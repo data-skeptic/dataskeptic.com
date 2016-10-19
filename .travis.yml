@@ -19,7 +19,7 @@ deploy:
       secret_access_key: $S3_SECRET
       bucket: dev.dataskeptic.com
       endpoint: http://dev.dataskeptic.com.s3-website-us-east-1.amazonaws.com
-      skip_cleanup: false
+      skip_cleanup: true
       acl: public_read
       on:
           branch: dev
