@@ -18,8 +18,7 @@ deploy:
       access_key_id: $S3_ID
       secret_access_key: $S3_SECRET
       bucket: dev.dataskeptic.com
-      endpoint: dev.dataskeptic.com.s3-website-us-east-1.amazonaws.com
-      region: ap-east-1
+      endpoint: http://dev.dataskeptic.com.s3-website-us-east-1.amazonaws.com
       skip_cleanup: false
       on:
           branch: dev
@@ -27,8 +26,7 @@ deploy:
       access_key_id: $S3_ID
       secret_access_key: $S3_SECRET
       bucket: dataskeptic.com
-      endpoint: dev.dataskeptic.com.s3-website-us-east-1.amazonaws.com
-      region: ap-east-1
+      endpoint: http://dataskeptic.com.s3-website-us-east-1.amazonaws.com
       skip_cleanup: true
       acl: public_read
       on:
