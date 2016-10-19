@@ -4,9 +4,6 @@
   "description": "Stub for new web site",
   "main": "index.htm",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
- "scripts": {
     "dev": "webpack-dev-server --inline --hot",
     "prod": "webpack",
     "start": "http-server",
