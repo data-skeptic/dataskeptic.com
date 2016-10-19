@@ -1,0 +1,42 @@
+language: node_js
+
+node_js:
+    - stable
+
+cache:
+  directories:
+  - node_modules
+
+before_script:
+    - "npm install --prod"
+
+script:
+    - "npm run prod"
+
+deploy:
+    - provider: s3
+      access_key_id: $S3_ID
+      secret_access_key: $S3_SECRET
+      bucket: dev.dataskeptic.com
+      endpoint: dev.dataskeptic.com.s3-website-us-east-1.amazonaws.com
+      region: ap-east-1
+      skip_cleanup: false
+      on:
+          branch: dev
+    - provider: s3
+      access_key_id: $S3_ID
+      secret_access_key: $S3_SECRET
+      bucket: dataskeptic.com
+      endpoint: dev.dataskeptic.com.s3-website-us-east-1.amazonaws.com
+      region: ap-east-1
+      skip_cleanup: true
+      acl: public_read
+      on:
+          branch: master
+
+notifications:
+  email:
+    recipients:
+      - kyle@dataskeptic.com
+    on_success: always
+    on_failure: always
