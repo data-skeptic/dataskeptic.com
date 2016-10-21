@@ -1,4 +1,66 @@
 html, body {
 	margin: 0 0 0 0;
+	width: 100%;
 }
 
+.header {
+	background-color: #3A3B3B;
+	height: 125px;
+}
+
+.center {
+	width: 60%;
+	margin: auto;
+}
+
+#logo {
+	height: 125px;
+}
+
+.header-left {
+	float: left;
+}
+
+.header-right {
+	position: relative;
+	padding: 7px;
+}
+
+#clear {
+	clear: both;
+}
+
+h1 {
+	font-size: 22pt;
+	padding: 0px;
+	margin: 0px;
+	color: #ffffff;
+	font-weight: bold;
+}
+
+.header-p {
+	color: #ffffff;
+}
+
+.menu {
+	padding-top: 10px;
+	background-color: #DADBDB;
+	padding-bottom: 10px;
+	margin-bottom: 15px;
+}
+
+.menu-link {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.footer {
+	margin-top: 25px;
+}
+
+.footer-links {
+	padding: 5px;
+}
+.footer-img {
+	height: 25px;
+}

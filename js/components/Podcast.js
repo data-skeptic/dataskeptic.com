@@ -9,7 +9,7 @@ export default class Home extends React.Component {
 	render() {
 		return (
 			<div class="center">
-				Coming Soon
+				Its a podcast
 			</div>
 		)
 	}

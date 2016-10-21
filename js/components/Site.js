@@ -10,16 +10,22 @@ import Footer from './Footer'
 export default class Site extends React.Component {
 	constructor(props) {
 		super(props)
+		this.state = {
+			"page": "home"
+		}
+		this.onMenuClick = this.onMenuClick.bind(this)
+	}
+
+	onMenuClick(e) {
+		console.log(e)
 	}
 	
 	render() {
-		return (
-			<div>
-				<Header />
-				<Menu />
-				<Home />
-				<Footer />
-			</div>
-		)
+		if (this.state.page == "podcast") {
+			return (<div><Header /><Menu onMenuClick="this.onMenuClick.bind(this)" /><Podcast /><Footer /></div>)
+		}
+		else {
+			return (<div><Header /><Menu /><Home /><Footer /></div>)
+		}
 	}
 }
