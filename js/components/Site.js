@@ -42,7 +42,7 @@ export default class Site extends React.Component {
 			var episode = {
 				"title": item["title"][0],
 				"desc": item["description"][0],
-				"pubDate": item["pubDate"][0],
+				"pubDate": new Date(item["pubDate"][0]),
 				"mp3":  item["enclosure"][0]["url"],
 				"duration": item["itunes:duration"][0],
 				"img": item["itunes:image"][0]["href"],

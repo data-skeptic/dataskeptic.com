@@ -9,6 +9,7 @@ export default class Home extends React.Component {
 	}
 
 	render() {
+		var year = (new Date()).getYear()
 		var num = this.props.episodes.length
 		if (num ==0) {
 			return (
@@ -20,7 +21,11 @@ export default class Home extends React.Component {
 			return (
 				<div class="center">
 					{this.props.episodes.map(function(episode) {
-						return <Episode key={episode.guid} episode={episode} />
+						if (episode.pubDate.getYear()==year) {
+							return <Episode key={episode.guid} episode={episode} />
+						} else {
+							return <div></div>
+						}
 					})}
 				</div>
 			)
