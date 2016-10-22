@@ -72,15 +72,27 @@ h1 {
 
 .episode-left {
 	float: left;
-	width: 80%;
+	height: 65px;	
+	width: 65px;
+	margin: 0px;
+}
+
+.episode-img {
+	width:  65px;
+	height: 65px;
+}
+.episode-middle {
 	padding-top: 5px;
 	padding-left: 5px;
+	height: 65px;
 	overflow: hidden;
+	white-space: nowrap;
 	margin: 0px;
 }
 
 .episode-right {
-	margin-left: 80%;
+	float: right;
+	min-width: 120px;
 }
 .episode-right-inner {
 	background-color: #eeeeee;
@@ -89,9 +101,8 @@ h1 {
 	margin: 0px;
 }
 .episode-right-inner-inner {
-	padding-top: 15px;
-	width:85%;
-	margin: auto;
+	padding-top: 17px;
+	margin-left: 10px;
 }
 
 .episode-button {
