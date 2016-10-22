@@ -43,13 +43,7 @@ export default class Episode extends React.Component {
 		return (
 			<div class="episode {more-class}">
 				<div class="episode-left">
-					<p><span class="episode-title">{ep.title}</span></p>
-					<p>
-						<span class="episode-duration">{ep.duration}</span>
-						-
-						<span class="episode-pubDate">{ep.pubDate}</span>
-					</p>
-					{desc}
+					<img class="episode-img" src={ep.img} />
 				</div>
 				<div class="episode-right">
 					<div class="episode-right-inner">
@@ -60,6 +54,15 @@ export default class Episode extends React.Component {
 						</div>
 					</div>
 				</div>
+				<div class="episode-middle">
+					<p><span class="episode-title">{ep.title}</span></p>
+					<p>
+						<span class="episode-duration">{ep.duration}</span>
+						-
+						<span class="episode-pubDate">{ep.pubDate}</span>
+					</p>
+				</div>
+				{desc}
 				<div class="clear"></div>
 			</div>
 		)

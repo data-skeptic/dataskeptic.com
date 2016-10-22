@@ -45,7 +45,7 @@ export default class Site extends React.Component {
 				"pubDate": item["pubDate"][0],
 				"mp3":  item["enclosure"][0]["url"],
 				"duration": item["itunes:duration"][0],
-				"img": item["itunes:image"][0]["href"],
+				"img": item["itunes:image"][0]["$"]["href"],
 				"guid": item["guid"][0]["_"],
 				"link": item["link"][0]
 			}
