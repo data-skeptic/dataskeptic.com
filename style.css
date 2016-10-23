@@ -133,6 +133,18 @@ h1 {
 	line-height: 90%;
 }
 
+.menu-year {
+	margin-right: 5px;
+}
+
+.menu-button-up {
+	background-color: #eeeeee;
+}
+
+.menu-button-down {
+	background-color: #aaaaaa;
+}
+
 .footer {
 	margin-top: 25px;
 }

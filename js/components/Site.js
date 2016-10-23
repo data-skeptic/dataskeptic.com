@@ -39,10 +39,12 @@ export default class Site extends React.Component {
 		var episodes = []
 		var items = rss["rss"]["channel"][0]["item"]
 		items.map(function(item) {
+			var dstr = item["pubDate"][0]
+			var pubDate = new Date(dstr)
 			var episode = {
 				"title": item["title"][0],
 				"desc": item["description"][0],
-				"pubDate": new Date(item["pubDate"][0]),
+				"pubDate": pubDate,
 				"mp3":  item["enclosure"][0]["url"],
 				"duration": item["itunes:duration"][0],
 				"img": item["itunes:image"][0]["$"]["href"],
