@@ -36,21 +36,28 @@ export default class Home extends React.Component {
 			)
 		} else {
 			var me = this
+			console.log(this.props)
 			var dyear = this.state.year
+			var onPlayToggle = this.props.onPlayClick
 			return (
 				<div class="center">
-					{years.map(function(year) {
-						var down = "menu-button-up"
-						if (dyear == year) {
-							down = "menu-button-down"
-						}
-						return <button class="menu-year" class={down} onClick={me.changeYear.bind(me, year)}>{year+1900}</button>
-					})}
-					{this.props.episodes.map(function(episode) {
-						if (episode.pubDate.getYear() == dyear) {
-							return <Episode key={episode.guid} episode={episode} />
-						}
-					})}
+					<div class="episode-selector">
+						{years.map(function(year) {
+							var down = "menu-button-up"
+							if (dyear == year) {
+								down = "menu-button-down"
+							}
+							console.log("warnings.js.45 to be resolved here")
+							return <button class="menu-year" class={down} onClick={me.changeYear.bind(me, year)}>{year+1900}</button>
+						})}
+					</div>
+					<div class="episodes-container">
+						{this.props.episodes.map(function(episode) {
+							if (episode.pubDate.getYear() == dyear) {
+								return <Episode key={episode.guid} episode={episode} onPlayClick={onPlayToggle} />
+							}
+						})}
+					</div>
 				</div>
 			)
 		}

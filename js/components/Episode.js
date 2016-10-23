@@ -8,8 +8,10 @@ export default class Episode extends React.Component {
 			"more": false
 		}
 	}
-	handlePlayClick() {
-		console.log("play")
+	handlePlayClick(ep) {
+		console.log("play?")
+		console.log(ep)
+		this.props.onPlayClick(ep)
 	}
 	handleDownloadClick() {
 		console.log("dl")
@@ -17,7 +19,6 @@ export default class Episode extends React.Component {
 	handleMoreClick() {
 		this.setState({more: (!this.state.more)})
 	}
-	//<!-- {ep.img} -->
 	//<!-- {ep.mp3} -->
 	//<!-- {ep.link} -->
 	render() {
@@ -45,7 +46,7 @@ export default class Episode extends React.Component {
 				<div class="episode-right">
 					<div class="episode-right-inner">
 						<div class="episode-right-inner-inner">
-							<button class="episode-button" onClick={this.handlePlayClick.bind(this)}>&#9658;</button>
+							<button class="episode-button" onClick={this.handlePlayClick.bind(this, ep)}>&#9658;</button>
 							<button class="episode-button" onClick={this.handleDownloadClick.bind(this)}>&darr;</button>
 							<button class="episode-button" onClick={this.handleMoreClick.bind(this)}>{more_symbol}</button>
 						</div>

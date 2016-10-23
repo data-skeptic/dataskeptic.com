@@ -3,6 +3,7 @@ import ReactDOM from "react-dom"
 
 import Header from './Header'
 import Menu from './Menu'
+import Player from './Player'
 import Home from './Home'
 import Footer from './Footer'
 import axios from "axios"
@@ -14,7 +15,10 @@ export default class Site extends React.Component {
 		super(props)
 		this.state = {
 			"page": "home",
-			"episodes": []
+			"episodes": [],
+			"player": {
+				"playing": false
+			}
 		}
 
 		var me = this
@@ -33,6 +37,7 @@ export default class Site extends React.Component {
 
 		this.extractEpisodes = this.extractEpisodes.bind(this)
 		this.onMenuClick = this.onMenuClick.bind(this)
+		this.onPlayClick = this.onPlayClick.bind(this)
 	}
 
 	extractEpisodes(rss) {
@@ -56,16 +61,27 @@ export default class Site extends React.Component {
 		return episodes
 	}
 	
+	onPlayClick(e) {
+		console.log("play!")
+		console.log(v1)
+		console.log(v2)
+		var cplay = this.state.player.playing
+		// TODO: send url to player
+		// TODO: if button is pause, just pause
+		// TODO: if button is play, play new, update state
+		// TODO: if top button pauses, change state of child
+		this.setState({player: {playing: false}})
+	}
 	onMenuClick(e) {
 		console.log(e)
 	}
 	
 	render() {
 		if (this.state.page == "podcast") {
-			return (<div><Header /><Menu onMenuClick={this.onMenuClick.bind(this)} /><Podcast /><Footer /></div>)
+			return (<div><Header /><Player config={this.state.player} onPause={this.onPlayClick.bind(this)} /><Menu onMenuClick={this.onMenuClick.bind(this)} /><Podcast /><Footer /></div>)
 		}
 		else {
-			return (<div><Header /><Menu /><Home episodes={this.state.episodes} /><Footer /></div>)
+			return (<div><Header /><Player config={this.state.player} onPause={this.onPlayClick.bind(this)} /><Menu /><Home episodes={this.state.episodes} onPlayClick={this.onPlayClick.bind(this)} /><Footer /></div>)
 		}
 	}
 }
