@@ -14,10 +14,10 @@ export default class Site extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			"page": "home",
 			"episodes": [],
 			"player": {
-				"playing": false
+				"playing": false,
+				"episode": undefined
 			}
 		}
 
@@ -71,10 +71,9 @@ export default class Site extends React.Component {
 			// TODO: send url to player
 			// TODO: make episode button a pause button
 		} else {
-			// TODO: send url to player
 			// TODO: make all episode buttons play buttons, except this one
 		}
-		this.setState({player: {playing: (!cplay)}})
+		this.setState({player: {playing: (!cplay), episode: episode}})
 	}
 	onMenuClick(e) {
 		console.log(e)
