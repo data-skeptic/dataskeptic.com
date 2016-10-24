@@ -14,6 +14,7 @@ export default class Home extends React.Component {
 			max_year: year,
 			year: year
 		}
+		console.log([2, this.props.onPlayToggle])
 	}
 
 	changeYear(year, event) {
@@ -41,7 +42,6 @@ export default class Home extends React.Component {
 			var onPlayToggle = this.props.onPlayToggle
 			return (
 				<div class="center">
-					<script type="text/javascript" src="//s3.amazonaws.com/downloads.mailchimp.com/js/signup-forms/popup/embed.js" data-dojo-config="usePlainJson: true, isDebug: false"></script><script type="text/javascript">require(["mojo/signup-forms/Loader"], function(L) { L.start({"baseUrl":"mc.us9.list-manage.com","uuid":"65e63d6f84f1d87759105d133","lid":"dc60d554db"}) })</script>
 					<div class="episode-selector">
 						{years.map(function(year) {
 							var down = "menu-button-up"
@@ -55,7 +55,7 @@ export default class Home extends React.Component {
 					<div class="episodes-container">
 						{this.props.episodes.map(function(episode) {
 							if (episode.pubDate.getYear() == dyear) {
-								return <Episode key={episode.guid} episode={episode} onPlayClick={onPlayToggle(episode)} />
+								return <Episode key={episode.guid} episode={episode} onPlayToggle={onPlayToggle} />
 							}
 						})}
 					</div>

@@ -62,27 +62,33 @@ export default class Site extends React.Component {
 		return episodes
 	}
 	
-	onPlayToggle(e, episode) {
-		console.log("play!!!")
+	onPlayToggle(episode) {
+		console.log(episode)
 		//console.log(e)
 		//console.log(episode)
 		var cplay = this.state.player.playing
-		// TODO: send url to player
-		// TODO: if button is pause, just pause
-		// TODO: if button is play, play new, update state
-		// TODO: if top button pauses, change state of child
-		//this.setState({player: {playing: false}})
+		if (cplay) {
+			// TODO: send url to player
+			// TODO: make episode button a pause button
+		} else {
+			// TODO: send url to player
+			// TODO: make all episode buttons play buttons, except this one
+		}
+		this.setState({player: {playing: (!cplay)}})
 	}
 	onMenuClick(e) {
 		console.log(e)
 	}
 	
 	render() {
-		if (this.state.page == "podcast") {
-			return (<div><Header /><Player config={this.state.player} onPause={this.onPlayToggle.bind(this)} /><Menu onMenuClick={this.onMenuClick.bind(this)} /><Podcast /><Footer /></div>)
-		}
-		else {
-			return (<div><Header /><Player config={this.state.player} onPause={this.onPlayToggle.bind(this)} /><Menu /><Home episodes={this.state.episodes} onPlayToggle={this.onPlayToggle.bind(this)} /><Footer /></div>)
-		}
+		return (
+			<div>
+			<Header />
+			<Player config={this.state.player} onPause={this.onPlayToggle.bind(this)} />
+			<Menu />
+			<Home episodes={this.state.episodes} onPlayToggle={this.onPlayToggle.bind(this)} />
+			<Footer />
+			</div>
+		)
 	}
 }
