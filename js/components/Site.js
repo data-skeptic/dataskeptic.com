@@ -68,6 +68,7 @@ export default class Site extends React.Component {
 		//console.log(episode)
 		var cplay = this.state.player.playing
 		if (cplay) {
+			this.setState({player: {episode: episode}})
 			// TODO: send url to player
 			// TODO: make episode button a pause button
 		} else {
