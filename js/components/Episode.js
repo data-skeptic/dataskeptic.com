@@ -10,7 +10,6 @@ export default class Episode extends React.Component {
 	}
 	handlePlayClick(ep) {
 		console.log("play?")
-		console.log(ep)
 		this.props.onPlayClick(ep)
 	}
 	handleDownloadClick() {

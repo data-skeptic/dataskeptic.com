@@ -37,7 +37,7 @@ export default class Site extends React.Component {
 
 		this.extractEpisodes = this.extractEpisodes.bind(this)
 		this.onMenuClick = this.onMenuClick.bind(this)
-		this.onPlayClick = this.onPlayClick.bind(this)
+		this.onPlayToggle = this.onPlayToggle.bind(this)
 	}
 
 	extractEpisodes(rss) {
@@ -46,11 +46,12 @@ export default class Site extends React.Component {
 		items.map(function(item) {
 			var dstr = item["pubDate"][0]
 			var pubDate = new Date(dstr)
+			var url = item["enclosure"][0]["$"]["url"]
 			var episode = {
 				"title": item["title"][0],
 				"desc": item["description"][0],
 				"pubDate": pubDate,
-				"mp3":  item["enclosure"][0]["url"],
+				"mp3":  url,
 				"duration": item["itunes:duration"][0],
 				"img": item["itunes:image"][0]["$"]["href"],
 				"guid": item["guid"][0]["_"],
@@ -61,16 +62,16 @@ export default class Site extends React.Component {
 		return episodes
 	}
 	
-	onPlayClick(e) {
-		console.log("play!")
-		console.log(v1)
-		console.log(v2)
+	onPlayToggle(e, episode) {
+		console.log("play!!!")
+		//console.log(e)
+		//console.log(episode)
 		var cplay = this.state.player.playing
 		// TODO: send url to player
 		// TODO: if button is pause, just pause
 		// TODO: if button is play, play new, update state
 		// TODO: if top button pauses, change state of child
-		this.setState({player: {playing: false}})
+		//this.setState({player: {playing: false}})
 	}
 	onMenuClick(e) {
 		console.log(e)
@@ -78,10 +79,10 @@ export default class Site extends React.Component {
 	
 	render() {
 		if (this.state.page == "podcast") {
-			return (<div><Header /><Player config={this.state.player} onPause={this.onPlayClick.bind(this)} /><Menu onMenuClick={this.onMenuClick.bind(this)} /><Podcast /><Footer /></div>)
+			return (<div><Header /><Player config={this.state.player} onPause={this.onPlayToggle.bind(this)} /><Menu onMenuClick={this.onMenuClick.bind(this)} /><Podcast /><Footer /></div>)
 		}
 		else {
-			return (<div><Header /><Player config={this.state.player} onPause={this.onPlayClick.bind(this)} /><Menu /><Home episodes={this.state.episodes} onPlayClick={this.onPlayClick.bind(this)} /><Footer /></div>)
+			return (<div><Header /><Player config={this.state.player} onPause={this.onPlayToggle.bind(this)} /><Menu /><Home episodes={this.state.episodes} onPlayToggle={this.onPlayToggle.bind(this)} /><Footer /></div>)
 		}
 	}
 }
