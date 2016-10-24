@@ -26,16 +26,19 @@ export default class Episode extends React.Component {
 			more_symbol = "-"
 			more_class = "episode-expanded"
 		}
+		var playing_symbol = (
+			<button class="episode-button" onClick={this.props.onPlayToggle.bind(this, ep)}>&#9658;</button>
+		)
+		if (this.state.playing) {
+			playing_symbol = (
+				<button class="episode-button" onClick={this.props.onPlayToggle.bind(this, ep)}>&#10073;&#10073;</button>
+			)
+		}
+		console.log(ep.pubDate)
 		return (
 			<div class="episode {more-class}">
 				<div class="episode-left">
-					<p><span class="episode-title">{ep.title}</span></p>
-					<p>
-						<span class="episode-duration">{ep.duration}</span>
-						-
-						<span class="episode-pubDate">{ep.pubDate.toString()}</span>
-					</p>
-					{desc}
+					<img class="episode-img" src={ep.img} />
 				</div>
 				<div class="episode-right">
 					<div class="episode-right-inner">
@@ -51,7 +54,7 @@ export default class Episode extends React.Component {
 					<p>
 						<span class="episode-duration">{ep.duration}</span>
 						-
-						<span class="episode-pubDate">{ep.pubDate}</span>
+						<span class="episode-pubDate">{ep.pubDate.toString()}</span>
 					</p>
 				</div>
 				<span dangerouslySetInnerHTML={{__html: desc}} />
