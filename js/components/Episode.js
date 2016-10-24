@@ -25,7 +25,7 @@ export default class Episode extends React.Component {
 		var more_symbol = "+"
 		var more_class = "episode-compressed"
 		if (this.state.more) {
-			desc = "<p>" + ep.desc + "</p>"
+			desc = (ep.desc)
 			more_symbol = "-"
 			more_class = "episode-expanded"
 		}
@@ -59,7 +59,7 @@ export default class Episode extends React.Component {
 						<span class="episode-pubDate">{ep.pubDate}</span>
 					</p>
 				</div>
-				{desc}
+				<span dangerouslySetInnerHTML={{__html: desc}} />
 				<div class="clear"></div>
 			</div>
 		)
