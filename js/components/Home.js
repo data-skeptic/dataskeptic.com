@@ -2,6 +2,7 @@ import React from "react"
 import ReactDOM from "react-dom"
 
 import Episode from "./Episode"
+import MailingList from "./MailingList"
 
 export default class Home extends React.Component {
 	constructor(props) {
@@ -19,6 +20,7 @@ export default class Home extends React.Component {
 		} else {
 			return (
 				<div class="center">
+					<MailingList />
 					{this.props.episodes.map(function(episode) {
 						return <Episode key={episode.guid} episode={episode} />
 					})}

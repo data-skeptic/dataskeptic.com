@@ -133,6 +133,18 @@ h1 {
 	line-height: 90%;
 }
 
+#mc_embed_signup {
+	background:#fff;
+	clear:left;
+	font:14px Helvetica,Arial,sans-serif; 
+	width:350px;
+}
+
+#mc-inner {
+	position: absolute;
+	left: -5000px; 
+}
+
 .footer {
 	margin-top: 25px;
 }
