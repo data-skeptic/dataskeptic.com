@@ -37,6 +37,8 @@ export default class Episode extends React.Component {
 								<button class="episode-button" onClick={this.handlePlayClick.bind(this)}>&#10073;&#10073;</button>
 							)
 		}
+		var dt = ep.pubDate
+		console.log(typeof(dt))
 		return (
 			<div class="episode {more-class}">
 				<div class="episode-left">
@@ -52,11 +54,11 @@ export default class Episode extends React.Component {
 					</div>
 				</div>
 				<div class="episode-middle">
-					<p><span class="episode-title">{ep.title}</span></p>
+					<p><span class="episode-title"><a href={ep.link}>{ep.title}</a></span></p>
 					<p>
 						<span class="episode-duration">{ep.duration}</span>
 						-
-						<span class="episode-pubDate">{ep.pubDate}</span>
+						<span class="episode-pubDate">{dt.getFullYear()}-{dt.getMonth()}-{dt.getDate()}</span>
 					</p>
 				</div>
 				<span dangerouslySetInnerHTML={{__html: desc}} />
