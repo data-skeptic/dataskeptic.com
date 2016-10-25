@@ -7,8 +7,10 @@ export default class Home extends React.Component {
 	constructor(props) {
 		super(props)
 		var year = (new Date()).getYear()
-		if (this.props.episodes.length > 0) {
-			(this.props.episodes[0].pubDate).getYear()
+		if (this.props.episodes != undefined) {
+			if (this.props.episodes.length > 0) {
+				(this.props.episodes[0].pubDate).getYear()
+			}
 		}
 		this.state = {
 			max_year: year,
@@ -23,7 +25,9 @@ export default class Home extends React.Component {
 
 	render() {
 		var year = this.state.max_year
-		var num = this.props.episodes.length
+		var num = 0
+		if (this.props.episodes != undefined)
+			num = this.props.episodes.length
 		var years = []
 		while (year > 113) {
 			years.push(year)

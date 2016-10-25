@@ -1,14 +1,21 @@
-import React from "react"
-import ReactDOM from "react-dom"
+import React from 'react'
+import { BrowserRouter as Router, Link, Match, Miss } from 'react-router'
 
 import Header from './Header'
-import Menu from './Menu'
 import Player from './Player'
 import Home from './Home'
+import Podcast from './Podcast'
+import Blog from './Blog'
+import Video from './Video'
+import Projects from './Projects'
+import Store from './Store'
+import Services from './Services'
+import Membership from './Membership'
 import Footer from './Footer'
+import NotFound from './NotFound'
+
 import axios from "axios"
 import xml2js from "xml2js"
-
 
 export default class Site extends React.Component {
 	constructor(props) {
@@ -39,6 +46,7 @@ export default class Site extends React.Component {
 		this.onMenuClick = this.onMenuClick.bind(this)
 		this.onPlayToggle = this.onPlayToggle.bind(this)
 	}
+
 
 	extractEpisodes(rss) {
 		var episodes = []
@@ -75,19 +83,41 @@ export default class Site extends React.Component {
 		}
 		this.setState({player: {playing: (!cplay), episode: episode}})
 	}
+	
 	onMenuClick(e) {
 		console.log(e)
 	}
-	
+
 	render() {
 		return (
-			<div>
-			<Header />
-			<Player config={this.state.player} onPause={this.onPlayToggle.bind(this)} />
-			<Menu />
-			<Home episodes={this.state.episodes} onPlayToggle={this.onPlayToggle.bind(this)} />
-			<Footer />
-			</div>
+			<Router>
+				<div>
+					<Header />
+					<Player config={this.state.player} onPause={this.onPlayToggle.bind(this)} />
+					<div>
+						<ul>
+							<li><Link to="/">Home</Link></li>
+							<li><Link to="/podcast">Podcast</Link></li>
+							<li><Link to="/blog">Blog</Link></li>
+							<li><Link to="/video">Videos</Link></li>
+							<li><Link to="/proj">Projects</Link></li>
+							<li><Link to="/store">Store</Link></li>
+							<li><Link to="/services">Services</Link></li>
+							<li><Link to="/members">Membership</Link></li>
+						</ul>
+					</div>
+					<Match exactly pattern="/" component={Home} />
+					<Match pattern="/podcast" component={Podcast} />
+					<Match pattern="/blog" component={Blog} />
+					<Match pattern="/video" component={Video} />
+					<Match pattern="/proj" component={Projects} />
+					<Match pattern="/store" component={Store} />
+					<Match pattern="/services" component={Services} />
+					<Match pattern="/members" component={Membership} />
+					<Miss component={NotFound} />
+					<Footer />
+				</div>
+			</Router>
 		)
 	}
 }

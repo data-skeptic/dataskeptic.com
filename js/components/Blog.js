@@ -1,7 +1,7 @@
 import React from "react"
 import ReactDOM from "react-dom"
 
-export default class Podcast extends React.Component {
+export default class Blog extends React.Component {
 	constructor(props) {
 		super(props)
 	}
@@ -9,7 +9,7 @@ export default class Podcast extends React.Component {
 	render() {
 		return (
 			<div class="center">
-				Its a podcast
+				Its a blog
 			</div>
 		)
 	}
