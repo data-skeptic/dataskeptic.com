@@ -51,6 +51,9 @@ h1 {
 	position: absolute;right:0;top:0;
 }
 
+.player-progress-bar {
+}
+
 .menu {
 	padding-top: 10px;
 	background-color: #DADBDB;

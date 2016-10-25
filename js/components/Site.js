@@ -64,17 +64,19 @@ export default class Site extends React.Component {
 	
 	onPlayToggle(episode) {
 		console.log(episode)
-		//console.log(e)
-		//console.log(episode)
 		var cplay = this.state.player.playing
+		var cepisode = this.state.player.episode
+		console.log([cplay, cepisode, episode])
 		if (cplay) {
-			this.setState({player: {episode: episode}})
-			// TODO: send url to player
-			// TODO: make episode button a pause button
+			if (cepisode != undefined && cepisode.guid == episode.guid) {
+				this.setState({player: {playing: false}})
+			}
+			else {
+				this.setState({player: {playing: true}, episode: episode})
+			}
 		} else {
-			// TODO: make all episode buttons play buttons, except this one
+			this.setState({player: {playing: true, episode: episode}})
 		}
-		this.setState({player: {playing: (!cplay), episode: episode}})
 	}
 	onMenuClick(e) {
 		console.log(e)
@@ -86,7 +88,7 @@ export default class Site extends React.Component {
 			<Header />
 			<Player config={this.state.player} onPause={this.onPlayToggle.bind(this)} />
 			<Menu />
-			<Home episodes={this.state.episodes} onPlayToggle={this.onPlayToggle.bind(this)} />
+			<Home episodes={this.state.episodes} playing={this.state.player.playing} playingEpisode={this.state.player.episode} onPlayToggle={this.onPlayToggle.bind(this)} />
 			<Footer />
 			</div>
 		)

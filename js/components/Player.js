@@ -2,6 +2,8 @@ import React from "react"
 import ReactDOM from "react-dom"
 import ReactHowler from 'react-howler'
 
+import PlayerProgressBar from './PlayerProgressBar'
+
 export default class Player extends React.Component {
 	constructor(props) {
 		super(props)
@@ -34,7 +36,7 @@ export default class Player extends React.Component {
 				<div class="player-inner">
 					<span class="player-title">{title}</span>
 					{duration}
-					Time Progress
+					<PlayerProgressBar playing={config.playing} progress={.5} />
 					{button}
 					{howler}
 				</div>

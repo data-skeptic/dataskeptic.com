@@ -40,6 +40,8 @@ export default class Home extends React.Component {
 			console.log(this.props)
 			var dyear = this.state.year
 			var onPlayToggle = this.props.onPlayToggle
+			var playingEpisode = this.props.playingEpisode
+			var playing = this.props.playing
 			return (
 				<div class="center">
 					<div class="episode-selector">
@@ -55,7 +57,11 @@ export default class Home extends React.Component {
 					<div class="episodes-container">
 						{this.props.episodes.map(function(episode) {
 							if (episode.pubDate.getYear() == dyear) {
-								return <Episode key={episode.guid} episode={episode} onPlayToggle={onPlayToggle} />
+								var isplaying = false
+								if (playingEpisode != undefined && playing && playingEpisode.guid == episode.guid) {
+									isplaying = true
+								}
+								return <Episode key={episode.guid} playing={isplaying} episode={episode} onPlayToggle={onPlayToggle} />
 							}
 						})}
 					</div>
