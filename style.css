@@ -1,4 +1,199 @@
 html, body {
 	margin: 0 0 0 0;
+	width: 100%;
 }
 
+.header {
+	background-color: #3A3B3B;
+	height: 125px;
+}
+
+.center {
+	width: 60%;
+	margin: auto;
+}
+
+#logo {
+	height: 125px;
+}
+
+.header-left {
+	float: left;
+}
+
+.header-right {
+	position: relative;
+	padding: 7px;
+}
+
+.clear {
+	clear: both;
+}
+
+h1 {
+	font-size: 22pt;
+	padding: 0px;
+	margin: 0px;
+	color: #ffffff;
+	font-weight: bold;
+}
+
+.header-p {
+	color: #ffffff;
+}
+
+.player {
+	position: relative;
+	min-width: 200px;
+	background-color: #6A6B6B;
+}
+.player-inner {
+	position: absolute;right:0;top:0;
+}
+
+.episode {
+    border-style: solid;
+    border-width: 1px 1px 1px 1px;
+	padding: 0px;
+	margin: 0px;
+	margin-bottom: 10px;
+	overflow: hidden;
+}
+
+.episode-expanded {
+}
+
+.episode-compressed {
+	height: 65px;	
+}
+
+.episode-left {
+	float: left;
+	height: 65px;	
+	width: 65px;
+	margin: 0px;
+}
+
+.episode-img {
+	width:  65px;
+	height: 65px;
+}
+.episode-middle {
+	padding-top: 5px;
+	padding-left: 5px;
+	height: 65px;
+	overflow: hidden;
+	white-space: nowrap;
+	margin: 0px;
+}
+
+.episode-right {
+	float: right;
+	min-width: 120px;
+}
+.episode-right-inner {
+	background-color: #eeeeee;
+	height: 65px;
+	padding: 0px;
+	margin: 0px;
+}
+.episode-right-inner-inner {
+	padding-top: 17px;
+	margin-left: 10px;
+}
+
+.episode-button {
+	float: left;
+	border-radius: 25px;
+	background-color: #c997fe;
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	margin-right: 5px;
+}
+
+.episode-title {
+	font-size: 16pt;
+	line-height: 15pt;
+}
+
+.episode-duration {
+	font-size: 8pt;
+	font-weight: bold;
+	margin-right: 5pt;
+	line-height: 7pt;
+}
+
+.episode-pubDate {
+	font-size: 8pt;
+	margin-left: 5pt;
+	line-height: 90%;
+}
+
+.menu-year {
+	margin-right: 5px;
+}
+
+.menu-button-up {
+	background-color: #eeeeee;
+}
+
+.menu-button-down {
+	background-color: #aaaaaa;
+}
+
+.episode-selector {
+	margin-bottom: 5px
+}
+
+.footer {
+	margin-top: 25px;
+}
+
+.footer-links {
+	padding: 5px;
+}
+.footer-img {
+	height: 25px;
+}
+
+
+
+
+
+
+
+
+
+
+ul.topnav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #282828;
+}
+
+ul.topnav li {float: left;}
+
+ul.topnav li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-decoration: none;
+}
+
+ul.topnav li a:hover:not(.active) {background-color: #111;}
+
+ul.topnav li a.active {background-color: #4CAF50;}
+
+ul.topnav li.right {float: right;}
+
+@media screen and (max-width: 613px){
+    ul.topnav li.right,
+    ul.topnav li {float: none;}
+}
