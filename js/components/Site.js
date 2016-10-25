@@ -14,9 +14,6 @@ import Membership from './Membership'
 import Footer from './Footer'
 import NotFound from './NotFound'
 
-import axios from "axios"
-import xml2js from "xml2js"
-
 export default class Site extends React.Component {
 	constructor(props) {
 		super(props)
@@ -36,40 +33,32 @@ export default class Site extends React.Component {
 		  	var xml = result["data"]
 			var extractedData = "";
 			var parser = new xml2js.Parser();
-			parser.parseString(xml, function(err,result) {
-				var episodes = me.extractEpisodes(result)
-				me.setState({"episodes": episodes})
-			});
+			var year = me.year
+			parser.parseString(xml, function(err,rss) {
+				var episodes = []
+				var items = rss["rss"]["channel"][0]["item"]
+				items.map(function(item) {
+					var mp3 = item["enclosure"][0]["$"]["url"]
+					var dstr = item["pubDate"][0]
+					var pubDate = new Date(dstr)
+					var episode = {
+						"title": item["title"][0],
+						"desc": item["description"][0],
+						"pubDate": pubDate,
+						"mp3": mp3,
+						"duration": item["itunes:duration"][0],
+						"img": item["itunes:image"][0]["$"]["href"],
+						"guid": item["guid"][0]["_"],
+						"link": item["link"][0]
+					}
+					episodes.push(episode)
+				})
+				me.setState({episodes})
+			});			
 		  });
-
-		this.extractEpisodes = this.extractEpisodes.bind(this)
-		this.onMenuClick = this.onMenuClick.bind(this)
-		this.onPlayToggle = this.onPlayToggle.bind(this)
+		// TODO: Set 1 hour callback to refresh xml
 	}
 
-
-	extractEpisodes(rss) {
-		var episodes = []
-		var items = rss["rss"]["channel"][0]["item"]
-		items.map(function(item) {
-			var mp3 = item["enclosure"][0]["$"]["url"]
-			var dstr = item["pubDate"][0]
-			var pubDate = new Date(dstr)
-			var episode = {
-				"title": item["title"][0],
-				"desc": item["description"][0],
-				"pubDate": pubDate,
-				"mp3": mp3,
-				"duration": item["itunes:duration"][0],
-				"img": item["itunes:image"][0]["$"]["href"],
-				"guid": item["guid"][0]["_"],
-				"link": item["link"][0]
-			}
-			episodes.push(episode)
-		})
-		return episodes
-	}
-	
 	onPlayToggle(episode) {
 		console.log(episode)
 		//console.log(e)
@@ -84,29 +73,29 @@ export default class Site extends React.Component {
 		this.setState({player: {playing: (!cplay), episode: episode}})
 	}
 	
-	onMenuClick(e) {
-		console.log(e)
-	}
-
 	render() {
 		return (
 			<Router>
 				<div>
 					<Header />
 					<Player config={this.state.player} onPause={this.onPlayToggle.bind(this)} />
-					<div>
-						<ul>
-							<li><Link to="/">Home</Link></li>
-							<li><Link to="/podcast">Podcast</Link></li>
-							<li><Link to="/blog">Blog</Link></li>
-							<li><Link to="/video">Videos</Link></li>
-							<li><Link to="/proj">Projects</Link></li>
-							<li><Link to="/store">Store</Link></li>
-							<li><Link to="/services">Services</Link></li>
-							<li><Link to="/members">Membership</Link></li>
-						</ul>
-					</div>
+					<nav id="js-responsive-nav">
+						<div>
+							<a id="menulogo" href="#"></a>
+							<ul>
+								<li class="navItem"><Link class="navItemLink" to="/">Home</Link></li>
+								<li class="navItem"><Link class="navItemLink" to="/podcast">Podcast</Link></li>
+								<li class="navItem"><Link class="navItemLink" to="/blog">Blog</Link></li>
+								<li class="navItem"><Link class="navItemLink" to="/video">Videos</Link></li>
+								<li class="navItem"><Link class="navItemLink" to="/proj">Projects</Link></li>
+								<li class="navItem"><Link class="navItemLink" to="/store">Store</Link></li>
+								<li class="navItem"><Link class="navItemLink" to="/services">Services</Link></li>
+								<li class="navItem"><Link class="navItemLink" to="/members">Membership</Link></li>
+							</ul>
+						</div>
+					</nav>
 					<Match exactly pattern="/" component={Home} />
+					<Match exactly pattern="/index.htm" component={Home} />
 					<Match pattern="/podcast" component={Podcast} />
 					<Match pattern="/blog" component={Blog} />
 					<Match pattern="/video" component={Video} />
@@ -114,7 +103,6 @@ export default class Site extends React.Component {
 					<Match pattern="/store" component={Store} />
 					<Match pattern="/services" component={Services} />
 					<Match pattern="/members" component={Membership} />
-					<Miss component={NotFound} />
 					<Footer />
 				</div>
 			</Router>

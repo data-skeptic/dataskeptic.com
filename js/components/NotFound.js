@@ -1,6 +1,6 @@
 import React from 'react'
 
-var NotFound = ({location}) => {
+const NotFound = ({location}) => {
 	return (
 		<div>
 			That page is not found.

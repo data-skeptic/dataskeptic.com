@@ -168,3 +168,106 @@ h1 {
 .footer-img {
 	height: 25px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+#menulogo {
+	float:left;
+	width:calc(100% - 50px);
+	max-width:280px;
+	height:40px;
+	background-image:url('http://htmltricks.altervista.org/img/logo.png'); /* your logo here! */
+	background-repeat:no-repeat;
+	background-size:100%;
+}
+		
+nav {
+	float:right;
+	padding-top:10px;
+}
+
+.navitem {
+	color:#999;
+	font-family:Helvetica;
+	font-size:16px;
+	margin-left:5px;
+	text-decoration:none;
+	font-weight:bold;
+	padding:8px;
+}
+
+.navitem:first-child {
+	margin-left:0px;
+}
+
+.navitem:hover {
+	color:white;
+}
+
+#smartbutton {
+	float:right;
+	width:20px;
+	height:15px;
+	cursor:pointer;
+	padding:7px;
+	border:1px solid #999;
+	border-radius:6px;
+	margin-top:5px;
+	display:none;
+}
+
+.buttonline {
+	background-color:#999;
+	height:3px;
+	margin-top:4px;
+}
+
+.buttonline:first-child {
+	margin-top:0px;
+}
+
+/* standard menu */
+@media only screen and (min-width:551px) 
+{
+	#smartbutton {
+		display:none;
+	}
+
+	nav {
+		display:inline-block !important;
+	}
+}
+
+/* smart menu */
+@media only screen and (max-width:550px) 
+{
+	#smartbutton {
+		display:inline-block;
+	}
+
+	nav {
+		display:none;
+		width:100%;
+		position:relative;
+		top:5px;
+	}
+	
+	.navitem {
+		border-top:1px solid #999;
+		display:block;
+		margin:0px;
+	}
+	
+	.navitem:hover {
+		background-color:#333;
+	}
+}

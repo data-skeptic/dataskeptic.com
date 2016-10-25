@@ -9,5 +9,15 @@
 	<body>
 		<div id="outer"></div>
 		<script src="js/scripts.min.js"></script>
+		<script>
+			var responsiveNav = document.getElementById('js-responsive-nav');
+			var responsiveNavBreakpoint = 720;
+
+			responsiveNav.addEventListener('click', function(){
+			    if(window.innerWidth < responsiveNavBreakpoint){
+			        responsiveNav.classList.toggle("is-open");
+			    }
+			});
+		</script>
 	</body>
 </html>
