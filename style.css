@@ -51,18 +51,6 @@ h1 {
 	position: absolute;right:0;top:0;
 }
 
-.menu {
-	padding-top: 10px;
-	background-color: #DADBDB;
-	padding-bottom: 10px;
-	margin-bottom: 15px;
-}
-
-.menu-link {
-	margin-left: 10px;
-	margin-right: 10px;
-}
-
 .episode {
     border-style: solid;
     border-width: 1px 1px 1px 1px;
@@ -167,4 +155,45 @@ h1 {
 }
 .footer-img {
 	height: 25px;
+}
+
+
+
+
+
+
+
+
+
+
+ul.topnav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #282828;
+}
+
+ul.topnav li {float: left;}
+
+ul.topnav li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-decoration: none;
+}
+
+ul.topnav li a:hover:not(.active) {background-color: #111;}
+
+ul.topnav li a.active {background-color: #4CAF50;}
+
+ul.topnav li.right {float: right;}
+
+@media screen and (max-width: 613px){
+    ul.topnav li.right,
+    ul.topnav li {float: none;}
 }
