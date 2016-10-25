@@ -1,7 +1,7 @@
 import React from "react"
 import ReactDOM from "react-dom"
 
-export default class Home extends React.Component {
+export default class Podcast extends React.Component {
 	constructor(props) {
 		super(props)
 	}
