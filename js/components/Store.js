@@ -2,7 +2,7 @@ import React from 'react'
 
 const Store = () => {
 	return (
-		<div>
+		<div class="center">
 			<p>Store</p>
 		</div>
 	)

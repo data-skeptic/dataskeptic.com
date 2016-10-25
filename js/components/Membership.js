@@ -2,7 +2,7 @@ import React from 'react'
 
 const Membership = () => {
 	return (
-		<div>
+		<div class="center">
 			<p>Sign up</p>
 		</div>
 	)

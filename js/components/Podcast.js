@@ -1,6 +1,9 @@
 import React from "react"
 import ReactDOM from "react-dom"
 
+import axios from "axios"
+import xml2js from "xml2js"
+
 import Episode from "./Episode"
 
 export default class Podcast extends React.Component {
@@ -16,6 +19,39 @@ export default class Podcast extends React.Component {
 			max_year: year,
 			year: year
 		}
+
+		var me = this
+
+		axios
+		  .get("http://dataskeptic.libsyn.com/rss")
+		  .then(function(result) {
+		  	var xml = result["data"]
+			var extractedData = "";
+			var parser = new xml2js.Parser();
+			var year = me.year
+			parser.parseString(xml, function(err,rss) {
+				var episodes = []
+				var items = rss["rss"]["channel"][0]["item"]
+				items.map(function(item) {
+					var mp3 = item["enclosure"][0]["$"]["url"]
+					var dstr = item["pubDate"][0]
+					var pubDate = new Date(dstr)
+					var episode = {
+						"title": item["title"][0],
+						"desc": item["description"][0],
+						"pubDate": pubDate,
+						"mp3": mp3,
+						"duration": item["itunes:duration"][0],
+						"img": item["itunes:image"][0]["$"]["href"],
+						"guid": item["guid"][0]["_"],
+						"link": item["link"][0]
+					}
+					episodes.push(episode)
+				})
+				me.setState({episodes})
+			});			
+		  });
+		// TODO: Set 1 hour callback to refresh xml
 
 		this.onMenuClick = this.onMenuClick.bind(this)
 		this.onPlayToggle = this.onPlayToggle.bind(this)
@@ -78,9 +114,7 @@ export default class Podcast extends React.Component {
 								down = "menu-button-down"
 							}
 							var key = Math.random().toString().substring(2,99)
-							console.log("warnings.js.45 to be resolved here")
 							return <button key={key} class="menu-year" class={down} onClick={me.changeYear.bind(me, year)}>{year+1900}</button>
-							console.log("warnings.js.45 to be resolved here")
 						})}
 					</div>
 					<div class="episodes-container">

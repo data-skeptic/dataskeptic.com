@@ -1,8 +1,8 @@
 import React from 'react'
 import { BrowserRouter as Router, Link, Match, Miss } from 'react-router'
 
-import axios from "axios"
-import xml2js from "xml2js"
+//import axios from "axios"
+//import xml2js from "xml2js"
 
 import Header from './Header'
 import Player from './Player'
@@ -29,6 +29,7 @@ export default class Site extends React.Component {
 			}
 		}
 
+		/*
 		var me = this
 
 		axios
@@ -61,6 +62,7 @@ export default class Site extends React.Component {
 			});			
 		  });
 		// TODO: Set 1 hour callback to refresh xml
+		*/
 	}
 
 	onPlayToggle(episode) {

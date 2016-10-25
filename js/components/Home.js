@@ -16,7 +16,6 @@ export default class Home extends React.Component {
 			max_year: year,
 			year: year
 		}
-		console.log([2, this.props.onPlayToggle])
 	}
 
 	changeYear(year, event) {
