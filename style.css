@@ -145,6 +145,7 @@ h1 {
 .episode-selector {
 	margin-top: 5px;
 	margin-bottom: 5px
+}
 #mc_embed_signup {
 	background:#fff;
 	clear:left;
@@ -386,12 +387,10 @@ ul.topnav li.right {float: right;}
   margin: 0 auto;
   padding: 40px;
   width: 80%;
-  color: #333;
-  background: #413bff;
+  background-color: #e9e9e9;
 }
 
 #card { 
-	background-color: #f00;
 	font-size: 22pt;
 	height: 200px;
 }

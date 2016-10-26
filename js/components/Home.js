@@ -4,7 +4,6 @@ import ReactDOM from "react-dom"
 import Slider from "react-slick"
 
 import Episode from "./Episode"
-import MailingList from "./MailingList"
 
 export default class Home extends React.Component {
 	constructor(props) {
@@ -55,11 +54,6 @@ export default class Home extends React.Component {
 							Follow on twitter
 							<p>Latest Tweet</p>
 						</div>
-						<div>2</div>
-						<div>3</div>
-						<div>4</div>
-						<div>5</div>
-						<div>6</div>
 					</Slider>
 				</div>
 				<p>Sign up for mailing list</p>
