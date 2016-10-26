@@ -24,12 +24,12 @@ export default class Home extends React.Component {
 
 	render() {
 		return (
-			<div>
-				Latest episode
-				Latest Tweet
-				Some live statistic
-				Carousel of interesting content (blog, videos)
-				Sign up for mailing list
+			<div class="center">
+				<p>Latest episode</p>
+				<p>Latest Tweet</p>
+				<p>Some live statistic</p>
+				<p>Carousel of interesting content (blog, videos)</p>
+				<p>Sign up for mailing list</p>
 			</div>
 		)
 	}

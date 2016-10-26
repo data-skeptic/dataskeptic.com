@@ -51,7 +51,7 @@ export default class Episode extends React.Component {
 					</div>
 				</div>
 				<div class="episode-middle">
-					<p><span class="episode-title">{ep.title}</span></p>
+					<p><span class="episode-title"><a href={ep.link}>{ep.title}</a></span></p>
 					<p>
 						<span class="episode-duration">{ep.duration}</span>
 						-
