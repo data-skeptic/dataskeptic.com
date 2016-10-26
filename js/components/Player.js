@@ -14,13 +14,13 @@ export default class Player extends React.Component {
 	}
 	
 	render() {
-		// TODO: render this.props.episode stuff
 		console.log(this.props.config)
 		var config = this.props.config
 		var episode = config.episode
 		var howler = ""
 		var title = ""
 		var duration = "--:--"
+		var progress = 0
 		if (episode != undefined) {
 			var mp3 = episode.mp3
 			howler = (<ReactHowler src={mp3} playing={config.playing} />)
@@ -34,10 +34,14 @@ export default class Player extends React.Component {
 		return (
 			<div class="player">
 				<div class="player-inner">
-					<span class="player-title">{title}</span>
-					{duration}
-					<PlayerProgressBar playing={config.playing} progress={.5} />
-					{button}
+					<div class="player-top">
+						<span class="player-duration">{duration}</span>
+						<span class="player-title">{title}</span>
+					</div>
+					<div class="player-bottom">
+						{button}
+						<PlayerProgressBar playing={config.playing} progress={progress} />
+					</div>
 					{howler}
 				</div>
 			</div>

@@ -1,7 +1,8 @@
 import React from "react"
 import ReactDOM from "react-dom"
+import Rcslider from "rc-slider"
 
-export default class Footer extends React.Component {
+export default class PlayerProgressBar extends React.Component {
 	constructor(props) {
 		super(props)
 	}
@@ -9,8 +10,13 @@ export default class Footer extends React.Component {
 	render() {
 		return (
 			<div class="player-progress-bar">
-			{this.props.playing}
-			{this.props.progress}
+			<Rcslider
+				min={0}
+				max={100}
+				range={false}
+				defaultValue={this.props.progress * 100}
+				disabled={!this.props.playing}
+			/>
 			</div>
 		)
 	}

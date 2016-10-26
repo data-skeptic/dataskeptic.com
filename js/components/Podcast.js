@@ -98,7 +98,8 @@ export default class Podcast extends React.Component {
 		if (num == 0) {
 			return (
 				<div class="center">
-				Loading episodes...
+				<p>Loading episodes...</p>
+				<img src="img/Loading_icon.gif" />
 				</div>
 			)
 		} else {
