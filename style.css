@@ -42,6 +42,11 @@ h1 {
 	color: #ffffff;
 }
 
+#card { 
+	background-color: #f00;
+	font-size: 22pt;
+}
+
 .player {
 	position: relative;
 	min-width: 200px;
@@ -197,4 +202,10 @@ ul.topnav li.right {float: right;}
 @media screen and (max-width: 613px){
     ul.topnav li.right,
     ul.topnav li {float: none;}
+}
+
+@media screen and (max-width: 450px){
+	#header-right {
+		background-color: #ff0;
+	}
 }

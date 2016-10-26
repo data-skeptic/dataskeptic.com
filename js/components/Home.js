@@ -1,6 +1,8 @@
 import React from "react"
 import ReactDOM from "react-dom"
 
+import Carousel from 'nuka-carousel'
+
 import Episode from "./Episode"
 
 export default class Home extends React.Component {
@@ -25,6 +27,11 @@ export default class Home extends React.Component {
 	render() {
 		return (
 			<div class="center">
+				<Carousel autoplay={true} >
+					<div className="card">Hi</div>
+					<div className="card">There</div>
+				</Carousel>
+
 				<p>Latest episode</p>
 				<p>Latest Tweet</p>
 				<p>Some live statistic</p>
