@@ -158,6 +158,7 @@ h1 {
 }
 
 .episode-selector {
+	margin-top: 5px;
 	margin-bottom: 5px
 }
 
@@ -170,4 +171,45 @@ h1 {
 }
 .footer-img {
 	height: 25px;
+}
+
+
+
+
+
+
+
+
+
+
+ul.topnav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #282828;
+}
+
+ul.topnav li {float: left;}
+
+ul.topnav li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-decoration: none;
+}
+
+ul.topnav li a:hover:not(.active) {background-color: #111;}
+
+ul.topnav li a.active {background-color: #4CAF50;}
+
+ul.topnav li.right {float: right;}
+
+@media screen and (max-width: 613px){
+    ul.topnav li.right,
+    ul.topnav li {float: none;}
 }

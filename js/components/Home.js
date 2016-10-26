@@ -7,14 +7,15 @@ export default class Home extends React.Component {
 	constructor(props) {
 		super(props)
 		var year = (new Date()).getYear()
-		if (this.props.episodes.length > 0) {
-			(this.props.episodes[0].pubDate).getYear()
+		if (this.props.episodes != undefined) {
+			if (this.props.episodes.length > 0) {
+				(this.props.episodes[0].pubDate).getYear()
+			}
 		}
 		this.state = {
 			max_year: year,
 			year: year
 		}
-		console.log([2, this.props.onPlayToggle])
 	}
 
 	changeYear(year, event) {
@@ -22,51 +23,14 @@ export default class Home extends React.Component {
 	}
 
 	render() {
-		var year = this.state.max_year
-		var num = this.props.episodes.length
-		var years = []
-		while (year > 113) {
-			years.push(year)
-			year -= 1
-		}
-		if (num == 0) {
-			return (
-				<div class="center">
-				Loading episodes...
-				</div>
-			)
-		} else {
-			var me = this
-			console.log(this.props)
-			var dyear = this.state.year
-			var onPlayToggle = this.props.onPlayToggle
-			var playingEpisode = this.props.playingEpisode
-			var playing = this.props.playing
-			return (
-				<div class="center">
-					<div class="episode-selector">
-						{years.map(function(year) {
-							var down = "menu-button-up"
-							if (dyear == year) {
-								down = "menu-button-down"
-							}
-							console.log("warnings.js.45 to be resolved here")
-							return <button class="menu-year" class={down} onClick={me.changeYear.bind(me, year)}>{year+1900}</button>
-						})}
-					</div>
-					<div class="episodes-container">
-						{this.props.episodes.map(function(episode) {
-							if (episode.pubDate.getYear() == dyear) {
-								var isplaying = false
-								if (playingEpisode != undefined && playing && playingEpisode.guid == episode.guid) {
-									isplaying = true
-								}
-								return <Episode key={episode.guid} playing={isplaying} episode={episode} onPlayToggle={onPlayToggle} />
-							}
-						})}
-					</div>
-				</div>
-			)
-		}
+		return (
+			<div class="center">
+				<p>Latest episode</p>
+				<p>Latest Tweet</p>
+				<p>Some live statistic</p>
+				<p>Carousel of interesting content (blog, videos)</p>
+				<p>Sign up for mailing list</p>
+			</div>
+		)
 	}
 }
