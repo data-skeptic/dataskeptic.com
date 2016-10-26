@@ -2,6 +2,7 @@ import React from "react"
 import ReactDOM from "react-dom"
 
 import Episode from "./Episode"
+import MailingList from "./MailingList"
 
 export default class Home extends React.Component {
 	constructor(props) {
