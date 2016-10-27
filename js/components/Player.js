@@ -18,7 +18,7 @@ export default class Player extends React.Component {
 		var config = this.props.config
 		var episode = config.episode
 		var howler = ""
-		var title = ""
+		var title = "adfj lskfj sdlfkj sldfkj sfkj slkfj slkfdjsdflkj kjkljlkjl ljkljkljlkjk"
 		var duration = "--:--"
 		var progress = 0
 		if (episode != undefined) {
@@ -32,17 +32,17 @@ export default class Player extends React.Component {
 			button = (<button class="episode-button" onClick={this.props.onPause}>&#10073;&#10073;</button>)
 		}
 		return (
-			<div class="player" className="thin-player">
-				<div class="player-inner">
-					<div class="player-top">
-						<span class="player-duration">{duration}</span>
-						<span class="player-title">{title}</span>
+			<div class="thin-player-container">
+				<div class="center">
+					<div class="player" className="thin-player">
+						<div class="player-inner">
+							{button}
+							<div class="player-title-container"><span class="player-title">{title}</span></div>
+							<PlayerProgressBar playing={config.playing} progress={progress} />
+							<div class="player-duration-container"><span class="player-duration">{duration}</span></div>
+							{howler}
+						</div>
 					</div>
-					<div class="player-bottom">
-						{button}
-						<PlayerProgressBar playing={config.playing} progress={progress} />
-					</div>
-					{howler}
 				</div>
 			</div>
 		)

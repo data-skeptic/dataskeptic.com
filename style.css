@@ -113,25 +113,52 @@ ul.topnav li.right {float: right;}
 *****************************************************************************/
 
 .player {
-	position: absolute;
-	right:0;
-	top:0;
-	background-color: #6A6B6B;
-	width: 200px;
-	padding: 1px;
+  width: 200px;
+  height: 20px;
+  padding: 1px;
+}
+
+.player-progress-bar {
+  margin-left: 250px;
+  margin-right: 50px;
+  padding: 9px;
+}
+
+.player-title-container {
+  float: left;
+  width: 250px;
+  overflow: hidden;
+}
+
+.player-title {
+  background-color: #f00;
+  height: 20px;
+  float: left;
+  font-size: 8pt;
+}
+
+.player-duration-container {
+  float: right;
+}
+
+.player-duration {
+  font-size: 8pt;
+  margin: 0 10 0 0px;
+  height: 20px;
+  background-color: #f00;
 }
 
 .player-inner {
-  position: absolute;right:0;top:0;
 }
 
-.player-label {
-
+.thin-player-container {
+  width: 100%;
+  background-color: #6A6B6B;
 }
 
-#thin-player {
-  position: relative;
-  min-width: 200px;
+.thin-player {
+  padding: 0px;
+  height: 20px;
 }
 
 .home-player {
@@ -143,6 +170,10 @@ ul.topnav li.right {float: right;}
   padding: 0 2 2 5px;
   height: 87px;
   width: 250px;
+}
+
+.player-label {
+
 }
 
 /*****************************************************************************
@@ -262,9 +293,9 @@ ul.topnav li.right {float: right;}
 }
 
 .card { 
-	font-size: 12pt;
-	width: 650px;
-	height: 200px;
+  font-size: 12pt;
+  width: 650px;
+  height: 200px;
 }
 
 div.mailing-list-signup-container {
@@ -668,9 +699,8 @@ button.slick-arrow.slick-prev {
 
 .rc-slider {
   position: relative;
-  height: 4px;
+  height: 1px;
   width: 100%;
-  border-radius: 6px;
   background-color: #e9e9e9;
   box-sizing: border-box;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -689,10 +719,10 @@ button.slick-arrow.slick-prev {
 }
 .rc-slider-handle {
   position: absolute;
-  margin-left: -7px;
-  margin-top: -5px;
-  width: 14px;
-  height: 14px;
+  margin-left: -3px;
+  margin-top: -3px;
+  width: 7px;
+  height: 7px;
   cursor: pointer;
   border-radius: 50%;
   border: solid 2px #96dbfa;
@@ -919,4 +949,3 @@ button.slick-arrow.slick-prev {
   border-top-color: #6c6c6c;
 }
 
->>>>>>> dev
