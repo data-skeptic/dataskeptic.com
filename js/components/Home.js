@@ -5,6 +5,7 @@ import Slider from "react-slick"
 
 import Episode from "./Episode"
 import MailingList from "./MailingList"
+import SocialMediaCard from "./SocialMediaCard"
 
 export default class Home extends React.Component {
 	constructor(props) {
@@ -53,8 +54,7 @@ export default class Home extends React.Component {
 								Latest blog posts
 							</div>
 							<div class="card">
-								Follow on twitter
-								<p>Latest Tweet</p>
+								<SocialMediaCard />
 							</div>
 						</Slider>
 					</div>
