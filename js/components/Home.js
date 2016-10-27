@@ -1,6 +1,8 @@
 import React from "react"
 import ReactDOM from "react-dom"
 
+import Slider from "react-slick"
+
 import Episode from "./Episode"
 import MailingList from "./MailingList"
 
@@ -24,13 +26,38 @@ export default class Home extends React.Component {
 	}
 
 	render() {
+	    var settings = {
+	      dots: true,
+	      infinite: true,
+	      slidesToShow: 1,
+	      slidesToScroll: 1,
+	      arrows: 1,
+	      adaptiveHeight: 1,
+	      accessibility: 1,
+	      autoplay: 1,
+	      autoplaySpeed: 3000,
+	      pauseOnHover: 1
+	    };
 		return (
 			<div class="center">
-				<p>Latest episode</p>
-				<p>Latest Tweet</p>
-				<p>Some live statistic</p>
-				<p>Carousel of interesting content (blog, videos)</p>
-				<p>Sign up for mailing list</p>
+
+				<div className="carousel">
+					<Slider {...settings}>
+						<div class="card">
+							Latest episode
+						</div>
+						<div class="card">
+							Some live statistics
+						</div>
+						<div class="card">
+							Latest blog posts
+						</div>
+						<div class="card">
+							Follow on twitter
+							<p>Latest Tweet</p>
+						</div>
+					</Slider>
+				</div>
 				<MailingList />
 			</div>
 		)
