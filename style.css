@@ -1,3 +1,7 @@
+/*****************************************************************************
+ All pages
+*****************************************************************************/
+
 html, body {
 	margin: 0 0 0 0;
 	width: 100%;
@@ -9,8 +13,9 @@ html, body {
 }
 
 .center {
-	width: 60%;
+	max-width: 800;
 	margin: auto;
+	clear: both;
 }
 
 #logo {
@@ -42,13 +47,74 @@ h1 {
 	color: #ffffff;
 }
 
-.player {
-	position: absolute;
-	right:0;
-	top:0;
-	background-color: #6A6B6B;
-	width: 200px;
-	padding: 1px;
+.menu-year {
+	margin-right: 5px;
+}
+
+.menu-button-up {
+	background-color: #eeeeee;
+}
+
+.menu-button-down {
+	background-color: #aaaaaa;
+}
+
+.menu {
+	width: 100%;
+    background-color: #282828;	
+}
+
+ul.topnav {
+    list-style-type: none;
+    margin: auto;
+    padding: 0;
+    max-width: 800px;
+    overflow: hidden;
+}
+
+ul.topnav li {float: left;}
+
+ul.topnav li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-decoration: none;
+}
+
+ul.topnav li a:hover:not(.active) {background-color: #111;}
+
+ul.topnav li a.active {background-color: #4CAF50;}
+
+ul.topnav li.right {float: right;}
+
+@media screen and (max-width: 613px){
+    ul.topnav li.right,
+    ul.topnav li {float: none;}
+}
+
+.footer {
+	text-align: center;
+	margin: auto;
+	margin-top: 5px;
+}
+
+.footer-links {
+	padding: 5px;
+}
+.footer-img {
+	height: 25px;
+}
+
+/*****************************************************************************
+ Player.js
+*****************************************************************************/
+
+#player {
+	background-color: #5A5B5B;
 }
 
 .player-inner {
@@ -83,6 +149,30 @@ h1 {
 	margin-left: 10px;
 	margin-right: 10px;
 }
+
+.player-label {
+
+}
+
+#thin-player {
+	position: relative;
+	min-width: 200px;
+}
+
+.home-player {
+	float: left;
+	margin-top: 5px;
+	border-style: solid;
+	border-radius: 2px;
+	border-width: 1px;
+	padding: 0 2 2 5px;
+	height: 87px;
+	width: 250px;
+}
+
+/*****************************************************************************
+ Podcast.js
+*****************************************************************************/
 
 .episode {
     border-style: solid;
@@ -163,74 +253,370 @@ h1 {
 	line-height: 90%;
 }
 
-.menu-year {
-	margin-right: 5px;
-}
-
-.menu-button-up {
-	background-color: #eeeeee;
-}
-
-.menu-button-down {
-	background-color: #aaaaaa;
-}
-
 .episode-selector {
 	margin-top: 5px;
 	margin-bottom: 5px
 }
 
-.footer {
-	margin-top: 25px;
+/*****************************************************************************
+ Home.js
+*****************************************************************************/
+
+#mc_embed_signup {
+	background:#fff;
+	clear:left;
+	font:14px Helvetica,Arial,sans-serif; 
+	width:350px;
 }
 
-.footer-links {
-	padding: 5px;
-}
-.footer-img {
-	height: 25px;
+#mc-inner {
+	position: absolute;
+	left: -5000px;
 }
 
+#home-top-row {
+	clear: both;
+}
 
+.carousel {
+	margin: 0 auto;
+	margin-right: 20px;
+	padding: 5 25 30 25px;
+	width: 530px;
+	float: left;
+}
 
+.card { 
+	background-color: #0f0;
+	font-size: 12pt;
+	width: 650px;
+	height: 200px;
+}
 
+div.mailing-list-signup-container {
+	float: left;
+	width: 250px;
+}
 
+button.slick-arrow.slick-next {
+	background-color: #aaa;
+	border-radius: 15px;
+}
 
+button.slick-arrow.slick-prev {
+	background-color: #aaa;
+	border-radius: 15px;
+}
 
+/* The home-player definition is in the Player.js section for convenience */
 
+/*****************************************************************************
+ Used for the carousel in Home.js
+*****************************************************************************/
 
+/* Slider */
+.slick-slider
+{
+    height: 200px;
 
-ul.topnav {
-    list-style-type: none;
+    position: relative;
+
+    display: block;
+    box-sizing: border-box;
+
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+
+    -webkit-touch-callout: none;
+    -khtml-user-select: none;
+    -ms-touch-action: pan-y;
+        touch-action: pan-y;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.slick-list
+{
+    position: relative;
+
+    display: block;
+    overflow: hidden;
+
     margin: 0;
     padding: 0;
-    overflow: hidden;
-    background-color: #282828;
+}
+.slick-list:focus
+{
+    outline: none;
+}
+.slick-list.dragging
+{
+    cursor: pointer;
+    cursor: hand;
 }
 
-ul.topnav li {float: left;}
+.slick-slider .slick-track,
+.slick-slider .slick-list
+{
+    -webkit-transform: translate3d(0, 0, 0);
+       -moz-transform: translate3d(0, 0, 0);
+        -ms-transform: translate3d(0, 0, 0);
+         -o-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+}
 
-ul.topnav li a {
+.slick-track
+{
+    position: relative;
+    top: 0;
+    left: 0;
+
     display: block;
+}
+.slick-track:before,
+.slick-track:after
+{
+    display: table;
+
+    content: '';
+}
+.slick-track:after
+{
+    clear: both;
+}
+.slick-loading .slick-track
+{
+    visibility: hidden;
+}
+
+.slick-slide
+{
+    display: none;
+    float: left;
+
+    height: 100%;
+    min-height: 1px;
+}
+[dir='rtl'] .slick-slide
+{
+    float: right;
+}
+.slick-slide img
+{
+    display: block;
+}
+.slick-slide.slick-loading img
+{
+    display: none;
+}
+.slick-slide.dragging img
+{
+    pointer-events: none;
+}
+.slick-initialized .slick-slide
+{
+    display: block;
+}
+.slick-loading .slick-slide
+{
+    visibility: hidden;
+}
+.slick-vertical .slick-slide
+{
+    display: block;
+
+    height: auto;
+
+    border: 1px solid transparent;
+}
+.slick-arrow.slick-hidden {
+    display: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@charset 'UTF-8';
+/* Slider */
+.slick-loading .slick-list
+{
+    background: #fff url('./ajax-loader.gif') center center no-repeat;
+}
+
+/* Icons */
+@font-face
+{
+    font-family: 'slick';
+    font-weight: normal;
+    font-style: normal;
+
+    src: url('./fonts/slick.eot');
+    src: url('./fonts/slick.eot?#iefix') format('embedded-opentype'), url('./fonts/slick.woff') format('woff'), url('./fonts/slick.ttf') format('truetype'), url('./fonts/slick.svg#slick') format('svg');
+}
+/* Arrows */
+.slick-prev,
+.slick-next
+{
+    font-size: 0;
+    line-height: 0;
+
+    position: absolute;
+    top: 50%;
+
+    display: block;
+
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    -webkit-transform: translate(0, -50%);
+    -ms-transform: translate(0, -50%);
+    transform: translate(0, -50%);
+
+    cursor: pointer;
+
+    color: transparent;
+    border: none;
+    outline: none;
+    background: transparent;
+}
+.slick-prev:hover,
+.slick-prev:focus,
+.slick-next:hover,
+.slick-next:focus
+{
+    color: transparent;
+    outline: none;
+    background: transparent;
+}
+.slick-prev:hover:before,
+.slick-prev:focus:before,
+.slick-next:hover:before,
+.slick-next:focus:before
+{
+    opacity: 1;
+}
+.slick-prev.slick-disabled:before,
+.slick-next.slick-disabled:before
+{
+    opacity: .25;
+}
+
+.slick-prev:before,
+.slick-next:before
+{
+    font-family: 'slick';
+    font-size: 20px;
+    line-height: 1;
+
+    opacity: .75;
     color: white;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.slick-prev
+{
+    left: -25px;
+}
+[dir='rtl'] .slick-prev
+{
+    right: -25px;
+    left: auto;
+}
+.slick-prev:before
+{
+    content: '<';
+}
+[dir='rtl'] .slick-prev:before
+{
+    content: '<';
+}
+
+.slick-next
+{
+    right: -25px;
+}
+[dir='rtl'] .slick-next
+{
+    right: auto;
+    left: -25px;
+}
+.slick-next:before
+{
+    content: '>';
+}
+[dir='rtl'] .slick-next:before
+{
+    content: '>';
+}
+
+/* Dots */
+.slick-dotted.slick-slider
+{
+    margin-bottom: 30px;
+}
+
+.slick-dots
+{
+    position: absolute;
+    bottom: -25px;
+
+    display: block;
+
+    width: 100%;
+    padding: 0;
+    margin: 0;
+
+    list-style: none;
+
     text-align: center;
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    text-decoration: none;
 }
+.slick-dots li
+{
+    position: relative;
 
-ul.topnav li a:hover:not(.active) {background-color: #111;}
+    display: inline-block;
 
-ul.topnav li a.active {background-color: #4CAF50;}
+    width: 20px;
+    height: 20px;
+    margin: 0 5px;
+    padding: 0;
 
-ul.topnav li.right {float: right;}
-
-@media screen and (max-width: 613px){
-    ul.topnav li.right,
-    ul.topnav li {float: none;}
+    cursor: pointer;
 }
+.slick-dots li button
+{
+    font-size: 0;
+    line-height: 0;
+
 
 
 
@@ -510,3 +896,40 @@ ul.topnav li.right {float: right;}
 }
 
 
+.slick-dots li button:hover,
+.slick-dots li button:focus
+{
+    outline: none;
+}
+.slick-dots li button:hover:before,
+.slick-dots li button:focus:before
+{
+    opacity: 1;
+}
+.slick-dots li button:before
+{
+    font-family: 'slick';
+    font-size: 6px;
+    line-height: 20px;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 20px;
+    height: 20px;
+
+    content: 'O';
+    text-align: center;
+
+    opacity: .25;
+    color: black;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.slick-dots li.slick-active button:before
+{
+    opacity: .75;
+    color: black;
+}

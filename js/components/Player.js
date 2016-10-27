@@ -32,7 +32,7 @@ export default class Player extends React.Component {
 			button = (<button class="episode-button" onClick={this.props.onPause}>&#10073;&#10073;</button>)
 		}
 		return (
-			<div class="player">
+			<div class="player" className="thin-player">
 				<div class="player-inner">
 					<div class="player-top">
 						<span class="player-duration">{duration}</span>

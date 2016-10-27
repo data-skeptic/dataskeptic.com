@@ -87,17 +87,19 @@ export default class Site extends React.Component {
 			<Router>
 				<div>
 					<Header />
-					<ul class="topnav">
-						<li><Link to="/">Home</Link></li>
-						<li><Link to="/podcast">Podcast</Link></li>
-						<li><Link to="/blog">Blog</Link></li>
-						<li><Link to="/video">Videos</Link></li>
-						<li><Link to="/proj">Projects</Link></li>
-						<li><Link to="/store">Store</Link></li>
-						<li><Link to="/services">Services</Link></li>
-						<li class="right"><Link to="/members">Membership</Link></li>
-					</ul>
 					<Player config={this.state.player} onPause={this.onPlayToggle.bind(this)} />
+					<div className="menu">
+						<ul class="topnav">
+							<li><Link to="/">Home</Link></li>
+							<li><Link to="/podcast">Podcast</Link></li>
+							<li><Link to="/blog">Blog</Link></li>
+							<li><Link to="/video">Videos</Link></li>
+							<li><Link to="/proj">Projects</Link></li>
+							<li><Link to="/store">Store</Link></li>
+							<li><Link to="/services">Services</Link></li>
+							<li class="right"><Link to="/members">Membership</Link></li>
+						</ul>
+					</div>
 					<Match exactly pattern="/" component={Home} />
 					<Match exactly pattern="/index.htm" component={Home} />
 					<Match pattern="/podcast" component={Podcast} />
