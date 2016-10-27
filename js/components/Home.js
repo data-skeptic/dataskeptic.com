@@ -40,25 +40,32 @@ export default class Home extends React.Component {
 	    };
 		return (
 			<div class="center">
-
-				<div className="carousel">
-					<Slider {...settings}>
-						<div class="card">
-							Latest episode
+				<div class="home-top-row">
+					<div className="carousel">
+						<Slider {...settings}>
+							<div class="card">
+								Latest episode
+							</div>
+							<div class="card">
+								Some live statistics
+							</div>
+							<div class="card">
+								Latest blog posts
+							</div>
+							<div class="card">
+								Follow on twitter
+								<p>Latest Tweet</p>
+							</div>
+						</Slider>
+					</div>
+					<div class="home-right">
+						<div className="home-player">
+							<span class="player-label">Latest episode:</span>
 						</div>
-						<div class="card">
-							Some live statistics
-						</div>
-						<div class="card">
-							Latest blog posts
-						</div>
-						<div class="card">
-							Follow on twitter
-							<p>Latest Tweet</p>
-						</div>
-					</Slider>
+						<MailingList />
+					</div>
 				</div>
-				<MailingList />
+				<div class="clear"></div>
 			</div>
 		)
 	}
