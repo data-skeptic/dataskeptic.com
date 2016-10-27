@@ -14,7 +14,7 @@ export default class Player extends React.Component {
 		// TODO: render this.props.episode stuff
 		if (this.props.config.playing) {
 			return (
-				<div class="player">
+				<div class="player" className="thin-player">
 					<div class="player-inner">
 						<button class="episode-button" onClick={this.props.onPause}>&#9658;</button>
 						<ReactHowler
