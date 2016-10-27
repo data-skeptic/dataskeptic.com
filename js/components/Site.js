@@ -67,16 +67,19 @@ export default class Site extends React.Component {
 
 	onPlayToggle(episode) {
 		console.log(episode)
-		//console.log(e)
-		//console.log(episode)
 		var cplay = this.state.player.playing
+		var cepisode = this.state.player.episode
+		console.log([cplay, cepisode, episode])
 		if (cplay) {
-			// TODO: send url to player
-			// TODO: make episode button a pause button
+			if (cepisode != undefined && cepisode.guid == episode.guid) {
+				this.setState({player: {playing: false}})
+			}
+			else {
+				this.setState({player: {playing: true}, episode: episode})
+			}
 		} else {
-			// TODO: make all episode buttons play buttons, except this one
+			this.setState({player: {playing: true, episode: episode}})
 		}
-		this.setState({player: {playing: (!cplay), episode: episode}})
 	}
 	
 	render() {
