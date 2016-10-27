@@ -1,2 +1,3 @@
 # dataskeptic.com
-Stub for new web site
+
+Source for the web app powering dataskeptic.com

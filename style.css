@@ -3,66 +3,64 @@
 *****************************************************************************/
 
 html, body {
-	margin: 0 0 0 0;
-	width: 100%;
+  margin: 0 0 0 0;
+  width: 100%;
 }
 
 .header {
-	background-color: #3A3B3B;
-	height: 125px;
+  background-color: #3A3B3B;
+  height: 125px;
 }
 
 .center {
-	max-width: 800;
-	margin: auto;
-	clear: both;
+  max-width: 800;
+  margin: auto;
+  clear: both;
 }
 
 #logo {
-	height: 125px;
+  height: 125px;
 }
 
 .header-left {
-	float: left;
+  float: left;
 }
 
 .header-right {
-	position: relative;
-	padding: 7px;
+  position: relative;
+  padding: 7px;
 }
 
 .clear {
-	clear: both;
+  clear: both;
 }
 
 h1 {
-	font-size: 22pt;
-	padding: 0px;
-	margin: 0px;
-	color: #ffffff;
-	font-weight: bold;
+  font-size: 22pt;
+  padding: 0px;
+  margin: 0px;
+  color: #ffffff;
+  font-weight: bold;
 }
 
 .header-p {
-	color: #ffffff;
+  color: #ffffff;
 }
-
-<<<<<<< HEAD
 .menu-year {
-	margin-right: 5px;
+  margin-right: 5px;
 }
 
 .menu-button-up {
-	background-color: #eeeeee;
+  background-color: #eeeeee;
 }
 
 .menu-button-down {
-	background-color: #aaaaaa;
+  background-color: #aaaaaa;
 }
 
 .menu {
-	width: 100%;
-    background-color: #282828;	
+  width: 100%;
+    background-color: #282828;  
 }
 
 ul.topnav {
@@ -98,16 +96,16 @@ ul.topnav li.right {float: right;}
 }
 
 .footer {
-	text-align: center;
-	margin: auto;
-	margin-top: 5px;
+  text-align: center;
+  margin: auto;
+  margin-top: 5px;
 }
 
 .footer-links {
-	padding: 5px;
+  padding: 5px;
 }
 .footer-img {
-	height: 25px;
+  height: 25px;
 }
 
 /*****************************************************************************
@@ -115,65 +113,67 @@ ul.topnav li.right {float: right;}
 *****************************************************************************/
 
 .player {
-	position: absolute;
-	right:0;
-	top:0;
-	background-color: #6A6B6B;
-	width: 200px;
-	padding: 1px;
-}
-
-.player-inner {
-	padding: 6px;
-}
-
-.player-top {
-
-}
-
-.player-bottom {
-	padding: 5px;
-}
-
-.player-title {
-
+  width: 200px;
+  height: 20px;
+  padding: 1px;
 }
 
 .player-progress-bar {
-	margin-top: 10px;
-	margin-left: 40px;
+  margin-left: 250px;
+  margin-right: 50px;
+  padding: 9px;
 }
 
-.menu {
-	padding-top: 10px;
-	background-color: #DADBDB;
-	padding-bottom: 10px;
-	margin-bottom: 15px;
+.player-title-container {
+  float: left;
+  width: 250px;
+  overflow: hidden;
 }
 
-.menu-link {
-	margin-left: 10px;
-	margin-right: 10px;
+.player-title {
+  background-color: #f00;
+  height: 20px;
+  float: left;
+  font-size: 8pt;
+}
+
+.player-duration-container {
+  float: right;
+}
+
+.player-duration {
+  font-size: 8pt;
+  margin: 0 10 0 0px;
+  height: 20px;
+  background-color: #f00;
+}
+
+.player-inner {
+}
+
+.thin-player-container {
+  width: 100%;
+  background-color: #6A6B6B;
+}
+
+.thin-player {
+  padding: 0px;
+  height: 20px;
+}
+
+.home-player {
+  float: left;
+  margin-top: 5px;
+  border-style: solid;
+  border-radius: 2px;
+  border-width: 1px;
+  padding: 0 2 2 5px;
+  height: 87px;
+  width: 250px;
 }
 
 .player-label {
 
-}
-
-#thin-player {
-	position: relative;
-	min-width: 200px;
-}
-
-.home-player {
-	float: left;
-	margin-top: 5px;
-	border-style: solid;
-	border-radius: 2px;
-	border-width: 1px;
-	padding: 0 2 2 5px;
-	height: 87px;
-	width: 250px;
 }
 
 /*****************************************************************************
@@ -183,85 +183,85 @@ ul.topnav li.right {float: right;}
 .episode {
     border-style: solid;
     border-width: 1px 1px 1px 1px;
-	padding: 0px;
-	margin: 0px;
-	margin-bottom: 10px;
-	overflow: hidden;
+  padding: 0px;
+  margin: 0px;
+  margin-bottom: 10px;
+  overflow: hidden;
 }
 
 .episode-expanded {
 }
 
 .episode-compressed {
-	height: 65px;	
+  height: 65px; 
 }
 
 .episode-left {
-	float: left;
-	height: 65px;	
-	width: 65px;
-	margin: 0px;
+  float: left;
+  height: 65px; 
+  width: 65px;
+  margin: 0px;
 }
 
 .episode-img {
-	width:  65px;
-	height: 65px;
+  width:  65px;
+  height: 65px;
 }
 .episode-middle {
-	padding-top: 5px;
-	padding-left: 5px;
-	height: 65px;
-	overflow: hidden;
-	white-space: nowrap;
-	margin: 0px;
+  padding-top: 5px;
+  padding-left: 5px;
+  height: 65px;
+  overflow: hidden;
+  white-space: nowrap;
+  margin: 0px;
 }
 
 .episode-right {
-	float: right;
-	min-width: 120px;
+  float: right;
+  min-width: 120px;
 }
 .episode-right-inner {
-	background-color: #eeeeee;
-	height: 65px;
-	padding: 0px;
-	margin: 0px;
+  background-color: #eeeeee;
+  height: 65px;
+  padding: 0px;
+  margin: 0px;
 }
 .episode-right-inner-inner {
-	padding-top: 17px;
-	margin-left: 10px;
+  padding-top: 17px;
+  margin-left: 10px;
 }
 
 .episode-button {
-	float: left;
-	border-radius: 25px;
-	background-color: #c997fe;
-	width: 30px;
-	height: 30px;
-	text-align: center;
-	margin-right: 5px;
+  float: left;
+  border-radius: 25px;
+  background-color: #c997fe;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  margin-right: 5px;
 }
 
 .episode-title {
-	font-size: 16pt;
-	line-height: 15pt;
+  font-size: 16pt;
+  line-height: 15pt;
 }
 
 .episode-duration {
-	font-size: 8pt;
-	font-weight: bold;
-	margin-right: 5pt;
-	line-height: 7pt;
+  font-size: 8pt;
+  font-weight: bold;
+  margin-right: 5pt;
+  line-height: 7pt;
 }
 
 .episode-pubDate {
-	font-size: 8pt;
-	margin-left: 5pt;
-	line-height: 90%;
+  font-size: 8pt;
+  margin-left: 5pt;
+  line-height: 90%;
 }
 
 .episode-selector {
-	margin-top: 5px;
-	margin-bottom: 5px
+  margin-top: 5px;
+  margin-bottom: 5px
 }
 
 /*****************************************************************************
@@ -269,49 +269,48 @@ ul.topnav li.right {float: right;}
 *****************************************************************************/
 
 #mc_embed_signup {
-	background:#fff;
-	clear:left;
-	font:14px Helvetica,Arial,sans-serif; 
-	width:350px;
+  background:#fff;
+  clear:left;
+  font:14px Helvetica,Arial,sans-serif; 
+  width:350px;
 }
 
 #mc-inner {
-	position: absolute;
-	left: -5000px;
+  position: absolute;
+  left: -5000px;
 }
 
 #home-top-row {
-	clear: both;
+  clear: both;
 }
 
 .carousel {
-	margin: 0 auto;
-	margin-right: 20px;
-	padding: 5 25 30 25px;
-	width: 530px;
-	float: left;
+  margin: 0 auto;
+  margin-right: 20px;
+  padding: 5 25 30 25px;
+  width: 530px;
+  float: left;
 }
 
 .card { 
-	background-color: #0f0;
-	font-size: 12pt;
-	width: 650px;
-	height: 200px;
+  font-size: 12pt;
+  width: 650px;
+  height: 200px;
 }
 
 div.mailing-list-signup-container {
-	float: left;
-	width: 250px;
+  float: left;
+  width: 250px;
 }
 
 button.slick-arrow.slick-next {
-	background-color: #aaa;
-	border-radius: 15px;
+  background-color: #aaa;
+  border-radius: 15px;
 }
 
 button.slick-arrow.slick-prev {
-	background-color: #aaa;
-	border-radius: 15px;
+  background-color: #aaa;
+  border-radius: 15px;
 }
 
 /* The home-player definition is in the Player.js section for convenience */
@@ -700,9 +699,8 @@ button.slick-arrow.slick-prev {
 
 .rc-slider {
   position: relative;
-  height: 4px;
+  height: 1px;
   width: 100%;
-  border-radius: 6px;
   background-color: #e9e9e9;
   box-sizing: border-box;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -721,10 +719,10 @@ button.slick-arrow.slick-prev {
 }
 .rc-slider-handle {
   position: absolute;
-  margin-left: -7px;
-  margin-top: -5px;
-  width: 14px;
-  height: 14px;
+  margin-left: -3px;
+  margin-top: -3px;
+  width: 7px;
+  height: 7px;
   cursor: pointer;
   border-radius: 50%;
   border: solid 2px #96dbfa;

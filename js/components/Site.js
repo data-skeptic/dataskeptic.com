@@ -87,7 +87,6 @@ export default class Site extends React.Component {
 			<Router>
 				<div>
 					<Header />
-					<Player config={this.state.player} onPause={this.onPlayToggle.bind(this)} />
 					<div className="menu">
 						<ul class="topnav">
 							<li><Link to="/">Home</Link></li>
@@ -100,6 +99,7 @@ export default class Site extends React.Component {
 							<li class="right"><Link to="/members">Membership</Link></li>
 						</ul>
 					</div>
+					<Player config={this.state.player} onPause={this.onPlayToggle.bind(this)} />
 					<Match exactly pattern="/" component={Home} />
 					<Match exactly pattern="/index.htm" component={Home} />
 					<Match pattern="/podcast" component={Podcast} />
