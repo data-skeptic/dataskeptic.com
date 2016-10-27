@@ -12,7 +12,7 @@ export default class Player extends React.Component {
 	
 	render() {
 		// TODO: render this.props.episode stuff
-		if (this.props.config.playing) {
+		if (this.props.config.playing || true) {
 			return (
 				<div class="player" className="thin-player">
 					<div class="player-inner">
