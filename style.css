@@ -120,6 +120,18 @@ ul.topnav li.right {float: right;}
     ul.topnav li {float: none;}
 }
 
+.episode-button-sm {
+  float: left;
+  border-radius: 9px;
+  background-color: #c997fe;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  font-size: 8pt;
+  padding:0 0 0 1px;  
+  margin-right: 5px;  
+}
+
 .footer {
   text-align: center;
   margin: auto;
@@ -144,7 +156,7 @@ ul.topnav li.right {float: right;}
 }
 
 .player-progress-bar {
-  margin-left: 250px;
+  margin-left: 275px;
   margin-right: 50px;
   padding: 9px;
 }
@@ -156,21 +168,23 @@ ul.topnav li.right {float: right;}
 }
 
 .player-title {
-  background-color: #f00;
+  overflow: hidden;
   height: 20px;
   float: left;
-  font-size: 8pt;
+  font-size: 10pt;
+  color: #fff;
 }
 
 .player-duration-container {
   float: right;
+  margin-top: -23px;
 }
 
 .player-duration {
-  font-size: 8pt;
+  font-size: 12pt;
+  color: #fff;
   margin: 0 10 0 0px;
   height: 20px;
-  background-color: #f00;
 }
 
 .player-inner {
@@ -182,8 +196,8 @@ ul.topnav li.right {float: right;}
 }
 
 .thin-player {
-  padding: 0px;
-  height: 20px;
+  padding: 3px;
+  height: 25px;
 }
 
 .home-player {
@@ -358,6 +372,11 @@ ul.topnav li.right {float: right;}
 }
 
 .card { 
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: #000;
+  border-style: solid;
+  padding: 5 5 5 10px;
   font-size: 12pt;
   width: 650px;
   height: 200px;
@@ -777,7 +796,7 @@ button.slick-arrow.slick-prev {
 .rc-slider-track {
   position: absolute;
   left: 0;
-  height: 4px;
+  height: 2px;
   border-radius: 6px;
   background-color: #abe2fb;
   z-index: 1;

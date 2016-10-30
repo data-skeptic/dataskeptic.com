@@ -11,6 +11,7 @@ export default class SocialMediaCard extends React.Component {
 			<div>
 				<p>Follow Data Skeptic on <a href="https://twitter.com/dataskeptic">Twitter</a></p>
 				<p>Like us on <a href="https://www.facebook.com/dataskeptic">Facebook</a></p>
+				<p>Subscribe on <a href="https://www.youtube.com/channel/UC60gRMJRjTuTskBnl-LkPAg">Youtube</a></p>
 			</div>
 		)
 	}
