@@ -87,6 +87,8 @@ export default class Podcast extends React.Component {
 	}
 	
 	render() {
+		console.log("props")
+		console.log(this.props)
 		var year = this.state.max_year
 		var episodes = this.state.episodes
 		var num = episodes.length
