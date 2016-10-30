@@ -29,7 +29,7 @@ export default class Episode extends React.Component {
 		var playing_symbol = (
 			<button class="episode-button" onClick={this.props.onPlayToggle.bind(this, ep)}>&#9658;</button>
 		)
-		if (this.props.playing) {
+		if (this.props.is_playing) {
 			playing_symbol = (
 				<button class="episode-button" onClick={this.props.onPlayToggle.bind(this, ep)}>&#10073;&#10073;</button>
 			)

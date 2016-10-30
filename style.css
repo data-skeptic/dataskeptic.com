@@ -209,6 +209,24 @@ ul.topnav li.right {float: right;}
   padding: 0 2 2 5px;
   height: 87px;
   width: 250px;
+  background-color: #eee;
+}
+
+.home-player-latest {
+  font-size: 8pt;
+}
+
+.home-player-title {
+  overflow: hidden;
+}
+
+.home-player-left {
+  float: left;
+  margin-top: 25px;
+}
+
+.home-player-right {
+  margin-left: 35px;
 }
 
 .player-label {

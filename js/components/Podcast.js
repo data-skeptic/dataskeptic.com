@@ -11,16 +11,11 @@ export default class Podcast extends React.Component {
 		super(props)
 		var year = (new Date()).getYear()
 		this.state = {
-			"player": {
-				"playing": false,
-				"episode": undefined
-			},
 			max_year: year,
 			year: year
 		}
 
 		this.onMenuClick = this.onMenuClick.bind(this)
-		this.onPlayToggle = this.onPlayToggle.bind(this)
 		this.setEpisodes = this.setEpisodes.bind(this)	
 	}
 
@@ -36,25 +31,12 @@ export default class Podcast extends React.Component {
 		this.setState({year})
 	}
 
-	onPlayToggle(episode) {
-		console.log(episode)
-		var cplay = this.state.player.playing
-		if (cplay) {
-			// TODO: send url to player
-			// TODO: make episode button a pause button
-		} else {
-			// TODO: make all episode buttons play buttons, except this one
-		}
-		this.setState({player: {playing: (!cplay), episode: episode}})
-	}
-
 	onMenuClick(e) {
 		console.log(e)
 	}
 	
 	render() {
-		console.log("props")
-		console.log(this.props)
+		var config = this.props.config
 		var year = this.state.max_year
 		var episodes = this.props.episodes
 		var num = episodes.length
@@ -73,7 +55,7 @@ export default class Podcast extends React.Component {
 		} else {
 			var me = this
 			var dyear = this.state.year
-			var onPlayToggle = this.onPlayToggle
+			var onPlayToggle = this.props.onPlayToggle
 			return (
 				<div class="center">
 					<div class="episode-selector">
@@ -89,7 +71,15 @@ export default class Podcast extends React.Component {
 					<div class="episodes-container">
 						{episodes.map(function(episode) {
 							if (episode.pubDate.getYear() == dyear) {
-								return <Episode key={episode.guid} episode={episode} onPlayToggle={onPlayToggle} />
+								var is_playing = false
+								if (config.player.episode != undefined) {
+									if (config.player.episode.guid == episode.guid) {
+										if (config.player.is_playing) {
+											is_playing = true
+										}
+									}
+								}
+								return <Episode key={episode.guid} is_playing={is_playing} episode={episode} onPlayToggle={onPlayToggle} />
 							}
 						})}
 					</div>

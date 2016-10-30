@@ -14,3 +14,5 @@ export default class Blog extends React.Component {
 		)
 	}
 }
+
+//				<span dangerouslySetInnerHTML={{__html: desc}} />
