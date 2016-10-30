@@ -102,7 +102,7 @@ export default class Site extends React.Component {
 					<Player config={this.state.player} onPause={this.onPlayToggle.bind(this)} />
 					<Match exactly pattern="/" component={Home} />
 					<Match exactly pattern="/index.htm" component={Home} />
-					<Match pattern="/podcast" component={Podcast} />
+					<Route path="/podcast" foo="bar" component={Podcast} />
 					<Match pattern="/blog/**" component={Blog} />
 					<Match pattern="/video" component={Video} />
 					<Match pattern="/proj" component={Projects} />
@@ -159,12 +159,14 @@ MISC
 	# TODO: redirects on old content, especially show notes pages from feed
 	# TODO: error page logging to cloudfront
 HELP
+	# TODO: Passing props into routes
 	# TODO: where to hold episodes (not in podcast.js)
 	# TODO: realtime refresh?
 	# TODO: caching of XML parse, Dynamo lookups
 	# TODO: Blog.js implementation
 	# TODO: packages.json - adding a library, am I doing it right?
 	# TODO: packages.json - dev vs prod
+	# TODO: page-not-found branch
 	# TODO: react-async-loader
 	# TODO: General overview
 	# TODO: SEO / crawlable?
