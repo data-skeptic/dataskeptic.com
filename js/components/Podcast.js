@@ -11,7 +11,6 @@ export default class Podcast extends React.Component {
 		super(props)
 		var year = (new Date()).getYear()
 		this.state = {
-			"episodes": [],
 			"player": {
 				"playing": false,
 				"episode": undefined
@@ -19,39 +18,6 @@ export default class Podcast extends React.Component {
 			max_year: year,
 			year: year
 		}
-
-		var me = this
-
-		axios
-		  .get("http://dataskeptic.libsyn.com/rss")
-		  .then(function(result) {
-		  	var xml = result["data"]
-			var extractedData = "";
-			var parser = new xml2js.Parser();
-			var year = me.year
-			parser.parseString(xml, function(err,rss) {
-				var episodes = []
-				var items = rss["rss"]["channel"][0]["item"]
-				items.map(function(item) {
-					var mp3 = item["enclosure"][0]["$"]["url"]
-					var dstr = item["pubDate"][0]
-					var pubDate = new Date(dstr)
-					var episode = {
-						"title": item["title"][0],
-						"desc": item["description"][0],
-						"pubDate": pubDate,
-						"mp3": mp3,
-						"duration": item["itunes:duration"][0],
-						"img": item["itunes:image"][0]["$"]["href"],
-						"guid": item["guid"][0]["_"],
-						"link": item["link"][0]
-					}
-					episodes.push(episode)
-				})
-				me.setState({episodes})
-			});			
-		  });
-		// TODO: Set 1 hour callback to refresh xml
 
 		this.onMenuClick = this.onMenuClick.bind(this)
 		this.onPlayToggle = this.onPlayToggle.bind(this)
@@ -90,7 +56,7 @@ export default class Podcast extends React.Component {
 		console.log("props")
 		console.log(this.props)
 		var year = this.state.max_year
-		var episodes = this.state.episodes
+		var episodes = this.props.episodes
 		var num = episodes.length
 		var years = []
 		while (year > 113) {
@@ -100,8 +66,8 @@ export default class Podcast extends React.Component {
 		if (num == 0) {
 			return (
 				<div class="center">
-				<p>Loading episodes...</p>
-				<img src="img/Loading_icon.gif" />
+					<p>Loading episodes...</p>
+					<img src="img/Loading_icon.gif" />
 				</div>
 			)
 		} else {

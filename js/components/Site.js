@@ -1,8 +1,8 @@
 import React from 'react'
 import { BrowserRouter as Router, Link, Match, Miss } from 'react-router'
 
-//import axios from "axios"
-//import xml2js from "xml2js"
+import axios from "axios"
+import xml2js from "xml2js"
 
 import Header from './Header'
 import Player from './Player'
@@ -17,6 +17,11 @@ import Membership from './Membership'
 import Footer from './Footer'
 import NotFound from './NotFound'
 
+const MatchWithProps = ({ component: Component, props, ...rest }) => (
+  <Match {...rest} render={(matchProps) => (
+    <Component {...props} {...matchProps} />
+  )}/>
+);
 
 export default class Site extends React.Component {
 	constructor(props) {
@@ -29,7 +34,6 @@ export default class Site extends React.Component {
 			}
 		}
 
-		/*
 		var me = this
 
 		axios
@@ -61,8 +65,6 @@ export default class Site extends React.Component {
 				me.setState({episodes})
 			});			
 		  });
-		// TODO: Set 1 hour callback to refresh xml
-		*/
 	}
 
 	onPlayToggle(episode) {
@@ -103,13 +105,14 @@ export default class Site extends React.Component {
 					<Player config={this.state.player} onPause={this.onPlayToggle.bind(this)} />
 					<Match exactly pattern="/" component={Home} />
 					<Match exactly pattern="/index.htm" component={Home} />
-					<Match pattern="/podcast" foo="bar" {...rest} component={Podcast} />
-					<Match pattern="/blog" component={Blog} />
+					<MatchWithProps pattern="/podcast" component={Podcast} props={{ episodes: this.state.episodes }} />
+					<Match pattern="/blog/**" component={Blog} />
 					<Match pattern="/video" component={Video} />
 					<Match pattern="/proj" component={Projects} />
 					<Match pattern="/store" component={Store} />
 					<Match pattern="/services" component={Services} />
-					<Match pattern="/members" component={Membership} />
+					<Match pattern="/members" render={(props) => (<Membership data={this.state.episodes}/>)} />
+					<Miss component={NotFound} />
 					<Footer />
 				</div>
 			</Router>
@@ -161,16 +164,12 @@ MISC
 	# TODO: error page logging to cloudfront
 	# TODO: realtime refresh?
 HELP
-	# TODO: Passing props into routes
 	# TODO: where to hold episodes (not in podcast.js)
 	# TODO: caching of XML parse, Dynamo lookups
 	# TODO: Blog.js implementation
-	# TODO: packages.json - adding a library, am I doing it right?
-	# TODO: packages.json - dev vs prod
-	# TODO: page-not-found branch
-	# TODO: react-async-loader
 	# TODO: General overview
+	# TODO: Saving state in localStorage
 	# TODO: SEO / crawlable?
-	# TODO: Removed Checkout.js because I didn't know how to pass data with Store.js
+		// TODO: Set 1 hour callback to refresh xml
 */
 
