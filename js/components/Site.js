@@ -28,6 +28,7 @@ export default class Site extends React.Component {
 		super(props)
 		this.state = {
 			"episodes": [],
+			"products": [],
 			"player": {
 				"playing": false,
 				"episode": undefined
@@ -64,7 +65,13 @@ export default class Site extends React.Component {
 				})
 				me.setState({episodes})
 			});			
-		  });
+		  })
+
+		axios
+			.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/products")
+			.then(function(result) {
+				me.setState({products})
+			});
 	}
 
 	onPlayToggle(episode) {
