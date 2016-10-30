@@ -3,7 +3,7 @@ import React from 'react'
 
 import AddressForm from './AddressForm'
 import CreditCardForm from './CreditCardForm'
-
+import Loading from './Loading'
 
 export default class Store extends React.Component {
 	constructor(props) {
@@ -51,7 +51,7 @@ export default class Store extends React.Component {
 	render() {
 		var products = this.props.products
 		if (this.state.stripeLoading || !this.props.products_loaded) {
-			return <div>Loading</div>
+			return <div><Loading /></div>
 		}
 		else if (this.state.stripeLoadingError) {
 			return <div>Error</div>
@@ -80,31 +80,31 @@ export default class Store extends React.Component {
 						</div>
 						{products.map(function(product) {
 							if (product.active == 1) {
-							return (
-								<div class="product-outer">
-									<div class="product-row" key={product.id} >
-										<div class="product-main">
-											<span class="product-title">{product.title}</span><br />
-											<p>{product.desc}</p>
-										</div>
+								return (
+									<div key={product.id} class="product-outer">
+										<div class="product-row">
+											<div class="product-main">
+												<span class="product-title">{product.title}</span><br />
+												<p>{product.desc}</p>
+											</div>
 
-										<div class="product-right">
-											<div class="product-right-top">
-												<div class="product-pull-down">
-													Pull down
+											<div class="product-right">
+												<div class="product-right-top">
+													<div class="product-pull-down">
+														Pull down
+													</div>
+													<div class="product-price">
+														${product.price}
+													</div>
 												</div>
-												<div class="product-price">
-													${product.price}
+												<div class="product-right-bottom">
+													<button class="add-to-cart">+</button>
 												</div>
-											</div>
-											<div class="product-right-bottom">
-												<button class="add-to-cart">+</button>
 											</div>
 										</div>
+										<div class="clear"></div>
 									</div>
-									<div class="clear"></div>
-								</div>
-							)
+								)
 							}
 						})}
 					</div>

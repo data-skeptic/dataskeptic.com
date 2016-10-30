@@ -158,6 +158,7 @@ HOME
 	# TODO: social tile
 	# TODO: Latest blog tile
 	# TODO: live statistics tile
+	# TODO: Player progress bar
 PODCAST
 	# TODO: 
 BLOG
