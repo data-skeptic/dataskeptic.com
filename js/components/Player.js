@@ -8,7 +8,7 @@ export default class Player extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			"playing": "http://goldfirestudios.com/proj/howlerjs/sound.ogg",
+			"position": 0,
 			"has_shown": false
 		}
 	}
@@ -18,9 +18,9 @@ export default class Player extends React.Component {
 		var config = this.props.config
 		var episode = config.episode
 		var howler = ""
-		var title = "adfj lskfj sdlfkj sldfkj sfkj slkfj slkfdjsdflkj kjkljlkjl ljkljkljlkjk"
+		var title = ""
 		var duration = "--:--"
-		var progress = 0.5
+		var progress = this.state.position
 		if (episode != undefined) {
 			var mp3 = episode.mp3
 			howler = (<ReactHowler src={mp3} playing={config.playing} />)
