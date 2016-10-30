@@ -102,7 +102,7 @@ export default class Site extends React.Component {
 					<Player config={this.state.player} onPause={this.onPlayToggle.bind(this)} />
 					<Match exactly pattern="/" component={Home} />
 					<Match exactly pattern="/index.htm" component={Home} />
-					<Match pattern="/podcast" component={Podcast} />
+					<Match pattern="/podcast" foo="bar" component={Podcast} />
 					<Match pattern="/blog" component={Blog} />
 					<Match pattern="/video" component={Video} />
 					<Match pattern="/proj" component={Projects} />
