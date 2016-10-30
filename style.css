@@ -326,7 +326,7 @@ ul.topnav li.right {float: right;}
  Store.js
 *****************************************************************************/
 
-.checkout-box {
+.cc-outer {
   border-color: #000;
   border-radius: 4px;
   border-width: 1px;
@@ -360,6 +360,92 @@ ul.topnav li.right {float: right;}
   padding-bottom: 50px;
   background-color: #ddd;
 }
+
+.store-items {
+  clear: both;
+  padding: 1 15 5 15px;
+  margin-top: 15px;
+  background-color: #fdd;
+}
+
+.product-row {
+  background-color: #fee;
+  clear:both;
+}
+
+.product-title {
+  font-size: 12pt;
+  font-weight: bold;
+}
+
+.product-outer {
+}
+.product-header {
+  float: left;
+  width: 100%;
+  background-color: #ccc;
+  margin: 2 2 2 2px;
+  padding: 4px;
+}
+.product-header-item {
+  float: left;
+  width: 55%;
+  font-weight: bold;
+}
+.product-header-options {
+  float: left;
+  width: 20%;
+  text-align: center;
+  font-weight: bold;
+}
+.product-header-price {
+  float: left;
+  width: 25%;
+  text-align: right;
+  font-weight: bold;
+}
+
+
+.product-row {
+  float: left;
+  width: 100%;
+  background-color: #eee;
+  margin: 2 2 2 2px;
+  height: 75px;
+}
+.product-main {
+  float: left;
+  width: 60%;
+  height: 100%;
+}
+.product-right {
+  float: left;
+  width: 40%;
+  height: 100%;
+}
+.product-right-top {
+  clear: both;
+}
+.product-pull-down {
+  float: left;
+  width: 70%;
+  padding: 10px;
+}
+.product-price {
+  float: left;
+  width: 30%;
+  text-align: right;
+  padding: 10px;
+}
+.product-right-bottom {
+  width: 100%;
+}
+.add-to-cart {
+  width: 100px;
+  float: right;
+}
+
+
 
 /*****************************************************************************
  Home.js

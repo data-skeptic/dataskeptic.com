@@ -83,7 +83,6 @@ export default class Site extends React.Component {
 	}
 
 	onPlayToggle(episode) {
-		console.log("onPlayToggle")
 		var player = this.state.player
 		if (episode == undefined) {
 			console.log("Got request to play undefined episode.")
@@ -116,6 +115,8 @@ export default class Site extends React.Component {
 	}
 	
 	render() {
+		var products = this.state.products
+		var products_loaded = this.state.products_loaded
 		var player = this.state.player
 		return (
 			<Router>
@@ -140,9 +141,9 @@ export default class Site extends React.Component {
 					<Match pattern="/blog/**" component={Blog} />
 					<Match pattern="/video" component={Video} />
 					<Match pattern="/proj" component={Projects} />
-					<Match pattern="/store" component={Store} />
+					<MatchWithProps pattern="/store"             component={Store}   props={{ products, products_loaded }} />
 					<Match pattern="/services" component={Services} />
-					<Match pattern="/members" render={(props) => (<Membership data={this.state.episodes}/>)} />
+					<MatchWithProps pattern="/members"           component={Membership} props={{ products, products_loaded }} />
 					<Miss component={NotFound} />
 					<Footer />
 				</div>
