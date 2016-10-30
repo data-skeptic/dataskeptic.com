@@ -20,16 +20,16 @@ export default class Player extends React.Component {
 		var howler = ""
 		var title = "adfj lskfj sdlfkj sldfkj sfkj slkfj slkfdjsdflkj kjkljlkjl ljkljkljlkjk"
 		var duration = "--:--"
-		var progress = 0
+		var progress = 1
 		if (episode != undefined) {
 			var mp3 = episode.mp3
 			howler = (<ReactHowler src={mp3} playing={config.playing} />)
 			title = episode.title
 			duration = episode.duration
 		}
-		var button = (<button class="episode-button" onClick={this.props.onPause}>&#9658;</button>)
+		var button = (<button class="episode-button-sm" onClick={this.props.onPause}>&#9658;</button>)
 		if (config.playing) {
-			button = (<button class="episode-button" onClick={this.props.onPause}>&#10073;&#10073;</button>)
+			button = (<button class="episode-button-sm" onClick={this.props.onPause}>&#10073;&#10073;</button>)
 		}
 		return (
 			<div class="thin-player-container">
