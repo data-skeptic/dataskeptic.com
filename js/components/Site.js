@@ -163,7 +163,11 @@ HELP
 	# TODO: realtime refresh?
 	# TODO: caching of XML parse, Dynamo lookups
 	# TODO: Blog.js implementation
+	# TODO: packages.json - adding a library, am I doing it right?
+	# TODO: packages.json - dev vs prod
+	# TODO: react-async-loader
 	# TODO: General overview
 	# TODO: SEO / crawlable?
+	# TODO: Removed Checkout.js because I didn't know how to pass data with Store.js
 */
 

@@ -289,6 +289,46 @@ ul.topnav li.right {float: right;}
   margin-bottom: 5px
 }
 
+
+/*****************************************************************************
+ Store.js
+*****************************************************************************/
+
+.checkout-box {
+  border-color: #000;
+  border-radius: 4px;
+  border-width: 1px;
+  border-style: solid;
+  padding: 5 4 3 14px;
+  width: 214px;
+}
+
+.cc-yymm {
+  width: 50px;
+}
+
+.cc-cvc {
+  margin-left: 10px;
+  width: 75;
+}
+
+.cc-num {
+  width: 185px;
+}
+
+.cc-purchase {
+  width: 185px;
+}
+
+.thank-you {
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  background-color: #ddd;
+}
+
 /*****************************************************************************
  Home.js
 *****************************************************************************/
