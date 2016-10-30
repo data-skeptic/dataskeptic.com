@@ -9,7 +9,7 @@ export default class Blog extends React.Component {
 	render() {
 		return (
 			<div class="center">
-				Its a blog
+				Categories
 			</div>
 		)
 	}
