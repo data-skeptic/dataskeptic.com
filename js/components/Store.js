@@ -94,7 +94,7 @@ export default class Store extends React.Component {
 													Pull down
 												</div>
 												<div class="product-price">
-													{product.price}
+													${product.price}
 												</div>
 											</div>
 											<div class="product-right-bottom">
@@ -119,7 +119,8 @@ export default class Store extends React.Component {
 						    <div class="checkout-row">
 						        <AddressForm />
 						        <CreditCardForm onSubmit={this.onSubmit.bind(this)} paymentError={this.state.paymentError} submitDisabled={this.state.submitDisabled} />
-						    </div>					
+						    </div>
+						    <div class="clear"></div>
 						</div>
 					</div>
 				</div>

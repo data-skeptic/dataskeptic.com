@@ -326,13 +326,30 @@ ul.topnav li.right {float: right;}
  Store.js
 *****************************************************************************/
 
-.cc-outer {
+
+.checkout-box {
   border-color: #000;
   border-radius: 4px;
   border-width: 1px;
   border-style: solid;
+  width: 100%;
+}
+
+.checkout-row {
+  width: 100%;
+  background-color: #eee;
+}
+
+.address-form {
+  width: 50%;
+  float: left;
+  background-color: #8f8;
+}
+
+.cc-outer {
+  float: left;
   padding: 5 4 3 14px;
-  width: 214px;
+  background-color: #fff;
 }
 
 .cc-yymm {
@@ -365,7 +382,6 @@ ul.topnav li.right {float: right;}
   clear: both;
   padding: 1 15 5 15px;
   margin-top: 15px;
-  background-color: #fdd;
 }
 
 .product-row {
@@ -411,6 +427,8 @@ ul.topnav li.right {float: right;}
   width: 100%;
   background-color: #eee;
   margin: 2 2 2 2px;
+  padding-left: 4px;
+  padding-right: 4px;
   height: 75px;
 }
 .product-main {
@@ -484,6 +502,10 @@ ul.topnav li.right {float: right;}
   font-size: 12pt;
   width: 650px;
   height: 200px;
+}
+
+.home-latest-episode-card-img {
+  width: 100px;
 }
 
 div.mailing-list-signup-container {

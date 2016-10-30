@@ -6,6 +6,7 @@ import Slider from "react-slick"
 import Episode from "./Episode"
 import MailingList from "./MailingList"
 import SocialMediaCard from "./SocialMediaCard"
+import LatestEpisodeCard from "./LatestEpisodeCard"
 import LatestEpisodePlayer from "./LatestEpisodePlayer"
 
 export default class Home extends React.Component {
@@ -64,7 +65,7 @@ export default class Home extends React.Component {
 								Some live statistics
 							</div>
 							<div class="card">
-								Latest episode details
+								<LatestEpisodeCard episode={episode} onPlayToggle={onPlayToggle} is_playing={is_playing} />
 							</div>
 							<div class="card">
 								Latest blog posts

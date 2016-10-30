@@ -138,7 +138,7 @@ export default class Site extends React.Component {
 					<MatchWithProps exactly pattern="/"          component={Home}    props={{ episodes: this.state.episodes, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
 					<MatchWithProps exactly pattern="/index.htm" component={Home}    props={{ episodes: this.state.episodes, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
 					<MatchWithProps pattern="/podcast"           component={Podcast} props={{ episodes: this.state.episodes, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
-					<Match pattern="/blog/**" component={Blog} />
+					<Match pattern="/blog" component={Blog} />
 					<Match pattern="/video" component={Video} />
 					<Match pattern="/proj" component={Projects} />
 					<MatchWithProps pattern="/store"             component={Store}   props={{ products, products_loaded }} />
@@ -156,10 +156,8 @@ export default class Site extends React.Component {
 /*
 HOME
 	# TODO: social tile
-	# TODO: latest episode tile
 	# TODO: Latest blog tile
 	# TODO: live statistics tile
-	# TODO: latest episode player
 PODCAST
 	# TODO: 
 BLOG
