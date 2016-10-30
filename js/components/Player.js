@@ -20,7 +20,7 @@ export default class Player extends React.Component {
 		var howler = ""
 		var title = "adfj lskfj sdlfkj sldfkj sfkj slkfj slkfdjsdflkj kjkljlkjl ljkljkljlkjk"
 		var duration = "--:--"
-		var progress = 1
+		var progress = 0.5
 		if (episode != undefined) {
 			var mp3 = episode.mp3
 			howler = (<ReactHowler src={mp3} playing={config.playing} />)
