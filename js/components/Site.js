@@ -164,6 +164,7 @@ HELP
 	# TODO: caching of XML parse, Dynamo lookups
 	# TODO: Blog.js implementation
 	# TODO: General overview
+	# TODO: Saving state in localStorage
 	# TODO: SEO / crawlable?
 */
 
