@@ -93,8 +93,8 @@ export default class Site extends React.Component {
 							<li><Link to="/podcast">Podcast</Link></li>
 							<li><Link to="/blog">Blog</Link></li>
 							<li><Link to="/video">Videos</Link></li>
-							<li><Link to="/proj">Projects</Link></li>
 							<li><Link to="/store">Store</Link></li>
+							<li><Link to="/proj">Projects</Link></li>
 							<li><Link to="/services">Services</Link></li>
 							<li class="right"><Link to="/members">Membership</Link></li>
 						</ul>
@@ -103,7 +103,7 @@ export default class Site extends React.Component {
 					<Match exactly pattern="/" component={Home} />
 					<Match exactly pattern="/index.htm" component={Home} />
 					<Match pattern="/podcast" component={Podcast} />
-					<Match pattern="/blog" component={Blog} />
+					<Match pattern="/blog/**" component={Blog} />
 					<Match pattern="/video" component={Video} />
 					<Match pattern="/proj" component={Projects} />
 					<Match pattern="/store" component={Store} />
@@ -115,3 +115,55 @@ export default class Site extends React.Component {
 		)
 	}
 }
+
+
+/*
+HOME
+	# TODO: social tile
+	# TODO: latest episode tile
+	# TODO: Latest blog tile
+	# TODO: live statistics tile
+	# TODO: latest episode player
+	# TODO: sitewide header player
+PODCAST
+	# TODO: 
+BLOG
+	# TODO: admin page to update blog content - add tags, release date, author, prettyname, title, tags
+					level - beginner, intermedia, advanced
+	# TODO: easy preview before publish
+	# TODO: author images
+	# TODO: API Gateway to return blog metadata
+	# TODO: React router
+	# TODO: upload knitr figures to S3
+	# TODO: Blog.js Categories
+	# TODO: Blog.js rendering
+	# TODO: Blog.js email sign up form
+	# TODO: Deep link handling from S3 per that guy's blog using cloud watch error routing
+	# TODO: migrate existing blog content
+VIDEOS
+	# TODO: static content
+PROJECTS
+	# static content
+	# TODO: open house
+	# TODO: Causal impact
+STORE
+	# TODO: Shopify
+	# TODO: migrate old content
+	# TODO: t-shirt integration
+SERVICES
+	# static content
+MEMBERSHIP
+	# TODO: content
+	# TODO: Shopify integration
+MISC
+	# TODO: redirects on old content, especially show notes pages from feed
+	# TODO: error page logging to cloudfront
+HELP
+	# TODO: where to hold episodes (not in podcast.js)
+	# TODO: realtime refresh?
+	# TODO: caching of XML parse, Dynamo lookups
+	# TODO: Blog.js implementation
+	# TODO: General overview
+	# TODO: SEO / crawlable?
+*/
+

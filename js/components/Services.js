@@ -4,6 +4,7 @@ const Services = () => {
 	return (
 		<div class="center">
 			<p>Services</p>
+			
 		</div>
 	)
 }
