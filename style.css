@@ -120,6 +120,18 @@ ul.topnav li.right {float: right;}
     ul.topnav li {float: none;}
 }
 
+.episode-button-sm {
+  float: left;
+  border-radius: 9px;
+  background-color: #c997fe;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  font-size: 8pt;
+  padding:0 0 0 1px;  
+  margin-right: 5px;  
+}
+
 .footer {
   text-align: center;
   margin: auto;
@@ -144,7 +156,7 @@ ul.topnav li.right {float: right;}
 }
 
 .player-progress-bar {
-  margin-left: 250px;
+  margin-left: 275px;
   margin-right: 50px;
   padding: 9px;
 }
@@ -156,21 +168,23 @@ ul.topnav li.right {float: right;}
 }
 
 .player-title {
-  background-color: #f00;
+  overflow: hidden;
   height: 20px;
   float: left;
-  font-size: 8pt;
+  font-size: 10pt;
+  color: #fff;
 }
 
 .player-duration-container {
   float: right;
+  margin-top: -23px;
 }
 
 .player-duration {
-  font-size: 8pt;
+  font-size: 12pt;
+  color: #fff;
   margin: 0 10 0 0px;
   height: 20px;
-  background-color: #f00;
 }
 
 .player-inner {
@@ -182,8 +196,8 @@ ul.topnav li.right {float: right;}
 }
 
 .thin-player {
-  padding: 0px;
-  height: 20px;
+  padding: 3px;
+  height: 25px;
 }
 
 .home-player {
@@ -195,6 +209,24 @@ ul.topnav li.right {float: right;}
   padding: 0 2 2 5px;
   height: 87px;
   width: 250px;
+  background-color: #eee;
+}
+
+.home-player-latest {
+  font-size: 8pt;
+}
+
+.home-player-title {
+  overflow: hidden;
+}
+
+.home-player-left {
+  float: left;
+  margin-top: 25px;
+}
+
+.home-player-right {
+  margin-left: 35px;
 }
 
 .player-label {
@@ -289,6 +321,150 @@ ul.topnav li.right {float: right;}
   margin-bottom: 5px
 }
 
+
+/*****************************************************************************
+ Store.js
+*****************************************************************************/
+
+
+.checkout-box {
+  border-color: #000;
+  border-radius: 4px;
+  border-width: 1px;
+  border-style: solid;
+  width: 100%;
+}
+
+.checkout-row {
+  width: 100%;
+  background-color: #eee;
+}
+
+.address-form {
+  width: 50%;
+  float: left;
+  background-color: #8f8;
+}
+
+.cc-outer {
+  float: left;
+  padding: 5 4 3 14px;
+  background-color: #fff;
+}
+
+.cc-yymm {
+  width: 50px;
+}
+
+.cc-cvc {
+  margin-left: 10px;
+  width: 75;
+}
+
+.cc-num {
+  width: 185px;
+}
+
+.cc-purchase {
+  width: 185px;
+}
+
+.thank-you {
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  background-color: #ddd;
+}
+
+.store-items {
+  clear: both;
+  padding: 1 15 5 15px;
+  margin-top: 15px;
+}
+
+.product-row {
+  background-color: #fee;
+  clear:both;
+}
+
+.product-title {
+  font-size: 12pt;
+  font-weight: bold;
+}
+
+.product-outer {
+}
+.product-header {
+  float: left;
+  width: 100%;
+  background-color: #ccc;
+  margin: 2 2 2 2px;
+  padding: 4px;
+}
+.product-header-item {
+  float: left;
+  width: 55%;
+  font-weight: bold;
+}
+.product-header-options {
+  float: left;
+  width: 20%;
+  text-align: center;
+  font-weight: bold;
+}
+.product-header-price {
+  float: left;
+  width: 25%;
+  text-align: right;
+  font-weight: bold;
+}
+
+
+.product-row {
+  float: left;
+  width: 100%;
+  background-color: #eee;
+  margin: 2 2 2 2px;
+  padding-left: 4px;
+  padding-right: 4px;
+  height: 75px;
+}
+.product-main {
+  float: left;
+  width: 60%;
+  height: 100%;
+}
+.product-right {
+  float: left;
+  width: 40%;
+  height: 100%;
+}
+.product-right-top {
+  clear: both;
+}
+.product-pull-down {
+  float: left;
+  width: 70%;
+  padding: 10px;
+}
+.product-price {
+  float: left;
+  width: 30%;
+  text-align: right;
+  padding: 10px;
+}
+.product-right-bottom {
+  width: 100%;
+}
+.add-to-cart {
+  width: 100px;
+  float: right;
+}
+
+
+
 /*****************************************************************************
  Home.js
 *****************************************************************************/
@@ -318,9 +494,18 @@ ul.topnav li.right {float: right;}
 }
 
 .card { 
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: #000;
+  border-style: solid;
+  padding: 5 5 5 10px;
   font-size: 12pt;
   width: 650px;
   height: 200px;
+}
+
+.home-latest-episode-card-img {
+  width: 100px;
 }
 
 div.mailing-list-signup-container {
@@ -737,7 +922,7 @@ button.slick-arrow.slick-prev {
 .rc-slider-track {
   position: absolute;
   left: 0;
-  height: 4px;
+  height: 2px;
   border-radius: 6px;
   background-color: #abe2fb;
   z-index: 1;

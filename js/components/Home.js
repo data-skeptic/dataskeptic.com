@@ -6,6 +6,8 @@ import Slider from "react-slick"
 import Episode from "./Episode"
 import MailingList from "./MailingList"
 import SocialMediaCard from "./SocialMediaCard"
+import LatestEpisodeCard from "./LatestEpisodeCard"
+import LatestEpisodePlayer from "./LatestEpisodePlayer"
 
 export default class Home extends React.Component {
 	constructor(props) {
@@ -27,6 +29,12 @@ export default class Home extends React.Component {
 	}
 
 	render() {
+		var config = this.props.config
+		var episode = undefined
+		var onPlayToggle = this.props.onPlayToggle
+		if (this.props.episodes.length > 0) {
+			episode = this.props.episodes[0]
+		}
 	    var settings = {
 	      dots: true,
 	      infinite: true,
@@ -39,16 +47,25 @@ export default class Home extends React.Component {
 	      autoplaySpeed: 3000,
 	      pauseOnHover: 1
 	    };
+		var is_playing = false
+		if (config.player.episode != undefined) {
+			if (config.player.episode.guid == episode.guid) {
+				if (config.player.is_playing) {
+					is_playing = true
+				}
+			}
+		}
+
 		return (
 			<div class="center">
 				<div class="home-top-row">
 					<div className="carousel">
 						<Slider {...settings}>
 							<div class="card">
-								Latest episode
+								Some live statistics
 							</div>
 							<div class="card">
-								Some live statistics
+								<LatestEpisodeCard episode={episode} onPlayToggle={onPlayToggle} is_playing={is_playing} />
 							</div>
 							<div class="card">
 								Latest blog posts
@@ -60,7 +77,7 @@ export default class Home extends React.Component {
 					</div>
 					<div class="home-right">
 						<div className="home-player">
-							<span class="player-label">Latest episode:</span>
+							<LatestEpisodePlayer episode={episode} onPlayToggle={onPlayToggle} is_playing={is_playing} />
 						</div>
 						<MailingList />
 					</div>

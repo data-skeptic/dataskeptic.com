@@ -1,8 +1,8 @@
 import React from 'react'
 import { BrowserRouter as Router, Link, Match, Miss } from 'react-router'
 
-//import axios from "axios"
-//import xml2js from "xml2js"
+import axios from "axios"
+import xml2js from "xml2js"
 
 import Header from './Header'
 import Player from './Player'
@@ -17,19 +17,29 @@ import Membership from './Membership'
 import Footer from './Footer'
 import NotFound from './NotFound'
 
+const MatchWithProps = ({ component: Component, props, ...rest }) => (
+  <Match {...rest} render={(matchProps) => (
+    <Component {...props} {...matchProps} />
+  )}/>
+);
 
 export default class Site extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
 			"episodes": [],
+			"episodes_loaded": false,
+			"products": [],
+			"products_loaded": false,
 			"player": {
-				"playing": false,
-				"episode": undefined
+				"episode": undefined,
+				"is_playing": false,
+				"has_shown": false
 			}
 		}
 
-		/*
+		this.onPlayToggle = this.onPlayToggle.bind(this)
+
 		var me = this
 
 		axios
@@ -58,31 +68,56 @@ export default class Site extends React.Component {
 					}
 					episodes.push(episode)
 				})
-				me.setState({episodes})
+				var episodes_loaded = true
+				me.setState({episodes, episodes_loaded})
 			});			
-		  });
-		// TODO: Set 1 hour callback to refresh xml
-		*/
+		  })
+
+		axios
+			.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/products")
+			.then(function(result) {
+				var products = result.data.Items
+				var products_loaded = true
+				me.setState({products, products_loaded})
+			});
 	}
 
 	onPlayToggle(episode) {
-		console.log(episode)
-		var cplay = this.state.player.playing
-		var cepisode = this.state.player.episode
-		console.log([cplay, cepisode, episode])
-		if (cplay) {
-			if (cepisode != undefined && cepisode.guid == episode.guid) {
-				this.setState({player: {playing: false}})
-			}
-			else {
-				this.setState({player: {playing: true}, episode: episode})
-			}
+		var player = this.state.player
+		if (episode == undefined) {
+			console.log("Got request to play undefined episode.")
+			this.setState({player: {is_playing: false}})
 		} else {
-			this.setState({player: {playing: true, episode: episode}})
+			var s = this.state
+			s.player.has_shown = true
+			if (player.is_playing) {
+				if (episode == undefined) {
+					console.log("Unusual situation for player to be in, but I can fix it")
+					s.player.episode = episode
+					s.player.is_playing = true
+					this.setState(s)
+				} else {
+					if (episode.guid == player.episode.guid) {
+						s.player.is_playing = false
+						this.setState(s)
+					} else {
+						s.player.episode = episode
+						s.player.is_playing = true
+						this.setState(s)
+					}
+				}
+			} else {
+				s.player.episode = episode
+				s.player.is_playing = true
+				this.setState(s)
+			}
 		}
 	}
 	
 	render() {
+		var products = this.state.products
+		var products_loaded = this.state.products_loaded
+		var player = this.state.player
 		return (
 			<Router>
 				<div>
@@ -99,16 +134,17 @@ export default class Site extends React.Component {
 							<li class="right"><Link to="/members">Membership</Link></li>
 						</ul>
 					</div>
-					<Player config={this.state.player} onPause={this.onPlayToggle.bind(this)} />
-					<Match exactly pattern="/" component={Home} />
-					<Match exactly pattern="/index.htm" component={Home} />
-					<Match pattern="/podcast" component={Podcast} />
-					<Match pattern="/blog/**" component={Blog} />
+					<Player config={player} onPlayToggle={this.onPlayToggle.bind(this)} episodes_loaded={this.state.episodes_loaded} />
+					<MatchWithProps exactly pattern="/"          component={Home}    props={{ episodes: this.state.episodes, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
+					<MatchWithProps exactly pattern="/index.htm" component={Home}    props={{ episodes: this.state.episodes, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
+					<MatchWithProps pattern="/podcast"           component={Podcast} props={{ episodes: this.state.episodes, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
+					<Match pattern="/blog" component={Blog} />
 					<Match pattern="/video" component={Video} />
 					<Match pattern="/proj" component={Projects} />
-					<Match pattern="/store" component={Store} />
+					<MatchWithProps pattern="/store"             component={Store}   props={{ products, products_loaded }} />
 					<Match pattern="/services" component={Services} />
-					<Match pattern="/members" component={Membership} />
+					<MatchWithProps pattern="/members"           component={Membership} props={{ products, products_loaded }} />
+					<Miss component={NotFound} />
 					<Footer />
 				</div>
 			</Router>
@@ -120,11 +156,9 @@ export default class Site extends React.Component {
 /*
 HOME
 	# TODO: social tile
-	# TODO: latest episode tile
 	# TODO: Latest blog tile
 	# TODO: live statistics tile
-	# TODO: latest episode player
-	# TODO: sitewide header player
+	# TODO: Player progress bar
 PODCAST
 	# TODO: 
 BLOG
@@ -158,13 +192,14 @@ MEMBERSHIP
 MISC
 	# TODO: redirects on old content, especially show notes pages from feed
 	# TODO: error page logging to cloudfront
+	# TODO: realtime refresh?
 HELP
 	# TODO: where to hold episodes (not in podcast.js)
-	# TODO: realtime refresh?
 	# TODO: caching of XML parse, Dynamo lookups
 	# TODO: Blog.js implementation
 	# TODO: General overview
 	# TODO: Saving state in localStorage
 	# TODO: SEO / crawlable?
+		// TODO: Set 1 hour callback to refresh xml
 */
 
