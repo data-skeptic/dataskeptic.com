@@ -29,7 +29,7 @@ export default class Site extends React.Component {
 		super(props)
 
 		/* Keep a 10 minute cache of things normally pulled dynamically */
-		var cacheSeconds = 60 * 10
+		var cacheSeconds = 60 * 10 * 60*24
 		var now = new Date().getTime()/1000
 		var lastCacheEpisodes = 0
 		var lastCacheBlogs = 0
@@ -279,13 +279,11 @@ export default class Site extends React.Component {
 /*
 HOME
 	# TODO: social tile
-	# TODO: from the archives tile
 	# TODO: live statistics tile
 	# TODO: Player progress bar
 	# TOOD: google analytics
 BLOG
 	# TODO: admin page to update blog content - add tags, release date, author, prettyname, title, tags
-					level - beginner, intermedia, advanced
 	# TODO: easy preview before publish
 	# TODO: author images
 	# TODO: upload knitr figures to S3
@@ -296,13 +294,8 @@ BLOG
 	# TODO: migrate existing blog content
 VIDEOS
 	# TODO: static content
-PROJECTS
-	# static content
-	# TODO: open house
-	# TODO: Causal impact
 STORE
 	# TODO: Shopify
-	# TODO: migrate old content
 	# TODO: cart
 	# TODO: sort by membership first, then price increasing
 	# TODO: notifications
@@ -319,5 +312,6 @@ MISC
 LATER
 	# TODO: Set 1 hour callback to refresh localStorage, find new episodes
 	# TODO: t-shirt integration
+	# TODO: rate content level - beginner, intermedia, advanced
 */
 

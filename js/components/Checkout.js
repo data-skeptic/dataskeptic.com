@@ -6,10 +6,12 @@ import CreditCardForm from './CreditCardForm'
 import Loading from './Loading'
 import Cart from './Cart'
 import SizeSelector from './SizeSelector'
+import ThankYouPage from './ThankYouPage'
 
 export default class Checkout extends React.Component {
 	constructor(props) {
 		super(props)
+		var prod = false
 		this.state = {
 			stripeLoading: false,
 			stripeLoadingError: false,
@@ -17,10 +19,14 @@ export default class Checkout extends React.Component {
 			paymentError: null,
 			paymentComplete: false,
 			token: null,
+			prod: prod,
 			sizeSelected: {}
 		}
-		var test_key = 'pk_test_y5MWdr7S7Sx6dpRCUTKOWfpf'
-		var key = test_key
+		if (prod) {
+			var key = 'pk_live_voDrzfYzsfKP33iuzmhxL4JY'
+		} else {
+			var key = 'pk_test_y5MWdr7S7Sx6dpRCUTKOWfpf'
+		}
 		Stripe.setPublishableKey(key)
 	}
 
@@ -59,13 +65,7 @@ export default class Checkout extends React.Component {
 			return <div>Error</div>
 		}
 		else if (this.state.paymentComplete) {
-			return (
-				<div class="thank-you">
-				<h1>Thank you!</h1>
-				<p>Payment Complete.</p>
-				<p>Please allow 2-4 weeks for delivery.</p>
-				</div>
-			)
+			return <ThankYouPage />
 		}
 		else {
 			var me = this

@@ -7,6 +7,7 @@ import Episode from "./Episode"
 import MailingList from "./MailingList"
 import SocialMediaCard from "./SocialMediaCard"
 import LatestEpisodeCard from "./LatestEpisodeCard"
+import ArchiveEpisodeCard from "./ArchiveEpisodeCard"
 import LatestEpisodePlayer from "./LatestEpisodePlayer"
 
 export default class Home extends React.Component {
@@ -31,9 +32,11 @@ export default class Home extends React.Component {
 	render() {
 		var config = this.props.config
 		var episode = undefined
+		var old_episode = undefined
 		var onPlayToggle = this.props.onPlayToggle
 		if (this.props.episodes.length > 0) {
 			episode = this.props.episodes[0]
+			old_episode = this.props.episodes[52]
 		}
 	    var settings = {
 	      dots: true,
@@ -62,13 +65,16 @@ export default class Home extends React.Component {
 					<div className="carousel">
 						<Slider {...settings}>
 							<div class="card">
-								Some live statistics
-							</div>
-							<div class="card">
 								<LatestEpisodeCard episode={episode} onPlayToggle={onPlayToggle} is_playing={is_playing} />
 							</div>
 							<div class="card">
+								Some live statistics
+							</div>
+							<div class="card">
 								Latest blog posts
+							</div>
+							<div class="card">
+								<ArchiveEpisodeCard episode={old_episode} onPlayToggle={onPlayToggle} is_playing={is_playing} />
 							</div>
 							<div class="card">
 								<SocialMediaCard />

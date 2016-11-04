@@ -19,8 +19,6 @@ export default class Blog extends React.Component {
 				</div>
 			)
 		} else {
-			console.log(3)
-			var content = "This is a blog"
 			console.log(this.props.location.pathname)
 			// Look it up in Dynamo via API, retrieve S3 url
 			var uri = "https://s3.amazonaws.com/dev.dataskeptic.com/test/test1.htm"

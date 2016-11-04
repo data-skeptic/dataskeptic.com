@@ -330,6 +330,25 @@ ul.topnav li.right {float: right;}
   margin-bottom: 5px
 }
 
+/*****************************************************************************
+ Blog.js
+*****************************************************************************/
+
+.blog-mailinglist-container {
+  background-color: #eee;
+  padding: 10 10 1 10px;
+  margin: 10 10 10 10px;
+}
+.blog-mailinglist-left {
+  max-width: 300px;
+  font-size: 14pt;
+  padding: 10px;
+  float: left;
+}
+
+.blog-mailinglist-right {  
+}
+
 
 /*****************************************************************************
  Store.js
@@ -489,7 +508,6 @@ ul.topnav li.right {float: right;}
 *****************************************************************************/
 
 #mc_embed_signup {
-  background:#fff;
   clear:left;
   font:14px Helvetica,Arial,sans-serif; 
   width:350px;
@@ -566,17 +584,41 @@ button.slick-arrow.slick-prev {
   text-align: center;  
   margin-bottom: -5px;
 }
+.project-img-container {
+  margin: auto;
+  margin-bottom: 10px;
+  text-align: center;  
+}
 .project-img {
   height: 100px;
   width: 100px;
-  margin: auto;
-  margin-bottom: 10px;
-  text-align: center;
-  background-color: #ddd;
 }
 .project-link {
   width: 100%;
   text-align: center;
+}
+
+/*****************************************************************************
+ Home.js > Slider
+*****************************************************************************/
+
+.services-box {
+  background-color: #eeeeee;
+  max-width: 300px;
+  margin: 5px;
+  padding: 10px;
+  border-radius: 5px;
+  border-color: #333;
+  border-width: 1px;
+  border-style: solid;
+  float: left;
+  height: 200px;
+}
+.services-title {
+  font-weight: bold;
+  font-size: 12pt;
+  text-align: center;  
+  margin-bottom: -5px;
 }
 
 /*****************************************************************************

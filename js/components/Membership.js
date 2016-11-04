@@ -5,12 +5,13 @@ import Loading from './Loading'
 export default class Membership extends React.Component {
 	render() {
 		var products = this.props.products
-		if (this.state.stripeLoading || !this.props.products_loaded) {
+		if (!this.props.products_loaded) {
 			return <div><Loading /></div>
 		} else {
 			return (
 				<div class="center">
 					{products.map(function(product) {
+						console.log(product)
 						if (product.active == 1 && product.type=="membership") {
 							return (
 								<div key="{product.id}">
