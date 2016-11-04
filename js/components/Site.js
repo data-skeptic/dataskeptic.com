@@ -12,6 +12,7 @@ import Blog from './Blog'
 import Video from './Video'
 import Projects from './Projects'
 import Store from './Store'
+import Checkout from './Checkout'
 import Services from './Services'
 import Membership from './Membership'
 import Footer from './Footer'
@@ -79,6 +80,17 @@ export default class Site extends React.Component {
 			}
 		}
 
+		// Reload cart if it exists
+		var cart_items = []
+		try {
+			cart_items = JSON.parse(localStorage.getItem("cart"))
+			if (cart_items == undefined) {
+				cart_items = []
+			}
+		} catch (err) {
+			cart_items = []
+		}
+
 		this.state = {
 			"episodes": episodes,
 			"episodes_loaded": episodes_loaded,
@@ -86,6 +98,7 @@ export default class Site extends React.Component {
 			"blogs_loaded": blogs_loaded,
 			"products": products,
 			"products_loaded": blogs_loaded,
+			"cart_items": cart_items,
 			"player": {
 				"episode": undefined,
 				"is_playing": false,
@@ -98,6 +111,7 @@ export default class Site extends React.Component {
 		var me = this
 
 		if (!blogs_loaded) {
+			console.log("Get blog")
 			axios
 				.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/blog")
 				.then(function(result) {
@@ -111,6 +125,7 @@ export default class Site extends React.Component {
 		}
 
 		if (!episodes_loaded) {
+			console.log("Get episodes")
 			axios
 			  .get("http://dataskeptic.libsyn.com/rss")
 			  .then(function(result) {
@@ -147,6 +162,7 @@ export default class Site extends React.Component {
 		}
 
 		if (!products_loaded) {
+			console.log("Get products")
 			axios
 				.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/products")
 				.then(function(result) {
@@ -159,8 +175,8 @@ export default class Site extends React.Component {
 				});			
 		}
 
-
 		this.onPlayToggle = this.onPlayToggle.bind(this)
+		this.addToCart = this.addToCart.bind(this)
 	}
 
 	onPlayToggle(episode) {
@@ -195,10 +211,35 @@ export default class Site extends React.Component {
 		}
 	}
 	
+	addToCart(product, size) {
+		console.log("add")
+		var id = product.id
+		var quan = 1
+		if (size != undefined) {
+			id = id + "--" + size
+		}
+		var cart_elem = {product, size, id, quan}
+		var cart_items = this.state.cart_items
+		var found = false
+		for (var i in cart_items) {
+			var item = cart_items[i]
+			if (item['id'] == id) {
+				item['quan'] += 1
+				found = true
+			}
+		}
+		if (!found) {
+			cart_items.push(cart_elem)
+		}
+		this.setState({cart_items})
+		localStorage.setItem("cart", JSON.stringify(cart_items))
+	}
+
 	render() {
 		var products = this.state.products
 		var products_loaded = this.state.products_loaded
 		var player = this.state.player
+		var cart_items = this.state.cart_items
 		return (
 			<Router>
 				<div>
@@ -222,7 +263,8 @@ export default class Site extends React.Component {
 					<Match pattern="/blog" component={Blog} />
 					<Match pattern="/video" component={Video} />
 					<Match pattern="/proj" component={Projects} />
-					<MatchWithProps pattern="/store"             component={Store}   props={{ products, products_loaded }} />
+					<MatchWithProps pattern="/store"             component={Store}    props={{ products, products_loaded, cart_items, addToCart: this.addToCart.bind(this) }} />
+					<MatchWithProps pattern="/checkout"          component={Checkout} props={{ products, products_loaded, cart_items }} />
 					<Match pattern="/services" component={Services} />
 					<MatchWithProps pattern="/members"           component={Membership} props={{ products, products_loaded }} />
 					<Miss component={NotFound} />
@@ -238,16 +280,14 @@ export default class Site extends React.Component {
 HOME
 	# TODO: social tile
 	# TODO: from the archives tile
-	# TODO: Latest blog tile
 	# TODO: live statistics tile
 	# TODO: Player progress bar
+	# TOOD: google analytics
 BLOG
 	# TODO: admin page to update blog content - add tags, release date, author, prettyname, title, tags
 					level - beginner, intermedia, advanced
 	# TODO: easy preview before publish
 	# TODO: author images
-	# TODO: API Gateway to return blog metadata
-	# TODO: React router
 	# TODO: upload knitr figures to S3
 	# TODO: Blog.js Categories
 	# TODO: Blog.js rendering
@@ -263,7 +303,8 @@ PROJECTS
 STORE
 	# TODO: Shopify
 	# TODO: migrate old content
-	# TODO: backend database
+	# TODO: cart
+	# TODO: sort by membership first, then price increasing
 	# TODO: notifications
 SERVICES
 	# static content
@@ -276,7 +317,7 @@ MISC
 	# TODO: realtime refresh?
 	# TODO: SEO / crawlable?
 LATER
-	# TODO: Set 1 hour callback to refresh xml
+	# TODO: Set 1 hour callback to refresh localStorage, find new episodes
 	# TODO: t-shirt integration
 */
 
