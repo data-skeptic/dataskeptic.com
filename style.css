@@ -335,58 +335,6 @@ ul.topnav li.right {float: right;}
  Store.js
 *****************************************************************************/
 
-
-.checkout-box {
-  border-color: #000;
-  border-radius: 4px;
-  border-width: 1px;
-  border-style: solid;
-  width: 100%;
-}
-
-.checkout-row {
-  width: 100%;
-  background-color: #eee;
-}
-
-.address-form {
-  width: 50%;
-  float: left;
-  background-color: #8f8;
-}
-
-.cc-outer {
-  float: left;
-  padding: 5 4 3 14px;
-  background-color: #fff;
-}
-
-.cc-yymm {
-  width: 50px;
-}
-
-.cc-cvc {
-  margin-left: 10px;
-  width: 75;
-}
-
-.cc-num {
-  width: 185px;
-}
-
-.cc-purchase {
-  width: 185px;
-}
-
-.thank-you {
-  text-align: center;
-  margin-top: 50px;
-  margin-bottom: 50px;
-  padding-top: 50px;
-  padding-bottom: 50px;
-  background-color: #ddd;
-}
-
 .store-items {
   clear: both;
   padding: 1 15 5 15px;
@@ -476,6 +424,65 @@ ul.topnav li.right {float: right;}
 }
 
 
+/*****************************************************************************
+ Checkout.js
+*****************************************************************************/
+
+
+
+.checkout-box {
+  border-color: #000;
+  border-radius: 4px;
+  border-width: 1px;
+  border-style: solid;
+  width: 100%;
+}
+
+.checkout-row {
+  width: 100%;
+  background-color: #eee;
+}
+
+.address-form {
+  width: 50%;
+  float: left;
+  background-color: #8f8;
+}
+
+.cc-outer {
+  float: left;
+  padding: 5 4 3 14px;
+  background-color: #fff;
+}
+
+.cc-yymm {
+  width: 50px;
+}
+
+.cc-cvc {
+  margin-left: 10px;
+  width: 75;
+}
+
+.cc-num {
+  width: 185px;
+}
+
+.cc-purchase {
+  width: 185px;
+}
+
+.thank-you {
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  background-color: #ddd;
+}
+
+
+
 
 /*****************************************************************************
  Home.js
@@ -538,7 +545,42 @@ button.slick-arrow.slick-prev {
 /* The home-player definition is in the Player.js section for convenience */
 
 /*****************************************************************************
- Used for the carousel in Home.js
+ Projects.js
+*****************************************************************************/
+
+.project-box {
+  background-color: #eeeeee;
+  max-width: 300px;
+  margin: 5px;
+  padding: 10px;
+  border-radius: 5px;
+  border-color: #333;
+  border-width: 1px;
+  border-style: solid;
+  float: left;
+  height: 250px;
+}
+.project-title {
+  font-weight: bold;
+  font-size: 12pt;
+  text-align: center;  
+  margin-bottom: -5px;
+}
+.project-img {
+  height: 100px;
+  width: 100px;
+  margin: auto;
+  margin-bottom: 10px;
+  text-align: center;
+  background-color: #ddd;
+}
+.project-link {
+  width: 100%;
+  text-align: center;
+}
+
+/*****************************************************************************
+ Home.js > Slider
 *****************************************************************************/
 
 /* Slider */
@@ -660,35 +702,6 @@ button.slick-arrow.slick-prev {
 .slick-arrow.slick-hidden {
     display: none;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 @charset 'UTF-8';
 /* Slider */
@@ -895,28 +908,8 @@ button.slick-arrow.slick-prev {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*********************************************************
-  SLIDER
+  PlayerProgressBar.js > Rcslider
 **********************************************************/
 
 .rc-slider {

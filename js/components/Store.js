@@ -2,8 +2,6 @@ import React from 'react'
 import { Link } from 'react-router'
 //import asyncLoad from 'react-async-loader'
 
-import AddressForm from './AddressForm'
-import CreditCardForm from './CreditCardForm'
 import Loading from './Loading'
 import Cart from './Cart'
 import SizeSelector from './SizeSelector'

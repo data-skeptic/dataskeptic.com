@@ -1,59 +1,49 @@
 import React from 'react'
 
-const AddressForm = () => {
+const AddressForm = props => {
 	return (
 		<div class="address-form">
-			<div class="large-8 small-centered columns">
-			    <fieldset>
-			        <legend>Shipping address</legend>
-			        <div class="row">
-			            <div>
-			                <label for="first_name">First name</label>
-			                <input type="text" id="first_name"></input>
-			            </div>
-			        </div>    
-			        <div class="row">
-			            <div>
-			                <label for="last_name">Last name</label>
-			                <input type="text" id="last_name"></input>
-			            </div>
-			        </div>    
-			        <div class="row">
-			            <div>
-			                <label for="address_1">Address 1</label>
-			                <input type="text" id="address_1"></input>
-			            </div>
-			        </div>    
-			        <div class="row">
-			            <div>
-			                <label for="address_2">Address 2</label>
-			                <input type="text" id="address_2"></input>
-			            </div>
-			        </div>    
-			        <div class="row">
-			            <div>
-			                <label for="town_city">Town/city</label>
-			                <input type="text" id="town_city"></input>
-			            </div>
-			        </div>    
-			        <div class="row">
-			            <div>
-			                <label for="state_province">State/province</label>
-			                <input type="text" id="state_province"></input>
-			            </div>
-			            <div>
-			                <label for="postcode_zip">Postcode/zip</label>
-			                <input type="text" id="postcode_zip"></input>
-			            </div>
-			        </div>    
-			        <div class="row">
-			            <div>
-			                <label for="phone">Phone</label>
-			                <input type="tel" id="phone"></input>
-			            </div>
-			        </div>    
-			    </fieldset>
+			<span class="shipping-address-title">{props.title}</span>
+			<div class="name-row">
+				<div class="shipping-label">First name:</div>
+				<input type="text" id="first_name" class="checkout-name-field" />
+				<div class="shipping-label">Last name:</div>
+				<input type="text" id="last_name" class="checkout-name-field" />
 			</div>
+			<div class="address-row-1">
+				<div class="shipping-label">Street address 1:</div>
+				<input id="street_1" type="text" class="checkout-address-field" />
+		    </div>
+			<div class="address-row-2">
+				<div class="shipping-label">Street address 2:</div>
+				<input id="street_2" type="text" class="checkout-address-field" />
+		    </div>
+			<div class="address-row-3">
+				<div class="shipping-label">City / town:</div>
+				<input id="city" type="text" class="checkout-address-field" />
+		    </div>
+			<div class="address-row-4">
+				<div class="shipping-label">State / province:</div>
+				<input id="state" type="text" class="checkout-address-field" />
+		    </div>
+			<div class="address-row-5">
+				<div class="shipping-label">Country</div>
+				<select id="country" class="checkout-country-field">
+					<option value="United State of America" />
+					<option value="Canada" />
+					<option value="UK" />
+					<option value="Australia" />
+					<option value="France" />
+				</select>
+		    </div>
+			<div class="address-row-6">
+				<div class="shipping-label">Postal / zipcode:</div>
+				<input id="zip" type="text" class="checkout-address-field" />
+		    </div>
+			<div class="address-row-7">
+				<div class="shipping-label">Phone:</div>
+				<input id="phone" type="text" class="checkout-address-field" />
+		    </div>
 		</div>
 	)
 }
