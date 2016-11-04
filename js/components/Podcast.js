@@ -46,12 +46,7 @@ export default class Podcast extends React.Component {
 			year -= 1
 		}
 		if (num == 0) {
-			return (
-				<div class="center">
-					<p>Loading episodes...</p>
-					<img src="img/Loading_icon.gif" />
-				</div>
-			)
+			return <div><Loading /></div>
 		} else {
 			var me = this
 			var dyear = this.state.year

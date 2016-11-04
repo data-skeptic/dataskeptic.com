@@ -145,6 +145,15 @@ ul.topnav li.right {float: right;}
   height: 25px;
 }
 
+.loading {
+  font-size: 18pt;
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
 /*****************************************************************************
  Player.js
 *****************************************************************************/

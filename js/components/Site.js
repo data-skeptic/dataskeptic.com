@@ -26,60 +26,141 @@ const MatchWithProps = ({ component: Component, props, ...rest }) => (
 export default class Site extends React.Component {
 	constructor(props) {
 		super(props)
+
+		/* Keep a 10 minute cache of things normally pulled dynamically */
+		var cacheSeconds = 60 * 10
+		var now = new Date().getTime()/1000
+		var lastCacheEpisodes = 0
+		var lastCacheBlogs = 0
+		var lastCacheProducts = 0
+		try {
+			lastCacheEpisodes = localStorage.getItem("lastCacheEpisodes")
+			lastCacheBlogs = localStorage.getItem("lastCacheBlogs")
+			lastCacheProducts = localStorage.getItem("lastCacheProducts")
+		} catch(err) {
+			lastCacheEpisodes = 0
+			lastCacheBlogs = 0
+			lastCacheProducts = 0
+		}
+		var episodes_loaded = false
+		var blogs_loaded = false
+		var products_loaded = false
+		var episodes = []
+		var blogs = []
+		var products = []
+		if (now - lastCacheEpisodes < cacheSeconds) {
+			episodes = JSON.parse(localStorage.getItem("episodes"))
+			if (episodes != undefined) {
+				episodes_loaded = true
+				for (var i in episodes) {
+					var ep = episodes[i]
+					var dstr = ep["pubDate"]
+					var pubDate = new Date(ep["pubDate"])
+					ep["pubDate"] = pubDate
+				}
+			} else {
+				episodes = []
+			}
+		}
+		if (now - lastCacheBlogs < cacheSeconds) {
+			blogs = JSON.parse(localStorage.getItem("blogs"))
+			if (blogs != undefined) {
+				blogs_loaded = true
+			} else {
+				blogs = []
+			}
+		}
+		if (now - lastCacheProducts < cacheSeconds) {
+			products = JSON.parse(localStorage.getItem("products"))
+			if (products != undefined) {
+				products_loaded = true
+			} else {
+				products = []
+			}
+		}
+
 		this.state = {
-			"episodes": [],
-			"episodes_loaded": false,
-			"products": [],
-			"products_loaded": false,
+			"episodes": episodes,
+			"episodes_loaded": episodes_loaded,
+			"blogs": blogs,
+			"blogs_loaded": blogs_loaded,
+			"products": products,
+			"products_loaded": blogs_loaded,
 			"player": {
 				"episode": undefined,
 				"is_playing": false,
 				"has_shown": false
 			}
 		}
+		console.log("Cache loaded blogs:" + blogs_loaded + " episodes:" + episodes_loaded + " products:" + products_loaded)
 
-		this.onPlayToggle = this.onPlayToggle.bind(this)
 
 		var me = this
 
-		axios
-		  .get("http://dataskeptic.libsyn.com/rss")
-		  .then(function(result) {
-		  	var xml = result["data"]
-			var extractedData = "";
-			var parser = new xml2js.Parser();
-			var year = me.year
-			parser.parseString(xml, function(err,rss) {
-				var episodes = []
-				var items = rss["rss"]["channel"][0]["item"]
-				items.map(function(item) {
-					var mp3 = item["enclosure"][0]["$"]["url"]
-					var dstr = item["pubDate"][0]
-					var pubDate = new Date(dstr)
-					var episode = {
-						"title": item["title"][0],
-						"desc": item["description"][0],
-						"pubDate": pubDate,
-						"mp3": mp3,
-						"duration": item["itunes:duration"][0],
-						"img": item["itunes:image"][0]["$"]["href"],
-						"guid": item["guid"][0]["_"],
-						"link": item["link"][0]
-					}
-					episodes.push(episode)
-				})
-				var episodes_loaded = true
-				me.setState({episodes, episodes_loaded})
-			});			
-		  })
+		if (!blogs_loaded) {
+			axios
+				.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/blog")
+				.then(function(result) {
+					var blogs = result.data.Items
+					var blogs_loaded = true
+					me.setState({blogs, blogs_loaded})
+					localStorage.setItem("blogs", JSON.stringify(blogs))
+					localStorage.setItem("lastCacheBlogs", new Date().getTime()/1000)
+					console.log("Loaded blogs")
+				});			
+		}
 
-		axios
-			.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/products")
-			.then(function(result) {
-				var products = result.data.Items
-				var products_loaded = true
-				me.setState({products, products_loaded})
-			});
+		if (!episodes_loaded) {
+			axios
+			  .get("http://dataskeptic.libsyn.com/rss")
+			  .then(function(result) {
+			  	var xml = result["data"]
+				var extractedData = "";
+				var parser = new xml2js.Parser();
+				var year = me.year
+				parser.parseString(xml, function(err,rss) {
+					var episodes = []
+					var items = rss["rss"]["channel"][0]["item"]
+					items.map(function(item) {
+						var mp3 = item["enclosure"][0]["$"]["url"]
+						var dstr = item["pubDate"][0]
+						var pubDate = new Date(dstr)
+						var episode = {
+							"title": item["title"][0],
+							"desc": item["description"][0],
+							"pubDate": pubDate,
+							"mp3": mp3,
+							"duration": item["itunes:duration"][0],
+							"img": item["itunes:image"][0]["$"]["href"],
+							"guid": item["guid"][0]["_"],
+							"link": item["link"][0]
+						}
+						episodes.push(episode)
+					})
+					var episodes_loaded = true
+					me.setState({episodes, episodes_loaded})
+					localStorage.setItem("episodes", JSON.stringify(episodes))
+					localStorage.setItem("lastCacheEpisodes", new Date().getTime()/1000)
+				});
+				console.log("loaded episodes")	
+			})			
+		}
+
+		if (!products_loaded) {
+			axios
+				.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/products")
+				.then(function(result) {
+					var products = result.data.Items
+					var products_loaded = true
+					me.setState({products, products_loaded})
+					localStorage.setItem("products", JSON.stringify(products))
+					localStorage.setItem("lastCacheProducts", new Date().getTime()/1000)
+					console.log("Loaded memberships")
+				});			
+		}
+
+
+		this.onPlayToggle = this.onPlayToggle.bind(this)
 	}
 
 	onPlayToggle(episode) {
@@ -156,11 +237,10 @@ export default class Site extends React.Component {
 /*
 HOME
 	# TODO: social tile
+	# TODO: from the archives tile
 	# TODO: Latest blog tile
 	# TODO: live statistics tile
 	# TODO: Player progress bar
-PODCAST
-	# TODO: 
 BLOG
 	# TODO: admin page to update blog content - add tags, release date, author, prettyname, title, tags
 					level - beginner, intermedia, advanced
@@ -183,7 +263,8 @@ PROJECTS
 STORE
 	# TODO: Shopify
 	# TODO: migrate old content
-	# TODO: t-shirt integration
+	# TODO: backend database
+	# TODO: notifications
 SERVICES
 	# static content
 MEMBERSHIP
@@ -193,13 +274,9 @@ MISC
 	# TODO: redirects on old content, especially show notes pages from feed
 	# TODO: error page logging to cloudfront
 	# TODO: realtime refresh?
-HELP
-	# TODO: where to hold episodes (not in podcast.js)
-	# TODO: caching of XML parse, Dynamo lookups
-	# TODO: Blog.js implementation
-	# TODO: General overview
-	# TODO: Saving state in localStorage
 	# TODO: SEO / crawlable?
-		// TODO: Set 1 hour callback to refresh xml
+LATER
+	# TODO: Set 1 hour callback to refresh xml
+	# TODO: t-shirt integration
 */
 

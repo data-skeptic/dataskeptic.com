@@ -128,3 +128,5 @@ export default class Store extends React.Component {
 		}
 	}
 }
+
+//XXS	XS	S	M	L	XL	2XL	3XL	4XL	5XL	6XL
