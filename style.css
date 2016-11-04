@@ -88,6 +88,10 @@ h1 {
     background-color: #282828;  
 }
 
+.menu-img {
+  height: 20px;
+}
+
 ul.topnav {
     list-style-type: none;
     margin: auto;

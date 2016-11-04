@@ -253,6 +253,7 @@ export default class Site extends React.Component {
 							<li><Link to="/store">Store</Link></li>
 							<li><Link to="/proj">Projects</Link></li>
 							<li><Link to="/services">Services</Link></li>
+							<li><Link to="/checkout"><img class="menu-img" src="/img/png/checkout.png" /></Link></li>
 							<li class="right"><Link to="/members">Membership</Link></li>
 						</ul>
 					</div>
@@ -298,13 +299,14 @@ STORE
 	# TODO: Shopify
 	# TODO: cart
 	# TODO: sort by membership first, then price increasing
-	# TODO: notifications
+	# TODO: notifications / record to DB
 SERVICES
 	# static content
 MEMBERSHIP
 	# TODO: content
 	# TODO: Shopify integration
 MISC
+	# TODO: travis ci blog deploy
 	# TODO: redirects on old content, especially show notes pages from feed
 	# TODO: error page logging to cloudfront
 	# TODO: realtime refresh?

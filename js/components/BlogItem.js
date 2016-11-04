@@ -12,6 +12,7 @@ export default class BlogItem extends React.Component {
 			src: props.src,
 			content: "Loading..."
 		}
+		var me = this
 		axios
 		  .get(this.state.src)
 		  .then(function(result) {
