@@ -15,7 +15,6 @@ export default class LatestBlogCard extends React.Component {
 				</div>
 			)			
 		} else {
-			console.log(blog)
 			var pn = blog.prettyname
 			if (pn[0] == "/") {
 				pn = pn.substring(1, pn.length)

@@ -9,7 +9,8 @@ export default class Videos extends React.Component {
 	}
 	
 	render() {
-		var videos = [{videoId: "RxtHeXHOdf0"}, {videoId: "cHoRn1UxEzk"}]
+		var videos = this.props.videos
+		console.log(videos)
 		return (
 			<div class="center">
 				<div class="videos-container">

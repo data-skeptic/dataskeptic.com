@@ -43,8 +43,6 @@ export default class Home extends React.Component {
 		if (this.props.blogs.length > 0) {
 			blog = this.props.blogs[0]
 		}
-		console.log("@")
-		console.log(this.props.blogs)
 	    var settings = {
 	      dots: true,
 	      infinite: true,
