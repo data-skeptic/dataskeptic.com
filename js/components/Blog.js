@@ -3,6 +3,7 @@ import ReactDOM from "react-dom"
 import { Link } from 'react-router'
 
 import BlogItem from "./BlogItem"
+import Loading from "./Loading"
 
 export default class Blog extends React.Component {
 	constructor(props) {
@@ -10,23 +11,57 @@ export default class Blog extends React.Component {
 	}
 	
 	render() {
+		if (!this.props.blogs_loaded) {
+			return <div><Loading /></div>
+		}
+		var blogs = this.props.blogs
 		if (this.props.isExact) {
-			console.log(2)
 			return (
 				<div class="center">
-					Categories
-					<Link to="/blog/test">Blog test</Link>
+					{blogs.map(function(blog) {
+						var pn = blog.prettyname
+						if (pn[0] == "/") {
+							pn = pn.substring(1, pn.length)
+						}
+						pn = "/blog/" + pn
+						var date = blog["publish_date"]
+						return (
+							<div class="blog-summary" key={blog.uri}>
+								<Link class="blog-title" to={pn}>{blog.title}</Link>
+								<span class="blog-date">{date}</span>
+								<p>{blog.desc}</p>
+							</div>
+						)
+					})}
 				</div>
 			)
 		} else {
-			console.log(this.props.location.pathname)
-			// Look it up in Dynamo via API, retrieve S3 url
-			var uri = "https://s3.amazonaws.com/dev.dataskeptic.com/test/test1.htm"
-			return (
-				<div class="center">
-					<BlogItem src={uri} />
-				</div>
-			)
+			var pathname = this.props.location.pathname
+			pathname = pathname.substring("/blog".length, pathname.length)
+			var blog = undefined
+			for (var i in blogs) {
+				var b = blogs[i]
+				var pn = b["prettyname"]
+				console.log([pn, pathname])
+				if (pn == pathname) {
+					blog = b
+				}
+			}
+			if (blog == undefined) {
+				return (
+					<div class="blog-error">
+						Sorry, there was an error trying to load that file.
+					</div>
+				)
+			}
+			else {
+				var uri = "https://s3.amazonaws.com/dev.dataskeptic.com" + blog["rendered"]
+				return (
+					<div class="center">
+						<BlogItem src={uri}  />
+					</div>
+				)
+			}
 		}
 	}
 }

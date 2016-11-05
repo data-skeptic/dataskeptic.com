@@ -1,5 +1,7 @@
 import React from 'react'
 
+import ContactForm from "./ContactForm"
+
 const Services = () => {
 	return (
 		<div class="center">
@@ -21,10 +23,8 @@ const Services = () => {
 					<p>Data Skeptic is the #1 ranked data science related podcast on iTunes.  We reach a highly targetted audience on a weekly basis via the podcast as well as via the Data Skeptic blog and other outlets.  Let's talk about how we can help get your message to our audience.</p>
 				</div>
 			</div>
-			<div class="contact-form">
-				Contact form goes here
-			</div>
 			<div class="clear"></div>
+			<ContactForm />
 		</div>
 	)
 }

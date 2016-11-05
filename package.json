@@ -27,6 +27,7 @@
     "react-howler": "^3.2.0",
     "react-router": "^4.0.0-alpha.5",
     "react-slick": "^0.14.5",
+    "react-youtube": "^7.2.0",
     "slick-carousel": "^1.6.0",
     "webpack": "^1.12.9",
     "webpack-dev-server": "^1.14.1"

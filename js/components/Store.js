@@ -10,12 +10,6 @@ export default class Store extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			stripeLoading: false,
-			stripeLoadingError: false,
-			submitDisabled: false,
-			paymentError: null,
-			paymentComplete: false,
-			token: null,
 			sizeSelected: {}
 		}
 		this.onSizeSelection = this.onSizeSelection.bind(this)
@@ -27,9 +21,10 @@ export default class Store extends React.Component {
 		var products = this.props.products
 		for (var i in products) {
 			var product = products[i]
+			var size = ""
 			if (product["id"] == id) {
 				if (product['sizes'] != undefined) {
-					var size = this.state.sizeSelected[product.id]
+					size = this.state.sizeSelected[product.id]
 					if (size == undefined) {
 						alert("Please select a size first")
 						return;
@@ -51,20 +46,10 @@ export default class Store extends React.Component {
 
 	render() {
 		var products = this.props.products
-		if (this.state.stripeLoading || !this.props.products_loaded) {
+		console.log("store1")
+		console.log(products)
+		if (!this.props.products_loaded) {
 			return <div><Loading /></div>
-		}
-		else if (this.state.stripeLoadingError) {
-			return <div>Error</div>
-		}
-		else if (this.state.paymentComplete) {
-			return (
-				<div class="thank-you">
-				<h1>Thank you!</h1>
-				<p>Payment Complete.</p>
-				<p>Please allow 2-4 weeks for delivery.</p>
-				</div>
-			)
 		}
 		else {
 			var me = this
@@ -80,6 +65,7 @@ export default class Store extends React.Component {
 							<div class="clear"></div>
 						</div>
 						{products.map(function(product) {
+							console.log("store2")
 							if (product.active == 1) {
 								var btnId = "add_" + product.id
 								var sizeSelectorId = "ss_" + product.id
@@ -116,7 +102,7 @@ export default class Store extends React.Component {
 
 					<div>
 						<h3>Cart</h3>
-						<Cart cart_items={this.props.cart_items} />
+						<Cart cart_items={this.props.cart_items} updatable={true} updateCartQuantity={this.props.updateCartQuantity} />
 					</div>
 					<Link to="/checkout">Checkout</Link>
 				</div>

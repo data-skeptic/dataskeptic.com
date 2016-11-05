@@ -14,19 +14,20 @@ export default class BlogItem extends React.Component {
 		}
 		var me = this
 		axios
-		  .get(this.state.src)
-		  .then(function(result) {
-		  	console.log(result)
-		  	var content = result["data"]
-		  	me.setState({content})
-		  })
+			.get(this.state.src)
+			.then(function(result) {
+				var content = result["data"]
+				me.setState({content})
+			})
+			.catch(function (err) {
+				console.log(err)
+				me.setState({content: "<div class=\"blog-error\">Error, cannot load.</div>"})
+			})
 	}
 	
 	render() {
 		return (
 			<div class="center">
-				Specifics
-				{this.props.src}
 				<span dangerouslySetInnerHTML={{__html: this.state.content}} />
 				<MailingListBlogFooter />
 			</div>

@@ -9,7 +9,7 @@ import Player from './Player'
 import Home from './Home'
 import Podcast from './Podcast'
 import Blog from './Blog'
-import Video from './Video'
+import Videos from './Videos'
 import Projects from './Projects'
 import Store from './Store'
 import Checkout from './Checkout'
@@ -34,21 +34,26 @@ export default class Site extends React.Component {
 		var lastCacheEpisodes = 0
 		var lastCacheBlogs = 0
 		var lastCacheProducts = 0
+		var lastCacheVideos = 0
 		try {
 			lastCacheEpisodes = localStorage.getItem("lastCacheEpisodes")
 			lastCacheBlogs = localStorage.getItem("lastCacheBlogs")
 			lastCacheProducts = localStorage.getItem("lastCacheProducts")
+			lastCacheVideos = localStorage.getItem("lastCacheVideos")
 		} catch(err) {
 			lastCacheEpisodes = 0
 			lastCacheBlogs = 0
 			lastCacheProducts = 0
+			lastCacheVideos = 0
 		}
 		var episodes_loaded = false
 		var blogs_loaded = false
 		var products_loaded = false
+		var videos_loaded = false
 		var episodes = []
 		var blogs = []
 		var products = []
+		var videos = []
 		if (now - lastCacheEpisodes < cacheSeconds) {
 			episodes = JSON.parse(localStorage.getItem("episodes"))
 			if (episodes != undefined) {
@@ -79,16 +84,24 @@ export default class Site extends React.Component {
 				products = []
 			}
 		}
+		if (now - lastCacheVideos < cacheSeconds) {
+			videos = JSON.parse(localStorage.getItem("videos"))
+			if (videos != undefined) {
+				videos_loaded = true
+			} else {
+				videos = []
+			}
+		}
 
 		// Reload cart if it exists
-		var cart_items = []
+		var cart_items = Array()
 		try {
 			cart_items = JSON.parse(localStorage.getItem("cart"))
 			if (cart_items == undefined) {
 				cart_items = []
 			}
 		} catch (err) {
-			cart_items = []
+			cart_items = Array()
 		}
 
 		this.state = {
@@ -99,6 +112,8 @@ export default class Site extends React.Component {
 			"products": products,
 			"products_loaded": blogs_loaded,
 			"cart_items": cart_items,
+			"videos": videos,
+			"videos_loaded": videos_loaded,
 			"player": {
 				"episode": undefined,
 				"is_playing": false,
@@ -174,9 +189,25 @@ export default class Site extends React.Component {
 					console.log("Loaded memberships")
 				});			
 		}
+		if (!videos_loaded) {
+			console.log("Get videos")
+			/*
+			axios
+				.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/videos")
+				.then(function(result) {
+					var videos = result.data.Items
+					var videos_loaded = true
+					me.setState({videos, videos_loaded})
+					localStorage.setItem("videos", JSON.stringify(videos))
+					localStorage.setItem("lastCacheVideos", new Date().getTime()/1000)
+					console.log("Loaded videos")
+				});
+			*/
+		}
 
 		this.onPlayToggle = this.onPlayToggle.bind(this)
 		this.addToCart = this.addToCart.bind(this)
+		this.updateCartQuantity = this.updateCartQuantity.bind(this)
 	}
 
 	onPlayToggle(episode) {
@@ -212,18 +243,17 @@ export default class Site extends React.Component {
 	}
 	
 	addToCart(product, size) {
-		console.log("add")
-		var id = product.id
+		console.log(["add", product, size])
 		var quan = 1
-		if (size != undefined) {
-			id = id + "--" + size
+		if (size == undefined) {
+			size = ""
 		}
-		var cart_elem = {product, size, id, quan}
-		var cart_items = this.state.cart_items
+		var cart_elem = {product, size, quan}
+		var cart_items = JSON.parse(JSON.stringify(this.state.cart_items))
 		var found = false
 		for (var i in cart_items) {
 			var item = cart_items[i]
-			if (item['id'] == id) {
+			if (item['product']['id'] == product['id'] && item['size'] == size) {
 				item['quan'] += 1
 				found = true
 			}
@@ -235,11 +265,42 @@ export default class Site extends React.Component {
 		localStorage.setItem("cart", JSON.stringify(cart_items))
 	}
 
+	updateCartQuantity(product, size, delta) {
+		console.log([product, size])
+		if (size == undefined) {
+			size = ""
+		}
+		var cart_items = JSON.parse(JSON.stringify(this.state.cart_items))
+		for (var i in cart_items) {
+			var item = cart_items[i]
+			console.log([i, item])
+			if (item['product']['id'] == product['id'] && item['size'] == size) {
+				item['quan'] += delta
+				if (item['quan'] <= 0) {
+					console.log("removing")
+					cart_items.splice(i, 1)
+				}
+				i = cart_items.length
+			}
+		}
+		this.setState({cart_items})
+		localStorage.setItem("cart", JSON.stringify(cart_items))
+	}
+
 	render() {
+		var blogs = this.state.blogs
+		var episodes = this.state.episodes
 		var products = this.state.products
+		var blogs_loaded = this.state.blogs_loaded
+		var episodes_loaded = this.state.episodes_loaded
 		var products_loaded = this.state.products_loaded
 		var player = this.state.player
 		var cart_items = this.state.cart_items
+		if (cart_items.length == 0) {
+			var cart_link = <div></div>
+		} else {
+			var cart_link = <li><Link to="/checkout"><img class="menu-img" src="/img/png/checkout.png" /></Link></li>
+		}
 		return (
 			<Router>
 				<div>
@@ -253,21 +314,21 @@ export default class Site extends React.Component {
 							<li><Link to="/store">Store</Link></li>
 							<li><Link to="/proj">Projects</Link></li>
 							<li><Link to="/services">Services</Link></li>
-							<li><Link to="/checkout"><img class="menu-img" src="/img/png/checkout.png" /></Link></li>
+							{cart_link}
 							<li class="right"><Link to="/members">Membership</Link></li>
 						</ul>
 					</div>
 					<Player config={player} onPlayToggle={this.onPlayToggle.bind(this)} episodes_loaded={this.state.episodes_loaded} />
-					<MatchWithProps exactly pattern="/"          component={Home}    props={{ episodes: this.state.episodes, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
-					<MatchWithProps exactly pattern="/index.htm" component={Home}    props={{ episodes: this.state.episodes, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
-					<MatchWithProps pattern="/podcast"           component={Podcast} props={{ episodes: this.state.episodes, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
-					<Match pattern="/blog" component={Blog} />
-					<Match pattern="/video" component={Video} />
+					<MatchWithProps exactly pattern="/"          component={Home}    props={{ episodes, blogs, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
+					<MatchWithProps exactly pattern="/index.htm" component={Home}    props={{ episodes, blogs, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
+					<MatchWithProps pattern="/podcast"           component={Podcast} props={{ episodes, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
+					<MatchWithProps pattern="/blog"              component={Blog}    props={{ blogs, blogs_loaded }} />
+					<Match pattern="/video" component={Videos} />
 					<Match pattern="/proj" component={Projects} />
-					<MatchWithProps pattern="/store"             component={Store}    props={{ products, products_loaded, cart_items, addToCart: this.addToCart.bind(this) }} />
-					<MatchWithProps pattern="/checkout"          component={Checkout} props={{ products, products_loaded, cart_items }} />
+					<MatchWithProps pattern="/store"             component={Store}    props={{ products, products_loaded, cart_items, updateCartQuantity: this.updateCartQuantity.bind(this), addToCart: this.addToCart.bind(this) }} />
+					<MatchWithProps pattern="/checkout"          component={Checkout} props={{ products, products_loaded, cart_items, updateCartQuantity: this.updateCartQuantity.bind(this) }} />
 					<Match pattern="/services" component={Services} />
-					<MatchWithProps pattern="/members"           component={Membership} props={{ products, products_loaded }} />
+					<MatchWithProps pattern="/members"           component={Membership} props={{ products, products_loaded, addToCart: this.addToCart.bind(this) }} />
 					<Miss component={NotFound} />
 					<Footer />
 				</div>
@@ -279,8 +340,6 @@ export default class Site extends React.Component {
 
 /*
 HOME
-	# TODO: social tile
-	# TODO: live statistics tile
 	# TODO: Player progress bar
 	# TOOD: google analytics
 BLOG
@@ -290,18 +349,17 @@ BLOG
 	# TODO: upload knitr figures to S3
 	# TODO: Blog.js Categories
 	# TODO: Blog.js rendering
-	# TODO: Blog.js email sign up form
 	# TODO: Deep link handling from S3 per that guy's blog using cloud watch error routing
 	# TODO: migrate existing blog content
-VIDEOS
-	# TODO: static content
+PODCAST
+	# TODO: transcripts
 STORE
 	# TODO: Shopify
 	# TODO: cart
 	# TODO: sort by membership first, then price increasing
 	# TODO: notifications / record to DB
 SERVICES
-	# static content
+	# Lead gen form
 MEMBERSHIP
 	# TODO: content
 	# TODO: Shopify integration
@@ -315,5 +373,6 @@ LATER
 	# TODO: Set 1 hour callback to refresh localStorage, find new episodes
 	# TODO: t-shirt integration
 	# TODO: rate content level - beginner, intermedia, advanced
+	# TODO: Blog categories
 */
 

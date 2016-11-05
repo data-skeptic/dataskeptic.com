@@ -58,7 +58,7 @@ export default class Checkout extends React.Component {
 
 	render() {
 		var products = this.props.products
-		if (this.state.stripeLoading || !this.props.products_loaded) {
+		if (this.state.stripeLoading) {
 			return <div><Loading /></div>
 		}
 		else if (this.state.stripeLoadingError) {
@@ -69,14 +69,16 @@ export default class Checkout extends React.Component {
 		}
 		else {
 			var me = this
+			console.log("checkout render")
 			return (
 				<div class="center">
+					<Cart cart_items={this.props.cart_items} updateable={false} updateCartQuantity={this.props.updateCartQuantity} />
 					<div>
 						<h3>Checkout</h3>
 						<div class="checkout-box">
 						    <div class="checkout-row">
 						        <AddressForm title="Shipping Address" />
-						        <CreditCardForm onSubmit={this.onSubmit.bind(this)} paymentError={this.state.paymentError} submitDisabled={this.state.submitDisabled} />
+						        <CreditCardForm onSubmit={this.onSubmit.bind(this)} paymentCompleteError={this.state.paymentError} submitDisabled={this.state.submitDisabled} />
 						    </div>
 						    <div class="clear"></div>
 						</div>

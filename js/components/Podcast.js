@@ -5,6 +5,7 @@ import axios from "axios"
 import xml2js from "xml2js"
 
 import Episode from "./Episode"
+import Loading from "./Loading"
 
 export default class Podcast extends React.Component {
 	constructor(props) {
