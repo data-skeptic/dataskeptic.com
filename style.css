@@ -88,6 +88,10 @@ h1 {
     background-color: #282828;  
 }
 
+.menu-img {
+  height: 20px;
+}
+
 ul.topnav {
     list-style-type: none;
     margin: auto;
@@ -143,6 +147,15 @@ ul.topnav li.right {float: right;}
 }
 .footer-img {
   height: 25px;
+}
+
+.loading {
+  font-size: 18pt;
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  padding-top: 50px;
+  padding-bottom: 50px;
 }
 
 /*****************************************************************************
@@ -321,62 +334,71 @@ ul.topnav li.right {float: right;}
   margin-bottom: 5px
 }
 
-
 /*****************************************************************************
- Store.js
+ Video.js
 *****************************************************************************/
 
-
-.checkout-box {
-  border-color: #000;
-  border-radius: 4px;
-  border-width: 1px;
-  border-style: solid;
-  width: 100%;
+.video {
+  margin: 5px;
 }
 
-.checkout-row {
-  width: 100%;
+/*****************************************************************************
+ Blog.js
+*****************************************************************************/
+
+.blog-mailinglist-container {
   background-color: #eee;
+  padding: 10 10 1 10px;
+  margin: 10 10 10 10px;
 }
-
-.address-form {
-  width: 50%;
+.blog-mailinglist-left {
+  max-width: 300px;
+  font-size: 14pt;
+  padding: 10px;
   float: left;
-  background-color: #8f8;
 }
 
-.cc-outer {
-  float: left;
-  padding: 5 4 3 14px;
-  background-color: #fff;
+.blog-mailinglist-right {  
 }
 
-.cc-yymm {
-  width: 50px;
+.blog-summary {
+  background-color: #eee;
+  padding: 10px;
+  margin: 10px;
 }
 
-.cc-cvc {
-  margin-left: 10px;
-  width: 75;
+.blog-title {
+
 }
 
-.cc-num {
-  width: 185px;
+.blog-date {
+  margin-left: 15px;
+  font-size: 8pt;
+  font-weight: bold;
 }
 
-.cc-purchase {
-  width: 185px;
-}
-
-.thank-you {
+.blog-error {
   text-align: center;
   margin-top: 50px;
   margin-bottom: 50px;
   padding-top: 50px;
   padding-bottom: 50px;
-  background-color: #ddd;
+  background-color: #fdd;
 }
+
+
+/*****************************************************************************
+ BlogItem.js
+*****************************************************************************/
+
+.prompt {
+  visibility: hidden;
+  display: none;
+}
+
+/*****************************************************************************
+ Store.js
+*****************************************************************************/
 
 .store-items {
   clear: both;
@@ -410,7 +432,7 @@ ul.topnav li.right {float: right;}
 }
 .product-header-options {
   float: left;
-  width: 20%;
+  width: 10%;
   text-align: center;
   font-weight: bold;
 }
@@ -421,6 +443,9 @@ ul.topnav li.right {float: right;}
   font-weight: bold;
 }
 
+.product-image {
+  height: 75px;
+}
 
 .product-row {
   float: left;
@@ -464,13 +489,208 @@ ul.topnav li.right {float: right;}
 }
 
 
+/*****************************************************************************
+ Checkout.js
+*****************************************************************************/
+
+.cart-table {
+  min-width: 500px;
+  max-width: 900px;
+}
+.cart-button {
+  background-color: #aaa;
+  border-radius: 5px;
+  width: 20px;
+  padding: 0px;
+  height: 20px;
+  margin: 1px;
+}
+.cart-thl {
+  background-color: #eee;
+}
+.cart-thc {
+  background-color: #eee;
+  text-align: center:
+}
+.cart-thr {
+  background-color: #eee;
+  text-align: right:
+}
+.cart-title {
+
+}
+.cart-quantity-label {
+  width: 30px;
+}
+.cart-price {
+  text-align: right;
+}
+.cart-quan {
+  text-align: center;
+}
+
+.cart-subtotal {
+  text-align: right;
+}
+.cart-total {
+  text-align: right;
+  font-weight: bold;
+  font-size: 12pt;
+}
+
+.checkout-box {
+  border-color: #000;
+  border-radius: 4px;
+  border-width: 1px;
+  border-style: solid;
+  width: 100%;
+}
+
+.checkout-row {
+  width: 100%;
+  background-color: #eee;
+}
+
+.address-form {
+  width: 55%;
+  float: left;
+  padding: 5px;
+}
+
+.shipping-address-title {
+
+}
+
+.address-row {
+  clear: both;
+}
+
+.address-name-label {
+  float: left;
+  font-size: 8pt;
+  width: 80px;
+}
+
+.first_name {
+  width:80px;
+  float: left;
+  margin-right: 5px;
+}
+
+.last_name {
+  width:134px;
+  float: left;
+}
+
+.address-street-label {
+  float: left;
+  font-size: 8pt;
+  width: 80px;
+}
+.address-street-label {
+
+}
+.street_1 {
+  width: 299px;
+}
+.street_2 {
+  width: 299px;
+}
+
+.address-label {
+}
+.city-label {
+  font-size: 8pt;
+  float: left;
+  width: 80px;
+}
+.city {
+  float: left;
+  width: 166px;
+  margin-right: 10px;
+}
+.state-label {
+  font-size: 8pt;
+  float: left;
+}
+.state {
+  float: left;
+  width: 50px;
+}
+
+.country-label {
+  font-size: 8pt;
+  float: left;
+  width: 80px;
+}
+
+.country {
+  float: left;
+  width: 180px;
+}
+
+.zip-label {
+  font-size: 8pt;
+  width: 40px;
+  float: left;
+}
+.zip {
+  width: 79px;
+  float: left;
+}
+.phone-label {
+  font-size: 8pt;
+  float: left;
+  width: 80px;
+}
+.phone {
+  width: 200px;
+}
+
+.checkout-name-field {
+  float: left;
+}
+
+.cc-outer {
+  float: left;
+  padding: 5 4 3 14px;
+  background-color: #fff;
+}
+
+.cc-yymm {
+  width: 50px;
+}
+
+.cc-cvc {
+  margin-left: 10px;
+  width: 75;
+}
+
+.cc-num {
+  width: 185px;
+}
+
+.cc-purchase {
+  width: 185px;
+}
+
+.thank-you {
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  background-color: #ddd;
+}
+
+
+
 
 /*****************************************************************************
  Home.js
 *****************************************************************************/
 
 #mc_embed_signup {
-  background:#fff;
   clear:left;
   font:14px Helvetica,Arial,sans-serif; 
   width:350px;
@@ -526,7 +746,127 @@ button.slick-arrow.slick-prev {
 /* The home-player definition is in the Player.js section for convenience */
 
 /*****************************************************************************
- Used for the carousel in Home.js
+ Projects.js
+*****************************************************************************/
+
+.project-box {
+  background-color: #eeeeee;
+  max-width: 300px;
+  margin: 5px;
+  padding: 10px;
+  border-radius: 5px;
+  border-color: #333;
+  border-width: 1px;
+  border-style: solid;
+  float: left;
+  height: 250px;
+}
+.project-title {
+  font-weight: bold;
+  font-size: 12pt;
+  text-align: center;  
+  margin-bottom: -5px;
+}
+.project-img-container {
+  margin: auto;
+  margin-bottom: 10px;
+  text-align: center;  
+}
+.project-img {
+  height: 100px;
+  width: 100px;
+}
+.project-link {
+  width: 100%;
+  text-align: center;
+}
+
+
+/*****************************************************************************
+ ContactForm.js
+*****************************************************************************/
+
+.contact-form {
+  background-color: #f00;
+  width: 600px;
+}
+.contact-title {
+  font-size: 12pt;
+  width: 200px;
+}
+.contact-name {
+
+}
+.contact-email {
+
+}
+.contact-msg {
+  width: 400px;
+  height: 100px;
+}
+.contact-send {
+  float: right;
+}
+.contact-status {
+  border-radius: 5px;
+  border-color: #333;
+  border-width: 1px;
+  border-style: solid;
+  height: 25px;
+  width: 250px;
+}
+
+
+/*****************************************************************************
+ Membership.js
+*****************************************************************************/
+
+.membership-container {
+  border-radius: 5px;
+  border-color: #333;
+  border-width: 1px;
+  border-style: solid;
+  width: 250px;
+  height: 250px;
+}
+.membership-img {
+  height: 50px;
+}
+.membership-title {
+}
+.membership-desc {
+}
+.membership-price {
+}
+.membership-add {
+}
+
+
+/*****************************************************************************
+ Home.js > Slider
+*****************************************************************************/
+
+.services-box {
+  background-color: #eeeeee;
+  max-width: 300px;
+  margin: 5px;
+  padding: 10px;
+  border-radius: 5px;
+  border-color: #333;
+  border-width: 1px;
+  border-style: solid;
+  float: left;
+  height: 200px;
+}
+.services-title {
+  font-weight: bold;
+  font-size: 12pt;
+  text-align: center;  
+  margin-bottom: -5px;
+}
+
+/*****************************************************************************
+ Home.js > Slider
 *****************************************************************************/
 
 /* Slider */
@@ -648,35 +988,6 @@ button.slick-arrow.slick-prev {
 .slick-arrow.slick-hidden {
     display: none;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 @charset 'UTF-8';
 /* Slider */
@@ -883,28 +1194,8 @@ button.slick-arrow.slick-prev {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*********************************************************
-  SLIDER
+  PlayerProgressBar.js > Rcslider
 **********************************************************/
 
 .rc-slider {

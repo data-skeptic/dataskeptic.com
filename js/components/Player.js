@@ -13,7 +13,6 @@ export default class Player extends React.Component {
 	}
 
 	render() {
-		console.log("render player")
 		var config = this.props.config
 		if (config.has_shown) {
 			var episode = config.episode
