@@ -341,35 +341,33 @@ export default class Site extends React.Component {
 /*
 HOME
 	# TODO: Player progress bar
-	# TOOD: google analytics
 BLOG
-	# TODO: admin page to update blog content - add tags, release date, author, prettyname, title, tags
 	# TODO: easy preview before publish
 	# TODO: author images
 	# TODO: upload knitr figures to S3
-	# TODO: Blog.js Categories
-	# TODO: Blog.js rendering
-	# TODO: Deep link handling from S3 per that guy's blog using cloud watch error routing
 	# TODO: migrate existing blog content
 PODCAST
 	# TODO: transcripts
 STORE
 	# TODO: Shopify
-	# TODO: cart
 	# TODO: sort by membership first, then price increasing
 	# TODO: notifications / record to DB
-SERVICES
-	# Lead gen form
+	# Shipping tshirt vs sticker
+	# Shipping intl
+	# Why need address pop up
 MEMBERSHIP
 	# TODO: content
-	# TODO: Shopify integration
 MISC
+	# TOOD: google analytics
 	# TODO: travis ci blog deploy
 	# TODO: redirects on old content, especially show notes pages from feed
 	# TODO: error page logging to cloudfront
 	# TODO: realtime refresh?
 	# TODO: SEO / crawlable?
+	# Blog deploy moves first h1 to title and guesses desc from first p.  fills all fields,  pub date tomorrow
+	# API respect pubdate
 LATER
+	# TODO: admin page to update blog content - add tags, release date, author, prettyname, title, tags
 	# TODO: Set 1 hour callback to refresh localStorage, find new episodes
 	# TODO: t-shirt integration
 	# TODO: rate content level - beginner, intermedia, advanced
