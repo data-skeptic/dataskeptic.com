@@ -86,7 +86,7 @@ export default class Site extends React.Component {
 		}
 		if (now - lastCacheVideos < cacheSeconds) {
 			videos = JSON.parse(localStorage.getItem("videos"))
-			if (videos != undefined) {
+			if (videos != undefined && videos.length > 0) {
 				videos_loaded = true
 			} else {
 				videos = []
@@ -191,6 +191,8 @@ export default class Site extends React.Component {
 		}
 		if (!videos_loaded) {
 			console.log("Get videos")
+			videos = [{videoId: "RxtHeXHOdf0"}, {videoId: "cHoRn1UxEzk"}]
+			this.state.videos = videos
 			/*
 			axios
 				.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/videos")
@@ -243,7 +245,6 @@ export default class Site extends React.Component {
 	}
 	
 	addToCart(product, size) {
-		console.log(["add", product, size])
 		var quan = 1
 		if (size == undefined) {
 			size = ""
@@ -266,18 +267,15 @@ export default class Site extends React.Component {
 	}
 
 	updateCartQuantity(product, size, delta) {
-		console.log([product, size])
 		if (size == undefined) {
 			size = ""
 		}
 		var cart_items = JSON.parse(JSON.stringify(this.state.cart_items))
 		for (var i in cart_items) {
 			var item = cart_items[i]
-			console.log([i, item])
 			if (item['product']['id'] == product['id'] && item['size'] == size) {
 				item['quan'] += delta
 				if (item['quan'] <= 0) {
-					console.log("removing")
 					cart_items.splice(i, 1)
 				}
 				i = cart_items.length
@@ -291,6 +289,7 @@ export default class Site extends React.Component {
 		var blogs = this.state.blogs
 		var episodes = this.state.episodes
 		var products = this.state.products
+		var videos = this.state.videos
 		var blogs_loaded = this.state.blogs_loaded
 		var episodes_loaded = this.state.episodes_loaded
 		var products_loaded = this.state.products_loaded
@@ -323,7 +322,7 @@ export default class Site extends React.Component {
 					<MatchWithProps exactly pattern="/index.htm" component={Home}    props={{ episodes, blogs, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
 					<MatchWithProps pattern="/podcast"           component={Podcast} props={{ episodes, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
 					<MatchWithProps pattern="/blog"              component={Blog}    props={{ blogs, blogs_loaded }} />
-					<Match pattern="/video" component={Videos} />
+					<MatchWithProps pattern="/video"             component={Videos}  props={{ videos }} />
 					<Match pattern="/proj" component={Projects} />
 					<MatchWithProps pattern="/store"             component={Store}    props={{ products, products_loaded, cart_items, updateCartQuantity: this.updateCartQuantity.bind(this), addToCart: this.addToCart.bind(this) }} />
 					<MatchWithProps pattern="/checkout"          component={Checkout} props={{ products, products_loaded, cart_items, updateCartQuantity: this.updateCartQuantity.bind(this) }} />
@@ -341,6 +340,8 @@ export default class Site extends React.Component {
 /*
 HOME
 	# TODO: Player progress bar
+	form validate ContactForm
+	form validate checkout
 BLOG
 	# TODO: easy preview before publish
 	# TODO: author images

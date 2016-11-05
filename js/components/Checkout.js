@@ -69,10 +69,9 @@ export default class Checkout extends React.Component {
 		}
 		else {
 			var me = this
-			console.log("checkout render")
-			return (
-				<div class="center">
-					<Cart cart_items={this.props.cart_items} updateable={false} updateCartQuantity={this.props.updateCartQuantity} />
+			var checkout = <div></div>
+			if (this.props.cart_items.length > 0) {
+				checkout = (
 					<div>
 						<h3>Checkout</h3>
 						<div class="checkout-box">
@@ -83,6 +82,12 @@ export default class Checkout extends React.Component {
 						    <div class="clear"></div>
 						</div>
 					</div>
+				)
+			}
+			return (
+				<div class="center">
+					<Cart cart_items={this.props.cart_items} updateable={false} updateCartQuantity={this.props.updateCartQuantity} />
+					{checkout}
 				</div>
 			)
 		}
