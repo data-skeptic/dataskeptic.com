@@ -787,25 +787,45 @@ button.slick-arrow.slick-prev {
 *****************************************************************************/
 
 .contact-form {
-  background-color: #f00;
-  width: 600px;
+  background-color: #eee;
+  max-width: 600px;
 }
-.contact-title {
+.contact-name-lbl {
   font-size: 12pt;
-  width: 200px;
+  float: left;
+  margin: 10 1 10 5px;
+}
+.contact-email-lbl {
+  font-size: 12pt;
+  float: left;
+  margin: 10 1 10 5px;
 }
 .contact-name {
-
+float: left;
+  margin: 10px;
+  width: 150px;
 }
 .contact-email {
-
+float: left;
+  margin: 10px;
+  width: 185px;
+}
+.contact-msg-container {
+  max-width: 590px;
 }
 .contact-msg {
-  width: 400px;
+  width: 95%;
+  max-width: 580px;
   height: 100px;
+  margin: 0 5 5 5px;
+}
+.contact-send-container {
+  text-align: right;
+  padding: 10px;
+  margin-right: 25px;
 }
 .contact-send {
-  float: right;
+  width: 100px;
 }
 .contact-status {
   border-radius: 5px;

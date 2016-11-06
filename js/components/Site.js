@@ -338,38 +338,52 @@ export default class Site extends React.Component {
 
 
 /*
-HOME
-	# TODO: Player progress bar
+LT
+	membership levels
+	services feedback
+	general feedback
+
+PLAYER
+	Player progress bar
+	Touch to seek
+	Spinning logo on waiting for file download
+CONTACT FORM
 	form validate ContactForm
-	form validate checkout
 BLOG
-	# TODO: easy preview before publish
-	# TODO: author images
-	# TODO: upload knitr figures to S3
-	# TODO: migrate existing blog content
+	author images
+	upload knitr figures to S3
 PODCAST
-	# TODO: transcripts
+	transcripts
 STORE
-	# TODO: Shopify
+	# Validation on fields before submit
 	# TODO: sort by membership first, then price increasing
 	# TODO: notifications / record to DB
+	t-shirt image
 	# Shipping tshirt vs sticker
 	# Shipping intl
 	# Why need address pop up
 MEMBERSHIP
-	# TODO: content
+	content, images, benefits
 MISC
 	# TOOD: google analytics
-	# TODO: travis ci blog deploy
 	# TODO: redirects on old content, especially show notes pages from feed
 	# TODO: error page logging to cloudfront
-	# TODO: realtime refresh?
 	# TODO: SEO / crawlable?
-	# Blog deploy moves first h1 to title and guesses desc from first p.  fills all fields,  pub date tomorrow
-	# API respect pubdate
+	Follow links more obvious
+DEPLOY BLOG
+	Guess title as h1, desc as first p
+	author name from github acnt
+	migrate existing blog content
+	Fill all fields
+	Pubdat tomorrow
+	environment column
+	Api respect pubdate and env
 LATER
+	Guest profile pages
 	# TODO: admin page to update blog content - add tags, release date, author, prettyname, title, tags
 	# TODO: Set 1 hour callback to refresh localStorage, find new episodes
+	# TODO: realtime refresh?
+	Leave voice mail on the site
 	# TODO: t-shirt integration
 	# TODO: rate content level - beginner, intermedia, advanced
 	# TODO: Blog categories

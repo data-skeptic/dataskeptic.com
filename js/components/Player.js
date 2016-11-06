@@ -8,7 +8,31 @@ export default class Player extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			"position": 0
+			position: 0,
+			loaded: false,
+			howler: undefined
+		}
+
+		this.update = this.update.bind(this)
+		setInterval(this.update, 1000)
+	}
+
+	update() {
+		console.log("update")
+		if (this.state.howler != undefined) {
+			var seek = this.state.howler.seek()
+			var duration = this.state.howler.duration()
+			var position = 100.0 * seek / duration
+			if (!isNaN(position)) {
+				console.log(position)
+				console.log(this)
+				var loaded = true
+				this.setState({position, loaded})
+			} else {
+				var loaded=false
+				this.setState({loaded})
+				// TODO: Still loading, reflect that in the state
+			}
 		}
 	}
 
@@ -23,7 +47,7 @@ export default class Player extends React.Component {
 			var duration = "--:--"
 			if (episode != undefined) {
 				var mp3 = episode.mp3
-				howler = (<ReactHowler src={mp3} playing={is_playing} />)
+				howler = <ReactHowler src={mp3} playing={is_playing} ref={(ref) => this.state.howler = ref} />
 				title = episode.title
 				duration = episode.duration
 			}
@@ -31,10 +55,14 @@ export default class Player extends React.Component {
 			if (!this.props.episodes_loaded) {
 				button = (<button class="episode-button-sm">?</button>)
 			} else {
-				if (is_playing) {
-					button = (<button class="episode-button-sm" onClick={this.props.onPlayToggle.bind(this, episode)}>&#10073;&#10073;</button>)
+				if (this.state.loaded) {
+					if (is_playing) {
+						button = (<button class="episode-button-sm" onClick={this.props.onPlayToggle.bind(this, episode)}>&#10073;&#10073;</button>)
+					} else {
+						button = (<button class="episode-button-sm" onClick={this.props.onPlayToggle.bind(this, episode)}>&#9658;</button>)
+					}
 				} else {
-					button = (<button class="episode-button-sm" onClick={this.props.onPlayToggle.bind(this, episode)}>&#9658;</button>)
+					button = (<button class="episode-button-sm" onClick={this.props.onPlayToggle.bind(this, episode)}>?</button>)
 				}
 			}
 			return (

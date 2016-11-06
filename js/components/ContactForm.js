@@ -61,15 +61,19 @@ export default class ContactForm extends React.Component {
 		return (
 			<div class="contact-form">
 				<div class="contact-name-container">
-					<div class="contact-title">Name:</div>
+					<div class="contact-name-lbl">Name:</div>
 					<input class="contact-name"  onChange={this.onChangeName.bind(this)} value={this.state.name} />
 				</div>
 				<div class="contact-email-container">
-					<div class="contact-title">E-Mail:</div>
+					<div class="contact-email-lbl">E-Mail:</div>
 					<input class="contact-email" onChange={this.onChangeEmail.bind(this)} value={this.state.email} />
 				</div>
-				<textarea class="contact-msg" onChange={this.onChangeMsg.bind(this)} value={this.state.msg} />
-				<button class="contact-send" onClick={this.onClick.bind(this)}>Send</button>
+				<div class="contact-msg-container">
+					<textarea class="contact-msg" onChange={this.onChangeMsg.bind(this)} value={this.state.msg} />
+				</div>
+				<div class="contact-send-container">
+					<button class="contact-send" onClick={this.onClick.bind(this)}>Send</button>
+				</div>
 				{statusbox}
 			</div>
 		)
