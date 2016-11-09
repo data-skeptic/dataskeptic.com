@@ -841,24 +841,34 @@ float: left;
  Membership.js
 *****************************************************************************/
 
+
 .membership-container {
   border-radius: 5px;
   border-color: #333;
   border-width: 1px;
   border-style: solid;
-  width: 250px;
-  height: 250px;
+  width: 280px;
+  height: 200px;
+  padding:5px;
+  margin: 5px;
 }
 .membership-img {
   height: 50px;
 }
 .membership-title {
+  text-align: center;
+  font-weight: bold;
 }
 .membership-desc {
 }
 .membership-price {
+  text-align: center;
+  font-weight: bold;
 }
 .membership-add {
+  background-color: #a3b2a2;
+  border-radius: 10px;
+  font-weight: bold;
 }
 
 
