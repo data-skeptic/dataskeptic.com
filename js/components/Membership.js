@@ -17,6 +17,9 @@ export default class Membership extends React.Component {
 			return <div><Loading /></div>
 		} else {
 			var products = this.props.products
+			products.sort(function(a, b) {
+				return a['price'] - b['price']
+			})
 			var me = this
 			return (
 				<div class="center">
