@@ -6,9 +6,8 @@ import Slider from "react-slick"
 import Episode from "./Episode"
 import MailingList from "./MailingList"
 import SocialMediaCard from "./SocialMediaCard"
-import LatestEpisodeCard from "./LatestEpisodeCard"
+import EpisodeCard from "./EpisodeCard"
 import LatestBlogCard from "./LatestBlogCard"
-import ArchiveEpisodeCard from "./ArchiveEpisodeCard"
 import LatestEpisodePlayer from "./LatestEpisodePlayer"
 
 export default class Home extends React.Component {
@@ -52,7 +51,7 @@ export default class Home extends React.Component {
 	      adaptiveHeight: 1,
 	      accessibility: 1,
 	      autoplay: 1,
-	      autoplaySpeed: 3000,
+	      autoplaySpeed: 4000,
 	      pauseOnHover: 1
 	    };
 		var is_playing = false
@@ -70,13 +69,13 @@ export default class Home extends React.Component {
 					<div className="carousel">
 						<Slider {...settings}>
 							<div class="card">
-								<LatestEpisodeCard episode={episode} onPlayToggle={onPlayToggle} is_playing={is_playing} />
+								<EpisodeCard episode={episode} title="Latest episode" onPlayToggle={onPlayToggle} is_playing={is_playing} />
 							</div>
 							<div class="card">
 								<LatestBlogCard blog={blog} />
 							</div>
 							<div class="card">
-								<ArchiveEpisodeCard episode={old_episode} onPlayToggle={onPlayToggle} is_playing={is_playing} />
+								<EpisodeCard episode={old_episode} title="From the archives" onPlayToggle={onPlayToggle} is_playing={is_playing} />
 							</div>
 							<div class="card">
 								<SocialMediaCard />

@@ -45,13 +45,28 @@ export default class Store extends React.Component {
 	}
 
 	render() {
-		var products = this.props.products
-		console.log("store1")
-		console.log(products)
 		if (!this.props.products_loaded) {
 			return <div><Loading /></div>
 		}
 		else {
+			var products = this.props.products
+			console.log("before")
+			console.log(products)
+			products = products.sort(function(a, b) {
+				var s1 = 1
+				if (a['type'] == 'membership') {
+					s1 = 1000
+				}
+				var s2 = 1
+				if (b['type'] == 'membership') {
+					s2 = 1000
+				}
+				var x = a['price'] * s1
+				var y = b['price'] * s2
+				return x - y
+			})
+			console.log("after")
+			console.log(products)
 			var me = this
 			return (
 				<div class="center">
@@ -65,7 +80,6 @@ export default class Store extends React.Component {
 							<div class="clear"></div>
 						</div>
 						{products.map(function(product) {
-							console.log("store2")
 							if (product.active == 1) {
 								var btnId = "add_" + product.id
 								var sizeSelectorId = "ss_" + product.id

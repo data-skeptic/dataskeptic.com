@@ -225,12 +225,44 @@ ul.topnav li.right {float: right;}
   background-color: #eee;
 }
 
-.home-player-latest {
+.home-player {
   font-size: 8pt;
 }
 
 .home-player-title {
   overflow: hidden;
+}
+
+.home-episode-card {
+  height: 100%;
+}
+.home-episode-card-left {
+  width: 190px;
+  float: left;
+}
+.home-episode-card-img {
+  padding: 10px;
+  width: 180px;
+}
+.home-player-button-container {
+  margin-left: 295px;
+}
+.home-episode-card-right {
+  padding: 10px;
+  background-color: #aaa;
+  border-radius: 5px;
+  height: 100%;
+  text-align: center;
+}
+.home-player-card {
+
+}
+.home-player-title {
+  font-size: 14pt;
+}
+.home-player-date {
+  font-size: 10pt;
+  font-weight: bold;
 }
 
 .home-player-left {
@@ -718,14 +750,41 @@ ul.topnav li.right {float: right;}
   border-width: 1px;
   border-color: #000;
   border-style: solid;
-  padding: 5 5 5 10px;
   font-size: 12pt;
   width: 650px;
   height: 200px;
 }
 
-.home-latest-episode-card-img {
-  width: 100px;
+.home-episode-card {
+  padding: 10px;
+}
+
+.home-latest-blog-card {
+  padding: 0px;
+}
+
+.home-latest-blog-card-container {
+  padding: 10px;
+}
+
+.home-latest-blog-top {
+  background-image: url("/img/png/back.png");
+  background-repeat: repeat-x;  
+  color: #fff;
+  width: 100%;
+  font-size: 11pt;
+  font-weight: bold;
+  padding: 5 5 1 5px;
+}
+
+.home-social-media-card {
+  background-image: url("/img/png/back.png");
+  background-repeat: repeat;
+  height: 100%;
+  color: #fff;
+  padding: 30 10 10 10px;
+  text-align: center;
+  font-size: 18pt;
 }
 
 div.mailing-list-signup-container {
@@ -787,25 +846,45 @@ button.slick-arrow.slick-prev {
 *****************************************************************************/
 
 .contact-form {
-  background-color: #f00;
-  width: 600px;
+  background-color: #eee;
+  max-width: 600px;
 }
-.contact-title {
+.contact-name-lbl {
   font-size: 12pt;
-  width: 200px;
+  float: left;
+  margin: 10 1 10 5px;
+}
+.contact-email-lbl {
+  font-size: 12pt;
+  float: left;
+  margin: 10 1 10 5px;
 }
 .contact-name {
-
+float: left;
+  margin: 10px;
+  width: 150px;
 }
 .contact-email {
-
+float: left;
+  margin: 10px;
+  width: 185px;
+}
+.contact-msg-container {
+  max-width: 590px;
 }
 .contact-msg {
-  width: 400px;
+  width: 95%;
+  max-width: 580px;
   height: 100px;
+  margin: 0 5 5 5px;
+}
+.contact-send-container {
+  text-align: right;
+  padding: 10px;
+  margin-right: 25px;
 }
 .contact-send {
-  float: right;
+  width: 100px;
 }
 .contact-status {
   border-radius: 5px;
@@ -821,24 +900,34 @@ button.slick-arrow.slick-prev {
  Membership.js
 *****************************************************************************/
 
+
 .membership-container {
   border-radius: 5px;
   border-color: #333;
   border-width: 1px;
   border-style: solid;
-  width: 250px;
-  height: 250px;
+  width: 280px;
+  height: 200px;
+  padding:5px;
+  margin: 5px;
 }
 .membership-img {
   height: 50px;
 }
 .membership-title {
+  text-align: center;
+  font-weight: bold;
 }
 .membership-desc {
 }
 .membership-price {
+  text-align: center;
+  font-weight: bold;
 }
 .membership-add {
+  background-color: #a3b2a2;
+  border-radius: 10px;
+  font-weight: bold;
 }
 
 

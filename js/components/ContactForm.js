@@ -14,21 +14,51 @@ export default class ContactForm extends React.Component {
 	}
 	
 	onClick(event) {
-		console.log(event.target)
 		var url = "https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/contact"
 		var data = this.state
-		this.setState({send: "sending"})
-		var me = this
-		axios
-			.post(url, JSON.stringify(data))
-			.then(function(result) {
-				console.log(result)
-				me.setState({send: "success"})
-			})
-            .catch(function (err) {
-            	console.log(err)
-            	me.setState({send: "error"})
-            });
+		var validated = true
+		var name_missing = false
+		var email_missing = false
+		var msg_missing = false
+		if (data.name.trim() == "") {
+			validated = false
+			name_missing = true
+		}
+		if (data.email.trim() == "") {
+			validated = false
+			email_missing = true
+		}
+		if (data.msg.trim() == "") {
+			validated = false
+			msg_missing = true
+		}
+		if (!validated) {
+			console.log("@@@@")
+			if (name_missing) {
+				//React.findDOMNode(this.refs.name).focus()
+			}
+			else if (email_missing) {
+				//React.findDOMNode(this.refs.email).focus()
+			}
+			else {
+				//React.findDOMNode(this.refs.msg).focus()
+			}
+			this.setState({send: "error"})
+		}
+		else {
+			this.setState({send: "sending"})
+			var me = this
+			axios
+				.post(url, JSON.stringify(data))
+				.then(function(result) {
+					console.log(result)
+					me.setState({send: "success"})
+				})
+	            .catch(function (err) {
+	            	console.log(err)
+	            	me.setState({send: "error"})
+	            });
+		}
 	}
 
 	onChangeName(event) {
@@ -51,6 +81,7 @@ export default class ContactForm extends React.Component {
 
 	render() {
 		var statusbox = <div></div>
+		console.log(this.state.send)
 		if (this.state.send == "sending") {
 			status = <div class="contact-status"><span>Sending...</span></div>
 		} else if (this.state.send == "error") {
@@ -61,15 +92,19 @@ export default class ContactForm extends React.Component {
 		return (
 			<div class="contact-form">
 				<div class="contact-name-container">
-					<div class="contact-title">Name:</div>
-					<input class="contact-name"  onChange={this.onChangeName.bind(this)} value={this.state.name} />
+					<div class="contact-name-lbl">Name:</div>
+					<input class="contact-name" ref="name" onChange={this.onChangeName.bind(this)} value={this.state.name} />
 				</div>
 				<div class="contact-email-container">
-					<div class="contact-title">E-Mail:</div>
-					<input class="contact-email" onChange={this.onChangeEmail.bind(this)} value={this.state.email} />
+					<div class="contact-email-lbl">E-Mail:</div>
+					<input class="contact-email" ref="email" onChange={this.onChangeEmail.bind(this)} value={this.state.email} />
 				</div>
-				<textarea class="contact-msg" onChange={this.onChangeMsg.bind(this)} value={this.state.msg} />
-				<button class="contact-send" onClick={this.onClick.bind(this)}>Send</button>
+				<div class="contact-msg-container">
+					<textarea class="contact-msg" ref="msg" onChange={this.onChangeMsg.bind(this)} value={this.state.msg} />
+				</div>
+				<div class="contact-send-container">
+					<button class="contact-send" onClick={this.onClick.bind(this)}>Send</button>
+				</div>
 				{statusbox}
 			</div>
 		)
