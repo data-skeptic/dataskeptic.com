@@ -225,12 +225,44 @@ ul.topnav li.right {float: right;}
   background-color: #eee;
 }
 
-.home-player-latest {
+.home-player {
   font-size: 8pt;
 }
 
 .home-player-title {
   overflow: hidden;
+}
+
+.home-episode-card {
+  height: 100%;
+}
+.home-episode-card-left {
+  width: 190px;
+  float: left;
+}
+.home-episode-card-img {
+  padding: 10px;
+  width: 180px;
+}
+.home-player-button-container {
+  margin-left: 295px;
+}
+.home-episode-card-right {
+  padding: 10px;
+  background-color: #aaa;
+  border-radius: 5px;
+  height: 100%;
+  text-align: center;
+}
+.home-player-card {
+
+}
+.home-player-title {
+  font-size: 14pt;
+}
+.home-player-date {
+  font-size: 10pt;
+  font-weight: bold;
 }
 
 .home-player-left {
@@ -718,14 +750,27 @@ ul.topnav li.right {float: right;}
   border-width: 1px;
   border-color: #000;
   border-style: solid;
-  padding: 5 5 5 10px;
   font-size: 12pt;
   width: 650px;
   height: 200px;
 }
 
-.home-latest-episode-card-img {
-  width: 100px;
+.home-episode-card {
+  padding: 10px;
+}
+
+.home-latest-blog-card {
+  padding: 30px;
+}
+
+.home-social-media-card {
+  background-image: url("/img/png/back.png");
+  background-repeat: repeat;
+  height: 100%;
+  color: #fff;
+  padding: 30 10 10 10px;
+  text-align: center;
+  font-size: 18pt;
 }
 
 div.mailing-list-signup-container {

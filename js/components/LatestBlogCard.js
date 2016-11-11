@@ -22,7 +22,7 @@ export default class LatestBlogCard extends React.Component {
 			pn = "/blog/" + pn
 			var date = blog["publish_date"]
 			return (
-				<div>
+				<div class="home-latest-blog-card">
 					<Link class="blog-title" to={pn}>{blog.title}</Link>
 					<span class="blog-date">{date}</span>
 					<p>{blog.desc}</p>
