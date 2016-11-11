@@ -356,7 +356,6 @@ PODCAST
 	transcripts
 STORE
 	# Validation on fields before submit
-	# TODO: sort by membership first, then price increasing
 	# TODO: notifications / record to DB
 	t-shirt image
 	# Shipping tshirt vs sticker
@@ -380,6 +379,7 @@ DEPLOY BLOG
 	Api respect pubdate and env
 LATER
 	Guest profile pages
+	Chat room with video so i can go live randomly whenever i want and talk about live stuff like elections
 	# TODO: admin page to update blog content - add tags, release date, author, prettyname, title, tags
 	# TODO: Set 1 hour callback to refresh localStorage, find new episodes
 	# TODO: realtime refresh?

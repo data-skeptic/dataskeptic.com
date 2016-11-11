@@ -760,7 +760,21 @@ ul.topnav li.right {float: right;}
 }
 
 .home-latest-blog-card {
-  padding: 30px;
+  padding: 0px;
+}
+
+.home-latest-blog-card-container {
+  padding: 10px;
+}
+
+.home-latest-blog-top {
+  background-image: url("/img/png/back.png");
+  background-repeat: repeat-x;  
+  color: #fff;
+  width: 100%;
+  font-size: 11pt;
+  font-weight: bold;
+  padding: 5 5 1 5px;
 }
 
 .home-social-media-card {
