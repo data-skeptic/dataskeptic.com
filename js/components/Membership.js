@@ -8,9 +8,8 @@ export default class Membership extends React.Component {
 		super(props)
 	}
 
-	addToCart(event, product) {
+	addToCart(product) {
 		this.props.addToCart(product, "")
-		browserHistory.push('/checkout')
 	}
 
 	render() {

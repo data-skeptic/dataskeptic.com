@@ -321,12 +321,15 @@ export default class Site extends React.Component {
 	}
 
 	addToCart(product, size) {
+		console.log([product, size])
 		var quan = 1
 		if (size == undefined) {
 			size = ""
 		}
 		var cart_elem = {product, size, quan}
-		var cart_items = JSON.parse(JSON.stringify(this.state.cart_items))
+		var s = JSON.stringify(this.state.cart_items)
+		console.log(["s", s])
+		var cart_items = JSON.parse(s)
 		var found = false
 		for (var i in cart_items) {
 			var item = cart_items[i]

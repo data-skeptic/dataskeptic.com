@@ -519,9 +519,10 @@ ul.topnav li.right {float: right;}
   font-weight: bold;
 }
 .product-header-price {
-  float: left;
+  float: right;
   width: 16%;
-  text-align: center;
+  text-align: right;
+  margin-right: 20px;
   font-weight: bold;
 }
 
