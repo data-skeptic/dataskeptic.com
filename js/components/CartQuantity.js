@@ -16,7 +16,7 @@ export default class Checkout extends React.Component {
 		if (this.props.updateable) {
 			return (
 				<div class="cart-quantity-container">
-					<span class="cart-quantity-label">{this.props.quantity}</span>
+					<div class="cart-quantity-label">{this.props.quantity}</div>
 					<button class="cart-button" onClick={this.update.bind(this, 1)}>+</button>
 					<button class="cart-button" onClick={this.update.bind(this, -1)}>-</button>
 				</div>

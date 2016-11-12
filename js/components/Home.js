@@ -51,7 +51,7 @@ export default class Home extends React.Component {
 	      adaptiveHeight: 1,
 	      accessibility: 1,
 	      autoplay: 1,
-	      autoplaySpeed: 4000,
+	      autoplaySpeed: 5000,
 	      pauseOnHover: 1
 	    };
 		var is_playing = false

@@ -230,7 +230,9 @@ ul.topnav li.right {float: right;}
 }
 
 .home-player-title {
-  overflow: hidden;
+  overflow:scroll;
+  width: 100%;
+  height: 25px;
 }
 
 .home-episode-card {
@@ -459,19 +461,19 @@ ul.topnav li.right {float: right;}
 }
 .product-header-item {
   float: left;
-  width: 55%;
+  width: 60%;
   font-weight: bold;
 }
 .product-header-options {
   float: left;
-  width: 10%;
+  width: 24%;
   text-align: center;
   font-weight: bold;
 }
 .product-header-price {
   float: left;
-  width: 25%;
-  text-align: right;
+  width: 16%;
+  text-align: center;
   font-weight: bold;
 }
 
@@ -503,12 +505,16 @@ ul.topnav li.right {float: right;}
 }
 .product-pull-down {
   float: left;
-  width: 70%;
+  width: 60%;
   padding: 10px;
+}
+.product-pull-down select {
+  width: 100%;
 }
 .product-price {
   float: left;
-  width: 30%;
+  width: 40%;
+  height: 100%;
   text-align: right;
   padding: 10px;
 }
@@ -516,8 +522,10 @@ ul.topnav li.right {float: right;}
   width: 100%;
 }
 .add-to-cart {
-  width: 100px;
+  width: 30px;
   float: right;
+  margin-left: 10px;
+  border-radius: 5px;
 }
 
 
@@ -526,8 +534,7 @@ ul.topnav li.right {float: right;}
 *****************************************************************************/
 
 .cart-table {
-  min-width: 500px;
-  max-width: 900px;
+  width: 100%;
 }
 .cart-button {
   background-color: #aaa;
@@ -542,20 +549,24 @@ ul.topnav li.right {float: right;}
 }
 .cart-thc {
   background-color: #eee;
-  text-align: center:
+  text-align: center;
+}
+.cart-thq {
+  background-color: #eee;
+  text-align: center;
 }
 .cart-thr {
-  background-color: #eee;
-  text-align: right:
+  background-color: #ddd;
+  text-align: right;
 }
 .cart-title {
 
 }
 .cart-quantity-label {
-  width: 30px;
+  padding-top: 20px;
 }
 .cart-price {
-  text-align: right;
+  text-align: center;
 }
 .cart-quan {
   text-align: center;
@@ -568,8 +579,18 @@ ul.topnav li.right {float: right;}
   text-align: right;
   font-weight: bold;
   font-size: 12pt;
+  background-color: #eee;
 }
 
+.btnCheckoutContainer {
+  background-color: #eee;
+  text-align: right;
+  padding: 15px;
+}
+.btnCheckout {
+  background-color: #ccc;
+  padding: 10px;
+}
 .checkout-box {
   border-color: #000;
   border-radius: 4px;
@@ -706,6 +727,10 @@ ul.topnav li.right {float: right;}
   width: 185px;
 }
 
+.payment-error {
+  background-color: #faa
+}
+
 .thank-you {
   text-align: center;
   margin-top: 50px;
@@ -765,6 +790,19 @@ ul.topnav li.right {float: right;}
 
 .home-latest-blog-card-container {
   padding: 10px;
+}
+
+.cart-rows {
+  padding: 0px;
+  border-width: 1px;
+  border-color: #aaa;
+  border-style: solid;
+}
+.cart-table th {
+  padding: 5px;
+}
+.cart-table td {
+  padding: 5px;
 }
 
 .home-latest-blog-top {
@@ -849,6 +887,11 @@ button.slick-arrow.slick-prev {
   background-color: #eee;
   max-width: 600px;
 }
+.contact-form-top-container {
+  clear: both;
+  width: 100%;
+  height: 50px;
+}
 .contact-name-lbl {
   font-size: 12pt;
   float: left;
@@ -887,12 +930,11 @@ float: left;
   width: 100px;
 }
 .contact-status {
-  border-radius: 5px;
-  border-color: #333;
   border-width: 1px;
-  border-style: solid;
-  height: 25px;
-  width: 250px;
+  height: 70px;
+  width: 100%;
+  padding: 25 5 5 5px;
+  text-align: center;
 }
 
 
@@ -906,10 +948,16 @@ float: left;
   border-color: #333;
   border-width: 1px;
   border-style: solid;
-  width: 280px;
-  height: 200px;
+  width: 340px;
+  height: 180px;
   padding:5px;
   margin: 5px;
+  float: left;
+}
+.membership-bottom-container {
+  text-align: center;
+  width: 100%;
+  background-color: #f00;
 }
 .membership-img {
   height: 50px;
@@ -919,12 +967,17 @@ float: left;
   font-weight: bold;
 }
 .membership-desc {
+  text-align: center;
+  padding: 5px;
 }
 .membership-price {
-  text-align: center;
   font-weight: bold;
+  font-size: 14pt;
+  float: left;
+  margin: 1 10 4 100px;
 }
 .membership-add {
+  float: left;
   background-color: #a3b2a2;
   border-radius: 10px;
   font-weight: bold;

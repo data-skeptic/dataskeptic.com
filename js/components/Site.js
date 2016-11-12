@@ -29,7 +29,7 @@ export default class Site extends React.Component {
 		super(props)
 
 		/* Keep a 10 minute cache of things normally pulled dynamically */
-		var cacheSeconds = 60 * 10 * 60*24
+		var cacheSeconds = 60 * 10
 		var now = new Date().getTime()/1000
 		var lastCacheEpisodes = 0
 		var lastCacheBlogs = 0
@@ -104,20 +104,27 @@ export default class Site extends React.Component {
 			cart_items = Array()
 		}
 
+		var persisted = this.loadState()
+		var total = this.calculateTotal(persisted.cart_items, persisted.country.short)
+		var shipping = this.calculateShipping(persisted.cart_items, persisted.country.short)
+
 		this.state = {
-			"episodes": episodes,
-			"episodes_loaded": episodes_loaded,
-			"blogs": blogs,
-			"blogs_loaded": blogs_loaded,
-			"products": products,
-			"products_loaded": blogs_loaded,
-			"cart_items": cart_items,
-			"videos": videos,
-			"videos_loaded": videos_loaded,
-			"player": {
-				"episode": undefined,
-				"is_playing": false,
-				"has_shown": false
+			episodes: episodes,
+			episodes_loaded: episodes_loaded,
+			blogs: blogs,
+			blogs_loaded: blogs_loaded,
+			products: products,
+			products_loaded: blogs_loaded,
+			cart_items: persisted.cart_items,
+			total: total,
+			shipping: shipping,
+			country: persisted.country,
+			videos: videos,
+			videos_loaded: videos_loaded,
+			player: {
+				episode: undefined,
+				is_playing: false,
+				has_shown: false
 			}
 		}
 		console.log("Cache loaded blogs:" + blogs_loaded + " episodes:" + episodes_loaded + " products:" + products_loaded)
@@ -210,6 +217,23 @@ export default class Site extends React.Component {
 		this.onPlayToggle = this.onPlayToggle.bind(this)
 		this.addToCart = this.addToCart.bind(this)
 		this.updateCartQuantity = this.updateCartQuantity.bind(this)
+		this.loadState = this.loadState.bind(this)
+		this.calculateTotal = this.calculateTotal.bind(this)
+		this.calculateShipping = this.calculateShipping.bind(this)
+	}
+
+	loadState() {
+		var cart_items = []
+		var country = {short: "us", long: "United State of America"}
+		var raw = localStorage.getItem("cart_items")
+		if (raw != undefined) {
+			cart_items = JSON.parse(raw)
+		}
+		raw = localStorage.getItem("country")
+		if (raw != undefined) {
+			country = JSON.parse(raw)
+		}
+		return {cart_items, country}
 	}
 
 	onPlayToggle(episode) {
@@ -244,6 +268,58 @@ export default class Site extends React.Component {
 		}
 	}
 	
+	onChangeCountry(short, long) {
+		var country = {short, long}
+		var total = this.calculateTotal(this.state.cart_items, short)
+		var shipping = this.calculateShipping(this.state.cart_items, short)
+		this.setState({country, total, shipping})
+		localStorage.setItem("country", JSON.stringify(country))
+	}
+
+	calculateTotal(products, country) {
+		var shipping = this.calculateShipping(products, country)
+		var total = shipping
+		for (var i=0; i < products.length; i++) {
+			var item = products[i]
+			total += item.product.price * item.quan
+		}
+		return total
+	}
+	calculateShipping(items, short) {
+		var has_items = 0
+		var big_items = 0
+		var is_us = 1
+		if (short != "us") {
+			is_us = 0
+		}
+		for (var i=0; i < items.length; i++) {
+			var item = items[i]
+			if (item.product.type != "membership") {
+				has_items = 1
+			}
+			if (item.product.type != "membership" && item.product.price > 4) {
+				big_items = 1
+			}
+		}
+		var shipping = 0
+		if (has_items == 1) {
+			if (big_items == 1) {
+				if (is_us == 1) {
+					shipping = 4
+				} else {
+					shipping = 6
+				}
+			} else {
+				if (is_us == 1) {
+					shipping = 1
+				} else {
+					shipping = 2
+				}
+			}
+		}
+		return shipping
+	}
+
 	addToCart(product, size) {
 		var quan = 1
 		if (size == undefined) {
@@ -262,8 +338,19 @@ export default class Site extends React.Component {
 		if (!found) {
 			cart_items.push(cart_elem)
 		}
-		this.setState({cart_items})
-		localStorage.setItem("cart", JSON.stringify(cart_items))
+		var short = this.state.country.short
+		var total = this.calculateTotal(cart_items, short)
+		var shipping = this.calculateShipping(cart_items, short)
+		this.setState({cart_items, total, shipping})
+		localStorage.setItem("cart_items", JSON.stringify(cart_items))
+	}
+
+	clearCart() {
+		var total = 0
+		var shipping = 0
+		var cart_items = []
+		this.setState({cart_items, total, shipping})
+		localStorage.setItem("cart_items", JSON.stringify(cart_items))
 	}
 
 	updateCartQuantity(product, size, delta) {
@@ -281,8 +368,11 @@ export default class Site extends React.Component {
 				i = cart_items.length
 			}
 		}
-		this.setState({cart_items})
-		localStorage.setItem("cart", JSON.stringify(cart_items))
+		var short = this.state.country.short
+		var total = this.calculateTotal(cart_items, short)
+		var shipping = this.calculateShipping(cart_items, short)
+		this.setState({cart_items, total, shipping})
+		localStorage.setItem("cart_items", JSON.stringify(cart_items))
 	}
 
 	render() {
@@ -300,6 +390,8 @@ export default class Site extends React.Component {
 		} else {
 			var cart_link = <li><Link to="/checkout"><img class="menu-img" src="/img/png/checkout.png" /></Link></li>
 		}
+		var total = this.state.total
+		var shipping = this.state.shipping
 		return (
 			<Router>
 				<div>
@@ -324,8 +416,8 @@ export default class Site extends React.Component {
 					<MatchWithProps pattern="/blog"              component={Blog}    props={{ blogs, blogs_loaded }} />
 					<MatchWithProps pattern="/video"             component={Videos}  props={{ videos }} />
 					<Match pattern="/proj" component={Projects} />
-					<MatchWithProps pattern="/store"             component={Store}    props={{ products, products_loaded, cart_items, updateCartQuantity: this.updateCartQuantity.bind(this), addToCart: this.addToCart.bind(this) }} />
-					<MatchWithProps pattern="/checkout"          component={Checkout} props={{ products, products_loaded, cart_items, updateCartQuantity: this.updateCartQuantity.bind(this) }} />
+					<MatchWithProps pattern="/store"             component={Store}    props={{ products, products_loaded, cart_items, total, shipping, country: this.state.country, updateCartQuantity: this.updateCartQuantity.bind(this), onChangeCountry: this.onChangeCountry.bind(this), addToCart: this.addToCart.bind(this) }} />
+					<MatchWithProps pattern="/checkout"          component={Checkout} props={{ products, products_loaded, cart_items, total, shipping, country: this.state.country, updateCartQuantity: this.updateCartQuantity.bind(this), onChangeCountry: this.onChangeCountry.bind(this), clearCart: this.clearCart.bind(this) }} />
 					<Match pattern="/services" component={Services} />
 					<MatchWithProps pattern="/members"           component={Membership} props={{ products, products_loaded, addToCart: this.addToCart.bind(this) }} />
 					<Miss component={NotFound} />
@@ -338,31 +430,17 @@ export default class Site extends React.Component {
 
 
 /*
-LT
-	membership levels
-	services feedback
-	general feedback
-
 PLAYER
 	Player progress bar
-	Touch to seek
 	Spinning logo on waiting for file download
-CONTACT FORM
-	form validate ContactForm
 BLOG
 	author images
 	upload knitr figures to S3
 PODCAST
 	transcripts
 STORE
-	# Validation on fields before submit
-	# TODO: notifications / record to DB
 	t-shirt image
-	# Shipping tshirt vs sticker
-	# Shipping intl
-	# Why need address pop up
-MEMBERSHIP
-	content, images, benefits
+	Stripe recurring for memberships
 MISC
 	# TOOD: google analytics
 	# TODO: redirects on old content, especially show notes pages from feed
@@ -377,10 +455,21 @@ DEPLOY BLOG
 	Pubdat tomorrow
 	environment column
 	Api respect pubdate and env
+
+
+
+
+
+
+
+
+
+
 LATER
 	Guest profile pages
 	Chat room with video so i can go live randomly whenever i want and talk about live stuff like elections
 	# TODO: admin page to update blog content - add tags, release date, author, prettyname, title, tags
+	# Why need address pop up
 	# TODO: Set 1 hour callback to refresh localStorage, find new episodes
 	# TODO: realtime refresh?
 	Leave voice mail on the site

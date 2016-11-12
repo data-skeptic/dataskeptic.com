@@ -50,8 +50,6 @@ export default class Store extends React.Component {
 		}
 		else {
 			var products = this.props.products
-			console.log("before")
-			console.log(products)
 			products = products.sort(function(a, b) {
 				var s1 = 1
 				if (a['type'] == 'membership') {
@@ -65,9 +63,9 @@ export default class Store extends React.Component {
 				var y = b['price'] * s2
 				return x - y
 			})
-			console.log("after")
-			console.log(products)
 			var me = this
+			var shipping = this.props.shipping
+			var total = this.props.total
 			return (
 				<div class="center">
 					<div class="store-items">
@@ -90,7 +88,6 @@ export default class Store extends React.Component {
 											<div class="product-main">
 												<img class="product-image" src={product.img} />
 												<span class="product-title">{product.title}</span><br />
-												<p>{product.desc}</p>
 											</div>
 
 											<div class="product-right">
@@ -100,10 +97,8 @@ export default class Store extends React.Component {
 													</div>
 													<div class="product-price">
 														${product.price}
+														<button class="add-to-cart" id={btnId} onClick={me.onAddToCart.bind(me)}>+</button>
 													</div>
-												</div>
-												<div class="product-right-bottom">
-													<button class="add-to-cart" id={btnId} onClick={me.onAddToCart.bind(me)}>+</button>
 												</div>
 											</div>
 										</div>
@@ -116,9 +111,11 @@ export default class Store extends React.Component {
 
 					<div>
 						<h3>Cart</h3>
-						<Cart cart_items={this.props.cart_items} updatable={true} updateCartQuantity={this.props.updateCartQuantity} />
+						<Cart cart_items={this.props.cart_items} updatable={true} country={this.props.country} updateCartQuantity={this.props.updateCartQuantity} shipping={shipping} total={total} onChangeCountry={this.props.onChangeCountry} />
 					</div>
-					<Link to="/checkout">Checkout</Link>
+					<div class="btnCheckoutContainer">
+						<Link class="btnCheckout" to="/checkout">Checkout</Link>
+					</div>
 				</div>
 			)
 		}

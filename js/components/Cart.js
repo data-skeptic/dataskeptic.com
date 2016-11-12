@@ -1,33 +1,33 @@
 import React from 'react'
 
 import CartQuantity from './CartQuantity'
+import CountrySelector from './CountrySelector'
 
 const Cart = props => {
 	if (props.cart_items == undefined || props.cart_items.length == 0) {
 		return <div>There is nothing in your cart.</div>
 	} else {
-		var total = 0
 		return (
 			<div class="cart-rows">
 				<table class="cart-table">
 					<thead>
-						<tr>
+						<tr key="header">
 							<th class="cart-thl">Item</th>
 							<th class="cart-thc">Price</th>
-							<th class="cart-thc">Quantity</th>
+							<th class="cart-thq">Quantity</th>
 							<th class="cart-thr">Sub-total</th>
 						</tr>
 					</thead>
 					<tbody>
 						{props.cart_items.map(function(item) {
 							var subtotal = item.product.price * item.quan
-							total += subtotal
 							var title = item.product.title
 							if (item.size != "") {
 								title += " (" + item.size + ")"
 							}
+							var key = "key_" + item.product.id
 							return (
-								<tr key={item.id}>
+								<tr key={key}>
 									<td class="cart-title">{title}</td>
 									<td class="cart-price">${item.product.price}</td>
 									<td class="cart-quan">
@@ -37,11 +37,17 @@ const Cart = props => {
 								</tr>
 							)
 						})}
-						<tr>
+						<tr key="countryrow">
+							<td>Country: <CountrySelector onChangeCountry={props.onChangeCountry} country={props.country} /></td>
+							<td></td>
+							<td class="cart-total">Shipping:</td>
+							<td class="cart-total">${props.shipping}</td>
+						</tr>
+						<tr key="totalrow">
 							<td></td>
 							<td></td>
-							<td>Total:</td>
-							<td class="cart-total">${total}</td>
+							<td class="cart-total">Total:</td>
+							<td class="cart-total">${props.total}</td>
 						</tr>
 					</tbody>
 				</table>
