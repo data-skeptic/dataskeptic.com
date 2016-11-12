@@ -78,7 +78,7 @@ export default class Store extends React.Component {
 							<div class="clear"></div>
 						</div>
 						{products.map(function(product) {
-							if (product.active == 1) {
+							if (product.active == 1 && product.type != "membership") {
 								var btnId = "add_" + product.id
 								var sizeSelectorId = "ss_" + product.id
 								var selection = me.state.sizeSelected[product.id]

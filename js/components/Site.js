@@ -385,10 +385,19 @@ export default class Site extends React.Component {
 		var products_loaded = this.state.products_loaded
 		var player = this.state.player
 		var cart_items = this.state.cart_items
-		if (cart_items.length == 0) {
-			var cart_link = <div></div>
+		var item_count = 0
+		for (var i=0; i < cart_items.length; i++) {
+			var item = cart_items[i]
+			item_count += item.quan
+		}
+		if (item_count == 0) {
+			var cart_link = <li><Link to="/checkout">
+			<div class="menu-cart-container"></div>
+			</Link></li>
 		} else {
-			var cart_link = <li><Link to="/checkout"><img class="menu-img" src="/img/png/checkout.png" /></Link></li>
+			var cart_link = <li><Link to="/checkout">
+			<div class="menu-cart-container"><div class="menu-cart-inner">{item_count}</div></div>
+			</Link></li>
 		}
 		var total = this.state.total
 		var shipping = this.state.shipping
@@ -405,8 +414,8 @@ export default class Site extends React.Component {
 							<li><Link to="/store">Store</Link></li>
 							<li><Link to="/proj">Projects</Link></li>
 							<li><Link to="/services">Services</Link></li>
+							<li><Link to="/members">Membership</Link></li>
 							{cart_link}
-							<li class="right"><Link to="/members">Membership</Link></li>
 						</ul>
 					</div>
 					<Player config={player} onPlayToggle={this.onPlayToggle.bind(this)} episodes_loaded={this.state.episodes_loaded} />

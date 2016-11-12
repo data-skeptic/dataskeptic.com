@@ -2,10 +2,11 @@ import React from 'react'
 
 import CartQuantity from './CartQuantity'
 import CountrySelector from './CountrySelector'
+import EmptyCart from './EmptyCart'
 
 const Cart = props => {
 	if (props.cart_items == undefined || props.cart_items.length == 0) {
-		return <div>There is nothing in your cart.</div>
+		return <EmptyCart />
 	} else {
 		return (
 			<div class="cart-rows">
