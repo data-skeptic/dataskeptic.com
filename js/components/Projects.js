@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router'
 
 const Projects = () => {
 	return (
@@ -20,6 +21,9 @@ const Projects = () => {
 				</div>
 			</div>
 			<div class="clear"></div>
+			<div class="project-bottom">
+				If you like our work, perhaps we can collaborate.  Checkout our <Link to="/services">Services</Link> page for details.
+			</div>
 		</div>
 	)
 }

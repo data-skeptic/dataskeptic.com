@@ -17,10 +17,21 @@ export default class Player extends React.Component {
 		setInterval(this.update, 1000)
 	}
 
+	onPlayerSeekChange(pos) {
+		console.log("onPlayerSeekChange")
+		var howler = this.state.howler
+		this.setState({position: pos})
+		if (howler != undefined) {
+			var duration = this.state.howler.duration()
+			howler.seek(pos / 100 * duration)
+		}
+	}
+
 	update() {
 		console.log("update")
 		if (this.state.howler != undefined) {
 			var seek = this.state.howler.seek()
+			console.log(["seek", seek])
 			var duration = this.state.howler.duration()
 			var position = 100.0 * seek / duration
 			if (!isNaN(position)) {
@@ -36,6 +47,11 @@ export default class Player extends React.Component {
 		}
 	}
 
+	pad(n, width) {
+		var z = '0';
+		n = n + '';
+		return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+	}
 	render() {
 		var config = this.props.config
 		if (config.has_shown) {
@@ -47,9 +63,26 @@ export default class Player extends React.Component {
 			var duration = "--:--"
 			if (episode != undefined) {
 				var mp3 = episode.mp3
-				howler = <ReactHowler src={mp3} playing={is_playing} ref={(ref) => this.state.howler = ref} />
+				howler = <ReactHowler src={mp3} playing={is_playing} ref={(ref) => this.state.howler = ref} loop={false} />
 				title = episode.title
 				duration = episode.duration
+				var arr = duration.split(":")
+				if (arr.length == 2) {
+					var min = parseInt(arr[0])
+					var sec = parseInt(arr[1])					
+				} else {
+					var hr  = parseInt(arr[0])
+					var min = parseInt(arr[1]) + 60 * hr
+					var sec = parseInt(arr[2])
+				}
+				var d = min * 60 + sec
+				var p = 1.0 * d * progress/100
+				var left = d - p
+				var m = left / 60
+				min = Math.floor(m)
+				sec = Math.floor(left - min * 60)
+				duration = min + ":" + this.pad(sec, 2)
+
 			}
 			var button = undefined
 			if (!this.props.episodes_loaded) {
@@ -72,7 +105,7 @@ export default class Player extends React.Component {
 							<div class="player-inner">
 								{button}
 								<div class="player-title-container"><span class="player-title">{title}</span></div>
-								<PlayerProgressBar playing={is_playing} progress={progress} />
+								<PlayerProgressBar playing={is_playing} progress={progress} onPlayerSeekChange={this.onPlayerSeekChange.bind(this)} />
 								<div class="player-duration-container"><span class="player-duration">{duration}</span></div>
 								{howler}
 							</div>

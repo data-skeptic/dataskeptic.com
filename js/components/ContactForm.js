@@ -101,6 +101,7 @@ export default class ContactForm extends React.Component {
 		}
 		return (
 			<div class="contact-form">
+				<h2>Contact Us</h2>
 				<div class="contact-form-top-container">
 					<div class="contact-name-container">
 						<div class="contact-name-lbl">Name:</div>

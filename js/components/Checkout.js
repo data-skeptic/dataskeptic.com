@@ -191,6 +191,7 @@ export default class Checkout extends React.Component {
 			}
 			return (
 				<div class="center">
+					<h2>Cart</h2>
 					<Cart cart_items={this.props.cart_items} updateable={false} country={this.props.country} updateCartQuantity={this.props.updateCartQuantity} onChangeCountry={this.props.onChangeCountry} shipping={this.props.shipping} total={this.props.total} />
 					{checkout}
 				</div>

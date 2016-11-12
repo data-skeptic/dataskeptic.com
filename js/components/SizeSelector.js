@@ -5,13 +5,16 @@ const SizeSelector = props => {
 		return <div></div>
 	} else {
 		return (
-			<select id={props.id} value={props.value} onChange={props.onChange}>
-				<option key="default" value="default"> -- Please select -- </option>
-				{props.sizes.map(function(size) {
-					return <option key={size} value={size}>{size}</option>
-				})}
-			</select>
-		)		
+			<div>
+				<span class="size-selector-label">Sizes:</span>
+				<select id={props.id} value={props.value} onChange={props.onChange}>
+					<option key="default" value="default"> -- Please select -- </option>
+					{props.sizes.map(function(size) {
+						return <option key={size} value={size}>{size}</option>
+					})}
+				</select>
+			</div>
+		)
 	}
 }
 

@@ -11,14 +11,6 @@ const Cart = props => {
 		return (
 			<div class="cart-rows">
 				<table class="cart-table">
-					<thead>
-						<tr key="header">
-							<th class="cart-thl">Item</th>
-							<th class="cart-thc">Price</th>
-							<th class="cart-thq">Quantity</th>
-							<th class="cart-thr">Sub-total</th>
-						</tr>
-					</thead>
 					<tbody>
 						{props.cart_items.map(function(item) {
 							var subtotal = item.product.price * item.quan

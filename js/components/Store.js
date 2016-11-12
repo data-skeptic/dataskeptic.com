@@ -72,7 +72,7 @@ export default class Store extends React.Component {
 						<div class="product-outer">
 							<div class="product-header">
 								<div class="product-header-item">Item</div>
-								<div class="product-header-options">Options</div>
+								<div class="product-header-options"></div>
 								<div class="product-header-price">Price</div>
 							</div>
 							<div class="clear"></div>

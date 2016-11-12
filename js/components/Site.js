@@ -482,6 +482,7 @@ LATER
 	# TODO: Set 1 hour callback to refresh localStorage, find new episodes
 	# TODO: realtime refresh?
 	Leave voice mail on the site
+	Embed script for episode
 	# TODO: t-shirt integration
 	# TODO: rate content level - beginner, intermedia, advanced
 	# TODO: Blog categories

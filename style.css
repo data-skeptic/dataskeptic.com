@@ -160,6 +160,7 @@ ul.topnav li.right {float: right;}
   text-align: center;
   margin: auto;
   margin-top: 5px;
+  margin-bottom: 45px;
 }
 
 .footer-links {
@@ -322,22 +323,22 @@ ul.topnav li.right {float: right;}
 
 .episode-left {
   float: left;
-  height: 65px; 
-  width: 65px;
+  height: 200px; 
+  width: 200px;
   margin: 0px;
 }
 
 .episode-img {
-  width:  65px;
-  height: 65px;
+  width:  200px;
+  height: 200px;
 }
 .episode-middle {
   padding-top: 5px;
   padding-left: 5px;
-  height: 65px;
+  height: 200px;
   overflow: hidden;
-  white-space: nowrap;
   margin: 0px;
+  font-size: 10pt;
 }
 
 .episode-right {
@@ -365,6 +366,28 @@ ul.topnav li.right {float: right;}
   margin-right: 5px;
 }
 
+.episode-download-button {
+  float: left;
+  border-radius: 25px;
+  background-color: #c997fe;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  font-size: 8pt;
+  margin-right: 5px;  
+}
+
+.episode-play-button {
+  float: left;
+  border-radius: 15px;
+  background-color: #c997fe;
+  width: 75px;
+  height: 25px;
+  text-align: center;
+  margin-right: 5px;  
+  padding-top: 0px;
+}
+
 .episode-title {
   font-size: 16pt;
   line-height: 15pt;
@@ -378,9 +401,8 @@ ul.topnav li.right {float: right;}
 }
 
 .episode-pubDate {
-  font-size: 8pt;
-  margin-left: 5pt;
-  line-height: 90%;
+  font-size: 12pt;
+  margin-left: 5px;
 }
 
 .episode-selector {
@@ -396,20 +418,26 @@ ul.topnav li.right {float: right;}
   margin: 5px;
 }
 
+.video-spacer {
+  height: 20px;
+}
 /*****************************************************************************
  Blog.js
 *****************************************************************************/
 
 .blog-mailinglist-container {
-  background-color: #eee;
-  padding: 10 10 1 10px;
-  margin: 10 10 10 10px;
+  background-color: #3A3B3B;
+  padding: 0 10 10 10px;
+  margin: 80 10 10 10px;
+  color: #fff;
 }
 .blog-mailinglist-left {
-  max-width: 300px;
+  max-width: 450px;
   font-size: 14pt;
-  padding: 10px;
+  padding: 20px;
   float: left;
+  margin-right: 20px;
+  text-align
 }
 
 .blog-mailinglist-right {  
@@ -582,6 +610,10 @@ ul.topnav li.right {float: right;}
 .cart-title {
 
 }
+.cart-quantity {
+  padding-left: 10px;
+  padding-right: 10px;
+}
 .cart-quantity-label {
   padding-top: 20px;
 }
@@ -594,6 +626,7 @@ ul.topnav li.right {float: right;}
 
 .cart-subtotal {
   text-align: right;
+  font-weight: bold;
 }
 .cart-total {
   text-align: right;
@@ -603,13 +636,17 @@ ul.topnav li.right {float: right;}
 }
 
 .btnCheckoutContainer {
-  background-color: #eee;
   text-align: right;
   padding: 15px;
 }
 .btnCheckout {
   background-color: #ccc;
-  padding: 10px;
+  padding: 10 55 10 55px;
+  font-weight: bold;
+  border-radius: 2px;
+  border-color: #000;
+  border-width: 1px;
+  border-style: solid;
 }
 .checkout-box {
   border-color: #000;
@@ -617,6 +654,10 @@ ul.topnav li.right {float: right;}
   border-width: 1px;
   border-style: solid;
   width: 100%;
+}
+
+.btnCheckout:hover{
+   background-color:#888;
 }
 
 .checkout-row {
@@ -699,7 +740,7 @@ ul.topnav li.right {float: right;}
 
 .country {
   float: left;
-  width: 180px;
+  width: 200px;
 }
 
 .zip-label {
@@ -848,7 +889,49 @@ ul.topnav li.right {float: right;}
 div.mailing-list-signup-container {
   float: left;
   width: 250px;
+  margin-top: 15px;
 }
+
+#mc_embed_signup .button {
+  clear:both;
+  background-color: #aaa;
+  border: 0 none;
+  border-radius:4px;
+  letter-spacing:.03em;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  font-size:15px;
+  height: 32px;
+  line-height: 32px;
+  margin: 0 5px 10px 0;
+  padding:0;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: top;
+  white-space: nowrap;
+  width: auto;
+  transition: all 0.23s ease-in-out 0s;
+}
+#mc_embed_signup .button:hover {
+  background-color:#777;
+}
+
+#mc_embed_signup label {
+  padding-top:10px;
+  font-weight:bold;
+ }
+#mc_embed_signup input.email {
+  font-size: 15px;
+  display:block;
+  padding:0 0.4em;
+  margin-bottom: 10px;
+  min-height:32px;
+  width: 249px;
+  border-radius: 3px;
+ }
+#mc_embed_signup input.button {display:block; width:35%; margin:0 0 10px 0; min-width:90px;}
+
 
 button.slick-arrow.slick-next {
   background-color: #aaa;
@@ -876,7 +959,7 @@ button.slick-arrow.slick-prev {
   border-width: 1px;
   border-style: solid;
   float: left;
-  height: 250px;
+  height: 300px;
 }
 .project-title {
   font-weight: bold;
@@ -898,6 +981,10 @@ button.slick-arrow.slick-prev {
   text-align: center;
 }
 
+.project-bottom {
+  padding: 10px;
+  text-align: center;
+}
 
 /*****************************************************************************
  ContactForm.js
@@ -969,7 +1056,6 @@ float: left;
   border-width: 1px;
   border-style: solid;
   width: 340px;
-  height: 180px;
   padding:5px;
   margin: 5px;
   float: left;
@@ -977,7 +1063,14 @@ float: left;
 .membership-bottom-container {
   text-align: center;
   width: 100%;
-  background-color: #f00;
+}
+.membership-btn {
+  text-align: center;
+  width: 100%;
+  height: 70px;
+}
+.per_month {
+  font-weight: normal;
 }
 .membership-img {
   height: 50px;
@@ -994,13 +1087,14 @@ float: left;
   font-weight: bold;
   font-size: 14pt;
   float: left;
-  margin: 1 10 4 100px;
+  margin-bottom: 10px;
+  width: 100%;
 }
 .membership-add {
-  float: left;
   background-color: #a3b2a2;
   border-radius: 10px;
   font-weight: bold;
+  margin: 0 auto;
 }
 
 
@@ -1023,8 +1117,8 @@ float: left;
 .services-title {
   font-weight: bold;
   font-size: 12pt;
-  text-align: center;  
-  margin-bottom: -5px;
+  text-ali  margin-bottom: 10px;
+gn: center;  
 }
 
 /*****************************************************************************
