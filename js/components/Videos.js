@@ -10,15 +10,14 @@ export default class Videos extends React.Component {
 	
 	render() {
 		var videos = this.props.videos
-		console.log(videos)
 		return (
 			<div class="center">
 				<div class="videos-container">
 					{videos.map(function(video) {
 						return (
-							<div>
-								<Video key={video.videoId} video={video} />
-								<div key={video.videoId + "_spacer"} class="video-spacer"></div>
+							<div key={video.videoId} >
+								<Video video={video} />
+								<div class="video-spacer"></div>
 							</div>
 						)
 					})}

@@ -28,6 +28,12 @@ export default class Site extends React.Component {
 	constructor(props) {
 		super(props)
 
+		var env = "dev"
+		var bucket = env + ".dataskeptic.com"
+		if (env == "master") {
+			bucket = "dataskeptic.com"
+		}
+
 		/* Keep a 10 minute cache of things normally pulled dynamically */
 		var cacheSeconds = 60 * 10
 		var now = new Date().getTime()/1000
@@ -109,6 +115,8 @@ export default class Site extends React.Component {
 		var shipping = this.calculateShipping(persisted.cart_items, persisted.country.short)
 
 		this.state = {
+			env: env,
+			bucket: bucket,
 			episodes: episodes,
 			episodes_loaded: episodes_loaded,
 			blogs: blogs,
@@ -118,6 +126,7 @@ export default class Site extends React.Component {
 			cart_items: persisted.cart_items,
 			total: total,
 			shipping: shipping,
+			router: undefined,
 			country: persisted.country,
 			videos: videos,
 			videos_loaded: videos_loaded,
@@ -134,10 +143,8 @@ export default class Site extends React.Component {
 
 		if (!blogs_loaded) {
 			console.log("Get blog")
-			var env = "dev"
-			var req = {"env": env}
 			axios
-				.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/blog?env=dev")
+				.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/blog?env=" + env)
 				.then(function(result) {
 					var blogs = result.data
 					var blogs_loaded = true
@@ -325,6 +332,7 @@ export default class Site extends React.Component {
 	}
 
 	addToCart(product, size) {
+		console.log(this.state.router)
 		console.log([product, size])
 		var quan = 1
 		if (size == undefined) {
@@ -408,8 +416,9 @@ export default class Site extends React.Component {
 		}
 		var total = this.state.total
 		var shipping = this.state.shipping
+		var bucket = this.state.bucket
 		return (
-			<Router>
+			<Router ref={(ref) => this.state.router = ref} >
 				<div>
 					<Header />
 					<div className="menu">
@@ -429,7 +438,7 @@ export default class Site extends React.Component {
 					<MatchWithProps exactly pattern="/"          component={Home}    props={{ episodes, blogs, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
 					<MatchWithProps exactly pattern="/index.htm" component={Home}    props={{ episodes, blogs, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
 					<MatchWithProps pattern="/podcast"           component={Podcast} props={{ episodes, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
-					<MatchWithProps pattern="/blog"              component={Blog}    props={{ blogs, blogs_loaded }} />
+					<MatchWithProps pattern="/blog"              component={Blog}    props={{ blogs, blogs_loaded, bucket }} />
 					<MatchWithProps pattern="/video"             component={Videos}  props={{ videos }} />
 					<Match pattern="/proj" component={Projects} />
 					<MatchWithProps pattern="/store"             component={Store}    props={{ products, products_loaded, cart_items, total, shipping, country: this.state.country, updateCartQuantity: this.updateCartQuantity.bind(this), onChangeCountry: this.onChangeCountry.bind(this), addToCart: this.addToCart.bind(this) }} />
@@ -446,30 +455,26 @@ export default class Site extends React.Component {
 
 
 /*
-PLAYER
-	Spinning logo on waiting for file download
-BLOG
-	author images
-PODCAST
-	transcripts
+PLAYER - Spinning logo on waiting for file download
+BLOG - author images
+PODCAST - transcripts
+MEMBERSHIP - on add, go to checkout
+CART - validation and checkout
+PROJECTS - SNL art
+SHOWNOTES - as blog
+WRITE - initial blog content
 STORE
 	t-shirt image
 	Stripe recurring for memberships
-	**Color change on button clicked
 	**Cart with images in checkout
-MEMBERSHIP
-	on add, go to checkout
 MISC
 	**Active menu CSS
 	configure env for Production
 	google analytics
-	redirects on old content, especially show notes pages from feed
+	redirects on old content
+	migrate show notes
 	SEO / crawlable?
 */
-
-
-
-
 
 
 

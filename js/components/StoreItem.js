@@ -8,7 +8,8 @@ export default class Store extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			sizeSelected: undefined
+			sizeSelected: undefined,
+			wasClicked: false
 		}
 	}
 
@@ -36,6 +37,9 @@ export default class Store extends React.Component {
 			}
 			this.props.addToCart(product, size)
 		}
+		this.setState({wasClicked: true})
+		var me = this
+		setTimeout(function(){ me.setState({wasClicked: false}) }, 1000);
 	}
 
 	render() {
@@ -44,6 +48,10 @@ export default class Store extends React.Component {
 			var btnId = "add_" + product.id
 			var sizeSelectorId = "ss_" + product.id
 			var selection = this.state.sizeSelected
+			var cls = "add-to-cart"
+			if (this.state.wasClicked) {
+				cls = "add-to-cart-clicked"
+			}
 			return (
 				<div class="product-outer">
 					<div class="product-row">
@@ -62,7 +70,7 @@ export default class Store extends React.Component {
 								</div>
 								<div class="product-price">
 									${product.price}
-									<button class="add-to-cart" id={btnId} onClick={this.onAddToCart.bind(this)}>+</button>
+									<button class={cls} id={btnId} onClick={this.onAddToCart.bind(this)}>+</button>
 								</div>
 							</div>
 						</div>

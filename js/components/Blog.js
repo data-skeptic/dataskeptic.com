@@ -58,7 +58,7 @@ export default class Blog extends React.Component {
 				)
 			}
 			else {
-				var uri = "https://s3.amazonaws.com/dev.dataskeptic.com" + '/' + blog["rendered"]
+				var uri = "https://s3.amazonaws.com/" + this.props.bucket + '/' + blog["rendered"]
 				return (
 					<div class="center">
 						<BlogItem src={uri} pathname={pathname}  />

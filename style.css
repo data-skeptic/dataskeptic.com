@@ -500,6 +500,10 @@ ul.topnav li.right {float: right;}
   background-color: #fdd;
 }
 
+.anchor-link {
+  visibility: hidden;
+}
+
 
 /*****************************************************************************
  BlogItem.js
@@ -614,7 +618,13 @@ ul.topnav li.right {float: right;}
   margin-left: 10px;
   border-radius: 5px;
 }
-
+.add-to-cart-clicked {
+  width: 30px;
+  float: right;
+  margin-left: 10px;
+  border-radius: 5px;
+  background-color: #afa;
+}
 
 /*****************************************************************************
  Checkout.js

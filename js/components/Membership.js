@@ -12,7 +12,8 @@ export default class Membership extends React.Component {
 	addToCart(product) {
 		this.props.addToCart(product, "")
 		console.log(browserHistory)
-		browserHistory.push('/checkout')
+		console.log(this.context)
+		console.log(this.context.router)
 	}
 
 	render() {
