@@ -82,12 +82,16 @@ export default class Store extends React.Component {
 								var btnId = "add_" + product.id
 								var sizeSelectorId = "ss_" + product.id
 								var selection = me.state.sizeSelected[product.id]
+								console.log(product)
 								return (
 									<div key={product.id} class="product-outer">
 										<div class="product-row">
 											<div class="product-main">
 												<img class="product-image" src={product.img} />
-												<span class="product-title">{product.title}</span><br />
+												<div class="product-inner">
+													<div class="product-title">{product.title}</div>
+													<div class="product-desc">{product.desc}</div>
+												</div>
 											</div>
 
 											<div class="product-right">

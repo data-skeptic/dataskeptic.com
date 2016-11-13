@@ -18,7 +18,7 @@ export default class Videos extends React.Component {
 						return (
 							<div>
 								<Video key={video.videoId} video={video} />
-								<div class="video-spacer"></div>
+								<div key={video.videoId + "_spacer"} class="video-spacer"></div>
 							</div>
 						)
 					})}

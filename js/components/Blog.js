@@ -15,23 +15,26 @@ export default class Blog extends React.Component {
 			return <div><Loading /></div>
 		}
 		var blogs = this.props.blogs
+		console.log(blogs)
 		if (this.props.isExact) {
 			return (
 				<div class="center">
 					{blogs.map(function(blog) {
 						var pn = blog.prettyname
-						if (pn[0] == "/") {
-							pn = pn.substring(1, pn.length)
+						if (pn != undefined) {
+							if (pn[0] == "/") {
+								pn = pn.substring(1, pn.length)
+							}
+							pn = "/blog/" + pn
+							var date = blog["publish_date"]
+							return (
+								<div class="blog-summary" key={blog.uri}>
+									<Link class="blog-title" to={pn}>{blog.title}</Link>
+									<span class="blog-date">{date}</span>
+									<p>{blog.desc}</p>
+								</div>
+							)
 						}
-						pn = "/blog/" + pn
-						var date = blog["publish_date"]
-						return (
-							<div class="blog-summary" key={blog.uri}>
-								<Link class="blog-title" to={pn}>{blog.title}</Link>
-								<span class="blog-date">{date}</span>
-								<p>{blog.desc}</p>
-							</div>
-						)
 					})}
 				</div>
 			)
@@ -55,10 +58,10 @@ export default class Blog extends React.Component {
 				)
 			}
 			else {
-				var uri = "https://s3.amazonaws.com/dev.dataskeptic.com" + blog["rendered"]
+				var uri = "https://s3.amazonaws.com/dev.dataskeptic.com" + '/' + blog["rendered"]
 				return (
 					<div class="center">
-						<BlogItem src={uri}  />
+						<BlogItem src={uri} pathname={pathname}  />
 					</div>
 				)
 			}

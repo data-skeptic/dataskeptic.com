@@ -4,16 +4,18 @@ import { browserHistory } from 'react-router'
 import Loading from './Loading'
 
 export default class Membership extends React.Component {
-	constructor(props) {
-		super(props)
+	constructor(props, context) {
+		super(props, context)
+		this.addToCart = this.addToCart.bind(this)
 	}
 
 	addToCart(product) {
 		this.props.addToCart(product, "")
+		console.log(browserHistory)
+		browserHistory.push('/checkout')
 	}
 
 	render() {
-		console.log("render membership!")
 		if (!this.props.products_loaded) {
 			return <div><Loading /></div>
 		} else {
