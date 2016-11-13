@@ -493,9 +493,30 @@ ul.topnav li.right {float: right;}
   clear:both;
 }
 
+.product-inner {
+  padding: 2px;
+  margin-left: 150px;
+}
+.product-image {
+  height: 150px;
+  float: left;
+}
+
 .product-title {
   font-size: 12pt;
   font-weight: bold;
+}
+.product-row {
+  width: 100%;
+  background-color: #eee;
+  margin: 2 2 2 2px;
+  padding-left: 4px;
+  padding-right: 4px;
+  height: 150px;
+}
+
+.product-desc {
+  
 }
 
 .product-outer {
@@ -526,28 +547,13 @@ ul.topnav li.right {float: right;}
   font-weight: bold;
 }
 
-.product-image {
-  height: 75px;
-}
-
-.product-row {
-  float: left;
-  width: 100%;
-  background-color: #eee;
-  margin: 2 2 2 2px;
-  padding-left: 4px;
-  padding-right: 4px;
-  height: 75px;
-}
 .product-main {
   float: left;
-  width: 60%;
-  height: 100%;
+  width: 70%
 }
 .product-right {
   float: left;
-  width: 40%;
-  height: 100%;
+  width: 30%;
 }
 .product-right-top {
   clear: both;
@@ -1424,30 +1430,31 @@ gn: center;
 }
 .slick-dots li button:before
 {
-    font-family: 'slick';
-    font-size: 6px;
-    line-height: 20px;
+    font-size: 16px;
+    line-height: 12px;
 
     position: absolute;
     top: 0;
     left: 0;
 
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
 
-    content: 'O';
+    content: 'o';
     text-align: center;
 
     opacity: .25;
-    color: black;
+    color: #222;
+    background-color: #ddd;
+    border-radius: 10px;
 
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 .slick-dots li.slick-active button:before
 {
-    opacity: .75;
-    color: black;
+    opacity: 1.0;
+    color: #000;
 }
 
 
