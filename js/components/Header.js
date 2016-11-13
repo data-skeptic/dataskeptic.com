@@ -1,5 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom"
+import { Link } from 'react-router'
 
 export default class Header extends React.Component {
 	constructor(props) {
@@ -11,7 +12,7 @@ export default class Header extends React.Component {
 			<div class='header'>
 				<div class="center">
 					<div class="header-left">
-						<img id="logo" src="/img/svg/data-skeptic-logo.svg" alt="Data Skeptic logo" />
+						<Link to="/"><img id="logo" src="/img/svg/data-skeptic-logo.svg" alt="Data Skeptic logo" /></Link>
 					</div>
 					<div class='header-right'>
 						<h1>Data Skeptic</h1>
