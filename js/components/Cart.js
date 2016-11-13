@@ -15,10 +15,11 @@ const Cart = props => {
 						{props.cart_items.map(function(item) {
 							var subtotal = item.product.price * item.quan
 							var title = item.product.title
+							var key = "key_" + item.product.id
 							if (item.size != "") {
 								title += " (" + item.size + ")"
+								key += "_" + item.size
 							}
-							var key = "key_" + item.product.id
 							return (
 								<tr key={key}>
 									<td class="cart-title">{title}</td>
