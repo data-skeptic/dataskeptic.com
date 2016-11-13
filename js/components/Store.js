@@ -50,8 +50,11 @@ export default class Store extends React.Component {
 		}
 		else {
 			var products = this.props.products
+<<<<<<< HEAD
 			console.log("before")
 			console.log(products)
+=======
+>>>>>>> ui
 			products = products.sort(function(a, b) {
 				var s1 = 1
 				if (a['type'] == 'membership') {
@@ -65,32 +68,44 @@ export default class Store extends React.Component {
 				var y = b['price'] * s2
 				return x - y
 			})
+<<<<<<< HEAD
 			console.log("after")
 			console.log(products)
+=======
+>>>>>>> ui
 			var me = this
+			var shipping = this.props.shipping
+			var total = this.props.total
 			return (
 				<div class="center">
 					<div class="store-items">
 						<div class="product-outer">
 							<div class="product-header">
 								<div class="product-header-item">Item</div>
-								<div class="product-header-options">Options</div>
+								<div class="product-header-options"></div>
 								<div class="product-header-price">Price</div>
 							</div>
 							<div class="clear"></div>
 						</div>
 						{products.map(function(product) {
+<<<<<<< HEAD
 							if (product.active == 1) {
+=======
+							if (product.active == 1 && product.type != "membership") {
+>>>>>>> ui
 								var btnId = "add_" + product.id
 								var sizeSelectorId = "ss_" + product.id
 								var selection = me.state.sizeSelected[product.id]
+								console.log(product)
 								return (
 									<div key={product.id} class="product-outer">
 										<div class="product-row">
 											<div class="product-main">
 												<img class="product-image" src={product.img} />
-												<span class="product-title">{product.title}</span><br />
-												<p>{product.desc}</p>
+												<div class="product-inner">
+													<div class="product-title">{product.title}</div>
+													<div class="product-desc">{product.desc}</div>
+												</div>
 											</div>
 
 											<div class="product-right">
@@ -100,10 +115,8 @@ export default class Store extends React.Component {
 													</div>
 													<div class="product-price">
 														${product.price}
+														<button class="add-to-cart" id={btnId} onClick={me.onAddToCart.bind(me)}>+</button>
 													</div>
-												</div>
-												<div class="product-right-bottom">
-													<button class="add-to-cart" id={btnId} onClick={me.onAddToCart.bind(me)}>+</button>
 												</div>
 											</div>
 										</div>
@@ -116,9 +129,11 @@ export default class Store extends React.Component {
 
 					<div>
 						<h3>Cart</h3>
-						<Cart cart_items={this.props.cart_items} updatable={true} updateCartQuantity={this.props.updateCartQuantity} />
+						<Cart cart_items={this.props.cart_items} updatable={true} country={this.props.country} updateCartQuantity={this.props.updateCartQuantity} shipping={shipping} total={total} onChangeCountry={this.props.onChangeCountry} />
 					</div>
-					<Link to="/checkout">Checkout</Link>
+					<div class="btnCheckoutContainer">
+						<Link class="btnCheckout" to="/checkout">Checkout</Link>
+					</div>
 				</div>
 			)
 		}

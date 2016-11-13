@@ -65,7 +65,8 @@ export default class Podcast extends React.Component {
 						})}
 					</div>
 					<div class="episodes-container">
-						{episodes.map(function(episode) {
+						{
+							episodes.map(function(episode) {
 							if (episode.pubDate.getYear() == dyear) {
 								var is_playing = false
 								if (config.player.episode != undefined) {
@@ -77,6 +78,16 @@ export default class Podcast extends React.Component {
 								}
 								return <Episode key={episode.guid} is_playing={is_playing} episode={episode} onPlayToggle={onPlayToggle} />
 							}
+						})}
+					</div>
+					<div class="episode-selector">
+						{years.map(function(year) {
+							var down = "menu-button-up"
+							if (dyear == year) {
+								down = "menu-button-down"
+							}
+							var key = Math.random().toString().substring(2,99)
+							return <button key={key} class="menu-year" class={down} onClick={me.changeYear.bind(me, year)}>{year+1900}</button>
 						})}
 					</div>
 				</div>

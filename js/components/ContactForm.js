@@ -9,6 +9,7 @@ export default class ContactForm extends React.Component {
 			name: "",
 			email: "",
 			msg: "",
+			error: "",
 			send: "no"
 		}
 	}
@@ -32,18 +33,21 @@ export default class ContactForm extends React.Component {
 			validated = false
 			msg_missing = true
 		}
+		var error = ""
 		if (!validated) {
-			console.log("@@@@")
 			if (name_missing) {
-				//React.findDOMNode(this.refs.name).focus()
+				error = "Please provide your name."
+				this.refs.name.focus()
 			}
 			else if (email_missing) {
-				//React.findDOMNode(this.refs.email).focus()
+				error = "Please provide a valid email address."
+				this.refs.email.focus()
 			}
 			else {
-				//React.findDOMNode(this.refs.msg).focus()
+				error = "Please provide a message."
+				this.refs.msg.focus()
 			}
-			this.setState({send: "error"})
+			this.setState({send: "error", error})
 		}
 		else {
 			this.setState({send: "sending"})
@@ -81,16 +85,26 @@ export default class ContactForm extends React.Component {
 
 	render() {
 		var statusbox = <div></div>
+<<<<<<< HEAD
 		console.log(this.state.send)
+=======
+		if (this.state.send == "success") {
+			statusbox = <div class="contact-status"><span>Your message has been sent.  Thanks!</span></div>
+			return (
+				<div class="contact-form">
+				{statusbox}
+				</div>
+			)
+		}
+>>>>>>> ui
 		if (this.state.send == "sending") {
 			status = <div class="contact-status"><span>Sending...</span></div>
 		} else if (this.state.send == "error") {
 			status = <div class="contact-status"><span>There was an error sending your message.  Sorry!  Feel free to reach out to kyle@dataskeptic.com directly.</span></div>
-		} else if (this.state.send == "success") {
-			statusbox = <div class="contact-status"><span>Your message has been sent.  Thanks!</span></div>
 		}
 		return (
 			<div class="contact-form">
+<<<<<<< HEAD
 				<div class="contact-name-container">
 					<div class="contact-name-lbl">Name:</div>
 					<input class="contact-name" ref="name" onChange={this.onChangeName.bind(this)} value={this.state.name} />
@@ -102,6 +116,23 @@ export default class ContactForm extends React.Component {
 				<div class="contact-msg-container">
 					<textarea class="contact-msg" ref="msg" onChange={this.onChangeMsg.bind(this)} value={this.state.msg} />
 				</div>
+=======
+				<h2>Contact Us</h2>
+				<div class="contact-form-top-container">
+					<div class="contact-name-container">
+						<div class="contact-name-lbl">Name:</div>
+						<input class="contact-name" ref="name" onChange={this.onChangeName.bind(this)} value={this.state.name} />
+					</div>
+					<div class="contact-email-container">
+						<div class="contact-email-lbl">E-Mail:</div>
+						<input class="contact-email" ref="email" onChange={this.onChangeEmail.bind(this)} value={this.state.email} />
+					</div>
+				</div>
+				<div class="contact-msg-container">
+					{this.state.error}
+					<textarea class="contact-msg" ref="msg" onChange={this.onChangeMsg.bind(this)} value={this.state.msg} />
+				</div>
+>>>>>>> ui
 				<div class="contact-send-container">
 					<button class="contact-send" onClick={this.onClick.bind(this)}>Send</button>
 				</div>

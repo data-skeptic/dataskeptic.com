@@ -33,7 +33,7 @@ export default class LatestEpisodePlayer extends React.Component {
 					</div>
 					<div class="home-player-right">
 						<p><span class="home-player-latest">Latest episode:</span></p>
-						<p><span class="home-player-title"><a href={ep.link}>{ep.title}</a></span></p>
+						<div class="home-player-title"><a href={ep.link}>{ep.title}</a></div>
 						<p>{dstr}</p>
 					</div>
 				</div>

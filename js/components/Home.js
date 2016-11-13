@@ -51,7 +51,7 @@ export default class Home extends React.Component {
 	      adaptiveHeight: 1,
 	      accessibility: 1,
 	      autoplay: 1,
-	      autoplaySpeed: 4000,
+	      autoplaySpeed: 5000,
 	      pauseOnHover: 1
 	    };
 		var is_playing = false
@@ -65,6 +65,10 @@ export default class Home extends React.Component {
 
 		return (
 			<div class="center">
+				<div class="home-statement">
+					<h2>About Data Skeptic</h2>
+					<p>Data Skeptic is the weekly podcast that is skeptical of and with data.  We explain the methods and algorithms that power our world in an accessible manner through our short mini-episode discussions and our longer interviews with experts in the field.</p>
+				</div>
 				<div class="home-top-row">
 					<div className="carousel">
 						<Slider {...settings}>

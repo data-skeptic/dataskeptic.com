@@ -29,7 +29,7 @@ export default class Site extends React.Component {
 		super(props)
 
 		/* Keep a 10 minute cache of things normally pulled dynamically */
-		var cacheSeconds = 60 * 10 * 60*24
+		var cacheSeconds = 60 * 10
 		var now = new Date().getTime()/1000
 		var lastCacheEpisodes = 0
 		var lastCacheBlogs = 0
@@ -104,20 +104,27 @@ export default class Site extends React.Component {
 			cart_items = Array()
 		}
 
+		var persisted = this.loadState()
+		var total = this.calculateTotal(persisted.cart_items, persisted.country.short)
+		var shipping = this.calculateShipping(persisted.cart_items, persisted.country.short)
+
 		this.state = {
-			"episodes": episodes,
-			"episodes_loaded": episodes_loaded,
-			"blogs": blogs,
-			"blogs_loaded": blogs_loaded,
-			"products": products,
-			"products_loaded": blogs_loaded,
-			"cart_items": cart_items,
-			"videos": videos,
-			"videos_loaded": videos_loaded,
-			"player": {
-				"episode": undefined,
-				"is_playing": false,
-				"has_shown": false
+			episodes: episodes,
+			episodes_loaded: episodes_loaded,
+			blogs: blogs,
+			blogs_loaded: blogs_loaded,
+			products: products,
+			products_loaded: blogs_loaded,
+			cart_items: persisted.cart_items,
+			total: total,
+			shipping: shipping,
+			country: persisted.country,
+			videos: videos,
+			videos_loaded: videos_loaded,
+			player: {
+				episode: undefined,
+				is_playing: false,
+				has_shown: false
 			}
 		}
 		console.log("Cache loaded blogs:" + blogs_loaded + " episodes:" + episodes_loaded + " products:" + products_loaded)
@@ -127,10 +134,12 @@ export default class Site extends React.Component {
 
 		if (!blogs_loaded) {
 			console.log("Get blog")
+			var env = "dev"
+			var req = {"env": env}
 			axios
-				.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/blog")
+				.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/blog?env=dev")
 				.then(function(result) {
-					var blogs = result.data.Items
+					var blogs = result.data
 					var blogs_loaded = true
 					me.setState({blogs, blogs_loaded})
 					localStorage.setItem("blogs", JSON.stringify(blogs))
@@ -182,40 +191,59 @@ export default class Site extends React.Component {
 				.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/products")
 				.then(function(result) {
 					var products = result.data.Items
-					var products_loaded = true
-					me.setState({products, products_loaded})
-					localStorage.setItem("products", JSON.stringify(products))
-					localStorage.setItem("lastCacheProducts", new Date().getTime()/1000)
-					console.log("Loaded memberships")
-				});			
+					if (products != undefined) {
+						var products_loaded = true
+						me.setState({products, products_loaded})
+						localStorage.setItem("products", JSON.stringify(products))
+						localStorage.setItem("lastCacheProducts", new Date().getTime()/1000)
+						console.log("Loaded memberships")
+					}
+				});
 		}
 		if (!videos_loaded) {
 			console.log("Get videos")
-			videos = [{videoId: "RxtHeXHOdf0"}, {videoId: "cHoRn1UxEzk"}]
+			videos = []
 			this.state.videos = videos
-			/*
 			axios
 				.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/videos")
 				.then(function(result) {
-					var videos = result.data.Items
-					var videos_loaded = true
-					me.setState({videos, videos_loaded})
-					localStorage.setItem("videos", JSON.stringify(videos))
-					localStorage.setItem("lastCacheVideos", new Date().getTime()/1000)
-					console.log("Loaded videos")
+					var videos = result.data
+					if (videos != undefined) {
+						var videos_loaded = true
+						me.setState({videos, videos_loaded})
+						localStorage.setItem("videos", JSON.stringify(videos))
+						localStorage.setItem("lastCacheVideos", new Date().getTime()/1000)
+						console.log("Loaded videos")
+					}
 				});
-			*/
 		}
 
 		this.onPlayToggle = this.onPlayToggle.bind(this)
 		this.addToCart = this.addToCart.bind(this)
 		this.updateCartQuantity = this.updateCartQuantity.bind(this)
+		this.loadState = this.loadState.bind(this)
+		this.calculateTotal = this.calculateTotal.bind(this)
+		this.calculateShipping = this.calculateShipping.bind(this)
+	}
+
+	loadState() {
+		var cart_items = []
+		var country = {short: "us", long: "United State of America"}
+		var raw = localStorage.getItem("cart_items")
+		if (raw != undefined) {
+			cart_items = JSON.parse(raw)
+		}
+		raw = localStorage.getItem("country")
+		if (raw != undefined) {
+			country = JSON.parse(raw)
+		}
+		return {cart_items, country}
 	}
 
 	onPlayToggle(episode) {
 		var player = this.state.player
 		if (episode == undefined) {
-			console.log("Got request to play undefined episode.")
+			console.log("Stopping playback")
 			this.setState({player: {is_playing: false}})
 		} else {
 			var s = this.state
@@ -244,13 +272,68 @@ export default class Site extends React.Component {
 		}
 	}
 	
+	onChangeCountry(short, long) {
+		var country = {short, long}
+		var total = this.calculateTotal(this.state.cart_items, short)
+		var shipping = this.calculateShipping(this.state.cart_items, short)
+		this.setState({country, total, shipping})
+		localStorage.setItem("country", JSON.stringify(country))
+	}
+
+	calculateTotal(products, country) {
+		var shipping = this.calculateShipping(products, country)
+		var total = shipping
+		for (var i=0; i < products.length; i++) {
+			var item = products[i]
+			total += item.product.price * item.quan
+		}
+		return total
+	}
+	calculateShipping(items, short) {
+		var has_items = 0
+		var big_items = 0
+		var is_us = 1
+		if (short != "us") {
+			is_us = 0
+		}
+		for (var i=0; i < items.length; i++) {
+			var item = items[i]
+			if (item.product.type != "membership") {
+				has_items = 1
+			}
+			if (item.product.type != "membership" && item.product.price > 4) {
+				big_items = 1
+			}
+		}
+		var shipping = 0
+		if (has_items == 1) {
+			if (big_items == 1) {
+				if (is_us == 1) {
+					shipping = 4
+				} else {
+					shipping = 6
+				}
+			} else {
+				if (is_us == 1) {
+					shipping = 1
+				} else {
+					shipping = 2
+				}
+			}
+		}
+		return shipping
+	}
+
 	addToCart(product, size) {
+		console.log([product, size])
 		var quan = 1
 		if (size == undefined) {
 			size = ""
 		}
 		var cart_elem = {product, size, quan}
-		var cart_items = JSON.parse(JSON.stringify(this.state.cart_items))
+		var s = JSON.stringify(this.state.cart_items)
+		console.log(["s", s])
+		var cart_items = JSON.parse(s)
 		var found = false
 		for (var i in cart_items) {
 			var item = cart_items[i]
@@ -262,8 +345,19 @@ export default class Site extends React.Component {
 		if (!found) {
 			cart_items.push(cart_elem)
 		}
-		this.setState({cart_items})
-		localStorage.setItem("cart", JSON.stringify(cart_items))
+		var short = this.state.country.short
+		var total = this.calculateTotal(cart_items, short)
+		var shipping = this.calculateShipping(cart_items, short)
+		this.setState({cart_items, total, shipping})
+		localStorage.setItem("cart_items", JSON.stringify(cart_items))
+	}
+
+	clearCart() {
+		var total = 0
+		var shipping = 0
+		var cart_items = []
+		this.setState({cart_items, total, shipping})
+		localStorage.setItem("cart_items", JSON.stringify(cart_items))
 	}
 
 	updateCartQuantity(product, size, delta) {
@@ -281,8 +375,11 @@ export default class Site extends React.Component {
 				i = cart_items.length
 			}
 		}
-		this.setState({cart_items})
-		localStorage.setItem("cart", JSON.stringify(cart_items))
+		var short = this.state.country.short
+		var total = this.calculateTotal(cart_items, short)
+		var shipping = this.calculateShipping(cart_items, short)
+		this.setState({cart_items, total, shipping})
+		localStorage.setItem("cart_items", JSON.stringify(cart_items))
 	}
 
 	render() {
@@ -295,11 +392,22 @@ export default class Site extends React.Component {
 		var products_loaded = this.state.products_loaded
 		var player = this.state.player
 		var cart_items = this.state.cart_items
-		if (cart_items.length == 0) {
-			var cart_link = <div></div>
-		} else {
-			var cart_link = <li><Link to="/checkout"><img class="menu-img" src="/img/png/checkout.png" /></Link></li>
+		var item_count = 0
+		for (var i=0; i < cart_items.length; i++) {
+			var item = cart_items[i]
+			item_count += item.quan
 		}
+		if (item_count == 0) {
+			var cart_link = <li><Link to="/checkout">
+			<div class="menu-cart-container"></div>
+			</Link></li>
+		} else {
+			var cart_link = <li><Link to="/checkout">
+			<div class="menu-cart-container"><div class="menu-cart-inner">{item_count}</div></div>
+			</Link></li>
+		}
+		var total = this.state.total
+		var shipping = this.state.shipping
 		return (
 			<Router>
 				<div>
@@ -313,8 +421,8 @@ export default class Site extends React.Component {
 							<li><Link to="/store">Store</Link></li>
 							<li><Link to="/proj">Projects</Link></li>
 							<li><Link to="/services">Services</Link></li>
+							<li><Link to="/members">Membership</Link></li>
 							{cart_link}
-							<li class="right"><Link to="/members">Membership</Link></li>
 						</ul>
 					</div>
 					<Player config={player} onPlayToggle={this.onPlayToggle.bind(this)} episodes_loaded={this.state.episodes_loaded} />
@@ -324,8 +432,8 @@ export default class Site extends React.Component {
 					<MatchWithProps pattern="/blog"              component={Blog}    props={{ blogs, blogs_loaded }} />
 					<MatchWithProps pattern="/video"             component={Videos}  props={{ videos }} />
 					<Match pattern="/proj" component={Projects} />
-					<MatchWithProps pattern="/store"             component={Store}    props={{ products, products_loaded, cart_items, updateCartQuantity: this.updateCartQuantity.bind(this), addToCart: this.addToCart.bind(this) }} />
-					<MatchWithProps pattern="/checkout"          component={Checkout} props={{ products, products_loaded, cart_items, updateCartQuantity: this.updateCartQuantity.bind(this) }} />
+					<MatchWithProps pattern="/store"             component={Store}    props={{ products, products_loaded, cart_items, total, shipping, country: this.state.country, updateCartQuantity: this.updateCartQuantity.bind(this), onChangeCountry: this.onChangeCountry.bind(this), addToCart: this.addToCart.bind(this) }} />
+					<MatchWithProps pattern="/checkout"          component={Checkout} props={{ products, products_loaded, cart_items, total, shipping, country: this.state.country, updateCartQuantity: this.updateCartQuantity.bind(this), onChangeCountry: this.onChangeCountry.bind(this), clearCart: this.clearCart.bind(this) }} />
 					<Match pattern="/services" component={Services} />
 					<MatchWithProps pattern="/members"           component={Membership} props={{ products, products_loaded, addToCart: this.addToCart.bind(this) }} />
 					<Miss component={NotFound} />
@@ -338,54 +446,52 @@ export default class Site extends React.Component {
 
 
 /*
-LT
-	membership levels
-	services feedback
-	general feedback
-
 PLAYER
-	Player progress bar
-	Touch to seek
 	Spinning logo on waiting for file download
-CONTACT FORM
-	form validate ContactForm
 BLOG
 	author images
-	upload knitr figures to S3
 PODCAST
 	transcripts
 STORE
-	# Validation on fields before submit
-	# TODO: notifications / record to DB
 	t-shirt image
-	# Shipping tshirt vs sticker
-	# Shipping intl
-	# Why need address pop up
+	Stripe recurring for memberships
+	**Color change on button clicked
+	**Cart with images in checkout
 MEMBERSHIP
-	content, images, benefits
+	on add, go to checkout
 MISC
-	# TOOD: google analytics
-	# TODO: redirects on old content, especially show notes pages from feed
-	# TODO: error page logging to cloudfront
-	# TODO: SEO / crawlable?
-	Follow links more obvious
-DEPLOY BLOG
-	Guess title as h1, desc as first p
-	author name from github acnt
-	migrate existing blog content
-	Fill all fields
-	Pubdat tomorrow
-	environment column
-	Api respect pubdate and env
+	**Active menu CSS
+	configure env for Production
+	google analytics
+	redirects on old content, especially show notes pages from feed
+	SEO / crawlable?
+*/
+
+
+
+
+
+
+
+
+
+
+
+/*
 LATER
 	Guest profile pages
 	Chat room with video so i can go live randomly whenever i want and talk about live stuff like elections
-	# TODO: admin page to update blog content - add tags, release date, author, prettyname, title, tags
-	# TODO: Set 1 hour callback to refresh localStorage, find new episodes
-	# TODO: realtime refresh?
+	admin page to update blog content - add tags, release date, author, prettyname, title, tags
+	Why need address pop up
+	Set 1 hour callback to refresh localStorage, find new episodes
+	error page logging to cloudfront
+	unique <title>
+	realtime refresh?
 	Leave voice mail on the site
-	# TODO: t-shirt integration
-	# TODO: rate content level - beginner, intermedia, advanced
-	# TODO: Blog categories
+	Embed script for episode
+	https://www.npmjs.com/package/react-telephone-input
+	t-shirt integration
+	rate content level - beginner, intermedia, advanced
+	Blog categories
 */
 

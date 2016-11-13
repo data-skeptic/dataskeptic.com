@@ -8,7 +8,7 @@ export default class Episode extends React.Component {
 		return (
 			<div class="cc-outer">
 				<form onSubmit={onSubmit} >
-					<p>{ paymentError }</p>
+					<div class="payment-error"><p>{ paymentError }</p></div>
 					<input class="cc-num" type='text' data-stripe='number' placeholder='credit card number' /><br />
 					<input class="cc-yymm" type='text' data-stripe='exp-month' placeholder='month' />
 					<input class="cc-yymm" type='text' data-stripe='exp-year' placeholder='year' />
