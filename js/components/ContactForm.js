@@ -85,9 +85,6 @@ export default class ContactForm extends React.Component {
 
 	render() {
 		var statusbox = <div></div>
-<<<<<<< HEAD
-		console.log(this.state.send)
-=======
 		if (this.state.send == "success") {
 			statusbox = <div class="contact-status"><span>Your message has been sent.  Thanks!</span></div>
 			return (
@@ -96,7 +93,6 @@ export default class ContactForm extends React.Component {
 				</div>
 			)
 		}
->>>>>>> ui
 		if (this.state.send == "sending") {
 			status = <div class="contact-status"><span>Sending...</span></div>
 		} else if (this.state.send == "error") {
@@ -104,19 +100,6 @@ export default class ContactForm extends React.Component {
 		}
 		return (
 			<div class="contact-form">
-<<<<<<< HEAD
-				<div class="contact-name-container">
-					<div class="contact-name-lbl">Name:</div>
-					<input class="contact-name" ref="name" onChange={this.onChangeName.bind(this)} value={this.state.name} />
-				</div>
-				<div class="contact-email-container">
-					<div class="contact-email-lbl">E-Mail:</div>
-					<input class="contact-email" ref="email" onChange={this.onChangeEmail.bind(this)} value={this.state.email} />
-				</div>
-				<div class="contact-msg-container">
-					<textarea class="contact-msg" ref="msg" onChange={this.onChangeMsg.bind(this)} value={this.state.msg} />
-				</div>
-=======
 				<h2>Contact Us</h2>
 				<div class="contact-form-top-container">
 					<div class="contact-name-container">
@@ -132,7 +115,6 @@ export default class ContactForm extends React.Component {
 					{this.state.error}
 					<textarea class="contact-msg" ref="msg" onChange={this.onChangeMsg.bind(this)} value={this.state.msg} />
 				</div>
->>>>>>> ui
 				<div class="contact-send-container">
 					<button class="contact-send" onClick={this.onClick.bind(this)}>Send</button>
 				</div>
