@@ -203,7 +203,7 @@ export default class Site extends React.Component {
 						me.setState({products, products_loaded})
 						localStorage.setItem("products", JSON.stringify(products))
 						localStorage.setItem("lastCacheProducts", new Date().getTime()/1000)
-						console.log("Loaded memberships")
+						console.log("Loaded products")
 					}
 				});
 		}
@@ -332,15 +332,12 @@ export default class Site extends React.Component {
 	}
 
 	addToCart(product, size) {
-		console.log(this.state.router)
-		console.log([product, size])
 		var quan = 1
 		if (size == undefined) {
 			size = ""
 		}
 		var cart_elem = {product, size, quan}
 		var s = JSON.stringify(this.state.cart_items)
-		console.log(["s", s])
 		var cart_items = JSON.parse(s)
 		var found = false
 		for (var i in cart_items) {
@@ -458,7 +455,6 @@ export default class Site extends React.Component {
 PLAYER - Spinning logo on waiting for file download
 BLOG - author images
 PODCAST - transcripts
-MEMBERSHIP - on add, go to checkout
 CART - validation and checkout
 PROJECTS - SNL art
 SHOWNOTES - as blog
