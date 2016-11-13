@@ -50,11 +50,6 @@ export default class Store extends React.Component {
 		}
 		else {
 			var products = this.props.products
-<<<<<<< HEAD
-			console.log("before")
-			console.log(products)
-=======
->>>>>>> ui
 			products = products.sort(function(a, b) {
 				var s1 = 1
 				if (a['type'] == 'membership') {
@@ -68,11 +63,6 @@ export default class Store extends React.Component {
 				var y = b['price'] * s2
 				return x - y
 			})
-<<<<<<< HEAD
-			console.log("after")
-			console.log(products)
-=======
->>>>>>> ui
 			var me = this
 			var shipping = this.props.shipping
 			var total = this.props.total
@@ -88,15 +78,10 @@ export default class Store extends React.Component {
 							<div class="clear"></div>
 						</div>
 						{products.map(function(product) {
-<<<<<<< HEAD
-							if (product.active == 1) {
-=======
 							if (product.active == 1 && product.type != "membership") {
->>>>>>> ui
 								var btnId = "add_" + product.id
 								var sizeSelectorId = "ss_" + product.id
 								var selection = me.state.sizeSelected[product.id]
-								console.log(product)
 								return (
 									<div key={product.id} class="product-outer">
 										<div class="product-row">
