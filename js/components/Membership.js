@@ -1,24 +1,36 @@
 import React from 'react'
-import { browserHistory } from 'react-router'
-
+import { Redirect } from 'react-router'
 import Loading from './Loading'
+
+import { MemoryRouter, BrowserRouter } from 'react-router';
+
+const navigator = global && global.navigator && global.navigator.userAgent;
+const hasWindow = typeof window !== 'undefined';
+const isBrowser = typeof navigator !== 'undefined' && navigator.indexOf('Node.js') === -1;
+const Router = isBrowser ? BrowserRouter : MemoryRouter;
 
 export default class Membership extends React.Component {
 	constructor(props, context) {
 		super(props, context)
+		this.state = {
+			goToCheckout: false
+		}
 		this.addToCart = this.addToCart.bind(this)
 	}
 
 	addToCart(product) {
 		this.props.addToCart(product, "")
-		console.log(browserHistory)
-		console.log(this.context)
-		console.log(this.context.router)
+		this.setState({goToCheckout: true})
 	}
 
 	render() {
 		if (!this.props.products_loaded) {
 			return <div><Loading /></div>
+		} else if (this.state.goToCheckout) {
+			console.log("hi")
+			return (
+				<Redirect to="/checkout" />
+			)
 		} else {
 			var products = this.props.products
 			products.sort(function(a, b) {
