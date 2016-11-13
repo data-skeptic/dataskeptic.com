@@ -18,25 +18,20 @@ export default class Player extends React.Component {
 	}
 
 	onPlayerSeekChange(pos) {
-		console.log("onPlayerSeekChange")
 		var howler = this.state.howler
-		this.setState({position: pos})
 		if (howler != undefined) {
+			this.setState({position: pos})
 			var duration = this.state.howler.duration()
 			howler.seek(pos / 100 * duration)
 		}
 	}
 
 	update() {
-		console.log("update")
 		if (this.state.howler != undefined) {
 			var seek = this.state.howler.seek()
-			console.log(["seek", seek])
 			var duration = this.state.howler.duration()
 			var position = 100.0 * seek / duration
 			if (!isNaN(position)) {
-				console.log(position)
-				console.log(this)
 				var loaded = true
 				this.setState({position, loaded})
 			} else {
@@ -52,6 +47,12 @@ export default class Player extends React.Component {
 		n = n + '';
 		return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 	}
+
+	onEnd() {
+		var howler = this.state.howler
+		howler.stop()
+		this.props.onPlayToggle(undefined)
+	}
 	render() {
 		var config = this.props.config
 		if (config.has_shown) {
@@ -63,7 +64,7 @@ export default class Player extends React.Component {
 			var duration = "--:--"
 			if (episode != undefined) {
 				var mp3 = episode.mp3
-				howler = <ReactHowler src={mp3} playing={is_playing} ref={(ref) => this.state.howler = ref} loop={false} />
+				howler = <ReactHowler src={mp3} playing={is_playing} ref={(ref) => this.state.howler = ref} onEnd={this.onEnd.bind(this)} />
 				title = episode.title
 				duration = episode.duration
 				var arr = duration.split(":")

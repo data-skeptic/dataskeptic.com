@@ -7,6 +7,10 @@ export default class PlayerProgressBar extends React.Component {
 		super(props)
 	}
 	
+	onUpdate(pos) {
+		this.props.onPlayerSeekChange(pos)
+	}
+
 	render() {
 		return (
 			<div class="player-progress-bar">
@@ -14,10 +18,10 @@ export default class PlayerProgressBar extends React.Component {
 				min={0}
 				max={100}
 				range={false}
-				defaultValue={0}
+				defaultValue={this.props.progress}
 				value={this.props.progress}
 				disabled={false}
-				onAfterChange={this.props.onPlayerSeekChange}
+				onChange={this.onUpdate.bind(this)}
 			/>
 			</div>
 		)

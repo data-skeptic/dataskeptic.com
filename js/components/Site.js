@@ -134,10 +134,12 @@ export default class Site extends React.Component {
 
 		if (!blogs_loaded) {
 			console.log("Get blog")
+			var env = "dev"
+			var req = {"env": env}
 			axios
-				.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/blog")
+				.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/blog?env=dev")
 				.then(function(result) {
-					var blogs = result.data.Items
+					var blogs = result.data
 					var blogs_loaded = true
 					me.setState({blogs, blogs_loaded})
 					localStorage.setItem("blogs", JSON.stringify(blogs))
@@ -189,29 +191,31 @@ export default class Site extends React.Component {
 				.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/products")
 				.then(function(result) {
 					var products = result.data.Items
-					var products_loaded = true
-					me.setState({products, products_loaded})
-					localStorage.setItem("products", JSON.stringify(products))
-					localStorage.setItem("lastCacheProducts", new Date().getTime()/1000)
-					console.log("Loaded memberships")
-				});			
+					if (products != undefined) {
+						var products_loaded = true
+						me.setState({products, products_loaded})
+						localStorage.setItem("products", JSON.stringify(products))
+						localStorage.setItem("lastCacheProducts", new Date().getTime()/1000)
+						console.log("Loaded memberships")
+					}
+				});
 		}
 		if (!videos_loaded) {
 			console.log("Get videos")
-			videos = [{videoId: "RxtHeXHOdf0"}, {videoId: "cHoRn1UxEzk"}]
+			videos = []
 			this.state.videos = videos
-			/*
 			axios
 				.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/videos")
 				.then(function(result) {
-					var videos = result.data.Items
-					var videos_loaded = true
-					me.setState({videos, videos_loaded})
-					localStorage.setItem("videos", JSON.stringify(videos))
-					localStorage.setItem("lastCacheVideos", new Date().getTime()/1000)
-					console.log("Loaded videos")
+					var videos = result.data
+					if (videos != undefined) {
+						var videos_loaded = true
+						me.setState({videos, videos_loaded})
+						localStorage.setItem("videos", JSON.stringify(videos))
+						localStorage.setItem("lastCacheVideos", new Date().getTime()/1000)
+						console.log("Loaded videos")
+					}
 				});
-			*/
 		}
 
 		this.onPlayToggle = this.onPlayToggle.bind(this)
@@ -239,7 +243,7 @@ export default class Site extends React.Component {
 	onPlayToggle(episode) {
 		var player = this.state.player
 		if (episode == undefined) {
-			console.log("Got request to play undefined episode.")
+			console.log("Stopping playback")
 			this.setState({player: {is_playing: false}})
 		} else {
 			var s = this.state
@@ -447,26 +451,22 @@ PLAYER
 	Spinning logo on waiting for file download
 BLOG
 	author images
-	upload knitr figures to S3
 PODCAST
 	transcripts
 STORE
 	t-shirt image
 	Stripe recurring for memberships
+	**Color change on button clicked
+	**Cart with images in checkout
+MEMBERSHIP
+	on add, go to checkout
 MISC
-	# TOOD: google analytics
-	# TODO: redirects on old content, especially show notes pages from feed
-	# TODO: error page logging to cloudfront
-	# TODO: SEO / crawlable?
-	Follow links more obvious
-DEPLOY BLOG
-	Guess title as h1, desc as first p
-	author name from github acnt
-	migrate existing blog content
-	Fill all fields
-	Pubdat tomorrow
-	environment column
-	Api respect pubdate and env
+	**Active menu CSS
+	configure env for Production
+	google analytics
+	redirects on old content, especially show notes pages from feed
+	SEO / crawlable?
+*/
 
 
 
@@ -477,17 +477,22 @@ DEPLOY BLOG
 
 
 
+
+/*
 LATER
 	Guest profile pages
 	Chat room with video so i can go live randomly whenever i want and talk about live stuff like elections
-	# TODO: admin page to update blog content - add tags, release date, author, prettyname, title, tags
-	# Why need address pop up
-	# TODO: Set 1 hour callback to refresh localStorage, find new episodes
-	# TODO: realtime refresh?
+	admin page to update blog content - add tags, release date, author, prettyname, title, tags
+	Why need address pop up
+	Set 1 hour callback to refresh localStorage, find new episodes
+	error page logging to cloudfront
+	unique <title>
+	realtime refresh?
 	Leave voice mail on the site
 	Embed script for episode
-	# TODO: t-shirt integration
-	# TODO: rate content level - beginner, intermedia, advanced
-	# TODO: Blog categories
+	https://www.npmjs.com/package/react-telephone-input
+	t-shirt integration
+	rate content level - beginner, intermedia, advanced
+	Blog categories
 */
 
