@@ -7,7 +7,6 @@ class NavLink extends Component {
         var active = this.props.active
         var isActive = active == to
         var className = isActive ? "menu-active" : "menu-inactive";
-        console.log(this.props)
         return (
             <li className={className}>
                 <Link to={to}>{this.props.children}</Link>

@@ -390,7 +390,6 @@ export default class Site extends React.Component {
 	}
 
 	render() {
-		console.log(this.props)
 		var blogs = this.state.blogs
 		var episodes = this.state.episodes
 		var products = this.state.products
@@ -409,7 +408,7 @@ export default class Site extends React.Component {
 		var shipping = this.state.shipping
 		var bucket = this.state.bucket
 		return (
-			<Router ref={(ref) => this.state.router = ref} >
+			<Router>
 				<div>
 					<Header />
 					<MatchWithProps pattern="*" component={Menu} props={{ item_count }} />

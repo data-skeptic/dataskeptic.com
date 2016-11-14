@@ -42,6 +42,7 @@ export default class Checkout extends React.Component {
 		Stripe.setPublishableKey(key)
 		this.adjust_for_dynamodb_bug = this.adjust_for_dynamodb_bug.bind(this)
 		this.onAddressChange = this.onAddressChange.bind(this)
+		this.onSubmit = this.onSubmit.bind(this)
 	}
 
 	onScriptLoaded() {
@@ -98,6 +99,7 @@ export default class Checkout extends React.Component {
 	}
 
 	onSubmit(event) {
+		console.log("onSubmit")
 		var self = this
 		event.preventDefault()
 		this.setState({ submitDisabled: true, paymentError: null })
