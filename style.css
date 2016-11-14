@@ -88,6 +88,15 @@ h1 {
     background-color: #282828;  
 }
 
+.menu-active {
+  background-color: #fff;
+  height: 35px;
+}
+.menu-active a:link {
+  background-color: #282828;
+  color: #000;
+}
+
 .menu-cart-container {
   background-image: url("/img/png/checkout.png");   
   height: 20px;

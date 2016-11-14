@@ -5,6 +5,7 @@ import axios from "axios"
 import xml2js from "xml2js"
 
 import Header from './Header'
+import Menu from './Menu'
 import Player from './Player'
 import Home from './Home'
 import Podcast from './Podcast'
@@ -17,6 +18,7 @@ import Services from './Services'
 import Membership from './Membership'
 import Footer from './Footer'
 import NotFound from './NotFound'
+import NavLink from './NavLink'
 
 const MatchWithProps = ({ component: Component, props, ...rest }) => (
   <Match {...rest} render={(matchProps) => (
@@ -388,6 +390,7 @@ export default class Site extends React.Component {
 	}
 
 	render() {
+		console.log(this.props)
 		var blogs = this.state.blogs
 		var episodes = this.state.episodes
 		var products = this.state.products
@@ -402,15 +405,6 @@ export default class Site extends React.Component {
 			var item = cart_items[i]
 			item_count += item.quan
 		}
-		if (item_count == 0) {
-			var cart_link = <li><Link to="/checkout">
-			<div class="menu-cart-container"></div>
-			</Link></li>
-		} else {
-			var cart_link = <li><Link to="/checkout">
-			<div class="menu-cart-container"><div class="menu-cart-inner">{item_count}</div></div>
-			</Link></li>
-		}
 		var total = this.state.total
 		var shipping = this.state.shipping
 		var bucket = this.state.bucket
@@ -418,24 +412,12 @@ export default class Site extends React.Component {
 			<Router ref={(ref) => this.state.router = ref} >
 				<div>
 					<Header />
-					<div className="menu">
-						<ul class="topnav">
-							<li><Link to="/">Home</Link></li>
-							<li><Link to="/podcast">Podcast</Link></li>
-							<li><Link to="/blog">Blog</Link></li>
-							<li><Link to="/video">Videos</Link></li>
-							<li><Link to="/store">Store</Link></li>
-							<li><Link to="/proj">Projects</Link></li>
-							<li><Link to="/services">Services</Link></li>
-							<li><Link to="/members">Membership</Link></li>
-							{cart_link}
-						</ul>
-					</div>
+					<MatchWithProps pattern="*" component={Menu} props={{ item_count }} />
 					<Player config={player} onPlayToggle={this.onPlayToggle.bind(this)} episodes_loaded={this.state.episodes_loaded} />
 					<MatchWithProps exactly pattern="/"          component={Home}    props={{ episodes, blogs, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
 					<MatchWithProps exactly pattern="/index.htm" component={Home}    props={{ episodes, blogs, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
 					<MatchWithProps pattern="/podcast"           component={Podcast} props={{ episodes, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
-					<MatchWithProps pattern="/blog"              component={Blog}    props={{ blogs, blogs_loaded, bucket }} />
+					<MatchWithProps pattern="/blog*"             component={Blog}    props={{ blogs, blogs_loaded, bucket }} />
 					<MatchWithProps pattern="/video"             component={Videos}  props={{ videos }} />
 					<Match pattern="/proj" component={Projects} />
 					<MatchWithProps pattern="/store"             component={Store}    props={{ products, products_loaded, cart_items, total, shipping, country: this.state.country, updateCartQuantity: this.updateCartQuantity.bind(this), onChangeCountry: this.onChangeCountry.bind(this), addToCart: this.addToCart.bind(this) }} />
@@ -458,13 +440,11 @@ PODCAST - transcripts
 CART - validation and checkout
 PROJECTS - SNL art
 SHOWNOTES - as blog
-WRITE - initial blog content
 STORE
 	t-shirt image
 	Stripe recurring for memberships
 	**Cart with images in checkout
 MISC
-	**Active menu CSS
 	configure env for Production
 	google analytics
 	redirects on old content
