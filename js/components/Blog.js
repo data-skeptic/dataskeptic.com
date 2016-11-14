@@ -15,8 +15,10 @@ export default class Blog extends React.Component {
 			return <div><Loading /></div>
 		}
 		var blogs = this.props.blogs
-		console.log(blogs)
-		if (this.props.isExact) {
+		var pathname = this.props.location.pathname
+		console.log(pathname)
+		console.log(this.props)
+		if (pathname == '/blog' || pathname == '/blog/') {
 			return (
 				<div class="center">
 					{blogs.map(function(blog) {
@@ -38,33 +40,42 @@ export default class Blog extends React.Component {
 					})}
 				</div>
 			)
-		} else {
-			var pathname = this.props.location.pathname
-			pathname = pathname.substring("/blog".length, pathname.length)
-			var blog = undefined
-			for (var i in blogs) {
-				var b = blogs[i]
-				var pn = b["prettyname"]
-				console.log([pn, pathname])
-				if (pn == pathname) {
-					blog = b
-				}
+		}
+		var eppath = "/blog/episodes/"
+		var top = ""
+		if (pathname.substring(0, eppath.length) == eppath ) {
+			top = (
+				<div>
+					<h2>Episode</h2>
+					TODO: add player and title
+				</div>
+			)
+		}
+		pathname = pathname.substring("/blog".length, pathname.length)
+		console.log(pathname)
+		var blog = undefined
+		for (var i in blogs) {
+			var b = blogs[i]
+			var pn = b["prettyname"]
+			if (pn == pathname) {
+				blog = b
 			}
-			if (blog == undefined) {
-				return (
-					<div class="blog-error">
-						Sorry, there was an error trying to load that file.
-					</div>
-				)
-			}
-			else {
-				var uri = "https://s3.amazonaws.com/" + this.props.bucket + '/' + blog["rendered"]
-				return (
-					<div class="center">
-						<BlogItem src={uri} pathname={pathname}  />
-					</div>
-				)
-			}
+		}
+		if (blog == undefined) {
+			return (
+				<div class="blog-error">
+					Sorry, there was an error trying to load that file.
+				</div>
+			)
+		}
+		else {
+			var uri = "https://s3.amazonaws.com/" + this.props.bucket + '/' + blog["rendered"]
+			return (
+				<div class="center">
+					{top}
+					<BlogItem src={uri} pathname={pathname}  />
+				</div>
+			)
 		}
 	}
 }
