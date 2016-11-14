@@ -390,6 +390,11 @@ export default class Site extends React.Component {
 	}
 
 	render() {
+		var env = this.state.env
+		var prod = false
+		if (env == "master") {
+			prod = true
+		}
 		var blogs = this.state.blogs
 		var episodes = this.state.episodes
 		var products = this.state.products
@@ -420,7 +425,7 @@ export default class Site extends React.Component {
 					<MatchWithProps pattern="/video"             component={Videos}  props={{ videos }} />
 					<Match pattern="/proj" component={Projects} />
 					<MatchWithProps pattern="/store"             component={Store}    props={{ products, products_loaded, cart_items, total, shipping, country: this.state.country, updateCartQuantity: this.updateCartQuantity.bind(this), onChangeCountry: this.onChangeCountry.bind(this), addToCart: this.addToCart.bind(this) }} />
-					<MatchWithProps pattern="/checkout"          component={Checkout} props={{ products, products_loaded, cart_items, total, shipping, country: this.state.country, updateCartQuantity: this.updateCartQuantity.bind(this), onChangeCountry: this.onChangeCountry.bind(this), clearCart: this.clearCart.bind(this) }} />
+					<MatchWithProps pattern="/checkout"          component={Checkout} props={{ products, products_loaded, cart_items, total, shipping, country: this.state.country, updateCartQuantity: this.updateCartQuantity.bind(this), onChangeCountry: this.onChangeCountry.bind(this), clearCart: this.clearCart.bind(this), prod }} />
 					<Match pattern="/services" component={Services} />
 					<MatchWithProps pattern="/members"           component={Membership} props={{ products, products_loaded, addToCart: this.addToCart.bind(this) }} />
 					<Miss component={NotFound} />

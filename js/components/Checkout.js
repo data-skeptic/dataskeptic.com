@@ -12,7 +12,7 @@ import axios from "axios"
 export default class Checkout extends React.Component {
 	constructor(props) {
 		super(props)
-		var prod = false
+		var prod = this.props.prod
 
 		this.state = {
 			stripeLoading: false,
@@ -21,7 +21,6 @@ export default class Checkout extends React.Component {
 			paymentError: null,
 			paymentComplete: false,
 			token: null,
-			prod: prod,
 			sizeSelected: {},
 			address: {
 				first_name: "",
@@ -99,13 +98,12 @@ export default class Checkout extends React.Component {
 	}
 
 	onSubmit(event) {
-		console.log("onSubmit")
 		var self = this
-		event.preventDefault()
 		this.setState({ submitDisabled: true, paymentError: null })
 		var msg = ""
 		var valid = true
 		var address = this.state.address
+		// TODO: do some validation on the address
 		var res = this.validate(address)
 		var valid = res.isvalid
 		var msg = res.msg
@@ -118,10 +116,8 @@ export default class Checkout extends React.Component {
 			var paymentError = ""
 			var paymentComplete = false
 			var token = response.id
-			var prod = self.state.prod
-			var customer = {
-				name: "n/a"
-			}
+			var prod = self.props.prod
+			var customer = address
 			var country = self.props.country.short
 			var products = self.props.cart_items
 			var total    = self.props.total
@@ -158,7 +154,6 @@ export default class Checkout extends React.Component {
 		var cls = target.className
 		var val = target.value
 		address[cls] = val
-		console.log(address)
 		this.setState({address})
 	}
 	render() {
@@ -193,7 +188,6 @@ export default class Checkout extends React.Component {
 			}
 			return (
 				<div class="center">
-					<h2>Cart</h2>
 					<Cart cart_items={this.props.cart_items} updateable={false} country={this.props.country} updateCartQuantity={this.props.updateCartQuantity} onChangeCountry={this.props.onChangeCountry} shipping={this.props.shipping} total={this.props.total} />
 					{checkout}
 				</div>
