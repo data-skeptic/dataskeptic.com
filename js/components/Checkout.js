@@ -30,7 +30,8 @@ export default class Checkout extends React.Component {
 				city: "",
 				state: "",
 				zip: "",
-				phone: ""
+				phone: "",
+				email: ""
 			}
 		}
 		if (prod) {

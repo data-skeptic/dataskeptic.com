@@ -31,6 +31,10 @@ const AddressForm = props => {
 				<input class="zip" type="text" onChange={props.onAddressChange} />
 		    </div>
 			<div class="address-row">
+				<div class="email-label">Email:</div>
+				<input class="email" type="text" onChange={props.onAddressChange} />
+		    </div>
+			<div class="address-row">
 				<div class="phone-label">Phone:</div>
 				<input class="phone" type="text" onChange={props.onAddressChange} />
 		    </div>
