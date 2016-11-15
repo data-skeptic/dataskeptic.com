@@ -15,9 +15,9 @@ export default class Blog extends React.Component {
 			return <div><Loading /></div>
 		}
 		var blogs = this.props.blogs
+		blogs = blogs.slice(0, 10)
 		var pathname = this.props.location.pathname
 		console.log(pathname)
-		console.log(this.props)
 		if (pathname == '/blog' || pathname == '/blog/') {
 			return (
 				<div class="center">
