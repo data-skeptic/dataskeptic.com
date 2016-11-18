@@ -64,30 +64,34 @@ export default class Home extends React.Component {
 		}
 
 		return (
-			<div class="center">
-				<div class="home-statement">
-					<h2>About Data Skeptic</h2>
-					<p>Data Skeptic is the weekly podcast that is skeptical of and with data.  We explain the methods and algorithms that power our world in an accessible manner through our short mini-episode discussions and our longer interviews with experts in the field.</p>
-				</div>
-				<div class="home-top-row">
-					<div className="carousel">
-						<Slider {...settings}>
-							<div class="card">
-								<EpisodeCard episode={episode} title="Latest episode" onPlayToggle={onPlayToggle} is_playing={is_playing} />
-							</div>
-							<div class="card">
-								<LatestBlogCard blog={blog} />
-							</div>
-							<div class="card">
-								<EpisodeCard episode={old_episode} title="From the archives" onPlayToggle={onPlayToggle} is_playing={is_playing} />
-							</div>
-							<div class="card">
-								<SocialMediaCard />
-							</div>
-						</Slider>
+			<div>
+				<div class="row">
+					<div class="home-statement">
+						<h2>About Data Skeptic</h2>
+						<p>Data Skeptic is the weekly podcast that is skeptical of and with data.  We explain the methods and algorithms that power our world in an accessible manner through our short mini-episode discussions and our longer interviews with experts in the field.</p>
 					</div>
-					<div class="home-right">
-						<div className="home-player">
+				</div>
+				<div class="row">
+					<div class="col-xs-12 col-sm-8">
+						<div class="carousel">
+							<Slider {...settings}>
+								<div class="card">
+									<EpisodeCard episode={episode} title="Latest episode" onPlayToggle={onPlayToggle} is_playing={is_playing} />
+								</div>
+								<div class="card">
+									<LatestBlogCard blog={blog} />
+								</div>
+								<div class="card">
+									<EpisodeCard episode={old_episode} title="From the archives" onPlayToggle={onPlayToggle} is_playing={is_playing} />
+								</div>
+								<div class="card">
+									<SocialMediaCard />
+								</div>
+							</Slider>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<div class="home-player">
 							<LatestEpisodePlayer episode={episode} onPlayToggle={onPlayToggle} is_playing={is_playing} />
 						</div>
 						<MailingList />

@@ -12,8 +12,25 @@ html, body {
   height: 125px;
 }
 
+.site {
+}
+
+.row {
+}
+
+.row-centered {
+}
+
+.col-centered {
+    display:inline-block;
+    float:none;
+    /* reset the text-align */
+    text-align:left;
+    /* inline-block space fix */
+    margin-right:-4px;
+}
+
 .center {
-  max-width: 800;
   margin: auto;
   clear: both;
 }
@@ -27,7 +44,8 @@ html, body {
 }
 
 .header-right {
-  position: relative;
+  float: left;
+  height: 100%;
   padding: 7px;
 }
 
@@ -125,7 +143,6 @@ ul.topnav {
     list-style-type: none;
     margin: auto;
     padding: 0;
-    max-width: 800px;
     overflow: hidden;
 }
 
@@ -242,16 +259,14 @@ ul.topnav li.right {float: right;}
   padding: 3px;
   height: 25px;
 }
-
+.row {
+}
 .home-player {
-  float: left;
   margin-top: 5px;
   border-style: solid;
   border-radius: 2px;
   border-width: 1px;
   padding: 0 2 2 5px;
-  height: 87px;
-  width: 250px;
   background-color: #eee;
 }
 
@@ -269,7 +284,6 @@ ul.topnav li.right {float: right;}
   height: 100%;
 }
 .home-episode-card-left {
-  width: 190px;
   float: left;
 }
 .home-episode-card-img {
@@ -277,7 +291,6 @@ ul.topnav li.right {float: right;}
   width: 180px;
 }
 .home-player-button-container {
-  margin-left: 295px;
 }
 .home-episode-card-right {
   padding: 10px;
@@ -301,7 +314,6 @@ ul.topnav li.right {float: right;}
   height: 100%;
 }
 .home-episode-card-left {
-  width: 190px;
   float: left;
 }
 .home-episode-card-img {
@@ -309,7 +321,6 @@ ul.topnav li.right {float: right;}
   width: 180px;
 }
 .home-player-button-container {
-  margin-left: 295px;
 }
 .home-episode-card-right {
   padding: 10px;
@@ -330,12 +341,10 @@ ul.topnav li.right {float: right;}
 }
 
 .home-player-left {
-  float: left;
-  margin-top: 25px;
+  margin-top: 5px;
 }
 
 .home-player-right {
-  margin-left: 35px;
 }
 
 .player-label {
@@ -351,7 +360,7 @@ ul.topnav li.right {float: right;}
     border-width: 1px 1px 1px 1px;
   padding: 0px;
   margin: 0px;
-  margin-bottom: 10px;
+  margin-bottom: 18px;
   overflow: hidden;
 }
 
@@ -632,7 +641,7 @@ ul.topnav li.right {float: right;}
   float: right;
   margin-left: 10px;
   border-radius: 5px;
-  background-color: #afa;
+  background-color: #ff0;
 }
 
 /*****************************************************************************
@@ -869,7 +878,6 @@ ul.topnav li.right {float: right;}
 #mc_embed_signup {
   clear:left;
   font:14px Helvetica,Arial,sans-serif; 
-  width:350px;
 }
 
 #mc-inner {
@@ -882,10 +890,10 @@ ul.topnav li.right {float: right;}
 }
 
 .carousel {
-  margin: 0 auto;
+  margin: auto;
   margin-right: 20px;
   padding: 5 25 30 25px;
-  width: 530px;
+  width: 100%;
   float: left;
 }
 
@@ -895,7 +903,6 @@ ul.topnav li.right {float: right;}
   border-color: #000;
   border-style: solid;
   font-size: 12pt;
-  width: 650px;
   height: 200px;
 }
 
@@ -911,6 +918,9 @@ ul.topnav li.right {float: right;}
   padding: 10px;
 }
 
+.home-statement {
+  margin-bottom: 25px;
+}
 .cart-rows {
   padding: 0px;
   border-width: 1px;
@@ -946,7 +956,7 @@ ul.topnav li.right {float: right;}
 
 div.mailing-list-signup-container {
   float: left;
-  width: 250px;
+  width: 100%;
   margin-top: 15px;
 }
 
@@ -985,10 +995,15 @@ div.mailing-list-signup-container {
   padding:0 0.4em;
   margin-bottom: 10px;
   min-height:32px;
-  width: 249px;
+  width: 100%;
   border-radius: 3px;
  }
-#mc_embed_signup input.button {display:block; width:35%; margin:0 0 10px 0; min-width:90px;}
+#mc_embed_signup input.button {
+  display:block;
+  width: 100%;
+  margin:0 0 10px 0;
+  min-width:90px;
+}
 
 
 button.slick-arrow.slick-next {
@@ -1009,15 +1024,12 @@ button.slick-arrow.slick-prev {
 
 .project-box {
   background-color: #eeeeee;
-  max-width: 300px;
   margin: 5px;
   padding: 10px;
   border-radius: 5px;
   border-color: #333;
   border-width: 1px;
   border-style: solid;
-  float: left;
-  height: 300px;
 }
 .project-title {
   font-weight: bold;
@@ -1050,7 +1062,8 @@ button.slick-arrow.slick-prev {
 
 .contact-form {
   background-color: #eee;
-  max-width: 600px;
+  margin: auto;
+  max-width: 1200px;
 }
 .contact-form-top-container {
   clear: both;
@@ -1078,11 +1091,9 @@ float: left;
   width: 185px;
 }
 .contact-msg-container {
-  max-width: 590px;
 }
 .contact-msg {
-  width: 95%;
-  max-width: 580px;
+  width: 100%;
   height: 100px;
   margin: 0 5 5 5px;
 }
@@ -1109,22 +1120,21 @@ float: left;
 
 
 .membership-container {
+  margin: 0px;
+  padding: 25px;
+}
+.membership-bottom-container {
+  text-align: center;
+}
+.membership-inner {
   border-radius: 5px;
   border-color: #333;
   border-width: 1px;
   border-style: solid;
-  width: 340px;
   padding:5px;
-  margin: 5px;
-  float: left;
-}
-.membership-bottom-container {
-  text-align: center;
-  width: 100%;
 }
 .membership-btn {
   text-align: center;
-  width: 100%;
   height: 70px;
 }
 .per_month {
@@ -1155,28 +1165,52 @@ float: left;
   margin: 0 auto;
 }
 
+/*****************************************************************************
+ LightsOut.js
+*****************************************************************************/
 
+.lights-out {
+  clear: both;
+  height: 170px;
+  width: 150px;
+  margin: auto;
+}
+.lo-cell {
+  border: solid;
+  border-width: 1px;
+  width: 30px;
+  height: 30px;
+  float: left;
+  border-color: #000;
+}
+.lo-cell-inactive {
+  background-color: #000;
+}
+.lo-cell-active {
+  background-color: #fff;  
+}
+.lo-row {
+  width: 162px;
+  height: 30px;
+}
 /*****************************************************************************
  Home.js > Slider
 *****************************************************************************/
 
-.services-box {
+.services-inner {
   background-color: #eeeeee;
-  max-width: 300px;
-  margin: 5px;
   padding: 10px;
   border-radius: 5px;
   border-color: #333;
   border-width: 1px;
+  margin: 10 0 0 0px;
   border-style: solid;
-  float: left;
-  height: 200px;
 }
 .services-title {
   font-weight: bold;
   font-size: 12pt;
-  text-ali  margin-bottom: 10px;
-gn: center;  
+  text-align: center;
+  margin-bottom: 10px;
 }
 
 /*****************************************************************************

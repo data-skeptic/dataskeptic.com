@@ -18,6 +18,7 @@ import Services from './Services'
 import Membership from './Membership'
 import Footer from './Footer'
 import NotFound from './NotFound'
+import LightsOut from './LightsOut'
 import NavLink from './NavLink'
 
 const MatchWithProps = ({ component: Component, props, ...rest }) => (
@@ -59,6 +60,7 @@ export default class Site extends React.Component {
 		var products_loaded = false
 		var videos_loaded = false
 		var episodes = []
+		var episodeMap = {}
 		var blogs = []
 		var products = []
 		var videos = []
@@ -72,14 +74,17 @@ export default class Site extends React.Component {
 					var pubDate = new Date(ep["pubDate"])
 					ep["pubDate"] = pubDate
 				}
+				episodeMap = this.generateEpisodeMap(episodes)
 			} else {
 				episodes = []
 			}
 		}
 		if (now - lastCacheBlogs < cacheSeconds) {
 			blogs = JSON.parse(localStorage.getItem("blogs"))
+			var folders = []
 			if (blogs != undefined) {
 				blogs_loaded = true
+				folders = this.extractFolders(blogs)
 			} else {
 				blogs = []
 			}
@@ -120,11 +125,13 @@ export default class Site extends React.Component {
 			env: env,
 			bucket: bucket,
 			episodes: episodes,
+			episodeMap: episodeMap,
 			episodes_loaded: episodes_loaded,
 			blogs: blogs,
 			blogs_loaded: blogs_loaded,
+			folders: folders,
 			products: products,
-			products_loaded: blogs_loaded,
+			products_loaded: products_loaded,
 			cart_items: persisted.cart_items,
 			total: total,
 			shipping: shipping,
@@ -150,7 +157,9 @@ export default class Site extends React.Component {
 				.then(function(result) {
 					var blogs = result.data
 					var blogs_loaded = true
-					me.setState({blogs, blogs_loaded})
+					var folders = me.extractFolders(blogs)
+					console.log(blogs)
+					me.setState({blogs, blogs_loaded, folders})
 					localStorage.setItem("blogs", JSON.stringify(blogs))
 					localStorage.setItem("lastCacheBlogs", new Date().getTime()/1000)
 					console.log("Loaded blogs")
@@ -185,8 +194,9 @@ export default class Site extends React.Component {
 						}
 						episodes.push(episode)
 					})
+					var episodeMap = me.generateEpisodeMap(episodes)
 					var episodes_loaded = true
-					me.setState({episodes, episodes_loaded})
+					me.setState({episodes, episodes_loaded, episodeMap})
 					localStorage.setItem("episodes", JSON.stringify(episodes))
 					localStorage.setItem("lastCacheEpisodes", new Date().getTime()/1000)
 				});
@@ -247,6 +257,34 @@ export default class Site extends React.Component {
 			country = JSON.parse(raw)
 		}
 		return {cart_items, country}
+	}
+
+	extractFolders(blogs) {
+		var folders = []
+		if (blogs != undefined) {
+			for (var i in blogs) {
+				var b = blogs[i]
+				var pn = b["prettyname"]
+				var arr = pn.split("/")
+				var level = 0
+				if (arr.length >= level+2) {
+					var folder = arr[level+1]
+					folders.push(folder)
+				}
+			}
+			folders = folders.reduce((a, x) => a.includes(x) ? a : [...a, x], []).sort()
+		}
+		return folders
+	}
+
+	generateEpisodeMap(episodes) {
+		var map = {}
+		for (var i=0; i < episodes.length; i++) {
+			var episode = episodes[i]
+			var guid = episode.guid
+			map[guid] = episode
+		}
+		return map
 	}
 
 	onPlayToggle(episode) {
@@ -397,6 +435,7 @@ export default class Site extends React.Component {
 		}
 		var blogs = this.state.blogs
 		var episodes = this.state.episodes
+		var episodeMap = this.state.episodeMap
 		var products = this.state.products
 		var videos = this.state.videos
 		var blogs_loaded = this.state.blogs_loaded
@@ -412,24 +451,42 @@ export default class Site extends React.Component {
 		var total = this.state.total
 		var shipping = this.state.shipping
 		var bucket = this.state.bucket
+		var folders = this.state.folders
 		return (
 			<Router>
-				<div>
-					<Header />
-					<MatchWithProps pattern="*" component={Menu} props={{ item_count }} />
-					<Player config={player} onPlayToggle={this.onPlayToggle.bind(this)} episodes_loaded={this.state.episodes_loaded} />
-					<MatchWithProps exactly pattern="/"          component={Home}    props={{ episodes, blogs, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
-					<MatchWithProps exactly pattern="/index.htm" component={Home}    props={{ episodes, blogs, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
-					<MatchWithProps pattern="/podcast"           component={Podcast} props={{ episodes, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
-					<MatchWithProps pattern="/blog*"             component={Blog}    props={{ blogs, blogs_loaded, bucket }} />
-					<MatchWithProps pattern="/video"             component={Videos}  props={{ videos }} />
-					<Match pattern="/proj" component={Projects} />
-					<MatchWithProps pattern="/store"             component={Store}    props={{ products, products_loaded, cart_items, total, shipping, country: this.state.country, updateCartQuantity: this.updateCartQuantity.bind(this), onChangeCountry: this.onChangeCountry.bind(this), addToCart: this.addToCart.bind(this) }} />
-					<MatchWithProps pattern="/checkout"          component={Checkout} props={{ products, products_loaded, cart_items, total, shipping, country: this.state.country, updateCartQuantity: this.updateCartQuantity.bind(this), onChangeCountry: this.onChangeCountry.bind(this), clearCart: this.clearCart.bind(this), prod }} />
-					<Match pattern="/services" component={Services} />
-					<MatchWithProps pattern="/members"           component={Membership} props={{ products, products_loaded, addToCart: this.addToCart.bind(this) }} />
-					<Miss component={NotFound} />
-					<Footer />
+				<div class="site">
+					<div class="container-fluid">
+						<div class="row row-centered">
+							<Header />
+						</div>
+						<div class="row row-centered">
+							<MatchWithProps pattern="*" component={Menu} props={{ item_count }} />
+						</div>
+						<div class="row row-centered">
+							<Player config={player} onPlayToggle={this.onPlayToggle.bind(this)} episodes_loaded={this.state.episodes_loaded} />
+						</div>
+						<MatchWithProps exactly pattern="/"          component={Home}    props={{ episodes, blogs, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
+						<MatchWithProps exactly pattern="/index.htm" component={Home}    props={{ episodes, blogs, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
+						<MatchWithProps pattern="/podcast"           component={Podcast} props={{ episodes, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
+						<MatchWithProps pattern="/blog*"             component={Blog}    props={{ blogs, folders, episodeMap, blogs_loaded, bucket, onPlayToggle: this.onPlayToggle.bind(this) }} />
+						<MatchWithProps pattern="/video"             component={Videos}  props={{ videos }} />
+						<Match pattern="/proj" component={Projects} />
+						<MatchWithProps pattern="/store"             component={Store}    props={{ products, products_loaded, cart_items, total, shipping, country: this.state.country, updateCartQuantity: this.updateCartQuantity.bind(this), onChangeCountry: this.onChangeCountry.bind(this), addToCart: this.addToCart.bind(this) }} />
+						<MatchWithProps pattern="/checkout"          component={Checkout} props={{ products, products_loaded, cart_items, total, shipping, country: this.state.country, updateCartQuantity: this.updateCartQuantity.bind(this), onChangeCountry: this.onChangeCountry.bind(this), clearCart: this.clearCart.bind(this), prod }} />
+						<Match pattern="/services" component={Services} />
+						<MatchWithProps pattern="/members"           component={Membership} props={{ products, products_loaded, addToCart: this.addToCart.bind(this) }} />
+						<Match pattern="/lightsout" component={LightsOut} />
+						<Miss component={NotFound} />
+						<div class="row row-centered">
+							<div class="col-sm-8">
+							AAA
+							</div>
+							<div class="col-sm-4">
+							BBB
+						</div>
+						</div>
+						<Footer />
+					</div>
 				</div>
 			</Router>
 		)
@@ -438,16 +495,21 @@ export default class Site extends React.Component {
 
 
 /*
-PLAYER - Spinning logo on waiting for file download
-BLOG - author images
-PODCAST - transcripts
-CART - validation and checkout
+PLAYER
+	Spinning logo on waiting for file download in all relevant buttons, not use bar
+	Howler buffering
+BLOG
+	author images
+	on episode notes, match to episode variable for metadata
+	fix transcripts
+	deploy breaks at chi-squared
+PODCAST - link to transcripts
 PROJECTS - SNL art
-SHOWNOTES - as blog
+MIGRATE SHOW NOTES
+	create redirects map from XML
 STORE
 	t-shirt image
 	Stripe recurring for memberships
-	**Cart with images in checkout
 MISC
 	configure env for Production
 	google analytics

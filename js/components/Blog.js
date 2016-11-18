@@ -10,17 +10,30 @@ export default class Blog extends React.Component {
 		super(props)
 	}
 	
+	getEpisode(guid) {
+		var episodes = this.props.episodes
+
+	}
+
 	render() {
 		if (!this.props.blogs_loaded) {
 			return <div><Loading /></div>
 		}
 		var blogs = this.props.blogs
-		blogs = blogs.slice(0, 10)
+		var folders = this.props.folders
 		var pathname = this.props.location.pathname
 		console.log(pathname)
+		console.log(folders)
 		if (pathname == '/blog' || pathname == '/blog/') {
+			blogs = blogs.slice(0, 10)
 			return (
 				<div class="center">
+					Categories:
+					<div class="blog-categories">
+						{folders.map(function(folder) {
+							return <div key={folder} class="blog-category">{folder}</div>
+						})}
+					</div>
 					{blogs.map(function(blog) {
 						var pn = blog.prettyname
 						if (pn != undefined) {
@@ -38,16 +51,6 @@ export default class Blog extends React.Component {
 							)
 						}
 					})}
-				</div>
-			)
-		}
-		var eppath = "/blog/episodes/"
-		var top = ""
-		if (pathname.substring(0, eppath.length) == eppath ) {
-			top = (
-				<div>
-					<h2>Episode</h2>
-					TODO: add player and title
 				</div>
 			)
 		}
@@ -69,6 +72,21 @@ export default class Blog extends React.Component {
 			)
 		}
 		else {
+			var top = ""
+			var isEpisode = blog.guid != undefined
+			console.log([blog, blog.guid, isEpisode])
+			if (isEpisode) {
+				var episode = this.getEpisode(blog.guid)
+				var onPlayToggle = this.props.onPlayToggle
+				var is_playing = false
+				top = (
+					<div>
+						<h2>Episode</h2>
+						TODO: add player and title
+						<LatestEpisodePlayer episode={episode} onPlayToggle={onPlayToggle} is_playing={is_playing} />
+					</div>
+				)
+			}
 			var uri = "https://s3.amazonaws.com/" + this.props.bucket + '/' + blog["rendered"]
 			return (
 				<div class="center">
