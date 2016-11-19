@@ -52,7 +52,6 @@ export default class Store extends React.Component {
 					</div>
 
 					<div>
-						<h3>Cart</h3>
 						<Cart cart_items={this.props.cart_items} updatable={true} country={this.props.country} updateCartQuantity={this.props.updateCartQuantity} shipping={shipping} total={total} onChangeCountry={this.props.onChangeCountry} />
 					</div>
 					<div class="btnCheckoutContainer">

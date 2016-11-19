@@ -18,7 +18,7 @@ const Menu = props => {
 		</NavLink>
 	}
 	return (
-		<div className="menu">
+		<div className="menu col-sm-12">
 			<ul class="topnav">
 				<NavLink active={pathname} to="/">Home</NavLink>
 				<NavLink active={pathname} to="/podcast">Podcast</NavLink>

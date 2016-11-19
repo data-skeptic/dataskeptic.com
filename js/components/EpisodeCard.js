@@ -35,7 +35,7 @@ export default class LatestEpisodeCard extends React.Component {
 						<p><span class="home-player-card">{this.props.title}</span></p>
 						<p><span class="home-player-title"><a href={ep.link}>{ep.title}</a></span></p>
 						<p><span class="home-player-date">{dstr}</span></p>
-						<div class="home-player-button-container">{playing_symbol}</div>
+						<div class="home-player-button-container"><p>{playing_symbol}</p></div>
 					</div>
 				</div>
 			)

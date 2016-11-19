@@ -6,11 +6,12 @@ import xml2js from "xml2js"
 
 import Episode from "./Episode"
 import Loading from "./Loading"
+import YearSelector from './YearSelector.js'
 
 export default class Podcast extends React.Component {
 	constructor(props) {
 		super(props)
-		var year = (new Date()).getYear()
+		var year = (new Date()).getYear() + 1900
 		this.state = {
 			max_year: year,
 			year: year
@@ -28,7 +29,7 @@ export default class Podcast extends React.Component {
 		this.setState({episodes, year})
 	}
 
-	changeYear(year, event) {
+	changeYear(year) {
 		this.setState({year})
 	}
 
@@ -42,7 +43,7 @@ export default class Podcast extends React.Component {
 		var episodes = this.props.episodes
 		var num = episodes.length
 		var years = []
-		while (year > 113) {
+		while (year > 2013) {
 			years.push(year)
 			year -= 1
 		}
@@ -50,46 +51,30 @@ export default class Podcast extends React.Component {
 			return <div><Loading /></div>
 		} else {
 			var me = this
-			var dyear = this.state.year
+			var year = this.state.year
 			var onPlayToggle = this.props.onPlayToggle
 			return (
 				<div class="center">
-					<div class="episode-selector">
-						{years.map(function(year) {
-							var down = "menu-button-up"
-							if (dyear == year) {
-								down = "menu-button-down"
-							}
-							var key = Math.random().toString().substring(2,99)
-							return <button key={key} class="menu-year" class={down} onClick={me.changeYear.bind(me, year)}>{year+1900}</button>
-						})}
-					</div>
+					<YearSelector years={years} year={year} changeYear={this.changeYear.bind(this)} />
+					<div class="clear"></div>
 					<div class="episodes-container">
 						{
 							episodes.map(function(episode) {
-							if (episode.pubDate.getYear() == dyear) {
-								var is_playing = false
-								if (config.player.episode != undefined) {
-									if (config.player.episode.guid == episode.guid) {
-										if (config.player.is_playing) {
-											is_playing = true
+								if (episode.pubDate.getYear()+1900 == year) {
+									var is_playing = false
+									if (config.player.episode != undefined) {
+										if (config.player.episode.guid == episode.guid) {
+											if (config.player.is_playing) {
+												is_playing = true
+											}
 										}
 									}
+									return <Episode key={episode.guid} is_playing={is_playing} episode={episode} onPlayToggle={onPlayToggle} />
 								}
-								return <Episode key={episode.guid} is_playing={is_playing} episode={episode} onPlayToggle={onPlayToggle} />
-							}
-						})}
+							})
+						}
 					</div>
-					<div class="episode-selector">
-						{years.map(function(year) {
-							var down = "menu-button-up"
-							if (dyear == year) {
-								down = "menu-button-down"
-							}
-							var key = Math.random().toString().substring(2,99)
-							return <button key={key} class="menu-year" class={down} onClick={me.changeYear.bind(me, year)}>{year+1900}</button>
-						})}
-					</div>
+					<YearSelector years={years} year={year} changeYear={this.changeYear.bind(this)} />
 				</div>
 			)
 		}

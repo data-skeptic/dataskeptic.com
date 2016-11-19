@@ -177,9 +177,11 @@ export default class Checkout extends React.Component {
 				checkout = (
 					<div>
 						<h3>Checkout</h3>
-						<div class="checkout-box">
-						    <div class="checkout-row">
+						<div class="row checkout-box">
+						    <div class="col-xs-12 col-sm-6">
 						        <AddressForm title="Shipping Address" country={country} onAddressChange={this.onAddressChange.bind(this)} address={address} />
+						    </div>
+						    <div class="col-xs-12 col-sm-6">
 						        <CreditCardForm onSubmit={this.onSubmit.bind(this)} paymentError={this.state.paymentError} submitDisabled={this.state.submitDisabled} />
 						    </div>
 						    <div class="clear"></div>
