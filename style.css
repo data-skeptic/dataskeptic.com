@@ -44,8 +44,7 @@ html, body {
 }
 
 .header-right {
-  float: left;
-  height: 100%;
+  position: relative;
   padding: 7px;
 }
 
@@ -65,19 +64,19 @@ h1 {
   color: #ffffff;
 }
 
-@media screen and (max-width: 260px){
+@media screen and (max-width: 260px) {
     .header-p {
       font-size: 8pt
     }
 }
 
-@media screen and (max-width: 233px){
+@media screen and (max-width: 233px) {
     .header-p {
       visibility:hidden;
     }
 }
 
-@media screen and (max-width: 186px){
+@media screen and (max-width: 186px) {
   h1 {
       visibility:hidden;
   }
@@ -85,6 +84,22 @@ h1 {
     text-align: center;
   }
   .header-left {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .episode-pubDate {
+    visibility: hidden;
+    display: none;
+  }
+}
+
+@media screen and (max-width: 700px) {
+}
+
+@media screen and (max-width:735px) {
+  .address-input {
     width: 100%;
   }
 }
@@ -165,10 +180,6 @@ ul.topnav li a.active {background-color: #4CAF50;}
 
 ul.topnav li.right {float: right;}
 
-@media screen and (max-width: 613px){
-    ul.topnav li.right,
-    ul.topnav li {float: none;}
-}
 
 .episode-button-sm {
   float: left;
@@ -355,15 +366,6 @@ ul.topnav li.right {float: right;}
  Podcast.js
 *****************************************************************************/
 
-.episode {
-    border-style: solid;
-    border-width: 1px 1px 1px 1px;
-  padding: 0px;
-  margin: 0px;
-  margin-bottom: 18px;
-  overflow: hidden;
-}
-
 .episode-expanded {
 }
 
@@ -455,10 +457,30 @@ ul.topnav li.right {float: right;}
   margin-left: 5px;
 }
 
-.episode-selector {
-  margin-top: 5px;
-  margin-bottom: 5px
+.year-select-outer {
+  text-align: center;
 }
+
+.episode-selector {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  height: 30;
+}
+
+.episode-year-container {
+  display: inline;
+  margin: auto;
+  padding: 5px;
+}
+.episode {
+    border-style: solid;
+    border-width: 1px 1px 1px 1px;
+  padding: 0px;
+  margin: 0px;
+  margin-bottom: 18px;
+  overflow: hidden;
+}
+
 
 /*****************************************************************************
  Video.js
@@ -733,100 +755,31 @@ ul.topnav li.right {float: right;}
 }
 
 .address-form {
-  width: 55%;
-  float: left;
-  padding: 5px;
 }
 
 .shipping-address-title {
+  font-size: 14pt;
+  margin: 10 0 10 0px;
+}
 
+.address-label {
+  font-size: 8pt;
+  height: 15px;
+  overflow: hidden;
 }
 
 .address-row {
   clear: both;
 }
 
-.address-name-label {
-  float: left;
-  font-size: 8pt;
-  width: 80px;
+.address-input {
+  width: 100%;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 3px;
+  margin-bottom: 10px;
 }
 
-.first_name {
-  width:80px;
-  float: left;
-  margin-right: 5px;
-}
-
-.last_name {
-  width:134px;
-  float: left;
-}
-
-.address-street-label {
-  float: left;
-  font-size: 8pt;
-  width: 80px;
-}
-.address-street-label {
-
-}
-.street_1 {
-  width: 299px;
-}
-.street_2 {
-  width: 299px;
-}
-
-.address-label {
-}
-.city-label {
-  font-size: 8pt;
-  float: left;
-  width: 80px;
-}
-.city {
-  float: left;
-  width: 166px;
-  margin-right: 10px;
-}
-.state-label {
-  font-size: 8pt;
-  float: left;
-}
-.state {
-  float: left;
-  width: 50px;
-}
-
-.country-label {
-  font-size: 8pt;
-  float: left;
-  width: 80px;
-}
-
-.country {
-  float: left;
-  width: 200px;
-}
-
-.zip-label {
-  font-size: 8pt;
-  width: 40px;
-  float: left;
-}
-.zip {
-  width: 79px;
-  float: left;
-}
-.phone-label {
-  font-size: 8pt;
-  float: left;
-  width: 80px;
-}
-.phone {
-  width: 200px;
-}
 
 .checkout-name-field {
   float: left;
@@ -919,6 +872,7 @@ ul.topnav li.right {float: right;}
 }
 
 .home-statement {
+  margin: 10px;
   margin-bottom: 25px;
 }
 .cart-rows {
@@ -1024,8 +978,8 @@ button.slick-arrow.slick-prev {
 
 .project-box {
   background-color: #eeeeee;
-  margin: 5px;
   padding: 10px;
+  margin: 15 0 0 10px;
   border-radius: 5px;
   border-color: #333;
   border-width: 1px;
@@ -1034,8 +988,7 @@ button.slick-arrow.slick-prev {
 .project-title {
   font-weight: bold;
   font-size: 12pt;
-  text-align: center;  
-  margin-bottom: -5px;
+  text-align: center;
 }
 .project-img-container {
   margin: auto;
@@ -1063,39 +1016,41 @@ button.slick-arrow.slick-prev {
 .contact-form {
   background-color: #eee;
   margin: auto;
-  max-width: 1200px;
+  margin-top: 10px;
+  border: 2px solid #888; 
+  border-radius: 4px;
 }
 .contact-form-top-container {
   clear: both;
   width: 100%;
   height: 50px;
 }
-.contact-name-lbl {
+.contact-name-lbl {  
   font-size: 12pt;
-  float: left;
-  margin: 10 1 10 5px;
 }
 .contact-email-lbl {
   font-size: 12pt;
-  float: left;
-  margin: 10 1 10 5px;
 }
 .contact-name {
-float: left;
-  margin: 10px;
-  width: 150px;
+  width: 100%;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 3px;
+  margin-bottom: 10px;
 }
 .contact-email {
-float: left;
-  margin: 10px;
-  width: 185px;
+  width: 100%;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 3px;
+  margin-bottom: 10px;
 }
 .contact-msg-container {
 }
 .contact-msg {
   width: 100%;
   height: 100px;
-  margin: 0 5 5 5px;
+ border: 1px solid #888; 
 }
 .contact-send-container {
   text-align: right;
@@ -1103,7 +1058,10 @@ float: left;
   margin-right: 25px;
 }
 .contact-send {
-  width: 100px;
+  margin: 15 5 15 5px;
+  width: 100%;
+  border-width: 2px;
+  border-radius: 2px;
 }
 .contact-status {
   border-width: 1px;

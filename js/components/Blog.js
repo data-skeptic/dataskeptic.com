@@ -1,6 +1,7 @@
 import React from "react"
 import ReactDOM from "react-dom"
 import { Link } from 'react-router'
+import NavLink from './NavLink'
 
 import BlogItem from "./BlogItem"
 import Loading from "./Loading"
@@ -29,11 +30,17 @@ export default class Blog extends React.Component {
 			return (
 				<div class="center">
 					Categories:
+				<ol class="breadcrumb">
 					<div class="blog-categories">
 						{folders.map(function(folder) {
-							return <div key={folder} class="blog-category">{folder}</div>
+							return (
+								<li key={folder}>
+									<a class="blog-category">{folder}</a>
+								</li>
+							)
 						})}
 					</div>
+				</ol>
 					{blogs.map(function(blog) {
 						var pn = blog.prettyname
 						if (pn != undefined) {

@@ -99,23 +99,17 @@ export default class ContactForm extends React.Component {
 			status = <div class="contact-status"><span>There was an error sending your message.  Sorry!  Feel free to reach out to kyle@dataskeptic.com directly.</span></div>
 		}
 		return (
-			<div class="contact-form">
-				<h2>Contact Us</h2>
-				<div class="contact-form-top-container">
-					<div class="contact-name-container">
-						<div class="contact-name-lbl">Name:</div>
-						<input class="contact-name" ref="name" onChange={this.onChangeName.bind(this)} value={this.state.name} />
-					</div>
-					<div class="contact-email-container">
-						<div class="contact-email-lbl">E-Mail:</div>
-						<input class="contact-email" ref="email" onChange={this.onChangeEmail.bind(this)} value={this.state.email} />
-					</div>
-				</div>
-				<div class="contact-msg-container">
+			<div class="row contact-form">
+				<div class="col-xs-12"><h2>Contact Us</h2></div>
+				<div class="col-xs-12 col-sm-2 contact-name-lbl">Name:</div>
+				<div class="col-xs-12 col-sm-4"><input class="contact-name" ref="name" onChange={this.onChangeName.bind(this)} value={this.state.name} /></div>
+				<div class="col-xs-12 col-sm-2 contact-email-lbl">E-Mail:</div>
+				<div class="col-xs-12 col-sm-4"><input class="contact-email" ref="email" onChange={this.onChangeEmail.bind(this)} value={this.state.email} /></div>
+				<div class="col-xs-12">
 					{this.state.error}
 					<textarea class="contact-msg" ref="msg" onChange={this.onChangeMsg.bind(this)} value={this.state.msg} />
 				</div>
-				<div class="contact-send-container">
+				<div class="col-xs-12">
 					<button class="contact-send" onClick={this.onClick.bind(this)}>Send</button>
 				</div>
 				{statusbox}

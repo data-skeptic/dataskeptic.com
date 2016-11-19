@@ -477,14 +477,6 @@ export default class Site extends React.Component {
 						<MatchWithProps pattern="/members"           component={Membership} props={{ products, products_loaded, addToCart: this.addToCart.bind(this) }} />
 						<Match pattern="/lightsout" component={LightsOut} />
 						<Miss component={NotFound} />
-						<div class="row row-centered">
-							<div class="col-sm-8">
-							AAA
-							</div>
-							<div class="col-sm-4">
-							BBB
-						</div>
-						</div>
 						<Footer />
 					</div>
 				</div>
