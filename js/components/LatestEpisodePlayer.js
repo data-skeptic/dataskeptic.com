@@ -24,6 +24,7 @@ export default class LatestEpisodePlayer extends React.Component {
 					<button class="episode-button" onClick={this.props.onPlayToggle.bind(this, ep)}>&#10073;&#10073;</button>
 				)
 			}
+			var title = this.props.title
 			var d = ep.pubDate
 			var dstr = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate()
 			return (
@@ -32,7 +33,7 @@ export default class LatestEpisodePlayer extends React.Component {
 						{playing_symbol}
 					</div>
 					<div class="home-player-right">
-						<p><span class="home-player-latest">Latest episode:</span></p>
+						<p><span class="home-player-latest">{title}</span></p>
 						<div class="home-player-title"><a href={ep.link}>{ep.title}</a></div>
 						<p>{dstr}</p>
 					</div>

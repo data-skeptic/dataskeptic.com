@@ -6,7 +6,9 @@ import NavLink from './NavLink'
 import NotFound from './NotFound'
 import BlogList from "./BlogList"
 import BlogNav from "./BlogNav"
+import BlogItem from "./BlogItem"
 import Loading from "./Loading"
+import LatestEpisodePlayer from "./LatestEpisodePlayer"
 
 export default class Blog extends React.Component {
 	constructor(props) {
@@ -14,8 +16,9 @@ export default class Blog extends React.Component {
 	}
 	
 	getEpisode(guid) {
-		var episodes = this.props.episodes
-
+		var episodeMap = this.props.episodeMap
+		var episode = episodeMap[guid]
+		return episode
 	}
 
 	remove_type(typ, arr) {
@@ -67,9 +70,12 @@ export default class Blog extends React.Component {
 			var b = blogs[i]
 			var pn = b["prettyname"]
 			if (pn == pathname) {
+				console.log("match")
 				blog = b
 			}
 		}
+		console.log("Not found!")
+		console.log(blog)
 		if (blog == undefined) {
 			// TODO: make this general and not error prone
 			for (var i=0; i < folders.length; i++) {
@@ -91,24 +97,22 @@ export default class Blog extends React.Component {
 		else {
 			var top = ""
 			var isEpisode = blog.guid != undefined
-			console.log([blog, blog.guid, isEpisode])
 			if (isEpisode) {
-				var guid = episode.guid
+				var guid = blog.guid
 				var episode = this.getEpisode(guid)
 				var onPlayToggle = this.props.onPlayToggle
 				var is_playing = false
+				console.log([episode, onPlayToggle])
 				top = (
-					<div>
-						<h2>Episode</h2>
-						TODO: add player and title
-						{guid}
-						<LatestEpisodePlayer episode={episode} onPlayToggle={onPlayToggle} is_playing={is_playing} />
+					<div class="home-player">
+						<LatestEpisodePlayer title="" episode={episode} onPlayToggle={onPlayToggle} is_playing={is_playing} />
 					</div>
 				)
 			}
 			var uri = "https://s3.amazonaws.com/" + this.props.bucket + '/' + blog["rendered"]
 			return (
 				<div class="center">
+					<BlogNav folders={folders} pathname={pathname} />
 					{top}
 					<BlogItem src={uri} pathname={pathname}  />
 				</div>

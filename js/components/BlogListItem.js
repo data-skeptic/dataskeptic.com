@@ -17,7 +17,10 @@ export default class BlogListItem extends Component {
 	            <div class="blog-summary" key={blog.uri}>
 	                <Link class="blog-title" to={pn}>{blog.title}</Link>
 	                <span class="blog-date">{date}</span>
-	                <p>{blog.desc}</p>
+	                <p>
+                        {blog.desc}
+                        ... <Link class="blog-title" to={pn}>[more]</Link>
+                    </p>
 	            </div>
             </div>
         )
