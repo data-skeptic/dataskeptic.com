@@ -541,6 +541,18 @@ ul.topnav li.right {float: right;}
   visibility: hidden;
 }
 
+.blog-categories {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.blog-link {
+  background-color: #eee;
+  border-radius: 5px;
+  margin-right: 20px;
+  padding: 2 10 2 10;
+}
+
 
 /*****************************************************************************
  BlogItem.js

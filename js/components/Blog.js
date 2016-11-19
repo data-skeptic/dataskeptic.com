@@ -51,7 +51,6 @@ export default class Blog extends React.Component {
 		var blogs = this.props.blogs
 		var folders = this.props.folders
 		var pathname = this.props.location.pathname
-		console.log(pathname)
 		if (pathname == '/blog' || pathname == '/blog/') {
 			blogs = this.remove_type("episodes", blogs)
 			blogs = this.remove_type("transcripts", blogs)
@@ -63,7 +62,6 @@ export default class Blog extends React.Component {
 			)
 		}
 		pathname = pathname.substring("/blog".length, pathname.length)
-		console.log(pathname)
 		var blog = undefined
 		for (var i in blogs) {
 			var b = blogs[i]
@@ -78,7 +76,12 @@ export default class Blog extends React.Component {
 				var folder = folders[i]
 				if (pathname.indexOf(folder) > 0) {
 					var fblogs = this.only_type(folder, blogs)
-					return <BlogList blogs={fblogs} />
+					return (
+						<div class="center">
+							<BlogNav folders={folders} pathname={pathname} />
+							<BlogList blogs={fblogs} />
+						</div>
+					)
 				}
 			}
 			return (
