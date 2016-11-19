@@ -19,7 +19,6 @@ import Membership from './Membership'
 import Footer from './Footer'
 import NotFound from './NotFound'
 import LightsOut from './LightsOut'
-import NavLink from './NavLink'
 
 const MatchWithProps = ({ component: Component, props, ...rest }) => (
   <Match {...rest} render={(matchProps) => (
@@ -492,23 +491,32 @@ PLAYER
 	Howler buffering
 BLOG
 	author images
-	on episode notes, match to episode variable for metadata
-	fix transcripts
 	deploy breaks at chi-squared
-PODCAST - link to transcripts
-PROJECTS - SNL art
-MIGRATE SHOW NOTES
-	create redirects map from XML
-STORE
-	t-shirt image
-	Stripe recurring for memberships
-MISC
-	configure env for Production
-	google analytics
-	redirects on old content
-	migrate show notes
-	SEO / crawlable?
+
+SNL art
+
+create redirects map from XML
+
+t-shirt image
+Stripe recurring for memberships
+
+configure env for Production
+google analytics
+redirects on old content
+SEO / crawlable?
+
+z-scores script in show notes broken
+Lights LightsOutstripe recurring
+generateEpisodeMapfeed.rss lambda download
+from blog card, get from only non-epsiode, non-transcript
+video width mobile
+causal impact
+caurosel taller
+remove label on mobile for compactness
+size pull down in store on mobile is fucked up
+transcripts linked from episode
 */
+
 
 
 
@@ -532,5 +540,17 @@ LATER
 	t-shirt integration
 	rate content level - beginner, intermedia, advanced
 	Blog categories
+
+	Search
+	Realted content
+	migrate resources.php to blog
+	blog admin ui
+	chatbot
+	rate content 1-5 by level of diffculty
+	advertiser page
+	press / bio page
+	guest login
+	guest directory
+	undue removed from cart
 */
 
