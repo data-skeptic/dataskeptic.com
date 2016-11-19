@@ -5,6 +5,7 @@ import NavLink from './NavLink'
 
 import NotFound from './NotFound'
 import BlogList from "./BlogList"
+import BlogNav from "./BlogNav"
 import Loading from "./Loading"
 
 export default class Blog extends React.Component {
@@ -56,18 +57,7 @@ export default class Blog extends React.Component {
 			blogs = this.remove_type("transcripts", blogs)
 			return (
 				<div class="center">
-					Categories:
-					<ol class="breadcrumb">
-						<div class="blog-categories">
-							{folders.map(function(folder) {
-								return (
-									<li key={folder}>
-										<a class="blog-category">{folder}</a>
-									</li>
-								)
-							})}
-						</div>
-					</ol>
+					<BlogNav folders={folders} pathname={pathname} />
 					<BlogList blogs={blogs} />
 				</div>
 			)
@@ -100,13 +90,15 @@ export default class Blog extends React.Component {
 			var isEpisode = blog.guid != undefined
 			console.log([blog, blog.guid, isEpisode])
 			if (isEpisode) {
-				var episode = this.getEpisode(blog.guid)
+				var guid = episode.guid
+				var episode = this.getEpisode(guid)
 				var onPlayToggle = this.props.onPlayToggle
 				var is_playing = false
 				top = (
 					<div>
 						<h2>Episode</h2>
 						TODO: add player and title
+						{guid}
 						<LatestEpisodePlayer episode={episode} onPlayToggle={onPlayToggle} is_playing={is_playing} />
 					</div>
 				)
