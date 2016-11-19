@@ -504,12 +504,9 @@ ul.topnav li.right {float: right;}
   color: #fff;
 }
 .blog-mailinglist-left {
-  max-width: 450px;
   font-size: 14pt;
-  padding: 20px;
-  float: left;
-  margin-right: 20px;
-  text-align
+  padding: 20 0 0 0px;
+  text-align: center;
 }
 
 .blog-mailinglist-right {  

@@ -3,7 +3,8 @@ import ReactDOM from "react-dom"
 import { Link } from 'react-router'
 import NavLink from './NavLink'
 
-import BlogItem from "./BlogItem"
+import NotFound from './NotFound'
+import BlogList from "./BlogList"
 import Loading from "./Loading"
 
 export default class Blog extends React.Component {
@@ -16,6 +17,32 @@ export default class Blog extends React.Component {
 
 	}
 
+	remove_type(typ, arr) {
+		var sub = []
+		var key = "/" + typ + "/"
+		for (var i=0; i < arr.length; i++) {
+			var blog = arr[i]
+			var pn = blog.prettyname
+			if (pn.indexOf(typ) == -1) {
+				sub.push(blog)
+			}
+		}
+		return sub
+	}
+
+	only_type(typ, arr) {
+		var sub = []
+		var key = "/" + typ + "/"
+		for (var i=0; i < arr.length; i++) {
+			var blog = arr[i]
+			var pn = blog.prettyname
+			if (pn.indexOf(typ) != -1) {
+				sub.push(blog)
+			}
+		}
+		return sub
+	}
+
 	render() {
 		if (!this.props.blogs_loaded) {
 			return <div><Loading /></div>
@@ -24,40 +51,24 @@ export default class Blog extends React.Component {
 		var folders = this.props.folders
 		var pathname = this.props.location.pathname
 		console.log(pathname)
-		console.log(folders)
 		if (pathname == '/blog' || pathname == '/blog/') {
-			blogs = blogs.slice(0, 10)
+			blogs = this.remove_type("episodes", blogs)
+			blogs = this.remove_type("transcripts", blogs)
 			return (
 				<div class="center">
 					Categories:
-				<ol class="breadcrumb">
-					<div class="blog-categories">
-						{folders.map(function(folder) {
-							return (
-								<li key={folder}>
-									<a class="blog-category">{folder}</a>
-								</li>
-							)
-						})}
-					</div>
-				</ol>
-					{blogs.map(function(blog) {
-						var pn = blog.prettyname
-						if (pn != undefined) {
-							if (pn[0] == "/") {
-								pn = pn.substring(1, pn.length)
-							}
-							pn = "/blog/" + pn
-							var date = blog["publish_date"]
-							return (
-								<div class="blog-summary" key={blog.uri}>
-									<Link class="blog-title" to={pn}>{blog.title}</Link>
-									<span class="blog-date">{date}</span>
-									<p>{blog.desc}</p>
-								</div>
-							)
-						}
-					})}
+					<ol class="breadcrumb">
+						<div class="blog-categories">
+							{folders.map(function(folder) {
+								return (
+									<li key={folder}>
+										<a class="blog-category">{folder}</a>
+									</li>
+								)
+							})}
+						</div>
+					</ol>
+					<BlogList blogs={blogs} />
 				</div>
 			)
 		}
@@ -72,10 +83,16 @@ export default class Blog extends React.Component {
 			}
 		}
 		if (blog == undefined) {
+			// TODO: make this general and not error prone
+			for (var i=0; i < folders.length; i++) {
+				var folder = folders[i]
+				if (pathname.indexOf(folder) > 0) {
+					var fblogs = this.only_type(folder, blogs)
+					return <BlogList blogs={fblogs} />
+				}
+			}
 			return (
-				<div class="blog-error">
-					Sorry, there was an error trying to load that file.
-				</div>
+				<NotFound location={pathname} />
 			)
 		}
 		else {
