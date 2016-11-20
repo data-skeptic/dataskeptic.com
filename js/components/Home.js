@@ -92,7 +92,7 @@ export default class Home extends React.Component {
 					</div>
 					<div class="col-xs-12 col-sm-4">
 						<div class="home-player">
-							<LatestEpisodePlayer episode={episode} onPlayToggle={onPlayToggle} is_playing={is_playing} />
+							<LatestEpisodePlayer title="Latest episode:" episode={episode} onPlayToggle={onPlayToggle} is_playing={is_playing} />
 						</div>
 						<MailingList />
 					</div>

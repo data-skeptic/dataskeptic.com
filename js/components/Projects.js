@@ -17,7 +17,7 @@ const Projects = () => {
 				</div>
 				<div class="col-xs-12 col-sm-6">
 					<div class="project-box">
-						<div class="project-img-container"><img class="project-img" src="/img/png/snl.png" /></div>
+						<div class="project-img-container"><img class="project-img" src="/img/png/snl-impact.png" /></div>
 						<div class="project-title">SNL Causal Impact</div>
 						<p>As an appendix to our Causal Impact episode, we teamed up with <a href="http://github.com/kjblakemore">Karen Blakemore</a> to create a Shiny webapp to interact with the Saturday Night Live analysis.</p>
 						<div class="project-link">
