@@ -33,6 +33,7 @@ html, body {
 .center {
   margin: auto;
   clear: both;
+  max-width: 800px;
 }
 
 #logo {
@@ -117,8 +118,12 @@ h1 {
 }
 
 .menu {
-  width: 100%;
-    background-color: #282828;  
+    background-color: #282828;
+}
+
+.menu-container {
+  max-width: 800px;
+  margin: auto;
 }
 
 .menu-active {
@@ -373,39 +378,21 @@ ul.topnav li.right {float: right;}
   height: 65px; 
 }
 
-.episode-left {
-  float: left;
-  height: 200px; 
-  width: 200px;
-  margin: 0px;
-}
-
 .episode-img {
-  width:  200px;
-  height: 200px;
+  width:  150px;
+  height: 150px;
 }
-.episode-middle {
-  padding-top: 5px;
-  padding-left: 5px;
-  height: 200px;
-  overflow: hidden;
-  margin: 0px;
-  font-size: 10pt;
+.episode-left {
+  text-align: center;
+  margin-top: 10px;
+  min-height: 160px;
 }
 
-.episode-right {
-  float: right;
-  min-width: 120px;
-}
-.episode-right-inner {
-  background-color: #eeeeee;
-  height: 65px;
-  padding: 0px;
-  margin: 0px;
-}
-.episode-right-inner-inner {
-  padding-top: 17px;
-  margin-left: 10px;
+.episode-middle {
+  max-height: 500px;
+  margin-top: 10px;
+  overflow: scroll;
+  font-size: 10pt;
 }
 
 .episode-button {
@@ -488,6 +475,7 @@ ul.topnav li.right {float: right;}
 
 .video {
   margin: 5px;
+  text-align: center;
 }
 
 .video-spacer {
@@ -541,13 +529,29 @@ ul.topnav li.right {float: right;}
   visibility: hidden;
 }
 
+.blog-nav {
+  width: 100%;
+  height: 25px;
+  display: table;
+}
+
 .blog-categories {
   margin-top: 20px;
   margin-bottom: 10px;
 }
 
 .blog-link {
+}
+
+.blog-categories {
+  height: 1px;
+  clear: both;
+}
+
+.blog-link-container {
+  float: left;
   background-color: #eee;
+  margin-bottom: 10px;
   border-radius: 5px;
   margin-right: 20px;
   padding: 2 10 2 10;
@@ -605,6 +609,7 @@ ul.topnav li.right {float: right;}
 }
 
 .product-outer {
+  
 }
 .product-header {
   float: left;
@@ -865,7 +870,7 @@ ul.topnav li.right {float: right;}
   border-color: #000;
   border-style: solid;
   font-size: 12pt;
-  height: 200px;
+  height: 400px;
 }
 
 .home-episode-card {
@@ -985,6 +990,10 @@ button.slick-arrow.slick-prev {
  Projects.js
 *****************************************************************************/
 
+.projects-container {
+  max-width: 600px;
+  margin: auto;
+}
 .project-box {
   background-color: #eeeeee;
   padding: 10px;
@@ -1028,6 +1037,7 @@ button.slick-arrow.slick-prev {
   margin-top: 10px;
   border: 2px solid #888; 
   border-radius: 4px;
+  max-width: 600px;
 }
 .contact-form-top-container {
   clear: both;
@@ -1163,6 +1173,10 @@ button.slick-arrow.slick-prev {
 /*****************************************************************************
  Home.js > Slider
 *****************************************************************************/
+
+.services-outer {
+  max-width: 600px;
+}
 
 .services-inner {
   background-color: #eeeeee;

@@ -4,7 +4,7 @@ import { Link } from 'react-router'
 const Projects = () => {
 	return (
 		<div class="center">
-			<div class="row">
+			<div class="row projects-container">
 				<div class="col-xs-12 col-sm-6">
 					<div class="project-box">
 						<div class="project-img-container"><img class="project-img" src="/img/png/openhouse.png" /></div>

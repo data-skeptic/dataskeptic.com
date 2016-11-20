@@ -28,7 +28,7 @@ export default class LatestBlogCard extends React.Component {
 						<Link class="blog-title" to={pn}>{blog.title}</Link>
 						<span class="blog-date">{date}</span>
 						<p>{blog.desc}</p>
-						<p><Link to={pn}>[more]</Link></p>
+						<p> ...<Link to={pn}>[more]</Link></p>
 					</div>
 				</div>
 			)

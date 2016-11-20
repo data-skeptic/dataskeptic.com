@@ -4,7 +4,7 @@ import ContactForm from "./ContactForm"
 
 const Services = () => {
 	return (
-		<div class="center">
+		<div class="center services-outer">
 			<div class="row services-container">
 				<div class="col-xs-12 col-sm-6 services-box">
 					<div class="services-inner">

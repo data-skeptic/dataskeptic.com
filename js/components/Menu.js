@@ -19,17 +19,19 @@ const Menu = props => {
 	}
 	return (
 		<div className="menu col-sm-12">
-			<ul class="topnav">
-				<NavLink active={pathname} to="/">Home</NavLink>
-				<NavLink active={pathname} to="/podcast">Podcast</NavLink>
-				<NavLink active={pathname} to="/blog">Blog</NavLink>
-				<NavLink active={pathname} to="/video">Videos</NavLink>
-				<NavLink active={pathname} to="/store">Store</NavLink>
-				<NavLink active={pathname} to="/proj">Projects</NavLink>
-				<NavLink active={pathname} to="/services">Services</NavLink>
-				<NavLink active={pathname} to="/members">Membership</NavLink>
-				{cart_link}
-			</ul>
+			<div class="menu-container">
+				<ul class="topnav">
+					<NavLink active={pathname} to="/">Home</NavLink>
+					<NavLink active={pathname} to="/podcast">Podcast</NavLink>
+					<NavLink active={pathname} to="/blog">Blog</NavLink>
+					<NavLink active={pathname} to="/video">Videos</NavLink>
+					<NavLink active={pathname} to="/store">Store</NavLink>
+					<NavLink active={pathname} to="/proj">Projects</NavLink>
+					<NavLink active={pathname} to="/services">Services</NavLink>
+					<NavLink active={pathname} to="/members">Membership</NavLink>
+					{cart_link}
+				</ul>
+			</div>
 		</div>
 	)
 }

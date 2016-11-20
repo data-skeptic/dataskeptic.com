@@ -506,6 +506,7 @@ redirects on old content
 SEO / crawlable?
 
 z-scores script in show notes broken
+crypto episode notes
 Lights LightsOutstripe recurring
 generateEpisodeMapfeed.rss lambda download
 from blog card, get from only non-epsiode, non-transcript
@@ -533,6 +534,8 @@ LATER
 	Set 1 hour callback to refresh localStorage, find new episodes
 	error page logging to cloudfront
 	unique <title>
+	anscombe's quartet show image
+	Using Data to Help Those in Crisis show image
 	realtime refresh?
 	Leave voice mail on the site
 	Embed script for episode

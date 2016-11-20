@@ -64,7 +64,7 @@ export default class Home extends React.Component {
 		}
 
 		return (
-			<div>
+			<div class="center">
 				<div class="row">
 					<div class="home-statement">
 						<h2>About Data Skeptic</h2>

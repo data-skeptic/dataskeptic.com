@@ -33,11 +33,11 @@ export default class Episode extends React.Component {
 		var d = ep.pubDate
 		var dstr = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate()
 		return (
-			<div class="episode">
-				<div class="episode-left">
+			<div class="row episode">
+				<div class="col-xs-12 col-sm-3 episode-left">
 					<img class="episode-img" src={ep.img} />
 				</div>
-				<div class="episode-middle">
+				<div class="col-xs-12 col-sm-9 episode-middle">
 					<p><span class="episode-title"><a href={ep.link}>{ep.title}</a></span></p>
 					<p>
 						{playing_symbol}
