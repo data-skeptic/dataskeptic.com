@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Link, Match, Miss } from 'react-router'
 import axios from "axios"
 import xml2js from "xml2js"
 
+import { calculateShipping, calculateTotal } from './store_utils'
+
 import Header from './Header'
 import Menu from './Menu'
 import Player from './Player'
@@ -117,8 +119,8 @@ export default class Site extends React.Component {
 		}
 
 		var persisted = this.loadState()
-		var total = this.calculateTotal(persisted.cart_items, persisted.country.short)
-		var shipping = this.calculateShipping(persisted.cart_items, persisted.country.short)
+		var total = calculateTotal(persisted.cart_items, persisted.country.short)
+		var shipping = calculateShipping(persisted.cart_items, persisted.country.short)
 
 		this.state = {
 			env: env,
@@ -157,7 +159,6 @@ export default class Site extends React.Component {
 					var blogs = result.data
 					var blogs_loaded = true
 					var folders = me.extractFolders(blogs)
-					console.log(blogs)
 					me.setState({blogs, blogs_loaded, folders})
 					localStorage.setItem("blogs", JSON.stringify(blogs))
 					localStorage.setItem("lastCacheBlogs", new Date().getTime()/1000)
@@ -240,8 +241,6 @@ export default class Site extends React.Component {
 		this.addToCart = this.addToCart.bind(this)
 		this.updateCartQuantity = this.updateCartQuantity.bind(this)
 		this.loadState = this.loadState.bind(this)
-		this.calculateTotal = this.calculateTotal.bind(this)
-		this.calculateShipping = this.calculateShipping.bind(this)
 	}
 
 	loadState() {
@@ -320,54 +319,10 @@ export default class Site extends React.Component {
 	
 	onChangeCountry(short, long) {
 		var country = {short, long}
-		var total = this.calculateTotal(this.state.cart_items, short)
-		var shipping = this.calculateShipping(this.state.cart_items, short)
+		var total = calculateTotal(this.state.cart_items, short)
+		var shipping = calculateShipping(this.state.cart_items, short)
 		this.setState({country, total, shipping})
 		localStorage.setItem("country", JSON.stringify(country))
-	}
-
-	calculateTotal(products, country) {
-		var shipping = this.calculateShipping(products, country)
-		var total = shipping
-		for (var i=0; i < products.length; i++) {
-			var item = products[i]
-			total += item.product.price * item.quan
-		}
-		return total
-	}
-	calculateShipping(items, short) {
-		var has_items = 0
-		var big_items = 0
-		var is_us = 1
-		if (short != "us") {
-			is_us = 0
-		}
-		for (var i=0; i < items.length; i++) {
-			var item = items[i]
-			if (item.product.type != "membership") {
-				has_items = 1
-			}
-			if (item.product.type != "membership" && item.product.price > 4) {
-				big_items = 1
-			}
-		}
-		var shipping = 0
-		if (has_items == 1) {
-			if (big_items == 1) {
-				if (is_us == 1) {
-					shipping = 4
-				} else {
-					shipping = 6
-				}
-			} else {
-				if (is_us == 1) {
-					shipping = 1
-				} else {
-					shipping = 2
-				}
-			}
-		}
-		return shipping
 	}
 
 	addToCart(product, size) {
@@ -390,8 +345,8 @@ export default class Site extends React.Component {
 			cart_items.push(cart_elem)
 		}
 		var short = this.state.country.short
-		var total = this.calculateTotal(cart_items, short)
-		var shipping = this.calculateShipping(cart_items, short)
+		var total = calculateTotal(cart_items, short)
+		var shipping = calculateShipping(cart_items, short)
 		this.setState({cart_items, total, shipping})
 		localStorage.setItem("cart_items", JSON.stringify(cart_items))
 	}
@@ -420,8 +375,8 @@ export default class Site extends React.Component {
 			}
 		}
 		var short = this.state.country.short
-		var total = this.calculateTotal(cart_items, short)
-		var shipping = this.calculateShipping(cart_items, short)
+		var total = calculateTotal(cart_items, short)
+		var shipping = calculateShipping(cart_items, short)
 		this.setState({cart_items, total, shipping})
 		localStorage.setItem("cart_items", JSON.stringify(cart_items))
 	}
@@ -501,7 +456,6 @@ google analytics
 redirects on old content
 SEO / crawlable?
 
-
 crypto episode notes
 z-scores script in show notes broken
 BLOG author images
@@ -512,10 +466,6 @@ transcripts linked from episode
 
 causal impact
 */
-
-
-
-
 
 
 
