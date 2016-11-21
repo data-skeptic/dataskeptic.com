@@ -95,6 +95,15 @@ h1 {
 }
 
 @media screen and (max-width: 700px) {
+  .menuzz {
+    visibility: hidden;
+    display: none;
+  }
+}
+
+//hamburger-menu.png
+
+@media screen and (max-width: 700px) {
 }
 
 @media screen and (max-width:735px) {
@@ -292,7 +301,7 @@ ul.topnav li.right {float: right;}
   border-style: solid;
   border-radius: 2px;
   border-width: 1px;
-  padding: 0 2 2 5px;
+  padding: 20 2 20 5px;
   background-color: #eee;
 }
 
@@ -316,17 +325,19 @@ ul.topnav li.right {float: right;}
   padding: 10px;
   width: 180px;
 }
+.home-episode-card-desc {
+  font-size:10pt
+}
 .home-player-button-container {
 }
 .home-episode-card-right {
   padding: 10px;
-  background-color: #aaa;
+  background-color: #eee;
   border-radius: 5px;
-  height: 100%;
   text-align: center;
 }
 .home-player-card {
-
+  text-align: center;
 }
 .home-player-title {
   font-size: 14pt;
@@ -334,43 +345,6 @@ ul.topnav li.right {float: right;}
 .home-player-date {
   font-size: 10pt;
   font-weight: bold;
-}
-
-.home-episode-card {
-  height: 100%;
-}
-.home-episode-card-left {
-  float: left;
-}
-.home-episode-card-img {
-  padding: 10px;
-  width: 180px;
-}
-.home-player-button-container {
-}
-.home-episode-card-right {
-  padding: 10px;
-  background-color: #aaa;
-  border-radius: 5px;
-  height: 100%;
-  text-align: center;
-}
-.home-player-card {
-
-}
-.home-player-title {
-  font-size: 14pt;
-}
-.home-player-date {
-  font-size: 10pt;
-  font-weight: bold;
-}
-
-.home-player-left {
-  margin-top: 5px;
-}
-
-.home-player-right {
 }
 
 .player-label {
@@ -406,13 +380,13 @@ ul.topnav li.right {float: right;}
 }
 
 .episode-button {
-  float: left;
-  border-radius: 25px;
-  background-color: #c997fe;
-  width: 30px;
-  height: 30px;
+  border-radius: 30px;
+  border-width: 1px;
+  background-color: #ffa;
+  width: 50px;
+  height: 50px;
+  font-size: 16pt;
   text-align: center;
-  margin-right: 5px;
 }
 
 .episode-download-button {
@@ -798,6 +772,13 @@ ul.topnav li.right {float: right;}
   font-size: 10pt;
   line-height: 10pt;
 }
+.address-validation-msg {
+  background-color: #faa;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  border-radius: 2px;
+  padding: 2 2 2 5px;
+}
 
 .shipping-address-title {
   font-size: 14pt;
@@ -807,7 +788,6 @@ ul.topnav li.right {float: right;}
 .address-label {
   font-size: 8pt;
   height: 15px;
-  overflow: hidden;
 }
 
 .address-row {
@@ -907,7 +887,6 @@ ul.topnav li.right {float: right;}
   border-color: #000;
   border-style: solid;
   font-size: 12pt;
-  height: 400px;
 }
 
 .home-episode-card {
@@ -948,7 +927,7 @@ ul.topnav li.right {float: right;}
   background-repeat: repeat;
   height: 100%;
   color: #fff;
-  padding: 30 10 10 10px;
+  padding: 75 10 10 10px;
   text-align: center;
   font-size: 18pt;
 }
@@ -1242,7 +1221,7 @@ button.slick-arrow.slick-prev {
 /* Slider */
 .slick-slider
 {
-    height: 200px;
+    height: 300px;
 
     position: relative;
 

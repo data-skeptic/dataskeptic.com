@@ -18,7 +18,7 @@ export default class Checkout extends React.Component {
 			stripeLoading: false,
 			stripeLoadingError: false,
 			submitDisabled: false,
-			paymentError: null,
+			paymentError: "",
 			paymentComplete: false,
 			token: null,
 			sizeSelected: {},
@@ -102,14 +102,14 @@ export default class Checkout extends React.Component {
 
 	onSubmit(event) {
 		var self = this
-		this.setState({ submitDisabled: true, paymentError: null })
+		this.setState({ submitDisabled: true, paymentError: "" })
 		var msg = ""
 		var valid = true
 		var address = this.state.address
 		// TODO: do some validation on the address
 		var res = this.validate(address)
 		var valid = res.isvalid
-		var msg = res.msg
+		var msg = ""
 		var focus = res.focus
 		var focus_msg = res.focus_msg
 		if (!valid) {
@@ -127,8 +127,9 @@ export default class Checkout extends React.Component {
 			var products = self.props.cart_items
 			var total    = self.props.total
 			if (response.error) {
+
 				paymentError = response.error.message
-				self.setState({ paymentError, submitDisabled: false });
+				self.setState({ paymentError, focus_msg: "", submitDisabled: false });
 				console.log("error: " + paymentError)
 				return
 			} else {

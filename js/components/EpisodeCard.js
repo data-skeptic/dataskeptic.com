@@ -26,6 +26,13 @@ export default class LatestEpisodeCard extends React.Component {
 			}
 			var d = ep.pubDate
 			var dstr = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate()
+			var desc = ep.desc
+			var x = 200
+			if (desc.length > x) {
+				var i = desc.indexOf(" ", x)
+				desc = desc.substring(0, i)
+				desc += "... <a href=\"" + ep.link + "\">[more]</a>"
+			}
 			return (
 				<div class="home-episode-card">
 					<div class="home-episode-card-left">
@@ -36,6 +43,10 @@ export default class LatestEpisodeCard extends React.Component {
 						<p><span class="home-player-title"><a href={ep.link}>{ep.title}</a></span></p>
 						<p><span class="home-player-date">{dstr}</span></p>
 						<div class="home-player-button-container"><p>{playing_symbol}</p></div>
+					</div>
+					<div class="home-episode-card-desc">
+						<span dangerouslySetInnerHTML={{__html: desc}} />
+						
 					</div>
 				</div>
 			)

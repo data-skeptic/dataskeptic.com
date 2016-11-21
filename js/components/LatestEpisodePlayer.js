@@ -28,15 +28,11 @@ export default class LatestEpisodePlayer extends React.Component {
 			var d = ep.pubDate
 			var dstr = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate()
 			return (
-				<div>
-					<div class="home-player-left">
-						{playing_symbol}
-					</div>
-					<div class="home-player-right">
+				<div class="home-player-card">
 						<p><span class="home-player-latest">{title}</span></p>
 						<div class="home-player-title"><a href={ep.link}>{ep.title}</a></div>
 						<p>{dstr}</p>
-					</div>
+						{playing_symbol}
 				</div>
 			)
 		}

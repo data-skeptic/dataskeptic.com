@@ -39,8 +39,15 @@ export default class Home extends React.Component {
 			episode = this.props.episodes[0]
 			old_episode = this.props.episodes[52]
 		}
-		if (this.props.blogs.length > 0) {
-			blog = this.props.blogs[0]
+		for (var i=0; i < this.props.blogs.length; i++) {
+			var b = this.props.blogs[i]
+			var pn = b.prettyname
+			if (pn.indexOf("episodes") == -1) {
+				if (pn.indexOf("transcripts") == -1) {
+					blog = b
+					i = this.props.blogs.length
+				}
+			}
 		}
 	    var settings = {
 	      dots: true,
@@ -76,16 +83,16 @@ export default class Home extends React.Component {
 						<div class="carousel">
 							<Slider {...settings}>
 								<div class="card">
-									<EpisodeCard episode={episode} title="Latest episode" onPlayToggle={onPlayToggle} is_playing={is_playing} />
-								</div>
-								<div class="card">
 									<LatestBlogCard blog={blog} />
 								</div>
 								<div class="card">
-									<EpisodeCard episode={old_episode} title="From the archives" onPlayToggle={onPlayToggle} is_playing={is_playing} />
+									<EpisodeCard episode={episode} title="Latest episode" onPlayToggle={onPlayToggle} is_playing={is_playing} />
 								</div>
 								<div class="card">
 									<SocialMediaCard />
+								</div>
+								<div class="card">
+									<EpisodeCard episode={old_episode} title="From the archives" onPlayToggle={onPlayToggle} is_playing={is_playing} />
 								</div>
 							</Slider>
 						</div>

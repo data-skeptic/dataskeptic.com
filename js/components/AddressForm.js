@@ -17,10 +17,14 @@ export default class AddressForm extends React.Component {
 		var props = this.props
 		var focus = props.focus
 		var focus_msg = props.focus_msg
+		var abox = <div></div>
+		if (focus_msg != "") {
+			abox = <div class="col-xs-12 address-validation-msg">{focus_msg}</div>
+		}
 		return (
 			<div class="row address-form">
 				<div class="col-xs-12 shipping-address-title">{props.title}</div>
-				<div class="col-xs-12">{focus_msg}</div>
+				{abox}
 				<div class="col-xs-12 col-sm-2 address-label">First name:</div>
 				<div class="col-xs-12 col-sm-4">
 					<input autoFocus={true} type="text" class="address-input first_name" ref="first_name" onChange={props.onAddressChange} />
@@ -52,7 +56,7 @@ export default class AddressForm extends React.Component {
 			    </div>
 
 				<div class="col-xs-12 col-sm-2 address-label">Country</div>
-				<div class="col-xs-12 col-sm-10 address-label"><span class="checkout-country">{props.country}</span></div>
+				<div class="col-xs-12 col-sm-10 address-label"><div class="checkout-country">{props.country}</div></div>
 
 				<div class="col-xs-12 col-sm-2 address-label">Postal / zipcode:</div>
 				<div class="col-xs-12 col-sm-10">

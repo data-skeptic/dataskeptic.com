@@ -13,12 +13,18 @@ export default class Episode extends React.Component {
 	render() {
 		var paymentError = this.props.paymentError
 		var submitDisabled = this.props.submitDisabled
+		var abox = <div></div>
+		if (paymentError != "") {
+			abox = (
+				<div class="row">
+					<div class="col-xs-12 payment-error"><p>{ paymentError }</p></div>
+				</div>
+			)
+		}
 		return (
 			<div class="cc-outer">
 				<form onSubmit={this.handleSubmit.bind(this)}>
-					<div class="row">
-						<div class="col-xs-12 payment-error"><p>{ paymentError }</p></div>
-					</div>
+					{abox}
 					<div class="row">
 						<input class="col-xs-12 cc-num" type='text' data-stripe='number' placeholder='credit card number' /><br />
 					</div>
