@@ -43,7 +43,6 @@ export default class LightsOut extends React.Component {
 		var arr = id.split("c")
 		var r = parseInt(arr[1])
 		var c = parseInt(arr[2])
-		console.log([r, c])
 		var grid = this.state.grid
 		grid = this.flip(grid, r, c)
 		grid = this.flip(grid, r, c+1)
@@ -63,7 +62,6 @@ export default class LightsOut extends React.Component {
 		}
 		var me = this
 		if (!this.state.won) {
-			console.log(grid)
 			return (
 				<div class="center">
 					<h2>Lights Out</h2>

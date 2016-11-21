@@ -490,6 +490,8 @@ PLAYER
 Spinning logo on waiting for file download in all relevant buttons, not use bar
 howler working?
 
+mathjax http://localhost:8080/blog/episodes/2014/bayesian-updating
+
 create redirects map from XML
 
 Stripe recurring for memberships

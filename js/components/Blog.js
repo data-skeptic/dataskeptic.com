@@ -65,16 +65,18 @@ export default class Blog extends React.Component {
 			)
 		}
 		pathname = pathname.substring("/blog".length, pathname.length)
-		var blog = undefined
-		for (var i in blogs) {
-			var b = blogs[i]
-			var pn = b["prettyname"]
-			if (pn == pathname) {
-				console.log("match")
-				blog = b
+		var fn = function(pn, blogs) {
+			for (var i in blogs) {
+				var b = blogs[i]
+				var pn = b["prettyname"]
+				if (pn == pathname) {
+					console.log("match")
+					return b
+				}
 			}
+			return undefined
 		}
-		console.log("Not found!")
+		var blog = fn(pathname, blogs)
 		console.log(blog)
 		if (blog == undefined) {
 			// TODO: make this general and not error prone
