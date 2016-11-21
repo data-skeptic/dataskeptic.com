@@ -33,6 +33,7 @@ export default class CountrySelector extends React.Component {
 		var scountry = this.props.country
 		return (
 			<div class="country-selector">
+				Country: 
 				<select class="country" onChange={this.onChange} value={scountry.short}>
 					{this.state.countries.map(function(country) {
 						return (

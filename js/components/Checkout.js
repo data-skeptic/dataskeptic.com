@@ -32,7 +32,9 @@ export default class Checkout extends React.Component {
 				zip: "",
 				phone: "",
 				email: ""
-			}
+			},
+			focus: "",
+			focus_msg: ""
 		}
 		if (prod) {
 			var key = 'pk_live_voDrzfYzsfKP33iuzmhxL4JY'
@@ -78,24 +80,24 @@ export default class Checkout extends React.Component {
 
 	validate(address) {
 		if (address.last_name.trim() == "") {
-			return {isvalid: false, msg: "Please enter your name"}
+			return {isvalid: false, msg: "Please enter your name", focus: "last_name", focus_msg: "Please enter your name"}
 		}
 		if (address.street_1.trim() == "") {
-			return {isvalid: false, msg: "Please provide a street address"}
+			return {isvalid: false, msg: "Please provide a street address", focus: "street_1", focus_msg: "Please enter your street address"}
 		}
 		if (address.city.trim() == "") {
-			return {isvalid: false, msg: "Please provide a valid city"}
+			return {isvalid: false, msg: "Please provide a valid city", focus: "city", focus_msg: "Please enter your city"}
 		}
 		if (address.state.trim() == "") {
-			return {isvalid: false, msg: "Please provide a state / province"}
+			return {isvalid: false, msg: "Please provide a state / province", focus: "state", focus_msg: "Please enter your state/province"}
 		}
 		if (address.zip.trim() == "") {
-			return {isvalid: false, msg: "Please provide a postal code"}
+			return {isvalid: false, msg: "Please provide a postal code", focus: "zip", focus_msg: "Please enter your postal code"}
 		}
 		if (address.phone.trim() == "") {
-			return {isvalid: false, msg: "Please provide a phone number"}
+			return {isvalid: false, msg: "Please provide a phone number", focus: "phone", focus_msg: "Please enter your phone number"}
 		}
-		return {isvalid: true, msg: ""}
+		return {isvalid: true, msg: "", focus: "", focus_msg: ""}
 	}
 
 	onSubmit(event) {
@@ -108,9 +110,11 @@ export default class Checkout extends React.Component {
 		var res = this.validate(address)
 		var valid = res.isvalid
 		var msg = res.msg
+		var focus = res.focus
+		var focus_msg = res.focus_msg
 		if (!valid) {
-			console.log("not valid")
-			this.setState({ submitDisabled: false, paymentError: msg })
+			console.log("not valid: " + msg)
+			this.setState({ submitDisabled: false, paymentError: msg, focus, focus_msg })
 			return false
 		}
 		Stripe.createToken(event.target, function(status, response) {
@@ -153,6 +157,7 @@ export default class Checkout extends React.Component {
 		var address = JSON.parse(JSON.stringify(this.state.address))
 		var target = event.target
 		var cls = target.className
+		cls = cls.replace("address-input ", "")
 		var val = target.value
 		address[cls] = val
 		this.setState({address})
@@ -179,7 +184,7 @@ export default class Checkout extends React.Component {
 						<h3>Checkout</h3>
 						<div class="row checkout-box">
 						    <div class="col-xs-12 col-sm-8">
-						        <AddressForm title="Shipping Address" country={country} onAddressChange={this.onAddressChange.bind(this)} address={address} />
+						        <AddressForm focus={this.state.focus} focus_msg={this.state.focus_msg} title="Shipping Address" country={country} onAddressChange={this.onAddressChange.bind(this)} address={address} />
 						    </div>
 						    <div class="col-xs-12 col-sm-4">
 						        <CreditCardForm onSubmit={this.onSubmit.bind(this)} paymentError={this.state.paymentError} submitDisabled={this.state.submitDisabled} />

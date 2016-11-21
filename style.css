@@ -132,11 +132,15 @@ h1 {
   color: #000;
 }
 
+.menu-cart-wrap {
+  display: inline;
+}
+
 .menu-cart-container {
   background-image: url("/img/png/checkout.png");   
-  height: 20px;
-  width: 20px;
-  background-size: 20px 20px;
+  height: 18px;
+  width: 18px;
+  background-size: 18px 18px;
   background-repeat: no-repeat;
 }
 
@@ -711,7 +715,11 @@ ul.topnav li.right {float: right;}
  Checkout.js
 *****************************************************************************/
 
-.cart-table {
+.cart-end {
+  margin-top: 10px;
+  padding-top: 10px;
+  background-color: #eee;
+  padding: 0px;
 }
 .cart-button {
   background-color: #aaa;
@@ -720,21 +728,6 @@ ul.topnav li.right {float: right;}
   padding: 0px;
   height: 20px;
   margin: 1px;
-}
-.cart-thl {
-  background-color: #eee;
-}
-.cart-thc {
-  background-color: #eee;
-  text-align: center;
-}
-.cart-thq {
-  background-color: #eee;
-  text-align: center;
-}
-.cart-thr {
-  background-color: #ddd;
-  text-align: right;
 }
 .cart-title {
 
@@ -753,6 +746,11 @@ ul.topnav li.right {float: right;}
   text-align: center;
 }
 
+.country {
+  margin-left: 10px;
+  background-color: #fff;
+}
+
 .cart-subtotal {
   text-align: right;
   font-weight: bold;
@@ -761,7 +759,6 @@ ul.topnav li.right {float: right;}
   text-align: right;
   font-weight: bold;
   font-size: 12pt;
-  background-color: #eee;
 }
 
 .btnCheckoutContainer {
@@ -797,6 +794,11 @@ ul.topnav li.right {float: right;}
 .address-form {
 }
 
+.checkout-country {
+  font-size: 10pt;
+  line-height: 10pt;
+}
+
 .shipping-address-title {
   font-size: 14pt;
   margin: 10 0 10 0px;
@@ -826,26 +828,35 @@ ul.topnav li.right {float: right;}
 }
 
 .cc-outer {
-  float: left;
-  padding: 5 4 3 14px;
+  margin-top: 10px;
+  padding: 15px;
   background-color: #fff;
 }
 
 .cc-yymm {
-  width: 50px;
+  margin-top: 10px;
+  border-width: 1px;
+  border-style: solid;
 }
 
 .cc-cvc {
-  margin-left: 10px;
-  width: 75;
+  margin-top: 10px;
+  border-width: 1px;
+  border-style: solid;
 }
 
 .cc-num {
-  width: 185px;
+  margin-top: 10px;
+  border-width: 1px;
+  border-style: solid;
 }
 
 .cc-purchase {
-  width: 185px;
+  margin-top: 10px;
+  border-color: #aaa;
+  border-width: 1px;
+  padding: 5 2 2 5px;
+  border-style: solid;
 }
 
 .payment-error {
@@ -916,17 +927,10 @@ ul.topnav li.right {float: right;}
   margin-bottom: 25px;
 }
 .cart-rows {
-  padding: 0px;
+  padding: 10 0 0 0px;
   margin: 10px;
   border-width: 1px;
-  border-color: #aaa;
   border-style: solid;
-}
-.cart-table th {
-  padding: 5px;
-}
-.cart-table td {
-  padding: 5px;
 }
 
 .home-latest-blog-top {

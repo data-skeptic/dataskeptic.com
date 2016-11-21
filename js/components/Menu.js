@@ -13,9 +13,15 @@ const Menu = props => {
 		<div class="menu-cart-container"></div>
 		</NavLink>
 	} else {
-		var cart_link = <NavLink to="/checkout" active={pathname}>
-		<div class="menu-cart-container"><div class="menu-cart-inner">{item_count}</div></div>
-		</NavLink>
+		var cart_link = (
+			<div class="menu-cart-wrap">
+				<NavLink to="/checkout" active={pathname}>
+					<div class="menu-cart-container">
+						<div class="menu-cart-inner">{item_count}</div>
+					</div>
+				</NavLink>
+			</div>
+		)
 	}
 	return (
 		<div className="menu col-sm-12">

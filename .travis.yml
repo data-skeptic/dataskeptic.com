@@ -20,6 +20,7 @@ deploy:
       bucket: dev.dataskeptic.com
       endpoint: http://dev.dataskeptic.com.s3-website-us-east-1.amazonaws.com
       skip_cleanup: true
+      detect_encoding: true
       acl: public_read
       on:
           branch: dev
@@ -29,6 +30,7 @@ deploy:
       bucket: dataskeptic.com
       endpoint: http://dataskeptic.com.s3-website-us-east-1.amazonaws.com
       skip_cleanup: true
+      detect_encoding: true
       acl: public_read
       on:
           branch: master

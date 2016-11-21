@@ -487,9 +487,8 @@ export default class Site extends React.Component {
 
 /*
 PLAYER
-	Spinning logo on waiting for file download in all relevant buttons, not use bar
-	Howler buffering
-
+Spinning logo on waiting for file download in all relevant buttons, not use bar
+howler working?
 
 create redirects map from XML
 
@@ -502,18 +501,14 @@ SEO / crawlable?
 
 
 crypto episode notes
-
 z-scores script in show notes broken
 BLOG author images
-LightsOut
 generateEpisodeMapfeed.rss lambda download
 from blog card, get from only non-epsiode, non-transcript
-video width mobile
-causal impact
 caurosel taller
-remove label on mobile for compactness
-size pull down in store on mobile is fucked up
 transcripts linked from episode
+
+causal impact
 */
 
 
