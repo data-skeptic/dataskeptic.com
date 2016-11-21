@@ -29,9 +29,8 @@ const Menu = props => {
 				<div class="menu-container-inner">
 					<ul class="topnav">
 						<NavLink active={pathname} to="/">Home</NavLink>
-						<NavLink active={pathname} to="/podcast">Podcast</NavLink>
+						<NavLink active={pathname} to="/podcast">Podcasts</NavLink>
 						<NavLink active={pathname} to="/blog">Blog</NavLink>
-						<NavLink active={pathname} to="/video">Videos</NavLink>
 						<NavLink active={pathname} to="/store">Store</NavLink>
 						<NavLink active={pathname} to="/proj">Projects</NavLink>
 						<NavLink active={pathname} to="/services">Services</NavLink>
