@@ -78,7 +78,7 @@ export default class Membership extends React.Component {
 							if (product.active == 1 && product.type=="membership" && product.price >= 128) {
 								var pid = product.id
 								return (
-									<div key={pid} class="col-xs-12 col-sm-3 membership-container">
+									<div key={pid} class="col-xs-12 col-sm-4 membership-container">
 										<div class="membership-inner">
 											<img class="membership-img" src={product.img} />
 											<div class="membership-title">{product.title}</div>

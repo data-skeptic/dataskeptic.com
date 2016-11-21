@@ -6,9 +6,8 @@ const SizeSelector = props => {
 	} else {
 		return (
 			<div>
-				<span class="size-selector-label">Sizes:</span>
 				<select id={props.id} value={props.value} onChange={props.onChange}>
-					<option key="default" value="default"> -- Please select -- </option>
+					<option key="default" value="default"> -- Please select size -- </option>
 					{props.sizes.map(function(size) {
 						return <option key={size} value={size}>{size}</option>
 					})}

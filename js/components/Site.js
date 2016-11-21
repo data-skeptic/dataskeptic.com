@@ -489,15 +489,10 @@ export default class Site extends React.Component {
 PLAYER
 	Spinning logo on waiting for file download in all relevant buttons, not use bar
 	Howler buffering
-BLOG
-	author images
-	deploy breaks at chi-squared
 
-SNL art
 
 create redirects map from XML
 
-t-shirt image
 Stripe recurring for memberships
 
 configure env for Production
@@ -505,9 +500,12 @@ google analytics
 redirects on old content
 SEO / crawlable?
 
-z-scores script in show notes broken
+
 crypto episode notes
-Lights LightsOutstripe recurring
+
+z-scores script in show notes broken
+BLOG author images
+LightsOut
 generateEpisodeMapfeed.rss lambda download
 from blog card, get from only non-epsiode, non-transcript
 video width mobile

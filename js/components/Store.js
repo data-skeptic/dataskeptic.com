@@ -38,14 +38,6 @@ export default class Store extends React.Component {
 			return (
 				<div class="center">
 					<div class="store-items">
-						<div class="product-outer">
-							<div class="product-header">
-								<div class="product-header-item">Item</div>
-								<div class="product-header-options"></div>
-								<div class="product-header-price">Price</div>
-							</div>
-							<div class="clear"></div>
-						</div>
 						{products.map(function(product) {
 							return <StoreItem key={product.id} product={product} addToCart={me.props.addToCart} />
 						})}

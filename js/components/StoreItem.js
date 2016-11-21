@@ -53,29 +53,32 @@ export default class Store extends React.Component {
 				cls = "add-to-cart-clicked"
 			}
 			return (
-				<div class="product-outer">
-					<div class="product-row">
-						<div class="product-main">
+				<div class="row prod-outer">
+					<div class="col-xs-12 col-sm-4">
+						<div class="prod-img">
 							<img class="product-image" src={product.img} />
-							<div class="product-inner">
-								<div class="product-title">{product.title}</div>
-								<div class="product-desc">{product.desc}</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-8">
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="prod-desc">
+									<span class="product-title">{product.title}</span>
+									<br/>
+									<span class="product-desc">{product.desc}</span>
+								</div>
 							</div>
 						</div>
-
-						<div class="product-right">
-							<div class="product-right-top">
-								<div class="product-pull-down">
-									<SizeSelector id={sizeSelectorId} sizes={product['sizes']} value={selection} onChange={this.onSizeSelection.bind(this)} />
-								</div>
-								<div class="product-price">
-									${product.price}
-									<button class={cls} id={btnId} onClick={this.onAddToCart.bind(this)}>+</button>
-								</div>
+						<div class="row">
+							<div class="col-xs-8 product-pull-down">
+								<SizeSelector id={sizeSelectorId} sizes={product['sizes']} value={selection} onChange={this.onSizeSelection.bind(this)} />
+							</div>
+							<div class="col-xs-2 product-price">${product.price}</div>
+							<div class="cls-xs-2">
+								<button class={cls} id={btnId} onClick={this.onAddToCart.bind(this)}>+</button>
 							</div>
 						</div>
 					</div>
-					<div class="clear"></div>
 				</div>
 			)
 		} else {

@@ -66,7 +66,7 @@ export default class Home extends React.Component {
 		return (
 			<div class="center">
 				<div class="row">
-					<div class="home-statement">
+					<div class="col-sm-12 home-statement">
 						<h2>About Data Skeptic</h2>
 						<p>Data Skeptic is the weekly podcast that is skeptical of and with data.  We explain the methods and algorithms that power our world in an accessible manner through our short mini-episode discussions and our longer interviews with experts in the field.</p>
 					</div>
