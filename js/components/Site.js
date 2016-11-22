@@ -442,7 +442,7 @@ export default class Site extends React.Component {
 						<Match pattern="/lightsout" component={LightsOut} />
 						<Miss component={NotFound} />
 						<Footer />
-						<Sidebar className="sidebar" toggleCart={this.toggleCart} cart_visible={cart_visible} cart_items={this.state.cart_items} updatable={true} onChangeCountry={this.state.onChangeCountry} country={this.state.country} updateCartQuantity={this.state.updateCartQuantity} shipping={this.state.shipping} total={this.state.total} />
+						<Sidebar className="sidebar" toggleCart={this.toggleCart} cart_visible={cart_visible} cart_items={this.state.cart_items} updatable={true} onChangeCountry={this.onChangeCountry.bind(this)} country={this.state.country} updateCartQuantity={this.state.updateCartQuantity} shipping={this.state.shipping} total={this.state.total} />
 					</div>
 				</div>
 			</Router>
