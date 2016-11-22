@@ -15,11 +15,11 @@ const Menu = props => {
 	} else {
 		var cart_link = (
 			<div class="menu-cart-wrap">
-				<NavLink to="/checkout" active={pathname}>
+				<button class="btn-open-cart-drawer" onClick={props.toggleCart}>
 					<div class="menu-cart-container">
 						<div class="menu-cart-inner">{item_count}</div>
 					</div>
-				</NavLink>
+				</button>
 			</div>
 		)
 	}

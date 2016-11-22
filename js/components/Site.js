@@ -21,6 +21,7 @@ import Membership from './Membership'
 import Footer from './Footer'
 import NotFound from './NotFound'
 import LightsOut from './LightsOut'
+import Sidebar from './Sidebar'
 
 const MatchWithProps = ({ component: Component, props, ...rest }) => (
   <Match {...rest} render={(matchProps) => (
@@ -134,6 +135,8 @@ export default class Site extends React.Component {
 			products: products,
 			products_loaded: products_loaded,
 			cart_items: persisted.cart_items,
+			cart_right: undefined,
+			cart_visible: false,
 			total: total,
 			shipping: shipping,
 			router: undefined,
@@ -241,6 +244,7 @@ export default class Site extends React.Component {
 		this.addToCart = this.addToCart.bind(this)
 		this.updateCartQuantity = this.updateCartQuantity.bind(this)
 		this.loadState = this.loadState.bind(this)
+		this.toggleCart = this.toggleCart.bind(this)
 	}
 
 	loadState() {
@@ -380,6 +384,11 @@ export default class Site extends React.Component {
 		this.setState({cart_items, total, shipping})
 		localStorage.setItem("cart_items", JSON.stringify(cart_items))
 	}
+    toggleCart() {
+    	var cart_visible = this.state.cart_visible
+    	cart_visible = !cart_visible
+    	this.setState({cart_visible: cart_visible})
+    }
 
 	render() {
 		var env = this.state.env
@@ -406,6 +415,7 @@ export default class Site extends React.Component {
 		var shipping = this.state.shipping
 		var bucket = this.state.bucket
 		var folders = this.state.folders
+		var cart_visible = this.state.cart_visible
 		return (
 			<Router>
 				<div class="site">
@@ -414,7 +424,7 @@ export default class Site extends React.Component {
 							<Header />
 						</div>
 						<div class="row row-centered">
-							<MatchWithProps pattern="*" component={Menu} props={{ item_count }} />
+							<MatchWithProps pattern="*" component={Menu} props={{ item_count, toggleCart: this.toggleCart }} />
 						</div>
 						<div class="row row-centered">
 							<Player config={player} onPlayToggle={this.onPlayToggle.bind(this)} episodes_loaded={this.state.episodes_loaded} />
@@ -432,6 +442,7 @@ export default class Site extends React.Component {
 						<Match pattern="/lightsout" component={LightsOut} />
 						<Miss component={NotFound} />
 						<Footer />
+						<Sidebar className="sidebar" toggleCart={this.toggleCart} cart_visible={cart_visible} cart_items={this.state.cart_items} updatable={true} onChangeCountry={this.state.onChangeCountry} country={this.state.country} updateCartQuantity={this.state.updateCartQuantity} shipping={this.state.shipping} total={this.state.total} />
 					</div>
 				</div>
 			</Router>
@@ -465,6 +476,7 @@ caurosel taller
 transcripts linked from episode
 
 causal impact
+99% invisible for download
 */
 
 

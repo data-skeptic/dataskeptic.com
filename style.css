@@ -689,6 +689,45 @@ ul.topnav li.right {float: right;}
  Checkout.js
 *****************************************************************************/
 
+@cart-width:250px;
+
+.sidebar {
+    background-color: #00f;
+}
+
+.sidebar-visible {
+    -webkit-transition:1s;
+    background-color: #ddd;
+    position: absolute;
+    margin: 0px;
+    padding: 0px;
+    top: 0px;
+    right: 0px;
+    width: 350px;
+    height: 100%;
+    .transition(-webkit-transform ease 250ms); 
+        .transition(transform ease 250ms);
+}
+.sidebar-hidden {
+    -webkit-transition:1s;
+    background-color: #222;
+    position: absolute;
+    margin: 0px;
+    padding: 0px;
+    top: 0px;
+    right: -350px;
+    width: 350px;
+    height: 100%;
+    overflow: hidden;
+.transition(-webkit-transform ease 250ms); 
+        .transition(transform ease 250ms);
+}
+
+.btn-open-cart-drawer {
+  background-color: transparent;
+  border-width: 0px;
+}
+
 .cart-end {
   margin-top: 10px;
   padding-top: 10px;
