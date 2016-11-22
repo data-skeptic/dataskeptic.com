@@ -1,0 +1,48 @@
+.btn {
+    width: 100%;
+    padding: 20px;
+}
+
+.input-sm {
+}
+
+.shiny-input-container {
+    font-size: 8pt;
+    line-height: 8pt;
+}
+
+.well {
+    background-color: #eee;
+    padding: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 0px;
+    height: 100%;
+}
+.form-group {
+}
+
+.input-group-addon {
+    font-size: 8pt;    
+}
+h2 {
+    color: #fff;
+}
+.header {
+    background-color: #282828;
+    margin: 0px;
+    padding: 10px;
+    color: #ccc;
+}
+a {
+    color: #aaf;
+    font-weight: bold;
+}
+.container-fluid {
+    margin: 0px;
+    padding: 0px;
+}
+body {
+    margin: 0px;
+    padding: 0px;
+}
