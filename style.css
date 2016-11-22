@@ -698,7 +698,7 @@ ul.topnav li.right {float: right;}
 .sidebar-visible {
     -webkit-transition:1s;
     background-color: #ddd;
-    position: absolute;
+    position: fixed;
     margin: 0px;
     padding: 0px;
     top: 0px;
@@ -711,7 +711,7 @@ ul.topnav li.right {float: right;}
 .sidebar-hidden {
     -webkit-transition:1s;
     background-color: #222;
-    position: absolute;
+    position: fixed;
     margin: 0px;
     padding: 0px;
     top: 0px;
