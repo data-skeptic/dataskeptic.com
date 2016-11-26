@@ -13,7 +13,7 @@ export default class BlogListItem extends Component {
             var date = blog["publish_date"]
         }
         return (
-            <div class="col-xs-12 col-sm-6">
+            <div class="col-xs-12">
 	            <div class="blog-summary" key={blog.uri}>
 	                <Link class="blog-title" to={pn}>{blog.title}</Link>
 	                <span class="blog-date">{date}</span>

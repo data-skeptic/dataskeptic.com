@@ -485,9 +485,12 @@ ul.topnav li.right {float: right;}
 }
 
 .blog-summary {
-  background-color: #eee;
-  padding: 10px;
+  padding: 30px;
   margin: 10px;
+  margin-bottom: 50px;
+  border-width: 1 0 0 0px;
+  border-color: #333;
+  border-style: dashed;
 }
 
 .blog-title {

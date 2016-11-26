@@ -117,6 +117,21 @@ export default class Checkout extends React.Component {
 			this.setState({ submitDisabled: false, paymentError: msg, focus, focus_msg })
 			return false
 		}
+		/*
+var stripe = require("stripe")("sk_test_JDu4VvArX2Oa2vh0DOek972y");
+
+// Get the credit card details submitted by the form
+var token = request.body.stripeToken; // Using Express
+
+stripe.customers.create({
+  source: token,
+  plan: "gold",
+  email: "payinguser@example.com"
+}, function(err, customer) {
+  // ...
+});
+https://stripe.com/docs/subscriptions/tutorial		
+		*/
 		Stripe.createToken(event.target, function(status, response) {
 			var paymentError = ""
 			var paymentComplete = false
