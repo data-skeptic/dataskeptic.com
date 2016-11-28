@@ -1,8 +1,9 @@
 import React from 'react'
-import { BrowserRouter as Router, Link, Match, Miss } from 'react-router'
+import { BrowserRouter as Router, Link, Match, Miss, browserHistory } from 'react-router'
 
 import axios from "axios"
 import xml2js from "xml2js"
+import ReactGA from 'react-ga'
 
 import { calculateShipping, calculateTotal } from './store_utils'
 
@@ -23,6 +24,7 @@ import NotFound from './NotFound'
 import LightsOut from './LightsOut'
 import Sidebar from './Sidebar'
 import SnlImpact from './l/SnlImpact'
+
 
 const MatchWithProps = ({ component: Component, props, ...rest }) => (
   <Match {...rest} render={(matchProps) => (
@@ -246,6 +248,12 @@ export default class Site extends React.Component {
 		this.updateCartQuantity = this.updateCartQuantity.bind(this)
 		this.loadState = this.loadState.bind(this)
 		this.toggleCart = this.toggleCart.bind(this)
+		this.logPageView = this.logPageView.bind(this)
+
+		console.log("Initialize GA")
+		ReactGA.initialize("UA-88166505-1", {
+		  debug: false
+		});		
 	}
 
 	loadState() {
@@ -391,6 +399,18 @@ export default class Site extends React.Component {
     	var cart_visible = this.state.cart_visible
     	cart_visible = !cart_visible
     	this.setState({cart_visible: cart_visible})
+    	this.logPageViewInner("cart toggle")
+    }
+    logPageView() {
+    	var logPageViewInner = this.logPageViewInner
+    	setTimeout(function() {
+    		var page = window.location.pathname
+    		logPageViewInner(page)
+    	}, 50)
+    }
+    logPageViewInner(page) {
+		ReactGA.set({ page });
+		ReactGA.pageview(page);
     }
 
 	render() {
@@ -419,15 +439,17 @@ export default class Site extends React.Component {
 		var bucket = this.state.bucket
 		var folders = this.state.folders
 		var cart_visible = this.state.cart_visible
+		var logPageView = this.logPageView
+		var onClick = logPageView
 		return (
-			<Router>
+			<Router onUpdate={this.logPageView.bind(this)} history={browserHistory}>
 				<div class="site">
 					<div class="container-fluid">
 						<div class="row row-centered">
 							<Header />
 						</div>
 						<div class="row row-centered">
-							<MatchWithProps pattern="*" component={Menu} props={{ item_count, toggleCart: this.toggleCart }} />
+							<MatchWithProps pattern="*" component={Menu} props={{ onClick, item_count, toggleCart: this.toggleCart }} />
 						</div>
 						<div class="row row-centered">
 							<Player config={player} onPlayToggle={this.onPlayToggle.bind(this)} episodes_loaded={this.state.episodes_loaded} />
@@ -435,7 +457,7 @@ export default class Site extends React.Component {
 						<MatchWithProps exactly pattern="/"          component={Home}    props={{ episodes, blogs, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
 						<MatchWithProps exactly pattern="/index.htm" component={Home}    props={{ episodes, blogs, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
 						<MatchWithProps pattern="/podcast"           component={Podcast} props={{ episodes, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
-						<MatchWithProps pattern="/blog*"             component={Blog}    props={{ blogs, folders, episodeMap, blogs_loaded, bucket, player, onPlayToggle: this.onPlayToggle.bind(this) }} />
+						<MatchWithProps pattern="/blog*"             component={Blog}    props={{ onClick, blogs, folders, episodeMap, blogs_loaded, bucket, player, onPlayToggle: this.onPlayToggle.bind(this) }} />
 						<MatchWithProps pattern="/video"             component={Videos}  props={{ videos }} />
 						<Match pattern="/proj" component={Projects} />
 						<Match pattern="/l/snl-impact" component={SnlImpact} />
