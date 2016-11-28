@@ -40,7 +40,7 @@ export default class Blog extends React.Component {
 		for (var i=0; i < arr.length; i++) {
 			var blog = arr[i]
 			var pn = blog.prettyname
-			if (pn.indexOf(typ) != -1) {
+			if (pn.indexOf(key) != -1) {
 				sub.push(blog)
 			}
 		}
@@ -70,14 +70,12 @@ export default class Blog extends React.Component {
 				var b = blogs[i]
 				var pn = b["prettyname"]
 				if (pn == pathname) {
-					console.log("match")
 					return b
 				}
 			}
 			return undefined
 		}
 		var blog = fn(pathname, blogs)
-		console.log(blog)
 		if (blog == undefined) {
 			// TODO: make this general and not error prone
 			for (var i=0; i < folders.length; i++) {
@@ -104,12 +102,10 @@ export default class Blog extends React.Component {
 				var episode = this.getEpisode(guid)
 				var onPlayToggle = this.props.onPlayToggle
 				var player = this.props.player
-				console.log(player)
 				var is_playing = false
-				if (episode.guid == config.episode.guid) {
-					is_playing = config.is_playing
+				if (episode == player.episode) {
+					is_playing = player.is_playing
 				}
-				console.log([episode, onPlayToggle])
 				top = (
 					<div class="home-player">
 						<LatestEpisodePlayer title="" episode={episode} onPlayToggle={onPlayToggle} is_playing={is_playing} />

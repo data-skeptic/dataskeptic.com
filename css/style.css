@@ -1054,6 +1054,7 @@ button.slick-arrow.slick-prev {
   border-color: #333;
   border-width: 1px;
   border-style: solid;
+  height: 300px;
 }
 .project-title {
   font-weight: bold;
