@@ -267,11 +267,14 @@ export default class Site extends React.Component {
 			for (var i in blogs) {
 				var b = blogs[i]
 				var pn = b["prettyname"]
-				var arr = pn.split("/")
-				var level = 0
-				if (arr.length >= level+2) {
-					var folder = arr[level+1]
-					folders.push(folder)
+				console.log(pn)
+				if (pn != undefined) {
+					var arr = pn.split("/")
+					var level = 0
+					if (arr.length >= level+2) {
+						var folder = arr[level+1]
+						folders.push(folder)
+					}
 				}
 			}
 			folders = folders.reduce((a, x) => a.includes(x) ? a : [...a, x], []).sort()
@@ -432,7 +435,7 @@ export default class Site extends React.Component {
 						<MatchWithProps exactly pattern="/"          component={Home}    props={{ episodes, blogs, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
 						<MatchWithProps exactly pattern="/index.htm" component={Home}    props={{ episodes, blogs, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
 						<MatchWithProps pattern="/podcast"           component={Podcast} props={{ episodes, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
-						<MatchWithProps pattern="/blog*"             component={Blog}    props={{ blogs, folders, episodeMap, blogs_loaded, bucket, onPlayToggle: this.onPlayToggle.bind(this) }} />
+						<MatchWithProps pattern="/blog*"             component={Blog}    props={{ blogs, folders, episodeMap, blogs_loaded, bucket, player, onPlayToggle: this.onPlayToggle.bind(this) }} />
 						<MatchWithProps pattern="/video"             component={Videos}  props={{ videos }} />
 						<Match pattern="/proj" component={Projects} />
 						<MatchWithProps pattern="/store"             component={Store}    props={{ products, products_loaded, cart_items, total, shipping, country: this.state.country, updateCartQuantity: this.updateCartQuantity.bind(this), onChangeCountry: this.onChangeCountry.bind(this), addToCart: this.addToCart.bind(this) }} />

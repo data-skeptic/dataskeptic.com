@@ -103,7 +103,12 @@ export default class Blog extends React.Component {
 				var guid = blog.guid
 				var episode = this.getEpisode(guid)
 				var onPlayToggle = this.props.onPlayToggle
+				var player = this.props.player
+				console.log(player)
 				var is_playing = false
+				if (episode.guid == config.episode.guid) {
+					is_playing = config.is_playing
+				}
 				console.log([episode, onPlayToggle])
 				top = (
 					<div class="home-player">
