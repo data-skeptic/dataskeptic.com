@@ -481,24 +481,16 @@ export default class Site extends React.Component {
 PLAYER
 Spinning logo on waiting for file download in all relevant buttons, not use bar
 howler working?
-
 mathjax http://localhost:8080/blog/episodes/2014/bayesian-updating
-
 create redirects map from XML
-
 Stripe recurring for memberships
-
 configure env for Production
-google analytics
 redirects on old content
 SEO / crawlable?
-
 crypto episode notes
 z-scores script in show notes broken
-BLOG author images
 feed.rss lambda download
 transcripts linked from episode
-
 causal impact
 99% invisible for download
 */
@@ -506,8 +498,31 @@ causal impact
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
 LATER
+	BLOG author images
 	Guest profile pages
 	Chat room with video so i can go live randomly whenever i want and talk about live stuff like elections
 	admin page to update blog content - add tags, release date, author, prettyname, title, tags

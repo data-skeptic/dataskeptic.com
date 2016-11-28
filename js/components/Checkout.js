@@ -142,7 +142,6 @@ https://stripe.com/docs/subscriptions/tutorial
 			var products = self.props.cart_items
 			var total    = self.props.total
 			if (response.error) {
-
 				paymentError = response.error.message
 				self.setState({ paymentError, focus_msg: "", submitDisabled: false });
 				console.log("error: " + paymentError)
@@ -153,6 +152,7 @@ https://stripe.com/docs/subscriptions/tutorial
 				self.props.clearCart()
 				console.log("order complete")
 			}
+			// Save in database
 			var dt = (new Date()).toString()
 			var order = {customer, products, total, paymentComplete, token, paymentError, prod, country, dt}
 			order = self.adjust_for_dynamodb_bug(order)
