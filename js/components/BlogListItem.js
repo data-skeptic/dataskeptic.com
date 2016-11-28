@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 
 export default class BlogListItem extends Component {
     render() {
+        var onClick = this.props.onClick
     	var blog = this.props.blog
         var pn = blog.prettyname
         if (pn != undefined) {
@@ -15,7 +16,7 @@ export default class BlogListItem extends Component {
         return (
             <div class="col-xs-12">
 	            <div class="blog-summary" key={blog.uri}>
-	                <Link class="blog-title" to={pn}>{blog.title}</Link>
+	                <Link onClick={onClick} class="blog-title" to={pn}>{blog.title}</Link>
 	                <span class="blog-date">{date}</span>
 	                <p>
                         {blog.desc}

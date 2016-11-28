@@ -1,7 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom"
 import { Link } from 'react-router'
-import NavLink from './NavLink'
 
 import NotFound from './NotFound'
 import BlogList from "./BlogList"
@@ -40,7 +39,7 @@ export default class Blog extends React.Component {
 		for (var i=0; i < arr.length; i++) {
 			var blog = arr[i]
 			var pn = blog.prettyname
-			if (pn.indexOf(typ) != -1) {
+			if (pn.indexOf(key) != -1) {
 				sub.push(blog)
 			}
 		}
@@ -51,6 +50,8 @@ export default class Blog extends React.Component {
 		if (!this.props.blogs_loaded) {
 			return <div><Loading /></div>
 		}
+		var onClick = this.props.onClick
+		console.log(["$$#$", onClick])
 		var blogs = this.props.blogs
 		var folders = this.props.folders
 		var pathname = this.props.location.pathname
@@ -59,7 +60,7 @@ export default class Blog extends React.Component {
 			blogs = this.remove_type("transcripts", blogs)
 			return (
 				<div class="center">
-					<BlogNav folders={folders} pathname={pathname} />
+					<BlogNav folders={folders} onClick={onClick} pathname={pathname} />
 					<BlogList blogs={blogs} />
 				</div>
 			)
@@ -70,14 +71,12 @@ export default class Blog extends React.Component {
 				var b = blogs[i]
 				var pn = b["prettyname"]
 				if (pn == pathname) {
-					console.log("match")
 					return b
 				}
 			}
 			return undefined
 		}
 		var blog = fn(pathname, blogs)
-		console.log(blog)
 		if (blog == undefined) {
 			// TODO: make this general and not error prone
 			for (var i=0; i < folders.length; i++) {
@@ -86,8 +85,8 @@ export default class Blog extends React.Component {
 					var fblogs = this.only_type(folder, blogs)
 					return (
 						<div class="center">
-							<BlogNav folders={folders} pathname={pathname} />
-							<BlogList blogs={fblogs} />
+							<BlogNav folders={folders} onClick={onClick} pathname={pathname} />
+							<BlogList blogs={fblogs} onClick={onClick} />
 						</div>
 					)
 				}
@@ -104,12 +103,10 @@ export default class Blog extends React.Component {
 				var episode = this.getEpisode(guid)
 				var onPlayToggle = this.props.onPlayToggle
 				var player = this.props.player
-				console.log(player)
 				var is_playing = false
-				if (episode.guid == config.episode.guid) {
-					is_playing = config.is_playing
+				if (episode == player.episode) {
+					is_playing = player.is_playing
 				}
-				console.log([episode, onPlayToggle])
 				top = (
 					<div class="home-player">
 						<LatestEpisodePlayer title="" episode={episode} onPlayToggle={onPlayToggle} is_playing={is_playing} />
@@ -119,7 +116,7 @@ export default class Blog extends React.Component {
 			var uri = "https://s3.amazonaws.com/" + this.props.bucket + '/' + blog["rendered"]
 			return (
 				<div class="center">
-					<BlogNav folders={folders} pathname={pathname} />
+					<BlogNav folders={folders} pathname={pathname} onClick={onClick} />
 					{top}
 					<BlogItem src={uri} pathname={pathname}  />
 				</div>

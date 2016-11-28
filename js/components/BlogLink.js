@@ -3,11 +3,12 @@ import { Link } from 'react-router'
 
 export default class BlogLink extends Component {
     render() {
+    	var onClick = this.props.onClick
         var to = this.props.to
         var active = this.props.active
         var isActive = active == to
         return (
-            <Link key={to} class="blog-link" to={to}>{this.props.children}</Link>
+            <Link key={to} onClick={onClick} class="blog-link" to={to}>{this.props.children}</Link>
         );
     }
 }

@@ -21,14 +21,14 @@ const Projects = () => {
 						<div class="project-title">SNL Causal Impact</div>
 						<p>As an appendix to our Causal Impact episode, we teamed up with <a href="http://github.com/kjblakemore">Karen Blakemore</a> to create a Shiny webapp to interact with the Saturday Night Live analysis.</p>
 						<div class="project-link">
-							<a href="http://snl.dataskeptic.com">snl.dataskeptic.com</a>
+							<Link to="/l/snl-impact">dataskeptic.com/l/snl-impact</Link>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-xs-12 project-bottom">
-					If you like our work, perhaps we can collaborate.  Checkout our <Link to="/services">Services</Link> page for details.
+					If you like our work, perhaps we can collaborate.  Visit our <Link to="/services">Services</Link> page for details.
 				</div>
 			</div>
 		</div>
