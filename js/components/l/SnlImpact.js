@@ -8,6 +8,7 @@ const SnlImpact = () => {
 		Using Shiny video
 		Link to other guy's paper and conference
 		Bibliography / further reading
+		Related blogs
 	*/
 	return (
 		<div class="center">
