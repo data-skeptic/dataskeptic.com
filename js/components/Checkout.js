@@ -147,25 +147,35 @@ https://stripe.com/docs/subscriptions/tutorial
 				console.log("error: " + paymentError)
 				return
 			} else {
-				paymentComplete = true
-				self.setState({ paymentComplete, submitDisabled: false, token });
-				self.props.clearCart()
-				console.log("order complete")
+				self.setState({ submitDisabled: true, token });
+				var dt = (new Date()).toString()
+				var order = {customer, products, total, paymentComplete, token, paymentError, prod, country, dt}
+				order = self.adjust_for_dynamodb_bug(order)
+				console.log(JSON.stringify(order))
+				axios
+					.post("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/order", order)
+					.then(function(resp) {
+						console.log(resp)
+						var result = resp["data"]
+						console.log(result)
+						if (result["status"] != "ok") {
+							console.log(result["msg"])
+							self.setState({ paymentComplete: false, submitDisabled: false, paymentError: result["msg"] });
+							console.log("order api error")
+						} else {
+							console.log("Success")
+							self.setState({ paymentComplete: true, submitDisabled: false });
+							self.props.clearCart()
+							console.log("order complete")
+						}
+					})
+					.catch(function(err) {
+						console.log("order error")
+						console.log(err)
+						var msg = "Error placing your order: " + err
+						self.setState({ paymentComplete: false, submitDisabled: false, paymentError: msg });
+					})
 			}
-			// Save in database
-			var dt = (new Date()).toString()
-			var order = {customer, products, total, paymentComplete, token, paymentError, prod, country, dt}
-			order = self.adjust_for_dynamodb_bug(order)
-			console.log(JSON.stringify(order))
-			axios
-				.post("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/order", order)
-				.then(function(result) {
-					console.log(result)
-					console.log("Success")
-				})
-				.catch(function(err) {
-					console.log(err)
-				})
 		});
 	}
 
