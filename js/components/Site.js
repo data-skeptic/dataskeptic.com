@@ -480,10 +480,8 @@ export default class Site extends React.Component {
 /*
 PLAYER
 Spinning logo on waiting for file download in all relevant buttons, not use bar
-howler working?
 mathjax http://localhost:8080/blog/episodes/2014/bayesian-updating
 create redirects map from XML
-Stripe recurring for memberships
 configure env for Production
 redirects on old content
 SEO / crawlable?
@@ -492,7 +490,16 @@ z-scores script in show notes broken
 feed.rss lambda download
 transcripts linked from episode
 causal impact
-99% invisible for download
+
+
+LAUNCH
+Change domain
+Verify GA
+Double check Stripe Live
+Check https
+feeds.rss manual until automated
+
+
 */
 
 
@@ -522,6 +529,7 @@ causal impact
 
 /*
 LATER
+	99% invisible for download
 	BLOG author images
 	Guest profile pages
 	Chat room with video so i can go live randomly whenever i want and talk about live stuff like elections
