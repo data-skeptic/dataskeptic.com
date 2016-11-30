@@ -117,21 +117,6 @@ export default class Checkout extends React.Component {
 			this.setState({ submitDisabled: false, paymentError: msg, focus, focus_msg })
 			return false
 		}
-		/*
-var stripe = require("stripe")("sk_test_JDu4VvArX2Oa2vh0DOek972y");
-
-// Get the credit card details submitted by the form
-var token = request.body.stripeToken; // Using Express
-
-stripe.customers.create({
-  source: token,
-  plan: "gold",
-  email: "payinguser@example.com"
-}, function(err, customer) {
-  // ...
-});
-https://stripe.com/docs/subscriptions/tutorial		
-		*/
 		Stripe.createToken(event.target, function(status, response) {
 			var paymentError = ""
 			var paymentComplete = false
@@ -141,6 +126,7 @@ https://stripe.com/docs/subscriptions/tutorial
 			var country = self.props.country.short
 			var products = self.props.cart_items
 			var total    = self.props.total
+			var shipping = self.props.shipping
 			if (response.error) {
 				paymentError = response.error.message
 				self.setState({ paymentError, focus_msg: "", submitDisabled: false });
@@ -149,9 +135,10 @@ https://stripe.com/docs/subscriptions/tutorial
 			} else {
 				self.setState({ submitDisabled: true, token });
 				var dt = (new Date()).toString()
-				var order = {customer, products, total, paymentComplete, token, paymentError, prod, country, dt}
+				var order = {customer, products, total, paymentComplete, token, paymentError, prod, country, dt, shipping}
 				order = self.adjust_for_dynamodb_bug(order)
 				console.log(JSON.stringify(order))
+				console.log(token)
 				axios
 					.post("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/order", order)
 					.then(function(resp) {
