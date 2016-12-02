@@ -1,9 +1,13 @@
-'use strict';
+var React = require('react')
+var ReactDOM = require('react-dom')
+var Component = require('./Component.jsx')
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Site from './components/Site';
+console.log("client")
 
-window.onload = () => {
-  ReactDOM.render(<Site/>, document);
-};
+var props = window.PROPS
+
+  //	<Site/>
+
+ReactDOM.render(
+  	React.createElement(Component, props), document
+);

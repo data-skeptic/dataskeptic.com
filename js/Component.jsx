@@ -1,23 +1,28 @@
 var React = require('react')
-var Site = require('./components/Site.js')
+//var Site = require('./components/Site.js')
 
 module.exports = React.createClass( {
+	_handleClick: function() {
+		alert()
+
+	},
 	render: function() {
-		var test = "a"
+		console.log("render Component")
+		console.log(this.props)
 		return (
 			<html>
 				<head>
 					<link rel='stylesheet' href='/css/style.css' />
 				</head>
 			<body>
-			<div>
-			<h2>Site?</h2>
-			he wo
-			<p>{test}</p>
-			</div>
-			<div id="outer"></div>
-			<p>After outer</p>
-			<script src='/js/scripts.min.js' />
+				<div>
+					<h2>{this.props.title}</h2>
+					<button onClick={this._handleClick}>Click</button>
+				</div>
+			<script dangerouslySetInnerHTML={{
+				__html: 'window.PROPS=' + JSON.stringify(this.props)
+			}} />
+			<script src='/bundle.js' />
 			</body>
 			</html>
 		)

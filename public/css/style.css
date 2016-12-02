@@ -9,8 +9,9 @@ html, body {
 
 .header {
   background-color: #3A3B3B;
-  height: 125px;
+  height: 65px;
 }
+
 
 .site {
 }
@@ -34,6 +35,11 @@ html, body {
   margin: auto;
   clear: both;
   max-width: 800px;
+}
+
+.header-left {
+  height: 57px;
+  overflow: hidden;
 }
 
 #logo {

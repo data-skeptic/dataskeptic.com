@@ -253,7 +253,9 @@ export default class Site extends React.Component {
 		console.log("Initialize GA")
 		ReactGA.initialize("UA-88166505-1", {
 		  debug: false
-		});		
+		});
+		this.logPageView()
+		console.log("done")
 	}
 
 	loadState() {
@@ -405,6 +407,7 @@ export default class Site extends React.Component {
     	var logPageViewInner = this.logPageViewInner
     	setTimeout(function() {
     		var page = window.location.pathname
+    		console.log(page)
     		logPageViewInner(page)
     	}, 50)
     }
@@ -414,6 +417,7 @@ export default class Site extends React.Component {
     }
 
 	render() {
+		console.log("render")
 		var env = this.state.env
 		var prod = false
 		if (env == "master") {
@@ -441,6 +445,10 @@ export default class Site extends React.Component {
 		var cart_visible = this.state.cart_visible
 		var logPageView = this.logPageView
 		var onClick = logPageView
+		return (
+			<div>Apr</div>
+		)
+		/*
 		return (
 			<Router onUpdate={this.logPageView.bind(this)} history={browserHistory}>
 				<div class="site">
@@ -473,6 +481,7 @@ export default class Site extends React.Component {
 				</div>
 			</Router>
 		)
+		*/
 	}
 }
 
