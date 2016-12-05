@@ -4,7 +4,6 @@ import { fromJS } from 'immutable';
 const init = {
   episodes: [],
   episodes_map: {},
-  year: (new Date()).getYear()+1900,
   episodes_loaded: 0
 }
 
@@ -32,9 +31,6 @@ export default function episodesReducer(state = defaultState, action) {
       break;
     case 'FETCH_EPISODES_ERROR':
       nstate.episodes_loaded = -1
-      break;
-    case 'SET_YEAR':
-      nstate.year = action.payload
       break;
   }
   return Immutable.fromJS(nstate)

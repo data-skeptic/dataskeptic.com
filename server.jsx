@@ -12,6 +12,8 @@ import { createStore,
          combineReducers,
          applyMiddleware }       from 'redux';
 import path                      from 'path';
+import getEpisodes          from 'daos/episodes';
+import getBlogs             from 'daos/blogs';
 
 const app = express();
 
@@ -26,14 +28,29 @@ app.use( (req, res) => {
   const reducer  = combineReducers(reducers);
   const store    = applyMiddleware(promiseMiddleware)(createStore)(reducer);
 
+  console.log("---[init]-----------------------------------------")
+  var state0 = store.getState()
+  var osite = state0.site.toJS()
+  var env = osite.env
+  getEpisodes(store)
+  getBlogs(store, env)
+
+  const initialState = store.getState()
+  var oepisodes = initialState.episodes.toJS()
+  var oblogs = initialState.blogs.toJS()
+  console.log("^^^")
+  console.log(oepisodes)
+  console.log(oblogs)
+
   match({ routes, location }, (err, redirectLocation, renderProps) => {
     if(err) {
       console.error(err);
       return res.status(500).end('Internal server error');
     }
 
-    if(!renderProps)
+    if(!renderProps) {
       return res.status(404).end('Not found');
+    }
 
     function renderView() {
       const InitialView = (
@@ -42,12 +59,11 @@ app.use( (req, res) => {
         </Provider>
       );
 
+      var title = osite.title + ":"+location.pathname
+      console.log("%%%")
+      console.log(location.pathname)
+
       const componentHTML = renderToString(InitialView);
-
-      const initialState = store.getState();
-      console.log("initialState")
-      console.log(initialState)
-
 
       const HTML = `
       <!DOCTYPE html>
@@ -70,7 +86,7 @@ app.use( (req, res) => {
           <link rel="icon" type="image/png" sizes="96x96" href="/favicon/favicon-96x96.png" />
           <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
           <link rel="manifest" href="/favicon/manifest.json" />
-          <title>Data Skeptic - the intersection of data science, artificial intelligence, machine learning, statistics, and scientific skepticism</title>
+          <title>${title}</title>
           <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cosmo/bootstrap.min.css" type="text/css" rel="stylesheet"/>
             <link rel="stylesheet" type="text/css" href="/css/style.css">
           <script>
@@ -92,7 +108,7 @@ app.use( (req, res) => {
 
     fetchComponentData(store.dispatch, renderProps.components, renderProps.params)
       .then(renderView)
-      .then(html => res.end(html))
+      .then(html => res.status(200).end(html))
       .catch(err => res.end(err.message));
   });
 });

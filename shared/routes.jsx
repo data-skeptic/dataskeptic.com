@@ -6,7 +6,7 @@ import createBrowserHistory                                  from 'history/lib/c
 import configureStore                                        from './store';
 
 import App                     from 'components/index';
-import Blog                    from 'components/blog';
+import Blog                    from 'components/Blog';
 import Checkout                from 'components/Checkout';
 import Home                    from 'components/Home';
 import LightsOut               from 'components/LightsOut';
