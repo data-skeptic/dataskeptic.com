@@ -2,9 +2,6 @@ import React from "react"
 import ReactDOM from "react-dom"
 import { connect } from 'react-redux'
 
-import axios from "axios"
-import xml2js from "xml2js"
-
 import Episode from "./Episode"
 import Loading from "./Loading"
 import YearSelector from './YearSelector.js'
@@ -39,41 +36,34 @@ class Podcast extends React.Component {
 	}
 	
 	render() {
-		console.log("podcast")
-		console.log(this.props)
-		var episodes = this.props.episodes
-		var num = episodes.size
-		var years = []
-		console.log(num)
-		if (num == 0) {
+		var oepisodes = this.props.episodes
+		var oepisodes = this.props.episodes.toJS()
+		var episodes_loaded = oepisodes.episodes_loaded
+		if (episodes_loaded == undefined) {
+			episodes_loaded = 0
+		}
+		if (episodes_loaded == 0) {
 			return <div><Loading /></div>
 		} else {
-			return (
-				<div>podcasts</div>
-			)
-			//		props={{ episodes, onPlayToggle: this.onPlayToggle.bind(this), config: {player} }} />
-		}
-		var config = this.props.config
-		var year = this.state.max_year
-		while (year > 2013) {
-			years.push(year)
-			year -= 1
-		}
-		if (num == 0) {
-			return <div><Loading /></div>
-		} else {
-			var me = this
-			var year = this.state.year
-			var onPlayToggle = this.props.onPlayToggle
+			var episodes = oepisodes.episodes
+			var years = []
+			var year = oepisodes.year
+			var y = this.state.max_year
+			while (y > 2013) {
+				years.push(y)
+				y -= 1
+			}
 			return (
 				<div className="center">
-					<YearSelector years={years} year={year} changeYear={this.changeYear.bind(this)} />
+					<YearSelector years={years} year={year} />
 					<div className="clear"></div>
 					<div className="episodes-container">
 						{
 							episodes.map(function(episode) {
+								var is_playing = false
 								if (episode.pubDate.getYear()+1900 == year) {
 									var is_playing = false
+									/*
 									if (config.player.episode != undefined) {
 										if (config.player.episode.guid == episode.guid) {
 											if (config.player.is_playing) {
@@ -81,12 +71,13 @@ class Podcast extends React.Component {
 											}
 										}
 									}
-									return <Episode key={episode.guid} is_playing={is_playing} episode={episode} onPlayToggle={onPlayToggle} />
+									*/
+									return <Episode key={episode.guid} is_playing={is_playing} episode={episode} />
 								}
 							})
 						}
 					</div>
-					<YearSelector years={years} year={year} changeYear={this.changeYear.bind(this)} />
+					<YearSelector years={years} year={year} />
 				</div>
 			)
 		}

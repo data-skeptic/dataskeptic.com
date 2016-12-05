@@ -5,7 +5,9 @@ const Loading = () => {
 		<div className="center">
 			<div className="loading">
 				<p>Loading...</p>
-				<p><img src="/img/Loading_icon.gif" /></p>
+				<div className="loading-icon-container">
+					<p><img className="loading-icon" src="/img/Loading_icon.gif" /></p>
+				</div>
 			</div>
 		</div>
 	)

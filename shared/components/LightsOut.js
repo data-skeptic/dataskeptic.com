@@ -63,18 +63,18 @@ export default class LightsOut extends React.Component {
 		var me = this
 		if (!this.state.won) {
 			return (
-				<div class="center">
+				<div className="center">
 					<h2>Lights Out</h2>
 					<p>Click on the squares below to turn off adjacent lights.  Turn off all the lights to win!</p>
-					<div class="lights-out">
+					<div className="lights-out">
 						{arr.map(function(r) {
 							return (
-								<div class="lo-row">
+								<div className="lo-row">
 									{arr.map(function(c) {
 										var isActive = grid[r][c]
 								        var className = isActive > 0 ? "lo-cell lo-cell-active" : "lo-cell lo-cell-inactive"
 										var id = "c" + r + "c" + c
-										return <div id={id} key={id} class={className} onClick={me.cellClick.bind(this)}></div>
+										return <div id={id} key={id} className={className} onClick={me.cellClick.bind(this)}></div>
 									})}
 								</div>
 							)
@@ -85,9 +85,9 @@ export default class LightsOut extends React.Component {
 		}
 		else {
 			return (
-				<div class="center">
-					<div class="lo-container">
-						<div class="lo-congrats">
+				<div className="center">
+					<div className="lo-container">
+						<div className="lo-congrats">
 							<p>Congratulations, you've won the game!!!</p>
 							<p>If you are the very very first person to write to kyle@dataskeptic.com and mention that you won the game and recieved this password: tukey137, then you get a free t-shirt!  I'll take this message out shortly after someone wins this easter egg, so appologies if two entries come in back to back.  Just in case, you better hurry up and go write that email!</p>
 						</div>

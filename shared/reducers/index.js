@@ -1,32 +1,6 @@
-export { default as episodes } from './EpisodeReducer';
-export { default as store } from './StoreReducer';
-export { default as todos } from './TodoReducer';
-
-import * as types from '../actions/actionTypes';
-import { combineReducers } from 'redux'; //might need to remove
-import { routerStateReducer } from 'redux-react-router';
-
-
-function exampleReducer(state = {
-	isLoading: false,
-	data: [],
-	error: false}
-, action = null) {
-	switch(action.type) {
-		case types.RECV_ERROR:
-			return Object.assign({}, state, {isLoading: false, data: action.data, error: true});
-		case types.RECV_DATA:
-			return Object.assign({}, state, {isLoading: false, data: action.data, error: false });
-		case types.REQ_DATA:
-			return Object.assign({}, state, {isLoading: true, error: false });
-		default:
-			return state;
-	}
-};
-
-const rootReducer = combineReducers({
-	router: routerStateReducer,
-	example: exampleReducer
-});
-
-export default rootReducer;
+export { default as blogs } from './BlogsReducer';
+export { default as cart } from './CartReducer';
+export { default as episodes } from './EpisodesReducer';
+export { default as products } from './ProductsReducer';
+export { default as player } from './PlayerReducer';
+export { default as site } from './SiteReducer';

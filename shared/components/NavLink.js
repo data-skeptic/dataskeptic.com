@@ -9,9 +9,11 @@ class NavLink extends Component {
         var isActive = active == to
         var className = isActive ? "menu-active" : "menu-inactive";
         return (
-            <li className={className}>
-                <Link to={to} onClick={onClick}>{this.props.children}</Link>
-            </li>
+            <div className="navlink-li-container">
+                <li className={className}>
+                    <Link to={to} onClick={onClick}>{this.props.children}</Link>
+                </li>
+            </div>
         );
     }
 }
