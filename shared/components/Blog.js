@@ -1,6 +1,5 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import { Link } from 'react-router'
 import { connect } from 'react-redux'
 
 import NotFound from './NotFound'

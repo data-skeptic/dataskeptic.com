@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router'
 import { connect } from 'react-redux'
 
 @connect((store) => {
@@ -7,11 +8,6 @@ import { connect } from 'react-redux'
 	}
 })
 export default class YearNav extends React.Component {
-	onClick(e) {
-		var year = this.props.year
-		this.props.dispatch({type: "SET_YEAR", payload: year })
-	}
-
 	render() {
 		var year = this.props.year
 		var active = this.props.active
@@ -19,9 +15,10 @@ export default class YearNav extends React.Component {
 		if (active) {
 			down = "menu-button-down"
 		}
+		var to = "/podcast/" + year
 		return (
 			<div className="episode-year-container">
-				<button className="menu-year" className={down} onClick={this.onClick.bind(this)}>{year}</button>
+		            <Link key={to} className="menu-year" to={to}>{year}</Link>
 			</div>
 		)		
 	}

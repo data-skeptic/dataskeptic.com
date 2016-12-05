@@ -9,35 +9,11 @@ import YearSelector from './YearSelector.js'
 class Podcast extends React.Component {
 	constructor(props) {
 		super(props)
-		var year = (new Date()).getYear() + 1900
-		this.state = {
-			max_year: year,
-			year: year
-		}
-
-		this.onMenuClick = this.onMenuClick.bind(this)
-		this.setEpisodes = this.setEpisodes.bind(this)	
 	}
 
-	setEpisodes(episodes) {
-		var year = (new Date()).getYear() + 1900
-		if (episodes.length > 0) {
-			year = episodes[0].pubDate.getYear()
-		}
-		this.setState({episodes, year})
-	}
-
-	changeYear(year) {
-		this.setState({year})
-	}
-
-	onMenuClick(e) {
-		console.log(e)
-	}
-	
 	render() {
-		var oepisodes = this.props.episodes
 		var oepisodes = this.props.episodes.toJS()
+		var episodes = oepisodes.episodes
 		var episodes_loaded = oepisodes.episodes_loaded
 		if (episodes_loaded == undefined) {
 			episodes_loaded = 0
@@ -45,10 +21,18 @@ class Podcast extends React.Component {
 		if (episodes_loaded == 0) {
 			return <div><Loading /></div>
 		} else {
-			var episodes = oepisodes.episodes
+			var myear = (new Date()).getYear() + 1900
+			if (episodes.length > 0) {
+				myear = episodes[0].pubDate.getYear() + 1900
+			}
+			var year = myear
+			var pathname = this.props.location.pathname
+			var l = '/podcast/'.length
+			if (pathname.length > l) {
+				year = pathname.substring(l, pathname.length)
+			}
 			var years = []
-			var year = oepisodes.year
-			var y = this.state.max_year
+			var y = myear
 			while (y > 2013) {
 				years.push(y)
 				y -= 1
@@ -62,17 +46,7 @@ class Podcast extends React.Component {
 							episodes.map(function(episode) {
 								var is_playing = false
 								if (episode.pubDate.getYear()+1900 == year) {
-									var is_playing = false
-									/*
-									if (config.player.episode != undefined) {
-										if (config.player.episode.guid == episode.guid) {
-											if (config.player.is_playing) {
-												is_playing = true
-											}
-										}
-									}
-									*/
-									return <Episode key={episode.guid} is_playing={is_playing} episode={episode} />
+									return <Episode key={episode.guid} episode={episode} />
 								}
 							})
 						}
