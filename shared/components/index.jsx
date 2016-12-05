@@ -206,7 +206,6 @@ class MainView extends React.Component {
           <div className="container-fluid">
             <div className="row row-centered">
               <Header />
-              <Favicon url={['http://localhost:3000/favicon/favicon-96x96.png']}/>
             </div>
             <div className="row row-centered">
               <Menu pathname={this.props.location.pathname} />
