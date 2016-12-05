@@ -14,8 +14,9 @@ import { createStore,
          combineReducers,
          applyMiddleware }       from 'redux';
 import path                      from 'path';
-import getEpisodes          from 'daos/episodes';
-import getBlogs             from 'daos/blogs';
+import getEpisodes               from 'daos/episodes';
+import getBlogs                  from 'daos/blogs';
+import redirects_map             from './redirects';
 
 const app = express();
 
@@ -24,6 +25,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 var title_map = {}
+var content_map = {}
 
 var env = "dev"
 
@@ -38,17 +40,46 @@ axios
     title_map[pn] = title
   }
   console.log("Loaded blogs!!!")
+  generate_content_map(blog)
 })
 .catch((err) => {
   console.log("bblogs error")
   console.log(err)
 })
 
+function generate_content_map(blog) {
+  var pn = blog['prettyname']
+  var envv = env + "."
+  if (env == "prod") {
+    envv = ""
+  }
+  var key = blog["rendered"]
+  var pn = blog["prettyname"]
+  var uri = "https://s3.amazonaws.com/" + envv + 'dataskeptic.com/' + key
+  axios.get(uri).then(function(result) {
+    var content = result.data
+    console.log(['pn', pn])
+    content_map[pn] = content
+  })
+  .catch((err) => {
+    console.log("content cache error")
+    console.log(err)
+  })
+}
+
 global.title_map = title_map
+global.content_map = content_map
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use( (req, res) => {
+  var redir = redirects_map['redirects_map'][req.url]
+  var hostname = req.headers.host
+  if (redir != undefined) {
+    console.log("Redirecting to " + hostname + redir)
+    return res.redirect(301, 'http://' + hostname + redir)
+  }
+
   const location = createLocation(req.url);
   const reducer  = combineReducers(reducers);
   const store    = applyMiddleware(promiseMiddleware)(createStore)(reducer);
@@ -88,6 +119,10 @@ app.use( (req, res) => {
       }
 
       const componentHTML = renderToString(InitialView);
+      var content = content_map[pathname]
+      if (content == undefined) {
+        content = ""
+      }
 
       const HTML = `
       <!DOCTYPE html>
@@ -119,6 +154,7 @@ app.use( (req, res) => {
         </head>
         <body>
           <div id="react-view">${componentHTML}</div>
+          <div id="content-view">${content}</div>
           <script type="application/javascript" src="/bundle.js"></script>
           <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
            <script type="text/javascript" 
