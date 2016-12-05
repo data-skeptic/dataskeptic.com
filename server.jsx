@@ -1,6 +1,8 @@
 import express                   from 'express';
 import React                     from 'react';
-import { renderToString }        from 'react-dom/server'
+import axios                     from 'axios';
+import xml2js                    from 'xml2js';
+import { renderToString }        from 'react-dom/server';
 import { RoutingContext, match } from 'react-router';
 import createLocation            from 'history/lib/createLocation';
 import routes                    from 'routes';
@@ -21,6 +23,29 @@ if (process.env.NODE_ENV !== 'production') {
   require('./webpack.dev').default(app);
 }
 
+var title_map = {}
+
+var env = "dev"
+
+axios
+.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/blog?env=" + env)
+.then(function(result) {
+  var blogs = result.data
+  for (var i=0; i < blogs.length; i++) {
+    var blog = blogs[i]
+    var pn = blog['prettyname']
+    var title = blog['title']
+    title_map[pn] = title
+  }
+  console.log("Loaded blogs!!!")
+})
+.catch((err) => {
+  console.log("bblogs error")
+  console.log(err)
+})
+
+global.title_map = title_map
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use( (req, res) => {
@@ -28,7 +53,6 @@ app.use( (req, res) => {
   const reducer  = combineReducers(reducers);
   const store    = applyMiddleware(promiseMiddleware)(createStore)(reducer);
 
-  console.log("---[init]-----------------------------------------")
   var state0 = store.getState()
   var osite = state0.site.toJS()
   var env = osite.env
@@ -38,9 +62,6 @@ app.use( (req, res) => {
   const initialState = store.getState()
   var oepisodes = initialState.episodes.toJS()
   var oblogs = initialState.blogs.toJS()
-  console.log("^^^")
-  console.log(oepisodes)
-  console.log(oblogs)
 
   match({ routes, location }, (err, redirectLocation, renderProps) => {
     if(err) {
@@ -60,8 +81,11 @@ app.use( (req, res) => {
       );
 
       var title = osite.title + ":"+location.pathname
-      console.log("%%%")
-      console.log(location.pathname)
+      var pathname = location.pathname.substring('/blog'.length, location.pathname.length)
+      var alt_title = title_map[pathname]
+      if (alt_title != undefined) {
+        title = alt_title
+      }
 
       const componentHTML = renderToString(InitialView);
 
