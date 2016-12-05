@@ -12,6 +12,9 @@ html, body {
   height: 65px;
 }
 
+#content-view {
+  display: none;
+}
 
 .site {
 }
@@ -69,13 +72,12 @@ h1 {
   color: #ffffff;
 }
 
-@media screen and (max-width: 260px) {
-    .header-p {
-      font-size: 8pt
-    }
-}
+@media screen and (max-width: 640px) { .header-p { font-size: 11pt }}
+@media screen and (max-width: 625px) { .header-p { font-size: 10pt }}
+@media screen and (max-width: 580px) { .header-p { font-size: 9pt }}
+@media screen and (max-width: 530px) { .header-p { font-size: 8pt }}
 
-@media screen and (max-width: 233px) {
+@media screen and (max-width: 288px) {
     .header-p {
       visibility:hidden;
     }
@@ -95,14 +97,6 @@ h1 {
 
 @media screen and (max-width: 500px) {
   .episode-pubDate {
-    visibility: hidden;
-    display: none;
-  }
-}
-
-
-@media screen and (max-width: 700px) {
-  .menuzz {
     visibility: hidden;
     display: none;
   }
@@ -138,17 +132,13 @@ h1 {
   max-width: 800px;
   margin: auto;
 }
+
 .menu-container-inner {
-  width: 600px;
   margin: auto;
+  max-width: 620px;
 }
 
-
-@media screen and (max-width: 600px) {
-   .menu-container-inner {
-     font-size: 8pt;
-     display: inline;
-   }
+ul.topnav {
 }
 
 .menu-active {
@@ -157,7 +147,7 @@ h1 {
 }
 .menu-active a:link {
   background-color: #282828;
-  color: #aaa;
+  color: #000;
 }
 
 .menu-cart-wrap {
@@ -211,8 +201,6 @@ ul.topnav li a {
     padding-top: 5px;
     padding-bottom: 5px;
     text-decoration: none;
-}
-ul.topnav {
 }
 
 ul.topnav li a:hover:not(.active) {
