@@ -9,8 +9,6 @@ class PlayerProgressBar extends React.Component {
 	}
 	
 	onUpdate(pos) {
-		console.log(["onUpdate", pos])
-		this.props.onPlayerSeekChange(pos)
 		this.props.dispatch({type: "PLAYER_SEEK", payload: pos })			
 	}
 

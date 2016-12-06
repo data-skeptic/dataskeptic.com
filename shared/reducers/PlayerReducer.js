@@ -6,6 +6,7 @@ const init = {
   has_shown: false,
   playback_loaded: false,
   position: 0,
+  position_updated: false,
   episode: undefined
 }
 
@@ -40,7 +41,6 @@ export default function playerReducer(state = defaultState, action) {
           nstate.is_playing = true
         }
       }
-      console.log(nstate)
       break;
     case 'STOP_PLAYBACK':
       nstate.is_player = false
@@ -48,8 +48,17 @@ export default function playerReducer(state = defaultState, action) {
     case 'PLAYBACK_LOADED':
       nstate.playback_loaded = action.payload
       break;
-    case 'PLAYBACK_POSITION':
-      nstate.position = action.payload
+    case 'PROGRESS_UPDATE':
+      var pos = action.payload
+      nstate.position = pos
+      break;
+    case 'PLAYER_SEEK':
+      var pos = action.payload
+      nstate.position = pos
+      nstate.position_updated = true
+      break;
+    case 'SEEK_SET':
+      nstate.position_updated = false
       break;
   }
   return Immutable.fromJS(nstate)

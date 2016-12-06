@@ -23,16 +23,12 @@ const history = createBrowserHistory();
 const reducer = combineReducers(reducers);
 
 const logger = (store) => (next) => (action) => {
-  console.log("action fired", action)
+  //console.log("action fired", action)
   next(action)
 }
 
-console.log("initialState")
-console.log(initialState)
-
 var rs = localStorage.getItem('reduxState')
 if (rs != undefined) {
-  console.log("Using saved state")
   var state = JSON.parse(rs)
   var nstate = {}
   var keys = Object.keys(state)
@@ -46,7 +42,6 @@ if (rs != undefined) {
   }
   console.log("Reloaded saved state")
   initialState = nstate
-  console.log(initialState)
 }
 
 const store = applyMiddleware(logger,thunk,promiseMiddleware)(createStore)(reducer, initialState);
@@ -77,12 +72,10 @@ store.subscribe(()=>{
     var val = state[key]
     nstate[key] = val.toJS()
     if (key == "player") {
-      console.log(nstate[key].is_playing)
       nstate[key].is_playing = false
     }
   }
   var s = JSON.stringify(state)
-  console.log("Length of state is " + s.length)
   localStorage.setItem('reduxState', s)
 })
 
@@ -97,7 +90,6 @@ render(
 /*
   HARD
   refresh page /checkout (stripe not loaded)
-  Home page spacing (footer / spinner overlap)
   Player seek issue
   checkout process
   Connect GA in index.jsx

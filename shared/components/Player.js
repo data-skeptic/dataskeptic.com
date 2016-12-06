@@ -18,28 +18,16 @@ class Player extends React.Component {
 		setInterval(this.update, 1000)
 	}
 
-	onPlayerSeekChange(pos) {
-		console.log("onPlayerSeekChange")
-		/*
-		var howler = this.state.howler
-		if (howler != undefined) {
-			this.setState({position: pos})
-			var duration = this.state.howler.duration()
-			howler.seek(pos / 100 * duration)
-		}
-		*/
-	}
-
 	update() {
 		if (this.state.howler != undefined) {
 			var oplayer = this.props.player.toJS()
-				if (oplayer.is_playing) {
+			if (oplayer.is_playing) {
 				var seek = this.state.howler.seek()
 				var duration = this.state.howler.duration()
 				var position = 100.0 * seek / duration
 				if (!isNaN(position)) {
 					this.props.dispatch({type: "PLAYBACK_LOADED", payload: true })
-					this.props.dispatch({type: "PLAYER_SEEK", payload: position })
+					this.props.dispatch({type: "PROGRESS_UPDATE", payload: position })
 				} else {
 					this.props.dispatch({type: "PLAYBACK_LOADED", payload: false })
 				}				
@@ -60,7 +48,6 @@ class Player extends React.Component {
 		this.props.dispatch({type: "STOP_PLAYBACK", payload: {} })
 	}
 	onPlayToggle(episode) {
-		console.log("onPlayToggle")
 		this.props.dispatch({type: "PLAY_EPISODE", payload: episode })
 	}
 	render() {
@@ -68,9 +55,23 @@ class Player extends React.Component {
 		if (!oplayer.has_shown) {
 			return <div></div>
 		}
+
+		var position_updated = oplayer.position_updated
+		var position = oplayer.position
+		if (position_updated) {
+			var howler = this.state.howler
+			var dur = howler.duration()
+			var p = 1.0 * position / 100 * dur
+			if (howler != undefined) {
+				howler.seek(p)
+				var me = this.props
+				setTimeout(function(){
+					me.dispatch({type: "SEEK_SET", payload: false })
+				}, 10);
+			}
+		}
 		var episode = oplayer.episode
 		var playback_loaded = oplayer.playback_loaded
-		var position = oplayer.position
 		var is_playing = oplayer.is_playing
 		var howler = ""
 		var title = "[No episode loaded yet]"
@@ -113,7 +114,7 @@ class Player extends React.Component {
 						<div className="player-inner">
 							<button className="episode-button-sm" onClick={this.onPlayToggle.bind(this, episode)}>{play_symb}</button>
 							<div className="player-title-container"><span className="player-title">{title}</span></div>
-							<PlayerProgressBar playing={is_playing} progress={position} onPlayerSeekChange={this.onPlayerSeekChange.bind(this)} />
+							<PlayerProgressBar playing={is_playing} progress={position} />
 							<div className="player-duration-container"><span className="player-duration">{duration}</span></div>
 							{howler}
 						</div>
