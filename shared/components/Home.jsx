@@ -24,7 +24,7 @@ class Home extends Component {
       adaptiveHeight: 1,
       accessibility: 1,
       autoplay: 1,
-      autoplaySpeed: 5000,
+      autoplaySpeed: 10000,
       pauseOnHover: 1
     };
     var episode = undefined
