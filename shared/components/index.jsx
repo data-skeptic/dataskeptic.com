@@ -38,16 +38,6 @@ class MainView extends React.Component {
   loadState() {
     var cart_items = []
     var country = {short: "us", long: "United State of America"}
-    /*
-    var raw = localStorage.getItem("cart_items")
-    if (raw != undefined) {
-      cart_items = JSON.parse(raw)
-    }
-    raw = localStorage.getItem("country")
-    if (raw != undefined) {
-      country = JSON.parse(raw)
-    }
-    */
     return {cart_items, country}
   }
 
@@ -118,7 +108,6 @@ class MainView extends React.Component {
     var total = calculateTotal(this.state.cart_items, short)
     var shipping = calculateShipping(this.state.cart_items, short)
     this.setState({country, total, shipping})
-    //localStorage.setItem("country", JSON.stringify(country))
   }
 
   addToCart(product, size) {
@@ -144,7 +133,6 @@ class MainView extends React.Component {
     var total = calculateTotal(cart_items, short)
     var shipping = calculateShipping(cart_items, short)
     this.setState({cart_items, total, shipping})
-    //localStorage.setItem("cart_items", JSON.stringify(cart_items))
   }
 
   clearCart() {
@@ -152,7 +140,6 @@ class MainView extends React.Component {
     var shipping = 0
     var cart_items = []
     this.setState({cart_items, total, shipping})
-    //localStorage.setItem("cart_items", JSON.stringify(cart_items))
   }
 
   updateCartQuantity(product, size, delta) {
@@ -174,7 +161,6 @@ class MainView extends React.Component {
     var total = calculateTotal(cart_items, short)
     var shipping = calculateShipping(cart_items, short)
     this.setState({cart_items, total, shipping})
-    //localStorage.setItem("cart_items", JSON.stringify(cart_items))
   }
   toggleCart() {
     var cart_visible = this.state.cart_visible
