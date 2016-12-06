@@ -970,10 +970,12 @@ ul.topnav li.right {float: right;}
 
 .home-episode-card {
   padding: 10px;
+  height: 300px;
 }
 
 .home-latest-blog-card {
   padding: 0px;
+  height: 300px;
 }
 
 .home-latest-blog-card-container {
@@ -1004,11 +1006,11 @@ ul.topnav li.right {float: right;}
 .home-social-media-card {
   background-image: url("/img/png/back.png");
   background-repeat: repeat;
-  height: 100%;
   color: #fff;
   padding: 75px 10px 10px 10px;
   text-align: center;
   font-size: 18pt;
+  height: 300px;
 }
 
 div.mailing-list-signup-container {
