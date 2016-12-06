@@ -38,7 +38,7 @@ class LatestEpisodePlayer extends React.Component {
 				}
 			}
 			var title = this.props.title
-			var d = ep.pubDate
+			var d = new Date(ep.pubDate)
 			var dstr = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate()
 			return (
 				<div className="home-player-card">

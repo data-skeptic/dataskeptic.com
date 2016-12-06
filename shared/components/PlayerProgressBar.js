@@ -1,14 +1,17 @@
 import React from "react"
 import ReactDOM from "react-dom"
 import Rcslider from "rc-slider"
+import { connect } from 'react-redux'
 
-export default class PlayerProgressBar extends React.Component {
+class PlayerProgressBar extends React.Component {
 	constructor(props) {
 		super(props)
 	}
 	
 	onUpdate(pos) {
+		console.log(["onUpdate", pos])
 		this.props.onPlayerSeekChange(pos)
+		this.props.dispatch({type: "PLAYER_SEEK", payload: pos })			
 	}
 
 	render() {
@@ -27,3 +30,5 @@ export default class PlayerProgressBar extends React.Component {
 		)
 	}
 }
+
+export default connect(state => ({ player: state.player }))(PlayerProgressBar)

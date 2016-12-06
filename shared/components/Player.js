@@ -39,7 +39,7 @@ class Player extends React.Component {
 				var position = 100.0 * seek / duration
 				if (!isNaN(position)) {
 					this.props.dispatch({type: "PLAYBACK_LOADED", payload: true })
-					this.props.dispatch({type: "PLAYBACK_POSITION", payload: position })
+					this.props.dispatch({type: "PLAYER_SEEK", payload: position })
 				} else {
 					this.props.dispatch({type: "PLAYBACK_LOADED", payload: false })
 				}				

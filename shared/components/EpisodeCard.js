@@ -37,9 +37,7 @@ class EpisodeCard extends React.Component {
 					}
 				}
 			}
-			var d = ep.pubDate
-			console.log(d)
-			console.log(typeof(d))
+			var d = new Date(ep.pubDate)
 			var dstr = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate()
 			var desc = ep.desc
 			var x = 200
