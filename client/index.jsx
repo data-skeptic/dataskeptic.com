@@ -90,7 +90,6 @@ render(
 /*
   HARD
   refresh page /checkout (stripe not loaded)
-  Player seek issue
   checkout process
   Connect GA in index.jsx
   disqus
@@ -107,16 +106,13 @@ render(
   favicon
   travis-ci deploy
   if #content-view populated, don't retrieve it
+  Spinning logo on waiting for file download in all relevant buttons, not use bar
 */
 
 /*
 PLAYER
-Spinning logo on waiting for file download in all relevant buttons, not use bar
 mathjax http://localhost:8080/blog/episodes/2014/bayesian-updating
-configure env for Production
-redirects on old content
 z-scores script in show notes broken
-feed.rss lambda download
 transcripts linked from episode
 
 
@@ -126,11 +122,7 @@ Verify GA
 Double check Stripe Live
 feeds.rss manual until automated
 
-
 */
-
-
-
 
 
 
