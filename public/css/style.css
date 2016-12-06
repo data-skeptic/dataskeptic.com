@@ -843,7 +843,8 @@ ul.topnav li.right {float: right;}
 }
 .address-validation-msg {
   background-color: #faa;
-  margin-left: 10px;
+  margin-left: 1px;
+  margin-right: 1px;
   margin-bottom: 10px;
   border-radius: 2px;
   padding: 2px 2px 2px 5px;

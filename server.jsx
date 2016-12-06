@@ -38,9 +38,9 @@ axios
     var pn = blog['prettyname']
     var title = blog['title']
     title_map[pn] = title
+    generate_content_map(blog)
   }
   console.log("Loaded blogs!!!")
-  generate_content_map(blog)
 })
 .catch((err) => {
   console.log("bblogs error")
@@ -58,7 +58,6 @@ function generate_content_map(blog) {
   var uri = "https://s3.amazonaws.com/" + envv + 'dataskeptic.com/' + key
   axios.get(uri).then(function(result) {
     var content = result.data
-    console.log(['pn', pn])
     content_map[pn] = content
   })
   .catch((err) => {

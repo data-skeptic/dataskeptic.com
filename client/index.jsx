@@ -38,6 +38,13 @@ if (rs != undefined) {
     if (key == 'episodes') {
       val.pubDate = new Date(val.pubDate)
     }
+    if (key == 'cart') {
+      val.stripeLoading = false
+      val.stripeLoadingError = false
+      val.submitDisabled = false
+      val.paymentError = ""
+      val.paymentComplete = false
+    }
     nstate[key] = Immutable.fromJS(val)
   }
   console.log("Reloaded saved state")
@@ -63,7 +70,6 @@ store.subscribe(() => {
 })
 
 store.subscribe(()=>{
-  console.log("going to save")
   var state = store.getState()
   var nstate = {}
   var keys = Object.keys(state)
@@ -89,7 +95,6 @@ render(
 
 /*
   HARD
-  refresh page /checkout (stripe not loaded)
   checkout process
   Connect GA in index.jsx
   disqus

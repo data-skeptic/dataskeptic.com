@@ -29,11 +29,135 @@ const init = {
     phone: "",
     email: ""
   },
-  focus: "",
+  invalid_submit: false,
+  focus: "first_name",
   focus_msg: ""
 }
 
 const defaultState = Immutable.fromJS(init);
+
+function do_checkout_submit(nstate) {
+  var prod = false
+  if (prod) {
+    var key = 'pk_live_voDrzfYzsfKP33iuzmhxL4JY'
+  } else {
+    var key = 'pk_test_y5MWdr7S7Sx6dpRCUTKOWfpf'
+  }
+  Stripe.setPublishableKey(key)
+  nstate.submitDisabled = true
+  nstate.paymentError = ""
+
+  var msg = ""
+  var valid = true
+  var address = nstate.address
+  var nstate = validate_address(nstate)
+  if (nstate.invalid_submit) {
+    return nstate
+  }
+  console.log("event")
+  console.log(event)
+  Stripe.createToken(event.target, function(status, response) {
+    var paymentError = ""
+    var paymentComplete = false
+    var token = response.id
+    var prod = nstate.prod
+    var customer = address
+    var country = nstate.country_short
+    var products = nstate.cart_items
+    var total    = nstate.total
+    var shipping = nstate.shipping
+    if (response.error) {
+      paymentError = response.error.message
+      nstate.paymentError = paymentError
+      nstate.focus_msg = ""
+      nstate.submitDisabled = false
+      console.log("error: " + paymentError)
+    } else {
+      console.log("response ok")
+      nstate.submitDisabled = true
+      nstate.token = token
+      var dt = (new Date()).toString()
+      var order = {customer, products, total, paymentComplete, token, paymentError, prod, country, dt, shipping}
+      order = self.adjust_for_dynamodb_bug(order)
+      console.log(JSON.stringify(order))
+      console.log(token)
+      axios
+        .post("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/order", order)
+        .then(function(resp) {
+          console.log(resp)
+          var result = resp["data"]
+          console.log(result)
+          if (result["status"] != "ok") {
+            console.log(result["msg"])
+            nstate.paymentComplete = false
+            nstate.submitDisabled = false
+            paymentError = result["msg"]
+            console.log("order api error")
+          } else {
+            console.log("Success")
+            nstate.paymentComplete = true
+            nstate.submitDisabled = false
+            self.props.clearCart()
+            console.log("order complete")
+          }
+        })
+        .catch(function(err) {
+          console.log("order error")
+          console.log(err)
+          var msg = "Error placing your order: " + err
+          nstate.paymentComplete = false
+          nstate.submitDisabled = false
+          nstate.paymentError = msg
+        })
+    }
+  });
+  return nstate
+}
+
+function validate_address(nstate) {
+  var address = nstate.address
+  if (address.last_name.trim() == "") {
+    nstate.invalid_submit = true
+    nstate.focus_msg = "Please enter your name"
+    nstate.focus = "last_name"
+  }
+  else if (address.street_1.trim() == "") {
+    nstate.invalid_submit = true
+    nstate.focus_msg = "Please provide a street address"
+    nstate.focus = "street_1"
+  }
+  else if (address.city.trim() == "") {
+    nstate.invalid_submit = true
+    nstate.focus_msg = "Please provide a valid city"
+    nstate.focus = "city"
+  }
+  else if (address.state.trim() == "") {
+    nstate.invalid_submit = true
+    nstate.focus_msg = "Please provide a state / province"
+    nstate.focus = "state"
+  }
+  else if (address.zip.trim() == "") {
+    nstate.invalid_submit = true
+    nstate.focus_msg = "Please provide a postal code"
+    nstate.focus = "zip"
+  }
+  else if (address.email.trim() == "") {
+    nstate.invalid_submit = true
+    nstate.focus_msg = "Please provide an email address"
+    nstate.focus = "email"
+  }
+  else if (address.phone.trim() == "") {
+    nstate.invalid_submit = true
+    nstate.focus_msg = "Please provide a phone number"
+    nstate.focus = "phone"
+  }
+  else {
+    nstate.invalid_submit = false
+    nstate.focus_msg = ""
+    nstate.focus = ""
+  }
+  return nstate
+}
 
 export default function cartReducer(state = defaultState, action) {
   var nstate = state.toJS()
@@ -82,14 +206,27 @@ export default function cartReducer(state = defaultState, action) {
       nstate.country_long = action.payload.long
       break;
     case 'TOGGLE_CART':
-      console.log("tcccccc")
       nstate.cart_visible = !nstate.cart_visible
       break;
     case 'SHOW_CART':
       nstate.cart_visible = action.payload
       break;
     case 'UPDATE_ADDRESS':
-      nstate.address = action.payload
+      var cls = action.payload.cls
+      var val = action.payload.val
+      nstate.address[cls] = val
+      nstate.focus_msg = ""
+      break;
+    case 'DO_CHECKOUT':
+      nstate = validate_address(nstate)
+      if (!nstate.invalid_submit) {
+        nstate = do_checkout_submit(nstate)        
+      } else {
+        console.log("invalid")
+      }
+      break;
+    case 'CLEAR_FOCUS':
+      nstate.focus = ""
       break;
   }
   nstate.total = calculateTotal(nstate.cart_items, nstate.country_short)

@@ -8,12 +8,13 @@ class CreditCardForm extends React.Component {
 	handleSubmit(event) {
 		event.preventDefault()
 		event.stopPropagation()
-		console.log("Do some validation here!!")
-		this.props.onSubmit(event)
+		this.props.dispatch({type: "DO_CHECKOUT", payload: true })
 	}
 	render() {
 		var ocart = this.props.cart.toJS()
 		var paymentError = ocart.paymentError
+		console.log(ocart)
+		console.log(paymentError)
 		var submitDisabled = ocart.submitDisabled
 		var abox = <div></div>
 		if (paymentError != "") {

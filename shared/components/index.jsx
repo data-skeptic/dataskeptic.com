@@ -186,7 +186,6 @@ class MainView extends React.Component {
   }
 
   render() {
-    console.log("test")
     return (
         <div className="site">
           <div className="container-fluid">
