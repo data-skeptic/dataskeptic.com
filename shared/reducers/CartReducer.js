@@ -54,8 +54,9 @@ function do_checkout_submit(nstate) {
   if (nstate.invalid_submit) {
     return nstate
   }
-  console.log("event")
-  console.log(event)
+  
+  // TODO: convert this to use promises instead
+
   Stripe.createToken(event.target, function(status, response) {
     var paymentError = ""
     var paymentComplete = false
@@ -68,10 +69,11 @@ function do_checkout_submit(nstate) {
     var shipping = nstate.shipping
     if (response.error) {
       paymentError = response.error.message
+      console.log("error: " + paymentError)
+      // Need to find a way to update redux state with values below
       nstate.paymentError = paymentError
       nstate.focus_msg = ""
       nstate.submitDisabled = false
-      console.log("error: " + paymentError)
     } else {
       console.log("response ok")
       nstate.submitDisabled = true
