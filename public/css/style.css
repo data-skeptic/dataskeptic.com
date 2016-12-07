@@ -932,7 +932,10 @@ ul.topnav li.right {float: right;}
   background-color: #ddd;
 }
 
-
+.spinner {
+  text-align: center;
+  width: 100%;
+}
 
 
 /*****************************************************************************

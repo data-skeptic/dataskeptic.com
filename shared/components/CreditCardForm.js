@@ -17,8 +17,6 @@ class CreditCardForm extends React.Component {
 		console.log("render CreditCardForm")
 		var ocart = this.props.cart.toJS()
 		var paymentError = ocart.paymentError
-		console.log(ocart)
-		console.log(paymentError)
 		var submitDisabled = ocart.submitDisabled
 		var abox = <div></div>
 		if (paymentError != "") {
@@ -28,9 +26,16 @@ class CreditCardForm extends React.Component {
 				</div>
 			)
 		}
+		var spinner = <div></div>
+		if (submitDisabled) {
+			spinner = <div className="spinner">
+				<img src="/img/svg/spinner.svg" />
+			</div>
+		}
 		return (
 			<div className="cc-container">
 				<div className="col-xs-12 shipping-address-title">Credit Cart Info</div>
+				{spinner}
 				<div className="cc-outer">
 					<form onSubmit={this.handleSubmit.bind(this)}>
 						{abox}

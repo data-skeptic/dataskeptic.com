@@ -95,10 +95,11 @@ render(
 
 /*
   HARD
-  checkout process
   Connect GA in index.jsx
   disqus
   Environment parameter
+  deploy
+  server side regular refresh for new content
   
   EASY
   /l/snl-impact content
@@ -107,8 +108,10 @@ render(
   
   SKIP?
   404 handling / missing pages
-  server side regular refresh for new content
+
   favicon
+  replace keys / invalidate them
+  get keys from env (lambda_function)
   travis-ci deploy
   if #content-view populated, don't retrieve it
   Spinning logo on waiting for file download in all relevant buttons, not use bar

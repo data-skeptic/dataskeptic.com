@@ -46,7 +46,6 @@ function get_token(nstate, event, dispatch) {
     var key = 'pk_test_y5MWdr7S7Sx6dpRCUTKOWfpf'
   }
   Stripe.setPublishableKey(key)
-  nstate.submitDisabled = true
   nstate.paymentError = ""
 
   var msg = ""
@@ -58,7 +57,7 @@ function get_token(nstate, event, dispatch) {
   }
   
   // TODO: convert this to use promises instead
-  // TODO: We probably only need to do this once if the token was successful
+
 
   Stripe.createToken(event.target, function(status, response) {
     var token = response.id
@@ -117,11 +116,11 @@ function token_recieved(dispatch, nstate) {
       var result = resp["data"]
       var paymentComplete = false
       var paymentError = ""
-      if (result["status"] != "ok") {
+      if (result["msg"] != "ok") {
         console.log("order api error")
         paymentComplete = false
-        paymentError = result["msg"]
-        console.log(result["msg"])
+        paymentError = result["msg"] || result["errorMessage"] || ""
+        console.log(paymentError)
       } else {
         console.log("Successfully got payment token")
         paymentComplete = true
@@ -196,6 +195,7 @@ export default function cartReducer(state = defaultState, action) {
   var nstate = state.toJS()
   switch(action.type) {
   	case 'ADD_TO_CART':
+      nstate.paymentComplete = false
       var found_index = -1
       var cart_item = action.payload
       for (var i=0; i < nstate.cart_items.length; i++) {
@@ -253,9 +253,10 @@ export default function cartReducer(state = defaultState, action) {
     case 'DO_CHECKOUT':
       var dispatch = action.payload.dispatch
       var event = action.payload.event
-      console.log(["dispatch", dispatch])
       nstate = validate_address(nstate)
       if (!nstate.invalid_submit) {
+        console.log("spinner on")
+        nstate.submitDisabled = true
         nstate = get_token(nstate, event, dispatch)
       } else {
         console.log("invalid")
@@ -267,23 +268,27 @@ export default function cartReducer(state = defaultState, action) {
       var paymentError = action.payload.paymentError
       console.log("token:" + token)
       nstate.token = token
-      nstate.submitDisabled = false
       nstate.paymentError = paymentError
       if (nstate.paymentError != "") {
         nstate.paymentError = "Please make sure you entered your credit card information correctly and try again."
+        console.log("spinner off")
         nstate.submitDisabled = false
       }
       if (token != undefined) {
         token_recieved(dispatch, nstate)
+      } else {
+        console.log("spinner off")
+        nstate.submitDisabled = false        
       }
       break;
     case 'PROCESS_CHECKOUT':
-      nstate.submitDisabled = false
       nstate.paymentComplete = action.payload.paymentComplete
       nstate.paymentError = action.payload.paymentError
       if (nstate.paymentComplete) {
           nstate = clearCart(nstate)
       }
+      console.log("spinner off")
+      nstate.submitDisabled = false
       break;
     case 'CLEAR_FOCUS':
       nstate.focus = ""
