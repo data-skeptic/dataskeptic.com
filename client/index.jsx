@@ -98,37 +98,35 @@ render(
   Connect GA in index.jsx
   disqus
   Environment parameter
-  deploy
+  deploy / hosting
   server side regular refresh for new content
   
   EASY
   /l/snl-impact content
   Sidebar layout is ugly
   crypto episode notes /bf
-  
-  SKIP?
-  404 handling / missing pages
 
-  favicon
-  replace keys / invalidate them
-  get keys from env (lambda_function)
-  travis-ci deploy
-  if #content-view populated, don't retrieve it
-  Spinning logo on waiting for file download in all relevant buttons, not use bar
+  LAUNCH
+  Change domain
+  Verify GA
+  Double check Stripe Live
+  feeds.rss manual until automated
 */
 
 /*
-PLAYER
+FIX NEXT
 mathjax http://localhost:8080/blog/episodes/2014/bayesian-updating
 z-scores script in show notes broken
 transcripts linked from episode
+404 handling / missing pages
+favicon
+replace keys / invalidate them
+get keys from env (lambda_function)
+travis-ci deploy
+if #content-view populated, don't retrieve it
+Spinning logo on waiting for file download in all relevant buttons, not use bar
 
 
-LAUNCH
-Change domain
-Verify GA
-Double check Stripe Live
-feeds.rss manual until automated
 
 */
 
