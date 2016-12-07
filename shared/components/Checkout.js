@@ -24,29 +24,6 @@ class Checkout extends React.Component {
 		console.log("onScriptError")
 	}
 
-	adjust_for_dynamodb_bug(obj) {
-		// Bug described in: https://forums.aws.amazon.com/thread.jspa?threadID=90137
-		var obj2 = JSON.parse(JSON.stringify(obj))
-		if (typeof(obj2)=="object") {
-			var keys = Object.keys(obj2)
-			for (var i=0; i < keys.length; i++) {
-				var key = keys[i]
-				var val = obj2[key]
-				if (typeof(val)=="string") {
-					if (val=="") {
-						obj2[key] = " "
-					}
-				}
-				else if (typeof(val)=="object") {
-					obj2[key] = this.adjust_for_dynamodb_bug(val)
-				}
-			}
-			return obj2
-		} else {
-			return obj2
-		}
-	}
-
 	render() {
 		var ocart = this.props.cart.toJS()
 		var cart_items = ocart.cart_items

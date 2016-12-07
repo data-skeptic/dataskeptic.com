@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
 import { fromJS } from 'immutable';
+import axios from 'axios';
 
 import { calculateShipping, calculateTotal } from "../components/store_utils"
 
@@ -8,6 +9,7 @@ const init = {
   total: 0,
   shipping: 0,
   cart_visible: false,
+  prod: false,
   go_to_checkout: false,
   country_short: "us",
   country_long: "United States of America",
@@ -36,7 +38,7 @@ const init = {
 
 const defaultState = Immutable.fromJS(init);
 
-function do_checkout_submit(nstate) {
+function get_token(nstate, event, dispatch) {
   var prod = false
   if (prod) {
     var key = 'pk_live_voDrzfYzsfKP33iuzmhxL4JY'
@@ -56,65 +58,87 @@ function do_checkout_submit(nstate) {
   }
   
   // TODO: convert this to use promises instead
+  // TODO: We probably only need to do this once if the token was successful
 
   Stripe.createToken(event.target, function(status, response) {
-    var paymentError = ""
-    var paymentComplete = false
     var token = response.id
-    var prod = nstate.prod
-    var customer = address
-    var country = nstate.country_short
-    var products = nstate.cart_items
-    var total    = nstate.total
-    var shipping = nstate.shipping
+    var paymentError = ""
     if (response.error) {
       paymentError = response.error.message
       console.log("error: " + paymentError)
-      // Need to find a way to update redux state with values below
-      nstate.paymentError = paymentError
-      nstate.focus_msg = ""
-      nstate.submitDisabled = false
-    } else {
-      console.log("response ok")
-      nstate.submitDisabled = true
-      nstate.token = token
-      var dt = (new Date()).toString()
-      var order = {customer, products, total, paymentComplete, token, paymentError, prod, country, dt, shipping}
-      order = self.adjust_for_dynamodb_bug(order)
-      console.log(JSON.stringify(order))
-      console.log(token)
-      axios
-        .post("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/order", order)
-        .then(function(resp) {
-          console.log(resp)
-          var result = resp["data"]
-          console.log(result)
-          if (result["status"] != "ok") {
-            console.log(result["msg"])
-            nstate.paymentComplete = false
-            nstate.submitDisabled = false
-            paymentError = result["msg"]
-            console.log("order api error")
-          } else {
-            console.log("Success")
-            nstate.paymentComplete = true
-            nstate.submitDisabled = false
-            self.props.clearCart()
-            console.log("order complete")
-          }
-        })
-        .catch(function(err) {
-          console.log("order error")
-          console.log(err)
-          var msg = "Error placing your order: " + err
-          nstate.paymentComplete = false
-          nstate.submitDisabled = false
-          nstate.paymentError = msg
-        })
     }
-  });
+    dispatch({type: "TOKEN_RECIEVED", payload: { dispatch, token, paymentError } })
+  })
   return nstate
 }
+
+function adjust_for_dynamodb_bug(obj) {
+  // Bug described in: https://forums.aws.amazon.com/thread.jspa?threadID=90137
+  var obj2 = JSON.parse(JSON.stringify(obj))
+  if (typeof(obj2)=="object") {
+    var keys = Object.keys(obj2)
+    for (var i=0; i < keys.length; i++) {
+      var key = keys[i]
+      var val = obj2[key]
+      if (typeof(val)=="string") {
+        if (val=="") {
+          obj2[key] = " "
+        }
+      }
+      else if (typeof(val)=="object") {
+        obj2[key] = adjust_for_dynamodb_bug(val)
+      }
+    }
+    return obj2
+  } else {
+    return obj2
+  }
+}
+
+function token_recieved(dispatch, nstate) {
+  var customer = nstate.address
+  var products = nstate.cart_items
+  var total    = nstate.total
+  var paymentComplete = false
+  var token = nstate.token
+  var paymentError = nstate.paymentError
+  var prod = nstate.prod
+  var country = nstate.country_short
+  var dt = (new Date()).toString()
+  var shipping = nstate.shipping
+  var order = {customer, products, total, paymentComplete, token, paymentError, prod, country, dt, shipping}
+  order = adjust_for_dynamodb_bug(order)
+  console.log(JSON.stringify(order))
+  console.log(token)
+  axios
+    .post("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/order", order)
+    .then(function(resp) {
+      console.log(resp)
+      var result = resp["data"]
+      var paymentComplete = false
+      var paymentError = ""
+      if (result["status"] != "ok") {
+        console.log("order api error")
+        paymentComplete = false
+        paymentError = result["msg"]
+        console.log(result["msg"])
+      } else {
+        console.log("Successfully got payment token")
+        paymentComplete = true
+        console.log("Now on to processing")
+      }
+      dispatch({type: "PROCESS_CHECKOUT", payload: { paymentComplete, paymentError } })
+    })
+    .catch(function(err) {
+      console.log("order error")
+      console.log(err)
+      var msg = "Error placing your order: " + err
+      paymentComplete = false
+      paymentError = msg
+      dispatch({type: "PROCESS_CHECKOUT", payload: { paymentComplete, paymentError } })
+    })
+}
+
 
 function validate_address(nstate) {
   var address = nstate.address
@@ -158,6 +182,13 @@ function validate_address(nstate) {
     nstate.focus_msg = ""
     nstate.focus = ""
   }
+  return nstate
+}
+
+function clearCart(nstate) {
+  nstate.total = 0
+  nstate.shipping = 0
+  nstate.cart_items = []
   return nstate
 }
 
@@ -220,11 +251,38 @@ export default function cartReducer(state = defaultState, action) {
       nstate.focus_msg = ""
       break;
     case 'DO_CHECKOUT':
+      var dispatch = action.payload.dispatch
+      var event = action.payload.event
+      console.log(["dispatch", dispatch])
       nstate = validate_address(nstate)
       if (!nstate.invalid_submit) {
-        nstate = do_checkout_submit(nstate)        
+        nstate = get_token(nstate, event, dispatch)
       } else {
         console.log("invalid")
+      }
+      break;
+    case 'TOKEN_RECIEVED':
+      var dispatch = action.payload.dispatch
+      var token = action.payload.token
+      var paymentError = action.payload.paymentError
+      console.log("token:" + token)
+      nstate.token = token
+      nstate.submitDisabled = false
+      nstate.paymentError = paymentError
+      if (nstate.paymentError != "") {
+        nstate.paymentError = "Please make sure you entered your credit card information correctly and try again."
+        nstate.submitDisabled = false
+      }
+      if (token != undefined) {
+        token_recieved(dispatch, nstate)
+      }
+      break;
+    case 'PROCESS_CHECKOUT':
+      nstate.submitDisabled = false
+      nstate.paymentComplete = action.payload.paymentComplete
+      nstate.paymentError = action.payload.paymentError
+      if (nstate.paymentComplete) {
+          nstate = clearCart(nstate)
       }
       break;
     case 'CLEAR_FOCUS':

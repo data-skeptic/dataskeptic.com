@@ -35,7 +35,7 @@
     "react-ga": "^2.1.2",
     "react-howler": "^3.3.0",
     "react-logger": "^1.1.0",
-    "react-redux": "^4.0.2",
+    "react-redux": "^4.4.6",
     "react-router": "^1.0.3",
     "react-slick": "^0.14.5",
     "react-thunk": "^1.0.0",

@@ -8,9 +8,13 @@ class CreditCardForm extends React.Component {
 	handleSubmit(event) {
 		event.preventDefault()
 		event.stopPropagation()
-		this.props.dispatch({type: "DO_CHECKOUT", payload: true })
+		var dispatch = this.props.dispatch
+		dispatch((dispatch) => {
+			this.props.dispatch({type: "DO_CHECKOUT", payload: { event, dispatch } })
+		})
 	}
 	render() {
+		console.log("render CreditCardForm")
 		var ocart = this.props.cart.toJS()
 		var paymentError = ocart.paymentError
 		console.log(ocart)

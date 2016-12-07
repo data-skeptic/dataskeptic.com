@@ -135,13 +135,6 @@ class MainView extends React.Component {
     this.setState({cart_items, total, shipping})
   }
 
-  clearCart() {
-    var total = 0
-    var shipping = 0
-    var cart_items = []
-    this.setState({cart_items, total, shipping})
-  }
-
   updateCartQuantity(product, size, delta) {
     if (size == undefined) {
       size = ""
