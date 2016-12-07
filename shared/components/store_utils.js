@@ -1,4 +1,7 @@
 export function calculateShipping(items, short) {
+	if (items == undefined) {
+		return 0
+	}
 	var has_items = 0
 	var big_items = 0
 	var is_us = 1
