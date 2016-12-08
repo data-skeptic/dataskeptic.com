@@ -39,7 +39,7 @@ const init = {
 const defaultState = Immutable.fromJS(init);
 
 function get_token(nstate, event, dispatch) {
-  var prod = false
+  var prod = true
   if (prod) {
     var key = 'pk_live_voDrzfYzsfKP33iuzmhxL4JY'
   } else {
