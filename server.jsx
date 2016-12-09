@@ -27,7 +27,7 @@ if (process.env.NODE_ENV !== 'production') {
 var title_map = {}
 var content_map = {}
 
-var env = "dev"
+var env = "prod"
 
 axios
 .get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/blog?env=" + env)
