@@ -83,15 +83,11 @@ app.use( (req, res) => {
   const reducer  = combineReducers(reducers);
   const store    = applyMiddleware(promiseMiddleware)(createStore)(reducer);
 
-  var state0 = store.getState()
-  var osite = state0.site.toJS()
-  var env = osite.env
-  getEpisodes(store)
-  getBlogs(store, env)
-
   const initialState = store.getState()
   var oepisodes = initialState.episodes.toJS()
   var oblogs = initialState.blogs.toJS()
+  var osite = initialState.site.toJS()
+  var env = osite.env
 
   match({ routes, location }, (err, redirectLocation, renderProps) => {
     if(err) {
