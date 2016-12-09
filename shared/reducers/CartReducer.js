@@ -41,9 +41,9 @@ const defaultState = Immutable.fromJS(init);
 function get_token(nstate, event, dispatch) {
   var prod = true
   if (prod) {
-    var key = 'pk_live_voDrzfYzsfKP33iuzmhxL4JY'
+    var key = 'pk_live_JcvvQ05E9jgvtPjONUQdCqYg'
   } else {
-    var key = 'pk_test_y5MWdr7S7Sx6dpRCUTKOWfpf'
+    var key = 'pk_test_oYGXSwgw9Jde2TOg7vZtCRGo'
   }
   Stripe.setPublishableKey(key)
   nstate.paymentError = ""
