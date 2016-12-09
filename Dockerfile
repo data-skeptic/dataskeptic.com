@@ -12,6 +12,5 @@ RUN sudo apt-get install -y nodejs
 
 RUN wget https://github.com/data-skeptic/dataskeptic.com/archive/master.zip
 RUN unzip master.zip
-RUN cd dataskeptic.com-master/
-RUN npm install
-RUN npm run dev
+RUN cd dataskeptic.com-master/; npm install
+#RUN cd dataskeptic.com-master/; npm run dev

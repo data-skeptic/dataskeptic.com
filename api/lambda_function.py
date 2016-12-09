@@ -6,9 +6,9 @@ import stripe
 env = "prod"
 
 if env == "prod":
-    stripe.api_key = "sk_live_GrD54yfWEDVAhgFeOea3HMD0"
+    stripe.api_key = "pk_live_JcvvQ05E9jgvtPjONUQdCqYg"
 else:
-    stripe.api_key = "sk_test_JDu4VvArX2Oa2vh0DOek972y"
+    stripe.api_key = "pk_test_oYGXSwgw9Jde2TOg7vZtCRGo"
 
 def lambda_handler(event, context):
     dynamodb = boto3.resource('dynamodb')
