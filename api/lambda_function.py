@@ -3,7 +3,12 @@ import boto3
 import uuid
 import stripe
 
-stripe.api_key = "sk_test_JDu4VvArX2Oa2vh0DOek972y"
+env = "prod"
+
+if env == "prod":
+    stripe.api_key = "sk_live_GrD54yfWEDVAhgFeOea3HMD0"
+else:
+    stripe.api_key = "sk_test_JDu4VvArX2Oa2vh0DOek972y"
 
 def lambda_handler(event, context):
     dynamodb = boto3.resource('dynamodb')
