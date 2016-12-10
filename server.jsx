@@ -79,7 +79,7 @@ app.use( (req, res) => {
     return res.redirect(301, 'http://' + hostname + redir)
   }
   if (req.url == '/feed.rss') {
-    return.redirect(307, 'http://dataskeptic.libsyn.com/rss')
+    return res.redirect(307, 'http://dataskeptic.libsyn.com/rss')
   }
 
   const location = createLocation(req.url);
