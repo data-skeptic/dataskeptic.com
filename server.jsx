@@ -78,6 +78,9 @@ app.use( (req, res) => {
     console.log("Redirecting to " + hostname + redir)
     return res.redirect(301, 'http://' + hostname + redir)
   }
+  if (req.url == '/feed.rss') {
+    return.redirect(307, 'http://dataskeptic.libsyn.com/rss')
+  }
 
   const location = createLocation(req.url);
   const reducer  = combineReducers(reducers);
