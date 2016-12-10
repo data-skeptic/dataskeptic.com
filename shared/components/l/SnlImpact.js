@@ -12,8 +12,13 @@ const SnlImpact = () => {
 	*/
 	return (
 		<div className="center">
-			<p>You've found a link before we were ready for it to go live!</p>
-			<p>This content will be officially released on 11/28/2016.  Come back then to find a way to listen to Causal Impact episode of Data Skeptic, try out the Causal Impact Shinyapp, and get episode extras!</p>
+			<h2>Causal Impact</h2>
+			<p>We're going to regularly add a few pieces of content about Causal Impact as they come up on Data Skeptic.  Check back later for more interesting things!</p>
+			<ul>
+				<li><a href="http://dataskeptic.com/blog/episodes/2016/causal-impact">Podcast episode</a></li>
+				<li><a href="http://snl.dataskeptic.com/">Shinny App</a></li>
+			</ul>
+
 		</div>
 	)
 }
