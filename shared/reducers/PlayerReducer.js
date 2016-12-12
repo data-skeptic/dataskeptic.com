@@ -16,10 +16,8 @@ export default function playerReducer(state = defaultState, action) {
   var nstate = state.toJS()
   switch(action.type) {
   	case 'PLAY_EPISODE':
-      console.log("play episode")
       var episode = action.payload
       if (episode == undefined) {
-        console.log("Stopping playback")
         nstate.is_playing = false
       } else {
         nstate.has_shown = true

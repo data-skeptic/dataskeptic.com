@@ -16,6 +16,7 @@ import { createStore,
          combineReducers,
          applyMiddleware }  from 'redux';
 
+
 var initialState = immutifyState(window.__INITIAL_STATE__);
 
 const history = createBrowserHistory();
@@ -23,7 +24,7 @@ const history = createBrowserHistory();
 const reducer = combineReducers(reducers);
 
 const logger = (store) => (next) => (action) => {
-  //console.log("action fired", action)
+  console.log("action fired", action)
   next(action)
 }
 
@@ -63,7 +64,7 @@ store.dispatch({type: "INITIALIZE_PLAYER", payload: player})
 
 getEpisodes(store)
 getBlogs(store, env)
-getProducts(store)
+getProducts(store, env)
 
 store.subscribe(() => {
   //console.log("store changed", store.getState())

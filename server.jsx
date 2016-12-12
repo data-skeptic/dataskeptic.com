@@ -27,10 +27,10 @@ if (process.env.NODE_ENV !== 'production') {
 var title_map = {}
 var content_map = {}
 
-var env = "prod"
+var env = "dev"
 
 axios
-.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/blog?env=" + env)
+.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + env + "/blogs?env=" + env)
 .then(function(result) {
   var blogs = result.data
   for (var i=0; i < blogs.length; i++) {
@@ -40,7 +40,7 @@ axios
     title_map[pn] = title
     generate_content_map(blog)
   }
-  console.log("Loaded blogs!!!")
+  console.log("Loaded all blogs into content_map")
 })
 .catch((err) => {
   console.log("bblogs error")
@@ -90,7 +90,6 @@ app.use( (req, res) => {
   var oepisodes = initialState.episodes.toJS()
   var oblogs = initialState.blogs.toJS()
   var osite = initialState.site.toJS()
-  var env = osite.env
 
   match({ routes, location }, (err, redirectLocation, renderProps) => {
     if(err) {
@@ -99,7 +98,7 @@ app.use( (req, res) => {
     }
 
     if(!renderProps) {
-      return res.status(404).end('Not found');
+      return res.status(404).end('<html><body><h1>Not found</h1></body></html>');
     }
 
     function renderView() {
@@ -115,6 +114,7 @@ app.use( (req, res) => {
       if (alt_title != undefined) {
         title = alt_title
       }
+      console.log("title: " + title)
 
       const componentHTML = renderToString(InitialView);
       var content = content_map[pathname]

@@ -2,8 +2,7 @@ import Immutable from 'immutable';
 import { fromJS } from 'immutable';
 
 const init = {
-  title: "Data Skeptic - The intersection of data science, artificial intelligence, machine learning, statistics, and scientific skepticism",
-  env: "dev"
+  title: "Data Skeptic - The intersection of data science, artificial intelligence, machine learning, statistics, and scientific skepticism"
 }
 
 const defaultState = Immutable.fromJS(init);

@@ -12,6 +12,15 @@ import LatestEpisodePlayer from "./LatestEpisodePlayer"
 class Blog extends React.Component {
 	constructor(props) {
 		super(props)
+		var oblogs = this.props.blogs.toJS()
+		var blogs_loaded = oblogs.blogs_loaded || 0
+		var blog_focus   = oblogs.blog_focus || {loaded: 0}
+		var pathname = this.props.location.pathname
+		pathname = pathname.substring("/blog".length, pathname.length)
+		if (blogs_loaded == 0 && blog_focus.loaded == 0) {
+			var dispatch = this.props.dispatch
+			dispatch({type: "LOAD_BLOG", payload: {dispatch, pathname} })
+		}
 	}
 
 	remove_type(typ, arr) {
@@ -41,91 +50,108 @@ class Blog extends React.Component {
 	}
 
 	render() {
-		var oblogs = this.props.blogs.toJS()
-		var oepisodes = this.props.episodes.toJS()
-		var osite = this.props.site.toJS()
-		console.log(["osite", osite])
-		var blogs_loaded = oblogs.blogs_loaded
-		if (blogs_loaded == undefined) {
-			blogs_loaded = 0
-		}
-		if (blogs_loaded == 0) {
-			return <div><Loading /></div>
-		}
-		var blogs = oblogs.blogs
-		var folders = oblogs.folders
+		console.log("rb")
 		var pathname = this.props.location.pathname
-		if (pathname == '/blog' || pathname == '/blog/') {
+		pathname = pathname.substring("/blog".length, pathname.length)
+
+		var oblogs = this.props.blogs.toJS()
+		var blogs_loaded = oblogs.blogs_loaded || 0
+		var blog_focus   = oblogs.blog_focus || {loaded: 0}
+		var folders = oblogs.folders || []
+		var blogs = oblogs.blogs || []
+		var listings = false
+
+		for (var i=0; i < folders.length; i++) {
+			var folder = folders[i]
+			var sfolder = "/" + folder
+			if (pathname.indexOf(sfolder) == 0 && pathname.length == sfolder.length) {
+				listings = true
+				blogs = this.only_type(folder, blogs)
+			}
+		}
+
+		if (pathname == "" || pathname == "/") {
 			blogs = this.remove_type("episodes", blogs)
 			blogs = this.remove_type("transcripts", blogs)
-			return (
-				<div className="center">
-					<BlogNav folders={folders} pathname={pathname} />
-					<BlogList blogs={blogs} />
-				</div>
-			)
+			listings = true
 		}
-		pathname = pathname.substring("/blog".length, pathname.length)
-		var fn = function(pn, blogs) {
-			for (var i in blogs) {
-				var b = blogs[i]
-				var pn = b["prettyname"]
-				if (pn == pathname) {
-					return b
-				}
-			}
-			return undefined
-		}
-		var blog = fn(pathname, blogs)
-		if (blog == undefined) {
-			// TODO: make this general and not error prone
-			for (var i=0; i < folders.length; i++) {
-				var folder = folders[i]
-				if (pathname.indexOf(folder) > 0) {
-					var fblogs = this.only_type(folder, blogs)
-					return (
-						<div className="center">
-							<BlogNav folders={folders} pathname={pathname} />
-							<BlogList blogs={fblogs} />
-						</div>
-					)
-				}
-			}
-			return (
-				<NotFound location={pathname} />
-			)
-		}
-		else {
-			var top = ""
-			var isEpisode = blog.guid != undefined
-			if (isEpisode) {
-				var guid = blog.guid
-				var episode = oepisodes.episodes_map[guid]
-				var player = this.props.player.toJS()
-				var is_playing = false
-				var pepisode = player.episode
-				if (pepisode != undefined && episode.guid == pepisode.guid) {
-					is_playing = player.is_playing
-				}
-				top = (
-					<div className="home-player">
-						<LatestEpisodePlayer title="" episode={episode} />
+
+
+		if (listings) {
+			// Navigation / listings
+			if (blogs_loaded == 1) {
+				return (
+					<div className="center">
+						<BlogNav folders={folders} pathname={pathname} />
+						<BlogList blogs={blogs} />
 					</div>
 				)
+			} else if (blogs_loaded == -1) {
+				return <div><Error /></div>
+			} else {
+				return <div><Loading /></div>
 			}
-			var env = oblogs.env + "."
-			if (env == "prod.") {
-				env = ""
+		}
+		else {
+			// Single page
+			var blog = undefined
+			if (blog_focus.loaded == 1) {
+				console.log("Got specific blog directly")
+				blog = blog_focus.blog
 			}
-			var uri = "https://s3.amazonaws.com/" + env + 'dataskeptic.com/' + blog["rendered"]
-			var title = blog["title"]
-			return (
-				<div className="center">
-					<BlogNav folders={folders} pathname={pathname} />
-					{top}
-					<BlogItem src={uri} pathname={pathname} title={title} />
-				</div>
-			)
+			else if (blogs_loaded == 1) {
+				for (var i=0; i < blogs.length; i++) {
+					var b = blogs[i]
+					if (b.prettyname == pathname) {
+						console.log("Got blog from full cache")
+						blog = b
+					}
+				}
+			}
+
+			if (blog != undefined) {
+				var env = oblogs.env + "."
+				if (env == "prod.") {
+					env = ""
+				}
+				var uri = "https://s3.amazonaws.com/" + env + 'dataskeptic.com/' + blog["rendered"]
+				var title = blog["title"]
+				var top = ""
+				var isEpisode = blog.guid != undefined
+				if (isEpisode) {
+					var guid = blog.guid
+					try {
+						var oepisodes = this.props.episodes.toJS() || []
+						var episode = oepisodes.episodes_map[guid]
+						var player = this.props.player.toJS()
+						var is_playing = false
+						var pepisode = player.episode
+						if (pepisode != undefined && episode.guid == pepisode.guid) {
+							is_playing = player.is_playing
+						}
+						top = (
+							<div className="home-player">
+								<LatestEpisodePlayer title="" episode={episode} />
+							</div>
+						)					
+					}
+					catch (err) {
+						console.log(err)
+						top = <div></div>
+					}
+				}
+				return (
+					<div className="center">
+						<BlogNav folders={folders} pathname={pathname} />
+						{top}
+						<BlogItem src={uri} pathname={pathname} title={title} />
+					</div>
+				)
+			} else if (blog_focus.loaded == -1) {
+				return <div><Error /></div>
+			} else {
+				return <div><Loading /></div>				
+			}
 		}
 	}
 }

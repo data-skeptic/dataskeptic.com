@@ -5,7 +5,8 @@ import axios from "axios"
 import xml2js from "xml2js"
 import ReactGA from 'react-ga'
 
-import { calculateShipping, calculateTotal } from './store_utils'
+import { calculateShipping, calculateTotal } from '../utils/store_utils'
+import { extractFolders } from '../utils/blog_utils'
 
 import Footer from './Footer'
 import Header from './Header'
@@ -16,49 +17,24 @@ import Sidebar from './Sidebar'
 class MainView extends React.Component {
   constructor(props) {
     super(props)
-    var env = "dev"
-    var bucket = env + ".dataskeptic.com"
-    if (env == "master") {
-      bucket = "dataskeptic.com"
-    }
-
     var persisted = this.loadState()
     var total = calculateTotal(persisted.cart_items, persisted.country.short)
     var shipping = calculateShipping(persisted.cart_items, persisted.country.short)
+  }
 
-    console.log("Initialize GA1")
-    //ReactGA.initialize("UA-88166505-1", {
-    //  debug: false
-    //});
-    console.log("Initialize GA2")
-    this.logPageView()
-    console.log("Initialize GA3")
+  componentDidMount() {
+    /*
+    console.log("Initialize GA")
+    ReactGA.initialize("UA-88166505-1", {
+      debug: false
+    });
+    */
   }
 
   loadState() {
     var cart_items = []
     var country = {short: "us", long: "United State of America"}
     return {cart_items, country}
-  }
-
-  extractFolders(blogs) {
-    var folders = []
-    if (blogs != undefined) {
-      for (var i in blogs) {
-        var b = blogs[i]
-        var pn = b["prettyname"]
-        if (pn != undefined) {
-          var arr = pn.split("/")
-          var level = 0
-          if (arr.length >= level+2) {
-            var folder = arr[level+1]
-            folders.push(folder)
-          }
-        }
-      }
-      folders = folders.reduce((a, x) => a.includes(x) ? a : [...a, x], []).sort()
-    }
-    return folders
   }
 
   generateEpisodeMap(episodes) {
@@ -163,10 +139,16 @@ class MainView extends React.Component {
   }
   logPageView() {
     var logPageViewInner = this.logPageViewInner
+    /*
     setTimeout(function() {
-      //var page = window.location.pathname
-      //logPageViewInner(page)
+      if (window != undefined) {
+        var page = window.location.pathname
+        logPageViewInner(page)        
+      } else {
+        console.log("window issue")
+      }
     }, 50)
+    */
   }
   logPageViewInner(page) {
     console.log(["logPageViewInner", page])
@@ -179,6 +161,7 @@ class MainView extends React.Component {
   }
 
   render() {
+    this.logPageView()
     return (
         <div className="site">
           <div className="container-fluid">

@@ -1,9 +1,9 @@
 import axios from "axios"
 
-export default function getProducts(store) {
+export default function getProducts(store, env) {
 	console.log("Get products")
 	axios
-		.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/products")
+		.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + env + "/products")
 		.then(function(result) {
 			var products = result.data.Items
 			if (products != undefined) {

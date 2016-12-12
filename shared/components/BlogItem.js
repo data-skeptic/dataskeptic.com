@@ -25,7 +25,6 @@ class BlogItem extends React.Component {
 			.get(src)
 			.then(function(result) {
 				var content = result["data"]
-				console.log(["content", content])
 				me.setState({content})
 			})
 			.catch(function (err) {

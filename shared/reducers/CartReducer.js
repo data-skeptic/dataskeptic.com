@@ -2,7 +2,7 @@ import Immutable from 'immutable';
 import { fromJS } from 'immutable';
 import axios from 'axios';
 
-import { calculateShipping, calculateTotal } from "../components/store_utils"
+import { calculateShipping, calculateTotal } from "../utils/store_utils"
 
 const init = {
   cart_items: [],

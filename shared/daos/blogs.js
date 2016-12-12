@@ -1,29 +1,14 @@
 import axios from "axios"
 
-function extractFolders(blogs) {
-	var folders = []
-	if (blogs != undefined) {
-		for (var i in blogs) {
-			var b = blogs[i]
-			var pn = b["prettyname"]
-			if (pn != undefined) {
-				var arr = pn.split("/")
-				var level = 0
-				if (arr.length >= level+2) {
-					var folder = arr[level+1]
-					folders.push(folder)
-				}
-			}
-		}
-		folders = folders.reduce((a, x) => a.includes(x) ? a : [...a, x], []).sort()
-	}
-	return folders
-}
-
+import { extractFolders } from '../utils/blog_utils'
 
 export default function getBlogs(store, env) {
+	var db_env = env
+	if (db_env == "prod") {
+		db_env = "master"
+	}
 	axios
-		.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/blog?env=" + env)
+		.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + env + "/blogs?env=" + db_env)
 		.then(function(result) {
 			var blogs = result.data
 			var blogs_loaded = true
