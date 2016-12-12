@@ -12,6 +12,7 @@ class LatestBlogCard extends React.Component {
 	render() {
 		var oblogs = this.props.blogs.toJS()
 		var blogs = oblogs.blogs
+		var blog_focus   = oblogs.blog_focus || {loaded: 0}
 		var blogs_loaded = oblogs.blogs_loaded
 		if (blogs_loaded == 0) {
 			return <Loading />
@@ -19,7 +20,19 @@ class LatestBlogCard extends React.Component {
 		if (blogs.length == 0) {
 			return <Error />
 		}
-		var blog = blogs[0]
+		var blog = undefined
+		if (blog_focus.loaded == 1) {
+			console.log(111)
+			blog = blog_focus.blog
+		}
+		else if (blogs.length > 0) {
+			console.log(222)
+			blog = blogs[0]
+		}
+		if (blog == undefined) {
+			return <Error />
+		}
+		console.log(blog)
 		var pn = blog.prettyname
 		if (pn[0] == "/") {
 			pn = pn.substring(1, pn.length)

@@ -6,7 +6,7 @@ const init = {
   blogs: [],
   folders: [],
   blogs_loaded: 0,
-  blog_focus: 0,
+  blog_focus: {loaded: 0},
   env: "prod"
 }
 
@@ -35,7 +35,7 @@ export default function blogsReducer(state = defaultState, action) {
       break
     case 'FETCH_BLOGS_ERROR':
       nstate.blogs_loaded = -1
-      nstate.blog_focus = -1
+      nstate.blog_focus.loaded = -1
       break
     case 'SET_FOLDERS':
       nstate.folders = action.payload

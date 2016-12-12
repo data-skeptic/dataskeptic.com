@@ -50,7 +50,6 @@ class Blog extends React.Component {
 	}
 
 	render() {
-		console.log("rb")
 		var pathname = this.props.location.pathname
 		pathname = pathname.substring("/blog".length, pathname.length)
 
