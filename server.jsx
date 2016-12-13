@@ -117,7 +117,8 @@ app.use( (req, res) => {
       var title = "Page not found"
       var componentHTML = "<div><h1>Not Found</h1></div>"
       var HTML = getContentWrapper(title, initialState, "", componentHTML)
-      console.log("page not found")
+      var pathname = location.pathname
+      console.log("page not found:" + pathname)
       //console.log(HTML)
       return res.status(404).end(componentHTML);
     } else {
