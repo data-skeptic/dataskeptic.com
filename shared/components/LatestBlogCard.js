@@ -22,17 +22,26 @@ class LatestBlogCard extends React.Component {
 		}
 		var blog = undefined
 		if (blog_focus.loaded == 1) {
-			console.log(111)
+			console.log("Using blog_focus")
 			blog = blog_focus.blog
 		}
 		else if (blogs.length > 0) {
-			console.log(222)
+			console.log("Using top of cache")
+			var i=0
+			while (i < blogs.length) {
+				var b = blogs[i]
+				var pn = b.prettyname
+				if (pn.indexOf("/episodes/") == -1 && pn.indexOf("/transcripts/") == -1) {
+					blog = b
+					i = blogs.length
+				}
+				i++
+			}
 			blog = blogs[0]
 		}
 		if (blog == undefined) {
 			return <Error />
 		}
-		console.log(blog)
 		var pn = blog.prettyname
 		if (pn[0] == "/") {
 			pn = pn.substring(1, pn.length)

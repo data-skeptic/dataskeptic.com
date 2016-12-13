@@ -20,7 +20,7 @@ export default class BlogNav extends React.Component {
 						<BlogLink active="/blog" to="/blog">{up}</BlogLink>
 					</div>
 					{folders.map(function(folder) {
-						var path = "/blog/" + folder
+						var path = "/blog/" + folder + "/"
 						return (
 							<div key={path} className="blog-link-container">
 								<BlogLink active={pathname} to={path}>{folder}</BlogLink>

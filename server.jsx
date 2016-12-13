@@ -1,3 +1,4 @@
+import compression               from 'compression';
 import express                   from 'express';
 import React                     from 'react';
 import axios                     from 'axios';
@@ -17,6 +18,7 @@ import path                      from 'path';
 import getEpisodes               from 'daos/episodes';
 import getBlogs                  from 'daos/blogs';
 import redirects_map             from './redirects';
+import getContentWrapper         from 'utils/content_wrapper';
 
 const app = express();
 
@@ -69,6 +71,17 @@ function generate_content_map(blog) {
 global.title_map = title_map
 global.content_map = content_map
 
+function shouldCompress (req, res) {
+  if (req.headers['x-no-compression']) {
+    // don't compress responses with this request header
+    return false
+  }
+  // fallback to standard filter function
+  return compression.filter(req, res)
+}
+
+app.use(compression({filter: shouldCompress}))
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use( (req, res) => {
@@ -98,10 +111,28 @@ app.use( (req, res) => {
     }
 
     if(!renderProps) {
-      return res.status(404).end('<html><body><h1>Not found</h1></body></html>');
+      var title = "Page not found"
+      var componentHTML = "<div><h1>Not Found</h1></div>"
+      var HTML = getContentWrapper(title, initialState, "", componentHTML)
+      console.log("page not found")
+      console.log(HTML)
+      return res.status(404).end(componentHTML);
+    } else {
+      console.log("render props")
+      //console.log(renderProps)
+      console.log("---------------------")
+      console.log(renderProps.params)
     }
 
     function renderView() {
+      var content = content_map[pathname]
+      if (content == undefined) {
+        content = ""
+      } else {
+        console.log("Pulled content from cache")
+        // TODO: inject into
+      }
+
       const InitialView = (
         <Provider store={store}>
           <RoutingContext {...renderProps} />
@@ -114,53 +145,10 @@ app.use( (req, res) => {
       if (alt_title != undefined) {
         title = alt_title
       }
-      console.log("title: " + title)
 
-      const componentHTML = renderToString(InitialView);
-      var content = content_map[pathname]
-      if (content == undefined) {
-        content = ""
-      }
+      const componentHTML = renderToString(InitialView)
 
-      const HTML = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta charset="utf-8" />
-            <meta http-equiv="X-UA-Compatible" content="IE=edge">
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <link rel="apple-touch-icon" sizes="57x57" href="/favicon/apple-icon-57x57.png" />
-          <link rel="apple-touch-icon" sizes="60x60" href="/favicon/apple-icon-60x60.png" />
-          <link rel="apple-touch-icon" sizes="72x72" href="/favicon/apple-icon-72x72.png" />
-          <link rel="apple-touch-icon" sizes="76x76" href="/favicon/apple-icon-76x76.png" />
-          <link rel="apple-touch-icon" sizes="114x114" href="/favicon/apple-icon-114x114.png" />
-          <link rel="apple-touch-icon" sizes="120x120" href="/favicon/apple-icon-120x120.png" />
-          <link rel="apple-touch-icon" sizes="144x144" href="/favicon/apple-icon-144x144.png" />
-          <link rel="apple-touch-icon" sizes="152x152" href="/favicon/apple-icon-152x152.png" />
-          <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-icon-180x180.png" />
-          <link rel="icon" type="image/png" sizes="192x192"  href="/favicon/android-icon-192x192.png" />
-          <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
-          <link rel="icon" type="image/png" sizes="96x96" href="/favicon/favicon-96x96.png" />
-          <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
-          <link rel="manifest" href="/favicon/manifest.json" />
-          <title>${title}</title>
-          <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cosmo/bootstrap.min.css" type="text/css" rel="stylesheet"/>
-            <link rel="stylesheet" type="text/css" href="/css/style.css">
-          <script>
-            window.__INITIAL_STATE__ = ${JSON.stringify(initialState)};
-          </script>
-        </head>
-        <body>
-          <div id="react-view">${componentHTML}</div>
-          <div id="content-view">${content}</div>
-          <script type="application/javascript" src="/bundle.js"></script>
-          <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-           <script type="text/javascript" 
-                src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-        </body>
-      </html>
-      `;
-
+      const HTML = getContentWrapper(title, initialState, componentHTML)
       return HTML;
     }
 
