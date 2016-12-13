@@ -8,6 +8,7 @@ import BlogNav from "./BlogNav"
 import BlogItem from "./BlogItem"
 import Loading from "./Loading"
 import LatestEpisodePlayer from "./LatestEpisodePlayer"
+import transform_pathname from "../utils/transform_pathname"
 
 class Blog extends React.Component {
 	constructor(props) {
@@ -15,12 +16,38 @@ class Blog extends React.Component {
 		var oblogs = this.props.blogs.toJS()
 		var blogs_loaded = oblogs.blogs_loaded || 0
 		var blog_focus   = oblogs.blog_focus || {loaded: 0}
-		var pathname = this.props.location.pathname
-		pathname = pathname.substring("/blog".length, pathname.length)
-		if (blogs_loaded == 0 && blog_focus.loaded == 0) {
-			var dispatch = this.props.dispatch
-			dispatch({type: "LOAD_BLOG", payload: {dispatch, pathname} })
+		var opathname = this.props.location.pathname
+		var folders = oblogs.folders || []
+		var pathname = transform_pathname(opathname)
+		var dispatch = this.props.dispatch
+
+		if (pathname != "" && pathname != "/") {
+			// Single page
+			if (blog_focus.loaded == 1) {
+				var content = blog_focus.content
+				if (content == undefined || content == "") {
+					var blog = blog_focus.blog
+					dispatch({type: "ADD_BLOG", payload: {dispatch, blog} })
+				}
+			}
+			else if (blogs_loaded == 1) {
+				var blogs = oblogs.blogs
+				for (var i=0; i < blogs.length; i++) {
+					var b = blogs[i]
+					if (b.prettyname == pathname) {
+						var blog = b
+						dispatch({type: "SET_FOCUS_BLOG", payload: {blog} })
+						dispatch({type: "LOAD_BLOG", payload: {dispatch, pathname: pathname} })
+					}
+				}
+			}
+			else {
+				dispatch({type: "LOAD_BLOG", payload: {dispatch, pathname: pathname} })
+			}
 		}
+	}
+
+	componentDidUpdate() {
 	}
 
 	remove_type(typ, arr) {
@@ -48,36 +75,52 @@ class Blog extends React.Component {
 		}
 		return sub
 	}
+	isListings(folders, pathname) {
+		for (var i=0; i < folders.length; i++) {
+			var folder = folders[i]
+			var sfolder = "/" + folder
+			if (pathname.indexOf(sfolder) == 0 && pathname.length == sfolder.length) {
+				return true
+			}
+		}
+		if (pathname == "" || pathname == "/") {
+			return true
+		}
+		return false
+	}
 
 	render() {
-		var pathname = this.props.location.pathname
-		pathname = pathname.substring("/blog".length, pathname.length)
+		var opathname = this.props.location.pathname
+		var pathname = transform_pathname(opathname)
 
 		var oblogs = this.props.blogs.toJS()
 		var blogs_loaded = oblogs.blogs_loaded || 0
 		var blog_focus   = oblogs.blog_focus || {loaded: 0}
 		var folders = oblogs.folders || []
 		var blogs = oblogs.blogs || []
-		var listings = false
-
-		for (var i=0; i < folders.length; i++) {
-			var folder = folders[i]
-			var sfolder = "/" + folder
-			if (pathname.indexOf(sfolder) == 0 && pathname.length == sfolder.length) {
-				listings = true
-				blogs = this.only_type(folder, blogs)
-			}
-		}
-
-		if (pathname == "" || pathname == "/") {
-			blogs = this.remove_type("episodes", blogs)
-			blogs = this.remove_type("transcripts", blogs)
+		var listings = this.isListings(folders, pathname)
+		var a = pathname.length
+		var lastChar = opathname.substring(a-1, a)
+		if (lastChar == "/") {
 			listings = true
 		}
 
-
 		if (listings) {
 			// Navigation / listings
+
+			for (var i=0; i < folders.length; i++) {
+				var folder = folders[i]
+				var sfolder = "/" + folder
+				if (pathname.indexOf(sfolder) == 0 && pathname.length == sfolder.length) {
+					blogs = this.only_type(folder, blogs)
+				}
+			}
+
+			if (pathname == "" || pathname == "/") {
+				blogs = this.remove_type("episodes", blogs)
+				blogs = this.remove_type("transcripts", blogs)
+			}
+
 			if (blogs_loaded == 1) {
 				return (
 					<div className="center">
@@ -92,28 +135,15 @@ class Blog extends React.Component {
 			}
 		}
 		else {
-			// Single page
-			var blog = undefined
-			if (blog_focus.loaded == 1) {
-				console.log("Got specific blog directly")
-				blog = blog_focus.blog
-			}
-			else if (blogs_loaded == 1) {
-				for (var i=0; i < blogs.length; i++) {
-					var b = blogs[i]
-					if (b.prettyname == pathname) {
-						console.log("Got blog from full cache")
-						blog = b
-					}
-				}
-			}
+			// It's a listing or it's a navigation page but we don't know that until other async finishes
+			var blog = blog_focus.blog
+			var content = blog_focus.content
 
-			if (blog != undefined) {
+			if (blog != undefined && content != undefined) {
 				var env = oblogs.env + "."
 				if (env == "prod.") {
 					env = ""
 				}
-				var uri = "https://s3.amazonaws.com/" + env + 'dataskeptic.com/' + blog["rendered"]
 				var title = blog["title"]
 				var top = ""
 				var isEpisode = blog.guid != undefined
@@ -143,7 +173,7 @@ class Blog extends React.Component {
 					<div className="center">
 						<BlogNav folders={folders} pathname={pathname} />
 						{top}
-						<BlogItem src={uri} pathname={pathname} title={title} />
+						<BlogItem pathname={pathname} title={title} />
 					</div>
 				)
 			} else if (blog_focus.loaded == -1) {

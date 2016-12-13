@@ -62,9 +62,12 @@ store.dispatch({type: "SET_BLOG_ENVIRONMENT", payload: env })
 store.dispatch({type: "SET_COUNTRY", payload: country })
 store.dispatch({type: "INITIALIZE_PLAYER", payload: player})
 
-getEpisodes(store)
-getBlogs(store, env)
-getProducts(store, env)
+setTimeout(function() {
+  getEpisodes(store)
+  getBlogs(store, env)
+  getProducts(store, env)
+}, 500)
+
 
 store.subscribe(() => {
   //console.log("store changed", store.getState())

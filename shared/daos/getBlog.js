@@ -13,9 +13,12 @@ export default function getBlog(dispatch, env, prettyname) {
 		.get(uri)
 		.then(function(result) {
 			var blog = result.data
-			var loaded = true
-			var pl = {blog, loaded}
-			dispatch({type: "ADD_BLOG", payload: pl })
+			if (blog != undefined) {
+				var uri = blog["uri"]
+				if (uri != undefined) {
+					dispatch({type: "ADD_BLOG", payload: {blog, dispatch} })					
+				}
+			}
 		})
 		.catch((err) => {
 			dispatch({type: "FETCH_BLOGS_ERROR", playload: err})

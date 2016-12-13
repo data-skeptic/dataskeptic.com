@@ -16,7 +16,6 @@ export default function getBlogs(store, env) {
 			store.dispatch({type: "ADD_BLOGS", payload: blogs })
 			store.dispatch({type: "SET_BLOGS_LOADED", payload: 1 })
 			store.dispatch({type: "SET_FOLDERS", payload: folders })
-			console.log("Loaded blogs")
 		})
 		.catch((err) => {
 			store.dispatch({type: "FETCH_BLOGS_ERROR", playload: err})
