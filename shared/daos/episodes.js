@@ -2,6 +2,7 @@ import axios from "axios"
 import xml2js from "xml2js"
 
 export default function getEpisodes(store) {
+	console.log("Network: retrieving episodes")
 	axios
 	  .get("http://dataskeptic.libsyn.com/rss")
 	  .then(function(result) {

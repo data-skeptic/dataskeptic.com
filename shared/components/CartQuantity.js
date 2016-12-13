@@ -1,7 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom"
 import { Link } from 'react-router'
-import axios from "axios"
 import { connect } from 'react-redux'
 
 class CartQuantity extends React.Component {

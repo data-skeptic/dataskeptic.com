@@ -1,7 +1,7 @@
 import axios from "axios"
 
 export default function getProducts(store, env) {
-	console.log("Get products")
+	console.log("Network: retrieving all products")
 	axios
 		.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + env + "/products")
 		.then(function(result) {

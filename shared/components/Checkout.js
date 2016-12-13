@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router'
-import axios from "axios"
 
 import AddressForm from './AddressForm'
 import Cart from './Cart'
