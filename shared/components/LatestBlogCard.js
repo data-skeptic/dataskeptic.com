@@ -43,22 +43,38 @@ class LatestBlogCard extends React.Component {
 			return <Error />
 		}
 		var pn = blog.prettyname
-		if (pn[0] == "/") {
-			pn = pn.substring(1, pn.length)
-		}
-		pn = "/blog/" + pn
-		var date = blog["publish_date"]
-		return (
-			<div className="home-latest-blog-card">
-				<div className="home-latest-blog-top"><p>From the blog:</p></div>
-				<div className="home-latest-blog-card-container">
-					<Link className="blog-title" to={pn}>{blog.title}</Link>
-					<span className="blog-date">{date}</span>
-					<p>{blog.desc}</p>
-					<p> ...<Link to={pn}>[more]</Link></p>
+		if (pn != undefined) {
+			if (pn[0] == "/") {
+				pn = pn.substring(1, pn.length)
+			}
+			pn = "/blog/" + pn
+			var date = blog["publish_date"]
+			return (
+				<div className="home-latest-blog-card">
+					<div className="home-latest-blog-top"><p>From the blog:</p></div>
+					<div className="home-latest-blog-card-container">
+						<Link className="blog-title" to={pn}>{blog.title}</Link>
+						<span className="blog-date">{date}</span>
+						<p>{blog.desc}</p>
+						<p> ...<Link to={pn}>[more]</Link></p>
+					</div>
 				</div>
-			</div>
-		)
+			)			
+		}
+		else {
+			var pn = "/meta/relaunching-dataskeptic.com"
+			return (
+				<div className="home-latest-blog-card">
+					<div className="home-latest-blog-top"><p>From the blog:</p></div>
+					<div className="home-latest-blog-card-container">
+						<Link className="blog-title" to={pn}>Relaunching DataSkeptic.com</Link>
+						<span className="blog-date">2016-11-16</span>
+						<p>We've spent the last few weeks tinkering away on a new web design. As I write this, we're in the final stages of coding the s...</p>
+						<p> ...<Link to={pn}>[more]</Link></p>
+					</div>
+				</div>
+			)
+		}
 	}
 }
 
