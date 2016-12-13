@@ -7,6 +7,7 @@ export default function getBlogs(store, env) {
 	if (db_env == "prod") {
 		db_env = "master"
 	}
+	console.log("Network: retrieving all blog metadata")
 	axios
 		.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + env + "/blogs?env=" + db_env)
 		.then(function(result) {

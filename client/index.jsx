@@ -30,6 +30,7 @@ const logger = (store) => (next) => (action) => {
 
 var rs = localStorage.getItem('reduxState')
 if (rs != undefined) {
+  console.log("Reloading state")
   var state = JSON.parse(rs)
   var nstate = {}
   var keys = Object.keys(state)
@@ -51,8 +52,19 @@ if (rs != undefined) {
   console.log("Reloaded saved state")
   initialState = nstate
 }
-
 const store = applyMiddleware(logger,thunk,promiseMiddleware)(createStore)(reducer, initialState);
+
+var content_prefetch = document.getElementById('content-prefetch')
+var content = content_prefetch.innerHTML
+if (content != undefined) {
+  store.dispatch({type: "ADD_BLOG_CONTENT", payload: {content} })
+}
+var metadata_prefetch = document.getElementById('metadata-prefetch')
+var metadata = metadata_prefetch.innerHTML
+if (metadata != undefined) {
+  var blog = JSON.parse(metadata)
+  store.dispatch({type: "INJECT_BLOG", payload: {blog} })
+}
 
 var env = "dev"
 var country = "us"

@@ -7,6 +7,7 @@ export default function getBlog(dispatch, env, prettyname) {
 	if (db_env == "prod") {
 		db_env = "master"
 	}
+	console.log("Network: retrieving single blog metadata")
 	var uri = "https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + env + "/blog?env=" + db_env + "&pn=" + prettyname
 	// TODO: check cache
 	axios

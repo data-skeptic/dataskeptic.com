@@ -9,6 +9,7 @@ export default function getBlogContent(dispatch, pathname, env) {
 		env = env + "."
 	}
 	var uri = "https://s3.amazonaws.com/" + env + 'dataskeptic.com/' + pathname
+	console.log("Network: retrieving blog content")
 	axios
 		.get(uri)
 		.then(function(result) {

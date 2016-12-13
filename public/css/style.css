@@ -12,7 +12,11 @@ html, body {
   height: 65px;
 }
 
-#content-view {
+#content-prefetch {
+  display: none;
+}
+
+#metadata-prefetch {
   display: none;
 }
 

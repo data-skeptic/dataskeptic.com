@@ -28,6 +28,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 var title_map = {}
 var content_map = {}
+var blogmetadata_map = {}
 
 var env = "dev"
 
@@ -38,6 +39,7 @@ axios
   for (var i=0; i < blogs.length; i++) {
     var blog = blogs[i]
     var pn = blog['prettyname']
+    blogmetadata_map[pn] = blog
     var title = blog['title']
     title_map[pn] = title
     generate_content_map(blog)
@@ -63,13 +65,14 @@ function generate_content_map(blog) {
     content_map[pn] = content
   })
   .catch((err) => {
-    console.log("content cache error")
+    console.log("Content cache error trying to store blog content")
     console.log(err)
   })
 }
 
 global.title_map = title_map
 global.content_map = content_map
+global.blogmetadata_map = blogmetadata_map
 
 function shouldCompress (req, res) {
   if (req.headers['x-no-compression']) {
@@ -115,7 +118,7 @@ app.use( (req, res) => {
       var componentHTML = "<div><h1>Not Found</h1></div>"
       var HTML = getContentWrapper(title, initialState, "", componentHTML)
       console.log("page not found")
-      console.log(HTML)
+      //console.log(HTML)
       return res.status(404).end(componentHTML);
     } else {
       console.log("render props")
@@ -125,12 +128,21 @@ app.use( (req, res) => {
     }
 
     function renderView() {
+      var pathname = location.pathname.substring('/blog'.length, location.pathname.length)
       var content = content_map[pathname]
+      var dispatch = store.dispatch
       if (content == undefined) {
         content = ""
+        console.log("Did not pull content from cache")
       } else {
         console.log("Pulled content from cache")
-        // TODO: inject into
+      }
+      var metadata = blogmetadata_map[pathname]
+      if (metadata == undefined) {
+        metadata = {}
+        console.log("Did not pull metadata from cache")
+      } else {
+        console.log("Pulled metadata from cache")
       }
 
       const InitialView = (
@@ -140,7 +152,6 @@ app.use( (req, res) => {
       );
 
       var title = osite.title + ":"+location.pathname
-      var pathname = location.pathname.substring('/blog'.length, location.pathname.length)
       var alt_title = title_map[pathname]
       if (alt_title != undefined) {
         title = alt_title
@@ -148,7 +159,7 @@ app.use( (req, res) => {
 
       const componentHTML = renderToString(InitialView)
 
-      const HTML = getContentWrapper(title, initialState, componentHTML)
+      const HTML = getContentWrapper(title, initialState, componentHTML, content, metadata)
       return HTML;
     }
 

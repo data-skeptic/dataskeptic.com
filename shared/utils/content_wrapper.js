@@ -1,4 +1,4 @@
-export default function getContentWrapper(title, initialState, componentHTML, content="") {
+export default function getContentWrapper(title, initialState, componentHTML, content="", metadata={}) {
   return `<!DOCTYPE html>
       <html>
         <head>
@@ -28,7 +28,8 @@ export default function getContentWrapper(title, initialState, componentHTML, co
         </head>
         <body>
           <div id="react-view">${componentHTML}</div>
-          <div id="content-view">${content}</div>
+          <div id="content-prefetch">${content}</div>
+          <div id="metadata-prefetch">${JSON.stringify(metadata)}</div>
           <script type="application/javascript" src="/bundle.js"></script>
           <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
            <script type="text/javascript" 
