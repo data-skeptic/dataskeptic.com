@@ -16,7 +16,6 @@ import { createStore,
          combineReducers,
          applyMiddleware }  from 'redux';
 
-
 var initialState = immutifyState(window.__INITIAL_STATE__);
 
 const history = createBrowserHistory();
@@ -54,16 +53,51 @@ if (rs != undefined) {
 }
 const store = applyMiddleware(logger,thunk,promiseMiddleware)(createStore)(reducer, initialState);
 
-var content_prefetch = document.getElementById('content-prefetch')
-var content = content_prefetch.innerHTML
-if (content != undefined) {
-  store.dispatch({type: "ADD_BLOG_CONTENT", payload: {content} })
+try {
+  var content_prefetch = document.getElementById('content-prefetch')
+  if (content_prefetch != null) {
+    var content = content_prefetch.innerHTML
+    if (content != undefined) {
+      console.log("Ingesting content prefetch")
+      store.dispatch({type: "ADD_BLOG_CONTENT", payload: {content} })
+    }  
+  }
 }
-var metadata_prefetch = document.getElementById('metadata-prefetch')
-var metadata = metadata_prefetch.innerHTML
-if (metadata != undefined) {
-  var blog = JSON.parse(metadata)
-  store.dispatch({type: "INJECT_BLOG", payload: {blog} })
+catch (err) {
+  console.log(err)
+}
+
+try {
+  var blog_metadata_prefetch = document.getElementById('blog-metadata-prefetch')
+  if (blog_metadata_prefetch != null) {
+    var blog_metadata = blog_metadata_prefetch.innerHTML
+    if (blog_metadata != undefined) {
+      console.log("Ingesting blog metadata prefetch")
+      var blog = JSON.parse(blog_metadata)
+      store.dispatch({type: "INJECT_BLOG", payload: {blog} })
+    }  
+  }
+}
+catch (err) {
+  console.log(err)
+}
+
+try {
+  var episode_metadata_prefetch = document.getElementById('episode-metadata-prefetch')
+  if (episode_metadata_prefetch != null) {
+    var episode_metadata = episode_metadata_prefetch.innerHTML
+    if (episode_metadata != undefined) {
+      console.log("Ingesting episode metadata prefetch")
+      episode_metadata = episode_metadata.split('"\\').join('').split('\\&quot;"').join('&quot;')
+      console.log(episode_metadata)
+      console.log(JSON.parse(episode_metadata))
+      var episode = JSON.parse(episode_metadata)
+      store.dispatch({type: "INJECT_EPISODE", payload: {episode} })
+    }  
+  }
+}
+catch (err) {
+  console.log(err)
 }
 
 var env = "dev"

@@ -11,13 +11,14 @@ class LatestBlogCard extends React.Component {
 
 	render() {
 		var oblogs = this.props.blogs.toJS()
-		var blogs = oblogs.blogs
+		var blogs = oblogs.blogs || []
 		var blog_focus   = oblogs.blog_focus || {loaded: 0}
 		var blogs_loaded = oblogs.blogs_loaded
-		if (blogs_loaded == 0) {
+		if (blogs_loaded == 0 && blog_focus.loaded == 0) {
+			console.log(1)
 			return <Loading />
 		}
-		if (blogs.length == 0) {
+		if (blogs_loaded < 0 || (blogs_loaded == 1 && blogs.length == 0) || blog_focus.loaded == -1) {
 			return <Error />
 		}
 		var blog = undefined
@@ -26,6 +27,7 @@ class LatestBlogCard extends React.Component {
 			blog = blog_focus.blog
 		}
 		else if (blogs.length > 0) {
+			console.log(3)
 			console.log("Using top of cache")
 			var i=0
 			while (i < blogs.length) {
@@ -39,6 +41,7 @@ class LatestBlogCard extends React.Component {
 			}
 			blog = blogs[0]
 		}
+		console.log(4)
 		if (blog == undefined) {
 			return <Error />
 		}

@@ -21,7 +21,7 @@ export default function blogsReducer(state = defaultState, action) {
       console.log("TODO: add this to cache if not already there")
       var blog = action.payload.blog
       var dispatch = action.payload.dispatch
-      var loaded = true
+      var loaded = 1
       nstate.blog_focus = {blog, loaded}
       var env = nstate.env
       getBlogContent(dispatch, blog.rendered, env)
@@ -41,13 +41,15 @@ export default function blogsReducer(state = defaultState, action) {
     case 'INJECT_BLOG':
       // This event is generated to handle data that was prefetched and just needs to be injected
       var blog = action.payload.blog
-      var loaded = true
+      var loaded = 1
       nstate.blog_focus.blog = blog
       nstate.blog_focus.loaded = loaded
+      console.log(nstate.blog_focus)
       break
     case 'ADD_BLOG_CONTENT':
       console.log("Adding blog content of length " + action.payload.content.length)
       nstate.blog_focus.content = action.payload.content
+      console.log(nstate.blog_focus)
       break
     case 'LOAD_BLOG':
       console.log("TODO: get from cache if its there")

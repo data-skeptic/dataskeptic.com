@@ -20,6 +20,14 @@ class Blog extends React.Component {
 		var folders = oblogs.folders || []
 		var pathname = transform_pathname(opathname)
 		var dispatch = this.props.dispatch
+		var guid = undefined
+		if (blog_focus != undefined) {
+			guid = blog_focus.guid
+		}
+		var isEpisode = guid != undefined
+		if (isEpisode) {
+			dispatch({type: "SET_FOCUS_EPISODE", payload: {guid} })			
+		}
 
 		if (pathname != "" && pathname != "/") {
 			// Single page
@@ -99,6 +107,12 @@ class Blog extends React.Component {
 		var oblogs = this.props.blogs.toJS()
 		var blogs_loaded = oblogs.blogs_loaded || 0
 		var blog_focus   = oblogs.blog_focus || {loaded: 0}
+		var blog = blog_focus.blog
+		var isEpisode = false
+		if (blog != undefined) {
+			isEpisode = blog.guid != undefined
+		}
+		var content = blog_focus.content
 		var folders = oblogs.folders || []
 		var blogs = oblogs.blogs || []
 		var listings = this.isListings(folders, pathname)
@@ -139,8 +153,6 @@ class Blog extends React.Component {
 		}
 		else {
 			// It's a listing or it's a navigation page but we don't know that until other async finishes
-			var blog = blog_focus.blog
-			var content = blog_focus.content
 
 			if (blog != undefined && content != undefined) {
 				var env = oblogs.env + "."
@@ -149,21 +161,11 @@ class Blog extends React.Component {
 				}
 				var title = blog["title"]
 				var top = ""
-				var isEpisode = blog.guid != undefined
 				if (isEpisode) {
-					var guid = blog.guid
 					try {
-						var oepisodes = this.props.episodes.toJS() || []
-						var episode = oepisodes.episodes_map[guid]
-						var player = this.props.player.toJS()
-						var is_playing = false
-						var pepisode = player.episode
-						if (pepisode != undefined && episode.guid == pepisode.guid) {
-							is_playing = player.is_playing
-						}
 						top = (
 							<div className="home-player">
-								<LatestEpisodePlayer title="" episode={episode} />
+								<LatestEpisodePlayer title="" />
 							</div>
 						)					
 					}
