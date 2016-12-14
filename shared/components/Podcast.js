@@ -23,7 +23,9 @@ class Podcast extends React.Component {
 		} else {
 			var myear = (new Date()).getYear() + 1900
 			if (episodes.length > 0) {
-				myear = episodes[0].pubDate.getYear() + 1900
+				var pubDate = episodes[0].pubDate
+				pubDate = new Date(pubDate)
+				myear = pubDate.getYear() + 1900
 			}
 			var year = myear
 			var pathname = this.props.location.pathname
@@ -45,7 +47,9 @@ class Podcast extends React.Component {
 						{
 							episodes.map(function(episode) {
 								var is_playing = false
-								if (episode.pubDate.getYear()+1900 == year) {
+								var pubDate = episode.pubDate
+								pubDate = new Date(pubDate)
+								if (pubDate.getYear()+1900 == year) {
 									return <Episode key={episode.guid} episode={episode} />
 								}
 							})

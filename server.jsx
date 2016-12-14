@@ -15,10 +15,13 @@ import { createStore,
          combineReducers,
          applyMiddleware }       from 'redux';
 import path                      from 'path';
-import getEpisodes               from 'daos/episodes';
 import getBlogs                  from 'daos/blogs';
 import redirects_map             from './redirects';
 import getContentWrapper         from 'utils/content_wrapper';
+import { getEpisodes,
+        convert_items_to_json, 
+         feed_uri }              from 'daos/episodes'
+
 
 const app = express();
 
@@ -26,9 +29,10 @@ if (process.env.NODE_ENV !== 'production') {
   require('./webpack.dev').default(app);
 }
 
-var title_map = {}
-var content_map = {}
-var blogmetadata_map = {}
+var title_map = {}         // `uri`             -> <title>
+var content_map = {}       // `uri`             -> {s3 blog content}
+var blogmetadata_map = {}  // `uri`             -> {blog}
+var episodes_map = {}      // `guid` | 'latest' -> {episode}
 
 var env = "dev"
 
@@ -40,6 +44,9 @@ axios
     var blog = blogs[i]
     var pn = blog['prettyname']
     blogmetadata_map[pn] = blog
+    if (i == 0) {
+      blogmetadata_map["latest"] = blog
+    }
     var title = blog['title']
     title_map[pn] = title
     generate_content_map(blog)
@@ -70,20 +77,47 @@ function generate_content_map(blog) {
   })
 }
 
-global.title_map = title_map
-global.content_map = content_map
+axios
+  .get(feed_uri)
+  .then(function(result) {
+    var xml = result["data"]
+    var parser = new xml2js.Parser()
+
+    parser.parseString(xml, function(err,rss) {
+      var items = rss["rss"]["channel"][0]["item"]
+      var episodes = convert_items_to_json(items)
+      for (var i=0; i < episodes.length; i++) {
+        var episode = episodes[i]
+        episodes_map[episode.guid] = episode
+        if (i == 0) {
+          episodes_map["latest"] = episode
+        }
+      }
+      console.log("Loaded all episodes into map")
+  })
+})
+.catch((err) => {
+  console.log("feed error")
+  console.log(err)
+})      
+
+global.title_map        = title_map
+global.content_map      = content_map
 global.blogmetadata_map = blogmetadata_map
+global.episodes_map     = episodes_map
 
-function shouldCompress (req, res) {
-  if (req.headers['x-no-compression']) {
-    // don't compress responses with this request header
-    return false
+
+if (process.env.NODE_ENV == 'production') {
+  function shouldCompress (req, res) {
+    if (req.headers['x-no-compression']) {
+      // don't compress responses with this request header
+      return false
+    }
+    // fallback to standard filter function
+    return compression.filter(req, res)
   }
-  // fallback to standard filter function
-  return compression.filter(req, res)
+  app.use(compression({filter: shouldCompress}))
 }
-
-app.use(compression({filter: shouldCompress}))
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -103,9 +137,10 @@ app.use( (req, res) => {
   const store    = applyMiddleware(promiseMiddleware)(createStore)(reducer);
 
   const initialState = store.getState()
+
   var oepisodes = initialState.episodes.toJS()
-  var oblogs = initialState.blogs.toJS()
-  var osite = initialState.site.toJS()
+  var oblogs    = initialState.blogs.toJS()
+  var osite     = initialState.site.toJS()
 
   match({ routes, location }, (err, redirectLocation, renderProps) => {
     if(err) {
@@ -116,7 +151,12 @@ app.use( (req, res) => {
     if(!renderProps) {
       var title = "Page not found"
       var componentHTML = "<div><h1>Not Found</h1></div>"
-      var HTML = getContentWrapper(title, initialState, "", componentHTML)
+
+      var injects = {
+        "react-view" : componentHTML
+      }
+
+      var HTML = getContentWrapper(title, initialState, injects)
       var pathname = location.pathname
       console.log("page not found:" + pathname)
       //console.log(HTML)
@@ -124,26 +164,46 @@ app.use( (req, res) => {
     } else {
       console.log("render props")
       //console.log(renderProps)
-      console.log("---------------------")
+      console.log("---------------------=")
       console.log(renderProps.params)
     }
 
     function renderView() {
       var pathname = location.pathname.substring('/blog'.length, location.pathname.length)
+      console.log("render: " + pathname)
       var content = content_map[pathname]
       var dispatch = store.dispatch
       if (content == undefined) {
         content = ""
-        console.log("Did not pull content from cache")
+        console.log(pathname + ": did not pull content from cache")
       } else {
-        console.log("Pulled content from cache")
+        console.log(pathname + ": pulled content from cache")
       }
-      var metadata = blogmetadata_map[pathname]
-      if (metadata == undefined) {
-        metadata = {}
-        console.log("Did not pull metadata from cache")
+
+      var blog_page = pathname
+      if (pathname == "" || pathname == "/") {
+        blog_page = "latest"
+      }
+      var blog_metadata = blogmetadata_map[blog_page]
+      var guid = ""
+      if (blog_metadata == undefined) {
+        blog_metadata = {}
+        console.log(pathname + ": did not pull blog metadata from cache")
       } else {
-        console.log("Pulled metadata from cache")
+        console.log(pathname + ": pulled blog metadata from cache")
+        guid = blog_metadata.guid
+      }
+
+      if (pathname == "" || pathname == "/") {
+        guid = "latest"
+        console.log("get latest episode")
+      }
+      var episode_metadata = episodes_map[guid]
+      if (episode_metadata == undefined) {
+        episode_metadata = {}
+        console.log(pathname + ": did not pull episode metadata from cache")
+      } else {
+        console.log(pathname + ": pulled episode metadata from cache")
       }
 
       const InitialView = (
@@ -152,7 +212,7 @@ app.use( (req, res) => {
         </Provider>
       );
 
-      var title = osite.title + ":"+location.pathname
+      var title = osite.title + ":" + location.pathname
       var alt_title = title_map[pathname]
       if (alt_title != undefined) {
         title = alt_title
@@ -160,7 +220,14 @@ app.use( (req, res) => {
 
       const componentHTML = renderToString(InitialView)
 
-      const HTML = getContentWrapper(title, initialState, componentHTML, content, metadata)
+      var injects = {
+        "react-view"                : componentHTML,
+        "content-prefetch"          : content,
+        "blog-metadata-prefetch"    : JSON.stringify(blog_metadata),
+        "episode-metadata-prefetch" : JSON.stringify(episode_metadata)
+      }
+
+      const HTML = getContentWrapper(title, initialState, injects)
       return HTML;
     }
 

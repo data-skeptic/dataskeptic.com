@@ -35,7 +35,7 @@ class Episode extends React.Component {
 				)				
 			}
 		}
-		var d = ep.pubDate
+		var d = new Date(ep.pubDate)
 		var dstr = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate()
 
 		var tmp = document.createElement("DIV");

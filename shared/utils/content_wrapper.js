@@ -1,5 +1,5 @@
-export default function getContentWrapper(title, initialState, componentHTML, content="", metadata={}) {
-  return `<!DOCTYPE html>
+export default function getContentWrapper(title, initialState, injects) {
+  var doc = `<!DOCTYPE html>
       <html>
         <head>
           <meta charset="utf-8" />
@@ -26,15 +26,19 @@ export default function getContentWrapper(title, initialState, componentHTML, co
             window.__INITIAL_STATE__ = ${JSON.stringify(initialState)};
           </script>
         </head>
-        <body>
-          <div id="react-view">${componentHTML}</div>
-          <div id="content-prefetch">${content}</div>
-          <div id="metadata-prefetch">${JSON.stringify(metadata)}</div>
-          <script type="application/javascript" src="/bundle.js"></script>
+        <body>`
+  var keys = Object.keys(injects)
+  for (var i=0; i < keys.length; i++) {
+    var key = keys[i]
+    var val = injects[key]
+    doc += `<div id="${key}">${val}</div>`
+  }
+  doc += `<script type="application/javascript" src="/bundle.js"></script>
           <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
            <script type="text/javascript" 
                 src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
         </body>
       </html>
       `
+  return doc
 }
