@@ -89,8 +89,6 @@ try {
     if (episode_metadata != undefined) {
       console.log("Ingesting episode metadata prefetch")
       episode_metadata = episode_metadata.split('"\\').join('').split('\\&quot;"').join('&quot;')
-      console.log(episode_metadata)
-      console.log(JSON.parse(episode_metadata))
       var episode = JSON.parse(episode_metadata)
       store.dispatch({type: "INJECT_EPISODE", payload: {episode} })
     }  
@@ -107,8 +105,6 @@ try {
     if (episode_metadata != undefined) {
       console.log("Ingesting episode metadata prefetch")
       episode_metadata = episode_metadata.split('"\\').join('').split('\\&quot;"').join('&quot;')
-      console.log(episode_metadata)
-      console.log(JSON.parse(episode_metadata))
       var episode = JSON.parse(episode_metadata)
       store.dispatch({type: "INJECT_EPISODE", payload: {episode} })
     }  
