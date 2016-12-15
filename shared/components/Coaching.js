@@ -19,19 +19,39 @@ class Coaching extends Component {
 	}
 	render() {
 		var oproducts = this.props.products.toJS()
-		console.log(oproducts)
+		var products = oproducts.products
+		for (var i=0; i < products.length; i++) {
+			var product = products[i]
+			console.log(product)
+		}
 		return (
 			<div className="center">
 				<h2>Professional development coaching</h2>
-					<div className="membership-inner">
-					<div className="membership-bottom-container">
-						<div className="membership-price">$550.00<span className="per_month">/ month</span></div>
-						<div className="membership-btn">
-							<button className="membership-add" onClick={this.addToCart.bind(this)}>Add to Cart</button>
+				<p>I remember when I left school to enter the job market.  There was so much I didn't know!  I worked hard and got good grades, but I realize that was only half the recipe for success.  I had to learn about how to interview, how to negotiate, when to make a career move, and what skills I needed to develop to make myself more attractive to employeers.  It was a long as slow process.  I wish I had had a mentor to help me along the way.</p>
+				<p>Many years later, I find myself in a position to help people like that.  I bring my industry experience, knowledge of data science, and connections in the industry to the table to help people prepare for and execute their next career move.</p>
+				<p>My services include a weekly 1 hour Skype session where we discuss your questions, and I share relevant knowledge, contacts, and references.  With most of the people I work with, this means technical walkthroughs where I teach them tools like SQL, sk-learn, dplyr, Spark, etc.  Other times we focus more on interview preparation or portfolio building.  Basically, I'm here to develop a custom plan that works for you.</p>
+				<p>In addition to our hour weekly checkin, I'm happy to have some email back and forth or a Slack discussion when we're both online.  We'll usually set goals in each Skype session, so this is helpful if there are stumbling blocks along the way and we don't want to lose a week.</p>
+				<p>Overall, I would be looking to help you find a few jobs you want to pursue, identify any skill gaps, teach those skill gaps, and coach you through rounds of interviews until you have an offer letter in your hand.  I can often make personal introductions when I have contacts in companies.</p>
+				<p>My rates are $550 / month.</p>
+				<p>Your next question is likely to be "ok, but how many months is this going to take?"  Ultimately, that depends on you.  I don't yet know your starting point or finishing line.  That's something we can discuss on our first chat.  I should be able to give you a realistic time frame after an initial discussion.  I've worked with people as short as one month and as long as 9 months.  Largely, the variance is your existing technical background and the amount of time you can put in per week.</p>
+				<div className="coaching-end-box">
+					<div className="coaching-left">
+						<img src="/img/png/kyle-polich.png" />
+						<div className="coach-caption">
+							<p><span className="coaching-name">Kyle Polich</span></p>
+							<p><span className="coaching-title">Data Skeptic, Executive Producer</span></p>
 						</div>
 					</div>
+					<div className="coaching-right">
+						<h2>Let's get started</h2>
+						<p>Schedule me right now for our first session.  If you're not completely satisified, I'll wave the fee and we'll part friends.</p>
+						<p>I look forward to helping you achieve your objectives as a data scientist.</p>
+						<div className="book-me"><a className="book-me-link" href="https://calendly.com/polich">
+							<span className="book-me-1">Book me on </span>
+							<span className="book-me-2">calendly.com/polich</span>
+						</a></div>
+					</div>
 				</div>
-
 			</div>
 		)
 	}
