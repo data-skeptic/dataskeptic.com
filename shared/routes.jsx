@@ -9,6 +9,7 @@ import App                     from 'components/index';
 import Blog                    from 'components/Blog';
 import Checkout                from 'components/Checkout';
 import Coaching                from 'components/Coaching';
+import Coaching2                from 'components/Coaching2';
 import Home                    from 'components/Home';
 import LightsOut               from 'components/LightsOut';
 import Menu                    from 'components/Menu';
@@ -32,6 +33,9 @@ export default (
 		</Route>
 		<Route path="/coaching" name="app" component={App}>
 			<IndexRoute component={Coaching}/>
+		</Route>
+		<Route path="/coaching2" name="app" component={App}>
+			<IndexRoute component={Coaching2}/>
 		</Route>
 		<Route path="/" name="app" component={App}>
 			<IndexRoute component={Home}/>

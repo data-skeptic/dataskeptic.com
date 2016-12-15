@@ -24,13 +24,11 @@ html, body {
   display: none;
 }
 
+#episode-metadata-prefetch {
+  display: none;
+}
+
 .site {
-}
-
-.row {
-}
-
-.row-centered {
 }
 
 .col-centered {
@@ -263,6 +261,71 @@ ul.topnav li.right {float: right;}
   height: 100px;
 }
 
+.coaching-end-box {
+  border-width: 0px;
+  padding: 10px;
+  border-style: solid;
+  border-color: #222;
+  border-radius: 5px;
+  background-color: #eee;
+  height: 370px;
+}
+
+.coaching-end-box {
+  border-width: 0px;
+  padding: 10px;
+  border-style: solid;
+  border-color: #222;
+  border-radius: 5px;
+  background-color: #eee;
+  height: 420px;
+}
+
+.coach-caption {
+  margin-top: 7px;
+}
+
+.coaching-left {
+  float: left;
+  margin-right: 15px;
+  line-height: 12px;
+}
+
+.coaching-right {
+  font-size: 14pt;
+}
+
+.book-me {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.book-me-link {
+  background-color: #666;
+  border-radius: 5px;
+  padding: 10px;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+.book-me-1 {
+  color: #fff;
+}
+
+.book-me-2 {
+  color: #ccf;
+  font-weight: bold;
+}
+
+.coaching-name {
+  font-size: 14pt;
+  line-height: 10pt;
+ }
+
+.coaching-title {
+  font-style: italic;
+}
+
 /*****************************************************************************
  Player.js
 *****************************************************************************/
@@ -316,8 +379,6 @@ ul.topnav li.right {float: right;}
 .thin-player {
   padding: 3px;
   height: 25px;
-}
-.row {
 }
 .home-player {
   margin-top: 5px;
@@ -759,9 +820,11 @@ ul.topnav li.right {float: right;}
 
 .cart-end {
   margin-top: 10px;
+  margin-left: -15px;
+  margin-right: -15px;
   padding-top: 10px;
   background-color: #eee;
-  padding: 0px;
+  padding-top: 10px;
 }
 .cart-button {
   background-color: #aaa;
@@ -772,7 +835,8 @@ ul.topnav li.right {float: right;}
   margin: 1px;
 }
 .cart-title {
-
+  overflow: hidden;
+  white-space:nowrap;
 }
 .cart-quantity {
   padding-left: 10px;
@@ -796,11 +860,15 @@ ul.topnav li.right {float: right;}
 .cart-subtotal {
   text-align: right;
   font-weight: bold;
+  background-color: #ff0;
 }
 .cart-total {
   text-align: right;
   font-weight: bold;
-  font-size: 12pt;
+  font-size: 10pt;
+  margin-right: 1px;
+  overflow: hidden;
+  white-space:nowrap;
 }
 
 .btnCheckoutContainer {
@@ -999,12 +1067,13 @@ ul.topnav li.right {float: right;}
   margin-bottom: 25px;
 }
 .cart-rows {
-  padding: 10px 0px 0px 0px;
-  margin: 10px;
+  padding: 5px 0px 0px 0px;
+  margin: 2px;
   border-width: 1px;
   border-style: solid;
 }
-
+.cart-inner-inner {
+}
 .home-latest-blog-top {
   background-image: url("/img/png/back.png");
   background-repeat: repeat-x;  

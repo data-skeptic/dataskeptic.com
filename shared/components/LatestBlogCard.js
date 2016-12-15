@@ -15,7 +15,6 @@ class LatestBlogCard extends React.Component {
 		var blog_focus   = oblogs.blog_focus || {loaded: 0}
 		var blogs_loaded = oblogs.blogs_loaded
 		if (blogs_loaded == 0 && blog_focus.loaded == 0) {
-			console.log(1)
 			return <Loading />
 		}
 		if (blogs_loaded < 0 || (blogs_loaded == 1 && blogs.length == 0) || blog_focus.loaded == -1) {
@@ -23,12 +22,9 @@ class LatestBlogCard extends React.Component {
 		}
 		var blog = undefined
 		if (blog_focus.loaded == 1) {
-			console.log("Using blog_focus")
 			blog = blog_focus.blog
 		}
 		else if (blogs.length > 0) {
-			console.log(3)
-			console.log("Using top of cache")
 			var i=0
 			while (i < blogs.length) {
 				var b = blogs[i]
