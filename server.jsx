@@ -25,16 +25,18 @@ import { getEpisodes,
 
 const app = express();
 
+var env = "prod"
+
 if (process.env.NODE_ENV !== 'production') {
   require('./webpack.dev').default(app);
+  env = "dev"
 }
+console.log("Environment: ", env)
 
 var title_map = {}         // `uri`             -> <title>
 var content_map = {}       // `uri`             -> {s3 blog content}
 var blogmetadata_map = {}  // `uri`             -> {blog}
 var episodes_map = {}      // `guid` | 'latest' -> {episode}
-
-var env = "dev"
 
 axios
 .get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + env + "/blogs?env=" + env)

@@ -18,12 +18,6 @@ class Coaching extends Component {
 		this.props.dispatch({type: "SHOW_CART", payload: true })
 	}
 	render() {
-		var oproducts = this.props.products.toJS()
-		var products = oproducts.products
-		for (var i=0; i < products.length; i++) {
-			var product = products[i]
-			console.log(product)
-		}
 		return (
 			<div className="center">
 				<h2>Professional development coaching</h2>

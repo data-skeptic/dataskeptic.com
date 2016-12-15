@@ -23,7 +23,7 @@ const history = createBrowserHistory();
 const reducer = combineReducers(reducers);
 
 const logger = (store) => (next) => (action) => {
-  console.log("action fired", action)
+  //console.log("action fired", action)
   next(action)
 }
 
@@ -100,10 +100,18 @@ catch (err) {
   console.log(err)
 }
 
-var env = "dev"
+var env = "prod"
+
+if (process.env.NODE_ENV != "production") {
+  env = "dev"
+}
+
+console.log(["env", env])
+
 var country = "us"
 var player = {episode: undefined, is_playing: false, has_shown: false}
 
+store.dispatch({type: "SET_STORE_ENVIRONMENT", payload: env })
 store.dispatch({type: "SET_BLOG_ENVIRONMENT", payload: env })
 store.dispatch({type: "SET_COUNTRY", payload: country })
 store.dispatch({type: "INITIALIZE_PLAYER", payload: player})
@@ -113,7 +121,6 @@ setTimeout(function() {
   getBlogs(store, env)
   getProducts(store, env)
 }, 500)
-
 
 store.subscribe(() => {
   //console.log("store changed", store.getState())
