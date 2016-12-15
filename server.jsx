@@ -107,8 +107,13 @@ global.title_map        = title_map
 global.content_map      = content_map
 global.blogmetadata_map = blogmetadata_map
 global.episodes_map     = episodes_map
+<<<<<<< HEAD
 
 
+=======
+
+
+>>>>>>> master
 if (process.env.NODE_ENV == 'production') {
   function shouldCompress (req, res) {
     if (req.headers['x-no-compression']) {

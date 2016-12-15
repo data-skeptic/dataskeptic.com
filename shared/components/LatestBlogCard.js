@@ -37,6 +37,7 @@ class LatestBlogCard extends React.Component {
 			}
 			blog = blogs[0]
 		}
+		console.log(4)
 		if (blog == undefined) {
 			return <Error />
 		}
