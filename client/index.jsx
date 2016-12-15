@@ -100,10 +100,36 @@ catch (err) {
   console.log(err)
 }
 
-var env = "dev"
+try {
+  var episode_metadata_prefetch = document.getElementById('episode-metadata-prefetch')
+  if (episode_metadata_prefetch != null) {
+    var episode_metadata = episode_metadata_prefetch.innerHTML
+    if (episode_metadata != undefined) {
+      console.log("Ingesting episode metadata prefetch")
+      episode_metadata = episode_metadata.split('"\\').join('').split('\\&quot;"').join('&quot;')
+      console.log(episode_metadata)
+      console.log(JSON.parse(episode_metadata))
+      var episode = JSON.parse(episode_metadata)
+      store.dispatch({type: "INJECT_EPISODE", payload: {episode} })
+    }  
+  }
+}
+catch (err) {
+  console.log(err)
+}
+
+var env = "prod"
+
+if (process.env.NODE_ENV != "production") {
+  env = "dev"
+}
+
+console.log(["env", env])
+
 var country = "us"
 var player = {episode: undefined, is_playing: false, has_shown: false}
 
+store.dispatch({type: "SET_STORE_ENVIRONMENT", payload: env })
 store.dispatch({type: "SET_BLOG_ENVIRONMENT", payload: env })
 store.dispatch({type: "SET_COUNTRY", payload: country })
 store.dispatch({type: "INITIALIZE_PLAYER", payload: player})
@@ -113,7 +139,6 @@ setTimeout(function() {
   getBlogs(store, env)
   getProducts(store, env)
 }, 500)
-
 
 store.subscribe(() => {
   //console.log("store changed", store.getState())

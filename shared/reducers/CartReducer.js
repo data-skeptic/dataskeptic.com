@@ -9,7 +9,7 @@ const init = {
   total: 0,
   shipping: 0,
   cart_visible: false,
-  prod: false,
+  prod: true, // client/index.jsx will dispatch SET_STORE_ENVIRONMENT on init
   go_to_checkout: false,
   country_short: "us",
   country_long: "United States of America",
@@ -39,8 +39,7 @@ const init = {
 const defaultState = Immutable.fromJS(init);
 
 function get_token(nstate, event, dispatch) {
-  var prod = true
-  if (prod) {
+  if (nstate.prod) {
     var key = 'pk_live_JcvvQ05E9jgvtPjONUQdCqYg'
   } else {
     var key = 'pk_test_oYGXSwgw9Jde2TOg7vZtCRGo'
@@ -234,6 +233,13 @@ export default function cartReducer(state = defaultState, action) {
         }
       }
       break;
+    case 'SET_STORE_ENVIRONMENT':
+      var env = action.payload
+      if (env == "prod") {
+        nstate.prod = true
+      } else {
+        nstate.prod = false        
+      }
     case 'CHANGE_COUNTRY':
       nstate.country_short = action.payload.short
       nstate.country_long = action.payload.long
@@ -255,7 +261,6 @@ export default function cartReducer(state = defaultState, action) {
       var event = action.payload.event
       nstate = validate_address(nstate)
       if (!nstate.invalid_submit) {
-        console.log("spinner on")
         nstate.submitDisabled = true
         nstate = get_token(nstate, event, dispatch)
       } else {

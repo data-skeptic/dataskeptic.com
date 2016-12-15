@@ -18,7 +18,7 @@ class Cart extends React.Component {
 				<div>
 					<h2>Cart</h2>
 					<div className="row cart-rows">
-						<div className="col-sm-12 cart-top">
+						<div className="col-sm-12 cart-top cart-inner">
 							{cart_items.map(function(item) {
 								var subtotal = item.product.price * item.quantity
 								var title = item.product.title
@@ -28,8 +28,8 @@ class Cart extends React.Component {
 									key += "_" + item.size
 								}
 								return (
-									<div key={key} className="row cart-row">
-										<div className="col-xs-5 cart-title">{title}</div>
+									<div key={key} className="row cart-row cart-inner-inner">
+										<div className="col-xs-4 cart-title">{title}</div>
 										<div className="col-xs-1 cart-price">${item.product.price}</div>
 										<div className="col-xs-4 cart-quan">
 											<CartQuantity quantity={item.quantity} updateable={true} product={item.product} size={item.size} />
@@ -40,13 +40,13 @@ class Cart extends React.Component {
 							})}
 							<div className="cart-end">
 								<div className="row">
-									<div className="col-xs-8"><CountrySelector /></div>
-									<div className="col-xs-2 cart-total">Shipping:</div>
+									<div className="col-xs-6"><CountrySelector /></div>
+									<div className="col-xs-3 cart-total">Shipping:</div>
 									<div className="col-xs-2 cart-total">${shipping}</div>
 								</div>
 								<div className="row">
-									<div className="col-xs-8"></div>
-									<div className="col-xs-2 cart-total">Total:</div>
+									<div className="col-xs-6"></div>
+									<div className="col-xs-3 cart-total">Total:</div>
 									<div className="col-xs-2 cart-total">${total}</div>
 								</div>
 							</div>

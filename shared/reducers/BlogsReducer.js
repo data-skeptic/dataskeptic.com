@@ -8,7 +8,7 @@ const init = {
   folders: [],
   blogs_loaded: 0,
   blog_focus: {blog: undefined, loaded: 0, content: ""},
-  env: "prod"
+  env: "prod"  // client/index.jsx will dispatch SET_BLOG_ENVIRONMENT on init
 }
 
 const defaultState = Immutable.fromJS(init);
