@@ -8,8 +8,10 @@ export default function getBlogs(store, env) {
 		db_env = "master"
 	}
 	console.log("Network: retrieving all blog metadata")
+	var uri = "https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + env + "/blogs?env=" + db_env
+	console.log(uri)
 	axios
-		.get("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + env + "/blogs?env=" + db_env)
+		.get(uri)
 		.then(function(result) {
 			var blogs = result.data
 			var blogs_loaded = true

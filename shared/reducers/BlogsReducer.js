@@ -24,7 +24,12 @@ export default function blogsReducer(state = defaultState, action) {
       var loaded = 1
       nstate.blog_focus = {blog, loaded}
       var env = nstate.env
-      getBlogContent(dispatch, blog.rendered, env)
+      if (blog.rendered != undefined) {
+        getBlogContent(dispatch, blog.rendered, env)
+      } else if(blog != {}) {
+        console.log("Got bad blog data:")
+        console.log(blog)
+      }
       break
     case 'SET_FOCUS_BLOG':
       var blog = action.payload.blog
@@ -44,12 +49,9 @@ export default function blogsReducer(state = defaultState, action) {
       var loaded = 1
       nstate.blog_focus.blog = blog
       nstate.blog_focus.loaded = loaded
-      console.log(nstate.blog_focus)
       break
     case 'ADD_BLOG_CONTENT':
-      console.log("Adding blog content of length " + action.payload.content.length)
       nstate.blog_focus.content = action.payload.content
-      console.log(nstate.blog_focus)
       break
     case 'LOAD_BLOG':
       console.log("TODO: get from cache if its there")

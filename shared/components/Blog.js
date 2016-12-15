@@ -6,6 +6,7 @@ import NotFound from './NotFound'
 import BlogList from "./BlogList"
 import BlogNav from "./BlogNav"
 import BlogItem from "./BlogItem"
+import Error from "./Error"
 import Loading from "./Loading"
 import LatestEpisodePlayer from "./LatestEpisodePlayer"
 import transform_pathname from "../utils/transform_pathname"
@@ -155,6 +156,7 @@ class Blog extends React.Component {
 			// It's a listing or it's a navigation page but we don't know that until other async finishes
 
 			if (blog != undefined && content != undefined) {
+				console.log(1)
 				var env = oblogs.env + "."
 				if (env == "prod.") {
 					env = ""
@@ -182,8 +184,10 @@ class Blog extends React.Component {
 					</div>
 				)
 			} else if (blog_focus.loaded == -1) {
+				console.log(2)
 				return <div><Error /></div>
 			} else {
+				console.log(3)
 				return <div><Loading /></div>				
 			}
 		}
