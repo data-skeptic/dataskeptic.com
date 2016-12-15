@@ -772,7 +772,8 @@ ul.topnav li.right {float: right;}
   margin: 1px;
 }
 .cart-title {
-
+  white-space:nowrap;
+  overflow: hidden;
 }
 .cart-quantity {
   padding-left: 10px;
@@ -786,6 +787,7 @@ ul.topnav li.right {float: right;}
 }
 .cart-quan {
   text-align: center;
+  font-size: 10pt;
 }
 
 .country {
@@ -800,8 +802,8 @@ ul.topnav li.right {float: right;}
 .cart-total {
   text-align: right;
   font-weight: bold;
-  font-size: 12pt;
-}
+  font-size: 10pt;
+  }
 
 .btnCheckoutContainer {
   text-align: right;
@@ -998,9 +1000,13 @@ ul.topnav li.right {float: right;}
   margin: 10px;
   margin-bottom: 25px;
 }
+.cart-top {
+  padding: 0px;
+  margin: 0px;
+}
 .cart-rows {
-  padding: 10px 0px 0px 0px;
-  margin: 10px;
+  padding: 5px 0px 0px 0px;
+  margin: 2px;
   border-width: 1px;
   border-style: solid;
 }

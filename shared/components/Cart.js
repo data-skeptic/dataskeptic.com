@@ -18,7 +18,7 @@ class Cart extends React.Component {
 				<div>
 					<h2>Cart</h2>
 					<div className="row cart-rows">
-						<div className="col-sm-12">
+						<div className="col-sm-12 cart-top">
 							{cart_items.map(function(item) {
 								var subtotal = item.product.price * item.quantity
 								var title = item.product.title
@@ -28,7 +28,7 @@ class Cart extends React.Component {
 									key += "_" + item.size
 								}
 								return (
-									<div key={key} className="row">
+									<div key={key} className="row cart-row">
 										<div className="col-xs-5 cart-title">{title}</div>
 										<div className="col-xs-1 cart-price">${item.product.price}</div>
 										<div className="col-xs-4 cart-quan">
