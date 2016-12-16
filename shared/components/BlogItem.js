@@ -31,7 +31,6 @@ class BlogItem extends React.Component {
 
 		return (
 			<div className="center">
-				$$x = 1$$
 				<span dangerouslySetInnerHTML={{__html: content}} />
 				<MailingListBlogFooter />
 			</div>
