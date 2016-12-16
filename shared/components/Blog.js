@@ -166,7 +166,7 @@ class Blog extends React.Component {
 					try {
 						top = (
 							<div className="home-player">
-								<LatestEpisodePlayer title="" />
+								<LatestEpisodePlayer guid={blog.guid} />
 							</div>
 						)					
 					}

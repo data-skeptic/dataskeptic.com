@@ -29,8 +29,18 @@ export default function episodesReducer(state = defaultState, action) {
     case 'FETCH_EPISODES_ERROR':
       nstate.episodes_loaded = -1
       break;
-    case 'REQUEST_INJECT_LATEST_EPISODE':
-      if (nstate.episodes.length > 0) {
+    case 'REQUEST_INJECT_EPISODE':
+      var guid = action.payload.guid
+      if (guid != undefined) {
+        var ep = nstate.episodes_map[guid]
+        if (ep != undefined) {
+          nstate.focus_episode.episode = ep
+          nstate.focus_episode.loaded = 1          
+        } else {
+          nstate.focus_episode.loaded = -1
+        }
+      }
+      else if (nstate.episodes.length > 0) {
         nstate.focus_episode.episode = nstate.episodes[0]
         nstate.focus_episode.loaded = 1
       }

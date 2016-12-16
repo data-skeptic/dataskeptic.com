@@ -8,8 +8,12 @@ class LatestEpisodePlayer extends React.Component {
 		super(props)
 		var episodes = this.props.episodes.toJS()
 		var focus_episode = episodes.focus_episode
-		if (focus_episode.pubData == null) {
-			this.props.dispatch({type: "REQUEST_INJECT_LATEST_EPISODE", payload: {} })
+		var guid = this.props.guid
+		if (guid != undefined) {
+			this.props.dispatch({type: "REQUEST_INJECT_EPISODE", payload: {guid} })			
+		}
+		else if (focus_episode.pubData == null) {
+			this.props.dispatch({type: "REQUEST_INJECT_EPISODE", payload: {} })
 		}
 	}
 
