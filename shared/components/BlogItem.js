@@ -26,10 +26,12 @@ class BlogItem extends React.Component {
 		if (content == "") {
 			content = "Loading....."
 		}
+		content = content.split('$').join('$$')
 		var uid = 'http://dataskeptic.com/blog' + this.props.pathname
 
 		return (
 			<div className="center">
+				$$x = 1$$
 				<span dangerouslySetInnerHTML={{__html: content}} />
 				<MailingListBlogFooter />
 			</div>
