@@ -15,7 +15,7 @@ const Services = () => {
         <div className="col-xs-12 col-sm-6 services-box">
           <div className="services-inner">
             <div className="services-title">Team Building</div>
-            <p>Are you looking to hire your first data scientist or expand your fledgling team?  Finding the right data scientist to match your unique business needs can be challenging.  We can help you recruit a world class team.</p>
+            <p>Are you looking to hire your first data scientist or expand your fledgling team?  Finding the right data scientist to match your unique business needs can be challenging.  We can help you identify the backgrounds appropriate for achieving your goals and help recruit a world class team.</p>
           </div>
         </div>
       </div>
@@ -23,7 +23,7 @@ const Services = () => {
         <div className="col-xs-12 col-sm-6 services-box">
           <div className="services-inner">
             <div className="services-title">Solutions</div>
-            <p>Looking to integrate data science into your company but not yet looking to build a full time team?  Let us help take you from proof of concept to production delivery.</p>
+            <p>Does your organization need a key data science solution, but not an expensive long term team?  Let us help take you from proof of concept to production delivery.  The team behind Data Skeptic can build to your vision and integrate with your existing technology stack.</p>
           </div>
         </div>
         <div className="col-xs-12 col-sm-6 services-box">
