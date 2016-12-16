@@ -51,8 +51,6 @@ export default function episodesReducer(state = defaultState, action) {
     case 'INJECT_EPISODE':
       var episode = action.payload.episode
       if (episode != {}) {
-        console.log("hi!")
-        console.log(episode)
         episode.pubDate = new Date(episode.pubDate)
         nstate.focus_episode.episode = episode
         nstate.focus_episode.loaded = 1        
