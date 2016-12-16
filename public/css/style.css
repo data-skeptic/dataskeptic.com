@@ -279,6 +279,7 @@ ul.topnav li.right {float: right;}
   border-radius: 5px;
   background-color: #eee;
   height: 420px;
+  margin-bottom: 100px;
 }
 
 .coach-caption {
@@ -286,13 +287,12 @@ ul.topnav li.right {float: right;}
 }
 
 .coaching-left {
-  float: left;
-  margin-right: 15px;
   line-height: 12px;
 }
 
 .coaching-right {
   font-size: 14pt;
+  margin-bottom: 100px;
 }
 
 .book-me {

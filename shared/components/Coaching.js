@@ -28,15 +28,15 @@ class Coaching extends Component {
 				<p>Overall, I would be looking to help you find a few jobs you want to pursue, identify any skill gaps, teach those skill gaps, and coach you through rounds of interviews until you have an offer letter in your hand.  I can often make personal introductions when I have contacts in companies.</p>
 				<p>My rates are $550 / month.</p>
 				<p>Your next question is likely to be "ok, but how many months is this going to take?"  Ultimately, that depends on you.  I don't yet know your starting point or finishing line.  That's something we can discuss on our first chat.  I should be able to give you a realistic time frame after an initial discussion.  I've worked with people as short as one month and as long as 9 months.  Largely, the variance is your existing technical background and the amount of time you can put in per week.</p>
-				<div className="coaching-end-box">
-					<div className="coaching-left">
+				<div className="row coaching-end-box">
+					<div className="col-xs-12 col-sm-5 coaching-left">
 						<img src="/img/png/kyle-polich.png" />
 						<div className="coach-caption">
 							<p><span className="coaching-name">Kyle Polich</span></p>
 							<p><span className="coaching-title">Data Skeptic, Executive Producer</span></p>
 						</div>
 					</div>
-					<div className="coaching-right">
+					<div className="col-xs-12 col-sm-7 coaching-right">
 						<h2>Let's get started</h2>
 						<p>Schedule me right now for our first session.  If you're not completely satisified, I'll wave the fee and we'll part friends.</p>
 						<p>I look forward to helping you achieve your objectives as a data scientist.</p>
@@ -46,6 +46,7 @@ class Coaching extends Component {
 						</a></div>
 					</div>
 				</div>
+				<div className="clear" />
 			</div>
 		)
 	}
