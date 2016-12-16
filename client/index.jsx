@@ -106,6 +106,7 @@ try {
       console.log("Ingesting episode metadata prefetch")
       episode_metadata = episode_metadata.split('"\\').join('').split('\\&quot;"').join('&quot;')
       var episode = JSON.parse(episode_metadata)
+      console.log("parsing complete, moving on to injection of episode")
       store.dispatch({type: "INJECT_EPISODE", payload: {episode} })
     }  
   }
