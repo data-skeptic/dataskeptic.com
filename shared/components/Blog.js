@@ -33,8 +33,6 @@ class Blog extends React.Component {
 		if (pathname != "" && pathname != "/") {
 			// Single page
 			if (blog_focus.loaded == 1) {
-				console.log("blog_focus")
-				console.log(blog_focus)
 				var content = blog_focus.content
 				if (content == undefined || content == "") {
 					var blog = blog_focus.blog

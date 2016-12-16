@@ -86,27 +86,12 @@ try {
   var episode_metadata_prefetch = document.getElementById('episode-metadata-prefetch')
   if (episode_metadata_prefetch != null) {
     var episode_metadata = episode_metadata_prefetch.innerHTML
-    if (episode_metadata != undefined) {
+    if (episode_metadata != undefined && episode_metadata != "{}") {
       console.log("Ingesting episode metadata prefetch")
       episode_metadata = episode_metadata.split('"\\').join('').split('\\&quot;"').join('&quot;')
+      console.log(episode_metadata)
       var episode = JSON.parse(episode_metadata)
-      store.dispatch({type: "INJECT_EPISODE", payload: {episode} })
-    }  
-  }
-}
-catch (err) {
-  console.log(err)
-}
-
-try {
-  var episode_metadata_prefetch = document.getElementById('episode-metadata-prefetch')
-  if (episode_metadata_prefetch != null) {
-    var episode_metadata = episode_metadata_prefetch.innerHTML
-    if (episode_metadata != undefined) {
-      console.log("Ingesting episode metadata prefetch")
-      episode_metadata = episode_metadata.split('"\\').join('').split('\\&quot;"').join('&quot;')
-      var episode = JSON.parse(episode_metadata)
-      console.log("parsing complete, moving on to injection of episode")
+      console.log(["injecting", episode])
       store.dispatch({type: "INJECT_EPISODE", payload: {episode} })
     }  
   }
