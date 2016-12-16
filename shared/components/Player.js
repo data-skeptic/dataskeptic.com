@@ -83,14 +83,19 @@ class Player extends React.Component {
 			var mp3 = episode.mp3
 			howler = <ReactHowler src={mp3} playing={is_playing} ref={(ref) => this.state.howler = ref} onEnd={this.onEnd.bind(this)} />
 			duration = episode.duration
-			var arr = duration.split(":")
-			if (arr.length == 2) {
-				var min = parseInt(arr[0])
-				var sec = parseInt(arr[1])					
-			} else {
-				var hr  = parseInt(arr[0])
-				var min = parseInt(arr[1]) + 60 * hr
-				var sec = parseInt(arr[2])
+			var min = 0
+			var sec = 0
+			var hr = 0
+			if (duration != undefined) {
+				var arr = duration.split(":")
+				if (arr.length == 2) {
+					min = parseInt(arr[0])
+					sec = parseInt(arr[1])					
+				} else {
+					hr  = parseInt(arr[0])
+					min = parseInt(arr[1]) + 60 * hr
+					sec = parseInt(arr[2])
+				}
 			}
 			var d = min * 60 + sec
 			var p = 1.0 * d * position/100

@@ -6,6 +6,11 @@ import Loading from "./Loading"
 class LatestEpisodePlayer extends React.Component {
 	constructor(props) {
 		super(props)
+		var episodes = this.props.episodes.toJS()
+		var focus_episode = episodes.focus_episode
+		if (focus_episode.pubData == null) {
+			this.props.dispatch({type: "REQUEST_INJECT_LATEST_EPISODE", payload: {} })
+		}
 	}
 
 	onClick(episode) {
@@ -18,6 +23,7 @@ class LatestEpisodePlayer extends React.Component {
 		var playback_loaded = oplayer.playback_loaded
 		var episodes = this.props.episodes.toJS()
 		var focus_episode = episodes.focus_episode
+		console.log(focus_episode)
 		var loaded = focus_episode.loaded
 		var episode = focus_episode.episode
 		if (loaded == -1) {
