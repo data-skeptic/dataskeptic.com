@@ -7,6 +7,11 @@ import Loading from "./Loading"
 class LatestBlogCard extends React.Component {
 	constructor(props) {
 		super(props)
+		var blogs = this.props.blogs.toJS()
+		var focus_blog = blogs.focus_blog
+		if (focus_blog == undefined || focus_blog.blog == undefined) {
+			this.props.dispatch({type: "REQUEST_INJECT_BLOG", payload: {} })
+		}
 	}
 
 	render() {
@@ -60,6 +65,7 @@ class LatestBlogCard extends React.Component {
 			)			
 		}
 		else {
+			console.log("Bad state.")
 			var pn = "/blog/meta/relaunching-dataskeptic.com"
 			return (
 				<div className="home-latest-blog-card">

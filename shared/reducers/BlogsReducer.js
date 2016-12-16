@@ -46,6 +46,19 @@ export default function blogsReducer(state = defaultState, action) {
         nstate.blog_focus.content = ""
       }
       break
+    case 'REQUEST_INJECT_BLOG':
+      var i = 0
+      nstate.blog_focus.loaded = 0        
+      while (i < nstate.blogs.length) {
+        var b = nstate.blogs[i]
+        if (b.uri.indexOf('/episodes/') == -1 && b.uri.indexOf('/transcripts/') == -1) {
+          nstate.blog_focus.blog = b
+          nstate.blog_focus.loaded = 1
+          i = nstate.blogs.length
+        }
+        i += 1
+      }
+      break
     case 'INJECT_BLOG':
       // This event is generated to handle data that was prefetched and just needs to be injected
       var blog = action.payload.blog
