@@ -60,7 +60,7 @@ class LatestBlogCard extends React.Component {
 			)			
 		}
 		else {
-			var pn = "/meta/relaunching-dataskeptic.com"
+			var pn = "/blog/meta/relaunching-dataskeptic.com"
 			return (
 				<div className="home-latest-blog-card">
 					<div className="home-latest-blog-top"><p>From the blog:</p></div>
