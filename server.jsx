@@ -100,7 +100,7 @@ app.use( (req, res) => {
 
     if(!renderProps) {
       var title = "Page not found"
-      var componentHTML = "<div><h1>Not Found</h1></div>"
+      var componentHTML = "<div><h1>Not Found</h1><p>You've encountered a bogus link, deprecated link, or bug in our site.  Either way, please nagivate to <a href="http://dataskeptic.com">dataskeptic.com</a> to get back on course.</p></div>"
 
       var injects = {
         "react-view" : componentHTML
