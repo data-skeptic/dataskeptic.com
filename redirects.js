@@ -134,6 +134,7 @@ var redirects_map = {'/epnotes/causal-impact.php':'/blog/episodes/2016/causal-im
 '/epnotes/ep002.php':'/blog/episodes/2014/advertising-attribution-with-nathan-janos',
 '/epnotes/type_i_type_ii.php':'/blog/episodes/2014/type-i--type-ii-errors',
 '/epnotes/ep001.php':'/blog/episodes/2014/introduction',
+'/store.php': 'http://dataskeptic.com/store',
 '/episodes.php':'/podcast',
 '/allepisodes.php':'/podcast',
 '/allepisodes.php?skip=10':'/podcast'
