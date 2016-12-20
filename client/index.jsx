@@ -46,6 +46,9 @@ if (rs != undefined) {
       val.paymentError = ""
       val.paymentComplete = false
     }
+    if (key == 'player') {
+      val.is_playing = false
+    }
     nstate[key] = Immutable.fromJS(val)
   }
   console.log("Reloaded saved state")
