@@ -27,7 +27,6 @@ class LatestEpisodePlayer extends React.Component {
 		var playback_loaded = oplayer.playback_loaded
 		var episodes = this.props.episodes.toJS()
 		var focus_episode = episodes.focus_episode
-		console.log(focus_episode)
 		var loaded = focus_episode.loaded
 		var episode = focus_episode.episode
 		if (loaded == -1) {
