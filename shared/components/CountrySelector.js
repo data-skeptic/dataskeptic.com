@@ -276,12 +276,15 @@ class CountrySelector extends React.Component {
 	render() {
 		var ocart = this.props.cart.toJS()
 		var short = ocart.country_short
+		var i = 0
 		return (
 			<div className="country-selector">
 				<select className="country" onChange={this.onChange.bind(this)} value={short}>
 					{countries.map(function(country) {
+						var key = country.short + "_" + i
+						i += 1
 						return (
-							<option key={country.short} value={country.short}>{country.long}</option>
+							<option key={key} value={country.short}>{country.long}</option>
 						)
 					})}
 				</select>
