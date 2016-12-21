@@ -572,22 +572,42 @@ ul.topnav li.right {float: right;}
 }
 
 .blog-summary {
-  padding: 30px;
   margin: 10px;
-  margin-bottom: 50px;
-  border-width: 1px 0px 0px 0px;
-  border-color: #333;
-  border-style: dashed;
+  padding-top: 0px;
+  padding-bottom: 50px;
+  border-width: 0px 0px 1px 0px;
+  border-color: #979797;
+  border-style: solid;
 }
 
 .blog-title {
+  font-family: .SFNSDisplay;
+  font-size: 32px;
+  color: #3A3B3B;
+  letter-spacing: 0;
+}
 
+.blog-view-more {
+  font-family: SFUIText-Semibold;
+  font-size: 14px;
+  color: #000000;
+  letter-spacing: 0;  
+  margin-left: 20px;
 }
 
 .blog-date {
-  margin-left: 15px;
-  font-size: 8pt;
-  font-weight: bold;
+  font-family: SFUIText-Semibold;
+  font-size: 14px;
+  color: #7D8080;
+  letter-spacing: 1px;
+}
+
+.blog-desc {
+  font-family: SFUIText-Regular;
+  font-size: 14px;
+  color: #575959;
+  letter-spacing: 0;
+  line-height: 24px;  
 }
 
 .blog-error {
