@@ -15,6 +15,12 @@ class LatestBlogCard extends React.Component {
 	}
 
 	render() {
+        var monthNames = [
+          "January", "February", "March",
+          "April", "May", "June", "July",
+          "August", "September", "October",
+          "November", "December"
+        ];
 		var oblogs = this.props.blogs.toJS()
 		var blogs = oblogs.blogs || []
 		var blog_focus   = oblogs.blog_focus || {loaded: 0}
@@ -51,13 +57,14 @@ class LatestBlogCard extends React.Component {
 				pn = pn.substring(1, pn.length)
 			}
 			pn = "/blog/" + pn
-			var date = blog["publish_date"]
+			var date = new Date(blog["publish_date"])
+            var dstr = monthNames[date.getMonth()].toUpperCase() + " " + date.getDate() + ", " + (date.getYear()+1900)
 			return (
 				<div className="home-latest-blog-card">
 					<div className="home-latest-blog-top"><p>From the blog:</p></div>
 					<div className="home-latest-blog-card-container">
+						<div className="blog-date">{dstr}</div>
 						<Link className="blog-title" to={pn}>{blog.title}</Link>
-						<span className="blog-date">{date}</span>
 						<p>{blog.desc}</p>
 						<p> ...<Link to={pn}>[more]</Link></p>
 					</div>

@@ -14,6 +14,12 @@ class EpisodeCard extends React.Component {
 	}
 
 	render() {
+        var monthNames = [
+          "January", "February", "March",
+          "April", "May", "June", "July",
+          "August", "September", "October",
+          "November", "December"
+        ];
 		var oplayer = this.props.player.toJS()
 		var playback_loaded = oplayer.playback_loaded
 		var oepisodes = this.props.episodes.toJS()
@@ -37,8 +43,8 @@ class EpisodeCard extends React.Component {
 					}
 				}
 			}
-			var d = new Date(ep.pubDate)
-			var dstr = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate()
+			var date = new Date(ep.pubDate)
+            var dstr = monthNames[date.getMonth()].toUpperCase() + " " + date.getDate() + ", " + (date.getYear()+1900)
 			var desc = ep.desc
 			var x = 200
 			if (desc.length > x) {
@@ -52,9 +58,9 @@ class EpisodeCard extends React.Component {
 						<img className="home-episode-card-img" src={ep.img} />
 					</div>
 					<div className="home-episode-card-right">
+						<div className="home-player-date">{dstr}</div>
 						<p><span className="home-player-card">{this.props.title}</span></p>
 						<p><span className="home-player-title"><a href={ep.link}>{ep.title}</a></span></p>
-						<p><span className="home-player-date">{dstr}</span></p>
 						<div className="home-player-button-container">
 							<button className="episode-button" onClick={this.onClick.bind(this, ep)}>{play_symb}</button>
 						</div>
