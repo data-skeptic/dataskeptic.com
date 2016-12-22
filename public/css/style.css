@@ -588,7 +588,7 @@ ul.topnav li.right {float: right;}
 }
 
 .blog-view-more {
-  font-family: SFUIText-Semibold;
+  font-weight: bold;
   font-size: 14px;
   color: #000000;
   letter-spacing: 0;  
@@ -596,14 +596,13 @@ ul.topnav li.right {float: right;}
 }
 
 .blog-date {
-  font-family: SFUIText-Semibold;
   font-size: 14px;
+  font-weight: bold;
   color: #7D8080;
   letter-spacing: 1px;
 }
 
 .blog-desc {
-  font-family: SFUIText-Regular;
   font-size: 14px;
   color: #575959;
   letter-spacing: 0;
