@@ -137,7 +137,9 @@ var redirects_map = {'/epnotes/causal-impact.php':'/blog/episodes/2016/causal-im
 '/store.php': 'http://dataskeptic.com/store',
 '/episodes.php':'/podcast',
 '/allepisodes.php':'/podcast',
-'/allepisodes.php?skip=10':'/podcast'
+'/allepisodes.php?skip=10':'/podcast',
+'/home-sales/':'/blog/open-house/',
+'/home-sales':'/blog/open-house/'
 }
 
 exports.redirects_map = redirects_map
