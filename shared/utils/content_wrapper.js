@@ -22,10 +22,6 @@ export default function getContentWrapper(title, initialState, injects) {
           <title>${title}</title>
           <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cosmo/bootstrap.min.css" type="text/css" rel="stylesheet"/>
             <link rel="stylesheet" type="text/css" href="/css/style.css">
-          <script
-              type="text/javascript"
-              src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&dummy=.js">
-            </script>
           <script>
             window.__INITIAL_STATE__ = ${JSON.stringify(initialState)};
           </script>
@@ -39,14 +35,6 @@ export default function getContentWrapper(title, initialState, injects) {
   }
   doc += `<script type="application/javascript" src="/bundle.js"></script>
           <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-          <script>
-MathJax.Hub.Config({
-  tex2jax: {
-    inlineMath: [['$','$'], ['\\(','\\)']],
-    processEscapes: true
-  }
-});
-          </script>
         </body>
       </html>
       `

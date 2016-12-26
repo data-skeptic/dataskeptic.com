@@ -9,13 +9,15 @@ import App                     from 'components/index';
 import Blog                    from 'components/Blog';
 import Checkout                from 'components/Checkout';
 import Coaching                from 'components/Coaching';
-import Coaching2                from 'components/Coaching2';
+import Coaching2               from 'components/Coaching2';
+import ContactUs               from 'components/ContactUs';
 import Home                    from 'components/Home';
 import LightsOut               from 'components/LightsOut';
 import Menu                    from 'components/Menu';
 import Membership              from 'components/Membership';
-import NotFound                from 'components/NotFound';
+import NotFound                from 'components/Press';
 import Podcast                 from 'components/Podcast';
+import Press                   from 'components/Press';
 import Projects                from 'components/Projects';
 import Services                from 'components/Services';
 import Store                   from 'components/Store';
@@ -43,6 +45,9 @@ export default (
 		<Route path="/checkout" name="app" component={App}>
 			<IndexRoute component={Checkout}/>
 		</Route>						
+		<Route path="/contact-us" component={App}>
+			<IndexRoute component={ContactUs} />
+		</Route>
 		<Route path="/lightsout" component={App}>
 			<IndexRoute component={LightsOut} />
 		</Route>
@@ -57,6 +62,9 @@ export default (
 		</Route>
 		<Route path="/store" component={App}>
 			<IndexRoute component={Store} />
+		</Route>
+		<Route path="/press" component={App}>
+			<IndexRoute component={Press} />
 		</Route>
 		<Route path="/projects" component={App}>
 			<IndexRoute component={Projects} />
