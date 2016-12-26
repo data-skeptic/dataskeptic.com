@@ -44,6 +44,7 @@ class Home extends Component {
           <div className="col-sm-12 home-statement">
             <h2>About Data Skeptic</h2>
             <p>Data Skeptic is the weekly podcast that is skeptical of and with data.  We explain the methods and algorithms that power our world in an accessible manner through our short mini-episode discussions and our longer interviews with experts in the field.</p>
+            <p>To reach out to the podcast, please visit our <a href="/contact-us">Contact Us</a> page.</p>
           </div>
         </div>
         <div className="row">
