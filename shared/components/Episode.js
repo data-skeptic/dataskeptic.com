@@ -1,5 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom"
+import { Link } from 'react-router'
 import { connect } from 'react-redux'
 
 class Episode extends React.Component {
@@ -9,9 +10,26 @@ class Episode extends React.Component {
 	onPlayToggle(episode) {
 		this.props.dispatch({type: "PLAY_EPISODE", payload: episode })
 	}
+    onClick(event) {
+        var href = event.target.href
+        var b = "/blog/"
+        var i = href.indexOf(b)
+        if (i >= 0) {
+            href = href.substring(i+b.length-1, href.length)
+            var dispatch = this.props.dispatch
+            dispatch({type: "LOAD_BLOG", payload: {dispatch, pathname: href} })
+        }
+    }
 	render() {
+        var monthNames = [
+          "January", "February", "March",
+          "April", "May", "June", "July",
+          "August", "September", "October",
+          "November", "December"
+        ];
 		var ep = this.props.episode
 		var oplayer = this.props.player.toJS()
+		var oblogs = this.props.blogs.toJS()
 		var player = oplayer.player
 		var desc = ep.desc
 		var i = desc.indexOf("</p>")
@@ -36,25 +54,41 @@ class Episode extends React.Component {
 			}
 		}
 		var d = new Date(ep.pubDate)
-		var dstr = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate()
+		var dstr = monthNames[d.getMonth()].toUpperCase() + " " + d.getDate() + ", " + (d.getYear()+1900)
 
 		var tmp = document.createElement("DIV");
 		tmp.innerHTML = desc;
 		desc = tmp.textContent || tmp.innerText || ""
+		var transcript = <div></div>
+		var tep = oblogs.transcript_map[ep.guid]
+		if (tep != undefined) {
+			var pn = "/blog" + tep.prettyname
+			console.log(pn)
+			transcript = (
+					<div className='episode-transcript-link'>
+						<Link onClick={this.onClick.bind(this)} to={pn}>Read transcript</Link>
+					</div>
+			)
+		}
 		return (
 			<div className="row episode">
 				<div className="col-xs-12 col-sm-3 episode-left">
 					<img className="episode-img" src={ep.img} />
 				</div>
 				<div className="col-xs-12 col-sm-9 episode-middle">
-					<p><span className="episode-title"><a href={ep.link}>{ep.title}</a></span></p>
-					<p>
-						<button className="episode-play-button" onClick={this.onPlayToggle.bind(this, ep)}>{play_symb} <span className="episode-duration">{duration}</span></button>
-						<span className="episode-pubDate">{dstr}</span>
-						<a className="episode-download-button" href={ep.mp3} download>&darr;</a>
-					</p>
+                    <div className="blog-date">{dstr}</div>
+					<a className="blog-title" href={ep.link}>{ep.title}</a>
+					<br/>
+					<div className="episode-button-row">
+						<button className="episode-play-button" onClick={this.onPlayToggle.bind(this, ep)}>{play_symb} <span className="episode-play">PLAY</span> <span className="episode-duration">{duration}</span></button>
+						<div className="episode-download">
+							<a className="episode-download-img" href={ep.mp3} download><img className="dl-arrow" src="/img/png/dl-arrow.png" /></a>
+							<a className="episode-download-txt" href={ep.mp3} download>Download</a>
+						</div>
+						{transcript}
+					</div>
 					<div className="clear"></div>
-					{desc}
+					<div className="episode-desc">{desc}</div>
 					<a href={ep.link}> [more]</a>
 				</div>
 				<div className="clear"></div>
@@ -63,5 +97,5 @@ class Episode extends React.Component {
 	}
 }
 
-export default connect(state => ({ player: state.player, episodes: state.episodes }))(Episode)
+export default connect(state => ({ player: state.player, episodes: state.episodes, blogs: state.blogs }))(Episode)
 

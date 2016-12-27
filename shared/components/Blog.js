@@ -8,7 +8,6 @@ import BlogNav from "./BlogNav"
 import BlogItem from "./BlogItem"
 import Error from "./Error"
 import Loading from "./Loading"
-import LatestEpisodePlayer from "./LatestEpisodePlayer"
 import transform_pathname from "../utils/transform_pathname"
 
 class Blog extends React.Component {
@@ -100,6 +99,7 @@ class Blog extends React.Component {
 	}
 
 	render() {
+		console.log("here")
 		var opathname = this.props.location.pathname
 		var pathname = transform_pathname(opathname)
 
@@ -145,6 +145,7 @@ class Blog extends React.Component {
 					</div>
 				)
 			} else if (blogs_loaded == -1) {
+				console.log("Blog not loaded")
 				return <div><Error /></div>
 			} else {
 				return <div><Loading /></div>
@@ -159,28 +160,14 @@ class Blog extends React.Component {
 					env = ""
 				}
 				var title = blog["title"]
-				var top = ""
-				if (isEpisode) {
-					try {
-						top = (
-							<div className="home-player">
-								<LatestEpisodePlayer guid={blog.guid} />
-							</div>
-						)					
-					}
-					catch (err) {
-						console.log(err)
-						top = <div></div>
-					}
-				}
 				return (
 					<div className="center">
 						<BlogNav folders={folders} pathname={pathname} />
-						{top}
 						<BlogItem pathname={pathname} title={title} />
 					</div>
 				)
 			} else if (blog_focus.loaded == -1) {
+				console.log("blog not loaded")
 				return <div><Error /></div>
 			} else {
 				return <div><Loading /></div>				
