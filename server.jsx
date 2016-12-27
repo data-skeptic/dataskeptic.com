@@ -111,11 +111,6 @@ app.use( (req, res) => {
       console.log("page not found:" + pathname)
       //console.log(HTML)
       return res.status(404).end(componentHTML);
-    } else {
-      console.log("render props")
-      //console.log(renderProps)
-      console.log("---------------------=")
-      console.log(renderProps.params)
     }
 
     function renderView() {
@@ -125,9 +120,9 @@ app.use( (req, res) => {
       var dispatch = store.dispatch
       if (content == undefined) {
         content = ""
-        console.log(pathname + ": did not pull content from cache")
+        //console.log(pathname + ": did not pull content from cache")
       } else {
-        console.log(pathname + ": pulled content from cache")
+        //console.log(pathname + ": pulled content from cache")
       }
 
       var blog_page = pathname
@@ -138,9 +133,9 @@ app.use( (req, res) => {
       var guid = ""
       if (blog_metadata == undefined) {
         blog_metadata = {}
-        console.log(pathname + ": did not pull blog metadata from cache")
+        //console.log(pathname + ": did not pull blog metadata from cache")
       } else {
-        console.log(pathname + ": pulled blog metadata from cache")
+        //console.log(pathname + ": pulled blog metadata from cache")
         guid = blog_metadata.guid
       }
 
@@ -151,9 +146,9 @@ app.use( (req, res) => {
       var episode_metadata = episodes_map[guid]
       if (episode_metadata == undefined) {
         episode_metadata = {}
-        console.log(pathname + ": did not pull episode metadata from cache")
+        //console.log(pathname + ": did not pull episode metadata from cache")
       } else {
-        console.log(pathname + ": pulled episode metadata from cache")
+        //console.log(pathname + ": pulled episode metadata from cache")
       }
 
       const InitialView = (
