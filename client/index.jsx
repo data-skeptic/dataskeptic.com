@@ -109,8 +109,6 @@ if (process.env.NODE_ENV != "production") {
   env = "dev"
 }
 
-console.log(["env", env])
-
 var country = "us"
 var player = {episode: undefined, is_playing: false, has_shown: false}
 

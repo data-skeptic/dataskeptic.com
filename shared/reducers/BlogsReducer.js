@@ -8,6 +8,7 @@ const init = {
   folders: [],
   blogs_loaded: 0,
   blog_focus: {blog: undefined, loaded: 0, content: ""},
+  transcript_map: {},
   env: "prod"  // client/index.jsx will dispatch SET_BLOG_ENVIRONMENT on init
 }
 
@@ -85,6 +86,12 @@ export default function blogsReducer(state = defaultState, action) {
       break
     case 'ADD_BLOGS':
   	  nstate.blogs = action.payload
+      for (var i=0; i < nstate.blogs.length; i++) {
+        var blog = nstate.blogs[i]
+        if (blog.guid != undefined && blog.uri.indexOf('/transcripts/') != -1) {
+          nstate.transcript_map[blog.guid] = blog
+        }
+      }
       break
     case 'SET_BLOGS_LOADED':
   	  nstate.blogs_loaded = action.payload
