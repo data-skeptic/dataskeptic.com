@@ -57,18 +57,15 @@ class Episode extends React.Component {
 		var dstr = monthNames[d.getMonth()].toUpperCase() + " " + d.getDate() + ", " + (d.getYear()+1900)
 
 		var tmp = document.createElement("DIV");
-		console.log("e3.1")
 		tmp.innerHTML = desc;
 		desc = tmp.textContent || tmp.innerText || ""
 		var transcript = <div></div>
-		console.log(ep.guid)
 		var tep = undefined
 		try {
 			tep = oblogs.transcript_map[ep.guid]
 		} catch (err) {
 			console.log(err)
 		}
-		console.log("e3.2")
 		if (tep != undefined) {
 			var pn = "/blog" + tep.prettyname
 			transcript = (
@@ -77,7 +74,6 @@ class Episode extends React.Component {
 					</div>
 			)
 		}
-		console.log("e4")
 		return (
 			<div className="row episode">
 				<div className="col-xs-12 col-sm-3 episode-left">
