@@ -21,7 +21,6 @@ class Episode extends React.Component {
         }
     }
 	render() {
-		console.log("e")
         var monthNames = [
           "January", "February", "March",
           "April", "May", "June", "July",
@@ -44,7 +43,6 @@ class Episode extends React.Component {
 				play_symb = <span>&#10073;&#10073;</span>
 			}
 		}
-		console.log("e2")
 		var playing_symbol = (
 			<button className="episode-play-button" onClick={this.onPlayToggle.bind(this, ep)}>&#9658; <span className="episode-duration">{duration}</span></button>
 		)
@@ -60,17 +58,21 @@ class Episode extends React.Component {
 		console.log("e3")
 
 		var tmp = document.createElement("DIV");
+		console.log("e3.1")
 		tmp.innerHTML = desc;
 		desc = tmp.textContent || tmp.innerText || ""
 		var transcript = <div></div>
 		var tep = oblogs.transcript_map[ep.guid]
+		console.log("e3.2")
 		if (tep != undefined) {
+		console.log("e3.3")
 			var pn = "/blog" + tep.prettyname
 			transcript = (
 					<div className='episode-transcript-link'>
 						<Link onClick={this.onClick.bind(this)} to={pn}>Read transcript</Link>
 					</div>
 			)
+		console.log("e3.4")
 		}
 		console.log("e4")
 		return (
