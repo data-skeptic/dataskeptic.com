@@ -21,6 +21,7 @@ class Episode extends React.Component {
         }
     }
 	render() {
+		console.log("e")
         var monthNames = [
           "January", "February", "March",
           "April", "May", "June", "July",
@@ -63,13 +64,13 @@ class Episode extends React.Component {
 		var tep = oblogs.transcript_map[ep.guid]
 		if (tep != undefined) {
 			var pn = "/blog" + tep.prettyname
-			console.log(pn)
 			transcript = (
 					<div className='episode-transcript-link'>
 						<Link onClick={this.onClick.bind(this)} to={pn}>Read transcript</Link>
 					</div>
 			)
 		}
+		console.log("e2")
 		return (
 			<div className="row episode">
 				<div className="col-xs-12 col-sm-3 episode-left">
