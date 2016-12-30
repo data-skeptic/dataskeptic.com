@@ -44,6 +44,7 @@ class Episode extends React.Component {
 				play_symb = <span>&#10073;&#10073;</span>
 			}
 		}
+		console.log("e2")
 		var playing_symbol = (
 			<button className="episode-play-button" onClick={this.onPlayToggle.bind(this, ep)}>&#9658; <span className="episode-duration">{duration}</span></button>
 		)
@@ -56,6 +57,7 @@ class Episode extends React.Component {
 		}
 		var d = new Date(ep.pubDate)
 		var dstr = monthNames[d.getMonth()].toUpperCase() + " " + d.getDate() + ", " + (d.getYear()+1900)
+		console.log("e3")
 
 		var tmp = document.createElement("DIV");
 		tmp.innerHTML = desc;
@@ -70,7 +72,7 @@ class Episode extends React.Component {
 					</div>
 			)
 		}
-		console.log("e2")
+		console.log("e4")
 		return (
 			<div className="row episode">
 				<div className="col-xs-12 col-sm-3 episode-left">

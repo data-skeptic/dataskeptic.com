@@ -12,7 +12,6 @@ class Podcast extends React.Component {
 	}
 
 	render() {
-		console.log("Begin render")
 		var oepisodes = this.props.episodes.toJS()
 		var episodes = oepisodes.episodes
 		var episodes_loaded = oepisodes.episodes_loaded
@@ -20,10 +19,8 @@ class Podcast extends React.Component {
 			episodes_loaded = 0
 		}
 		if (episodes_loaded == 0) {
-			console.log("1")
 			return <div><Loading /></div>
 		} else {
-			console.log("2")
 			var myear = (new Date()).getYear() + 1900
 			if (episodes.length > 0) {
 				var pubDate = episodes[0].pubDate
@@ -42,7 +39,6 @@ class Podcast extends React.Component {
 				years.push(y)
 				y -= 1
 			}
-			console.log("Now render outer")
 			return (
 				<div className="center">
 					<YearSelector years={years} year={year} />
