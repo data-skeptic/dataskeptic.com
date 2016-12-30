@@ -55,24 +55,27 @@ class Episode extends React.Component {
 		}
 		var d = new Date(ep.pubDate)
 		var dstr = monthNames[d.getMonth()].toUpperCase() + " " + d.getDate() + ", " + (d.getYear()+1900)
-		console.log("e3")
 
 		var tmp = document.createElement("DIV");
 		console.log("e3.1")
 		tmp.innerHTML = desc;
 		desc = tmp.textContent || tmp.innerText || ""
 		var transcript = <div></div>
-		var tep = oblogs.transcript_map[ep.guid]
+		console.log(ep.guid)
+		var tep = undefined
+		try {
+			tep = oblogs.transcript_map[ep.guid]
+		} catch (err) {
+			console.log(err)
+		}
 		console.log("e3.2")
 		if (tep != undefined) {
-		console.log("e3.3")
 			var pn = "/blog" + tep.prettyname
 			transcript = (
 					<div className='episode-transcript-link'>
 						<Link onClick={this.onClick.bind(this)} to={pn}>Read transcript</Link>
 					</div>
 			)
-		console.log("e3.4")
 		}
 		console.log("e4")
 		return (
