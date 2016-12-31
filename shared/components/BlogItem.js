@@ -64,13 +64,15 @@ class BlogItem extends React.Component {
 			if (tm != undefined) {
 				var guid = blog_focus.blog.guid
 				var b = tm[guid]
-				var pn = "/blog" + b.prettyname
-				var bot = (
-					<div className='blog-transcript-link'>
-						Read the full transcript here:
-						<Link onClick={this.onClick.bind(this)} to={pn}>{title} transcripts</Link>.
-					</div>
-				)
+				if (b != undefined) {
+					var pn = "/blog" + b.prettyname
+					var bot = (
+						<div className='blog-transcript-link'>
+							Read the full transcript here:
+							<Link onClick={this.onClick.bind(this)} to={pn}>{title} transcripts</Link>.
+						</div>
+					)					
+				}
 			}
 		}
 		var content = blog_focus.content || "Loading...."
