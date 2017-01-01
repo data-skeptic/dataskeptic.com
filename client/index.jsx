@@ -18,6 +18,14 @@ import { createStore,
 
 var initialState = immutifyState(window.__INITIAL_STATE__);
 
+var version = "1.0.1"
+
+if (initialState['version'] == undefined) {
+  initialState = {version}
+} else if (initialState['version'] != v) {
+  initialState = {version}
+}
+
 const history = createBrowserHistory();
 
 const reducer = combineReducers(reducers);
