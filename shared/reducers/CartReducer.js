@@ -64,12 +64,14 @@ function get_token(nstate, event, dispatch) {
     var paymentError = ""
     if (response.error) {
       paymentError = response.error.message
-      console.log("error: " + paymentError)
+      console.log("Error: " + paymentError)
+      nstate.paymentError = "We were unable to verify your information.  Please check the information below or contact kyle@dataskeptic.com for support."
+      nstate.submitDisabled = false
       var msg = paymentError
       var email = nstate.address.email
       dispatch({type: "CONTACT_FORM", payload: {msg, email} })
     }
-    dispatch({type: "TOKEN_RECIEVED", payload: { dispatch, token, paymentError } })
+   dispatch({type: "TOKEN_RECIEVED", payload: { dispatch, token, paymentError } })
   })
   return nstate
 }
@@ -291,12 +293,15 @@ export default function cartReducer(state = defaultState, action) {
       nstate.token = token
       nstate.paymentError = paymentError
       if (nstate.paymentError != "") {
-        nstate.paymentError = "Please make sure you entered your credit card information correctly and try again."
-        console.log("spinner off")
+        nstate.paymentError = "Please make sure you entered your credit card information correctly and try again.  If you continue to have problems, please contact <a href='mailto:kyle@dataskeptic.com'>kyle@dataskeptic.com</a> for support.  We apologize for any inconvenience."
         nstate.submitDisabled = false
         var msg = {paymentError: nstate.paymentError, address: nstate.address}
         var email = nstate.address.email
-        dispatch({type: "CONTACT_FORM", payload: {msg, email} })
+        setTimeout(
+          function() {
+            dispatch({type: "CONTACT_FORM", payload: {msg, email} })
+          }
+        , 10)
       }
       if (token != undefined) {
         token_recieved(dispatch, nstate)

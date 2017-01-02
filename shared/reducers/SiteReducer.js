@@ -63,7 +63,19 @@ export default function siteReducer(state = defaultState, action) {
     case 'CONTACT_FORM_ERROR':
       var error = action.payload.error
       nstate.contact_form.error = error
+      nstate.contact_form.send = "no"
+    case 'CONTACT_FORM_COMPLETE':
+      var success = action.payload.success
+      if (success) {
+        nstate.contact_form.msg = ""
+        nstate.contact_form.error = ""
+        nstate.contact_form.send = "success"
+      } else {
+        nstate.contact_form.send = "error"
+      }
+      break
     case 'CONTACT_FORM':
+      var dispatch = action.payload.dispatch
       var data = nstate.contact_form
       var msg = action.payload.msg
       if (msg != undefined) {
@@ -81,13 +93,17 @@ export default function siteReducer(state = defaultState, action) {
         .post(url, JSON.stringify(data))
         .then(function(result) {
           console.log(result)
-          nstate.contact_form.msg = ""
-          nstate.contact_form.error = ""
-          nstate.contact_form.send = "success"
+          if (dispatch != undefined) {
+            var success = true
+            dispatch({type: "CONTACT_FORM_COMPLETE", payload: {success} })
+          }
         })
         .catch(function (err) {
           console.log(err)
-          nstate.contact_form.send = "error"
+          if (dispatch != undefined) {
+            var success = false
+            dispatch({type: "CONTACT_FORM_COMPLETE", payload: {success} })
+          }
         });
   }
   return Immutable.fromJS(nstate)

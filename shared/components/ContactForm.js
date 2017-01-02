@@ -8,20 +8,21 @@ class ContactForm extends React.Component {
 		super(props)
 	}
 	
-	onClick(event) {
+	onClick(event, name, email, msg) {
 		var validated = true
 		var name_missing = false
 		var email_missing = false
 		var msg_missing = false
-		if (data.name.trim() == "") {
+
+		if (name == "") {
 			validated = false
 			name_missing = true
 		}
-		if (data.email.trim() == "") {
+		if (email == "") {
 			validated = false
 			email_missing = true
 		}
-		if (data.msg.trim() == "") {
+		if (msg == "") {
 			validated = false
 			msg_missing = true
 		}
@@ -41,7 +42,8 @@ class ContactForm extends React.Component {
 			this.props.dispatch({type: "CONTACT_FORM_ERROR", payload: {error} })
 		}
 		else {
-			this.props.dispatch({type: "CONTACT_FORM", payload: {} })
+			var dispatch = this.props.dispatch
+			dispatch({type: "CONTACT_FORM", payload: {dispatch} })
 		}
 	}
 
@@ -64,13 +66,13 @@ class ContactForm extends React.Component {
 	}
 
 	render() {
-		console.log(this.props)
 		var osite = this.props.site.toJS()
 		var name = osite.contact_form.name
 		var email = osite.contact_form.email
 		var msg = osite.contact_form.msg
 		var error = osite.contact_form.error
 		var send = osite.contact_form.send
+		console.log(['send', send])
 		var statusbox = <div></div>
 		if (send == "success") {
 			statusbox = <div className="contact-status"><span>Your message has been sent.  Thanks!</span></div>
@@ -97,7 +99,7 @@ class ContactForm extends React.Component {
 					<textarea className="contact-msg" ref="msg" onChange={this.onChangeMsg.bind(this)} value={msg} />
 				</div>
 				<div className="col-xs-12">
-					<button className="contact-send" onClick={this.onClick.bind(this)}>Send</button>
+					<button className="contact-send" onClick={this.onClick.bind(this, name, email, msg)}>Send</button>
 				</div>
 				{statusbox}
 			</div>
