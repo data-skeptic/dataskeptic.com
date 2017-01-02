@@ -107,7 +107,6 @@ function token_recieved(dispatch, nstate) {
   var token = nstate.token
   var paymentError = nstate.paymentError
   var prod = nstate.prod
-  console.log(["ns", nstate])
   var country = nstate.country_short
   if (country == undefined) {
     console.log("Setting country to US")
@@ -117,19 +116,14 @@ function token_recieved(dispatch, nstate) {
   var shipping = nstate.shipping
   var order = {customer, products, total, paymentComplete, token, paymentError, prod, country, dt, shipping}
   order = adjust_for_dynamodb_bug(order)
-  console.log(token)
   order['country'] = country
-  console.log(country)
-  console.log(JSON.stringify(order))
   axios
     .post("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/order", order)
     .then(function(resp) {
-      console.log(resp)
       var result = resp["data"]
       var paymentComplete = false
       var paymentError = ""
       if (result["msg"] != "ok") {
-        console.log(["E: ", result])
         paymentComplete = false
         paymentError = result["msg"] || result["errorMessage"] || ""
         var address = nstate.address
@@ -215,6 +209,11 @@ function clearCart(nstate) {
 
 export default function cartReducer(state = defaultState, action) {
   var nstate = state.toJS()
+  if (nstate.country_short == undefined) {
+    console.log("Setting default country to us")
+    nstate.country_short = "us"
+    nstate.country_long = "United States of America"
+  }
   switch(action.type) {
   	case 'ADD_TO_CART':
       nstate.paymentComplete = false
@@ -264,8 +263,11 @@ export default function cartReducer(state = defaultState, action) {
         nstate.prod = false        
       }
     case 'CHANGE_COUNTRY':
-      nstate.country_short = action.payload.short
-      nstate.country_long = action.payload.long
+      if (action.payload.short != undefined) {
+        console.log("Change country to " + action.payload.short)
+        nstate.country_short = action.payload.short
+        nstate.country_long = action.payload.long        
+      }
       break;
     case 'TOGGLE_CART':
       nstate.cart_visible = !nstate.cart_visible
@@ -294,7 +296,6 @@ export default function cartReducer(state = defaultState, action) {
       var dispatch = action.payload.dispatch
       var token = action.payload.token
       var paymentError = action.payload.paymentError
-      console.log("token:" + token)
       nstate.token = token
       nstate.paymentError = paymentError
       if (nstate.paymentError != "") {

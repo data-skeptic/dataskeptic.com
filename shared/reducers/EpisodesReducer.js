@@ -45,7 +45,9 @@ export default function episodesReducer(state = defaultState, action) {
         nstate.focus_episode.loaded = 1
       }
       else {
-        nstate.focus_episode.loaded = 0        
+        if (nstate.focus_episode.episode == undefined) {
+          nstate.focus_episode.loaded = 0
+        }
       }
       break;
     case 'INJECT_EPISODE':
@@ -53,7 +55,7 @@ export default function episodesReducer(state = defaultState, action) {
       if (episode != {}) {
         episode.pubDate = new Date(episode.pubDate)
         nstate.focus_episode.episode = episode
-        nstate.focus_episode.loaded = 1        
+        nstate.focus_episode.loaded = 1
       }
       break;
     case 'SET_FOCUS_EPISODE_BY_GUID':
