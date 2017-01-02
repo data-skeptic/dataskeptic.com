@@ -107,12 +107,16 @@ function token_recieved(dispatch, nstate) {
   var token = nstate.token
   var paymentError = nstate.paymentError
   var prod = nstate.prod
+  console.log(["ns", nstate])
   var country = nstate.country_short
+  if (country == undefined) {
+    console.log("Setting country to US")
+    country = "us"
+  }
   var dt = (new Date()).toString()
   var shipping = nstate.shipping
   var order = {customer, products, total, paymentComplete, token, paymentError, prod, country, dt, shipping}
   order = adjust_for_dynamodb_bug(order)
-  var country = nstate.country_short
   console.log(token)
   order['country'] = country
   console.log(country)
