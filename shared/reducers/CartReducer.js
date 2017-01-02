@@ -113,9 +113,10 @@ function token_recieved(dispatch, nstate) {
   var order = {customer, products, total, paymentComplete, token, paymentError, prod, country, dt, shipping}
   order = adjust_for_dynamodb_bug(order)
   var country = nstate.country_short
-  order['country'] = country
-  console.log(JSON.stringify(order))
   console.log(token)
+  order['country'] = country
+  console.log(country)
+  console.log(JSON.stringify(order))
   axios
     .post("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/order", order)
     .then(function(resp) {
@@ -127,15 +128,12 @@ function token_recieved(dispatch, nstate) {
         console.log(["E: ", result])
         paymentComplete = false
         paymentError = result["msg"] || result["errorMessage"] || ""
-        console.log(["Payment error:", paymentError])
         var address = nstate.address
         var msg = {paymentError, address}
         var email = nstate.address.email
         dispatch({type: "CONTACT_FORM", payload: {msg, email} })
       } else {
-        console.log("Successfully got payment token")
         paymentComplete = true
-        console.log("Now on to processing")
       }
       setTimeout(
         function() {
@@ -144,7 +142,7 @@ function token_recieved(dispatch, nstate) {
       , 10)
     })
     .catch(function(err) {
-      console.log("order error")
+      console.log("order error:")
       console.log(err)
       var msg = "Error placing your order: " + err
       paymentComplete = false
@@ -309,7 +307,6 @@ export default function cartReducer(state = defaultState, action) {
       if (token != undefined) {
         token_recieved(dispatch, nstate)
       } else {
-        console.log("spinner off")
         nstate.submitDisabled = false        
       }
       break;
@@ -328,7 +325,6 @@ export default function cartReducer(state = defaultState, action) {
           }
         , 10)
       }
-      console.log("spinner off")
       nstate.submitDisabled = false
       break;
     case 'CLEAR_FOCUS':
