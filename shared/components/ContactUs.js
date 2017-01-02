@@ -32,8 +32,11 @@ class ContactUs extends React.Component {
 
 	render() {
 		var ocart = this.props.cart.toJS()
+		var email = ""
 		var address = ocart.address
-		var email = address.email
+		if (address != undefined) {
+			email = address.email
+		}
 		return (
 	    	<div className="center">
 				<div className="row contact-page">
@@ -56,6 +59,6 @@ class ContactUs extends React.Component {
 	}
 }
 
-export default connect(state => ({ site: state.site }))(ContactUs)
+export default connect(state => ({ cart: state.cart, site: state.site }))(ContactUs)
 
 
