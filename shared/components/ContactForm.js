@@ -1,8 +1,9 @@
 import React from "react"
 import ReactDOM from "react-dom"
 import axios from "axios"
+import { connect } from 'react-redux'
 
-export default class ContactForm extends React.Component {
+class ContactForm extends React.Component {
 	constructor(props) {
 		super(props)
 	}
@@ -103,4 +104,5 @@ export default class ContactForm extends React.Component {
 	}
 }
 
+export default connect(state => ({ site: state.site }))(ContactForm)
 
