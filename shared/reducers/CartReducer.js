@@ -39,6 +39,7 @@ const init = {
 const defaultState = Immutable.fromJS(init);
 
 function get_token(nstate, event, dispatch) {
+  console.log(['nstate.prod', nstate.prod])
   if (nstate.prod) {
     var key = 'pk_live_JcvvQ05E9jgvtPjONUQdCqYg'
   } else {
@@ -64,6 +65,9 @@ function get_token(nstate, event, dispatch) {
     if (response.error) {
       paymentError = response.error.message
       console.log("error: " + paymentError)
+      var msg = paymentError
+      var email = nstate.address.email
+      dispatch({type: "CONTACT_FORM", payload: {msg, email} })
     }
     dispatch({type: "TOKEN_RECIEVED", payload: { dispatch, token, paymentError } })
   })
@@ -116,16 +120,23 @@ function token_recieved(dispatch, nstate) {
       var paymentComplete = false
       var paymentError = ""
       if (result["msg"] != "ok") {
-        console.log("order api error")
         paymentComplete = false
         paymentError = result["msg"] || result["errorMessage"] || ""
         console.log(paymentError)
+        var address = nstate.address
+        var msg = {paymentError, address}
+        var email = nstate.address.email
+        dispatch({type: "CONTACT_FORM", payload: {msg, email} })
       } else {
         console.log("Successfully got payment token")
         paymentComplete = true
         console.log("Now on to processing")
       }
-      dispatch({type: "PROCESS_CHECKOUT", payload: { paymentComplete, paymentError } })
+      setTimeout(
+        function() {
+          dispatch({type: "PROCESS_CHECKOUT", payload: { dispatch, paymentComplete, paymentError } })
+        }
+      , 10)
     })
     .catch(function(err) {
       console.log("order error")
@@ -133,7 +144,12 @@ function token_recieved(dispatch, nstate) {
       var msg = "Error placing your order: " + err
       paymentComplete = false
       paymentError = msg
-      dispatch({type: "PROCESS_CHECKOUT", payload: { paymentComplete, paymentError } })
+      var p = { dispatch, paymentComplete, paymentError }
+      setTimeout(
+        function() {
+          dispatch({type: "PROCESS_CHECKOUT", payload: p })
+        }
+      , 10)
     })
 }
 
@@ -278,6 +294,9 @@ export default function cartReducer(state = defaultState, action) {
         nstate.paymentError = "Please make sure you entered your credit card information correctly and try again."
         console.log("spinner off")
         nstate.submitDisabled = false
+        var msg = {paymentError: nstate.paymentError, address: nstate.address}
+        var email = nstate.address.email
+        dispatch({type: "CONTACT_FORM", payload: {msg, email} })
       }
       if (token != undefined) {
         token_recieved(dispatch, nstate)
@@ -287,10 +306,19 @@ export default function cartReducer(state = defaultState, action) {
       }
       break;
     case 'PROCESS_CHECKOUT':
+      var dispatch = action.payload.dispatch
       nstate.paymentComplete = action.payload.paymentComplete
       nstate.paymentError = action.payload.paymentError
       if (nstate.paymentComplete) {
           nstate = clearCart(nstate)
+      } else {
+        var msg = nstate.paymentError
+        var email = nstate.address.email
+        setTimeout(
+          function() {
+            dispatch({type: "CONTACT_FORM", payload: {msg, email} })
+          }
+        , 10)
       }
       console.log("spinner off")
       nstate.submitDisabled = false

@@ -18,7 +18,7 @@ import { createStore,
 
 var initialState = immutifyState(window.__INITIAL_STATE__);
 
-var version = "1.0.1"
+var version = "1.0.2"
 
 if (initialState['version'] == undefined) {
   initialState = {version}
@@ -124,6 +124,7 @@ store.dispatch({type: "SET_STORE_ENVIRONMENT", payload: env })
 store.dispatch({type: "SET_BLOG_ENVIRONMENT", payload: env })
 store.dispatch({type: "SET_COUNTRY", payload: country })
 store.dispatch({type: "INITIALIZE_PLAYER", payload: player})
+store.dispatch({type: "INITIALIZE_SITE", payload: {}})
 
 setTimeout(function() {
   getEpisodes(store)

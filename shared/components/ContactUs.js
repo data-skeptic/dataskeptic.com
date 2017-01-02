@@ -60,6 +60,6 @@ class ContactUs extends React.Component {
 	}
 }
 
-export default connect(state => ({ cart: state.cart }))(ContactUs)
+export default connect(state => ({ site: state.site }))(ContactUs)
 
 
