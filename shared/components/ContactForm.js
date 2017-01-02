@@ -64,6 +64,7 @@ class ContactForm extends React.Component {
 	}
 
 	render() {
+		console.log(this.props)
 		var osite = this.props.site.toJS()
 		var name = osite.contact_form.name
 		var email = osite.contact_form.email
