@@ -31,6 +31,7 @@ class ContactUs extends React.Component {
 	}
 
 	render() {
+		console.log(this.props)
 		var ocart = this.props.cart.toJS()
 		var email = ""
 		var address = ocart.address
