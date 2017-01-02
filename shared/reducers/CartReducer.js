@@ -122,9 +122,10 @@ function token_recieved(dispatch, nstate) {
       var paymentComplete = false
       var paymentError = ""
       if (result["msg"] != "ok") {
+        console.log("E: " + result["msg"])
         paymentComplete = false
         paymentError = result["msg"] || result["errorMessage"] || ""
-        console.log(paymentError)
+        console.log(["Payment error:", paymentError])
         var address = nstate.address
         var msg = {paymentError, address}
         var email = nstate.address.email
@@ -293,7 +294,7 @@ export default function cartReducer(state = defaultState, action) {
       nstate.token = token
       nstate.paymentError = paymentError
       if (nstate.paymentError != "") {
-        nstate.paymentError = "Please make sure you entered your credit card information correctly and try again.  If you continue to have problems, please contact <a href='mailto:kyle@dataskeptic.com'>kyle@dataskeptic.com</a> for support.  We apologize for any inconvenience."
+        nstate.paymentError = "Please make sure you entered your credit card information correctly and try again.  If you continue to have problems, please contact kyle@dataskeptic.com for support.  We apologize for any inconvenience."
         nstate.submitDisabled = false
         var msg = {paymentError: nstate.paymentError, address: nstate.address}
         var email = nstate.address.email

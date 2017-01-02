@@ -50,10 +50,12 @@ class ContactUs extends React.Component {
 						<p>We hope to respond to all inquiries, but sometimes the volume of incoming questions can cause our queue to explode.  We prioritize responses to Data Skeptic members first, and to those who ask quetions in a public forum like Twitter, our Facebook wall (not Facebook direct message), or Slack.  Many people can benefit from responses in public places.</p>
 						<p>You can find us on Twitter via <a href="https://twitter.com/dataskeptic">@DataSkeptic</a></p>
 						<p>We are on Facebook via <a href="https://www.facebook.com/dataskeptic">https://www.facebook.com/dataskeptic</a>.</p>
+						<p>You can also reach us via the contact form below.</p>
 						<p>Please note, we often reply via the Data Skeptic blog and may share a link to our reply if its something many readers may enjoy.  If so, we refer to people via firstname only.  If that's an issue, let us know.</p>
 					</div>
 					&nbsp;
 					<br/>
+					<ContactForm />
 				</div>
 			</div>
 		)
