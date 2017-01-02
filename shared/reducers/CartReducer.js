@@ -67,7 +67,7 @@ function get_token(nstate, event, dispatch) {
       console.log("Error: " + paymentError)
       nstate.paymentError = "We were unable to verify your information.  Please check the information below or contact kyle@dataskeptic.com for support."
       nstate.submitDisabled = false
-      var msg = paymentError
+      var msg = {err: paymentError, address: nstate.address}
       var email = nstate.address.email
       dispatch({type: "CONTACT_FORM", payload: {msg, email} })
     }
@@ -112,6 +112,8 @@ function token_recieved(dispatch, nstate) {
   var shipping = nstate.shipping
   var order = {customer, products, total, paymentComplete, token, paymentError, prod, country, dt, shipping}
   order = adjust_for_dynamodb_bug(order)
+  var country = nstate.country_short
+  order['country'] = country
   console.log(JSON.stringify(order))
   console.log(token)
   axios
@@ -122,7 +124,7 @@ function token_recieved(dispatch, nstate) {
       var paymentComplete = false
       var paymentError = ""
       if (result["msg"] != "ok") {
-        console.log("E: " + result["msg"])
+        console.log(["E: ", result])
         paymentComplete = false
         paymentError = result["msg"] || result["errorMessage"] || ""
         console.log(["Payment error:", paymentError])
@@ -318,7 +320,7 @@ export default function cartReducer(state = defaultState, action) {
       if (nstate.paymentComplete) {
           nstate = clearCart(nstate)
       } else {
-        var msg = nstate.paymentError
+        var msg = {error: nstate.paymentError, address: nstate.address}
         var email = nstate.address.email
         setTimeout(
           function() {
