@@ -20,6 +20,7 @@ class BlogItem extends React.Component {
 	}
 
     handleNewComment(comment) {
+    	// TODO: Maybe use a cognitive service here?
         console.log(comment.text);
     }
 
@@ -81,7 +82,7 @@ class BlogItem extends React.Component {
 		}
 		
 		var uid = 'http://dataskeptic.com/blog' + this.props.pathname
-		
+
 		return (
 			<div className="center">
 				{top}

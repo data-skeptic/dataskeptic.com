@@ -5,11 +5,12 @@ import { extractFolders } from '../utils/blog_utils'
 export default function getBlogContent(dispatch, pathname, env) {
 	if (env == "prod") {
 		env = ""
+	} else if (env == undefined) {
+		env = ""
 	} else {
 		env = env + "."
 	}
 	var uri = "https://s3.amazonaws.com/" + env + 'dataskeptic.com/' + pathname
-	console.log("Network: retrieving blog content")
 	axios
 		.get(uri)
 		.then(function(result) {

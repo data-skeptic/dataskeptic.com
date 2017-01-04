@@ -10,7 +10,10 @@ class LatestBlogCard extends React.Component {
 		var blogs = this.props.blogs.toJS()
 		var focus_blog = blogs.focus_blog
 		if (focus_blog == undefined || focus_blog.blog == undefined) {
-			this.props.dispatch({type: "REQUEST_INJECT_BLOG", payload: {} })
+			var dispatch = this.props.dispatch
+			setTimeout(function() {
+				dispatch({type: "REQUEST_INJECT_BLOG", payload: {dispatch} })
+			}, 10)
 		}
 	}
 
