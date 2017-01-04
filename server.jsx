@@ -72,6 +72,18 @@ if (process.env.NODE_ENV == 'production') {
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use( (req, res) => {
+  if (req.url.indexOf('/src-') > 0) {
+    var u = req.url
+    var i = u.indexOf('/blog/') + '/blog'.length
+    if (i > 0) {
+      var hostname = 's3.amazonaws.com/dataskeptic.com'
+      if (env != 'prod') {
+        hostname = 's3.amazonaws.com/' + env + '.dataskeptic.com'
+      }
+      var redir = u.substring(i, u.length)
+      return res.redirect(301, 'https://' + hostname + redir)
+    }
+  }
   var redir = redirects_map['redirects_map'][req.url]
   var hostname = req.headers.host
   if (redir != undefined) {
