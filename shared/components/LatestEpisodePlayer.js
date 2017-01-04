@@ -6,6 +6,9 @@ import Loading from "./Loading"
 class LatestEpisodePlayer extends React.Component {
 	constructor(props) {
 		super(props)
+	}
+
+	componentWillMount() {
 		var episodes = this.props.episodes.toJS()
 		var focus_episode = episodes.focus_episode
 		var guid = this.props.guid
