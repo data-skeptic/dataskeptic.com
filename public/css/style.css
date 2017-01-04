@@ -1360,6 +1360,7 @@ button.slick-arrow.slick-prev {
   border-color: #333;
   border-width: 1px;
   border-style: solid;
+  min-height: 350px;
   padding:5px;
 }
 .membership-btn {
@@ -1379,6 +1380,7 @@ button.slick-arrow.slick-prev {
 .membership-desc {
   text-align: center;
   padding: 5px;
+  min-height: 100px;
 }
 .membership-price {
   font-weight: bold;
@@ -1392,6 +1394,8 @@ button.slick-arrow.slick-prev {
   border-radius: 10px;
   font-weight: bold;
   margin: 0 auto;
+}
+.membership-add-paypal {
 }
 
 /*****************************************************************************
