@@ -7,6 +7,10 @@ import Loading from "./Loading"
 class LatestBlogCard extends React.Component {
 	constructor(props) {
 		super(props)
+	}
+
+	componentWillMount() {
+		console.log("CWM")
 		var blogs = this.props.blogs.toJS()
 		var focus_blog = blogs.focus_blog
 		if (focus_blog == undefined || focus_blog.blog == undefined) {
@@ -14,10 +18,11 @@ class LatestBlogCard extends React.Component {
 			setTimeout(function() {
 				dispatch({type: "REQUEST_INJECT_BLOG", payload: {dispatch} })
 			}, 10)
-		}
+		}		
 	}
 
 	render() {
+		console.log("LatestBlogCard")
         var monthNames = [
           "January", "February", "March",
           "April", "May", "June", "July",
@@ -54,6 +59,7 @@ class LatestBlogCard extends React.Component {
 		if (blog == undefined) {
 			return <Error />
 		}
+		var dstr = ""
 		var pn = blog.prettyname
 		if (pn != undefined) {
 			if (pn[0] == "/") {
@@ -62,33 +68,28 @@ class LatestBlogCard extends React.Component {
 			pn = "/blog/" + pn
 			var date = new Date(blog["publish_date"])
             var dstr = monthNames[date.getMonth()].toUpperCase() + " " + date.getDate() + ", " + (date.getYear()+1900)
-			return (
-				<div className="home-latest-blog-card">
-					<div className="home-latest-blog-top"><p>From the blog:</p></div>
-					<div className="home-latest-blog-card-container">
-						<div className="blog-date">{dstr}</div>
-						<Link className="blog-title" to={pn}>{blog.title}</Link>
-						<p>{blog.desc}</p>
-						<p> ...<Link to={pn}>[more]</Link></p>
-					</div>
-				</div>
-			)			
 		}
 		else {
 			console.log("Bad state.")
-			var pn = "/blog/meta/relaunching-dataskeptic.com"
-			return (
-				<div className="home-latest-blog-card">
-					<div className="home-latest-blog-top"><p>From the blog:</p></div>
-					<div className="home-latest-blog-card-container">
-						<Link className="blog-title" to={pn}>Relaunching DataSkeptic.com</Link>
-						<span className="blog-date">2016-11-16</span>
-						<p>We've spent the last few weeks tinkering away on a new web design. As I write this, we're in the final stages of coding the s...</p>
-						<p> ...<Link to={pn}>[more]</Link></p>
-					</div>
-				</div>
-			)
+			pn = "/blog/meta/relaunching-dataskeptic.com"
+			var blog = {
+				title: "Relaunching DataSkeptic.com",
+				desc: "We've spent the last few weeks tinkering away on a new web design. As I write this, we're in the final stages of coding the s..."
+			}
+			dstr = "2016-11-16"
 		}
+		console.log("LatestBlogCard2")
+		return (
+			<div className="home-latest-blog-card">
+				<div className="home-latest-blog-top"><p>From the blog:</p></div>
+				<div className="home-latest-blog-card-container">
+					<div className="blog-date">{dstr}</div>
+					<Link className="blog-title" to={pn}>{blog.title}</Link>
+					<p>{blog.desc}</p>
+					<p> ...<Link to={pn}>[more]</Link></p>
+				</div>
+			</div>
+		)			
 	}
 }
 
