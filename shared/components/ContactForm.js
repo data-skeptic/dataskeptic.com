@@ -72,7 +72,6 @@ class ContactForm extends React.Component {
 		var msg = osite.contact_form.msg
 		var error = osite.contact_form.error
 		var send = osite.contact_form.send
-		console.log(['send', send])
 		var statusbox = <div></div>
 		if (send == "success") {
 			statusbox = <div className="contact-status"><span>Your message has been sent.  Thanks!</span></div>

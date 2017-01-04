@@ -10,7 +10,6 @@ class LatestBlogCard extends React.Component {
 	}
 
 	componentWillMount() {
-		console.log("CWM")
 		var blogs = this.props.blogs.toJS()
 		var focus_blog = blogs.focus_blog
 		if (focus_blog == undefined || focus_blog.blog == undefined) {
@@ -22,7 +21,6 @@ class LatestBlogCard extends React.Component {
 	}
 
 	render() {
-		console.log("LatestBlogCard")
         var monthNames = [
           "January", "February", "March",
           "April", "May", "June", "July",
@@ -78,7 +76,6 @@ class LatestBlogCard extends React.Component {
 			}
 			dstr = "2016-11-16"
 		}
-		console.log("LatestBlogCard2")
 		return (
 			<div className="home-latest-blog-card">
 				<div className="home-latest-blog-top"><p>From the blog:</p></div>
