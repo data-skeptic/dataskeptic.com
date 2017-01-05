@@ -22,6 +22,8 @@ import Projects                from 'components/Projects';
 import Services                from 'components/Services';
 import Store                   from 'components/Store';
 
+import Admin                   from 'components/admin/Admin';
+
 import SnlImpact               from 'components/l/SnlImpact';
 
 function loadData() {
@@ -68,6 +70,10 @@ export default (
 		</Route>
 		<Route path="/projects" component={App}>
 			<IndexRoute component={Projects} />
+		</Route>
+
+		<Route path="/admin" component={App}>
+			<IndexRoute component={Admin} />
 		</Route>
 
 		<Route path="/l/snl-impact" component={App}>
