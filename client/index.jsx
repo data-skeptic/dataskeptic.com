@@ -18,7 +18,7 @@ import { createStore,
 
 var initialState = immutifyState(window.__INITIAL_STATE__);
 
-var version = "1.0.2"
+var version = "1.0.3"
 
 if (initialState['version'] == undefined) {
   initialState = {version}
