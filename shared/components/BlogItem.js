@@ -43,6 +43,7 @@ class BlogItem extends React.Component {
 		var blog_focus = oblogs.blog_focus
 		var title = this.props.title
 		var isEpisode = false
+		console.log(blog_focus)
 		var top = <div></div>
 		if (blog_focus.blog != undefined && blog_focus.blog.guid != undefined) {
 			var ep = oepisodes.episodes_map[blog_focus.blog.guid]
@@ -66,13 +67,15 @@ class BlogItem extends React.Component {
 				var guid = blog_focus.blog.guid
 				var b = tm[guid]
 				if (b != undefined) {
-					var pn = "/blog" + b.prettyname
-					var bot = (
-						<div className='blog-transcript-link'>
-							Read the full transcript here:
-							<Link onClick={this.onClick.bind(this)} to={pn}>{title} transcripts</Link>.
-						</div>
-					)					
+					if (b.prettyname.indexOf('/transcripts/') == -1) {
+						var pn = "/blog" + b.prettyname
+						bot = (
+							<div className='blog-transcript-link'>
+								Read the full transcript here:
+								<Link onClick={this.onClick.bind(this)} to={pn}>{title} transcripts</Link>.
+							</div>
+						)
+					}
 				}
 			}
 		}
