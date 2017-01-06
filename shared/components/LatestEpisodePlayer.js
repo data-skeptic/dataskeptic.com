@@ -13,10 +13,14 @@ class LatestEpisodePlayer extends React.Component {
 		var focus_episode = episodes.focus_episode
 		var guid = this.props.guid
 		if (guid != undefined) {
+			console.log("request inject 1")
 			this.props.dispatch({type: "REQUEST_INJECT_EPISODE", payload: {guid} })			
 		}
 		else if (focus_episode.pubData == null) {
+			console.log("request inject 2")
 			this.props.dispatch({type: "REQUEST_INJECT_EPISODE", payload: {} })
+		} else {
+			console.log("episode in place")
 		}
 	}
 

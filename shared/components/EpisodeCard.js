@@ -29,11 +29,11 @@ class EpisodeCard extends React.Component {
 			return <Loading />
 		}
 		if (episodes_loaded == -1) {
-			return <div>Error </div>
+			return <div>Loading... </div>
 		}
 		var ep = this.props.episode
 		if (ep == undefined) {
-			return <div>Error </div>
+			return <div>Loading.... </div>
 		} else {
 			var play_symb = <span>&#9658;</span>
 			if (oplayer.is_playing) {
