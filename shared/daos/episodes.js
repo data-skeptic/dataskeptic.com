@@ -34,12 +34,14 @@ export default function getEpisodes(store) {
 		var year = (new Date()).getYear()+1900
 
 		parser.parseString(xml, function(err,rss) {
+			console.log("done parsing")
 			var items = rss["rss"]["channel"][0]["item"]
 			var episodes = convert_items_to_json(items)
 			if (episodes.length > 0) {
 				var pubDate = episodes[0].pubDate
 				year = pubDate.getYear() + 1900				
 			}
+			console.log(["num eps", episodes.length])
 			store.dispatch({type: "ADD_EPISODES", payload: episodes })
 			store.dispatch({type: "SET_YEAR", payload: year })
 			store.dispatch({type: "SET_EPISODES_LOADED", payload: 1 })
