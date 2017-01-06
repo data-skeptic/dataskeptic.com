@@ -14,6 +14,7 @@ class EpisodeCard extends React.Component {
 	}
 
 	render() {
+		console.log("EpisodeCard")
         var monthNames = [
           "January", "February", "March",
           "April", "May", "June", "July",
