@@ -42,6 +42,7 @@ loadEpisodes(env, feed_uri, episodes_map)
 
 setInterval(function() {
   console.log("---[Refreshing cache]------------------")
+  console.log(process.memoryUsage())
   var env = global.env
   var title_map = global.title_map
   var blogmetadata_map = global.blogmetadata_map
