@@ -99,6 +99,7 @@ class Blog extends React.Component {
 	}
 
 	render() {
+		console.log("render blog")
 		var opathname = this.props.location.pathname
 		var pathname = transform_pathname(opathname)
 
