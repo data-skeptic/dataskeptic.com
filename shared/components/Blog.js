@@ -99,6 +99,7 @@ class Blog extends React.Component {
 	}
 
 	render() {
+		console.log("render blog")
 		var opathname = this.props.location.pathname
 		var pathname = transform_pathname(opathname)
 
@@ -121,6 +122,7 @@ class Blog extends React.Component {
 		}
 
 		if (listings) {
+			console.log("rendering listings")
 			// Navigation / listings
 
 			for (var i=0; i < folders.length; i++) {
@@ -147,10 +149,12 @@ class Blog extends React.Component {
 				console.log("Blog not loaded")
 				return <div><Error /></div>
 			} else {
+				console.log("Blog listings are loading")
 				return <div><Loading /></div>
 			}
 		}
 		else {
+			console.log("rendering blog page")
 			// It's a listing or it's a navigation page but we don't know that until other async finishes
 
 			if (blog != undefined && content != undefined) {
@@ -159,6 +163,7 @@ class Blog extends React.Component {
 					env = ""
 				}
 				var title = blog["title"]
+				console.log([pathname, title])
 				return (
 					<div className="center">
 						<BlogNav folders={folders} pathname={pathname} />
@@ -169,8 +174,10 @@ class Blog extends React.Component {
 				console.log("blog not loaded")
 				return <div><Error /></div>
 			} else {
+				console.log([blog, content, blog_focus])
 				return <div><Loading /></div>				
 			}
+			console.log("rendering blog page complete")
 		}
 	}
 }

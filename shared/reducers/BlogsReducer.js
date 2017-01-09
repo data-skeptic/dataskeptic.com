@@ -82,7 +82,11 @@ export default function blogsReducer(state = defaultState, action) {
       if (b != undefined) {
         pn = b.prettyname
       }
-      if (prettyname != pn) {
+      if (b == undefined || prettyname != pn) {
+        getBlog(dispatch, nstate.env, prettyname)
+        nstate.blog_focus = {blog: undefined, loaded: 0, content: ""}
+      }
+      else if (b.blog_focus != undefined && b.blog_focus.content == undefined) {
         getBlog(dispatch, nstate.env, prettyname)
         nstate.blog_focus = {blog: undefined, loaded: 0, content: ""}
       }

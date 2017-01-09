@@ -13,7 +13,6 @@ class BlogListItem extends Component {
         var i = href.indexOf(b)
         if (i >= 0) {
             href = href.substring(i+b.length-1, href.length)
-
             var dispatch = this.props.dispatch
             dispatch({type: "LOAD_BLOG", payload: {dispatch, pathname: href} })
         }

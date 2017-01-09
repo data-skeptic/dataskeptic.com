@@ -14,9 +14,10 @@ class BlogItem extends React.Component {
 		var title = this.props.title
 		var dispatch = this.props.dispatch
 		var pathname = this.props.pathname
-
-	    dispatch({type: "SET_TITLE", payload: title })
-	    dispatch({type: "LOAD_BLOG", payload: {dispatch, pathname} })
+		setTimeout(function() {
+		    dispatch({type: "SET_TITLE", payload: title })
+		    dispatch({type: "LOAD_BLOG", payload: {dispatch, pathname} })
+		}, 10)
 	}
 
     handleNewComment(comment) {
@@ -36,6 +37,7 @@ class BlogItem extends React.Component {
     }
 
 	render() {
+		console.log("BlogItem")
 		var oepisodes = this.props.episodes.toJS()
 		var oblogs = this.props.blogs.toJS()
 		var osite = this.props.site.toJS()
@@ -43,6 +45,7 @@ class BlogItem extends React.Component {
 		var blog_focus = oblogs.blog_focus
 		var title = this.props.title
 		var isEpisode = false
+
 		var top = <div></div>
 		if (blog_focus.blog != undefined && blog_focus.blog.guid != undefined) {
 			var ep = oepisodes.episodes_map[blog_focus.blog.guid]
@@ -66,13 +69,15 @@ class BlogItem extends React.Component {
 				var guid = blog_focus.blog.guid
 				var b = tm[guid]
 				if (b != undefined) {
-					var pn = "/blog" + b.prettyname
-					var bot = (
-						<div className='blog-transcript-link'>
-							Read the full transcript here:
-							<Link onClick={this.onClick.bind(this)} to={pn}>{title} transcripts</Link>.
-						</div>
-					)					
+					if (b.prettyname.indexOf('/transcripts/') == -1) {
+						var pn = "/blog" + b.prettyname
+						bot = (
+							<div className='blog-transcript-link'>
+								Read the full transcript here:
+								<Link onClick={this.onClick.bind(this)} to={pn}>{title} transcripts</Link>.
+							</div>
+						)
+					}
 				}
 			}
 		}
@@ -82,7 +87,7 @@ class BlogItem extends React.Component {
 		}
 		
 		var uid = 'http://dataskeptic.com/blog' + this.props.pathname
-
+		console.log(uid)
 		return (
 			<div className="center">
 				{top}

@@ -89,7 +89,7 @@ export default class LightsOut extends React.Component {
 					<div className="lo-container">
 						<div className="lo-congrats">
 							<p>Congratulations, you've won the game!!!</p>
-							<p>If you are the very very first person to write to kyle@dataskeptic.com and mention that you won the game and recieved this password: tukey137, then you get a free t-shirt!  I'll take this message out shortly after someone wins this easter egg, so appologies if two entries come in back to back.  Just in case, you better hurry up and go write that email!</p>
+							<p>We add easter eggs to dataskeptic.com from time to time where visitors can win prizes.  This easter egg was already solved and the winner got a Data Skeptic t-shirt.</p>
 						</div>
 					</div>
 				</div>

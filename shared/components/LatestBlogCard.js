@@ -21,6 +21,7 @@ class LatestBlogCard extends React.Component {
 	}
 
 	render() {
+		console.log("LatestBlogCard")
         var monthNames = [
           "January", "February", "March",
           "April", "May", "June", "July",
@@ -76,6 +77,7 @@ class LatestBlogCard extends React.Component {
 			}
 			dstr = "2016-11-16"
 		}
+		console.log("return")
 		return (
 			<div className="home-latest-blog-card">
 				<div className="home-latest-blog-top"><p>From the blog:</p></div>
