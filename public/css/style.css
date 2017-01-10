@@ -1461,6 +1461,41 @@ button.slick-arrow.slick-prev {
 }
 
 /*****************************************************************************
+ Admin
+*****************************************************************************/
+
+.email-label {
+  width: 150px;
+}
+
+.email-input {
+  width: 300px;
+}
+
+.send-email {
+  border-width: 1px;
+  border-style: solid;
+  padding: 10px;
+}
+
+.email-body-field {
+  overflow: 'auto',
+  width: 600,
+  height: 200,
+  maxHeight: 200
+}
+
+.form-group {
+  border-width: 1px;
+  border-style: solid;
+}
+
+.email-body {
+  width: 100%;
+  height: 200px;
+}
+
+/*****************************************************************************
  Home.js > Slider
 *****************************************************************************/
 

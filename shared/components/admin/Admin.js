@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import axios from "axios"
 import { connect } from 'react-redux'
-//import { aws } from 'aws-sdk'
+
+import SendEmail from './SendEmail'
 
 class Admin extends Component {
 	constructor(props) {
@@ -42,7 +43,7 @@ class Admin extends Component {
 				}
 			})
 			.catch((err) => {
-				console.log(this)
+				console.log(err)
 				self.setState({step: 'error', errorMsg: err})
 			})			
 	}
@@ -115,37 +116,6 @@ class Admin extends Component {
 			u[att] = val
 			this.setState(u)
 		}
-	}
-
-	sendEmail() {
-		console.log("Button Click")
-		/*
-		aws.config.loadFromPath('./config.json');
-		var ses = new aws.SES({apiVersion: '2010-12-01'});
-		var to = ['kylepolich@gmail.com']
-		var from = 'kyle@dataskeptic.com'
-
-
-		ses.sendEmail( { 
-		   Source: from, 
-		   Destination: { ToAddresses: to },
-		   Message: {
-		       Subject: {
-		          Data: 'A Message To You Rudy'
-		       },
-		       Body: {
-		           Text: {
-		               Data: 'Stop your messing around',
-		           }
-		        }
-		   }
-		}
-		, function(err, data) {
-		    if(err) throw err
-	        console.log('Email sent:');
-	        console.log(data);
-		 });
-		 */
 	}
 
 	render() {
@@ -222,7 +192,7 @@ class Admin extends Component {
 				<h4>Fulfill Order</h4>
 				<h4>Send Confirmation Email</h4>
 				<h4>Send Shipped Email</h4>
-				<button className="btn" onClick={this.sendEmail.bind(this)}>Send Email</button>
+				<SendEmail />
 				<div className="clear" />
 			</div>
 		)
