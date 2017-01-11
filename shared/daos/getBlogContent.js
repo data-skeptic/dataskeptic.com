@@ -10,6 +10,9 @@ export default function getBlogContent(dispatch, pathname, env) {
 	} else {
 		env = env + "."
 	}
+	if (pathname.substring(0, 1) == "/") {
+		pathname = pathname.substring(1, pathname.length)
+	}
 	var uri = "https://s3.amazonaws.com/" + env + 'dataskeptic.com/' + pathname
 	axios
 		.get(uri)

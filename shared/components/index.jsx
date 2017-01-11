@@ -22,12 +22,10 @@ class MainView extends React.Component {
   }
 
   componentDidMount() {
-    /*
     console.log("Initialize GA")
     ReactGA.initialize("UA-88166505-1", {
       debug: false
     });
-    */
   }
 
   loadState() {

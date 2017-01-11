@@ -38,11 +38,6 @@ class Home extends Component {
       }
       old_episode = episodes[i]
     }
-    /*
-                <div className="card">
-                  <LatestBlogCard />
-                </div>
-    */
     return (
       <div className="center">
         <div className="row">
@@ -55,6 +50,9 @@ class Home extends Component {
           <div className="col-xs-12 col-sm-8">
             <div className="carousel">
               <Slider {...settings}>
+                <div className="card">
+                  <LatestBlogCard />
+                </div>
                 <div className="card">
                   <EpisodeCard id="latest_episode" key="latest_episode" episode={episode} title="Latest episode" />
                 </div>

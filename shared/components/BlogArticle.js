@@ -7,8 +7,9 @@ import ReactDisqusComments from 'react-disqus-comments'
 import LatestEpisodePlayer from "./LatestEpisodePlayer"
 import MailingListBlogFooter from "./MailingListBlogFooter"
 import BlogLink from './BlogLink'
+import Loading from './Loading'
 
-class BlogItem extends React.Component {
+class BlogArticle extends React.Component {
 	constructor(props) {
 		super(props)
 		var title = this.props.title
@@ -19,13 +20,21 @@ class BlogItem extends React.Component {
 		}, 10)
 	}
 
+	componentDidMount() {
+		var pathname = location.pathname
+		var key = "/blog"
+		var pn = pathname.substring(key.length, pathname.length)
+		var dispatch = this.props.dispatch
+		dispatch({type: "LOAD_BLOG_AND_CONTENT", payload: {pathname: pn, dispatch} })
+	}
+
+
     handleNewComment(comment) {
     	// TODO: Maybe use a cognitive service here?
         console.log(comment.text);
     }
 
 	render() {
-		console.log(10)
 		var oepisodes = this.props.episodes.toJS()
 		var oblogs = this.props.blogs.toJS()
 		var osite = this.props.site.toJS()
@@ -33,6 +42,10 @@ class BlogItem extends React.Component {
 		var blog_focus = oblogs.blog_focus
 		var title = this.props.title
 		var isEpisode = false
+
+		if (blog_focus == undefined || blog_focus.blog == undefined) {
+			return <Loading />
+		}
 
 		var top = <div></div>
 		if (blog_focus.blog != undefined && blog_focus.blog.guid != undefined) {
@@ -69,13 +82,17 @@ class BlogItem extends React.Component {
 				}
 			}
 		}
-		var content = blog_focus.content || "Loading...."
+		var content = blog_focus.content || ""
 		if (content == "") {
-			content = "Loading....."
+			if (blog_focus.blog != undefined) {
+				var title = blog_focus.blog.title
+				content = "<h2>" + title + "</h2><p>Loading...</p>"
+			} else {
+				content = "<p>Loading....</p>"
+			}
 		}
-		console.log("---")
+
 		var uid = 'http://dataskeptic.com/blog' + blog_focus.blog.prettyname
-		console.log(uid)
 
 		return (
 			<div className="center">
@@ -93,5 +110,4 @@ class BlogItem extends React.Component {
 		)
 	}
 }
-export default connect(state => ({ site: state.site, episodes: state.episodes, blogs: state.blogs }))(BlogItem)
-
+export default connect(state => ({ site: state.site, episodes: state.episodes, blogs: state.blogs }))(BlogArticle)

@@ -7,16 +7,6 @@ class BlogListItem extends Component {
         super(props)
     }
 
-    onClick(event) {
-        var href = event.target.href
-        var b = "/blog/"
-        var i = href.indexOf(b)
-        if (i >= 0) {
-            href = href.substring(i+b.length-1, href.length)
-            var dispatch = this.props.dispatch
-            dispatch({type: "LOAD_BLOG", payload: {dispatch, pathname: href} })
-        }
-    }
     render() {
         var monthNames = [
           "January", "February", "March",
@@ -24,7 +14,6 @@ class BlogListItem extends Component {
           "August", "September", "October",
           "November", "December"
         ];
-        var onClick = this.onClick
     	var blog = this.props.blog
         var pn = blog.prettyname
         var datestr = ""
@@ -41,7 +30,7 @@ class BlogListItem extends Component {
             <div className="col-xs-12">
 	            <div className="blog-summary" key={blog.uri}>
                     <div className="blog-date">{datestr}</div>
-	                <Link onClick={this.onClick.bind(this)} className="blog-title" to={pn}>{blog.title}</Link>
+	                <Link className="blog-title" to={pn}>{blog.title}</Link>
 	                <p className="blog-desc">
                         {blog.desc}
                         ... <Link className="blog-view-more" to={pn}>View More &gt;</Link>
