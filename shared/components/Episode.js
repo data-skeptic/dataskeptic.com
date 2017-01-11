@@ -10,16 +10,6 @@ class Episode extends React.Component {
 	onPlayToggle(episode) {
 		this.props.dispatch({type: "PLAY_EPISODE", payload: episode })
 	}
-    onClick(event) {
-        var href = event.target.href
-        var b = "/blog/"
-        var i = href.indexOf(b)
-        if (i >= 0) {
-            href = href.substring(i+b.length-1, href.length)
-            var dispatch = this.props.dispatch
-            dispatch({type: "LOAD_BLOG", payload: {dispatch, pathname: href} })
-        }
-    }
 	render() {
         var monthNames = [
           "January", "February", "March",
@@ -70,7 +60,7 @@ class Episode extends React.Component {
 			var pn = "/blog" + tep.prettyname
 			transcript = (
 					<div className='episode-transcript-link'>
-						<Link onClick={this.onClick.bind(this)} to={pn}>Read transcript</Link>
+						<Link to={pn}>Read transcript</Link>
 					</div>
 			)
 		}

@@ -13,7 +13,6 @@ export default class BlogNav extends React.Component {
 		if (folders == undefined) {
 			return <div></div>
 		}
-		console.log("BlogLink")
 		return (
 			<div className="blog-nav">
 				<div className="blog-categories">
@@ -34,5 +33,3 @@ export default class BlogNav extends React.Component {
 		)
 	}
 }
-/*
-*/

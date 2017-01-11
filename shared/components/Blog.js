@@ -3,6 +3,7 @@ import ReactDOM from "react-dom"
 import { connect } from 'react-redux'
 
 import NotFound from './NotFound'
+import BlogArticle from "./BlogArticle"
 import BlogList from "./BlogList"
 import BlogNav from "./BlogNav"
 import BlogItem from "./BlogItem"
@@ -13,50 +14,6 @@ import transform_pathname from "../utils/transform_pathname"
 class Blog extends React.Component {
 	constructor(props) {
 		super(props)
-		var oblogs = this.props.blogs.toJS()
-		var blogs_loaded = oblogs.blogs_loaded || 0
-		var blog_focus   = oblogs.blog_focus || {loaded: 0}
-		var opathname = this.props.location.pathname
-		var folders = oblogs.folders || []
-		var pathname = transform_pathname(opathname)
-		var dispatch = this.props.dispatch
-		var guid = undefined
-		if (blog_focus != undefined) {
-			guid = blog_focus.guid
-		}
-		var isEpisode = guid != undefined
-		if (isEpisode) {
-			dispatch({type: "SET_FOCUS_EPISODE", payload: {guid} })			
-		}
-
-		if (pathname != "" && pathname != "/") {
-			// Single page
-			if (blog_focus.loaded == 1) {
-				var content = blog_focus.content
-				if (content == undefined || content == "") {
-					var blog = blog_focus.blog
-					console.log("Retrieve blog content")
-					dispatch({type: "ADD_BLOG", payload: {dispatch, blog} })
-				}
-			}
-			else if (blogs_loaded == 1) {
-				var blogs = oblogs.blogs
-				for (var i=0; i < blogs.length; i++) {
-					var b = blogs[i]
-					if (b.prettyname == pathname) {
-						var blog = b
-						dispatch({type: "SET_FOCUS_BLOG", payload: {blog} })
-						dispatch({type: "LOAD_BLOG", payload: {dispatch, pathname: pathname} })
-					}
-				}
-			}
-			else {
-				dispatch({type: "LOAD_BLOG", payload: {dispatch, pathname: pathname} })
-			}
-		}
-	}
-
-	componentDidUpdate() {
 	}
 
 	remove_type(typ, arr) {
@@ -84,101 +41,42 @@ class Blog extends React.Component {
 		}
 		return sub
 	}
-	isListings(folders, pathname) {
+
+	render() {
+		console.log("render blog is a dumb list")
+		var oblogs = this.props.blogs.toJS()
+		var folders = oblogs.folders || []
+		var blogs = oblogs.blogs || []
+
+		if (blogs.length == 0) {
+			return <div><Loading /></div>
+		}
+
+		var opathname = this.props.pathname
+		if (opathname == undefined) {
+			opathname = this.props.location.pathname
+		}
+		var pathname = transform_pathname(opathname)
+
 		for (var i=0; i < folders.length; i++) {
 			var folder = folders[i]
 			var sfolder = "/" + folder
 			if (pathname.indexOf(sfolder) == 0 && pathname.length == sfolder.length) {
-				return true
+				blogs = this.only_type(folder, blogs)
 			}
 		}
+
 		if (pathname == "" || pathname == "/") {
-			return true
-		}
-		return false
-	}
-
-	render() {
-		console.log("render blog")
-		var opathname = this.props.location.pathname
-		var pathname = transform_pathname(opathname)
-
-		var oblogs = this.props.blogs.toJS()
-		var blogs_loaded = oblogs.blogs_loaded || 0
-		var blog_focus   = oblogs.blog_focus || {loaded: 0}
-		var blog = blog_focus.blog
-		var isEpisode = false
-		if (blog != undefined) {
-			isEpisode = blog.guid != undefined
-		}
-		var content = blog_focus.content
-		var folders = oblogs.folders || []
-		var blogs = oblogs.blogs || []
-		var listings = this.isListings(folders, pathname)
-		var a = pathname.length
-		var lastChar = opathname.substring(a-1, a)
-		if (lastChar == "/") {
-			listings = true
+			blogs = this.remove_type("episodes", blogs)
+			blogs = this.remove_type("transcripts", blogs)
 		}
 
-		if (listings) {
-			console.log("rendering listings")
-			// Navigation / listings
-
-			for (var i=0; i < folders.length; i++) {
-				var folder = folders[i]
-				var sfolder = "/" + folder
-				if (pathname.indexOf(sfolder) == 0 && pathname.length == sfolder.length) {
-					blogs = this.only_type(folder, blogs)
-				}
-			}
-
-			if (pathname == "" || pathname == "/") {
-				blogs = this.remove_type("episodes", blogs)
-				blogs = this.remove_type("transcripts", blogs)
-			}
-
-			if (blogs_loaded == 1) {
-				return (
-					<div className="center">
-						<BlogNav folders={folders} pathname={pathname} />
-						<BlogList blogs={blogs} />
-					</div>
-				)
-			} else if (blogs_loaded == -1) {
-				console.log("Blog not loaded")
-				return <div><Error /></div>
-			} else {
-				console.log("Blog listings are loading")
-				return <div><Loading /></div>
-			}
-		}
-		else {
-			console.log("rendering blog page")
-			// It's a listing or it's a navigation page but we don't know that until other async finishes
-
-			if (blog != undefined && content != undefined) {
-				var env = oblogs.env + "."
-				if (env == "prod.") {
-					env = ""
-				}
-				var title = blog["title"]
-				console.log([pathname, title])
-				return (
-					<div className="center">
-						<BlogNav folders={folders} pathname={pathname} />
-						<BlogItem pathname={pathname} title={title} />
-					</div>
-				)
-			} else if (blog_focus.loaded == -1) {
-				console.log("blog not loaded")
-				return <div><Error /></div>
-			} else {
-				console.log([blog, content, blog_focus])
-				return <div><Loading /></div>				
-			}
-			console.log("rendering blog page complete")
-		}
+		return (
+			<div className="center">
+				<BlogNav folders={folders} pathname={pathname} />
+				<BlogList blogs={blogs} />
+			</div>
+		)
 	}
 }
 

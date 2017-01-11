@@ -7,6 +7,8 @@ import configureStore                                        from './store';
 
 import App                     from 'components/index';
 import Blog                    from 'components/Blog';
+import BlogArticle             from 'components/BlogArticle';
+import BlogRouter              from 'components/BlogRouter';
 import Checkout                from 'components/Checkout';
 import Coaching                from 'components/Coaching';
 import Coaching2               from 'components/Coaching2';
@@ -30,8 +32,11 @@ function loadData() {
 
 export default (
 	<Router>
-		<Route path="/blog*" component={App}>
+		<Route path="/blog" component={App}>
 			<IndexRoute component={Blog}/>
+		</Route>
+		<Route path="/blog/*" component={App}>
+			<IndexRoute component={BlogRouter}/>
 		</Route>
 		<Route path="/coaching" name="app" component={App}>
 			<IndexRoute component={Coaching}/>
@@ -72,6 +77,10 @@ export default (
 
 		<Route path="/l/snl-impact" component={App}>
 			<IndexRoute component={SnlImpact} />
+		</Route>
+
+		<Route path="/*" component={App}>
+			<IndexRoute component={NotFound} />
 		</Route>
 
 	</Router>

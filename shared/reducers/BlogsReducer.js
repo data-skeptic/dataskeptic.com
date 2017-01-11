@@ -47,6 +47,7 @@ export default function blogsReducer(state = defaultState, action) {
       }
       break
     case 'REQUEST_INJECT_BLOG':
+
       var i = 0
       nstate.blog_focus.loaded = 0        
       while (i < nstate.blogs.length) {
@@ -67,29 +68,49 @@ export default function blogsReducer(state = defaultState, action) {
     case 'INJECT_BLOG':
       // This event is generated to handle data that was prefetched and just needs to be injected
       var blog = action.payload.blog
-      var loaded = 1
+      var loaded = 0
       nstate.blog_focus.blog = blog
       nstate.blog_focus.loaded = loaded
       break
     case 'ADD_BLOG_CONTENT':
       nstate.blog_focus.content = action.payload.content
       break
-    case 'LOAD_BLOG':
+    case 'LOAD_BLOG_AND_CONTENT':
+      var pathname = action.payload.pathname
       var dispatch = action.payload.dispatch
-      var prettyname = action.payload.pathname
+      var key = '/blog'
+      var pn = pathname.substring(key.length, pathname.length)
       var b = nstate.blog_focus.blog
-      var pn = ""
+      var loaded = false
       if (b != undefined) {
-        pn = b.prettyname
+        if (b.prettyname == pn) {
+          loaded = true
+          if (nstate.blog_focus.content == "") {
+            nstate.blog_focus.loaded = 0
+          } else {
+            nstate.blog_focus.loaded = 1
+          }
+        }
       }
-      if (b == undefined || prettyname != pn) {
-        getBlog(dispatch, nstate.env, prettyname)
+      if (!loaded) {
+        for (var i=0; i < nstate.blogs.length; i++) {
+          var blog = nstate.blogs[i]
+          if (blog.prettyname == pn) {
+            nstate.blog_focus.blog = blog
+            nstate.blog_focus.content = ""
+            nstate.blog_focus.loaded = 0
+            loaded = true
+          }
+        }
+      }
+      if (!loaded) {
         nstate.blog_focus = {blog: undefined, loaded: 0, content: ""}
+        getBlog(dispatch, nstate.env, pathname)
       }
-      else if (b.blog_focus != undefined && b.blog_focus.content == undefined) {
-        getBlog(dispatch, nstate.env, prettyname)
-        nstate.blog_focus = {blog: undefined, loaded: 0, content: ""}
+      if (nstate.blog_focus.content == "") {
+        getBlogContent(dispatch, pathname, nstate.env)
       }
+      // check content
       break
     case 'ADD_BLOGS':
   	  nstate.blogs = action.payload
