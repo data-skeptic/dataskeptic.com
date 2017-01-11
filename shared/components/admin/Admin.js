@@ -74,6 +74,8 @@ class Admin extends Component {
 	}
 
 	orderTshirt() {
+		var key = 'test_Z_gOWbE8iwjhXf4y4vqizQ'
+
 		var self = this
 		var data = {
 		  'type': 'dtg',
@@ -90,22 +92,25 @@ class Admin extends Component {
 		  'address[country]': this.state.country,
 		  'designId': this.state.designId
 		}
-		var key = 'test_Z_gOWbE8iwjhXf4y4vqizQ'
+
+		var t = 'Basic ' + new Buffer(':' + key).toString('base64')
+
 	      var config = {
-	        headers: {'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'},
-	        auth: ('', key)
+	        headers: {'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8',
+			        'Accept': 'application/json',
+				    'Access-Control-Allow-Origin': '*',
+				    'Authorization': t}
 	      };
+	    console.log("trying")
 		axios
 			.post('https://api.scalablepress.com/v2/quote', data, config)
   			.then(function(resp) {
   			  console.log(resp)
   			})
 			.catch((err) => {
-				console.log(this)
+				console.log(err)
 				self.setState({step: 'error', errorMsg: err})
-			})
-
-		
+			})		
 	}
 
 	formUpdate(e) {

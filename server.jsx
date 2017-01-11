@@ -1,3 +1,4 @@
+import axios                     from 'axios';
 import compression               from 'compression';
 import express                   from 'express';
 import React                     from 'react';
@@ -84,6 +85,47 @@ app.use( (req, res) => {
       var redir = u.substring(i, u.length)
       return res.redirect(301, 'https://' + hostname + redir)
     }
+  }
+  if (req.url.indexOf('/api') == 0) {
+    console.log("API")
+    var key = 'test_Z_gOWbE8iwjhXf4y4vqizQ'
+
+    var self = this
+    var data = {
+      'type': 'dtg',
+      'products[0][id]': "gildan-ultra-blend-50-50-t",
+      'address[name]': "Kyle Polich",
+      'products[0][color]': "Black",
+      'products[0][quantity]': "1",
+      'products[0][size]': "xxl",
+      'address[address1]': "4158 Sutro Ave",
+      'address[address2]': "",
+      'address[city]': "Los Angeles",
+      'address[state]': "CA",
+      'address[zip]': "90008",
+      'address[country]': "US",
+      'designId': "58196cb41338d457459d579c"
+    }
+
+    var t = 'Basic ' + new Buffer(':' + key).toString('base64')
+
+        var config = {
+          headers: {'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'},
+            auth: {username: '', password: key},
+            withCredentials: true
+        };
+      console.log("trying")
+    axios
+      .post('https://api.scalablepress.com/v2/quote', data, config)
+        .then(function(resp) {
+          console.log(resp)
+        })
+      .catch((err) => {
+        console.log(err)
+        //self.setState({step: 'error', errorMsg: err})
+      })
+
+    return res.status(200).end("hi2")
   }
   var redir = redirects_map['redirects_map'][req.url]
   var hostname = req.headers.host
