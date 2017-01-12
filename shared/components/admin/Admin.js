@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import axios from "axios"
 import { connect } from 'react-redux'
+import querystring from 'querystring'
 
 import SendEmail from './SendEmail'
 import OpenOrders from './OpenOrders'
@@ -22,7 +23,8 @@ class Admin extends Component {
 			city: '',
 			state: '',
 			zipcode: '',
-			country: 'US'
+			country: 'US',
+			spError: ''
 		}
 		this.getProducts()
 	}
@@ -75,8 +77,7 @@ class Admin extends Component {
 	}
 
 	orderTshirt() {
-		var key = 'test_Z_gOWbE8iwjhXf4y4vqizQ'
-
+		this.setState({spError: "Ordering..."})
 		var self = this
 		var data = {
 		  'type': 'dtg',
@@ -89,29 +90,31 @@ class Admin extends Component {
 		  'address[address2]': this.state.address2,
 		  'address[city]': this.state.city,
 		  'address[state]': this.state.state,
-		  'address[zip]': this.state.zip,
+		  'address[zip]': this.state.zipcode,
 		  'address[country]': this.state.country,
 		  'designId': this.state.designId
 		}
-
-		var t = 'Basic ' + new Buffer(':' + key).toString('base64')
-
-	      var config = {
-	        headers: {'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8',
-			        'Accept': 'application/json',
-				    'Access-Control-Allow-Origin': '*',
-				    'Authorization': t}
-	      };
-	    console.log("trying")
+		var url = "/api/order/create"
+		var sreq = querystring.stringify(data)
+		var config = {
+			'Content-Type' : "application/x-www-form-urlencoded"
+		};
+		var self = this
 		axios
-			.post('https://api.scalablepress.com/v2/quote', data, config)
-  			.then(function(resp) {
-  			  console.log(resp)
-  			})
-			.catch((err) => {
-				console.log(err)
-				self.setState({step: 'error', errorMsg: err})
-			})		
+			.post(url, sreq, config)
+			.then(function(r) {
+				console.log("OK!!!")
+		        var resp = r['data']
+				console.log("done")
+				console.log(resp)
+	      		self.setState({spError: "Success!"})
+			})
+			.catch(function(err) {
+	      		console.log("api error")
+	      		var resp = err['data']
+	      		var jstr = JSON.stringify(resp['response'])
+	      		self.setState({spError: jstr})
+			})
 	}
 
 	formUpdate(e) {
@@ -122,6 +125,11 @@ class Admin extends Component {
 			u[att] = val
 			this.setState(u)
 		}
+	}
+
+	onSizeChange(e) {
+		var size = e.target.value
+		this.setState({size})
 	}
 
 	render() {
@@ -137,7 +145,8 @@ class Admin extends Component {
 							<tr>
 								<td>Size:</td>
 								<td>
-									<select id="size">
+									<select id="size" onChange={this.onSizeChange.bind(this)}>
+										<option value=''>---[Choose]---</option>
 										<option value='sml'>Small</option>
 										<option value='med'>Medium</option>
 										<option value='lrg'>Large</option>
@@ -193,12 +202,14 @@ class Admin extends Component {
 					</table>
 				</form>
 				<button className="btn" onClick={this.orderTshirt.bind(this)}>Order T-shirt</button>
-
+				<div>{this.state.spError}</div>
+				<h4>Verification</h4>
+				<p><a href="https://scalablepress.com/manager/order#?page=1">scalablepress.com/manager/order</a></p>
 				<h4>Mark Fulfilled in Stripe</h4>
 				<OpenOrders />
-				<h4>Fulfill Order</h4>
+				<h4>Verification</h4>
+				<p><a href="https://dashboard.stripe.com/orders">dashboard.stripe.com/orders</a></p>
 				<h4>Send Confirmation Email</h4>
-				<h4>Send Shipped Email</h4>
 				<SendEmail />
 				<div className="clear" />
 			</div>

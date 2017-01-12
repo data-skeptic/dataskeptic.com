@@ -27,7 +27,7 @@ const app = express();
 
 var env = "prod"
 
-aws.config.loadFromPath('config.json');
+aws.config.loadFromPath('awsconfig.json');
 
 if (process.env.NODE_ENV !== 'production') {
   require('./webpack.dev').default(app);
@@ -82,16 +82,18 @@ app.use(bodyParser.urlencoded({
 }))
 
 var stripe_key = "sk_test_81PZIV6UfHDlapSAkn18bmQi"
+var sp_key = "test_Z_gOWbE8iwjhXf4y4vqizQ"
 
 var fs = require("fs")
-fs.open("stripe.json", "r", function(error, fd) {
+fs.open("config.json", "r", function(error, fd) {
   var buffer = new Buffer(10000)
   fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
     var data = buffer.toString("utf8", 0, bytesRead)
     var c = JSON.parse(data)
     var env2 = env
     env2 = "prod"
-    stripe_key = c[env2]
+    stripe_key = c[env2]['stripe']
+    sp_key = c[env2]['sp']
     fs.close(fd)
   })
 })
@@ -129,18 +131,89 @@ function api_router(req, res) {
         console.log(err)
         resp = {status: 400, msg: err}
       }
-      console.log("---[DATA]--------------------")
-      console.log(data)
     });
     return res.status(200).end(JSON.stringify(resp))
+  }
+  else if (req.url.indexOf('/api/order/create') == 0) {
+    var obj = req.body
+    var key = sp_key
+    var t = 'Basic ' + new Buffer(':' + key).toString('base64')
+    var config = {
+      'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8',
+      'Authorization': t
+    };
+    var instance = axios.create()
+    instance.request({
+      url: 'https://api.scalablepress.com/v2/quote',
+      method: 'POST',
+      headers: {},
+      data: obj,
+      withCredentials: true,
+      auth: {
+        username: '',
+        password: key
+      }
+    }).then(function(resp) {
+      var data = resp['data']
+      var status = resp['status']
+      if (status == 200) {
+        var orderIssues = data['orderIssues']
+        if (orderIssues != undefined && orderIssues.length > 0) {
+          var resp = {status: "Order Issues", "response": resp}
+          return res.status(400).end(JSON.stringify(resp))        
+        } else {
+          var orderToken = data['orderToken']
+          console.log("orderToken="+orderToken)
+          var i2 = axios.create()
+          var obj2 = {orderToken}
+          i2.request({
+            url: 'https://api.scalablepress.com/v2/order',
+            method: 'POST',
+            headers: {},
+            data: obj2,
+            withCredentials: true,
+            auth: {
+              username: '',
+              password: key
+            }
+          }).then(function(resp) {
+            console.log("order complete")
+            return res.status(200).end(JSON.stringify(resp))
+          })
+          .catch((err) => {
+            console.log(err)
+            var resp = {status: "Last Step Error", "response": err}
+            return res.status(400).end(JSON.stringify(resp))
+          })
+        }
+      } else {
+        var resp = {status: "Status Not OK", "response": resp}
+        return res.status(400).end(JSON.stringify(resp))        
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+      var resp = {status: "Error", "response": err}
+      return res.status(400).end(JSON.stringify(resp))
+    })
   }
   else if (req.url.indexOf('/api/order/fulfill') == 0) {
     var stripe = require("stripe")(stripe_key)
     var obj = req.body
     var oid = obj['oid']
-    console.log(oid)
-    strip.orders.update(oid, {
-      metadata: {status: "fulfilled"}
+    console.log("oid=" + oid)
+    stripe.orders.update(oid, {
+      status: "fulfilled"
+    }, function(err, resp) {
+      if (err == null) {
+        console.log("---")
+        console.log(resp)
+        return res.status(200).end(JSON.stringify(resp))
+      } else {
+        console.log("===")
+        console.log(err)
+        return res.status(400).end(JSON.stringify(err))        
+      }
     })
     /*
     stripe.orders.list({limit: 10}, function(err, orders) {
@@ -150,56 +223,16 @@ function api_router(req, res) {
       return res.status(200).end(JSON.stringify(orders))
     })
     */
-    var resp = {"status": 200, msg: "ok", oid}
-    return res.status(200).end(JSON.stringify(resp))
   }
   else if (req.url.indexOf('/api/order/list') == 0) {
     var stripe = require("stripe")(stripe_key)
     stripe.orders.list({limit: 10}, function(err, orders) {
-      console.log(err)
-      console.log("----")
-      console.log(orders)
+      if (err) {
+        console.log("ERROR")
+        console.log(err)
+      }
       return res.status(200).end(JSON.stringify(orders))
     })
-  }
-  else if (req.url.indexOf('/api/order') == 0) {
-    console.log("API")
-    var key = 'test_Z_gOWbE8iwjhXf4y4vqizQ'
-
-    var self = this
-    var data = {
-      'type': 'dtg',
-      'products[0][id]': "gildan-ultra-blend-50-50-t",
-      'address[name]': "Kyle Polich",
-      'products[0][color]': "Black",
-      'products[0][quantity]': "1",
-      'products[0][size]': "xxl",
-      'address[address1]': "4158 Sutro Ave",
-      'address[address2]': "",
-      'address[city]': "Los Angeles",
-      'address[state]': "CA",
-      'address[zip]': "90008",
-      'address[country]': "US",
-      'designId': "58196cb41338d457459d579c"
-    }
-
-    var config = {
-        'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8',
-        auth: {username: '', password: key},
-        withCredentials: true
-    };
-    console.log("trying")
-    axios
-      .post('https://api.scalablepress.com/v2/quote', data, config)
-        .then(function(resp) {
-          console.log(resp)
-        })
-      .catch((err) => {
-        console.log(err)
-        //self.setState({step: 'error', errorMsg: err})
-      })
-
-    return res.status(200).end("hi2")
   }
 }
 
@@ -256,13 +289,12 @@ app.use( (req, res) => {
       var HTML = getContentWrapper(title, initialState, injects)
       var pathname = location.pathname
       console.log("page not found:" + pathname)
-      //console.log(HTML)
       return res.status(404).end(componentHTML);
     }
 
     function renderView() {
       var pathname = location.pathname.substring('/blog'.length, location.pathname.length)
-      console.log("render: " + pathname)
+      console.log("render: " + location.pathname)
       var content = content_map[pathname]
       var dispatch = store.dispatch
       if (content == undefined) {
@@ -288,7 +320,6 @@ app.use( (req, res) => {
 
       if (pathname == "" || pathname == "/") {
         guid = "latest"
-        console.log("get latest episode")
       }
       var episode_metadata = episodes_map[guid]
       if (episode_metadata == undefined) {

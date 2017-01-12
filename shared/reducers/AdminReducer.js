@@ -13,11 +13,16 @@ const init = {
 			"subject": "dataskeptic.com - order confirmed",
 			"body": "Hi {name},\n\nWe wanted to let you know that your order has processed and we'll send another confirmation shortly when it ships.\n\nThanks for your support,\n\nThe Data Skeptic team"
 		},
-		{
-			"name": "Order shipped", 
-			"subject": "dataskeptic.com - order shipped",
-			"body": "Hi {name],\n\nWe wanted to let you know that your recent order has shipped.\n\nThanks for your support,\n\nThe Data Skeptic team"
-		}
+        {
+            "name": "Order shipped", 
+            "subject": "dataskeptic.com - order shipped",
+            "body": "Hi {name},\n\nWe wanted to let you know that your recent order has shipped.\n\nThanks for your support,\n\nThe Data Skeptic team"
+        },
+        {
+            "name": "Coaching renewing", 
+            "subject": "dataskeptic.com - reminder of upcoming charge",
+            "body": "Hi {name},\n\nWe wanted to let you know that your monthly coaching plan will recur on {date}.  If you have any questions or want to pause on our collaboration, you can reply to this email or reach out to Kyle directly.  No action is needed on your part to continue.\n\nThanks!"
+        }
 	]
 }
 
