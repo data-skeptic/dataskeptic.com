@@ -1,30 +1,33 @@
+import aws                       from 'aws-sdk'
 import axios                     from 'axios';
+import bodyParser                from 'body-parser'
 import compression               from 'compression';
-import express                   from 'express';
-import React                     from 'react';
-import { renderToString }        from 'react-dom/server';
-import { RoutingContext, match } from 'react-router';
-import createLocation            from 'history/lib/createLocation';
-import routes                    from 'routes';
-import { Provider }              from 'react-redux';
-import * as reducers             from 'reducers';
-import promiseMiddleware         from 'lib/promiseMiddleware';
-import fetchComponentData        from 'lib/fetchComponentData';
-import { createStore,
-         combineReducers,
-         applyMiddleware }       from 'redux';
-import path                      from 'path';
 import getBlogs                  from 'daos/blogs';
-import redirects_map             from './redirects';
-import getContentWrapper         from 'utils/content_wrapper';
 import { feed_uri }              from 'daos/episodes'
 import { loadBlogs,
          loadEpisodes }          from 'daos/serverInit'
-
+import express                   from 'express';
+import createLocation            from 'history/lib/createLocation';
+import promiseMiddleware         from 'lib/promiseMiddleware';
+import fetchComponentData        from 'lib/fetchComponentData';
+import path                      from 'path';
+import React                     from 'react';
+import { renderToString }        from 'react-dom/server';
+import { Provider }              from 'react-redux';
+import { RoutingContext, match } from 'react-router';
+import routes                    from 'routes';
+import * as reducers             from 'reducers';
+import { createStore,
+         combineReducers,
+         applyMiddleware }       from 'redux';
+import getContentWrapper         from 'utils/content_wrapper';
+import redirects_map             from './redirects';
 
 const app = express();
 
 var env = "prod"
+
+aws.config.loadFromPath('config.json');
 
 if (process.env.NODE_ENV !== 'production') {
   require('./webpack.dev').default(app);
@@ -73,20 +76,93 @@ if (process.env.NODE_ENV == 'production') {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use( (req, res) => {
-  if (req.url.indexOf('/src-') > 0) {
-    var u = req.url
-    var i = u.indexOf('/blog/') + '/blog'.length
-    if (i > 0) {
-      var hostname = 's3.amazonaws.com/dataskeptic.com'
-      if (env != 'prod') {
-        hostname = 's3.amazonaws.com/' + env + '.dataskeptic.com'
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({
+  extended: true
+}))
+
+var stripe_key = "sk_test_81PZIV6UfHDlapSAkn18bmQi"
+
+var fs = require("fs")
+fs.open("stripe.json", "r", function(error, fd) {
+  var buffer = new Buffer(10000)
+  fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
+    var data = buffer.toString("utf8", 0, bytesRead)
+    var c = JSON.parse(data)
+    var env2 = env
+    env2 = "prod"
+    stripe_key = c[env2]
+    fs.close(fd)
+  })
+})
+
+function api_router(req, res) {
+  if (req.url.indexOf('/api/email/send') == 0) {
+    var obj = req.body
+    var msg = obj['msg']
+    var to = obj['to']
+    var toa = [to]
+    var ses = new aws.SES({apiVersion: '2010-12-01'});
+    var from = 'orders@dataskeptic.com'
+    var subject = obj['subject']
+    var resp = {status: 200, msg: "ok"}
+    var header = '<div><img src="https://s3.amazonaws.com/dataskeptic.com/img/png/email-header.png" /></div><br/>'
+    var footer = '<br/><br/><div><img src="https://s3.amazonaws.com/dataskeptic.com/img/png/email-footer.png" /></div>'
+    var body = header + msg + footer
+    var email_request = {
+      Source: from, 
+      Destination: { ToAddresses: toa, BccAddresses: ["orders@dataskeptic.com"]},
+      Message: {
+        Subject: {
+          Data: subject
+        },
+        Body: {
+          Html: {
+            Data: body
+          }
+        }
       }
-      var redir = u.substring(i, u.length)
-      return res.redirect(301, 'https://' + hostname + redir)
     }
+    ses.sendEmail(email_request, function(err, data) {
+      if (err != null) {
+        console.log("---[ERROR]-------------------")
+        console.log(err)
+        resp = {status: 400, msg: err}
+      }
+      console.log("---[DATA]--------------------")
+      console.log(data)
+    });
+    return res.status(200).end(JSON.stringify(resp))
   }
-  if (req.url.indexOf('/api') == 0) {
+  else if (req.url.indexOf('/api/order/fulfill') == 0) {
+    var stripe = require("stripe")(stripe_key)
+    var obj = req.body
+    var oid = obj['oid']
+    console.log(oid)
+    strip.orders.update(oid, {
+      metadata: {status: "fulfilled"}
+    })
+    /*
+    stripe.orders.list({limit: 10}, function(err, orders) {
+      console.log(err)
+      console.log("----")
+      console.log(orders)
+      return res.status(200).end(JSON.stringify(orders))
+    })
+    */
+    var resp = {"status": 200, msg: "ok", oid}
+    return res.status(200).end(JSON.stringify(resp))
+  }
+  else if (req.url.indexOf('/api/order/list') == 0) {
+    var stripe = require("stripe")(stripe_key)
+    stripe.orders.list({limit: 10}, function(err, orders) {
+      console.log(err)
+      console.log("----")
+      console.log(orders)
+      return res.status(200).end(JSON.stringify(orders))
+    })
+  }
+  else if (req.url.indexOf('/api/order') == 0) {
     console.log("API")
     var key = 'test_Z_gOWbE8iwjhXf4y4vqizQ'
 
@@ -107,14 +183,12 @@ app.use( (req, res) => {
       'designId': "58196cb41338d457459d579c"
     }
 
-    var t = 'Basic ' + new Buffer(':' + key).toString('base64')
-
-        var config = {
-          headers: {'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'},
-            auth: {username: '', password: key},
-            withCredentials: true
-        };
-      console.log("trying")
+    var config = {
+        'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8',
+        auth: {username: '', password: key},
+        withCredentials: true
+    };
+    console.log("trying")
     axios
       .post('https://api.scalablepress.com/v2/quote', data, config)
         .then(function(resp) {
@@ -126,6 +200,24 @@ app.use( (req, res) => {
       })
 
     return res.status(200).end("hi2")
+  }
+}
+
+app.use( (req, res) => {
+  if (req.url.indexOf('/src-') > 0) {
+    var u = req.url
+    var i = u.indexOf('/blog/') + '/blog'.length
+    if (i > 0) {
+      var hostname = 's3.amazonaws.com/dataskeptic.com'
+      if (env != 'prod') {
+        hostname = 's3.amazonaws.com/' + env + '.dataskeptic.com'
+      }
+      var redir = u.substring(i, u.length)
+      return res.redirect(301, 'https://' + hostname + redir)
+    }
+  }
+  if (req.url.indexOf('/api') == 0) {
+    return api_router(req, res)
   }
   var redir = redirects_map['redirects_map'][req.url]
   var hostname = req.headers.host

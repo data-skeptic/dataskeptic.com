@@ -3,6 +3,7 @@ import axios from "axios"
 import { connect } from 'react-redux'
 
 import SendEmail from './SendEmail'
+import OpenOrders from './OpenOrders'
 
 class Admin extends Component {
 	constructor(props) {
@@ -194,6 +195,7 @@ class Admin extends Component {
 				<button className="btn" onClick={this.orderTshirt.bind(this)}>Order T-shirt</button>
 
 				<h4>Mark Fulfilled in Stripe</h4>
+				<OpenOrders />
 				<h4>Fulfill Order</h4>
 				<h4>Send Confirmation Email</h4>
 				<h4>Send Shipped Email</h4>
@@ -205,39 +207,3 @@ class Admin extends Component {
 }
 
 export default connect(state => ({ products: state.products }))(Admin)
-
-/*
-
-
-resp = requests.post('https://api.scalablepress.com/v2/quote', data=data, auth=('', key))
-
-quote = json.loads(resp.content)
-orderToken = quote['orderToken']
-
-if quote.has_key('statusCode'):
-  print(quote['statusCode'])
-
-if quote.has_key('issues'):
-  print(quote['issues'])
-
-if quote.has_key('orderIssues'):
-  print(quote['orderIssues'])
-
-###########################################################################
-# CREATE ORDER
-###########################################################################
-
-data = {
-  'orderToken': orderToken
-}
-
-resp = requests.post('https://api.scalablepress.com/v2/order', data=data, auth=('', key))
-order = json.loads(resp.content)
-
-###########################################################################
-# RESULTS
-###########################################################################
-
-print(quote)
-print(order)
-*/

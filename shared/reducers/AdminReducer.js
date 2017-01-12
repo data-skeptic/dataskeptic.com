@@ -2,10 +2,11 @@ import Immutable from 'immutable';
 import { fromJS } from 'immutable';
 
 const init = {
+    "email_send_msg": "",
 	"from": "orders@dataskeptic.com",
 	"to": "kylepolich@gmail.com",
 	"subject": "Hello from Data Skeptic",
-	"body": "I can't feel my body",
+	"body": "",
 	"templates": [
 		{
 			"name": "Order confirmation", 
@@ -29,8 +30,12 @@ export default function adminReducer(state = defaultState, action) {
     	nstate.from = action.payload
     	break
     case 'SET_EMAIL_TO':
-    	nstate.to = action.payload
-    	break
+        nstate.to = action.payload
+        break
+    case 'SET_EMAIL_SEND_MSG':
+        console.log(action.payload)
+        nstate.email_send_msg = action.payload
+        break
     case 'SET_EMAIL_SUBJECT':
     	nstate.subject = action.payload
     	break

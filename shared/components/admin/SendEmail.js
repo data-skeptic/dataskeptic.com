@@ -2,6 +2,8 @@ import React from "react"
 import ReactDOM from "react-dom"
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
+import axios from "axios"
+import querystring from 'querystring'
 
 class SendEmail extends React.Component {
 	constructor(props) {
@@ -29,36 +31,42 @@ class SendEmail extends React.Component {
 		console.log(value)
 		this.props.dispatch({type: t, payload: value })
 	}
-
+	replaceAll(str, find, replace) {
+		return str.replace(new RegExp(find, 'g'), replace);
+	}
 	sendEmail() {
-		console.log("Button Click")
-		/*
-		aws.config.loadFromPath('./config.json');
-		var ses = new aws.SES({apiVersion: '2010-12-01'});
-		var to = ['kylepolich@gmail.com']
-		var from = 'kyle@dataskeptic.com'
-
-
-		ses.sendEmail( { 
-		   Source: from, 
-		   Destination: { ToAddresses: to },
-		   Message: {
-		       Subject: {
-		          Data: 'A Message To You Rudy'
-		       },
-		       Body: {
-		           Text: {
-		               Data: 'Stop your messing around',
-		           }
-		        }
-		   }
-		}
-		, function(err, data) {
-		    if(err) throw err
-	        console.log('Email sent:');
-	        console.log(data);
-		 });
-		 */
+		var oadmin = this.props.admin.toJS()
+		var to = oadmin.to
+		var subject = oadmin.subject
+		var msg = oadmin.body
+		msg = this.replaceAll(msg, '\n', '<br/>')
+		var req = { to, subject, msg }
+		var resp = {status: 0, msg: "Not set"}
+		var dispatch = this.props.dispatch
+		dispatch({type: "SET_EMAIL_SEND_MSG", payload: "Sending..." })		
+		var url = "/api/email/send"
+		var config = {
+			'Content-Type' : "application/x-www-form-urlencoded"
+		};
+		var sreq = querystring.stringify(req)
+  		axios
+  			.post(url, sreq, config)
+  			.then(function(r) {
+  				console.log("back")
+		        var resp = r['data']
+				console.log(resp)
+				if (resp['status'] == 200) {
+					dispatch({type: "SET_EMAIL_SEND_MSG", payload: "Sent!" })
+					dispatch({type: "SET_EMAIL_BODY", value: ""})
+				} else {
+					dispatch({type: "SET_EMAIL_SEND_MSG", payload: "Error: " + JSON.stringify(resp['msg']) })
+				}
+  			})
+  			.catch(function(err) {
+	          	console.log("api error")
+	  			console.log(err)
+				dispatch({type: "SET_EMAIL_SEND_MSG", payload: "Error: " + err })
+  			})
 	}
 	handleContentChange(e) {
 		var t = "SET_EMAIL_BODY"
@@ -71,9 +79,15 @@ class SendEmail extends React.Component {
 		var to = oadmin.to
 		var subject = oadmin.subject
 		var body = oadmin.body
+		var email_send_msg = oadmin.email_send_msg
+		var response_msg = <div></div>
+		if (email_send_msg != "") {
+			response_msg = <div classname="error-box">{email_send_msg}</div>
+		}
 		return (
 			<div className="send-email">
 				<select onChange={this.pickTemplate.bind(this)}>
+				<option key={"---[Choose]---"} value={""}>---[Choose]---</option>
 				{
 					oadmin.templates.map(function(template) {
 						var name = template['name']
@@ -91,6 +105,7 @@ class SendEmail extends React.Component {
 					<div className="col-xs-12">
 						<textarea className="email-body" value={body} onChange={this.handleContentChange.bind(this)} />
 					</div>
+					{response_msg}
 					<div className="col-xs-12">
 						<button className="col-xs-12 btn" onClick={this.sendEmail.bind(this)}>Send Email</button>
 					</div>
