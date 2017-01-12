@@ -1,25 +1,27 @@
+import aws                       from 'aws-sdk'
+import axios                     from 'axios';
+import bodyParser                from 'body-parser'
 import compression               from 'compression';
-import express                   from 'express';
-import React                     from 'react';
-import { renderToString }        from 'react-dom/server';
-import { RoutingContext, match } from 'react-router';
-import createLocation            from 'history/lib/createLocation';
-import routes                    from 'routes';
-import { Provider }              from 'react-redux';
-import * as reducers             from 'reducers';
-import promiseMiddleware         from 'lib/promiseMiddleware';
-import fetchComponentData        from 'lib/fetchComponentData';
-import { createStore,
-         combineReducers,
-         applyMiddleware }       from 'redux';
-import path                      from 'path';
 import getBlogs                  from 'daos/blogs';
-import redirects_map             from './redirects';
-import getContentWrapper         from 'utils/content_wrapper';
 import { feed_uri }              from 'daos/episodes'
 import { loadBlogs,
          loadEpisodes }          from 'daos/serverInit'
-
+import express                   from 'express';
+import createLocation            from 'history/lib/createLocation';
+import promiseMiddleware         from 'lib/promiseMiddleware';
+import fetchComponentData        from 'lib/fetchComponentData';
+import path                      from 'path';
+import React                     from 'react';
+import { renderToString }        from 'react-dom/server';
+import { Provider }              from 'react-redux';
+import { RoutingContext, match } from 'react-router';
+import routes                    from 'routes';
+import * as reducers             from 'reducers';
+import { createStore,
+         combineReducers,
+         applyMiddleware }       from 'redux';
+import getContentWrapper         from 'utils/content_wrapper';
+import redirects_map             from './redirects';
 
 const app = express();
 
@@ -72,6 +74,16 @@ if (process.env.NODE_ENV == 'production') {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({
+  extended: true
+}))
+
+function api_router(req, res) {
+  if (req.url.indexOf('/api/email/send') == 0) {
+  }
+}
+
 app.use( (req, res) => {
   if (req.url.indexOf('/src-') > 0) {
     var u = req.url
@@ -84,6 +96,9 @@ app.use( (req, res) => {
       var redir = u.substring(i, u.length)
       return res.redirect(301, 'https://' + hostname + redir)
     }
+  }
+  if (req.url.indexOf('/api') == 0) {
+    return api_router(req, res)
   }
   var redir = redirects_map['redirects_map'][req.url]
   var hostname = req.headers.host
@@ -122,7 +137,6 @@ app.use( (req, res) => {
       var HTML = getContentWrapper(title, initialState, injects)
       var pathname = location.pathname
       console.log("page not found:" + pathname)
-      //console.log(HTML)
       return res.status(404).end(componentHTML);
     }
 
@@ -154,7 +168,6 @@ app.use( (req, res) => {
 
       if (pathname == "" || pathname == "/") {
         guid = "latest"
-        console.log("get latest episode")
       }
       var episode_metadata = episodes_map[guid]
       if (episode_metadata == undefined) {
