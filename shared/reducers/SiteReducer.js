@@ -40,38 +40,28 @@ export default function siteReducer(state = defaultState, action) {
     	var email = action.payload.email
     	var token = ""
   		var req = {email: email, token: token, set_active: true}
-
-      var data = "email=" + email + "&token=" + token + "&set_active=true"
-
       nstate.slackstatus = "Sending..."
-
       var config = {
-        headers: {'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'}
+       // headers: {'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'}
       };
   		axios
-  			.post("https://dataskeptic.slack.com/api/users.admin.invite", data, config)
+  			.post("/api/slack/join", req, config)
   			.then(function(resp) {
-  			  console.log(resp)
           var data = resp['data']
-          var msg = ""
-          if (data.ok) {
-            msg = "Welcome to our Slack channel.  You should receive a confirmation email shortly!"
-          } else {
-            var error = data.error
-            if (error == "already_invited") {
-              msg = "You have already been invited to our Slack channel.  Please check your spam folder or search your email to find the invite."
-            } else if (error == "already_in_team") {
-              msg = "You are already a member of the team.  Visit https://dataskeptic.slack.com/ to log in."
-            } else {
-              msg = "An error has occured.  Please contact kyle@dataskeptic.com for assistance."
-            }
-          }
+  			  console.log(data)
+          var msg = data['msg']
+          console.log(msg)
           dispatch({type: "SLACK_UPDATE", payload: {msg} })            
   			})
   			.catch(function(err) {
+          var data = err['data']
           var msg = "Sorry, we're having a problem getting that done :("
+          if (data != undefined) {
+            if (data['msg'] != undefined) {
+              msg = data['msg']
+            }
+          }
           dispatch({type: "SLACK_UPDATE", payload: {msg} })
-  			  console.log("slack error")
   			  console.log(err)
   			})
       break;
