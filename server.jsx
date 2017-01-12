@@ -129,10 +129,13 @@ function api_router(req, res) {
       if (err != null) {
         console.log("---[ERROR]-------------------")
         console.log(err)
-        resp = {status: 400, msg: err}
+        return res.status(500).end(JSON.stringify(err))
+      } else {
+        console.log("Email sent")
+        resp = {status: 200, msg: err}
+        return res.status(200).end(JSON.stringify(resp))
       }
     });
-    return res.status(200).end(JSON.stringify(resp))
   }
   else if (req.url.indexOf('/api/order/create') == 0) {
     var obj = req.body
