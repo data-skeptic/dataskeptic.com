@@ -83,6 +83,7 @@ app.use(bodyParser.urlencoded({
 
 var stripe_key = "sk_test_81PZIV6UfHDlapSAkn18bmQi"
 var sp_key = "test_Z_gOWbE8iwjhXf4y4vqizQ"
+var slack_key = ""
 
 var fs = require("fs")
 fs.open("config.json", "r", function(error, fd) {
@@ -94,12 +95,53 @@ fs.open("config.json", "r", function(error, fd) {
     env2 = "prod"
     stripe_key = c[env2]['stripe']
     sp_key = c[env2]['sp']
+    slack_key = c[env2]['slack']
     fs.close(fd)
   })
 })
 
+function serialize(obj) {
+  var str = [];
+  for(var p in obj)
+     str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+  return str.join("&");
+}
+
 function api_router(req, res) {
-  if (req.url.indexOf('/api/email/send') == 0) {
+  if (req.url.indexOf('/api/slack/join') == 0) {
+    var req = req.body
+    var config = {}
+    req['token'] = slack_key
+    var sreq = serialize(req)
+    axios
+      .post("https://dataskeptic.slack.com/api/users.admin.invite?" + sreq, req, config)
+      .then(function(resp) {
+        var data = resp['data']
+        var msg = ""
+        if (data.ok) {
+          msg = "Welcome to our Slack channel.  You should receive a confirmation email shortly!"
+          var resp = {msg}
+          return res.status(200).end(JSON.stringify(resp))
+        } else {
+          var error = data.error
+          if (error == "already_invited") {
+            msg = "You have already been invited to our Slack channel.  Please check your spam folder or search your email to find the invite."
+          } else if (error == "already_in_team") {
+            msg = "You are already a member of the team.  Visit https://dataskeptic.slack.com/ to log in."
+          } else {
+            msg = "An error has occured.  Please contact kyle@dataskeptic.com for assistance."
+          }
+          var resp = {msg}
+          return res.status(400).end(JSON.stringify(resp))
+        }
+      })
+      .catch(function(err) {
+        console.log(err)
+        var resp = {err, "msg": "We could not process your request.  Please contact kyle@dataskeptic.com for assistance"}
+        return res.status(400).end(JSON.stringify(resp))
+      })
+  }
+  else if (req.url.indexOf('/api/email/send') == 0) {
     var obj = req.body
     var msg = obj['msg']
     var to = obj['to']
@@ -236,7 +278,6 @@ function api_router(req, res) {
       }
       return res.status(200).end(JSON.stringify(orders))
     })
-  }
 }
 
 app.use( (req, res) => {
