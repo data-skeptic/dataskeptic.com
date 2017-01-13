@@ -126,6 +126,7 @@ function api_router(req, res) {
   }
   else if (req.url.indexOf('/api/order/list') == 0) {
     order_list(req, res, stripe_key)
+    return true
   }
   else if (req.url.indexOf('/api/contributors/list') == 0) {
     var req = req.body

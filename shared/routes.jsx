@@ -17,7 +17,7 @@ import Home                    from 'components/Home';
 import LightsOut               from 'components/LightsOut';
 import Menu                    from 'components/Menu';
 import Membership              from 'components/Membership';
-import NotFound                from 'components/Press';
+import NotFound                from 'components/NotFound';
 import Podcast                 from 'components/Podcast';
 import Press                   from 'components/Press';
 import Projects                from 'components/Projects';

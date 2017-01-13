@@ -11,9 +11,11 @@ class Order extends React.Component {
     	fulfilled: false
     }
   }
+  populateOrder(order, e) {
+    this.props.dispatch({type: "ORDER_POPULATE", payload: order })
+  }
   fulfill(oid) {
   	var self = this
-  	console.log(oid)
   	var req = {oid}
   	var url = "/api/order/fulfill"
   	var sreq = querystring.stringify(req)
@@ -23,10 +25,7 @@ class Order extends React.Component {
   	axios
   		.post(url, sreq, config)
   		.then(function(r) {
-        console.log(r)
   	    var resp = r['data']
-  			console.log("done")
-  			console.log(resp)
   			if (resp['status'] == "fulfilled") {
   				self.setState({fulfilled: true})
   			} else {
@@ -43,18 +42,39 @@ class Order extends React.Component {
   	var order = this.props.order
   	var os = order.status
   	if (order.status == "paid" && !this.state.fulfilled) {
-  		os = <button onClick={this.fulfill.bind(this, order.id)}>Fulfill</button>
+  		os = (<div>
+        <button onClick={this.populateOrder.bind(this, order)}>Populate</button>
+        <button onClick={this.fulfill.bind(this, order.id)}>Fulfill</button>
+        </div>)
   	}
     var created = order.created
     var d = new Date(created*1000)
     var dt = d.toLocaleDateString() + " " + d.toLocaleTimeString()
   	return (
-  		<div className="row order-row">
-  			<div className="col-xs-3">{order.email}</div>
-  			<div className="col-xs-3">{dt}</div>
-  			<div className="col-xs-3">{order.amount/100}</div>
-  			<div className="col-xs-3">{os}</div>
-  		</div>
+      <div>
+    		<div className="row order-row">
+    			<div className="col-xs-3">
+            <p>{order.email}</p>
+            <p>{order.shipping.name}</p>
+          </div>
+    			<div className="col-xs-3">{dt}</div>
+    			<div className="col-xs-3">{order.amount/100}</div>
+    			<div className="col-xs-3">{os}</div>
+    		</div>
+        {
+          order.items.map(function(item) {
+            return (
+              <div className="row">
+                <div className="col-xs-3">{item.description}</div>
+                <div className="col-xs-3">{item.amount}</div>
+                <div className="col-xs-3">{item.parent}</div>
+                <div className="col-xs-3">{item.quantity}</div>
+              </div>
+            )
+          })
+        }
+        <hr/>
+      </div>
   	)
   }
 }

@@ -1,3 +1,4 @@
+import aws from 'aws-sdk'
 import axios from 'axios'
 
 module.exports = {
