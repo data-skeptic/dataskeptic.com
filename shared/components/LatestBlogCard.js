@@ -47,12 +47,11 @@ class LatestBlogCard extends React.Component {
 			console.log("Bad state.")
 			pn = "/blog/meta/relaunching-dataskeptic.com"
 			var blog = {
-				title: "Relaunching DataSkeptic.com",
-				desc: "We've spent the last few weeks tinkering away on a new web design. As I write this, we're in the final stages of coding the s..."
+				title: "Loading",
+				desc: "..."
 			}
 			dstr = "2016-11-16"
 		}
-		console.log("return")
 		return (
 			<div className="home-latest-blog-card">
 				<div className="home-latest-blog-top"><p>From the blog:</p></div>
