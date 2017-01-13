@@ -99,7 +99,11 @@ class BlogArticle extends React.Component {
 		if (blog_focus != undefined) {
 			var blog = blog_focus.blog
 			if (blog != undefined) {
-				author = blog.author.toLowerCase()
+				if (blog.author == undefined) {
+					author = ""
+				} else {
+					author = blog.author.toLowerCase()					
+				}
 			}
 		}
 		return (
