@@ -1,6 +1,10 @@
 import aws                       from 'aws-sdk'
 import axios                     from 'axios';
 import {join_slack}              from 'backend/join_slack'
+import {send_email}              from 'backend/send_email'
+import {order_create}            from 'backend/order_create'
+import {order_fulfill}           from 'backend/order_fulfill'
+import {order_list}              from 'backend/order_list'
 import bodyParser                from 'body-parser'
 import compression               from 'compression';
 import getBlogs                  from 'daos/blogs';
@@ -37,7 +41,7 @@ if (process.env.NODE_ENV !== 'production') {
 console.log("Environment: ", env)
 
 var title_map = {}         // `uri`             -> <title>
-var content_map = {}       // `uri`             -> {s3 blog content}
+var content_map = {}       // `uri`             -? {s3 blog content}
 var blogmetadata_map = {}  // `uri`             -> {blog}
 var episodes_map = {}      // `guid` | 'latest' -> {episode}
 
@@ -105,144 +109,25 @@ function api_router(req, res) {
   if (req.url.indexOf('/api/slack/join') == 0) {
     var req = req.body
     join_slack(req, res, slack_key)
+    return true
   }
   else if (req.url.indexOf('/api/email/send') == 0) {
-    var obj = req.body
-    var msg = obj['msg']
-    var to = obj['to']
-    var toa = [to]
-    var ses = new aws.SES({apiVersion: '2010-12-01'});
-    var from = 'orders@dataskeptic.com'
-    var subject = obj['subject']
-    var resp = {status: 200, msg: "ok"}
-    var header = '<div><img src="https://s3.amazonaws.com/dataskeptic.com/img/png/email-header.png" /></div><br/>'
-    var footer = '<br/><br/><div><img src="https://s3.amazonaws.com/dataskeptic.com/img/png/email-footer.png" /></div>'
-    var body = header + msg + footer
-    var email_request = {
-      Source: from, 
-      Destination: { ToAddresses: toa, BccAddresses: ["orders@dataskeptic.com"]},
-      Message: {
-        Subject: {
-          Data: subject
-        },
-        Body: {
-          Html: {
-            Data: body
-          }
-        }
-      }
-    }
-    ses.sendEmail(email_request, function(err, data) {
-      if (err != null) {
-        console.log("---[ERROR]-------------------")
-        console.log(err)
-        return res.status(500).end(JSON.stringify(err))
-      } else {
-        console.log("Email sent")
-        resp = {status: 200, msg: err}
-        return res.status(200).end(JSON.stringify(resp))
-      }
-    });
+    send_email(req, res)
+    return true
   }
   else if (req.url.indexOf('/api/order/create') == 0) {
-    var obj = req.body
-    var key = sp_key
-    var t = 'Basic ' + new Buffer(':' + key).toString('base64')
-    var config = {
-      'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8',
-      'Authorization': t
-    };
-    var instance = axios.create()
-    instance.request({
-      url: 'https://api.scalablepress.com/v2/quote',
-      method: 'POST',
-      headers: {},
-      data: obj,
-      withCredentials: true,
-      auth: {
-        username: '',
-        password: key
-      }
-    }).then(function(resp) {
-      var data = resp['data']
-      var status = resp['status']
-      if (status == 200) {
-        var orderIssues = data['orderIssues']
-        if (orderIssues != undefined && orderIssues.length > 0) {
-          var resp = {status: "Order Issues", "response": resp}
-          return res.status(400).end(JSON.stringify(resp))        
-        } else {
-          var orderToken = data['orderToken']
-          console.log("orderToken="+orderToken)
-          var i2 = axios.create()
-          var obj2 = {orderToken}
-          i2.request({
-            url: 'https://api.scalablepress.com/v2/order',
-            method: 'POST',
-            headers: {},
-            data: obj2,
-            withCredentials: true,
-            auth: {
-              username: '',
-              password: key
-            }
-          }).then(function(resp) {
-            console.log("order complete")
-            return res.status(200).end(JSON.stringify(resp))
-          })
-          .catch((err) => {
-            console.log(err)
-            var resp = {status: "Last Step Error", "response": err}
-            return res.status(400).end(JSON.stringify(resp))
-          })
-        }
-      } else {
-        var resp = {status: "Status Not OK", "response": resp}
-        return res.status(400).end(JSON.stringify(resp))        
-      }
-    })
-    .catch((err) => {
-      console.log(err)
-      var resp = {status: "Error", "response": err}
-      return res.status(400).end(JSON.stringify(resp))
-    })
+    order_create(req, res, sp_key)
+    return true
   }
   else if (req.url.indexOf('/api/order/fulfill') == 0) {
-    var stripe = require("stripe")(stripe_key)
-    var obj = req.body
-    var oid = obj['oid']
-    console.log("oid=" + oid)
-    stripe.orders.update(oid, {
-      status: "fulfilled"
-    }, function(err, resp) {
-      if (err == null) {
-        console.log("---")
-        console.log(resp)
-        return res.status(200).end(JSON.stringify(resp))
-      } else {
-        console.log("===")
-        console.log(err)
-        return res.status(400).end(JSON.stringify(err))        
-      }
-    })
-    /*
-    stripe.orders.list({limit: 10}, function(err, orders) {
-      console.log(err)
-      console.log("----")
-      console.log(orders)
-      return res.status(200).end(JSON.stringify(orders))
-    })
-    */
+    order_fulfill(req, res, stripe_key)
+    return true
   }
   else if (req.url.indexOf('/api/order/list') == 0) {
-    var stripe = require("stripe")(stripe_key)
-    stripe.orders.list({limit: 10}, function(err, orders) {
-      if (err) {
-        console.log("ERROR")
-        console.log(err)
-      }
-      return res.status(200).end(JSON.stringify(orders))
-    })
+    order_list(req, res, stripe_key)
+    return true
+  }
+  return false
 }
 
 app.use( (req, res) => {
@@ -259,7 +144,10 @@ app.use( (req, res) => {
     }
   }
   if (req.url.indexOf('/api') == 0) {
-    return api_router(req, res)
+    var routed = api_router(req, res)
+    if (routed) {
+      return
+    }
   }
   var redir = redirects_map['redirects_map'][req.url]
   var hostname = req.headers.host
