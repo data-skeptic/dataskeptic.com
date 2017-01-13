@@ -1,5 +1,6 @@
 import aws                       from 'aws-sdk'
 import axios                     from 'axios';
+import {get_contributors}        from 'backend/get_contributors'
 import {join_slack}              from 'backend/join_slack'
 import {send_email}              from 'backend/send_email'
 import {order_create}            from 'backend/order_create'
@@ -125,6 +126,10 @@ function api_router(req, res) {
   }
   else if (req.url.indexOf('/api/order/list') == 0) {
     order_list(req, res, stripe_key)
+  }
+  else if (req.url.indexOf('/api/contributors/list') == 0) {
+    var req = req.body
+    get_contributors(req, res)
     return true
   }
   return false

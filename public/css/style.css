@@ -630,7 +630,7 @@ ul.topnav li.right {float: right;}
 
 .blog-title {
   font-family: .SFNSDisplay;
-  font-size: 32px;
+  font-size: 26px;
   color: #3A3B3B;
   letter-spacing: 0;
 }
@@ -706,6 +706,18 @@ ul.topnav li.right {float: right;}
   padding: 2px 10px 2px 10px;
 }
 
+/*****************************************************************************
+ BlogAuthorBottom.js
+*****************************************************************************/
+
+.blog-author-bottom {
+  padding: 20px;
+  background-color: #eee;
+}
+.blog-author-img {
+  text-align: center;
+  margin-bottom: 10px;
+}
 
 /*****************************************************************************
  BlogItem.js
@@ -1109,7 +1121,8 @@ ul.topnav li.right {float: right;}
 .carousel {
   margin: auto;
   margin-right: 20px;
-  padding: 5px 25px 30px 25px;
+  margin-left: 0px;
+  padding: 5px 24px 34px 27px;
   width: 100%;
   float: left;
 }

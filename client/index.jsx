@@ -124,7 +124,7 @@ store.dispatch({type: "SET_STORE_ENVIRONMENT", payload: env })
 store.dispatch({type: "SET_BLOG_ENVIRONMENT", payload: env })
 store.dispatch({type: "SET_COUNTRY", payload: country })
 store.dispatch({type: "INITIALIZE_PLAYER", payload: player})
-store.dispatch({type: "INITIALIZE_SITE", payload: {}})
+store.dispatch({type: "INITIALIZE_SITE", payload: {dispatch: store.dispatch}})
 
 setTimeout(function() {
   getEpisodes(store)

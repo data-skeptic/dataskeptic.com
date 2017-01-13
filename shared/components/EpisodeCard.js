@@ -12,9 +12,12 @@ class EpisodeCard extends React.Component {
 	onClick(episode) {
 		this.props.dispatch({type: "PLAY_EPISODE", payload: episode })		
 	}
-
+	strip(html) {
+	   var tmp = document.createElement("DIV");
+	   tmp.innerHTML = html;
+	   return tmp.textContent || tmp.innerText || "";
+	}
 	render() {
-		console.log("EpisodeCard")
         var monthNames = [
           "January", "February", "March",
           "April", "May", "June", "July",
@@ -46,12 +49,12 @@ class EpisodeCard extends React.Component {
 			}
 			var date = new Date(ep.pubDate)
             var dstr = monthNames[date.getMonth()].toUpperCase() + " " + date.getDate() + ", " + (date.getYear()+1900)
-			var desc = ep.desc
+			var desc = this.strip(ep.desc)
 			var x = 200
+			var more = ep.link
 			if (desc.length > x) {
 				var i = desc.indexOf(" ", x)
 				desc = desc.substring(0, i)
-				desc += "... <a href=\"" + ep.link + "\">[more]</a>"
 			}
 			return (
 				<div className="home-episode-card">
@@ -67,8 +70,8 @@ class EpisodeCard extends React.Component {
 						</div>
 					</div>
 					<div className="home-episode-card-desc">
-						<span dangerouslySetInnerHTML={{__html: desc}} />
-						
+					{desc}
+					... <a href={more}>[more]</a>
 					</div>
 				</div>
 			)

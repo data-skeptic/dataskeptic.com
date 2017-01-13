@@ -7,6 +7,8 @@ import ReactDisqusComments from 'react-disqus-comments'
 import LatestEpisodePlayer from "./LatestEpisodePlayer"
 import MailingListBlogFooter from "./MailingListBlogFooter"
 import BlogLink from './BlogLink'
+import BlogAuthorTop from './BlogAuthorTop'
+import BlogAuthorBottom from './BlogAuthorBottom'
 import Loading from './Loading'
 
 class BlogArticle extends React.Component {
@@ -93,12 +95,20 @@ class BlogArticle extends React.Component {
 		}
 
 		var uid = 'http://dataskeptic.com/blog' + blog_focus.blog.prettyname
-
+		var author = ""
+		if (blog_focus != undefined) {
+			var blog = blog_focus.blog
+			if (blog != undefined) {
+				author = blog.author.toLowerCase()
+			}
+		}
 		return (
 			<div className="center">
 				{top}
+				<BlogAuthorTop author={author} />
 				<span dangerouslySetInnerHTML={{__html: content}} />
 				{bot}
+				<BlogAuthorBottom author={author} />
 				<MailingListBlogFooter />
 	            <ReactDisqusComments
 	                shortname={disqus_username}
