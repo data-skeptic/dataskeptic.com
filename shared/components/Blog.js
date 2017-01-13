@@ -43,7 +43,6 @@ class Blog extends React.Component {
 	}
 
 	render() {
-		console.log("render blog is a dumb list")
 		var oblogs = this.props.blogs.toJS()
 		var folders = oblogs.folders || []
 		var blogs = oblogs.blogs || []

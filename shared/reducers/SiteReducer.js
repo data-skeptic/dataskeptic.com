@@ -12,6 +12,7 @@ const init = {
       error: "",
       send: "no"
     },
+  contributors: {},
   slackstatus: ""
 }
 
@@ -31,6 +32,21 @@ export default function siteReducer(state = defaultState, action) {
         }
       }
       nstate.contact_form.send = "no"
+      var dispatch = action.payload.dispatch
+      axios
+        .get("/api/contributors/list")
+        .then(function(resp) {
+          var contributors = resp["data"]
+          console.log(contributors)
+          dispatch({type: "SET_CONTRIBUTORS", payload: contributors})
+        })
+        .catch(function(err) {
+          console.log(err)
+          self.setState({contributor: undefined})
+        })      
+      break
+    case 'SET_CONTRIBUTORS':
+      nstate.contributors = action.payload
       break
     case 'SET_TITLE':
     	nstate.title = action.payload

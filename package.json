@@ -46,6 +46,7 @@
     "redux": "^3.0.5",
     "redux-react-router": "^1.0.0-beta3",
     "redux-thunk": "^2.1.0",
+    "showdown": "^1.6.0",
     "webpack": "^1.12.9",
     "xml2js": "^0.4.17"
   },

@@ -1,5 +1,6 @@
 import aws                       from 'aws-sdk'
 import axios                     from 'axios';
+import {get_contributors}        from 'backend/get_contributors'
 import {join_slack}              from 'backend/join_slack'
 import bodyParser                from 'body-parser'
 import compression               from 'compression';
@@ -99,7 +100,14 @@ function api_router(req, res) {
   if (req.url.indexOf('/api/slack/join') == 0) {
     var req = req.body
     join_slack(req, res, slack_key)
+    return true
   }
+  if (req.url.indexOf('/api/contributors/list') == 0) {
+    var req = req.body
+    get_contributors(req, res)
+    return true
+  }
+  return false
 }
 
 app.use( (req, res) => {

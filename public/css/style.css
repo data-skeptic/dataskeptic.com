@@ -706,6 +706,18 @@ ul.topnav li.right {float: right;}
   padding: 2px 10px 2px 10px;
 }
 
+/*****************************************************************************
+ BlogAuthorBottom.js
+*****************************************************************************/
+
+.blog-author-bottom {
+  padding: 20px;
+  background-color: #eee;
+}
+.blog-author-img {
+  text-align: center;
+  margin-bottom: 10px;
+}
 
 /*****************************************************************************
  BlogItem.js
