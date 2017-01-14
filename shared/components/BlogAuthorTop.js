@@ -18,10 +18,11 @@ class BlogAuthorTop extends React.Component {
 		}
 		var twitter = contributor.twitter || ""
 		var twitterdiv = <span></span>
+		var twitterurl = "https://twitter.com/" + twitter
 		if (twitter != "") {
 			twitterdiv = (<span>
 				<img src="/img/png/twitter.png" />
-				<a href="https://twitter.com/{twitter}">{twitter}</a>
+				<a href={twitterurl}>{twitter}</a>
 			</span>)
 		}
 		return (
