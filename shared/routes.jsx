@@ -28,7 +28,6 @@ import Store                   from 'components/Store';
 import SnlImpact               from 'components/l/SnlImpact';
 
 function loadData() {
-	console.log("loadData")
 	if (typeof window !== 'undefined') {
 		ReactGA.set({ page: window.location.pathname });
 		ReactGA.pageview(window.location.pathname);		

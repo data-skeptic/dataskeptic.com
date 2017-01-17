@@ -2,6 +2,7 @@ import aws                       from 'aws-sdk'
 import axios                     from 'axios';
 import {get_contributors}        from 'backend/get_contributors'
 import {join_slack}              from 'backend/join_slack'
+import {related_content}         from 'backend/related_content'
 import bodyParser                from 'body-parser'
 import compression               from 'compression';
 import getBlogs                  from 'daos/blogs';
@@ -102,9 +103,16 @@ function api_router(req, res) {
     join_slack(req, res, slack_key)
     return true
   }
-  if (req.url.indexOf('/api/contributors/list') == 0) {
+  else if (req.url.indexOf('/api/contributors/list') == 0) {
     var req = req.body
     get_contributors(req, res)
+    return true
+  }
+  else if (req.url.indexOf('/api/related') == 0) {
+    var params = req['params']
+    console.log(req.query)
+    console.log(['p', params])
+    related_content(req, res)
     return true
   }
   return false
