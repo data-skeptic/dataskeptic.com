@@ -6,6 +6,7 @@ import {send_email}              from 'backend/send_email'
 import {order_create}            from 'backend/order_create'
 import {order_fulfill}           from 'backend/order_fulfill'
 import {order_list}              from 'backend/order_list'
+import {related_content}         from 'backend/related_content'
 import bodyParser                from 'body-parser'
 import compression               from 'compression';
 import getBlogs                  from 'daos/blogs';
@@ -131,6 +132,13 @@ function api_router(req, res) {
   else if (req.url.indexOf('/api/contributors/list') == 0) {
     var req = req.body
     get_contributors(req, res)
+    return true
+  }
+  else if (req.url.indexOf('/api/related') == 0) {
+    var params = req['params']
+    console.log(req.query)
+    console.log(['p', params])
+    related_content(req, res)
     return true
   }
   return false

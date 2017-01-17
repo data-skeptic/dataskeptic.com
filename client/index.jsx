@@ -1,5 +1,6 @@
 import React                from 'react';
 import { render }           from 'react-dom';
+import ReactGA from 'react-ga'
 import { Router }           from 'react-router';
 import createBrowserHistory from 'history/lib/createBrowserHistory'
 import { Provider }         from 'react-redux';
@@ -18,13 +19,18 @@ import { createStore,
 
 var initialState = immutifyState(window.__INITIAL_STATE__);
 
-var version = "1.0.3"
+var version = "1.0.4"
 
 if (initialState['version'] == undefined) {
   initialState = {version}
 } else if (initialState['version'] != v) {
   initialState = {version}
 }
+
+console.log("Initialize GA")
+ReactGA.initialize("UA-88166505-1", {
+  debug: false
+});
 
 const history = createBrowserHistory();
 
@@ -98,11 +104,8 @@ try {
   if (episode_metadata_prefetch != null) {
     var episode_metadata = episode_metadata_prefetch.innerHTML
     if (episode_metadata != undefined && episode_metadata != "{}") {
-      console.log("Ingesting episode metadata prefetch")
       episode_metadata = episode_metadata.split('"\\').join('').split('\\&quot;"').join('&quot;')
-      console.log(episode_metadata)
       var episode = JSON.parse(episode_metadata)
-      console.log(["injecting", episode])
       store.dispatch({type: "INJECT_EPISODE", payload: {episode} })
     }  
   }

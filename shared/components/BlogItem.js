@@ -25,7 +25,6 @@ class BlogItem extends React.Component {
     }
 
 	render() {
-		console.log(10)
 		var oepisodes = this.props.episodes.toJS()
 		var oblogs = this.props.blogs.toJS()
 		var osite = this.props.site.toJS()
@@ -73,9 +72,7 @@ class BlogItem extends React.Component {
 		if (content == "") {
 			content = "Loading....."
 		}
-		console.log("---")
 		var uid = 'http://dataskeptic.com/blog' + blog_focus.blog.prettyname
-		console.log(uid)
 
 		return (
 			<div className="center">

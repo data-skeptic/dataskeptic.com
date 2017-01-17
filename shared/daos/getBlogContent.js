@@ -21,6 +21,7 @@ export default function getBlogContent(dispatch, pathname, env) {
 			dispatch({type: "ADD_BLOG_CONTENT", payload: {dispatch, content, uri} })
 		})
 		.catch(function (err) {
+			console.log(uri)
 			console.log(err)
 			dispatch({type: "FETCH_BLOGS_ERROR", playload: err})
 		})
