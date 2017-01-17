@@ -32,10 +32,10 @@ class BlogAuthorBottom extends React.Component {
 		return (
 			<div className="blog-author-bottom">
 				<div className="row">
-					<div className="col-xs-12 col-sm-4 blog-author-img">
+					<div className="col-xs-12 col-sm-5 blog-author-img">
 						<img src={contributor.img} />
 					</div>
-					<div className="col-xs-12 col-sm-8 blog-author-main">
+					<div className="col-xs-12 col-sm-7 blog-author-main">
 						<p><b>Author:</b> {contributor.prettyname}</p>
 						<p><span dangerouslySetInnerHTML={{__html: bio}} /></p>
 						<p>{twitterdiv}</p>
