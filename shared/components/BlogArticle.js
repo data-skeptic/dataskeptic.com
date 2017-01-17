@@ -48,9 +48,13 @@ class BlogArticle extends React.Component {
 		if (blog_focus == undefined || blog_focus.blog == undefined) {
 			return <Loading />
 		}
-		var pn = blog_focus.blog.prettyname
 		var showBio = true
-		if (pn.indexOf('/episodes/')==0 || pn.indexOf('/transcripts/')==0) {
+		var pn = blog_focus.blog.prettyname
+		if (pn != undefined) {
+			if (pn.indexOf('/episodes/')==0 || pn.indexOf('/transcripts/')==0) {
+				showBio = false
+			}			
+		} else {
 			showBio = false
 		}
 		var top = <div></div>
