@@ -37,7 +37,6 @@ export default function siteReducer(state = defaultState, action) {
         .get("/api/contributors/list")
         .then(function(resp) {
           var contributors = resp["data"]
-          console.log(contributors)
           dispatch({type: "SET_CONTRIBUTORS", payload: contributors})
         })
         .catch(function(err) {
@@ -64,9 +63,7 @@ export default function siteReducer(state = defaultState, action) {
   			.post("/api/slack/join", req, config)
   			.then(function(resp) {
           var data = resp['data']
-  			  console.log(data)
           var msg = data['msg']
-          console.log(msg)
           dispatch({type: "SLACK_UPDATE", payload: {msg} })            
   			})
   			.catch(function(err) {
@@ -128,7 +125,6 @@ export default function siteReducer(state = defaultState, action) {
       axios
         .post(url, JSON.stringify(data))
         .then(function(result) {
-          console.log(result)
           if (dispatch != undefined) {
             var success = true
             dispatch({type: "CONTACT_FORM_COMPLETE", payload: {success} })

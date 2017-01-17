@@ -48,7 +48,11 @@ class BlogArticle extends React.Component {
 		if (blog_focus == undefined || blog_focus.blog == undefined) {
 			return <Loading />
 		}
-
+		var pn = blog_focus.blog.prettyname
+		var showBio = true
+		if (pn.indexOf('/episodes/')==0 || pn.indexOf('/transcripts/')==0) {
+			showBio = false
+		}
 		var top = <div></div>
 		if (blog_focus.blog != undefined && blog_focus.blog.guid != undefined) {
 			var ep = oepisodes.episodes_map[blog_focus.blog.guid]
@@ -96,7 +100,7 @@ class BlogArticle extends React.Component {
 
 		var uid = 'http://dataskeptic.com/blog' + blog_focus.blog.prettyname
 		var author = ""
-		if (blog_focus != undefined) {
+		if (blog_focus != undefined && showBio) {
 			var blog = blog_focus.blog
 			if (blog != undefined) {
 				if (blog.author == undefined) {

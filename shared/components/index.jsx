@@ -1,8 +1,8 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes } from 'react'
+import ReactGA from 'react-ga'
 import { connect } from 'react-redux'
 
 import xml2js from "xml2js"
-import ReactGA from 'react-ga'
 
 import { calculateShipping, calculateTotal } from '../utils/store_utils'
 import { extractFolders } from '../utils/blog_utils'
@@ -19,13 +19,6 @@ class MainView extends React.Component {
     var persisted = this.loadState()
     var total = calculateTotal(persisted.cart_items, persisted.country.short)
     var shipping = calculateShipping(persisted.cart_items, persisted.country.short)
-  }
-
-  componentDidMount() {
-    console.log("Initialize GA")
-    ReactGA.initialize("UA-88166505-1", {
-      debug: false
-    });
   }
 
   loadState() {
