@@ -17,6 +17,7 @@ export default function getContentWrapper(title, initialState, injects) {
           <script>
             window.__INITIAL_STATE__ = ${JSON.stringify(initialState)};
           </script>
+          <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
         </head>
         <body>`
   var keys = Object.keys(injects)

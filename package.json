@@ -34,6 +34,7 @@
     "object-assign": "^4.0.1",
     "rc-slider": "^5.3.5",
     "react": "^0.14.3",
+    "react-adsense": "0.0.1",
     "react-disqus-comments": "^0.5.2",
     "react-dom": "^0.14.3",
     "react-ga": "^2.1.2",

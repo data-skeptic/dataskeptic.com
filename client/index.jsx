@@ -37,7 +37,7 @@ const history = createBrowserHistory();
 const reducer = combineReducers(reducers);
 
 const logger = (store) => (next) => (action) => {
-  //console.log("action fired", action)
+  console.log("action fired", action)
   next(action)
 }
 

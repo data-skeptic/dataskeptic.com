@@ -10,6 +10,7 @@ class CreditCardForm extends React.Component {
 		}
 	}
 	handleSubmit(event) {
+		// Stripe.card.validateExpiry
 		event.preventDefault()
 		event.stopPropagation()
 		var dispatch = this.props.dispatch
@@ -21,27 +22,63 @@ class CreditCardForm extends React.Component {
 	  return ;
 	}
 	onCCChange(e) {
+		var id = e.target.id
 		var n = e.target.value
-		console.log(n)
 		var error_msg = ""
-		if (n=="") {
-			this.setState({numeric_error: false, error_msg})
-		}
-		else if (!(!isNaN(parseFloat(n)) && isFinite(n))) {
-			error_msg = "Numeric values only please."
-			this.setState({numeric_error: true, error_msg})
-		} else {
-			var x = parseInt(n)
-			if (n < 1 || n > 12) {
-				error_msg = "<img>"
+		if (id == "cc-m") {
+			if (n=="") {
+				this.setState({numeric_error: false, error_msg})
+			}
+			else if (!(!isNaN(parseFloat(n)) && isFinite(n))) {
+				error_msg = "Numeric values only please."
 				this.setState({numeric_error: true, error_msg})
 			} else {
-				this.setState({numeric_error: false, error_msg})				
+				var x = parseInt(n)
+				if (x < 1 || x > 12) {
+					error_msg = "<img>"
+					this.setState({numeric_error: true, error_msg})
+				} else {
+					this.setState({numeric_error: false, error_msg})				
+				}
 			}
+		}
+		else if (id == "cc-y") {
+			var now = (new Date()).getYear()+1900
+			if (n=="") {
+				this.setState({numeric_error: false, error_msg})
+			}
+			else if (!(!isNaN(parseFloat(n)) && isFinite(n))) {
+				error_msg = "Numeric values only please."
+				this.setState({numeric_error: true, error_msg})
+			} else {
+				var x = parseInt(n)
+				if (x < now && n.length >= 4) {
+					error_msg = "Due to the limits of causality, we are unable to use credit cards with expirations in the past."
+					this.setState({numeric_error: true, error_msg})
+				} else {
+					this.setState({numeric_error: false, error_msg})				
+				}
+			}
+		}
+		else if (id == "cc-c") {
+			if (n.length >= 3) {
+				var test = Stripe.card.validateCVC(n)
+				if (!test) {
+					var error_msg = "Please check the CVC"
+					this.setState({numeric_error: true, error_msg})
+				} else {
+					this.setState({numeric_error: false, error_msg: ""})
+				}
+			} else {
+				this.setState({numeric_error: false, error_msg: ""})
+			}
+			
+		}
+		else if (id == "cc-n") {
+			var cardType = Stripe.card.cardType(n)
 		}
 	}
 	render() {
-		console.log("render CreditCardForm")
 		var ocart = this.props.cart.toJS()
 		var paymentError = ocart.paymentError
 		var submitDisabled = ocart.submitDisabled
@@ -74,13 +111,13 @@ class CreditCardForm extends React.Component {
 					<form onSubmit={this.handleSubmit.bind(this)}>
 						{abox}
 						<div className="row">
-							<input className="col-xs-12 cc-num" type='text' data-stripe='number' placeholder='credit card number' /><br />
+							<input id="cc-n" className="col-xs-12 cc-num" type='text' data-stripe='number' placeholder='credit card number' onChange={this.onCCChange.bind(this)} /><br />
 						</div>
 						{errors}
 						<div className="row">
-							<input className="col-xs-4 cc-yymm" type='text' data-stripe='exp-month' placeholder='month' onChange={this.onCCChange.bind(this)} />
-							<input className="col-xs-4 cc-yymm" type='text' data-stripe='exp-year' placeholder='year' onChange={this.onCCChange.bind(this)} />
-							<input className="col-xs-4 cc-cvc" type='text' data-stripe='cvc' placeholder='cvc' /><br />
+							<input id="cc-m" className="col-xs-4 cc-yymm" type='text' data-stripe='exp-month' placeholder='month' onChange={this.onCCChange.bind(this)} />
+							<input id="cc-y" className="col-xs-4 cc-yymm" type='text' data-stripe='exp-year' placeholder='year' onChange={this.onCCChange.bind(this)} />
+							<input id="cc-c" className="col-xs-4 cc-cvc" type='text' data-stripe='cvc' placeholder='cvc' onChange={this.onCCChange.bind(this)} /><br />
 						</div>
 						<div className="row">
 							<input className="col-xs-12 cc-purchase" type='submit' disabled={submitDisabled} value='Purchase' />

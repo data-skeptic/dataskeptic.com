@@ -28,7 +28,8 @@ export default function blogsReducer(state = defaultState, action) {
       nstate.blog_focus = {blog, loaded}
       var env = nstate.env
       if (blog.rendered != undefined) {
-        getBlogContent(dispatch, blog.rendered, env)
+        var pathname = blog.rendered
+        getBlogContent(dispatch, pathname, env)
       } else if(blog != {}) {
         console.log("Got bad blog data:")
         console.log(blog)
@@ -90,7 +91,11 @@ export default function blogsReducer(state = defaultState, action) {
           } else {
             nstate.blog_focus.loaded = 1
           }
+        } else {
+          nstate.blog_focus = {blog: undefined, loaded: 0, content: ""}
         }
+      } else {
+        nstate.blog_focus = {blog: undefined, loaded: 0, content: ""}
       }
       if (!loaded) {
         for (var i=0; i < nstate.blogs.length; i++) {
@@ -108,7 +113,9 @@ export default function blogsReducer(state = defaultState, action) {
         getBlog(dispatch, nstate.env, pathname)
       }
       if (nstate.blog_focus.content == "") {
-        getBlogContent(dispatch, pathname, nstate.env)
+        var p = pathname
+        p += ".htm"
+        getBlogContent(dispatch, p, nstate.env)
       }
       // check content
       break

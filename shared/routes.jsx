@@ -24,6 +24,7 @@ import Press                   from 'components/Press';
 import Projects                from 'components/Projects';
 import Services                from 'components/Services';
 import Store                   from 'components/Store';
+import ThankYouPage            from 'components/ThankYouPage';
 
 import Admin                   from 'components/admin/Admin';
 
@@ -31,8 +32,10 @@ import SnlImpact               from 'components/l/SnlImpact';
 
 function loadData() {
 	if (typeof window !== 'undefined') {
-		ReactGA.set({ page: window.location.pathname });
-		ReactGA.pageview(window.location.pathname);		
+		var p = window.location.pathname
+		console.log("ga:" + p)
+		ReactGA.set({ page: p });
+		ReactGA.pageview(p);		
 	}
 }
 
@@ -84,6 +87,9 @@ export default (
 		</Route>
 		<Route path="/projects" component={App} onEnter={loadData}>
 			<IndexRoute component={Projects} />
+		</Route>
+		<Route path="/thank-you" component={App} onEnter={loadData}>
+			<IndexRoute component={ThankYouPage} />
 		</Route>
 
 		<Route path="/admin" component={App}>
