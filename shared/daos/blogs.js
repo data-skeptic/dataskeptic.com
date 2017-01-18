@@ -21,6 +21,7 @@ export default function getBlogs(store, env) {
 			store.dispatch({type: "SET_FOLDERS", payload: folders })
 		})
 		.catch((err) => {
+			console.log(err)
 			store.dispatch({type: "FETCH_BLOGS_ERROR", playload: err})
 		})			
 }

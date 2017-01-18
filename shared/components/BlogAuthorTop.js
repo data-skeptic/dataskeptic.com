@@ -16,20 +16,26 @@ class BlogAuthorTop extends React.Component {
 		if (author == "" || contributor == undefined) {
 			return <div></div>
 		}
+		var twitterimg = <span></span>
+		var twitterlink = <span></span>
+		var linkedinimg = <span></span>
+		var linkedinlink = <span></span>
 		var twitter = contributor.twitter || ""
-		var twitterdiv = <span></span>
-		var twitterurl = "https://twitter.com/" + twitter
+		var linkedin = contributor.linkedin || ""
 		if (twitter != "") {
-			twitterdiv = (<span>
-				<img src="/img/png/twitter.png" />
-				<a href={twitterurl}>{twitter}</a>
-			</span>)
+			var twitterurl = "https://twitter.com/" + twitter
+			twitterimg = <a href={twitterurl}><img src="/img/png/twitter.png" /></a>
+			twitterlink = <a href={twitterurl}>{twitter}</a>
+		}
+		if (linkedin != "") {
+			linkedinimg = <a href={linkedin}><img src="/img/png/linkedin.png" /></a>
+			linkedinlink = <a href={linkedin}>LinkedIn</a>
 		}
 		return (
-			<div className="blog-author-top">
-				<b>Author:</b> {contributor.prettyname}
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				{twitterdiv}
+			<div className="row blog-author-top">
+				<div className="col-xs-12 col-sm-4"><b>Author:</b> {contributor.prettyname}</div>
+				<div className="col-xs-12 col-sm-4">{twitterimg} {twitterlink}</div>
+				<div className="col-xs-12 col-sm-4">{linkedinimg} {linkedinlink}</div>
 			</div>
 		)
 	}

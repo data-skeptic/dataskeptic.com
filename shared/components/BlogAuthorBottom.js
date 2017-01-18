@@ -18,17 +18,25 @@ class BlogAuthorBottom extends React.Component {
 			return <div></div>
 		}
 		var twitter = contributor.twitter || ""
-		var twitterhref="https://twitter.com/" + twitter
+		var linkedin = contributor.linkedin || ""
 		var twitterdiv = <span></span>
+		var linkedindiv = <span></span>
 		if (twitter != "") {
-			twitterdiv = (<span>
+			var twitterhref="https://twitter.com/" + twitter
+			twitterdiv = (<div>
 				<img src="/img/png/twitter.png" />
 				<a href={twitterhref}>{twitter}</a>
-			</span>)
+			</div>)
+		}
+		if (linkedin != "") {
+			linkedindiv = (<div>
+				<img src="/img/png/linkedin.png" />
+				<a href={linkedin}>LinkedIn</a>
+			</div>)
 		}
 		var bio = contributor.bio
 		var converter = new showdown.Converter()
-	    bio = converter.makeHtml(bio);
+	    bio = converter.makeHtml(bio)
 		return (
 			<div className="blog-author-bottom">
 				<div className="row">
@@ -38,7 +46,8 @@ class BlogAuthorBottom extends React.Component {
 					<div className="col-xs-12 col-sm-7 blog-author-main">
 						<p><b>Author:</b> {contributor.prettyname}</p>
 						<p><span dangerouslySetInnerHTML={{__html: bio}} /></p>
-						<p>{twitterdiv}</p>
+						{linkedindiv}
+						{twitterdiv}
 					</div>
 				</div>
 			</div>

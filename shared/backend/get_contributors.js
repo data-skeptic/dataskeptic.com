@@ -5,6 +5,7 @@ module.exports = {
 			"prettyname": "Kyle Polich",
 			"img": "https://s3.amazonaws.com/dataskeptic.com/contributors/kyle-polich.png",
 			"twitter": "@dataskeptic",
+			"linkedin": "https://www.linkedin.com/in/kyle-polich-5047193",
 			"bio": "Kyle studied computer science and focused on artificial intelligence in grad school.  His general interests range from obvious areas like statistics, machine learning, data viz, and optimization to data provenance, data governance, econometrics, and metrology.",
 			"sort-rank": 1
 		},
@@ -27,6 +28,14 @@ module.exports = {
 			"img": "https://s3.amazonaws.com/dataskeptic.com/contributors/megan-ray-nichols.jpg",
 			"twitter": "nicholsrmegan",
 			"bio": "[Megan Ray Nichols](https://about.me/megan-ray-nichols) is a freelance science writer and the editor of Schooled By Science, a blog dedicated to making science understandable to those without a science degree. She is also a regular contributor to The Energy Collective, Datafloq and Vision Times. Subscribe to [Schooled By Science](http://schooledbyscience.com/subscribe/) for the latest news and follow Megan on [Twitter](https://twitter.com/nicholsrmegan).",
+			"sort-rank": 2
+		},
+		"jack-simpson": {
+			"prettyname": "Jack Simpson",
+			"img": "https://s3.amazonaws.com/dataskeptic.com/contributors/jack-simpson.jpg",
+			"twitter": "jack_simpson",
+			"linkedin": "https://au.linkedin.com/in/jackbrucesimpson",
+			"bio": "Jack Simpson is completing a PhD in computational biology at the Australian National University in 2017. Over the course of his PhD, Jack has gained a keen interest in how machine learning can be used to solve problems in both research and industry. Jack is also passionate about science, programming and beekeeping.  His personal blog can be found at [jacksimpson.co](http://www.jacksimpson.co).  He also blogs about medical research on [biosky.co](http://biosky.co).",
 			"sort-rank": 2
 		}
 	}
