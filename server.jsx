@@ -10,9 +10,12 @@ import { feed_uri }              from 'daos/episodes'
 import { loadBlogs,
          loadEpisodes }          from 'daos/serverInit'
 import express                   from 'express';
+import FileStreamRotator         from 'file-stream-rotator'
+import fs                        from 'fs'
 import createLocation            from 'history/lib/createLocation';
 import promiseMiddleware         from 'lib/promiseMiddleware';
 import fetchComponentData        from 'lib/fetchComponentData';
+import morgan                    from 'morgan'
 import path                      from 'path';
 import React                     from 'react';
 import { renderToString }        from 'react-dom/server';
@@ -26,7 +29,18 @@ import { createStore,
 import getContentWrapper         from 'utils/content_wrapper';
 import redirects_map             from './redirects';
 
-const app = express();
+const app = express()
+
+var logDirectory = path.join(__dirname, 'log')
+fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
+var accessLogStream = FileStreamRotator.getStream({
+  date_format: 'YYYYMMDD',
+  filename: path.join(logDirectory, 'access-%DATE%.log'),
+  frequency: 'daily',
+  verbose: false
+})
+app.use(morgan('combined', {stream: accessLogStream}))
+
 
 var env = "prod"
 
@@ -84,7 +98,6 @@ app.use(bodyParser.urlencoded({
 
 var slack_key = ""
 
-var fs = require("fs")
 fs.open("config.json", "r", function(error, fd) {
   var buffer = new Buffer(10000)
   fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
