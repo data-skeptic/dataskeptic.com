@@ -1,5 +1,5 @@
 var related_content_cache = {
-  "/blog/episodes/2017/blah": [
+  "/blog/episodes/2017/studying-competition-and-gender-through-chess": [
     {
       uri: "/blog/episodes/2014/economic-modeling-and-prediction-charitable-giving-and-a-follow-up-with-peter-backus",
       title: "More with Peter Backus",
@@ -8,7 +8,7 @@ var related_content_cache = {
     {
       uri: "/blog/episodes/2015/detecting-cheating-in-chess",
       title: "Detecting Cheating in Chess",
-      desc: "Dr. Kenneth Regan has developed a methodology for looking at a long series of modes and measuring the likelihood that the moves may have been selected by an algorithm."
+      desc: "Kenneth Regan has developed a methodology for looking at a long series of modes and measuring the likelihood that the moves may have been selected by an algorithm."
     }
   ]
 }

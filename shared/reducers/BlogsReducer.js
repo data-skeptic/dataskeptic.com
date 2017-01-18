@@ -91,7 +91,11 @@ export default function blogsReducer(state = defaultState, action) {
           } else {
             nstate.blog_focus.loaded = 1
           }
+        } else {
+          nstate.blog_focus = {blog: undefined, loaded: 0, content: ""}
         }
+      } else {
+        nstate.blog_focus = {blog: undefined, loaded: 0, content: ""}
       }
       if (!loaded) {
         for (var i=0; i < nstate.blogs.length; i++) {

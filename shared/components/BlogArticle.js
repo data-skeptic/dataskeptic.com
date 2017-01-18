@@ -10,6 +10,7 @@ import BlogLink from './BlogLink'
 import BlogAuthorTop from './BlogAuthorTop'
 import BlogAuthorBottom from './BlogAuthorBottom'
 import Loading from './Loading'
+import RelatedContent from './RelatedContent'
 
 class BlogArticle extends React.Component {
 	constructor(props) {
@@ -22,8 +23,8 @@ class BlogArticle extends React.Component {
 		}, 10)
 	}
 
-	componentDidMount() {
-		var pathname = location.pathname
+	componentWillMount() {
+		var pathname = this.props.location.pathname
 		var key = "/blog"
 		var pn = pathname.substring(key.length, pathname.length)
 		var dispatch = this.props.dispatch
@@ -37,6 +38,8 @@ class BlogArticle extends React.Component {
     }
 
 	render() {
+		var pn = this.props.location.pathname
+		console.log("here")
 		var oepisodes = this.props.episodes.toJS()
 		var oblogs = this.props.blogs.toJS()
 		var osite = this.props.site.toJS()
@@ -49,7 +52,7 @@ class BlogArticle extends React.Component {
 			return <Loading />
 		}
 		var showBio = true
-		var pn = blog_focus.blog.prettyname
+		pn = blog_focus.blog.prettyname
 		if (pn != undefined) {
 			if (pn.indexOf('/episodes/')==0 || pn.indexOf('/transcripts/')==0) {
 				showBio = false
@@ -114,6 +117,7 @@ class BlogArticle extends React.Component {
 				}
 			}
 		}
+		console.log("pn=" + pn)
 		return (
 			<div className="center">
 				{top}
@@ -121,6 +125,7 @@ class BlogArticle extends React.Component {
 				<span dangerouslySetInnerHTML={{__html: content}} />
 				{bot}
 				<BlogAuthorBottom author={author} />
+				<RelatedContent prettyname={pn} />
 				<MailingListBlogFooter />
 	            <ReactDisqusComments
 	                shortname={disqus_username}
