@@ -19,7 +19,7 @@ import { createStore,
 
 var initialState = immutifyState(window.__INITIAL_STATE__);
 
-var version = "1.0.4"
+var version = "1.0.6"
 
 if (initialState['version'] == undefined) {
   initialState = {version}
@@ -28,7 +28,7 @@ if (initialState['version'] == undefined) {
 }
 
 console.log("Initialize GA")
-ReactGA.initialize("UA-88166505-1", {
+ReactGA.initialize("UA-51062432-1", {
   debug: false
 });
 
@@ -37,7 +37,7 @@ const history = createBrowserHistory();
 const reducer = combineReducers(reducers);
 
 const logger = (store) => (next) => (action) => {
-  console.log("action fired", action)
+  //console.log("action fired", action)
   next(action)
 }
 
@@ -76,7 +76,9 @@ try {
     var content = content_prefetch.innerHTML
     if (content != undefined) {
       console.log("Ingesting content prefetch")
-      store.dispatch({type: "ADD_BLOG_CONTENT", payload: {content} })
+      var blog = {}
+      nstate.blog_focus = {blog, loaded: 1, content}
+      store.dispatch({type: "PRE-FETCH-INJECT", payload: {content, blog} })
     }  
   }
 }

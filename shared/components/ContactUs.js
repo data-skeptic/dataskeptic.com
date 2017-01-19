@@ -43,15 +43,50 @@ class ContactUs extends React.Component {
 				<div className="row contact-page">
 					<div className="col-xs-12"><h2>Contact Us</h2></div>
 					<div className="col-xs-12">
-						<p>For inquiries related to a purchase of any kind, including membership, please contact <a href="mailto:orders@dataskeptic.com">orders@dataskeptic.com</a> for prioritized service.</p>
-						<p>For advertising related questions or issues, contact <a href="advertising@dataskeptic.com">advertising@dataskeptic.com</a> or <a href="kyle@dataskeptic.com">kyle@dataskeptic.com</a>.</p>
-						<p>We hope to respond to all inquiries, but sometimes the volume of incoming questions can cause our queue to explode.  We prioritize responses to Data Skeptic members first, and to those who ask quetions in a public forum like Twitter, our Facebook wall (not Facebook direct message), or Slack.  Many people can benefit from responses in public places.</p>
-						<p>To join our Slack channel, enter your email in the box below.</p>
- 						<input onChange={this.onChangeEmail.bind(this)} className='slack-email' value={email} />
- 						<button onClick={this.onClick.bind(this)}>Join dataskeptic.slack.com</button>
- 						{slackstatus}
- 						<p>You can find us on Twitter via <a href="https://twitter.com/dataskeptic">@DataSkeptic</a></p>
-						<p>We are on Facebook via <a href="https://www.facebook.com/dataskeptic">https://www.facebook.com/dataskeptic</a>.</p>
+						<p>We hope to respond to all inquiries, but sometimes the volume of incoming questions can cause our queue to explode.  We prioritize responses to Data Skeptic members first, and to those who ask questions in a public forum like Twitter, our Facebook wall (not Facebook direct message), or Slack.  Many people can benefit from responses in public places.</p>
+						<div className="row">
+							<div className="col-xs-12 col-sm-4 contact-person-out">
+								<div className="contact-person">
+									<a href="mailto:orders@dataskeptic.com"><img src="img/png/email-icon.png" /></a>
+									<span className="vcenter"><p>For inquiries related to a purchase of any kind, including membership, please contact <a href="mailto:orders@dataskeptic.com">orders@dataskeptic.com</a> for prioritized service.</p></span>
+									</div>
+							</div>
+							<div className="col-xs-12 col-sm-4 contact-person-out">
+								<div className="contact-person">
+									<a href="mailto:advertising@dataskeptic.com"><img src="img/png/email-icon.png" /></a>
+									<span className="vcenter"><p>For advertising related questions or issues, contact <a href="advertising@dataskeptic.com">advertising@dataskeptic.com</a>.</p></span>
+									</div>
+							</div>
+							<div className="col-xs-12 col-sm-4 contact-person-out">
+								<div className="contact-person">
+									<a href="mailto:kyle@dataskeptic.com"><img src="img/png/email-icon.png" /></a>
+									<span className="vcenter"><p>If you're looking to mail us something like a review copy of a book, please contact <a href="mailto:kyle@dataskeptic.com">kyle@dataskeptic.com</a>.</p></span>
+								</div>
+							</div>
+						</div>
+						<br/>
+						<div className="row">
+							<div className="col-xs-12 col-sm-6">
+								<div className="slack-join row">
+									<div className="col-xs-12 col-sm-3 slack-join-left">
+										<img src="/img/png/slack-icon.png" />
+									</div>
+									<div className="col-xs-12 col-sm-9 slack-join-right">
+											<p>To join our Slack channel, enter your email in the box below.</p>
+				 						<input onChange={this.onChangeEmail.bind(this)} className='slack-email' value={email} />
+				 						<button className="slack-button" onClick={this.onClick.bind(this)}>Join dataskeptic.slack.com</button>
+				 						{slackstatus}
+				 					</div>
+			 					</div>
+							</div>
+							<div className="col-xs-12 col-sm-6">
+								<br/>
+		 						<p>You can find us on Twitter via <a href="https://twitter.com/dataskeptic">@DataSkeptic</a></p>
+								<br/>
+								<p>We are on Facebook via <a href="https://www.facebook.com/dataskeptic">https://www.facebook.com/dataskeptic</a>.</p>
+							</div>
+						</div>
+						<br/>
 						<p>You can also reach us via the contact form below.</p>
 						<p>Please note, we often reply via the Data Skeptic blog and may share a link to our reply if its something many readers may enjoy.  If so, we refer to people via firstname only.  If that's an issue, let us know.</p>
 					</div>
