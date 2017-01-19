@@ -17,7 +17,6 @@ module.exports = {
   related_content: function(req, res) {
     var resp = []
     var uri = req.query.uri
-    console.log(uri)
     if (uri != undefined) {
       resp = related_content_cache[uri]
       if (resp == undefined) {

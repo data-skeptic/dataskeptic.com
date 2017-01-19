@@ -33,7 +33,6 @@ class BlogArticle extends React.Component {
 	}
 
 	componentWillMount() {
-		console.log("CWM")
 		var dispatch = this.props.dispatch
 		var title = this.props.title
 		if (title != undefined) {
@@ -41,6 +40,7 @@ class BlogArticle extends React.Component {
 		}
 		var pathname = this.getPN()
 		dispatch({type: "LOAD_BLOG_AND_CONTENT", payload: {pathname, dispatch} })
+		dispatch({type: "LOAD_RELATED", payload: {dispatch, pathname}})
 	}
 
     handleNewComment(comment) {
@@ -49,12 +49,10 @@ class BlogArticle extends React.Component {
     }
 
 	render() {
-		console.log("here")
 		var pn = this.getPN()
 		var oepisodes = this.props.episodes.toJS()
 		var oblogs = this.props.blogs.toJS()
 		var blog_focus = oblogs.blog_focus
-		console.log(blog_focus)
 		var osite = this.props.site.toJS()
 		var disqus_username = osite.disqus_username
 		var title = this.props.title
@@ -133,7 +131,6 @@ class BlogArticle extends React.Component {
 				}
 			}
 		}
-		console.log("pn=" + pn)
 		return (
 			<div className="center">
 				{top}
@@ -141,6 +138,7 @@ class BlogArticle extends React.Component {
 				<span dangerouslySetInnerHTML={{__html: content}} />
 				{bot}
 				<BlogAuthorBottom author={author} />
+				<RelatedContent />
 				<MailingListBlogFooter />
 	            <ReactDisqusComments
 	                shortname={disqus_username}

@@ -1,3 +1,4 @@
+import axios from "axios"
 import Immutable from 'immutable';
 
 import getBlog from 'daos/getBlog';
@@ -22,7 +23,6 @@ export default function blogsReducer(state = defaultState, action) {
       nstate.env = action.payload
       break
     case 'CLEAR_FOCUS_BLOG':
-      console.log("yes indeed")
       nstate.blog_focus = {blog: undefined, loaded: 0, content: ""}
       break
     case 'ADD_BLOG':
@@ -55,7 +55,6 @@ export default function blogsReducer(state = defaultState, action) {
           nstate.blog_focus.content = ""
           var dispatch = action.payload.dispatch
           setTimeout(function() {
-            console.log(2)
             getBlogContent(dispatch, b, env)
           },1)
           i = nstate.blogs.length
@@ -77,7 +76,6 @@ export default function blogsReducer(state = defaultState, action) {
       nstate.blog_focus = {blog, loaded: 1, content}
       break
     case 'ADD_BLOG_CONTENT':
-      console.log(action.payload)
       var content = action.payload.content
       var nblog = action.payload.blog
       var cblog = nstate.blog_focus.blog
@@ -101,19 +99,15 @@ export default function blogsReducer(state = defaultState, action) {
       for (var i=0; i < nstate.blogs.length; i++) {
         var blog = nstate.blogs[i]
         if (blog.prettyname == pn) {
-          console.log("found in cache")
           var env = nstate.env
           if (nstate.blog_focus.prettyname == blog.prettyname) {
-            console.log("Already loaded")
             if (nstate.blog_focus.loaded == 1) {
               load = false
               break
             } else {
-              console.log("Had blog metadata but not content")
               getBlogContent(dispatch, blog, env)
             }
           } else {
-            console.log("Stale cache")
             nstate.blog_focus.blog = blog
             nstate.blog_focus.loaded = 0
             nstate.blog_focus.content = ""
@@ -124,22 +118,35 @@ export default function blogsReducer(state = defaultState, action) {
       }
       if (load) {
         nstate.blog_focus = {blog: undefined, loaded: 0, content: ""}
-        console.log("getBlog:" + pathname)
         getBlog(dispatch, nstate.env, pathname)
+      }
+      break
+    case 'ADD_RELATED':
+      var items = action.payload.items
+      var uri = action.payload.uri
+      var b = nstate.blog_focus.blog
+      var key = '/blog'
+      if (uri.indexOf(key) == 0) {
+        uri = uri.substring(key.length, uri.length)
+      }
+      if (b != undefined && b['prettyname'] == uri) {
+        nstate.related = items
+      } else {
+        console.log([b['prettyname'], 'is not ', uri])
       }
       break
     case 'LOAD_RELATED':
       var pathname = action.payload.pathname
       var dispatch = action.payload.dispatch      
       var pn = pathname
-      var uri = "/api/related?uri=/blog" + pn
-      console.log(uri)
+      var uri = "/api/related?uri=" + pn
         axios
             .get(uri)
             .then(function(resp) {
               var data = resp['data']
               var items = data
-              console.log("Got related and did nothing with them")
+              dispatch({type: "ADD_RELATED", payload: {items, uri: pn} })
+              var items = data
             })
             .catch(function(err) {
               console.log(err)
@@ -165,7 +172,6 @@ export default function blogsReducer(state = defaultState, action) {
       nstate.folders = action.payload
       break
   }
-  console.log("reducer complete")
   return Immutable.fromJS(nstate)
 }
 

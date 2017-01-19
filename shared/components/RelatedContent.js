@@ -9,7 +9,6 @@ class RelatedContent extends React.Component {
 	}
 
 	render() {
-		console.log("related")
 		var oblogs = this.props.blogs.toJS()
 		var items = oblogs.related || []
 		if (items.length == 0) {
@@ -21,7 +20,7 @@ class RelatedContent extends React.Component {
 			{items.map(function(item) {
 				var desc = item.desc
 				var title = item.title
-				var uri = item.desc
+				var uri = item.uri
 				return (
 					<div className="related-content">
 						<a href={uri}>{title}</a> - {desc}

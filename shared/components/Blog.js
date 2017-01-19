@@ -50,7 +50,6 @@ class Blog extends React.Component {
 	render() {
 		var oblogs = this.props.blogs.toJS()
 		var blog_focus = oblogs.blog_focus
-		console.log(blog_focus)
 		var folders = oblogs.folders || []
 		var blogs = oblogs.blogs || []
 
