@@ -19,7 +19,7 @@ import { createStore,
 
 var initialState = immutifyState(window.__INITIAL_STATE__);
 
-var version = "1.0.5"
+var version = "1.0.6"
 
 if (initialState['version'] == undefined) {
   initialState = {version}
@@ -28,7 +28,7 @@ if (initialState['version'] == undefined) {
 }
 
 console.log("Initialize GA")
-ReactGA.initialize("UA-88166505-1", {
+ReactGA.initialize("UA-51062432-1", {
   debug: false
 });
 

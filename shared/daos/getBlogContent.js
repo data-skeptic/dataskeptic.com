@@ -10,16 +10,13 @@ export default function getBlogContent(dispatch, blog, env) {
 	} else {
 		env = env + "."
 	}
-	console.log(blog)
 	var renderedPath = blog['rendered']
 	var uri = "https://s3.amazonaws.com/" + env + 'dataskeptic.com/' + renderedPath
-	console.log("uri=" + uri)
 	axios
 		.get(uri)
 		.then(function(result) {
 			var content = result["data"]
 			dispatch({type: "ADD_BLOG_CONTENT", payload: {content, blog} })
-			console.log("dispatch done!!!")
 		})
 		.catch(function (err) {
 			console.log(uri)

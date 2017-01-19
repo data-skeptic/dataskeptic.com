@@ -19,6 +19,7 @@ export default class Footer extends React.Component {
 					<a className="footer-links" href="http://dataskeptic.com/feed.rss"><img src="/img/gif/rss2.gif" alt="Data Skeptic podcast episode rss feed" /></a>
 				</div>
 				<div className='center'>
+					<AdSense.Google client='ca-pub-4495792015968395' slot='2320193863' />
 				</div>
 			</div>
 		)
