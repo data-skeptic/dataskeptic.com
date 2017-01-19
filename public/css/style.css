@@ -1292,6 +1292,39 @@ button.slick-arrow.slick-prev {
   text-align: center;
 }
 
+
+/*****************************************************************************
+ ContactUs.js
+*****************************************************************************/
+
+.slack-email {
+  border: 1px solid #888;
+}
+
+.slack-button {
+  border: 1px solid #888;
+  background-color: #eee;  
+}
+.contact-person-out {
+  padding: 5px;
+}
+
+.contact-person {
+  background-color: #eee;
+  padding: 5px;
+  text-align: center;
+  height: 150px;
+}
+.vcenter {
+  vertical-align: middle;
+}
+
+.slack-join {
+  padding: 5px;
+  text-align: center;
+  border: 1px solid #888;
+}
+
 /*****************************************************************************
  ContactForm.js
 *****************************************************************************/
