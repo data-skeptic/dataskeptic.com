@@ -15,22 +15,33 @@ import RelatedContent from './RelatedContent'
 class BlogArticle extends React.Component {
 	constructor(props) {
 		super(props)
-		var title = this.props.title
-		var dispatch = this.props.dispatch
-		var pathname = this.props.pathname
-		setTimeout(function() {
-		    dispatch({type: "SET_TITLE", payload: title })
-		}, 10)
+	}
+
+	getPN() {
+		var pathname = ""
+		if (typeof location != 'undefined') {
+			if (location.pathname != undefined) {
+				return location.pathname
+			}
+		}
+		if (this.props.location != undefined) {
+			if (this.props.location.pathname != undefined) {
+				return this.props.location.pathname
+			}
+		}
+		return pathname
 	}
 
 	componentWillMount() {
-		var pathname = this.props.location.pathname
-		var key = "/blog"
-		var pn = pathname.substring(key.length, pathname.length)
+		console.log("CWM")
 		var dispatch = this.props.dispatch
-		dispatch({type: "LOAD_BLOG_AND_CONTENT", payload: {pathname: pn, dispatch} })
+		var title = this.props.title
+		if (title != undefined) {
+		    dispatch({type: "SET_TITLE", payload: title })
+		}
+		var pathname = this.getPN()
+		dispatch({type: "LOAD_BLOG_AND_CONTENT", payload: {pathname, dispatch} })
 	}
-
 
     handleNewComment(comment) {
     	// TODO: Maybe use a cognitive service here?
@@ -38,13 +49,14 @@ class BlogArticle extends React.Component {
     }
 
 	render() {
-		var pn = this.props.location.pathname
 		console.log("here")
+		var pn = this.getPN()
 		var oepisodes = this.props.episodes.toJS()
 		var oblogs = this.props.blogs.toJS()
+		var blog_focus = oblogs.blog_focus
+		console.log(blog_focus)
 		var osite = this.props.site.toJS()
 		var disqus_username = osite.disqus_username
-		var blog_focus = oblogs.blog_focus
 		var title = this.props.title
 		var isEpisode = false
 
@@ -99,10 +111,14 @@ class BlogArticle extends React.Component {
 		if (content == "") {
 			if (blog_focus.blog != undefined) {
 				var title = blog_focus.blog.title
-				content = "<h2>" + title + "</h2><p>Loading...</p>"
+				content = "<div id='blog-content'><h2>" + title + "</h2><p>Loading...</p></div>"
 			} else {
-				content = "<p>Loading....</p>"
+				content = "<div id='blog-content'><p>Loading....</p></div>"
 			}
+		} else if (blog_focus.loaded < 1) {
+				content = "<div id='blog-content'><p>Loading...</p></div>"
+		} else {
+			content = "<div id='blog-content'>" + content + "</div>"
 		}
 
 		var uid = 'http://dataskeptic.com/blog' + blog_focus.blog.prettyname
@@ -125,7 +141,6 @@ class BlogArticle extends React.Component {
 				<span dangerouslySetInnerHTML={{__html: content}} />
 				{bot}
 				<BlogAuthorBottom author={author} />
-				<RelatedContent prettyname={pn} />
 				<MailingListBlogFooter />
 	            <ReactDisqusComments
 	                shortname={disqus_username}

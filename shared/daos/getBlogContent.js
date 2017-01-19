@@ -2,7 +2,7 @@ import axios from "axios"
 
 import { extractFolders } from '../utils/blog_utils'
 
-export default function getBlogContent(dispatch, pathname, env) {
+export default function getBlogContent(dispatch, blog, env) {
 	if (env == "prod") {
 		env = ""
 	} else if (env == undefined) {
@@ -10,15 +10,16 @@ export default function getBlogContent(dispatch, pathname, env) {
 	} else {
 		env = env + "."
 	}
-	if (pathname.substring(0, 1) == "/") {
-		pathname = pathname.substring(1, pathname.length)
-	}
-	var uri = "https://s3.amazonaws.com/" + env + 'dataskeptic.com/' + pathname
+	console.log(blog)
+	var renderedPath = blog['rendered']
+	var uri = "https://s3.amazonaws.com/" + env + 'dataskeptic.com/' + renderedPath
+	console.log("uri=" + uri)
 	axios
 		.get(uri)
 		.then(function(result) {
 			var content = result["data"]
-			dispatch({type: "ADD_BLOG_CONTENT", payload: {dispatch, content, uri} })
+			dispatch({type: "ADD_BLOG_CONTENT", payload: {content, blog} })
+			console.log("dispatch done!!!")
 		})
 		.catch(function (err) {
 			console.log(uri)

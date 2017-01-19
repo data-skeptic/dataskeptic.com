@@ -1,6 +1,7 @@
 import axios from "axios"
 
 import { extractFolders } from '../utils/blog_utils'
+import getBlogContent from './getBlogContent'
 
 export default function getBlog(dispatch, env, prettyname) {
 	var db_env = env
@@ -18,7 +19,8 @@ export default function getBlog(dispatch, env, prettyname) {
 			if (blog != undefined) {
 				var uri = blog["uri"]
 				if (uri != undefined) {
-					dispatch({type: "ADD_BLOG", payload: {blog, dispatch} })					
+					dispatch({type: "ADD_BLOG", payload: {blog, dispatch} })
+					getBlogContent(dispatch, blog, env)
 				} else {
 					console.log("Did not get blog back as expected")
 					console.log(result)
@@ -29,7 +31,9 @@ export default function getBlog(dispatch, env, prettyname) {
 			}
 		})
 		.catch((err) => {
+			console.log(err)
 			dispatch({type: "FETCH_BLOGS_ERROR", playload: err})
 		})
+
 }
 

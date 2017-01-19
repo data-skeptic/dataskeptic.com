@@ -16,6 +16,11 @@ class Blog extends React.Component {
 		super(props)
 	}
 
+	componentWillMount() {
+		var dispatch = this.props.dispatch
+		dispatch({type: "CLEAR_FOCUS_BLOG", payload: {} })
+	}
+
 	remove_type(typ, arr) {
 		var sub = []
 		var key = "/" + typ + "/"
@@ -44,6 +49,8 @@ class Blog extends React.Component {
 
 	render() {
 		var oblogs = this.props.blogs.toJS()
+		var blog_focus = oblogs.blog_focus
+		console.log(blog_focus)
 		var folders = oblogs.folders || []
 		var blogs = oblogs.blogs || []
 

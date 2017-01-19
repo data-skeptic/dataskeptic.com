@@ -19,7 +19,7 @@ import { createStore,
 
 var initialState = immutifyState(window.__INITIAL_STATE__);
 
-var version = "1.0.4"
+var version = "1.0.5"
 
 if (initialState['version'] == undefined) {
   initialState = {version}
@@ -76,7 +76,9 @@ try {
     var content = content_prefetch.innerHTML
     if (content != undefined) {
       console.log("Ingesting content prefetch")
-      store.dispatch({type: "ADD_BLOG_CONTENT", payload: {content} })
+      var blog = {}
+      nstate.blog_focus = {blog, loaded: 1, content}
+      store.dispatch({type: "PRE-FETCH-INJECT", payload: {content, blog} })
     }  
   }
 }
