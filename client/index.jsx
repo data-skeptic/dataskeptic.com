@@ -77,7 +77,6 @@ try {
     if (content != undefined) {
       console.log("Ingesting content prefetch")
       var blog = {}
-      nstate.blog_focus = {blog, loaded: 1, content}
       store.dispatch({type: "PRE-FETCH-INJECT", payload: {content, blog} })
     }  
   }

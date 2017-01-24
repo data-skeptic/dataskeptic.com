@@ -15,7 +15,7 @@ export default function getBlog(dispatch, env, prettyname) {
 	axios
 		.get(uri)
 		.then(function(result) {
-			var blog = result.data
+			var blog = result['data']
 			if (blog != undefined) {
 				var uri = blog["uri"]
 				if (uri != undefined) {
@@ -27,6 +27,7 @@ export default function getBlog(dispatch, env, prettyname) {
 				}
 			} else {
 				console.log("Didn't get blog back as expected")
+				console.log(uri)
 				console.log(result)
 			}
 		})
