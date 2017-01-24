@@ -93,14 +93,16 @@ class BlogArticle extends React.Component {
 				var guid = blog_focus.blog.guid
 				var b = tm[guid]
 				if (b != undefined) {
-					if (b.prettyname.indexOf('/transcripts/') == -1) {
-						var pn = "/blog" + b.prettyname
-						bot = (
-							<div className='blog-transcript-link'>
-								Read the full transcript here:
-								<Link to={pn}>{title} transcripts</Link>.
-							</div>
-						)
+					if (b.prettyname != undefined) {
+						if (b.prettyname.indexOf('/transcripts/') == -1) {
+							var pn = "/blog" + b.prettyname
+							bot = (
+								<div className='blog-transcript-link'>
+									Read the full transcript here:
+									<Link to={pn}>{title} transcripts</Link>.
+								</div>
+							)
+						}						
 					}
 				}
 			}
@@ -119,7 +121,8 @@ class BlogArticle extends React.Component {
 			content = "<div id='blog-content'>" + content + "</div>"
 		}
 
-		var uid = 'http://dataskeptic.com/blog' + blog_focus.blog.prettyname
+		var pn = blog_focus.blog.prettyname
+		var uid = 'http://dataskeptic.com/blog' + pn
 		var author = ""
 		if (blog_focus != undefined && showBio) {
 			var blog = blog_focus.blog

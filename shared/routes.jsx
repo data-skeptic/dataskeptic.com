@@ -14,6 +14,7 @@ import Checkout                from 'components/Checkout';
 import Coaching                from 'components/Coaching';
 import Coaching2               from 'components/Coaching2';
 import ContactUs               from 'components/ContactUs';
+import DontHackMe              from 'components/DontHackMe';
 import Home                    from 'components/Home';
 import LightsOut               from 'components/LightsOut';
 import Menu                    from 'components/Menu';
@@ -96,6 +97,9 @@ export default (
 			<IndexRoute component={Admin} />
 		</Route>
 
+		<Route path="/wp-login.php" component={App} onEnter={loadData}>
+			<IndexRoute component={DontHackMe} />
+		</Route>
 		<Route path="/l/snl-impact" component={App} onEnter={loadData}>
 			<IndexRoute component={SnlImpact} />
 		</Route>
