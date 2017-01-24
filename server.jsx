@@ -1,5 +1,6 @@
 import aws                       from 'aws-sdk'
 import axios                     from 'axios';
+import {get_blogs}               from 'backend/get_blogs'
 import {get_contributors}        from 'backend/get_contributors'
 import {join_slack}              from 'backend/join_slack'
 import {related_content}         from 'backend/related_content'
@@ -122,10 +123,11 @@ function api_router(req, res) {
     return true
   }
   else if (req.url.indexOf('/api/related') == 0) {
-    var params = req['params']
-    console.log(req.query)
-    console.log(['p', params])
     related_content(req, res)
+    return true
+  }
+  else if (req.url.indexOf('/api/blog') == 0) {
+    get_blogs(req, res, blogmetadata_map)
     return true
   }
   return false
