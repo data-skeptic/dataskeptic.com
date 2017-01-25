@@ -1,6 +1,9 @@
 import aws                       from 'aws-sdk'
 import axios                     from 'axios';
+import {get_blogs}               from 'backend/get_blogs'
 import {get_contributors}        from 'backend/get_contributors'
+import {get_episodes}            from 'backend/get_episodes'
+import {get_products}            from 'backend/get_products'
 import {join_slack}              from 'backend/join_slack'
 import {send_email}              from 'backend/send_email'
 import {order_create}            from 'backend/order_create'
@@ -9,10 +12,10 @@ import {order_list}              from 'backend/order_list'
 import {related_content}         from 'backend/related_content'
 import bodyParser                from 'body-parser'
 import compression               from 'compression';
-import getBlogs                  from 'daos/blogs';
 import { feed_uri }              from 'daos/episodes'
 import { loadBlogs,
-         loadEpisodes }          from 'daos/serverInit'
+         loadEpisodes,
+         loadProducts }          from 'daos/serverInit'
 import express                   from 'express';
 import FileStreamRotator         from 'file-stream-rotator'
 import fs                        from 'fs'
@@ -60,21 +63,24 @@ var title_map = {}         // `uri`             -> <title>
 var content_map = {}       // `uri`             -? {s3 blog content}
 var blogmetadata_map = {}  // `uri`             -> {blog}
 var episodes_map = {}      // `guid` | 'latest' -> {episode}
-
+var products = {}
 
 loadBlogs(env, blogmetadata_map, title_map, content_map)
 loadEpisodes(env, feed_uri, episodes_map)
+loadProducts(env, products)
 
 setInterval(function() {
   console.log("---[Refreshing cache]------------------")
   console.log(process.memoryUsage())
   var env = global.env
-  var title_map = global.title_map
   var blogmetadata_map = global.blogmetadata_map
-  var episodes_map = global.episodes_map
   var content_map = global.content_map
+  var episodes_map = global.episodes_map
+  var products = global.products
+  var title_map = global.title_map
   loadBlogs(env, blogmetadata_map, title_map, content_map)
   loadEpisodes(env, feed_uri, episodes_map)
+  loadProducts(env, products)
 }, 5 * 60 * 1000)
 
 global.env              = env
@@ -82,6 +88,7 @@ global.title_map        = title_map
 global.content_map      = content_map
 global.blogmetadata_map = blogmetadata_map
 global.episodes_map     = episodes_map
+global.products         = products
 
 if (process.env.NODE_ENV == 'production') {
   function shouldCompress (req, res) {
@@ -148,10 +155,23 @@ function api_router(req, res) {
     return true
   }
   else if (req.url.indexOf('/api/related') == 0) {
-    var params = req['params']
-    console.log(req.query)
-    console.log(['p', params])
     related_content(req, res)
+    return true
+  }
+  else if (req.url.indexOf('/api/blog') == 0) {
+    get_blogs(req, res, blogmetadata_map)
+    return true
+  }
+  else if (req.url.indexOf('/api/store/membership/list') == 0) {
+    get_products(req, res, products['items'])
+    return true
+  }
+  else if (req.url.indexOf('/api/store/misc/list') == 0) {
+    get_products(req, res, products['items'])
+    return true
+  }
+  else if (req.url.indexOf('/api/episodes/list') == 0) {
+    get_episodes(req, res, episodes_map)
     return true
   }
   return false
