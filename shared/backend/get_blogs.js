@@ -1,5 +1,5 @@
 module.exports = {
-  get_blogs: function(req, res, blogmetadata_map, exclude=['episodes', 'transcripts']) {
+  get_blogs: function(req, res, blogmetadata_map, exclude=['/episodes', '/transcripts']) {
   	var blogs = []
     var params = req['params']
     var query = req.query
@@ -10,10 +10,8 @@ module.exports = {
     }
     var pre = '/api/blog'
     url = url.substring(pre.length, url.length)
-    console.log(['?', url])
-    var offset = query['offset']
-    var limit = query['limit']
-    console.log(['!', offset, limit])
+    var offset = query['offset'] || 0
+    var limit = query['limit'] || 10
     var c = 0
     var keys = Object.keys(blogmetadata_map)
     for (var i=0; i < keys.length; i++) {
@@ -23,13 +21,19 @@ module.exports = {
     	if (blog['prettyname'].indexOf(url) == 0) {
     		match = true
     	}
+    	if (url == '/') {
+	    	for (ex in exclude) {
+	    		if (blog['prettyname'].indexOf(ex) == 0) {
+					match = false
+                }
+            }
+        }
     	if (match) {
     		if (c >= offset) {
     			blogs.push(blog)
     		}
     		c += 1
     		if (blogs.length >= limit) {
-    			console.log("limit done")
 				return res.status(200).end(JSON.stringify(blogs))
     		}
     	}

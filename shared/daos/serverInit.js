@@ -21,6 +21,23 @@ function generate_content_map(env, blog, content_map) {
   })
 }
 
+export function loadProducts(env, products) {
+  console.log("loadProducts")
+  var uri = "https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + env + "/products"
+  console.log(uri)
+  axios
+    .get(uri)
+    .then(function(result) {
+      console.log("done")
+      var items = result.data.Items
+      products['items'] = items
+      console.log("done2")
+    })
+    .catch((err) => {
+      console.log("Could not load prodcuts")
+    })      
+
+}
 export function loadBlogs(env, blogmetadata_map, title_map, content_map) {
   var uri = "https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + env + "/blogs?env=" + env
   axios
