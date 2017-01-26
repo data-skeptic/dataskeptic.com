@@ -62,7 +62,7 @@ export function loadBlogs(env, blogmetadata_map, title_map, content_map) {
   })
 }
 
-export function loadEpisodes(env, feed_uri, episodes_map) {
+export function loadEpisodes(env, feed_uri, episodes_map, episodes_list) {
   axios
     .get(feed_uri)
     .then(function(result) {
@@ -72,13 +72,19 @@ export function loadEpisodes(env, feed_uri, episodes_map) {
       parser.parseString(xml, function(err,rss) {
         var items = rss["rss"]["channel"][0]["item"]
         var episodes = convert_items_to_json(items)
+        var list = []
         for (var i=0; i < episodes.length; i++) {
           var episode = episodes[i]
           episodes_map[episode.guid] = episode
           if (i == 0) {
             episodes_map["latest"] = episode
           }
+          list.push(episode.guid)
         }
+        episodes_list.splice(0, episodes_list.length)
+        for (var i=0; i < list.length; i++) {
+          episodes_list.push(list[i])
+        }        
         console.log("Loaded all episodes into map")
     })
   })

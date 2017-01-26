@@ -1,16 +1,22 @@
 module.exports = {
-  get_episodes: function(req, res, episodes_map, exclude=['/episodes', '/transcripts']) {
+  get_episodes: function(req, res, episodes_map, episodes_list, exclude=['/episodes', '/transcripts']) {
   	var episodes = []
     var query = req.query
     var url = req.url
-    var offset = query['offset'] || 0
-    var limit = query['limit'] || 10
+    var offset = parseInt(query['offset']) || 0
+    var limit = parseInt(query['limit']) || 52
     var year = query['year'] || -1
-    var guids = Object.keys(episodes_map)
-    for (var i=0; i < guids.length; i++) {
-        var guid = guids[i]
+    var s = limit
+    for (var i=offset; i < episodes_list.length && s > 0; i++) {
+        var guid = episodes_list[i]
         var episode = episodes_map[guid]
+        console.log(typeof(episode.pubDate))
+        var pd = new Date(episode.pubDate)
+        var eyear = pd.getYear()+1900
+        if (year == -1 || eyear == year) {
+          episodes.push(episode)
+        }
     }
-	return res.status(200).end(JSON.stringify(episodes))
+  	return res.status(200).end(JSON.stringify(episodes))
   }
 }
