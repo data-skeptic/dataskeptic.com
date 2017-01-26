@@ -63,10 +63,11 @@ var title_map = {}         // `uri`             -> <title>
 var content_map = {}       // `uri`             -? {s3 blog content}
 var blogmetadata_map = {}  // `uri`             -> {blog}
 var episodes_map = {}      // `guid` | 'latest' -> {episode}
+var episodes_list = []     // guids
 var products = {}
 
 loadBlogs(env, blogmetadata_map, title_map, content_map)
-loadEpisodes(env, feed_uri, episodes_map)
+loadEpisodes(env, feed_uri, episodes_map, episodes_list)
 loadProducts(env, products)
 
 setInterval(function() {
@@ -76,10 +77,11 @@ setInterval(function() {
   var blogmetadata_map = global.blogmetadata_map
   var content_map = global.content_map
   var episodes_map = global.episodes_map
+  var episodes_list = global.episodes_list
   var products = global.products
   var title_map = global.title_map
   loadBlogs(env, blogmetadata_map, title_map, content_map)
-  loadEpisodes(env, feed_uri, episodes_map)
+  loadEpisodes(env, feed_uri, episodes_map, episodes_list)
   loadProducts(env, products)
 }, 5 * 60 * 1000)
 
@@ -88,6 +90,7 @@ global.title_map        = title_map
 global.content_map      = content_map
 global.blogmetadata_map = blogmetadata_map
 global.episodes_map     = episodes_map
+global.episodes_list    = episodes_list
 global.products         = products
 
 if (process.env.NODE_ENV == 'production') {
@@ -171,7 +174,7 @@ function api_router(req, res) {
     return true
   }
   else if (req.url.indexOf('/api/episodes/list') == 0) {
-    get_episodes(req, res, episodes_map)
+    get_episodes(req, res, episodes_map, episodes_list)
     return true
   }
   return false
