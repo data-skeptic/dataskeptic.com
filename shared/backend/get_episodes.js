@@ -10,11 +10,11 @@ module.exports = {
     for (var i=offset; i < episodes_list.length && s > 0; i++) {
         var guid = episodes_list[i]
         var episode = episodes_map[guid]
-        console.log(typeof(episode.pubDate))
         var pd = new Date(episode.pubDate)
         var eyear = pd.getYear()+1900
         if (year == -1 || eyear == year) {
           episodes.push(episode)
+          s -= 1
         }
     }
   	return res.status(200).end(JSON.stringify(episodes))
