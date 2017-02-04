@@ -202,8 +202,17 @@ function inject_years(store, my_cache) {
 }
 
 function inject_homepage(store, my_cache, pathname) {
-  // latest episode
-  // latest blog
+  console.log("inject_homepage")
+  var blog_metadata = my_cache.blogmetadata_map["latest"]
+  var pn = blog_metadata.prettyname
+  var blog_page = pn.substring('/blog'.length, pn.length)
+  var content = my_cache.content_map[pn]
+  if (content == undefined) {
+    content = ""
+  }
+  install_blog(store, blog_metadata, content)
+  var episode = my_cache.episodes_map["latest"]
+  install_episode(store, episode)
 }
 
 function inject_products(store, my_cache, pathname) {
@@ -214,6 +223,23 @@ function inject_products(store, my_cache, pathname) {
 function inject_podcast(store, my_cache, pathname) {
   var episodes = get_podcasts_from_cache(my_cache, pathname)
   store.dispatch({type: "ADD_EPISODES", payload: episodes})
+}
+
+function install_blog(store, blog_metadata, content) {
+  var author = blog_metadata['author'].toLowerCase()
+  var contributors = get_contributors()
+  var contributor = contributors[author]
+  var loaded = 1
+  var blog = blog_metadata
+  var pathname = "/blog" + blog.prettyname
+  var blog_focus = {blog, loaded, content, pathname, contributor}
+  store.dispatch({type: "SET_FOCUS_BLOG", payload: {blog_focus} })
+  store.dispatch({type: "ADD_BLOG_CONTENT", payload: {content, blog} })
+  console.log("install complete")
+}
+
+function install_episode(store, episode) {
+  store.dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
 }
 
 function inject_blog(store, my_cache, pathname) {
@@ -228,13 +254,7 @@ function inject_blog(store, my_cache, pathname) {
     var dispatch = store.dispatch
     var blogs = get_blogs_list(dispatch, pathname)
   } else {
-    var author = blog_metadata['author'].toLowerCase()
-    var contributors = get_contributors()
-    var contributor = contributors[author]
-    var loaded = 1
-    var blog = blog_metadata
-    var blog_focus = {blog, loaded, content, pathname, contributor}
-    store.dispatch({type: "SET_FOCUS_BLOG", payload: {blog_focus} })
+    install_blog(store, blog_metadata, content)
   }
 }
 
@@ -319,6 +339,7 @@ app.use( (req, res) => {
         </Provider>
       );
 
+      var title = "Data Skeptic"
       var pathname = location.pathname.substring('/blog'.length, location.pathname.length)
       var alt_title = my_cache.title_map[pathname]
       if (alt_title != undefined) {

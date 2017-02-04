@@ -11,20 +11,9 @@ class LatestBlogCard extends React.Component {
 	}
 
 	render() {
-		var oblogs = this.props.blogs.toJS()
 		var osite = this.props.site.toJS()
-		var blogs = oblogs.blogs
-		var i=0
-		var blog = undefined
-		while (i < blogs.length) {
-			var b = blogs[i]
-			var pn = b.prettyname
-			if (pn.indexOf("/episodes/") == -1 && pn.indexOf("/transcripts/") == -1) {
-				blog = b
-				i = blogs.length
-			}
-			i++
-		}
+		var blog = this.props.blog
+		console.log(this.props)
 		if (blog == undefined) {
 			return <Loading />			
 		}

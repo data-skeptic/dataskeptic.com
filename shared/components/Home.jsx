@@ -12,6 +12,15 @@ import EpisodeCard from "./EpisodeCard"
 import LatestBlogCard from "./LatestBlogCard"
 import LatestEpisodePlayer from "./LatestEpisodePlayer"
 
+/*
+                <div className="card">
+                  <EpisodeCard id="old_episode" key="old_episode" episode={old_episode} title="From the archives" />
+                </div>
+                <div className="card">
+                  <EpisodeCard id="latest_episode" key="latest_episode" episode={episode} title="Latest episode" />
+                </div>
+*/
+
 class Home extends Component {
   render() {
     var oepisodes = this.props.episodes.toJS()
@@ -28,7 +37,11 @@ class Home extends Component {
       autoplaySpeed: 10000,
       pauseOnHover: 1
     };
-    var episode = undefined
+    var episode = oepisodes.focus_episode
+    var blog = oblogs.focus_blog
+    console.log("home blog")
+    console.log(blog)
+    /*
     var old_episode = undefined
     var episodes = oepisodes.episodes
     if (episodes.length > 0) {
@@ -39,6 +52,7 @@ class Home extends Component {
       }
       old_episode = episodes[i]
     }
+    */
     return (
       <div className="center">
         <div className="row">
@@ -52,16 +66,10 @@ class Home extends Component {
             <div className="carousel">
               <Slider {...settings}>
                 <div className="card">
-                  <LatestBlogCard />
-                </div>
-                <div className="card">
-                  <EpisodeCard id="latest_episode" key="latest_episode" episode={episode} title="Latest episode" />
+                  <LatestBlogCard blog={blog} />
                 </div>
                 <div className="card">
                   <AdvertiserCard />
-                </div>
-                <div className="card">
-                  <EpisodeCard id="old_episode" key="old_episode" episode={old_episode} title="From the archives" />
                 </div>
                 <div className="card">
                   <SocialMediaCard />

@@ -35,11 +35,12 @@ export default function blogsReducer(state = defaultState, action) {
       nstate.blog_focus = blog_focus
       break
     case 'REQUEST_INJECT_BLOG':
-
       var i = 0
       nstate.blog_focus.loaded = 0        
       while (i < nstate.blogs.length) {
         var b = nstate.blogs[i]
+        console.log("b")
+        console.log(b)
         if (b.uri.indexOf('/episodes/') == -1 && b.uri.indexOf('/transcripts/') == -1) {
           nstate.blog_focus.blog = b
           nstate.blog_focus.loaded = 1

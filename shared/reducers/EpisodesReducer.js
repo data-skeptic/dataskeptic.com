@@ -18,6 +18,10 @@ export default function episodesReducer(state = defaultState, action) {
 		case 'SET_YEARS':
 			nstate.years = action.payload
 			break;
+		case 'SET_FOCUS_EPISODE':
+			nstate.focus_episode.episode = action.payload
+			nstate.focus_episode.loaded = 1
+			break;
 	}
 	return Immutable.fromJS(nstate)
 }
