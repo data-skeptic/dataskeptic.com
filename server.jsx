@@ -60,43 +60,36 @@ if (process.env.NODE_ENV !== 'production') {
 }
 console.log("Environment: ", env)
 
-var title_map = {}         // `uri`             -> <title>
-var content_map = {}       // `uri`             -? {s3 blog content}
-var blogmetadata_map = {}  // `uri`             -> {blog}
-var episodes_map = {}      // `guid` | 'latest' -> {episode}
-var episodes_list = []     // guids
-var products = {}
+var my_cache = {
+  title_map : {}         // `uri`             -> <title>
+, content_map : {}       // `uri`             -? {s3 blog content}
+, blogmetadata_map : {}  // `uri`             -> {blog}
+, folders : []
+, episodes_map : {}      // `guid` | 'latest' -> {episode}
+, episodes_list : []     // guids
+, products : {}
+}
 
 const reducer  = combineReducers(reducers);
 const store    = applyMiddleware(promiseMiddleware)(createStore)(reducer);
 const initialState = store.getState()
 
-loadBlogs(store, env, blogmetadata_map, title_map, content_map)
-loadEpisodes(env, feed_uri, episodes_map, episodes_list)
-loadProducts(env, products)
+loadBlogs(store, env, my_cache)
+loadEpisodes(env, feed_uri, my_cache)
+loadProducts(env, my_cache)
 
 setInterval(function() {
   console.log("---[Refreshing cache]------------------")
   console.log(process.memoryUsage())
   var env = global.env
-  var blogmetadata_map = global.blogmetadata_map
-  var content_map = global.content_map
-  var episodes_map = global.episodes_map
-  var episodes_list = global.episodes_list
-  var products = global.products
-  var title_map = global.title_map
-  loadBlogs(store, env, blogmetadata_map, title_map, content_map)
-  loadEpisodes(env, feed_uri, episodes_map, episodes_list)
-  loadProducts(env, products)
+  var my_cache = global.my_cache
+  loadBlogs(store, env, my_cache)
+  loadEpisodes(env, feed_uri, my_cache)
+  loadProducts(env, my_cache)
 }, 5 * 60 * 1000)
 
 global.env              = env
-global.title_map        = title_map
-global.content_map      = content_map
-global.blogmetadata_map = blogmetadata_map
-global.episodes_map     = episodes_map
-global.episodes_list    = episodes_list
-global.products         = products
+global.my_cache         = my_cache
 
 if (process.env.NODE_ENV == 'production') {
   function shouldCompress (req, res) {
@@ -166,39 +159,62 @@ function api_router(req, res) {
     related_content(req, res)
     return true
   }
+  else if (req.url == '/api/blog/categories') {
+    var folders = my_cache.folders
+    return res.status(200).end(JSON.stringify(folders))
+  }
   else if (req.url.indexOf('/api/blog') == 0) {
-    get_blogs(req, res, blogmetadata_map)
+    get_blogs(req, res, my_cache.blogmetadata_map)
     return true
   }
   else if (req.url.indexOf('/api/store/membership/list') == 0) {
-    get_products(req, res, products['items'])
+    get_products(req, res, my_cache.products['items'])
     return true
   }
   else if (req.url.indexOf('/api/store/misc/list') == 0) {
-    get_products(req, res, products['items'])
+    get_products(req, res, my_cache.products['items'])
     return true
   }
   else if (req.url.indexOf('/api/episodes/list') == 0) {
-    get_episodes(req, res, episodes_map, episodes_list)
+    get_episodes(req, res, my_cache.episodes_map, my_cache.episodes_list)
     return true
   }
   return false
 }
 
-function inject_blog(store, initialState, blog, content, pathname, contributor) {
-  var oblogs = initialState.blogs.toJS()
-  var loaded = 1
-  var blog_focus = {blog, loaded, content, pathname, contributor}
-  oblogs.blog_focus = blog_focus
-  initialState.blogs = Immutable.fromJS(oblogs)
-  store.dispatch({type: "SET_FOCUS_BLOG", payload: {blog_focus} })
-  return initialState
+function inject_folders(store, my_cache) {
+  var folders = my_cache.folders
+  store.dispatch({type: "ADD_FOLDERS", payload: folders })
 }
 
+function inject_blog(store, my_cache, pathname) {
+  var blog_page = pathname.substring('/blog'.length, pathname.length)
+  var content = my_cache.content_map[blog_page]
+  if (content == undefined) {
+    content = ""
+  }
+  var blog_metadata = my_cache.blogmetadata_map[blog_page]
+  if (blog_metadata == undefined) {
+    blog_metadata = {}
+  } else {
+    var author = blog_metadata['author'].toLowerCase()
+    var contributors = get_contributors()
+    var contributor = contributors[author]
+    var loaded = 1
+    var blog = blog_metadata
+    var blog_focus = {blog, loaded, content, pathname, contributor}
+    store.dispatch({type: "SET_FOCUS_BLOG", payload: {blog_focus} })
+  }
+}
+
+function updateState(store, pathname) {
+  inject_folders(store, my_cache)
+  if (pathname.indexOf('/blog/') == 0) {
+    inject_blog(store, my_cache, pathname)
+  }
+}
 
 app.use( (req, res) => {
-  const store    = applyMiddleware(promiseMiddleware)(createStore)(reducer);
-  const initialState = store.getState()
   if (req.url == '/favicon.ico') {
     return res.redirect(301, 'https://s3.amazonaws.com/dataskeptic.com/favicon.ico')    
   }
@@ -253,37 +269,8 @@ app.use( (req, res) => {
     }
 
     function renderView() {
-      var pathname = location.pathname.substring('/blog'.length, location.pathname.length)
-      var content = content_map[pathname]
-      var dispatch = store.dispatch
-      if (content == undefined) {
-        content = ""
-      }
-
-      var blog_page = pathname
-      if (pathname == "" || pathname == "/") {
-        blog_page = "latest"
-      }
-      var blog_metadata = blogmetadata_map[blog_page]
-      var guid = ""
-      var updatedState = initialState
-      if (blog_metadata == undefined) {
-        blog_metadata = {}
-      } else {
-        var author = blog_metadata['author'].toLowerCase()
-        var contributors = get_contributors()
-        var contributor = contributors[author]
-        updatedState = inject_blog(store, initialState, blog_metadata, content, location.pathname, contributor)
-        guid = blog_metadata.guid
-      }
-
-      if (pathname == "" || pathname == "/") {
-        guid = "latest"
-      }
-      var episode_metadata = episodes_map[guid]
-      if (episode_metadata == undefined) {
-        episode_metadata = {}
-      }
+      const store = applyMiddleware(promiseMiddleware)(createStore)(reducer)
+      updateState(store, location.pathname)
 
       const InitialView = (
         <Provider store={store}>
@@ -291,9 +278,8 @@ app.use( (req, res) => {
         </Provider>
       );
 
-      var osite     = initialState.site.toJS()
-      var title = osite.title + ":" + location.pathname
-      var alt_title = title_map[pathname]
+      var pathname = location.pathname.substring('/blog'.length, location.pathname.length)
+      var alt_title = my_cache.title_map[pathname]
       if (alt_title != undefined) {
         title = alt_title
       }
@@ -301,10 +287,11 @@ app.use( (req, res) => {
       const componentHTML = renderToString(InitialView)
 
       var injects = {
-        "react-view"                : componentHTML
+        "react-view": componentHTML
       }
 
-      const HTML = getContentWrapper(title, updatedState, injects)
+      const state = store.getState()
+      const HTML = getContentWrapper(title, state, injects)
       return HTML;
     }
 

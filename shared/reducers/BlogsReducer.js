@@ -107,7 +107,11 @@ export default function blogsReducer(state = defaultState, action) {
             .catch(function(err) {
               console.log(err)
             })
-      break    
+      break   
+    case 'ADD_FOLDERS':
+      console.log("Setting folders")
+      nstate.folders = action.payload 
+      break
     case 'ADD_BLOGS':
   	  nstate.blogs = action.payload
       for (var i=0; i < nstate.blogs.length; i++) {
@@ -125,7 +129,7 @@ export default function blogsReducer(state = defaultState, action) {
       nstate.blog_focus.loaded = -1
       break
     case 'SET_FOLDERS':
-      nstate.folders = action.payload
+      nstate.folders = action.payload.folders
       break
   }
   return Immutable.fromJS(nstate)
