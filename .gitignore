@@ -42,3 +42,6 @@ jspm_packages
 
 js/scripts.min.js
 
+api/place_tshirt_order.py
+*.json
+*.csv

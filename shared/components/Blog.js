@@ -3,7 +3,6 @@ import ReactDOM from "react-dom"
 import { connect } from 'react-redux'
 
 import NotFound from './NotFound'
-import BlogArticle from "./BlogArticle"
 import BlogList from "./BlogList"
 import BlogNav from "./BlogNav"
 import BlogItem from "./BlogItem"

@@ -1,4 +1,3 @@
-import axios from "axios"
 import React from "react"
 import ReactDOM from "react-dom"
 import { connect } from 'react-redux'
@@ -10,10 +9,9 @@ class BlogAuthorTop extends React.Component {
 	}
 	
 	render() {
-		var osite = this.props.site.toJS()
-		var author = this.props.author || ""
-		var contributor = osite.contributors[author]
-		if (author == "" || contributor == undefined) {
+		var oblogs = this.props.blogs.toJS()
+		var contributor = oblogs.blog_focus.contributor
+		if (contributor == undefined) {
 			return <div></div>
 		}
 		var twitterimg = <span></span>
@@ -40,4 +38,4 @@ class BlogAuthorTop extends React.Component {
 		)
 	}
 }
-export default connect(state => ({ site: state.site }))(BlogAuthorTop)
+export default connect(state => ({ blogs: state.blogs }))(BlogAuthorTop)

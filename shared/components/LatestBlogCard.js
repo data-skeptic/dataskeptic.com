@@ -12,6 +12,7 @@ class LatestBlogCard extends React.Component {
 
 	render() {
 		var oblogs = this.props.blogs.toJS()
+		var osite = this.props.site.toJS()
 		var blogs = oblogs.blogs
 		var i=0
 		var blog = undefined
@@ -27,6 +28,8 @@ class LatestBlogCard extends React.Component {
 		if (blog == undefined) {
 			return <Loading />			
 		}
+		var author = blog.author || ""
+		var contributor = osite.contributors[author]
         var monthNames = [
           "January", "February", "March",
           "April", "May", "June", "July",
@@ -56,8 +59,16 @@ class LatestBlogCard extends React.Component {
 			<div className="home-latest-blog-card">
 				<div className="home-latest-blog-top"><p>From the blog:</p></div>
 				<div className="home-latest-blog-card-container">
-					<div className="blog-date">{dstr}</div>
-					<Link className="blog-title" to={pn}>{blog.title}</Link>
+					<div className="home-latest-blog-header">
+						<div className="home-latest-blog-header-left">
+							<img className="home-latest-blog-img" src={contributor.img} />
+						</div>
+						<div className="home-latest-blog-header-right">
+							<Link className="blog-title" to={pn}>{blog.title}</Link>
+							<div className="blog-author">{contributor.prettyname}</div>
+							<div className="blog-date">{dstr}</div>
+						</div>
+					</div>
 					<p>{blog.desc}</p>
 					<p> ...<Link to={pn}>[more]</Link></p>
 				</div>
@@ -66,4 +77,4 @@ class LatestBlogCard extends React.Component {
 	}
 }
 
-export default connect(state => ({ blogs: state.blogs }))(LatestBlogCard)
+export default connect(state => ({ site: state.site, blogs: state.blogs }))(LatestBlogCard)

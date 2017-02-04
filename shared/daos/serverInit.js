@@ -38,12 +38,13 @@ export function loadProducts(env, products) {
     })      
 
 }
-export function loadBlogs(env, blogmetadata_map, title_map, content_map) {
+export function loadBlogs(store, env, blogmetadata_map, title_map, content_map) {
   var uri = "https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + env + "/blogs?env=" + env
   axios
   .get(uri)
   .then(function(result) {
     var blogs = result.data
+    store.dispatch({type: "ADD_BLOGS", payload: blogs })
     for (var i=0; i < blogs.length; i++) {
       var blog = blogs[i]
       var pn = blog['prettyname']

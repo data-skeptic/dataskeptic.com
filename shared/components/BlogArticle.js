@@ -33,13 +33,18 @@ class BlogArticle extends React.Component {
 	}
 
 	componentWillMount() {
+		var oblogs = this.props.blogs.toJS()
+		var blog_focus = oblogs.blog_focus
 		var dispatch = this.props.dispatch
 		var title = this.props.title
 		if (title != undefined) {
 		    dispatch({type: "SET_TITLE", payload: title })
 		}
 		var pathname = this.getPN()
-		dispatch({type: "LOAD_BLOG_AND_CONTENT", payload: {pathname, dispatch} })
+		if (blog_focus.pathname != pathname) {
+			console.log("Need to retrieve blog")
+			//dispatch({type: "LOAD_BLOG_AND_CONTENT", payload: {pathname, dispatch} })
+		}
 		dispatch({type: "LOAD_RELATED", payload: {dispatch, pathname}})
 	}
 
@@ -115,7 +120,7 @@ class BlogArticle extends React.Component {
 			} else {
 				content = "<div id='blog-content'><p>Loading....</p></div>"
 			}
-		} else if (blog_focus.loaded < 1) {
+		} else if (blog_focus.content == "") {
 				content = "<div id='blog-content'><p>Loading...</p></div>"
 		} else {
 			content = "<div id='blog-content'>" + content + "</div>"

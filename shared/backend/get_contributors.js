@@ -1,5 +1,5 @@
 module.exports = {
-  get_contributors: function(req, res) {
+  get_contributors: function() {
 	var resp = {
 		"kyle": {
 			"prettyname": "Kyle Polich",
@@ -39,6 +39,6 @@ module.exports = {
 			"sort-rank": 2
 		}
 	}
-	return res.status(200).end(JSON.stringify(resp))
+	return resp
   }
 }

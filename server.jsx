@@ -20,6 +20,7 @@ import express                   from 'express';
 import FileStreamRotator         from 'file-stream-rotator'
 import fs                        from 'fs'
 import createLocation            from 'history/lib/createLocation';
+import Immutable                 from 'immutable'
 import promiseMiddleware         from 'lib/promiseMiddleware';
 import fetchComponentData        from 'lib/fetchComponentData';
 import morgan                    from 'morgan'
@@ -66,7 +67,11 @@ var episodes_map = {}      // `guid` | 'latest' -> {episode}
 var episodes_list = []     // guids
 var products = {}
 
-loadBlogs(env, blogmetadata_map, title_map, content_map)
+const reducer  = combineReducers(reducers);
+const store    = applyMiddleware(promiseMiddleware)(createStore)(reducer);
+const initialState = store.getState()
+
+loadBlogs(store, env, blogmetadata_map, title_map, content_map)
 loadEpisodes(env, feed_uri, episodes_map, episodes_list)
 loadProducts(env, products)
 
@@ -80,7 +85,7 @@ setInterval(function() {
   var episodes_list = global.episodes_list
   var products = global.products
   var title_map = global.title_map
-  loadBlogs(env, blogmetadata_map, title_map, content_map)
+  loadBlogs(store, env, blogmetadata_map, title_map, content_map)
   loadEpisodes(env, feed_uri, episodes_map, episodes_list)
   loadProducts(env, products)
 }, 5 * 60 * 1000)
@@ -154,8 +159,8 @@ function api_router(req, res) {
   }
   else if (req.url.indexOf('/api/contributors/list') == 0) {
     var req = req.body
-    get_contributors(req, res)
-    return true
+    var resp = get_contributors()
+    return res.status(200).end(JSON.stringify(resp))
   }
   else if (req.url.indexOf('/api/related') == 0) {
     related_content(req, res)
@@ -180,7 +185,23 @@ function api_router(req, res) {
   return false
 }
 
+function inject_blog(store, initialState, blog, content, pathname, contributor) {
+  var oblogs = initialState.blogs.toJS()
+  var loaded = 1
+  var blog_focus = {blog, loaded, content, pathname, contributor}
+  oblogs.blog_focus = blog_focus
+  initialState.blogs = Immutable.fromJS(oblogs)
+  store.dispatch({type: "SET_FOCUS_BLOG", payload: {blog_focus} })
+  return initialState
+}
+
+
 app.use( (req, res) => {
+  const store    = applyMiddleware(promiseMiddleware)(createStore)(reducer);
+  const initialState = store.getState()
+  if (req.url == '/favicon.ico') {
+    return res.redirect(301, 'https://s3.amazonaws.com/dataskeptic.com/favicon.ico')    
+  }
   if (req.url.indexOf('/src-') > 0) {
     var u = req.url
     var i = u.indexOf('/blog/') + '/blog'.length
@@ -193,7 +214,7 @@ app.use( (req, res) => {
       return res.redirect(301, 'https://' + hostname + redir)
     }
   }
-  if (req.url.indexOf('/api') == 0) {
+  else if (req.url.indexOf('/api') == 0) {
     var routed = api_router(req, res)
     if (routed) {
       return
@@ -210,14 +231,6 @@ app.use( (req, res) => {
   }
 
   const location = createLocation(req.url);
-  const reducer  = combineReducers(reducers);
-  const store    = applyMiddleware(promiseMiddleware)(createStore)(reducer);
-
-  const initialState = store.getState()
-
-  var oepisodes = initialState.episodes.toJS()
-  var oblogs    = initialState.blogs.toJS()
-  var osite     = initialState.site.toJS()
 
   match({ routes, location }, (err, redirectLocation, renderProps) => {
     if(err) {
@@ -241,14 +254,10 @@ app.use( (req, res) => {
 
     function renderView() {
       var pathname = location.pathname.substring('/blog'.length, location.pathname.length)
-      console.log("render: " + location.pathname)
       var content = content_map[pathname]
       var dispatch = store.dispatch
       if (content == undefined) {
         content = ""
-        //console.log(pathname + ": did not pull content from cache")
-      } else {
-        //console.log(pathname + ": pulled content from cache")
       }
 
       var blog_page = pathname
@@ -257,11 +266,14 @@ app.use( (req, res) => {
       }
       var blog_metadata = blogmetadata_map[blog_page]
       var guid = ""
+      var updatedState = initialState
       if (blog_metadata == undefined) {
         blog_metadata = {}
-        //console.log(pathname + ": did not pull blog metadata from cache")
       } else {
-        //console.log(pathname + ": pulled blog metadata from cache")
+        var author = blog_metadata['author'].toLowerCase()
+        var contributors = get_contributors()
+        var contributor = contributors[author]
+        updatedState = inject_blog(store, initialState, blog_metadata, content, location.pathname, contributor)
         guid = blog_metadata.guid
       }
 
@@ -271,9 +283,6 @@ app.use( (req, res) => {
       var episode_metadata = episodes_map[guid]
       if (episode_metadata == undefined) {
         episode_metadata = {}
-        //console.log(pathname + ": did not pull episode metadata from cache")
-      } else {
-        //console.log(pathname + ": pulled episode metadata from cache")
       }
 
       const InitialView = (
@@ -282,6 +291,7 @@ app.use( (req, res) => {
         </Provider>
       );
 
+      var osite     = initialState.site.toJS()
       var title = osite.title + ":" + location.pathname
       var alt_title = title_map[pathname]
       if (alt_title != undefined) {
@@ -291,13 +301,10 @@ app.use( (req, res) => {
       const componentHTML = renderToString(InitialView)
 
       var injects = {
-        "react-view"                : componentHTML,
-        "content-prefetch"          : content,
-        "blog-metadata-prefetch"    : JSON.stringify(blog_metadata),
-        "episode-metadata-prefetch" : JSON.stringify(episode_metadata)
+        "react-view"                : componentHTML
       }
 
-      const HTML = getContentWrapper(title, initialState, injects)
+      const HTML = getContentWrapper(title, updatedState, injects)
       return HTML;
     }
 

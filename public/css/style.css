@@ -423,6 +423,13 @@ ul.topnav li.right {float: right;}
 .home-player-card {
   text-align: center;
 }
+.advertiser-card {
+  text-align: center;
+  padding: 10px 10px 10px 10px;
+  font-size: 12pt;
+  height: 300px;
+}
+
 .home-player-title {
   font-size: 14pt;
 }
@@ -1143,6 +1150,18 @@ ul.topnav li.right {float: right;}
 .home-latest-blog-card {
   padding: 0px;
   height: 300px;
+}
+
+.home-latest-blog-header-left {
+  float: left;
+  padding-right: 10px;
+}
+.home-latest-blog-header-right {
+  height: 100px;
+}
+
+.home-latest-blog-img {
+  width: 100px;
 }
 
 .home-latest-blog-card-container {

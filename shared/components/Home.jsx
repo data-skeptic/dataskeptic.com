@@ -7,6 +7,7 @@ import Slider from "react-slick"
 import Episode from "./Episode"
 import MailingList from "./MailingList"
 import SocialMediaCard from "./SocialMediaCard"
+import AdvertiserCard from "./AdvertiserCard"
 import EpisodeCard from "./EpisodeCard"
 import LatestBlogCard from "./LatestBlogCard"
 import LatestEpisodePlayer from "./LatestEpisodePlayer"
@@ -42,7 +43,7 @@ class Home extends Component {
       <div className="center">
         <div className="row">
           <div className="col-sm-12 home-statement">
-            <p>Data Skeptic is the weekly podcast that is skeptical of and with data.  We explain the methods and algorithms that power our world in an accessible manner through our short mini-episode discussions and our longer interviews with experts in the field.</p>
+            <p>Data Skeptic is your source for a perseptive of scientific skepticism on topics in statistics, machine learning, big data, artificial intelligence, and data science.  Our weekly podcast and blog bring you stories and tutorials to help understand our data-driven world.</p>
             <p>To reach out to the podcast, please visit our <a href="/contact-us">Contact Us</a> page.</p>
           </div>
         </div>
@@ -55,6 +56,9 @@ class Home extends Component {
                 </div>
                 <div className="card">
                   <EpisodeCard id="latest_episode" key="latest_episode" episode={episode} title="Latest episode" />
+                </div>
+                <div className="card">
+                  <AdvertiserCard />
                 </div>
                 <div className="card">
                   <EpisodeCard id="old_episode" key="old_episode" episode={old_episode} title="From the archives" />
