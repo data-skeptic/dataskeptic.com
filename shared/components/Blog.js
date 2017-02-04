@@ -10,14 +10,24 @@ import Error from "./Error"
 import Loading from "./Loading"
 import transform_pathname from "../utils/transform_pathname"
 
+import {get_blogs_list} from '../utils/redux_loader'
+
 class Blog extends React.Component {
 	constructor(props) {
 		super(props)
 	}
 
 	componentWillMount() {
-		var dispatch = this.props.dispatch
-		dispatch({type: "CLEAR_FOCUS_BLOG", payload: {} })
+		var location = this.props.location
+		if (location != undefined) {
+			var pathname = location.pathname
+			console.log(pathname)
+			var dispatch = this.props.dispatch
+			get_blogs_list(dispatch, pathname)
+		}
+		else {
+			console.log("location is not defined")
+		}
 	}
 
 	remove_type(typ, arr) {

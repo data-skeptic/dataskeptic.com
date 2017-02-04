@@ -636,13 +636,6 @@ ul.topnav li.right {float: right;}
   border-style: solid;
 }
 
-.blog-title {
-  font-family: .SFNSDisplay;
-  font-size: 26px;
-  color: #3A3B3B;
-  letter-spacing: 0;
-}
-
 .blog-transcript-link {
   background-color: #eee;
   border-width: 1px;
@@ -1157,7 +1150,16 @@ ul.topnav li.right {float: right;}
   float: left;
   padding-right: 10px;
 }
+
+.blog-title {
+  font-family: .SFNSDisplay;
+  font-size: 16pt;
+  color: #3A3B3B;
+  letter-spacing: 0;
+}
+
 .home-latest-blog-header-right {
+  overflow-x: hidden;
   height: 100px;
 }
 

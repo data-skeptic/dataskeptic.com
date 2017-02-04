@@ -6,7 +6,17 @@ import Loading from './Loading'
 import Cart from './Cart'
 import StoreItem from './StoreItem'
 
+import {get_products} from '../utils/redux_loader'
+
 class Store extends React.Component {
+
+	componentWillMount() {
+		var oproducts = this.props.products.toJS()
+		if (oproducts.products.length == 0) {
+			get_products(this.props.dispatch)			
+		}
+	}
+
 	render() {
 		var oproducts = this.props.products.toJS()
 		var products_loaded = oproducts.products_loaded

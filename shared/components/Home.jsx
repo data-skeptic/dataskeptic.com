@@ -12,6 +12,8 @@ import EpisodeCard from "./EpisodeCard"
 import LatestBlogCard from "./LatestBlogCard"
 import LatestEpisodePlayer from "./LatestEpisodePlayer"
 
+import {get_homepage_content} from '../utils/redux_loader'
+
 /*
                 <div className="card">
                   <EpisodeCard id="old_episode" key="old_episode" episode={old_episode} title="From the archives" />
@@ -22,6 +24,12 @@ import LatestEpisodePlayer from "./LatestEpisodePlayer"
 */
 
 class Home extends Component {
+
+  componentWillMount() {
+      var dispatch = this.props.dispatch
+      get_homepage_content(dispatch)
+  }
+
   render() {
     var oepisodes = this.props.episodes.toJS()
     var oblogs = this.props.blogs.toJS()
@@ -38,9 +46,7 @@ class Home extends Component {
       pauseOnHover: 1
     };
     var episode = oepisodes.focus_episode
-    var blog = oblogs.focus_blog
-    console.log("home blog")
-    console.log(blog)
+    var blog_focus = oblogs.blog_focus
     /*
     var old_episode = undefined
     var episodes = oepisodes.episodes
@@ -66,13 +72,13 @@ class Home extends Component {
             <div className="carousel">
               <Slider {...settings}>
                 <div className="card">
-                  <LatestBlogCard blog={blog} />
-                </div>
-                <div className="card">
                   <AdvertiserCard />
                 </div>
                 <div className="card">
                   <SocialMediaCard />
+                </div>
+                <div className="card">
+                  <LatestBlogCard blog={blog_focus.blog} contributor={blog_focus.contributor} />
                 </div>
               </Slider>
             </div>          

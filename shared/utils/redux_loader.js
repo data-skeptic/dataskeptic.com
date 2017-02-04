@@ -1,4 +1,5 @@
 import axios from "axios"
+import {get_contributors} from 'backend/get_contributors'
 
 export function get_folders(dispatch) {
 	var my_cache = global.my_cache
@@ -18,6 +19,68 @@ export function get_folders(dispatch) {
 				console.log(err)
 			})			
 	}
+}
+
+export function get_homepage_content(dispatch) {
+	var my_cache = global.my_cache
+	if (my_cache != undefined) {
+		var blog = my_cache.blogmetadata_map["latest"]
+		var pathname = blog.prettyname
+		var content = my_cache.content_map[pathname]
+		var episode = my_cache.episode_map["latest"]
+		var author = blog['author'].toLowerCase()
+		var contributors = get_contributors()
+		var contributor = contributors[author]
+		var loaded = 1
+		var blog_focus = {blog, loaded, content, pathname, contributor}
+		dispatch({type: "SET_FOCUS_BLOG", payload: {blog_focus} })
+		dispatch({type: "ADD_BLOG_CONTENT", payload: {content, blog} })
+		dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
+	} else {
+		console.log("Loading homepage content")
+		axios
+			.get("/api/blog?limit=1")
+	  		.then(function(result) {
+	  			var blogs = result["data"]
+	  			var blog = blogs[0]
+	  			var loaded = 1
+	  			var pathname = "/blog" + blog["prettyname"]
+				var author = blog['author'].toLowerCase()
+				var contributors = get_contributors()
+				var contributor = contributors[author]
+				var envv = blog["env"]
+				if (envv == "prod") {
+					envv = ""
+				} else {
+					envv += "."
+				}
+				var key = blog["rendered"]
+				var uri = "https://s3.amazonaws.com/" + envv + 'dataskeptic.com/' + key
+				axios.get(uri).then(function(result) {
+					var content = result.data
+					var blog_focus = {blog, loaded, content, pathname, contributor}
+					dispatch({type: "SET_FOCUS_BLOG", payload: {blog_focus} })
+					dispatch({type: "ADD_BLOG_CONTENT", payload: {content, blog} })
+				})
+				.catch((err) => {
+					console.log("Content cache error trying to store blog content")
+					console.log(err)
+				})
+			})
+			.catch((err) => {
+				console.log(err)
+			})
+		axios
+			.get("/api/episodes/list?limit=1")
+	  		.then(function(result) {
+	  			var episodes = result["data"]
+	  			var episode = episodes[0]
+				dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
+			})
+			.catch((err) => {
+				console.log(err)
+			})
+	}	
 }
 
 export function get_blogs_list(dispatch, pathname) {
@@ -40,10 +103,13 @@ export function get_blogs_list(dispatch, pathname) {
 		dispatch({type: "ADD_BLOGS", payload: blogs})
 	} else {
 		console.log("Getting blogs")
+		var url = "/api" + pathname
+		console.log(url)
 		axios
-			.get("/api/" + pathname)
+			.get(url)
 	  		.then(function(result) {
 	  			var blogs = result["data"]
+	  			console.log("here")
 				dispatch({type: "ADD_BLOGS", payload: blogs})
 			})
 			.catch((err) => {
@@ -62,8 +128,9 @@ export function get_products(dispatch) {
 		axios
 			.get("/api/store/list")
 	  		.then(function(result) {
-	  			var folders = result["data"]
-				dispatch({type: "ADD_FOLDERS", payload: folders})
+	  			var products = result["data"]["items"]
+	  			console.log(products)
+				dispatch({type: "ADD_PRODUCTS", payload: products})
 			})
 			.catch((err) => {
 				console.log(err)

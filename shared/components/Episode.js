@@ -26,6 +26,7 @@ class Episode extends React.Component {
 		if (i > 0) {
 			desc = desc.substring(0, i)
 		}
+		desc = desc.replace(/(<([^>]+)>)/ig, "")
 		var duration = ep.duration
 		var play_symb = <span>&#9658;</span>
 		if (oplayer.is_playing) {

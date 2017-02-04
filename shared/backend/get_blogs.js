@@ -16,27 +16,29 @@ module.exports = {
     var keys = Object.keys(blogmetadata_map)
     for (var i=0; i < keys.length; i++) {
     	var key = keys[i]
-    	var blog = blogmetadata_map[key]
-    	var match = false
-    	if (blog['prettyname'].indexOf(url) == 0) {
-    		match = true
-    	}
-    	if (url == '/') {
-	    	for (ex in exclude) {
-	    		if (blog['prettyname'].indexOf(ex) == 0) {
-					match = false
+        if (key != "latest") {
+            var blog = blogmetadata_map[key]
+            var match = false
+            if (blog['prettyname'].indexOf(url) == 0) {
+                match = true
+            }
+            if (url == '/') {
+                for (ex in exclude) {
+                    if (blog['prettyname'].indexOf(ex) == 0) {
+                        match = false
+                    }
+                }
+            }
+            if (match) {
+                if (c >= offset) {
+                    blogs.push(blog)
+                }
+                c += 1
+                if (blogs.length >= limit) {
+                    return res.status(200).end(JSON.stringify(blogs))
                 }
             }
         }
-    	if (match) {
-    		if (c >= offset) {
-    			blogs.push(blog)
-    		}
-    		c += 1
-    		if (blogs.length >= limit) {
-				return res.status(200).end(JSON.stringify(blogs))
-    		}
-    	}
     }
 	return res.status(200).end(JSON.stringify(blogs))
   }

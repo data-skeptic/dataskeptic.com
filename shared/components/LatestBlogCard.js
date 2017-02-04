@@ -13,12 +13,11 @@ class LatestBlogCard extends React.Component {
 	render() {
 		var osite = this.props.site.toJS()
 		var blog = this.props.blog
-		console.log(this.props)
+		var contributor = this.props.contributor
+		console.log(blog)
 		if (blog == undefined) {
 			return <Loading />			
 		}
-		var author = blog.author || ""
-		var contributor = osite.contributors[author]
         var monthNames = [
           "January", "February", "March",
           "April", "May", "June", "July",
@@ -27,6 +26,7 @@ class LatestBlogCard extends React.Component {
         ];
 		var dstr = ""
 		var pn = blog.prettyname
+		console.log(pn)
 		if (pn != undefined) {
 			if (pn[0] == "/") {
 				pn = pn.substring(1, pn.length)
@@ -44,6 +44,8 @@ class LatestBlogCard extends React.Component {
 			}
 			dstr = "2016-11-16"
 		}
+		console.log("d")
+		console.log(blog.desc)
 		return (
 			<div className="home-latest-blog-card">
 				<div className="home-latest-blog-top"><p>From the blog:</p></div>
