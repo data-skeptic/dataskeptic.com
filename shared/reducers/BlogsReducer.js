@@ -109,7 +109,6 @@ export default function blogsReducer(state = defaultState, action) {
             })
       break   
     case 'ADD_FOLDERS':
-      console.log("Setting folders")
       nstate.folders = action.payload 
       break
     case 'ADD_BLOGS':

@@ -10,7 +10,6 @@ export default function getProducts(store, env) {
 			var products = result.data.Items
 			if (products != undefined) {
 				store.dispatch({type: "ADD_PRODUCTS", payload: products })
-				store.dispatch({type: "SET_PRODUCTS_LOADED", payload: 1 })
 				console.log("Loaded products")
 			}
 		})

@@ -1,4 +1,5 @@
 module.exports = {
+    // deprecated
     get_products: function(req, res, products_list) {
         var url = req.url
         var typ = url.split('/')[3]

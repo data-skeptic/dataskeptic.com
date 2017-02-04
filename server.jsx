@@ -3,7 +3,6 @@ import axios                     from 'axios';
 import {get_blogs}               from 'backend/get_blogs'
 import {get_contributors}        from 'backend/get_contributors'
 import {get_episodes}            from 'backend/get_episodes'
-import {get_products}            from 'backend/get_products'
 import {join_slack}              from 'backend/join_slack'
 import {send_email}              from 'backend/send_email'
 import {order_create}            from 'backend/order_create'
@@ -35,6 +34,9 @@ import { createStore,
          combineReducers,
          applyMiddleware }       from 'redux';
 import getContentWrapper         from 'utils/content_wrapper';
+import { get_blogs_list,
+         get_podcasts_from_cache
+       }                         from 'utils/redux_loader';
 import redirects_map             from './redirects';
 
 const app = express()
@@ -167,13 +169,9 @@ function api_router(req, res) {
     get_blogs(req, res, my_cache.blogmetadata_map)
     return true
   }
-  else if (req.url.indexOf('/api/store/membership/list') == 0) {
-    get_products(req, res, my_cache.products['items'])
-    return true
-  }
-  else if (req.url.indexOf('/api/store/misc/list') == 0) {
-    get_products(req, res, my_cache.products['items'])
-    return true
+  else if (req.url.indexOf('/api/store/list') == 0) {
+    var products = my_cache.products
+    return res.status(200).end(JSON.stringify(products))
   }
   else if (req.url.indexOf('/api/episodes/list') == 0) {
     get_episodes(req, res, my_cache.episodes_map, my_cache.episodes_list)
@@ -187,6 +185,37 @@ function inject_folders(store, my_cache) {
   store.dispatch({type: "ADD_FOLDERS", payload: folders })
 }
 
+function inject_years(store, my_cache) {
+  var episodes_list = my_cache.episodes_list
+  var episodes_map = my_cache.episodes_map
+  var ymap = {}
+  for (var i=0; i < episodes_list.length; i++) {
+    var guid = episodes_list[i]
+    var episode = episodes_map[guid]
+    var pd = new Date(episode.pubDate)
+    var year = pd.getYear() + 1900
+    ymap[year] = 1
+  }
+  var years = Object.keys(ymap)
+  years = years.sort().reverse()
+  store.dispatch({type: "SET_YEARS", payload: years })
+}
+
+function inject_homepage(store, my_cache, pathname) {
+  // latest episode
+  // latest blog
+}
+
+function inject_products(store, my_cache, pathname) {
+  var products = my_cache.products['items']
+  store.dispatch({type: "ADD_PRODUCTS", payload: products})
+}
+
+function inject_podcast(store, my_cache, pathname) {
+  var episodes = get_podcasts_from_cache(my_cache, pathname)
+  store.dispatch({type: "ADD_EPISODES", payload: episodes})
+}
+
 function inject_blog(store, my_cache, pathname) {
   var blog_page = pathname.substring('/blog'.length, pathname.length)
   var content = my_cache.content_map[blog_page]
@@ -196,6 +225,8 @@ function inject_blog(store, my_cache, pathname) {
   var blog_metadata = my_cache.blogmetadata_map[blog_page]
   if (blog_metadata == undefined) {
     blog_metadata = {}
+    var dispatch = store.dispatch
+    var blogs = get_blogs_list(dispatch, pathname)
   } else {
     var author = blog_metadata['author'].toLowerCase()
     var contributors = get_contributors()
@@ -209,8 +240,18 @@ function inject_blog(store, my_cache, pathname) {
 
 function updateState(store, pathname) {
   inject_folders(store, my_cache)
-  if (pathname.indexOf('/blog/') == 0) {
+  inject_years(store, my_cache)
+  if (pathname == "" || pathname == "/") {
+    inject_homepage(store, my_cache, pathname)
+  }
+  if (pathname.indexOf('/blog') == 0) {
     inject_blog(store, my_cache, pathname)
+  }
+  else if (pathname == "/members" || pathname=="/store") {
+    inject_products(store, my_cache, pathname)
+  }
+  else if (pathname.indexOf("/podcast") == 0) {
+    inject_podcast(store, my_cache, pathname)
   }
 }
 

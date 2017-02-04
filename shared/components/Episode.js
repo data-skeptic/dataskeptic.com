@@ -46,9 +46,6 @@ class Episode extends React.Component {
 		var d = new Date(ep.pubDate)
 		var dstr = monthNames[d.getMonth()].toUpperCase() + " " + d.getDate() + ", " + (d.getYear()+1900)
 
-		var tmp = document.createElement("DIV");
-		tmp.innerHTML = desc;
-		desc = tmp.textContent || tmp.innerText || ""
 		var transcript = <div></div>
 		var tep = undefined
 		try {

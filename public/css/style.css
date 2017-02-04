@@ -466,8 +466,9 @@ ul.topnav li.right {float: right;}
 .episode-middle {
   max-height: 500px;
   margin-top: 10px;
-  overflow: scroll;
   font-size: 10pt;
+  padding: 0px;
+  padding-bottom: 10px;
 }
 
 .episode-button {
