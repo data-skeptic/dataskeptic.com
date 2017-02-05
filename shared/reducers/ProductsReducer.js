@@ -12,9 +12,7 @@ export default function productsReducer(state = defaultState, action) {
   switch(action.type) {
     case 'ADD_PRODUCTS':
       nstate.products = new Immutable.List(action.payload)
-      break;
-    case 'SET_PRODUCTS_LOADED':
-      nstate.products_loaded = action.payload
+      nstate.products_loaded = 1
       break;
     case 'FETCH_PRODUCTS_ERROR':
       nstate.products_loaded = -1

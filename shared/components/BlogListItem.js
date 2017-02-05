@@ -30,7 +30,7 @@ class BlogListItem extends Component {
             <div className="col-xs-12">
 	            <div className="blog-summary" key={blog.uri}>
                     <div className="blog-date">{datestr}</div>
-	                <Link className="blog-title" to={pn}>{blog.title}</Link>
+	                <a className="blog-title" href={pn}>{blog.title}</a>
 	                <p className="blog-desc">
                         {blog.desc}
                         ... <Link className="blog-view-more" to={pn}>View More &gt;</Link>

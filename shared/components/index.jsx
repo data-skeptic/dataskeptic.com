@@ -129,16 +129,6 @@ class MainView extends React.Component {
   }
   logPageView() {
     var logPageViewInner = this.logPageViewInner
-    /*
-    setTimeout(function() {
-      if (window != undefined) {
-        var page = window.location.pathname
-        logPageViewInner(page)        
-      } else {
-        console.log("window issue")
-      }
-    }, 50)
-    */
   }
   logPageViewInner(page) {
     console.log(["logPageViewInner", page])

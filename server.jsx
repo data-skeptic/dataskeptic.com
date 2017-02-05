@@ -3,7 +3,6 @@ import axios                     from 'axios';
 import {get_blogs}               from 'backend/get_blogs'
 import {get_contributors}        from 'backend/get_contributors'
 import {get_episodes}            from 'backend/get_episodes'
-import {get_products}            from 'backend/get_products'
 import {join_slack}              from 'backend/join_slack'
 import {send_email}              from 'backend/send_email'
 import {order_create}            from 'backend/order_create'
@@ -20,6 +19,7 @@ import express                   from 'express';
 import FileStreamRotator         from 'file-stream-rotator'
 import fs                        from 'fs'
 import createLocation            from 'history/lib/createLocation';
+import Immutable                 from 'immutable'
 import promiseMiddleware         from 'lib/promiseMiddleware';
 import fetchComponentData        from 'lib/fetchComponentData';
 import morgan                    from 'morgan'
@@ -34,6 +34,9 @@ import { createStore,
          combineReducers,
          applyMiddleware }       from 'redux';
 import getContentWrapper         from 'utils/content_wrapper';
+import { get_blogs_list,
+         get_podcasts_from_cache
+       }                         from 'utils/redux_loader';
 import redirects_map             from './redirects';
 
 const app = express()
@@ -51,7 +54,7 @@ app.use(morgan('combined', {stream: accessLogStream}))
 
 var env = "prod"
 
-aws.config.loadFromPath('awsconfig.json');
+//aws.config.loadFromPath('awsconfig.json');
 
 if (process.env.NODE_ENV !== 'production') {
   require('./webpack.dev').default(app);
@@ -59,39 +62,36 @@ if (process.env.NODE_ENV !== 'production') {
 }
 console.log("Environment: ", env)
 
-var title_map = {}         // `uri`             -> <title>
-var content_map = {}       // `uri`             -? {s3 blog content}
-var blogmetadata_map = {}  // `uri`             -> {blog}
-var episodes_map = {}      // `guid` | 'latest' -> {episode}
-var episodes_list = []     // guids
-var products = {}
+var my_cache = {
+  title_map : {}         // `uri`             -> <title>
+, content_map : {}       // `uri`             -? {s3 blog content}
+, blogmetadata_map : {}  // `uri`             -> {blog}
+, folders : []
+, episodes_map : {}      // `guid` | 'latest' -> {episode}
+, episodes_list : []     // guids
+, products : {}
+}
 
-loadBlogs(env, blogmetadata_map, title_map, content_map)
-loadEpisodes(env, feed_uri, episodes_map, episodes_list)
-loadProducts(env, products)
+const reducer  = combineReducers(reducers);
+const store    = applyMiddleware(promiseMiddleware)(createStore)(reducer);
+const initialState = store.getState()
+
+loadBlogs(store, env, my_cache)
+loadEpisodes(env, feed_uri, my_cache)
+loadProducts(env, my_cache)
 
 setInterval(function() {
   console.log("---[Refreshing cache]------------------")
   console.log(process.memoryUsage())
   var env = global.env
-  var blogmetadata_map = global.blogmetadata_map
-  var content_map = global.content_map
-  var episodes_map = global.episodes_map
-  var episodes_list = global.episodes_list
-  var products = global.products
-  var title_map = global.title_map
-  loadBlogs(env, blogmetadata_map, title_map, content_map)
-  loadEpisodes(env, feed_uri, episodes_map, episodes_list)
-  loadProducts(env, products)
+  var my_cache = global.my_cache
+  loadBlogs(store, env, my_cache)
+  loadEpisodes(env, feed_uri, my_cache)
+  loadProducts(env, my_cache)
 }, 5 * 60 * 1000)
 
 global.env              = env
-global.title_map        = title_map
-global.content_map      = content_map
-global.blogmetadata_map = blogmetadata_map
-global.episodes_map     = episodes_map
-global.episodes_list    = episodes_list
-global.products         = products
+global.my_cache         = my_cache
 
 if (process.env.NODE_ENV == 'production') {
   function shouldCompress (req, res) {
@@ -116,6 +116,7 @@ var stripe_key = "sk_test_81PZIV6UfHDlapSAkn18bmQi"
 var sp_key = "test_Z_gOWbE8iwjhXf4y4vqizQ"
 var slack_key = ""
 
+/*
 fs.open("config.json", "r", function(error, fd) {
   var buffer = new Buffer(10000)
   fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
@@ -129,6 +130,7 @@ fs.open("config.json", "r", function(error, fd) {
     fs.close(fd)
   })
 })
+*/
 
 function api_router(req, res) {
   if (req.url.indexOf('/api/slack/join') == 0) {
@@ -154,33 +156,131 @@ function api_router(req, res) {
   }
   else if (req.url.indexOf('/api/contributors/list') == 0) {
     var req = req.body
-    get_contributors(req, res)
-    return true
+    var resp = get_contributors()
+    return res.status(200).end(JSON.stringify(resp))
   }
   else if (req.url.indexOf('/api/related') == 0) {
     related_content(req, res)
     return true
   }
+  else if (req.url == '/api/blog/categories') {
+    var folders = my_cache.folders
+    return res.status(200).end(JSON.stringify(folders))
+  }
   else if (req.url.indexOf('/api/blog') == 0) {
-    get_blogs(req, res, blogmetadata_map)
+    get_blogs(req, res, my_cache.blogmetadata_map)
     return true
   }
-  else if (req.url.indexOf('/api/store/membership/list') == 0) {
-    get_products(req, res, products['items'])
-    return true
-  }
-  else if (req.url.indexOf('/api/store/misc/list') == 0) {
-    get_products(req, res, products['items'])
-    return true
+  else if (req.url.indexOf('/api/store/list') == 0) {
+    var products = my_cache.products
+    return res.status(200).end(JSON.stringify(products))
   }
   else if (req.url.indexOf('/api/episodes/list') == 0) {
-    get_episodes(req, res, episodes_map, episodes_list)
+    get_episodes(req, res, my_cache.episodes_map, my_cache.episodes_list)
     return true
   }
   return false
 }
 
+function inject_folders(store, my_cache) {
+  var folders = my_cache.folders
+  store.dispatch({type: "ADD_FOLDERS", payload: folders })
+}
+
+function inject_years(store, my_cache) {
+  var episodes_list = my_cache.episodes_list
+  var episodes_map = my_cache.episodes_map
+  var ymap = {}
+  for (var i=0; i < episodes_list.length; i++) {
+    var guid = episodes_list[i]
+    var episode = episodes_map[guid]
+    var pd = new Date(episode.pubDate)
+    var year = pd.getYear() + 1900
+    ymap[year] = 1
+  }
+  var years = Object.keys(ymap)
+  years = years.sort().reverse()
+  store.dispatch({type: "SET_YEARS", payload: years })
+}
+
+function inject_homepage(store, my_cache, pathname) {
+  var blog_metadata = my_cache.blogmetadata_map["latest"]
+  console.log(blog_metadata)
+  var pn = blog_metadata.prettyname
+  var blog_page = pn.substring('/blog'.length, pn.length)
+  var content = my_cache.content_map[pn]
+  if (content == undefined) {
+    content = ""
+  }
+  install_blog(store, blog_metadata, content)
+  var episode = my_cache.episodes_map["latest"]
+  install_episode(store, episode)
+}
+
+function inject_products(store, my_cache, pathname) {
+  var products = my_cache.products['items']
+  store.dispatch({type: "ADD_PRODUCTS", payload: products})
+}
+
+function inject_podcast(store, my_cache, pathname) {
+  var episodes = get_podcasts_from_cache(my_cache, pathname)
+  store.dispatch({type: "ADD_EPISODES", payload: episodes})
+}
+
+function install_blog(store, blog_metadata, content) {
+  var author = blog_metadata['author'].toLowerCase()
+  var contributors = get_contributors()
+  var contributor = contributors[author]
+  var loaded = 1
+  var blog = blog_metadata
+  var pathname = "/blog" + blog.prettyname
+  var blog_focus = {blog, loaded, content, pathname, contributor}
+  store.dispatch({type: "SET_FOCUS_BLOG", payload: {blog_focus} })
+  store.dispatch({type: "ADD_BLOG_CONTENT", payload: {content, blog} })
+}
+
+function install_episode(store, episode) {
+  store.dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
+}
+
+function inject_blog(store, my_cache, pathname) {
+  var blog_page = pathname.substring('/blog'.length, pathname.length)
+  var content = my_cache.content_map[blog_page]
+  if (content == undefined) {
+    content = ""
+  }
+  var blog_metadata = my_cache.blogmetadata_map[blog_page]
+  if (blog_metadata == undefined) {
+    blog_metadata = {}
+    var dispatch = store.dispatch
+    var blogs = get_blogs_list(dispatch, pathname)
+  } else {
+    install_blog(store, blog_metadata, content)
+  }
+}
+
+function updateState(store, pathname) {
+  var my_cache = global.my_cache
+  inject_folders(store, my_cache)
+  inject_years(store, my_cache)
+  if (pathname == "" || pathname == "/") {
+    inject_homepage(store, my_cache, pathname)
+  }
+  if (pathname.indexOf('/blog') == 0) {
+    inject_blog(store, my_cache, pathname)
+  }
+  else if (pathname == "/members" || pathname=="/store") {
+    inject_products(store, my_cache, pathname)
+  }
+  else if (pathname.indexOf("/podcast") == 0) {
+    inject_podcast(store, my_cache, pathname)
+  }
+}
+
 app.use( (req, res) => {
+  if (req.url == '/favicon.ico') {
+    return res.redirect(301, 'https://s3.amazonaws.com/dataskeptic.com/favicon.ico')    
+  }
   if (req.url.indexOf('/src-') > 0) {
     var u = req.url
     var i = u.indexOf('/blog/') + '/blog'.length
@@ -193,7 +293,7 @@ app.use( (req, res) => {
       return res.redirect(301, 'https://' + hostname + redir)
     }
   }
-  if (req.url.indexOf('/api') == 0) {
+  else if (req.url.indexOf('/api') == 0) {
     var routed = api_router(req, res)
     if (routed) {
       return
@@ -210,14 +310,6 @@ app.use( (req, res) => {
   }
 
   const location = createLocation(req.url);
-  const reducer  = combineReducers(reducers);
-  const store    = applyMiddleware(promiseMiddleware)(createStore)(reducer);
-
-  const initialState = store.getState()
-
-  var oepisodes = initialState.episodes.toJS()
-  var oblogs    = initialState.blogs.toJS()
-  var osite     = initialState.site.toJS()
 
   match({ routes, location }, (err, redirectLocation, renderProps) => {
     if(err) {
@@ -240,41 +332,8 @@ app.use( (req, res) => {
     }
 
     function renderView() {
-      var pathname = location.pathname.substring('/blog'.length, location.pathname.length)
-      console.log("render: " + location.pathname)
-      var content = content_map[pathname]
-      var dispatch = store.dispatch
-      if (content == undefined) {
-        content = ""
-        //console.log(pathname + ": did not pull content from cache")
-      } else {
-        //console.log(pathname + ": pulled content from cache")
-      }
-
-      var blog_page = pathname
-      if (pathname == "" || pathname == "/") {
-        blog_page = "latest"
-      }
-      var blog_metadata = blogmetadata_map[blog_page]
-      var guid = ""
-      if (blog_metadata == undefined) {
-        blog_metadata = {}
-        //console.log(pathname + ": did not pull blog metadata from cache")
-      } else {
-        //console.log(pathname + ": pulled blog metadata from cache")
-        guid = blog_metadata.guid
-      }
-
-      if (pathname == "" || pathname == "/") {
-        guid = "latest"
-      }
-      var episode_metadata = episodes_map[guid]
-      if (episode_metadata == undefined) {
-        episode_metadata = {}
-        //console.log(pathname + ": did not pull episode metadata from cache")
-      } else {
-        //console.log(pathname + ": pulled episode metadata from cache")
-      }
+      const store = applyMiddleware(promiseMiddleware)(createStore)(reducer)
+      updateState(store, location.pathname)
 
       const InitialView = (
         <Provider store={store}>
@@ -282,8 +341,9 @@ app.use( (req, res) => {
         </Provider>
       );
 
-      var title = osite.title + ":" + location.pathname
-      var alt_title = title_map[pathname]
+      var title = "Data Skeptic"
+      var pathname = location.pathname.substring('/blog'.length, location.pathname.length)
+      var alt_title = my_cache.title_map[pathname]
       if (alt_title != undefined) {
         title = alt_title
       }
@@ -291,13 +351,11 @@ app.use( (req, res) => {
       const componentHTML = renderToString(InitialView)
 
       var injects = {
-        "react-view"                : componentHTML,
-        "content-prefetch"          : content,
-        "blog-metadata-prefetch"    : JSON.stringify(blog_metadata),
-        "episode-metadata-prefetch" : JSON.stringify(episode_metadata)
+        "react-view": componentHTML
       }
 
-      const HTML = getContentWrapper(title, initialState, injects)
+      const state = store.getState()
+      const HTML = getContentWrapper(title, state, injects)
       return HTML;
     }
 

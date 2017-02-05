@@ -13,9 +13,12 @@ class EpisodeCard extends React.Component {
 		this.props.dispatch({type: "PLAY_EPISODE", payload: episode })		
 	}
 	strip(html) {
-	   var tmp = document.createElement("DIV");
-	   tmp.innerHTML = html;
-	   return tmp.textContent || tmp.innerText || "";
+		return html
+		/*
+		var tmp = document.createElement("DIV");
+		tmp.innerHTML = html;
+		return tmp.textContent || tmp.innerText || "";
+		*/
 	}
 	render() {
         var monthNames = [

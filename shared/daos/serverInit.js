@@ -1,8 +1,9 @@
 import xml2js from 'xml2js'
 import axios  from 'axios'
 import { convert_items_to_json } from 'daos/episodes'
+import { extractFolders } from '../utils/blog_utils'
 
-function generate_content_map(env, blog, content_map) {
+function generate_content_map(env, blog, my_cache) {
   var pn = blog['prettyname']
   var envv = env + "."
   if (env == "prod") {
@@ -13,7 +14,7 @@ function generate_content_map(env, blog, content_map) {
   var uri = "https://s3.amazonaws.com/" + envv + 'dataskeptic.com/' + key
   axios.get(uri).then(function(result) {
     var content = result.data
-    content_map[pn] = content
+    my_cache.content_map[pn] = content
   })
   .catch((err) => {
     console.log("Content cache error trying to store blog content")
@@ -21,39 +22,39 @@ function generate_content_map(env, blog, content_map) {
   })
 }
 
-export function loadProducts(env, products) {
-  console.log("loadProducts")
+export function loadProducts(env, my_cache) {
   var uri = "https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + env + "/products"
-  console.log(uri)
   axios
     .get(uri)
     .then(function(result) {
-      console.log("done")
       var items = result.data.Items
-      products['items'] = items
-      console.log("done2")
+      my_cache.products['items'] = items
     })
     .catch((err) => {
       console.log("Could not load prodcuts")
     })      
 
 }
-export function loadBlogs(env, blogmetadata_map, title_map, content_map) {
+export function loadBlogs(store, env, my_cache) {
   var uri = "https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + env + "/blogs?env=" + env
   axios
   .get(uri)
   .then(function(result) {
     var blogs = result.data
+    var folders = extractFolders(blogs)
+    my_cache.folders = folders
+    store.dispatch({type: "ADD_FOLDERS", payload: folders })
+    store.dispatch({type: "ADD_BLOGS", payload: blogs })
     for (var i=0; i < blogs.length; i++) {
       var blog = blogs[i]
       var pn = blog['prettyname']
-      blogmetadata_map[pn] = blog
+      my_cache.blogmetadata_map[pn] = blog
       if (i == 0) {
-        blogmetadata_map["latest"] = blog
+        my_cache.blogmetadata_map["latest"] = blog
       }
       var title = blog['title']
-      title_map[pn] = title
-      generate_content_map(env, blog, content_map)
+      my_cache.title_map[pn] = title
+      generate_content_map(env, blog, my_cache)
     }
     console.log("Loaded all blogs into content_map")
   })
@@ -62,7 +63,7 @@ export function loadBlogs(env, blogmetadata_map, title_map, content_map) {
   })
 }
 
-export function loadEpisodes(env, feed_uri, episodes_map, episodes_list) {
+export function loadEpisodes(env, feed_uri, my_cache) {
   axios
     .get(feed_uri)
     .then(function(result) {
@@ -75,16 +76,16 @@ export function loadEpisodes(env, feed_uri, episodes_map, episodes_list) {
         var list = []
         for (var i=0; i < episodes.length; i++) {
           var episode = episodes[i]
-          episodes_map[episode.guid] = episode
+          my_cache.episodes_map[episode.guid] = episode
           if (i == 0) {
-            episodes_map["latest"] = episode
+            my_cache.episodes_map["latest"] = episode
           }
           list.push(episode.guid)
         }
-        episodes_list.splice(0, episodes_list.length)
+        my_cache.episodes_list.splice(0, my_cache.episodes_list.length)
         for (var i=0; i < list.length; i++) {
-          episodes_list.push(list[i])
-        }        
+          my_cache.episodes_list.push(list[i])
+        }
         console.log("Loaded all episodes into map")
     })
   })

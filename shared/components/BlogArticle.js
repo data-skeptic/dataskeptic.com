@@ -3,7 +3,6 @@ import ReactDOM from "react-dom"
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import ReactDisqusComments from 'react-disqus-comments'
-
 import LatestEpisodePlayer from "./LatestEpisodePlayer"
 import MailingListBlogFooter from "./MailingListBlogFooter"
 import BlogLink from './BlogLink'
@@ -11,6 +10,8 @@ import BlogAuthorTop from './BlogAuthorTop'
 import BlogAuthorBottom from './BlogAuthorBottom'
 import Loading from './Loading'
 import RelatedContent from './RelatedContent'
+
+import {get_folders} from '../utils/redux_loader'
 
 class BlogArticle extends React.Component {
 	constructor(props) {
@@ -34,12 +35,17 @@ class BlogArticle extends React.Component {
 
 	componentWillMount() {
 		var dispatch = this.props.dispatch
-		var title = this.props.title
-		if (title != undefined) {
-		    dispatch({type: "SET_TITLE", payload: title })
+		var oblogs = this.props.blogs.toJS()
+		if (oblogs.folders.length == 0) {
+			get_folders(dispatch)			
 		}
 		var pathname = this.getPN()
-		dispatch({type: "LOAD_BLOG_AND_CONTENT", payload: {pathname, dispatch} })
+		var oblogs = this.props.blogs.toJS()
+		var blog_focus = oblogs.blog_focus
+		if (blog_focus.pathname != pathname) {
+			console.log("Need to retrieve blog")
+			//dispatch({type: "LOAD_BLOG_AND_CONTENT", payload: {pathname, dispatch} })
+		}
 		dispatch({type: "LOAD_RELATED", payload: {dispatch, pathname}})
 	}
 
@@ -115,7 +121,7 @@ class BlogArticle extends React.Component {
 			} else {
 				content = "<div id='blog-content'><p>Loading....</p></div>"
 			}
-		} else if (blog_focus.loaded < 1) {
+		} else if (blog_focus.content == "") {
 				content = "<div id='blog-content'><p>Loading...</p></div>"
 		} else {
 			content = "<div id='blog-content'>" + content + "</div>"

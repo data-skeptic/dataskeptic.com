@@ -423,6 +423,13 @@ ul.topnav li.right {float: right;}
 .home-player-card {
   text-align: center;
 }
+.advertiser-card {
+  text-align: center;
+  padding: 10px 10px 10px 10px;
+  font-size: 12pt;
+  height: 300px;
+}
+
 .home-player-title {
   font-size: 14pt;
 }
@@ -459,8 +466,9 @@ ul.topnav li.right {float: right;}
 .episode-middle {
   max-height: 500px;
   margin-top: 10px;
-  overflow: scroll;
   font-size: 10pt;
+  padding: 0px;
+  padding-bottom: 10px;
 }
 
 .episode-button {
@@ -626,13 +634,6 @@ ul.topnav li.right {float: right;}
   border-width: 0px 0px 1px 0px;
   border-color: #979797;
   border-style: solid;
-}
-
-.blog-title {
-  font-family: .SFNSDisplay;
-  font-size: 26px;
-  color: #3A3B3B;
-  letter-spacing: 0;
 }
 
 .blog-transcript-link {
@@ -1143,6 +1144,27 @@ ul.topnav li.right {float: right;}
 .home-latest-blog-card {
   padding: 0px;
   height: 300px;
+}
+
+.home-latest-blog-header-left {
+  float: left;
+  padding-right: 10px;
+}
+
+.blog-title {
+  font-family: .SFNSDisplay;
+  font-size: 16pt;
+  color: #3A3B3B;
+  letter-spacing: 0;
+}
+
+.home-latest-blog-header-right {
+  overflow-x: hidden;
+  height: 100px;
+}
+
+.home-latest-blog-img {
+  width: 100px;
 }
 
 .home-latest-blog-card-container {

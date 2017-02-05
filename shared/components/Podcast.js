@@ -6,59 +6,50 @@ import Episode from "./Episode"
 import Loading from "./Loading"
 import YearSelector from './YearSelector.js'
 
+import {get_podcasts} from '../utils/redux_loader'
+import {year_from_path} from '../utils/redux_loader'
+
 class Podcast extends React.Component {
 	constructor(props) {
 		super(props)
 	}
 
-	render() {
+	componentWillMount() {
+		var dispatch = this.props.dispatch
 		var oepisodes = this.props.episodes.toJS()
 		var episodes = oepisodes.episodes
-		var episodes_loaded = oepisodes.episodes_loaded
-		if (episodes_loaded == undefined) {
-			episodes_loaded = 0
+		var pathname = this.props.location.pathname
+		if (episodes.length == 0) {
+			get_podcasts(dispatch, pathname)
 		}
-		if (episodes_loaded == 0) {
+	}
+
+	render() {
+		var pathname = this.props.location.pathname
+		var oepisodes = this.props.episodes.toJS()
+		var episodes = oepisodes.episodes
+		if (episodes.length == 0) {
 			return <div><Loading /></div>
-		} else {
-			var myear = (new Date()).getYear() + 1900
-			if (episodes.length > 0) {
-				var pubDate = episodes[0].pubDate
-				pubDate = new Date(pubDate)
-				myear = pubDate.getYear() + 1900
-			}
-			var year = myear
-			var pathname = this.props.location.pathname
-			var l = '/podcast/'.length
-			if (pathname.length > l) {
-				year = pathname.substring(l, pathname.length)
-			}
-			var years = []
-			var y = myear
-			while (y > 2013) {
-				years.push(y)
-				y -= 1
-			}
-			return (
-				<div className="center">
-					<YearSelector years={years} year={year} />
-					<div className="clear"></div>
-					<div className="episodes-container">
-						{
-							episodes.map(function(episode) {
-								var is_playing = false
-								var pubDate = episode.pubDate
-								pubDate = new Date(pubDate)
-								if (pubDate.getYear()+1900 == year) {
-									return <Episode key={episode.guid} episode={episode} />
-								}
-							})
-						}
-					</div>
-					<YearSelector years={years} year={year} />
-				</div>
-			)
 		}
+		var year = year_from_path(pathname)
+		var years = oepisodes.years
+		if (year == -1) {
+			year = years[0]
+		}
+		return (
+			<div className="center">
+				<YearSelector years={years} year={year} />
+				<div className="clear"></div>
+				<div className="episodes-container">
+					{
+						episodes.map(function(episode) {
+							return <Episode key={episode.guid} episode={episode} />
+						})
+					}
+				</div>
+				<YearSelector years={years} year={year} />
+			</div>
+		)
 	}
 }
 

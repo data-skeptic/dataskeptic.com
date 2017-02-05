@@ -11,19 +11,10 @@ class LatestBlogCard extends React.Component {
 	}
 
 	render() {
-		var oblogs = this.props.blogs.toJS()
-		var blogs = oblogs.blogs
-		var i=0
-		var blog = undefined
-		while (i < blogs.length) {
-			var b = blogs[i]
-			var pn = b.prettyname
-			if (pn.indexOf("/episodes/") == -1 && pn.indexOf("/transcripts/") == -1) {
-				blog = b
-				i = blogs.length
-			}
-			i++
-		}
+		var osite = this.props.site.toJS()
+		var blog = this.props.blog
+		var contributor = this.props.contributor
+		console.log(blog)
 		if (blog == undefined) {
 			return <Loading />			
 		}
@@ -35,6 +26,7 @@ class LatestBlogCard extends React.Component {
         ];
 		var dstr = ""
 		var pn = blog.prettyname
+		console.log(pn)
 		if (pn != undefined) {
 			if (pn[0] == "/") {
 				pn = pn.substring(1, pn.length)
@@ -52,12 +44,22 @@ class LatestBlogCard extends React.Component {
 			}
 			dstr = "2016-11-16"
 		}
+		console.log("d")
+		console.log(blog.desc)
 		return (
 			<div className="home-latest-blog-card">
 				<div className="home-latest-blog-top"><p>From the blog:</p></div>
 				<div className="home-latest-blog-card-container">
-					<div className="blog-date">{dstr}</div>
-					<Link className="blog-title" to={pn}>{blog.title}</Link>
+					<div className="home-latest-blog-header">
+						<div className="home-latest-blog-header-left">
+							<img className="home-latest-blog-img" src={contributor.img} />
+						</div>
+						<div className="home-latest-blog-header-right">
+							<Link className="blog-title" to={pn}>{blog.title}</Link>
+							<div className="blog-author">{contributor.prettyname}</div>
+							<div className="blog-date">{dstr}</div>
+						</div>
+					</div>
 					<p>{blog.desc}</p>
 					<p> ...<Link to={pn}>[more]</Link></p>
 				</div>
@@ -66,4 +68,4 @@ class LatestBlogCard extends React.Component {
 	}
 }
 
-export default connect(state => ({ blogs: state.blogs }))(LatestBlogCard)
+export default connect(state => ({ site: state.site, blogs: state.blogs }))(LatestBlogCard)

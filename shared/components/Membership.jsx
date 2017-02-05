@@ -6,10 +6,19 @@ import Loading from './Loading'
 import Error from './Error'
 import LightsOut from './LightsOut'
 
+import {get_products} from '../utils/redux_loader'
+
 class Membership extends Component {
 	constructor(props, context) {
 		super(props, context)
 		this.addToCart = this.addToCart.bind(this)
+	}
+
+	componentWillMount() {
+		var oproducts = this.props.products.toJS()
+		if (oproducts.products.length == 0) {
+			get_products(this.props.dispatch)			
+		}
 	}
 
 	addToCart(product) {
