@@ -36,11 +36,16 @@ export function loadProducts(env, my_cache) {
 
 }
 export function loadBlogs(store, env, my_cache) {
-  var uri = "https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + env + "/blogs?env=" + env
+  var env2 = env
+  if (env == "prod") {
+    env2 = "master"
+  }
+  var uri = "https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + env + "/blogs?env=" + env2
   axios
   .get(uri)
   .then(function(result) {
     var blogs = result.data
+    var latest = undefined
     var folders = extractFolders(blogs)
     my_cache.folders = folders
     store.dispatch({type: "ADD_FOLDERS", payload: folders })
@@ -49,14 +54,17 @@ export function loadBlogs(store, env, my_cache) {
       var blog = blogs[i]
       var pn = blog['prettyname']
       my_cache.blogmetadata_map[pn] = blog
-      if (i == 0) {
-        my_cache.blogmetadata_map["latest"] = blog
+      if (latest == undefined) {
+        if (pn.indexOf("/episodes/") != 0 && pn.indexOf("/transcripts/") != 0) {
+          latest = blog
+          my_cache.blogmetadata_map["latest"] = latest
+        }
       }
       var title = blog['title']
       my_cache.title_map[pn] = title
       generate_content_map(env, blog, my_cache)
     }
-    console.log("Loaded all blogs into content_map")
+    console.log("Loaded " + blogs.length + " blogs into content_map")
   })
   .catch((err) => {
     console.log("loadBlogs error: " + err)
@@ -86,7 +94,7 @@ export function loadEpisodes(env, feed_uri, my_cache) {
         for (var i=0; i < list.length; i++) {
           my_cache.episodes_list.push(list[i])
         }
-        console.log("Loaded all episodes into map")
+        console.log("Loaded " + episodes.length + " episodes into map")
     })
   })
   .catch((err) => {

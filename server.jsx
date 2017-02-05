@@ -80,6 +80,9 @@ loadBlogs(store, env, my_cache)
 loadEpisodes(env, feed_uri, my_cache)
 loadProducts(env, my_cache)
 
+global.env              = env
+global.my_cache         = my_cache
+
 setInterval(function() {
   console.log("---[Refreshing cache]------------------")
   console.log(process.memoryUsage())
@@ -89,9 +92,6 @@ setInterval(function() {
   loadEpisodes(env, feed_uri, my_cache)
   loadProducts(env, my_cache)
 }, 5 * 60 * 1000)
-
-global.env              = env
-global.my_cache         = my_cache
 
 if (process.env.NODE_ENV == 'production') {
   function shouldCompress (req, res) {
@@ -204,17 +204,19 @@ function inject_years(store, my_cache) {
 }
 
 function inject_homepage(store, my_cache, pathname) {
-  var blog_metadata = my_cache.blogmetadata_map["latest"]
-  console.log(blog_metadata)
-  var pn = blog_metadata.prettyname
-  var blog_page = pn.substring('/blog'.length, pn.length)
-  var content = my_cache.content_map[pn]
-  if (content == undefined) {
-    content = ""
+  var map = my_cache.blogmetadata_map
+  var blog_metadata = map["latest"]
+  if (blog_metadata != undefined) {
+    var pn = blog_metadata.prettyname
+    var blog_page = pn.substring('/blog'.length, pn.length)
+    var content = my_cache.content_map[pn]
+    if (content == undefined) {
+      content = ""
+    }
+    install_blog(store, blog_metadata, content)
+    var episode = my_cache.episodes_map["latest"]
+    install_episode(store, episode)    
   }
-  install_blog(store, blog_metadata, content)
-  var episode = my_cache.episodes_map["latest"]
-  install_episode(store, episode)
 }
 
 function inject_products(store, my_cache, pathname) {
