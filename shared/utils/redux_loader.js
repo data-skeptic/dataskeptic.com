@@ -24,17 +24,27 @@ export function get_homepage_content(dispatch) {
 	var my_cache = global.my_cache
 	if (my_cache != undefined) {
 		var blog = my_cache.blogmetadata_map["latest"]
-		var pathname = blog.prettyname
-		var content = my_cache.content_map[pathname]
-		var episode = my_cache.episodes_map["latest"]
-		var author = blog['author'].toLowerCase()
-		var contributors = get_contributors()
-		var contributor = contributors[author]
-		var loaded = 1
-		var blog_focus = {blog, loaded, content, pathname, contributor}
-		dispatch({type: "SET_FOCUS_BLOG", payload: {blog_focus} })
-		dispatch({type: "ADD_BLOG_CONTENT", payload: {content, blog} })
-		dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
+		if (blog == undefined) {
+			console.log("Cound not retrieve latest")
+			var loaded = 0
+			var content = ""
+			var pathname = ""
+			var  ontributor = {}
+			var blog_focus = {blog, loaded, content, pathname, contributor}
+			dispatch({type: "SET_FOCUS_BLOG", payload: {blog_focus} })
+		} else {
+			var pathname = blog.prettyname
+			var content = my_cache.content_map[pathname]
+			var episode = my_cache.episodes_map["latest"]
+			var author = blog['author'].toLowerCase()
+			var contributors = get_contributors()
+			var contributor = contributors[author]
+			var loaded = 1
+			var blog_focus = {blog, loaded, content, pathname, contributor}
+			dispatch({type: "SET_FOCUS_BLOG", payload: {blog_focus} })
+			dispatch({type: "ADD_BLOG_CONTENT", payload: {content, blog} })
+			dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
+		}
 	} else {
 		console.log("Loading homepage content")
 		axios
