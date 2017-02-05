@@ -12,7 +12,6 @@ export function get_folders(dispatch) {
 			.get("/api/blog/categories")
 	  		.then(function(result) {
 	  			var folders = result["data"]
-	  			console.log(folders)
 				dispatch({type: "ADD_FOLDERS", payload: folders})
 			})
 			.catch((err) => {
@@ -27,7 +26,7 @@ export function get_homepage_content(dispatch) {
 		var blog = my_cache.blogmetadata_map["latest"]
 		var pathname = blog.prettyname
 		var content = my_cache.content_map[pathname]
-		var episode = my_cache.episode_map["latest"]
+		var episode = my_cache.episodes_map["latest"]
 		var author = blog['author'].toLowerCase()
 		var contributors = get_contributors()
 		var contributor = contributors[author]
@@ -104,12 +103,10 @@ export function get_blogs_list(dispatch, pathname) {
 	} else {
 		console.log("Getting blogs")
 		var url = "/api" + pathname
-		console.log(url)
 		axios
 			.get(url)
 	  		.then(function(result) {
 	  			var blogs = result["data"]
-	  			console.log("here")
 				dispatch({type: "ADD_BLOGS", payload: blogs})
 			})
 			.catch((err) => {
@@ -129,7 +126,6 @@ export function get_products(dispatch) {
 			.get("/api/store/list")
 	  		.then(function(result) {
 	  			var products = result["data"]["items"]
-	  			console.log(products)
 				dispatch({type: "ADD_PRODUCTS", payload: products})
 			})
 			.catch((err) => {
@@ -168,9 +164,7 @@ export function get_podcasts_from_cache(my_cache, pathname) {
 }
 
 export function get_podcasts(dispatch, pathname) {
-	console.log("get em:"+pathname)
 	var year = year_from_path(pathname)
-	console.log(year)
 	var my_cache = global.my_cache
 	if (my_cache != undefined) {
 		var episodes = get_podcasts_from_cache(my_cache, pathname)

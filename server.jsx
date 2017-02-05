@@ -204,8 +204,6 @@ function inject_years(store, my_cache) {
 }
 
 function inject_homepage(store, my_cache, pathname) {
-  console.log("inject_homepage!")
-  console.log(Object.keys(my_cache))
   var blog_metadata = my_cache.blogmetadata_map["latest"]
   console.log(blog_metadata)
   var pn = blog_metadata.prettyname
@@ -239,7 +237,6 @@ function install_blog(store, blog_metadata, content) {
   var blog_focus = {blog, loaded, content, pathname, contributor}
   store.dispatch({type: "SET_FOCUS_BLOG", payload: {blog_focus} })
   store.dispatch({type: "ADD_BLOG_CONTENT", payload: {content, blog} })
-  console.log("install complete")
 }
 
 function install_episode(store, episode) {
@@ -264,7 +261,6 @@ function inject_blog(store, my_cache, pathname) {
 
 function updateState(store, pathname) {
   var my_cache = global.my_cache
-  console.log(Object.keys(my_cache))
   inject_folders(store, my_cache)
   inject_years(store, my_cache)
   if (pathname == "" || pathname == "/") {
