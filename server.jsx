@@ -257,8 +257,20 @@ function inject_blog(store, my_cache, pathname) {
     var dispatch = store.dispatch
     var blogs = get_blogs_list(dispatch, pathname)
   } else {
+    var guid = blog_metadata.guid
+    if (guid != undefined) {
+      var episode = my_cache.episodes_map[guid]
+      if (episode != undefined) {
+        install_episode(store, episode)
+      } else {
+        console.log("Bogus guid found")
+      }
+    } else {
+      console.log("No episode guid found")
+    }
     install_blog(store, blog_metadata, content)
   }
+  console.log("done with blog inject")
 }
 
 function updateState(store, pathname) {
@@ -269,6 +281,7 @@ function updateState(store, pathname) {
     inject_homepage(store, my_cache, pathname)
   }
   if (pathname.indexOf('/blog') == 0) {
+    console.log("updateState blog")
     inject_blog(store, my_cache, pathname)
   }
   else if (pathname == "/members" || pathname=="/store") {
@@ -349,6 +362,7 @@ app.use( (req, res) => {
       if (alt_title != undefined) {
         title = alt_title
       }
+      console.log("done with title")
 
       const componentHTML = renderToString(InitialView)
 
@@ -356,8 +370,10 @@ app.use( (req, res) => {
         "react-view": componentHTML
       }
 
+      console.log(1)
       const state = store.getState()
       const HTML = getContentWrapper(title, state, injects)
+      console.log(2)
       return HTML;
     }
 
