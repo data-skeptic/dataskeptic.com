@@ -204,8 +204,10 @@ function inject_years(store, my_cache) {
 }
 
 function inject_homepage(store, my_cache, pathname) {
-  console.log("inject_homepage")
+  console.log("inject_homepage!")
+  console.log(Object.keys(my_cache))
   var blog_metadata = my_cache.blogmetadata_map["latest"]
+  console.log(blog_metadata)
   var pn = blog_metadata.prettyname
   var blog_page = pn.substring('/blog'.length, pn.length)
   var content = my_cache.content_map[pn]
@@ -261,6 +263,8 @@ function inject_blog(store, my_cache, pathname) {
 }
 
 function updateState(store, pathname) {
+  var my_cache = global.my_cache
+  console.log(Object.keys(my_cache))
   inject_folders(store, my_cache)
   inject_years(store, my_cache)
   if (pathname == "" || pathname == "/") {
