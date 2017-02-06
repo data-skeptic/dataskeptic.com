@@ -12,6 +12,7 @@ var app = require('./server').default;
 
 const httpsOptions = {
   cert: fs.readFileSync('/ssl/cert.pem'),
+  ca: [ fs.readFileSync('/ssl/fullchain.pem') ],
   key: fs.readFileSync('/ssl/privkey.pem')
 }
 
