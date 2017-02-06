@@ -58,7 +58,7 @@ export function get_homepage_content(dispatch) {
 				var contributors = get_contributors()
 				var contributor = contributors[author]
 				var envv = blog["env"]
-				if (envv == "prod") {
+				if (envv == "prod" || envv == "master") {
 					envv = ""
 				} else {
 					envv += "."
