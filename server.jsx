@@ -281,7 +281,6 @@ function updateState(store, pathname) {
     inject_homepage(store, my_cache, pathname)
   }
   if (pathname.indexOf('/blog') == 0) {
-    console.log("updateState blog")
     inject_blog(store, my_cache, pathname)
   }
   else if (pathname == "/members" || pathname=="/store") {
@@ -362,7 +361,6 @@ app.use( (req, res) => {
       if (alt_title != undefined) {
         title = alt_title
       }
-      console.log("done with title")
 
       const componentHTML = renderToString(InitialView)
 
@@ -370,10 +368,8 @@ app.use( (req, res) => {
         "react-view": componentHTML
       }
 
-      console.log(1)
       const state = store.getState()
       const HTML = getContentWrapper(title, state, injects)
-      console.log(2)
       return HTML;
     }
 

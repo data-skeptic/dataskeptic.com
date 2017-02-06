@@ -57,7 +57,6 @@ class BlogArticle extends React.Component {
     }
 
 	render() {
-		console.log("render BlogArticle")
 		var pn = this.getPN()
 		var oepisodes = this.props.episodes.toJS()
 		var oblogs = this.props.blogs.toJS()
