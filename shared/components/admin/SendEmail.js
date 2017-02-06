@@ -21,6 +21,9 @@ class SendEmail extends React.Component {
 		else if (id == "subject") {
 			t = "SET_EMAIL_SUBJECT"
 		}
+		else if (id == "send_headers") {
+			t = "SET_EMAIL_HEADER"
+		}
 		var value = e.target.value
 		this.props.dispatch({type: t, payload: value })
 	}
@@ -39,8 +42,9 @@ class SendEmail extends React.Component {
 		var to = oadmin.to
 		var subject = oadmin.subject
 		var msg = oadmin.body
+		var send_headers = oadmin.send_headers
 		msg = this.replaceAll(msg, '\n', '<br/>')
-		var req = { to, subject, msg }
+		var req = { to, subject, msg, send_headers }
 		var resp = {status: 0, msg: "Not set"}
 		var dispatch = this.props.dispatch
 		dispatch({type: "SET_EMAIL_SEND_MSG", payload: "Sending..." })		
@@ -80,6 +84,7 @@ class SendEmail extends React.Component {
 		var subject = oadmin.subject
 		var body = oadmin.body
 		var email_send_msg = oadmin.email_send_msg
+		var send_headers = oadmin.send_headers
 		var response_msg = <div></div>
 		if (email_send_msg != "") {
 			response_msg = <div classname="error-box">{email_send_msg}</div>
@@ -102,6 +107,8 @@ class SendEmail extends React.Component {
 					<div className="col-xs-12 col-sm-10"><input className="email-input" id="to" className="to" value={to} onChange={this.onChange.bind(this)} /></div>
 					<div className="col-xs-12 col-sm-2">Subject:</div>
 					<div className="col-xs-12 col-sm-10"><input className="email-input" id="subject" className="subject" value={subject} onChange={this.onChange.bind(this)} /></div>
+					<div className="col-xs-12 col-sm-2">Include headers:</div>
+					<div className="col-xs-12 col-sm-10"><input className="email-input" id="send_headers" className="send_headers" value={send_headers} onChange={this.onChange.bind(this)} /></div>
 					<div className="col-xs-12">
 						<textarea className="email-body" value={body} onChange={this.handleContentChange.bind(this)} />
 					</div>
