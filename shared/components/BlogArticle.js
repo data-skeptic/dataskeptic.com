@@ -44,6 +44,8 @@ class BlogArticle extends React.Component {
 		var blog_focus = oblogs.blog_focus
 		if (blog_focus.pathname != pathname) {
 			console.log("Need to retrieve blog")
+			console.log(blog_focus.pathname)
+			console.log(pathname)
 			//dispatch({type: "LOAD_BLOG_AND_CONTENT", payload: {pathname, dispatch} })
 		}
 		dispatch({type: "LOAD_RELATED", payload: {dispatch, pathname}})
@@ -77,12 +79,12 @@ class BlogArticle extends React.Component {
 			showBio = false
 		}
 		var top = <div></div>
-		if (blog_focus.blog != undefined && blog_focus.blog.guid != undefined) {
-			var ep = oepisodes.episodes_map[blog_focus.blog.guid]
+		var focus_episode = oepisodes.focus_episode
+		if (focus_episode.episode != undefined) {
 			try {
 				top = (
 					<div className="home-player">
-						<LatestEpisodePlayer guid={blog_focus.blog.guid} />
+						<LatestEpisodePlayer guid={focus_episode.guid} />
 					</div>
 				)
 				isEpisode = true					
@@ -93,7 +95,7 @@ class BlogArticle extends React.Component {
 			}
 		}
 		var bot = <div></div>
-		if (isEpisode) {
+		if (isEpisode && false) {
 			var tm = oblogs.transcript_map
 			if (tm != undefined) {
 				var guid = blog_focus.blog.guid

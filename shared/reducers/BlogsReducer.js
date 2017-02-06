@@ -79,14 +79,16 @@ export default function blogsReducer(state = defaultState, action) {
       var items = action.payload.items
       var uri = action.payload.uri
       var b = nstate.blog_focus.blog
-      var key = '/blog'
-      if (uri.indexOf(key) == 0) {
-        uri = uri.substring(key.length, uri.length)
-      }
-      if (b != undefined && b['prettyname'] == uri) {
-        nstate.related = items
-      } else {
-        console.log([b['prettyname'], 'is not ', uri])
+      if (b != undefined) {
+        var key = '/blog'
+        if (uri.indexOf(key) == 0) {
+          uri = uri.substring(key.length, uri.length)
+        }
+        if (b != undefined && b['prettyname'] == uri) {
+          nstate.related = items
+        } else {
+          console.log([b['prettyname'], 'is not ', uri])
+        }
       }
       break
     case 'LOAD_RELATED':

@@ -3,7 +3,7 @@ import axios from "axios"
 import { extractFolders } from '../utils/blog_utils'
 
 export default function getBlogContent(dispatch, blog, env) {
-	if (env == "prod") {
+	if (env == "prod" || env == "master") {
 		env = ""
 	} else if (env == undefined) {
 		env = ""
