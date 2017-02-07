@@ -12,14 +12,14 @@ import Loading from './Loading'
 import RelatedContent from './RelatedContent'
 
 import {get_folders} from '../utils/redux_loader'
+import {get_related_content} from '../utils/redux_loader'
 
 class BlogArticle extends React.Component {
 	constructor(props) {
 		super(props)
 	}
 
-	getPN() {
-		var pathname = ""
+	getPN(blog_focus) {
 		if (typeof location != 'undefined') {
 			if (location.pathname != undefined) {
 				return location.pathname
@@ -30,7 +30,10 @@ class BlogArticle extends React.Component {
 				return this.props.location.pathname
 			}
 		}
-		return pathname
+		if (blog_focus != undefined) {
+			return blog_focus.pathname | ""
+		}
+		return ""
 	}
 
 	componentWillMount() {
@@ -45,10 +48,9 @@ class BlogArticle extends React.Component {
 		if (blog_focus.pathname != pathname) {
 			console.log("Need to retrieve blog")
 			console.log(blog_focus.pathname)
-			console.log(pathname)
 			//dispatch({type: "LOAD_BLOG_AND_CONTENT", payload: {pathname, dispatch} })
 		}
-		dispatch({type: "LOAD_RELATED", payload: {dispatch, pathname}})
+		get_related_content(dispatch, pathname)
 	}
 
     handleNewComment(comment) {
@@ -148,8 +150,8 @@ class BlogArticle extends React.Component {
 				<BlogAuthorTop author={author} />
 				<span dangerouslySetInnerHTML={{__html: content}} />
 				{bot}
-				<BlogAuthorBottom author={author} />
 				<RelatedContent />
+				<BlogAuthorBottom author={author} />
 				<MailingListBlogFooter />
 	            <ReactDisqusComments
 	                shortname={disqus_username}

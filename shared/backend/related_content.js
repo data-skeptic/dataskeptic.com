@@ -23,7 +23,7 @@ var related_content_cache = {
       desc: "Our mini-episode on AdaBoost"
     }
   ],
-  "/blog/meta/2016/ms-connect": [
+  "/blog/meta/2016/microsoft-connect-conference": [
     {
       uri: "/blog/infrastructure/2016/working-with-azure-blob-store",
       title: "Working with Azure Blob Store",

@@ -711,6 +711,10 @@ ul.topnav li.right {float: right;}
  BlogAuthorBottom.js
 *****************************************************************************/
 
+.related-content {
+  padding-bottom: 20px;
+}
+
 .blog-author-bottom {
   padding: 20px;
   background-color: #eee;
