@@ -22,6 +22,23 @@ var related_content_cache = {
       title: "AdaBoost",
       desc: "Our mini-episode on AdaBoost"
     }
+  ],
+  "/blog/meta/2016/ms-connect": [
+    {
+      uri: "/blog/infrastructure/2016/working-with-azure-blob-store",
+      title: "Working with Azure Blob Store",
+      desc: "A project I was building required regular appends to files.  I checked out Azure Blob Store to see if it could meet my needs."
+    },
+    {
+      uri: "/blog/tools-and-techniques/2017/trying-the-microsoft-computer-vision-api",
+      title: "Trying the Microsoft Computer Vision API",
+      desc: "An afternoon spent kicking the tires of this API"
+    },
+    {
+      uri: "/blog/tools-and-techniques/2017/review-of-azure-text-analytics",
+      title: "Review of Azure Text Analytics",
+      desc: "Summarizing Data Skeptic blog posts with Azure Text Analytics"
+    }
   ]
 }
 
