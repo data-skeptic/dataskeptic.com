@@ -91,23 +91,6 @@ export default function blogsReducer(state = defaultState, action) {
         }
       }
       break
-    case 'LOAD_RELATED':
-      var pathname = action.payload.pathname
-      var dispatch = action.payload.dispatch      
-      var pn = pathname
-      var uri = "/api/related?uri=" + pn
-        axios
-            .get(uri)
-            .then(function(resp) {
-              var data = resp['data']
-              var items = data
-              dispatch({type: "ADD_RELATED", payload: {items, uri: pn} })
-              var items = data
-            })
-            .catch(function(err) {
-              console.log(err)
-            })
-      break   
     case 'ADD_FOLDERS':
       nstate.folders = action.payload 
       break

@@ -1,6 +1,21 @@
 import axios from "axios"
 import {get_contributors} from 'backend/get_contributors'
 
+export function get_related_content(dispatch, pathname) {
+    var uri = "/api/related?uri=" + pathname
+    axios
+        .get(uri)
+        .then(function(resp) {
+          var data = resp['data']
+          var items = data
+          dispatch({type: "ADD_RELATED", payload: {items, uri: pathname} })
+        })
+        .catch(function(err) {
+          console.log(err)
+        })
+}
+
+
 export function get_folders(dispatch) {
 	var my_cache = global.my_cache
 	if (my_cache != undefined) {
