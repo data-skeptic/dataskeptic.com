@@ -33,5 +33,3 @@ if (fs.existsSync('/ssl/cert.pem')) {
 	});
 }
 
-
-

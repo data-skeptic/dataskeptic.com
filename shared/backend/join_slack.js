@@ -12,10 +12,13 @@ module.exports = {
       var config = {}
       req['token'] = slack_key
       var sreq = serialize(req)
+      console.log("req")
       axios
         .post("https://dataskeptic.slack.com/api/users.admin.invite?" + sreq, req, config)
         .then(function(resp) {
+          console.log("success")
           var data = resp['data']
+          console.log(data)
           var msg = ""
           if (data.ok) {
             msg = "Welcome to our Slack channel.  You should receive a confirmation email shortly!"
@@ -23,6 +26,7 @@ module.exports = {
             return res.status(200).end(JSON.stringify(resp))
           } else {
             var error = data.error
+            console.log(error)
             if (error == "already_invited") {
               msg = "You have already been invited to our Slack channel.  Please check your spam folder or search your email to find the invite."
             } else if (error == "already_in_team") {

@@ -15,6 +15,10 @@ class BlogAuthorBottom extends React.Component {
 		if (contributor == undefined) {
 			return <div></div>
 		}
+		var pn = oblogs.blog_focus.blog.prettyname
+		if (pn.indexOf('/episodes/') == 0 || pn.indexOf('/transcripts/') == 0) {
+			return <div></div>
+		}
 		var twitter = contributor.twitter || ""
 		var linkedin = contributor.linkedin || ""
 		var twitterdiv = <span></span>
