@@ -23,7 +23,7 @@ class Coaching extends Component {
 		return (
 			<div className="center">
 				<h2>Professional development coaching</h2>
-					<div className="membership-inner">
+					<div className="coaching-inner">
 					<div className="membership-bottom-container">
 						<div className="membership-price">$550.00<span className="per_month">/ month</span></div>
 						<div className="membership-btn">
@@ -31,7 +31,9 @@ class Coaching extends Component {
 						</div>
 					</div>
 				</div>
-
+				<div><p> &nbsp; </p></div>
+				<div><p> &nbsp; </p></div>
+				<div><p> &nbsp; </p></div>
 			</div>
 		)
 	}

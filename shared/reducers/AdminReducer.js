@@ -43,7 +43,8 @@ const init = {
         zipcode: '',
         country: 'US',
         spError: ''
-    }
+    },
+	invoice: undefined
 }
 
 const defaultState = Immutable.fromJS(init);
@@ -226,6 +227,9 @@ export default function adminReducer(state = defaultState, action) {
                 dispatch({type: "SET_ORDER_ERROR_MSG", payload: errorMsg })
             })
         break;
+    case 'ADD_INVOICE':
+      nstate.invoice = action.payload
+      break
   }
   return Immutable.fromJS(nstate)
 }
