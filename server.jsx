@@ -9,6 +9,7 @@ import {send_email}              from 'backend/send_email'
 import {order_create}            from 'backend/order_create'
 import {order_fulfill}           from 'backend/order_fulfill'
 import {order_list}              from 'backend/order_list'
+import {pay_invoice}             from 'backend/pay_invoice'
 import {related_content}         from 'backend/related_content'
 import bodyParser                from 'body-parser'
 import compression               from 'compression';
@@ -123,7 +124,6 @@ fs.open("config.json", "r", function(error, fd) {
     var data = buffer.toString("utf8", 0, bytesRead)
     var c = JSON.parse(data)
     var env2 = env
-    env2 = "prod"
     stripe_key = c[env2]['stripe']
     sp_key = c[env2]['sp']
     slack_key = c[env2]['slack']
@@ -139,6 +139,10 @@ function api_router(req, res) {
   }
   else if (req.url.indexOf('/api/email/send') == 0) {
     send_email(req, res)
+    return true
+  }
+  else if (req.url.indexOf('/api/invoice/pay') == 0) {
+    pay_invoice(req, res, stripe_key)
     return true
   }
   else if (req.url.indexOf('/api/invoice') == 0) {

@@ -76,7 +76,7 @@ class Invoice extends Component {
 					</div>
 				</div>
 
-				<CreditCardForm2 />
+				<CreditCardForm2 invoice_id={id} total={invoice.total} />
 
 				<div><p> &nbsp; </p></div>
 				<div><p> &nbsp; </p></div>
