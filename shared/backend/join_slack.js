@@ -12,13 +12,10 @@ module.exports = {
       var config = {}
       req['token'] = slack_key
       var sreq = serialize(req)
-      console.log("req")
       axios
         .post("https://dataskeptic.slack.com/api/users.admin.invite?" + sreq, req, config)
         .then(function(resp) {
-          console.log("success")
           var data = resp['data']
-          console.log(data)
           var msg = ""
           if (data.ok) {
             msg = "Welcome to our Slack channel.  You should receive a confirmation email shortly!"

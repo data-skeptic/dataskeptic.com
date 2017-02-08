@@ -116,7 +116,6 @@ var stripe_key = "sk_test_81PZIV6UfHDlapSAkn18bmQi"
 var sp_key = "test_Z_gOWbE8iwjhXf4y4vqizQ"
 var slack_key = ""
 
-/*
 fs.open("config.json", "r", function(error, fd) {
   var buffer = new Buffer(10000)
   fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
@@ -130,7 +129,6 @@ fs.open("config.json", "r", function(error, fd) {
     fs.close(fd)
   })
 })
-*/
 
 function api_router(req, res) {
   if (req.url.indexOf('/api/slack/join') == 0) {
