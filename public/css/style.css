@@ -261,6 +261,16 @@ ul.topnav li.right {float: right;}
   height: 100px;
 }
 
+.coaching-inner {
+  border-radius: 5px;
+  border-color: #333;
+  border-width: 1px;
+  border-style: solid;
+  min-height: 100px;
+  padding:5px;
+}
+
+
 .coaching-end-box {
   border-width: 0px;
   padding: 10px;
@@ -1894,6 +1904,47 @@ button.slick-arrow.slick-prev {
     color: #000;
 }
 
+/*********************************************************
+  Admin / invoices
+**********************************************************/
+
+
+.invoice-tbl-header {
+   background-color: #eee;
+   padding: 10px;
+   font-weight: bold;
+  border-style: solid;
+  border-width: 1px;
+}
+.invoice-row-cell {
+  border-style: solid;
+  border-width: 0px 1px 1px 1px;
+}
+.invoice-row-cellc {
+  border-style: solid;
+  border-width: 0px 1px 1px 0px;
+  text-align: center;
+}
+.invoice-row-cellr {
+  border-style: solid;
+  border-width: 0px 1px 1px 0px;
+  text-align: right;
+}
+.invoice-row-cellt {
+  border-style: solid;
+  padding: 10px;
+  font-size: 14pt;
+  border-width: 0px 1px 1px 1px;
+  font-weight: bold;
+  text-align: right;  
+}
+.invoice-header-c {
+  text-align: center;
+}
+.invoice-header-r {
+  text-align: right;
+}
+
 
 /*********************************************************
   PlayerProgressBar.js > Rcslider
@@ -2150,4 +2201,8 @@ button.slick-arrow.slick-prev {
   border-width: 4px 4px 0;
   border-top-color: #6c6c6c;
 }
+
+
+
+
 

@@ -28,6 +28,7 @@ import Store                   from 'components/Store';
 import ThankYouPage            from 'components/ThankYouPage';
 
 import Admin                   from 'components/admin/Admin';
+import Invoice                 from 'components/invoices/Invoice';
 
 import SnlImpact               from 'components/l/SnlImpact';
 
@@ -95,6 +96,9 @@ export default (
 
 		<Route path="/admin" component={App}>
 			<IndexRoute component={Admin} />
+		</Route>
+		<Route path="/invoice" component={App}>
+			<IndexRoute component={Invoice} />
 		</Route>
 
 		<Route path="/wp-login.php" component={App} onEnter={loadData}>

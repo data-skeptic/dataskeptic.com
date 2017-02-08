@@ -1,6 +1,22 @@
 import axios from "axios"
 import {get_contributors} from 'backend/get_contributors'
 
+export function get_invoice(dispatch, id) {
+    var uri = "/api/invoice?id=" + id
+    axios
+        .get(uri)
+        .then(function(resp) {
+          var invoice = resp['data']
+          console.log("invoice")
+          console.log(invoice)
+          console.log(uri)
+          dispatch({type: "ADD_INVOICE", payload: invoice })
+        })
+        .catch(function(err) {
+          console.log(err)
+        })
+}
+
 export function get_related_content(dispatch, pathname) {
     var uri = "/api/related?uri=" + pathname
     axios

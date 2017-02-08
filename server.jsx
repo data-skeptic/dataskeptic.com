@@ -3,6 +3,7 @@ import axios                     from 'axios';
 import {get_blogs}               from 'backend/get_blogs'
 import {get_contributors}        from 'backend/get_contributors'
 import {get_episodes}            from 'backend/get_episodes'
+import {get_invoice}             from 'backend/get_invoice'
 import {join_slack}              from 'backend/join_slack'
 import {send_email}              from 'backend/send_email'
 import {order_create}            from 'backend/order_create'
@@ -54,7 +55,7 @@ app.use(morgan('combined', {stream: accessLogStream}))
 
 var env = "prod"
 
-//aws.config.loadFromPath('awsconfig.json');
+aws.config.loadFromPath('awsconfig.json');
 
 if (process.env.NODE_ENV !== 'production') {
   require('./webpack.dev').default(app);
@@ -138,6 +139,10 @@ function api_router(req, res) {
   }
   else if (req.url.indexOf('/api/email/send') == 0) {
     send_email(req, res)
+    return true
+  }
+  else if (req.url.indexOf('/api/invoice') == 0) {
+    get_invoice(req, res)
     return true
   }
   else if (req.url.indexOf('/api/order/create') == 0) {
