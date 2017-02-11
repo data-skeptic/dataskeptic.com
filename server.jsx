@@ -78,22 +78,22 @@ const reducer  = combineReducers(reducers);
 const store    = applyMiddleware(promiseMiddleware)(createStore)(reducer);
 const initialState = store.getState()
 
-loadBlogs(store, env, my_cache)
-loadEpisodes(env, feed_uri, my_cache)
-loadProducts(env, my_cache)
-
 global.env              = env
 global.my_cache         = my_cache
 
-setInterval(function() {
+var doRefresh = function() {
   console.log("---[Refreshing cache]------------------")
   console.log(process.memoryUsage())
   var env = global.env
   var my_cache = global.my_cache
   loadBlogs(store, env, my_cache)
-  loadEpisodes(env, feed_uri, my_cache)
+  loadEpisodes(env, feed_uri, my_cache, aws)
   loadProducts(env, my_cache)
-}, 5 * 60 * 1000)
+}
+
+setInterval(doRefresh, 5 * 60 * 1000)
+
+doRefresh()
 
 if (process.env.NODE_ENV == 'production') {
   function shouldCompress (req, res) {
