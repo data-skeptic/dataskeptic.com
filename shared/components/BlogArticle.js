@@ -83,7 +83,10 @@ class BlogArticle extends React.Component {
 		var top = <div></div>
 		var focus_episode = oepisodes.focus_episode
 		if (focus_episode.episode != undefined) {
-			if (focus_episode.guid == blog_focus.blog.guid) {
+			console.log("!!!")
+			console.log(blog_focus)
+			console.log(focus_episode)
+			if (focus_episode.episode.guid == blog_focus.blog.guid) {
 				try {
 					top = (
 						<div className="home-player">
