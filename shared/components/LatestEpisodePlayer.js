@@ -59,7 +59,7 @@ class LatestEpisodePlayer extends React.Component {
 		return (
 			<div className="home-player-card">
 					<p><span className="home-player-latest">{title}</span></p>
-					<div className="home-player-title"><a href={episode.link}>{episode.title}</a></div>
+					<div className="home-player-title"><a className="home-player-link" href={episode.link}>{episode.title}</a></div>
 					<p>{dstr}</p>
 					<button className="episode-button" onClick={this.onClick.bind(this, episode)}>{play_symb}</button>
 			</div>
