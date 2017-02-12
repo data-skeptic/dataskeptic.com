@@ -37,7 +37,7 @@ class Podcast extends React.Component {
 			year = years[0]
 		}
 		return (
-			<div className="row center">
+			<div className="row podcasts">
 				<div className="col-md-8 col-xs-12">
 					<div className="episodes-container">
 						{

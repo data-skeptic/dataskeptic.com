@@ -41,6 +41,12 @@ html, body {
 }
 
 .center {
+  margin: auto;
+  clear: both;
+  max-width: 800px;
+}
+
+.podcasts {
   margin: 0px 5%;
 }
 
