@@ -409,6 +409,10 @@ ul.topnav li.right {float: right;}
   height: 25px;
 }
 
+.home-player-link {
+  font-size: 11pt;
+}
+
 .home-episode-card {
   height: 100%;
 }
@@ -621,6 +625,10 @@ ul.topnav li.right {float: right;}
 /*****************************************************************************
  Blog.js
 *****************************************************************************/
+
+.floating-img {
+  float:left;
+}
 
 .blog-mailinglist-container {
   background-color: #3A3B3B;
@@ -1159,7 +1167,7 @@ ul.topnav li.right {float: right;}
   padding: 0px;
   height: 300px;
 }
-
+ 
 .home-latest-blog-header-left {
   float: left;
   padding-right: 10px;
@@ -1167,7 +1175,7 @@ ul.topnav li.right {float: right;}
 
 .blog-title {
   font-family: .SFNSDisplay;
-  font-size: 16pt;
+  font-size: 14pt;
   color: #3A3B3B;
   letter-spacing: 0;
 }

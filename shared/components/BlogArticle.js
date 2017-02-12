@@ -79,21 +79,23 @@ class BlogArticle extends React.Component {
 			}			
 		} else {
 			showBio = false
-		}
+		} 
 		var top = <div></div>
 		var focus_episode = oepisodes.focus_episode
 		if (focus_episode.episode != undefined) {
-			try {
-				top = (
-					<div className="home-player">
-						<LatestEpisodePlayer guid={focus_episode.guid} />
-					</div>
-				)
-				isEpisode = true					
-			}
-			catch (err) {
-				console.log(err)
-				top = <div></div>
+			if (focus_episode.guid == blog_focus.blog.guid) {
+				try {
+					top = (
+						<div className="home-player">
+							<LatestEpisodePlayer guid={focus_episode.guid} />
+						</div>
+					)
+					isEpisode = true					
+				}
+				catch (err) {
+					console.log(err)
+					top = <div></div>
+				}
 			}
 		}
 		var bot = <div></div>
