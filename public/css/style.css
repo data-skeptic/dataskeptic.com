@@ -46,6 +46,10 @@ html, body {
   max-width: 800px;
 }
 
+.podcasts {
+  margin: 0px 5%;
+}
+
 .header-left {
   height: 57px;
   overflow: hidden;
@@ -468,13 +472,16 @@ ul.topnav li.right {float: right;}
 }
 
 .episode-img {
-  width:  150px;
-  height: 150px;
+  float: left;
+  max-width: 200px;
+  width: 100%;
 }
 .episode-left {
   text-align: center;
   margin-top: 10px;
   min-height: 160px;
+  padding: 0px;
+  overflow: hidden;
 }
 
 .episode-middle {
@@ -482,7 +489,13 @@ ul.topnav li.right {float: right;}
   margin-top: 10px;
   font-size: 10pt;
   padding: 0px;
+  padding-left: 30px;
   padding-bottom: 10px;
+}
+@media (max-width: 768px) {
+  .episode-middle {
+    padding-left: 0px;
+  }
 }
 
 .episode-button {
@@ -525,6 +538,14 @@ ul.topnav li.right {float: right;}
   padding-left: 28px;
   padding-right: 28px;
   float: left;
+  border: none;
+  outline: none;
+}
+.episode-play-button:hover {
+  background-color: #38383A;
+}
+.episode-play-button:focus {
+  background-color: #222222;
 }
 
 .episode-download {
@@ -560,6 +581,18 @@ ul.topnav li.right {float: right;}
   line-height: 24px;
 }
 
+.episode-desc > .episode-view-more {
+  font-size: 14px;
+  font-weight: bold;
+  color: #000000;
+  padding-left: 14px;
+  letter-spacing: 0;
+}
+.episode-desc > .episode-view-more > .glyphicon-more {
+  font-size: 9px;
+  vertical-align: 1px;
+}
+
 .episode-play {
   font-size: 14px;
   color: #FFFFFF;
@@ -576,6 +609,7 @@ ul.topnav li.right {float: right;}
 
 .episode-duration {
   font-size: 14px;
+  font-weight: bold;
   color: #FFFFFF;
   letter-spacing: 0;
 }
@@ -586,7 +620,7 @@ ul.topnav li.right {float: right;}
 }
 
 .year-select-outer {
-  text-align: center;
+
 }
 
 .episode-selector {
@@ -596,20 +630,40 @@ ul.topnav li.right {float: right;}
 }
 
 .episode-year-container {
-  display: inline;
+  display: block;
   margin: auto;
-  padding: 5px;
+  padding: 6px 0px;
+  color: #ffffff;
+}
+.episode-year-container > .menu-year{
+  color: #ffffff;
+}
+.episode-year-container.active > .menu-year{
+  font-size: 16px;
+  color: #F8E81C;
 }
 .episode {
-    border-style: solid;
-    border-width: 1px 1px 1px 1px;
+  border: none;
+  border-bottom: 1px solid #979797;
   padding: 0px;
   margin: 0px;
-  margin-bottom: 18px;
+  padding-top: 60px;
+  padding-bottom: 50px;
   overflow: hidden;
 }
-
-
+.episodes-sidebar {
+  margin-top: 70px;
+  background: #38383A;
+  padding: 28px 42px;
+  color: #ffffff;
+}
+.episodes-sidebar a.menu-year {
+  font-size: 16px;
+}
+.episodes-sidebar h3 {
+  color: #ffffff;
+  font-size: 22px;
+}
 /*****************************************************************************
  Video.js
 *****************************************************************************/
@@ -675,6 +729,7 @@ ul.topnav li.right {float: right;}
   font-weight: bold;
   color: #7D8080;
   letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .blog-desc {
@@ -1175,9 +1230,10 @@ ul.topnav li.right {float: right;}
 
 .blog-title {
   font-family: .SFNSDisplay;
-  font-size: 14pt;
+  font-size: 32px;
   color: #3A3B3B;
   letter-spacing: 0;
+  margin-top: 8px;
 }
 
 .home-latest-blog-header-right {

@@ -12,6 +12,13 @@ class YearNav extends React.Component {
 		var pathname = "/podcast/" + year
 		get_podcasts(dispatch, pathname)
 	}
+	getClassNames(isActive) {
+		var selectors = 'episode-year-container';
+		if (isActive) {
+			selectors += ' active'
+		}
+		return selectors;
+	}
 	render() {
 		var year = this.props.year
 		var active = this.props.active
@@ -20,8 +27,9 @@ class YearNav extends React.Component {
 			down = "menu-button-down"
 		}
 		var to = "/podcast/" + year
+		var selectors = this.getClassNames(active);
 		return (
-			<div className="episode-year-container">
+			<div className={selectors}>
 		            <Link key={to} onClick={this.onClick.bind(this)} className="menu-year" to={to}>{year}</Link>
 			</div>
 		)		
