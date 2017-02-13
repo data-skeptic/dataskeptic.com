@@ -9,7 +9,62 @@ html, body {
 
 .header {
   background-color: #3A3B3B;
-  height: 65px;
+  height: 80px;
+  overflow: hidden;
+}
+
+.header .nav {
+  overflow: hidden;
+  text-align: center;
+}
+
+.header .nav .navlink-li-container {
+  display: block;
+  float: left;
+  margin: 1px 20px 0;
+}
+.header .nav :last-child {
+  margin-right: 0 !important;
+}
+.header .nav .navlink-li-container a {
+  display: block;
+  padding: 28px 0;
+  list-style: none;
+  text-decoration: none;
+  border-bottom: 2px transparent solid;
+  color: #FFFFFF;
+}
+
+.header .nav .navlink-li-container a:hover {
+  color: #f0e8b4;
+  border-bottom-color: #f0e8b4;
+}
+
+.header .nav .navlink-li-container a.menu-active {
+  color: #F0D943;
+  border-bottom-color: #F0D943;
+}
+
+.header .mainnav {
+  width: 375px;
+  padding-right: 25px;
+  margin-left: auto;
+  margin-right: auto;
+  float: none;
+}
+
+@media (max-width: 880px) {
+  .header .mainnav {
+    padding-right: 0px;
+    padding-right: 25px;
+  }
+  .header .nav .navlink-li-container {
+    margin-right: 16px;
+    margin-left: 16px;
+  }
+  #logo {
+    margin-left: 20px !important;
+  }
 }
 
 #content-prefetch {
@@ -56,7 +111,14 @@ html, body {
 }
 
 #logo {
-  height: 125px;
+  margin-top: 25px;
+  margin-left: 40px;
+  display: inline-block;
+}
+
+#logo img {
+  width: 100%;
+  height: 31px;
 }
 
 .header-left {
@@ -148,24 +210,13 @@ h1 {
   max-width: 620px;
 }
 
-ul.topnav {
-}
-
-.menu-active {
-  background-color: #fff;
-  height: 35px;
-}
-.menu-active a:link {
-  background-color: #282828;
-  color: #000;
-}
-
 .menu-cart-wrap {
   display: inline;
 }
 
 .menu-cart-container {
-  background-image: url("/img/png/checkout.png");   
+  background-image: url("/img/png/checkout.png");
+  position: relative;
   height: 18px;
   width: 18px;
   background-size: 18px 18px;
@@ -174,13 +225,17 @@ ul.topnav {
 
 .menu-cart-inner {
   background-color: #ffff00;
-  width: 12px;
-  height: 14px;
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  width: 16px;
+  height: 16px;
   margin: auto;
-  border-radius: 5px;
-  opacity: 0.7;
+  border-radius: 100%;
+  opacity: 1;
   text-align: center;
   font-size: 9pt;
+  color: black;
   font-weight: bold;
 }
 
@@ -192,10 +247,6 @@ ul.topnav {
     padding: 0;
     overflow: hidden;
     margin: auto;
-}
-
-.navlink-li-container {
-  float: left;
 }
 
 ul.topnav li {
@@ -979,8 +1030,10 @@ ul.topnav li.right {float: right;}
 }
 
 .btn-open-cart-drawer {
-  background-color: transparent;
-  border-width: 0px;
+  background: #323333;
+  padding: 31px !important;
+  border-bottom: 0px !important;
+  cursor: pointer;
 }
 
 .cart-end {

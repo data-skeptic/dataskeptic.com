@@ -142,14 +142,13 @@ class MainView extends React.Component {
 
   render() {
     this.logPageView()
+    
+    const {pathname} = this.props.location;
     return (
         <div className="site">
           <div className="container-fluid">
             <div className="row row-centered">
-              <Header />
-            </div>
-            <div className="row row-centered">
-              <Menu pathname={this.props.location.pathname} />
+              <Header pathname={pathname} />
             </div>
             <div className="row row-centered">
               <Player />
