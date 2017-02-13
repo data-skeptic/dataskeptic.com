@@ -41,22 +41,13 @@ class Menu extends React.Component {
         </div>
       )
     }
+
     return (
-      <div className="menu col-sm-12">
-        <div className="menu-container">
-          <div className="menu-container-inner">
-            <ul className="topnav">
-              <NavLink active={pathname} to="/">Home</NavLink>
-              <NavLink active={pathname} to="/podcast">Podcasts</NavLink>
-              <NavLink active={pathname} to="/blog">Blog</NavLink>
-              <NavLink active={pathname} to="/store">Store</NavLink>
-              <NavLink active={pathname} to="/projects">Projects</NavLink>
-              <NavLink active={pathname} to="/services">Services</NavLink>
-              <NavLink active={pathname} to="/members">Membership</NavLink>
-              {cart_link}
-            </ul>
-          </div>
-        </div>
+      <div className="nav">
+        <NavLink active={pathname} to="/podcast">Podcasts</NavLink>
+        <NavLink active={pathname} to="/blog">Blog</NavLink>
+        <NavLink active={pathname} to="/projects">Projects</NavLink>
+        <NavLink active={pathname} to="/services">Services</NavLink>
       </div>
     )
   }
