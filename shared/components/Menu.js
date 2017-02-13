@@ -8,39 +8,8 @@ class Menu extends React.Component {
     super(props)
   }
 
-  onClick() {
-    this.props.dispatch({type: "TOGGLE_CART", payload: {} })
-  }
-
   render() {
-    var ocart = this.props.cart.toJS()
-    var pathname = this.props.pathname
-    if (pathname == '/index.htm') {
-      pathname = '/'
-    }
-    var item_count = 0
-    var cart_items = ocart.cart_items
-    for (var i=0; i < cart_items.length; i++) {
-      var item = cart_items[i]
-      item_count += item.quantity
-    }
-    if (item_count == 0) {
-      var cart_link = <NavLink to="/checkout" active={pathname}>
-      <div className="menu-cart-container"></div>
-      </NavLink>
-    } else {
-      var cart_link = (
-        <div className="navlink-li-container">
-          <div className="menu-cart-wrap">
-            <button className="btn-open-cart-drawer" onClick={this.onClick.bind(this)}>
-              <div className="menu-cart-container">
-                <div className="menu-cart-inner">{item_count}</div>
-              </div>
-            </button>
-          </div>
-        </div>
-      )
-    }
+    const {pathname} = this.props
 
     return (
       <div className="nav">
