@@ -28,7 +28,7 @@ class CartMenu extends React.Component {
 
         return (
             <div className="nav">
-                <NavLink active={pathname} to="/sponsor">Sponsor</NavLink>
+                <NavLink active={pathname} to="/members">Membership</NavLink>
                 <NavLink active={pathname} to="/store">Store</NavLink>
                 <CartLink itemCount={cartItemsCount} onClick={this.onCartClick}/>
             </div>
