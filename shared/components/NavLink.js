@@ -10,7 +10,7 @@ class NavLink extends Component {
         var className = isActive ? "menu-active" : "menu-inactive";
         return (
             <div className="navlink-li-container">
-                <Link to={to} onClick={onClick} className={className}>{this.props.children}</Link>
+                <Link to={to} onClick={onClick} className={className}><span>{this.props.children}</span></Link>
             </div>
         );
     }

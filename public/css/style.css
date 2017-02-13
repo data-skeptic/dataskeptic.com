@@ -10,20 +10,25 @@ html, body {
 .header {
   background-color: #3A3B3B;
   height: 80px;
+  overflow: hidden;
 }
 
 .header .nav {
+  overflow: hidden;
+  text-align: center;
 }
 
 .header .nav .navlink-li-container {
-
-}
-
-.header .nav .navlink-li-container a {
+  display: block;
   float: left;
+  margin: 1px 20px 0;
+}
+.header .nav :last-child {
+  margin-right: 0 !important;
+}
+.header .nav .navlink-li-container a {
   display: block;
   padding: 28px 0;
-  margin: 1px 20px 0;
   list-style: none;
   text-decoration: none;
   border-bottom: 2px transparent solid;
@@ -40,17 +45,26 @@ html, body {
   border-bottom-color: #F0D943;
 }
 
-.header .cart-menu {
-  width: 281px;
-}
-
 .header .mainnav {
   width: 375px;
   padding-right: 25px;
   margin-left: auto;
   margin-right: auto;
   float: none;
+}
 
+@media (max-width: 880px) {
+  .header .mainnav {
+    padding-right: 0px;
+    padding-right: 25px;
+  }
+  .header .nav .navlink-li-container {
+    margin-right: 16px;
+    margin-left: 16px;
+  }
+  #logo {
+    margin-left: 20px !important;
+  }
 }
 
 #content-prefetch {
@@ -964,7 +978,6 @@ ul.topnav li.right {float: right;}
   background: #323333;
   padding: 31px !important;
   border-bottom: 0px !important;
-  margin: 0px 0px 0px 20px !important;
   cursor: pointer;
 }
 
