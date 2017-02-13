@@ -41,7 +41,16 @@ html, body {
 }
 
 .header .cart-menu {
-  width: 266px;
+  width: 281px;
+}
+
+.header .mainnav {
+  width: 375px;
+  padding-right: 25px;
+  margin-left: auto;
+  margin-right: auto;
+  float: none;
+
 }
 
 #content-prefetch {
@@ -85,6 +94,7 @@ html, body {
 
 #logo {
   margin-top: 25px;
+  margin-left: 40px;
   display: inline-block;
 }
 
