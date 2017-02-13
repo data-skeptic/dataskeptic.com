@@ -18,7 +18,7 @@ export default class Header extends React.Component {
 			<div className='header row'>
 				<div className="container-fluid hidden-xs desktop">
 					<div className="cart-menu pull-right">
-						<CartMenu pathname={CartMenu} />
+						<CartMenu pathname={pathname} />
 					</div>
 					<div className="logo pull-left">
 						<Link to="/" id="logo"><img src="/img/svg/logo.svg" alt="Data Skeptic logo" /></Link>
