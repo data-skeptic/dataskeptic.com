@@ -110,6 +110,43 @@ html, body {
     margin-top: 4px;
 }
 
+.mobile-menu {
+    position: fixed;
+    top: 80px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+
+    background: #323333;
+
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 300ms;
+}
+
+.mobile-menu.overlay {
+    z-index: 999;
+    opacity: 1;
+}
+
+.mobile-menu .nav {
+    padding-top: 40px;
+}
+.mobile-menu .nav .navlink-li-container { }
+
+.mobile-menu .nav .navlink-li-container a {
+    display: block;
+    line-height: 50px;
+    color: #FFFFFF;
+    padding-left: 38px;
+    border-left: 2px solid transparent;
+    text-decoration: none;
+}
+.mobile-menu .nav .navlink-li-container a.menu-active {
+    border-left-color: #F0D943;
+    color: #F0D943;
+}
+
 #content-prefetch {
     display: none;
 }
@@ -1136,10 +1173,12 @@ ul.topnav li.right {
 }
 
 .btn-open-cart-drawer {
+    border-bottom: 0px !important;
+}
+
+.desktop .btn-open-cart-drawer {
     background: #323333;
     padding: 31px !important;
-    border-bottom: 0px !important;
-    cursor: pointer;
 }
 
 .cart-end {

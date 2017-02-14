@@ -9,17 +9,17 @@ class Menu extends React.Component {
   }
 
   render() {
-    const {pathname} = this.props
+    const { pathname, itemClick } = this.props
 
     return (
       <div className="nav">
-        <NavLink active={pathname} to="/podcast">Podcasts</NavLink>
-        <NavLink active={pathname} to="/blog">Blog</NavLink>
-        <NavLink active={pathname} to="/projects">Projects</NavLink>
-        <NavLink active={pathname} to="/services">Services</NavLink>
+        <NavLink active={pathname} to="/podcast" onClick={itemClick}>Podcasts</NavLink>
+        <NavLink active={pathname} to="/blog" onClick={itemClick}>Blog</NavLink>
+        <NavLink active={pathname} to="/projects" onClick={itemClick}>Projects</NavLink>
+        <NavLink active={pathname} to="/services" onClick={itemClick}>Services</NavLink>
       </div>
     )
   }
 }
 
-export default connect(state => ({ cart: state.cart }))(Menu)
+export default Menu;
