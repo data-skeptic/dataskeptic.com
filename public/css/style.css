@@ -8,6 +8,10 @@ html, body {
     outline: none;
 }
 
+.site.no-scroll {
+    overflow: hidden;
+}
+
 .header {
     background-color: #3A3B3B;
     height: 80px;
@@ -57,6 +61,18 @@ html, body {
 }
 
 @media (max-width: 880px) {
+    .site {
+        padding-top: 80px;
+    }
+
+    .header {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        z-index: 999;
+    }
+
     .header .mainnav {
         padding-right: 0px;
         padding-right: 25px;
@@ -92,22 +108,49 @@ html, body {
 .header .mobile .menu-collapse button.btn-collapse {
     position: relative;
     border: none;
-    padding: 33px 29px !important;
+    width: 80px;
+    height: 80px;
+    padding: 30px;
     background: transparent;
 }
-.header .mobile .menu-collapse button.btn-collapse .icon-bar {
-    background-color: #FFFFFF;
+
+.header .mobile .menu-collapse button.btn-collapse .icon-container {
+    position: relative;
+    width: 23px;
+    height: 23px;
+    margin-top: 3px;
 }
 
 .header .mobile .menu-collapse button.btn-collapse .icon-bar {
     display: block;
     width: 22px;
-    height: 2px;
+    height: 1px;
     border-radius: 1px;
+    transition: all 0.1s ease;
+    opacity: 1;
+    position: absolute;
+    background-color: #FFFFFF;
 }
 
-.header .mobile .menu-collapse button.btn-collapse .icon-bar+.icon-bar {
-    margin-top: 4px;
+.header .mobile .menu-collapse button.btn-collapse .icon-bar-f { top: 0px; }
+.header .mobile .menu-collapse button.btn-collapse .icon-bar-s { top: 6px; }
+.header .mobile .menu-collapse button.btn-collapse .icon-bar-t { top: 13px; }
+
+.header.collapsed .mobile .menu-collapse button.btn-collapse .icon-bar-f { opacity: 0; }
+.header.collapsed .mobile .menu-collapse button.btn-collapse .icon-bar-t {
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+     transform: rotate(-45deg);
+    margin-top: -7px;
+}
+.header.collapsed .mobile .menu-collapse button.btn-collapse .icon-bar-s {
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+     transform: rotate(45deg);
 }
 
 .mobile-menu {
@@ -116,12 +159,10 @@ html, body {
     left: 0px;
     right: 0px;
     bottom: 0px;
-
     background: #323333;
-
-    z-index: 1;
     opacity: 0;
-    transition: opacity 300ms;
+    z-index: -2;
+    transition: opacity 0.3s, z-index 0.5s;
 }
 
 .mobile-menu.overlay {

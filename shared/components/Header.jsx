@@ -35,12 +35,29 @@ class Header extends React.Component {
 		this.props.toggleMobileMenu()
 	}
 
+	/**
+	 * Collect class list for current state
+	 *
+	 * @param isMobileMenuVisible
+	 * @returns {string} classList List of component styles
+     */
+	getClassList({ isMobileMenuVisible }) {
+		let classList = ['header'];
+
+		if (isMobileMenuVisible) {
+			classList.push('collapsed');
+		}
+
+		return classList.join(' ');
+	}
+
 	render() {
 		const {pathname, isMobileMenuVisible, cart} = this.props
 		const itemsCount = getCartItemsCount(cart.toJS().cart_items);
+		const classList = this.getClassList({ isMobileMenuVisible });
 
 		return (
-			<div className='header'>
+			<div className={classList}>
 				<div className="container-fluid hidden-xs desktop">
 					<div className="cart-menu pull-right">
 						<CartMenu pathname={pathname}
@@ -58,18 +75,20 @@ class Header extends React.Component {
 				<div className="visible-xs mobile">
 					<div className="menu-collapse pull-left">
 						<button type="button" className="btn-collapse" onClick={this.onToggleMenuClick}>
-							<span className="icon-bar"></span>
-							<span className="icon-bar"></span>
-							<span className="icon-bar"></span>
+							<div className="icon-container">
+								<span className="icon-bar icon-bar-f"></span>
+								<span className="icon-bar icon-bar-s"></span>
+								<span className="icon-bar icon-bar-t"></span>
+							</div>
 						</button>
 					</div>
 					<div className="cart pull-right">
 						<CartLink itemCount={itemsCount} onClick={this.onCartClick} />
 					</div>
 					<div className="logo">
-						<Link to="/" id="logo_mobile">
+						<div id="logo_mobile">
 							<img src="/img/svg/logo-min.svg" alt="Data Skeptic logo" />
-						</Link>
+						</div>
 					</div>
 				</div>
 			</div>

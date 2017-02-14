@@ -156,15 +156,38 @@ class MainView extends React.Component {
     this.props.toggleMobileMenu()
   }
 
+  /**
+   * Determinate current class list
+   *
+   * @param {Boolean} isMobileMenuVisible Mobile Menu visibility state
+   */
+  getClassList({isMobileMenuVisible}) {
+    let classes = ['site'];
+
+    if (isMobileMenuVisible) {
+      classes.push('no-scroll');
+    }
+
+    return classes.join(' ');
+  }
+
   render() {
     this.logPageView()
     const {isMobileMenuVisible, cart} = this.props;
     const {pathname} = this.props.location
     const itemsCount = getCartItemsCount(cart.toJS().cart_items);
+    const classList = this.getClassList({isMobileMenuVisible});
 
     return (
-        <div className="site">
+        <div className={classList}>
           <div className="container-fluid">
+            <MobileMenu
+                itemClick={this.onNavigationItemClick}
+                pathname={pathname}
+                cartItemsCount={itemsCount}
+                visible={isMobileMenuVisible}
+            />
+
             <div className="row row-centered">
               <Header pathname={pathname} />
             </div>
@@ -175,12 +198,6 @@ class MainView extends React.Component {
             {this.props.children}
             <Footer />
             <Sidebar />
-            <MobileMenu
-                itemClick={this.onNavigationItemClick}
-                pathname={pathname}
-                cartItemsCount={itemsCount}
-                visible={isMobileMenuVisible}
-            />
           </div> 
         </div>
     )

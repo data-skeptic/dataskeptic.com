@@ -2,7 +2,7 @@ import Immutable, { fromJS } from 'immutable';
 import {TOGGLE_MOBILE_MENU} from '../Actions/LayoutActions';
 
 const init = {
-    isMobileMenuVisible: true
+    isMobileMenuVisible: false
 }
 
 const defaultState = fromJS(init);
