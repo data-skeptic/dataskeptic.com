@@ -101,6 +101,10 @@ html, body {
     padding-top: 24px;
 }
 
+.header #logo_mobile {
+    margin-left: 12px;
+}
+
 .header .mobile .cart .btn-open-cart-drawer {
     padding: 31px 30px !important;
     display: block;
@@ -173,6 +177,15 @@ html, body {
 .mobile-menu .nav {
     padding-top: 40px;
 }
+
+@media screen and (orientation:landscape) {
+    .mobile-menu .nav {
+        padding-top: 20px;
+        width: 50%;
+        float: left;
+    }
+}
+
 .mobile-menu .nav .navlink-li-container { }
 
 .mobile-menu .nav .navlink-li-container a {
@@ -184,8 +197,14 @@ html, body {
     text-decoration: none;
 }
 .mobile-menu .nav .navlink-li-container a.menu-active {
-    border-left-color: #F0D943;
+    border-color: #F0D943;
     color: #F0D943;
+}
+@media screen and (orientation:landscape) {
+    .mobile-menu .nav .navlink-li-container a {
+        line-height: 40px;
+        border-left: 0px;
+    }
 }
 
 #content-prefetch {

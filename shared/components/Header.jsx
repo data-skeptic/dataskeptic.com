@@ -58,7 +58,7 @@ class Header extends React.Component {
 
 		return (
 			<div className={classList}>
-				<div className="container-fluid hidden-xs desktop">
+				<div className="hidden-xs desktop">
 					<div className="cart-menu pull-right">
 						<CartMenu pathname={pathname}
 								  cartItemsCount={itemsCount}
