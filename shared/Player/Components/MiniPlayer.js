@@ -3,11 +3,11 @@ import React from 'react'
 import PlayerProgressBar from '../Components/PlayerProgressBar'
 import TogglePlayButton from '../Components/TogglePlayButton'
 
-export const MiniPlayer = ({ realPos=0, playing = false, title='[No episode loaded yet]', date='', duration='--:--', position='--:--', onPlayToggle, howler}) => (
+export const MiniPlayer = ({ realPos=0, playing = false, preview, title='[No episode loaded yet]', date='', duration='--:--', position='--:--', onPlayToggle, howler}) => (
     <div className="thin-player-container">
         <div className="">
             <div className="col-xs-9 col-sm-4 col-md-3 preview">
-                <img src="http://static.libsyn.com/p/assets/c/6/c/9/c6c96779218f4fb3/deep-learning.png"></img>
+                <img src={preview} alt={title}/>
                 <div className="description">
                     <p className="date">{date}</p>
                     <p className="title">{title}</p>

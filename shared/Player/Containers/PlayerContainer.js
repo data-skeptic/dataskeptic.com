@@ -98,9 +98,11 @@ class PlayerContainer extends React.Component {
 		var realDur = "--:--"
 		var realPos = "--:--"
 		var pubDate = null
+		var preview = null
 		if (oplayer.episode != undefined) {
 			var episode = oplayer.episode
 			title = episode.title
+			preview = episode.img
 			pubDate = episode.pubDate
 			var mp3 = episode.mp3
 			howler = <ReactHowler src={mp3} playing={is_playing} ref={(ref) => this.state.howler = ref} onEnd={this.onEnd.bind(this)} />
@@ -134,9 +136,10 @@ class PlayerContainer extends React.Component {
 		if (pubDate) {
 			pubDate = moment(pubDate).format('MMMM D, YYYY');
 		}
-		
+
 		return (
 			<MiniPlayer
+				preview={preview}
 				playing={is_playing}
 				episode={episode}
 				title={title}
