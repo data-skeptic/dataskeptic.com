@@ -2,6 +2,8 @@ import React, { PropTypes } from 'react'
 import ReactGA from 'react-ga'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import classNames from 'classnames'
+
 
 import xml2js from "xml2js"
 
@@ -13,6 +15,7 @@ import Header from './Header'
 import Menu from './Menu'
 import PlayerContainer from '../Player'
 import Sidebar from './Sidebar'
+import Overflow from '../Layout/Components/Overflow'
 
 import { toggleMobileMenu } from '../Layout/Actions/LayoutActions';
 import MobileMenu from '../MobileMenu/Components/MobileMenu'
@@ -146,8 +149,7 @@ class MainView extends React.Component {
   static propTypes = {
       children: PropTypes.object
   }
-
-
+  
   /**
    * Handler for mobile menu navigation item click
    *
@@ -173,13 +175,13 @@ class MainView extends React.Component {
 
   render() {
     this.logPageView()
-    const {isMobileMenuVisible, cart} = this.props;
+    const {isMobileMenuVisible, cart, isCartVisible} = this.props;
     const {pathname} = this.props.location
     const itemsCount = getCartItemsCount(cart.toJS().cart_items);
-    const classList = this.getClassList({isMobileMenuVisible});
+    const isOverflowMode = isCartVisible
 
     return (
-        <div className={classList}>
+        <div className={ classNames('site', {'no-scroll' : isMobileMenuVisible}) }>
           <div className="container-fluid">
             <MobileMenu
                 itemClick={this.onNavigationItemClick}
@@ -197,7 +199,8 @@ class MainView extends React.Component {
             {this.props.children}
             <Footer />
             <Sidebar />
-          </div> 
+          </div>
+          <Overflow visible={isOverflowMode}/>
         </div>
     )
   }
@@ -205,7 +208,8 @@ class MainView extends React.Component {
 
 export default connect(
     state => ({ 
-      cart: state.cart, 
+      cart: state.cart,
+      isCartVisible: state.cart.getIn(['cart_visible']),
       site: state.site,
       isMobileMenuVisible: state.layout.getIn(['isMobileMenuVisible']),
     }),
