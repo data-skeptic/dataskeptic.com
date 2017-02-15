@@ -174,7 +174,7 @@ h1 {
   }
 }
 
-//hamburger-menu.png
+/*hamburger-menu.png*/
 
 @media screen and (max-width: 700px) {
 }
@@ -479,7 +479,7 @@ ul.topnav li.right {float: right;}
 .thin-player-container .preview,
 .thin-player-container .slider,
 .thin-player-container .button {
-
+    z-index: 1;
 }
 
 .thin-player-container .button {
@@ -566,6 +566,34 @@ ul.topnav li.right {float: right;}
 .thin-player-container .slider {
     padding: 22px 10px;
 }
+
+
+@media (max-width: 880px) {
+    .thin-player-container {
+        position: relative;
+    }
+
+    .thin-player-container .slider {
+        position: absolute;
+        padding: 0px;
+        bottom: -1px;
+        left: 0px;
+        right: 0px;
+        width: 100%;
+    }
+
+    .thin-player-container .slider .player-progress-bar {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .thin-player-container .slider .player-position-container,
+    .thin-player-container .slider .player-duration-container,
+    .thin-player-container .slider .rc-slider-handle {
+        display: none;
+    }
+}
+
 
 .thin-player {
   padding: 3px;
@@ -1944,7 +1972,7 @@ button.slick-arrow.slick-prev {
     display: none;
 }
 
-@charset 'UTF-8';
+/*@charset 'UTF-8';*/
 /* Slider */
 .slick-loading .slick-list
 {

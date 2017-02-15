@@ -13,7 +13,7 @@ export const MiniPlayer = ({ realPos=0, playing = false, title='[No episode load
                     <p className="title">{title}</p>
                 </div>
             </div>
-            <div className="col-sm-7 col-md-offset-1 col-md-6 slider hidden-xs">
+            <div className="col-sm-7 col-md-offset-1 col-md-6 slider">
                 <PlayerProgressBar playing={playing} progress={position} />
                 <div className="player-position-container"><span className="player-position">{realPos}</span></div>
                 <div className="player-duration-container"><span className="player-duration">{duration}</span></div>
