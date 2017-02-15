@@ -3,7 +3,7 @@ import React from 'react'
 import PlayerProgressBar from '../Components/PlayerProgressBar'
 import TogglePlayButton from '../Components/TogglePlayButton'
 
-export const MiniPlayer = ({ playing = false, episode = {}, title, date, duration, position, playSymb, onPlayToggle, howler}) => (
+export const MiniPlayer = ({ realPos, playing = false, episode = {}, title, date, duration, position, playSymb, onPlayToggle, howler}) => (
     <div className="thin-player-container">
         <div className="">
             <div className="col-xs-9 col-sm-4 col-md-3 preview">
@@ -14,8 +14,8 @@ export const MiniPlayer = ({ playing = false, episode = {}, title, date, duratio
                 </div>
             </div>
             <div className="col-sm-7 col-md-offset-1 col-md-6 slider hidden-xs">
-                {position}
                 <PlayerProgressBar playing={playing} progress={position} />
+                <div className="player-position-container"><span className="player-position">{realPos}</span></div>
                 <div className="player-duration-container"><span className="player-duration">{duration}</span></div>
                 {howler}
             </div>
@@ -25,13 +25,5 @@ export const MiniPlayer = ({ playing = false, episode = {}, title, date, duratio
         </div>
     </div>
 )
-//
-// <div className="player" className="thin-player">
-//     <div className="player-inner">
-//     <button className="episode-button-sm" onClick={onPlayToggle}>{playSymb}</button>
-// <div className="player-title-container"><span className="player-title">{title}</span></div>
-//
-// </div>
-// </div>
 
 export default MiniPlayer

@@ -41,6 +41,15 @@ class PlayerContainer extends React.Component {
 		return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 	}
 
+	formatPosition(val) {
+		const m = val / 60
+		const min = Math.floor(m)
+		const sec = Math.floor(val - min * 60)
+		const duration = min + ":" + this.pad(sec, 2)
+
+		return duration
+	}
+
 	onEnd() {
 		var howler = this.state.howler
 		howler.stop()
@@ -52,6 +61,7 @@ class PlayerContainer extends React.Component {
 
 		this.props.dispatch({type: "PLAY_EPISODE", payload: episode })
 	}
+
 	render() {
 		var oplayer = this.props.player.toJS();
 
@@ -79,13 +89,16 @@ class PlayerContainer extends React.Component {
 		var howler = ""
 		var title = "[No episode loaded yet]"
 		var duration = "--:--"
-		var play_symb = <span>&#9658;</span>
+		var realDur = "--:--"
+		var realPos = "--:--"
 		if (oplayer.episode != undefined) {
 			var episode = oplayer.episode
 			title = episode.title
 			var mp3 = episode.mp3
 			howler = <ReactHowler src={mp3} playing={is_playing} ref={(ref) => this.state.howler = ref} onEnd={this.onEnd.bind(this)} />
 			duration = episode.duration
+			realDur = duration
+
 			var min = 0
 			var sec = 0
 			var hr = 0
@@ -102,19 +115,12 @@ class PlayerContainer extends React.Component {
 			}
 			var d = min * 60 + sec
 			var p = 1.0 * d * position/100
-			var left = d - p
-			var m = left / 60
-			min = Math.floor(m)
-			sec = Math.floor(left - min * 60)
-			duration = min + ":" + this.pad(sec, 2)
-		}
 
-		play_symb = null
-		if (is_playing) {
-			play_symb = <span>&#10073;&#10073;</span>
-		}
-		if (!playback_loaded) {			
-			play_symb = <span>?</span>
+			var left = d - p
+			duration = this.formatPosition(left)
+
+			var right = p
+			realPos = this.formatPosition(right)
 		}
 
 		return (
@@ -122,9 +128,9 @@ class PlayerContainer extends React.Component {
 				playing={true}
 				episode={episode}
 				title={title}
-				duration={duration}
+				duration={realDur}
 				position={position}
-				playSymb={play_symb}
+				realPos={realPos}
 				onPlayToggle={this.onPlayToggle}
 				howler={howler}
 			/>
