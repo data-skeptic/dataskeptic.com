@@ -34,6 +34,7 @@
     "immutable": "^3.7.6",
     "letsencrypt-express": "^2.0.5",
     "mathjax": "^2.7.0",
+    "moment": "^2.17.1",
     "morgan": "^1.7.0",
     "object-assign": "^4.0.1",
     "rc-slider": "^5.3.5",
