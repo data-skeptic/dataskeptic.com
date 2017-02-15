@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import Loading from './Loading'
-import Cart from './Cart'
+import CartContainer from '../Cart/Containers/CartContainer'
 import SizeSelector from './SizeSelector'
 
 @connect((store) => {

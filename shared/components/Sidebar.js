@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 import { Redirect } from 'react-router'
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import classNames from 'classnames'
 
-import Cart from './Cart'
+import CartContainer from '../Cart/Containers/CartContainer'
+
+import { toggleCart } from '../Cart/Actions/CartActions'
 
 class Sidebar extends React.Component {
 	constructor(props) {
@@ -11,12 +15,11 @@ class Sidebar extends React.Component {
 		this.onClick = this.onClick.bind(this)
 	}
 	onClick(event) {
-		this.props.dispatch({type: "TOGGLE_CART", payload: {} })
+		this.props.toggleCart();
 	}
 	toggleCart() {
-		this.props.dispatch({type: "TOGGLE_CART", payload: {} })
+		this.props.toggleCart();
 	}
-
     render() {
     	var ocart = this.props.cart.toJS()
     	var cart_visible = ocart.cart_visible
@@ -25,13 +28,12 @@ class Sidebar extends React.Component {
     	var total = ocart.total
     	var shipping = ocart.shipping
 
-	    var cls = cart_visible ? "sidebar-visible": "sidebar-hidden"
 	    return (
-	    	<div className="sidebar">
-		    	<div className={cls}>
+	    	<div className={ classNames('sidebar', { 'opened': cart_visible, 'closed': !cart_visible }) }>
+		    	<div className="inner">
 					<button onClick={this.toggleCart.bind(this)}>X - Close</button>
 					<div>
-						<Cart updatable={true} />
+						<CartContainer updatable={true} />
 					</div>
 					<div className="btnCheckoutContainer">
 						<Link className="btnCheckout" to="/checkout" onClick={this.onClick.bind(this)}>Checkout</Link>
@@ -43,4 +45,11 @@ class Sidebar extends React.Component {
     }
 }
 
-export default connect(state => ({ cart: state.cart }))(Sidebar)
+export default connect(
+	state => ({
+		cart: state.cart
+	}),
+	dispatch => bindActionCreators({
+		toggleCart
+	}, dispatch)
+)(Sidebar)

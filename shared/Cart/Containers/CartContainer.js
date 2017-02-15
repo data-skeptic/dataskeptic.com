@@ -1,11 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import CartQuantity from './CartQuantity'
-import CountrySelector from './CountrySelector'
-import EmptyCart from './EmptyCart'
+import CartQuantity from '../Components/CartQuantity'
+import CountrySelector from '../../components/CountrySelector'
+import EmptyCart from '../Components/EmptyCart'
 
-class Cart extends React.Component {
+class CartContainer extends React.Component {
 	render() {
 		var ocart = this.props.cart.toJS()
 		var cart_items = ocart.cart_items
@@ -58,4 +58,6 @@ class Cart extends React.Component {
 	}
 }
 
-export default connect(state => ({ cart: state.cart }))(Cart)
+export default connect(
+	state => ({ cart: state.cart })
+)(CartContainer)

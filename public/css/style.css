@@ -70,7 +70,7 @@ html, body {
         top: 0px;
         left: 0px;
         right: 0px;
-        z-index: 999;
+        z-index: 3;
     }
 
     .header .mainnav {
@@ -1353,42 +1353,56 @@ ul.topnav li.right {
  Checkout.js
 *****************************************************************************/
 
-@cart-width :250px;
+/*@cart-width :250px;*/
 
 .sidebar {
-    background-color: #00f;
-}
-
-.sidebar-visible {
+    background: #FFFFFF;
     -webkit-transition: 1s;
-    background-color: #ddd;
+    z-index: 999;
+    width: 400px;
+    height: 100%;
     position: fixed;
     margin: 0px;
     padding: 0px;
     top: 0px;
+
+    transition: right 0.3s cubic-bezier(0.17, 0.68, 0.38, 0.84) 0.1s;
+}
+
+@media (max-width: 880px) {
+    .sidebar {
+        width: 100%;
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+        background: #323333;
+        z-index: -1;
+
+        transition: all 0.3s;
+    }
+    .sidebar.closed {
+        opacity: 0;
+    }
+    .sidebar.opened {
+        z-index: 999;
+        opacity: 1;
+    }
+}
+
+.sidebar.opened {
     right: 0px;
-    width: 350px;
-    height: 100%;
-. transition(-webkit-transform ease 250 ms);
-. transition(transform ease 250 ms);
 }
-
-.sidebar-hidden {
-    -webkit-transition: 1s;
-    background-color: #222;
-    position: fixed;
-    margin: 0px;
-    padding: 0px;
-    top: 0px;
-    right: -350px;
-    width: 350px;
-    height: 100%;
-    overflow: hidden;
-. transition(-webkit-transform ease 250 ms);
-. transition(transform ease 250 ms);
+.sidebar.closed {
+    right: -500px;
+}
+.sidebar .inner {
+    padding: 25px 32px;
 }
 
 .btn-open-cart-drawer {
+    cursor: pointer;
     border-bottom: 0px !important;
 }
 
@@ -1592,7 +1606,7 @@ ul.topnav li.right {
     margin-bottom: 50px;
     padding-top: 50px;
     padding-bottom: 50px;
-    background-color: #ddd;
+    color: white
 }
 
 .spinner {

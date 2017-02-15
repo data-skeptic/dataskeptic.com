@@ -6,9 +6,11 @@ import { Link } from 'react-router'
 import { toggleMobileMenu } from '../Layout/Actions/LayoutActions';
 
 import Menu from './Menu'
-import CartMenu from './CartMenu'
+import CartMenu from '../Cart/Components/CartMenu'
+import CartLink from '../Cart/Components/CartLink'
 
-import CartLink from './CartLink'
+import { toggleCart } from '../Cart/Actions/CartActions';
+
 import { getItemsCount as getCartItemsCount } from '../Cart/Helpers';
 
 class Header extends React.Component {
@@ -24,7 +26,7 @@ class Header extends React.Component {
 	 *
 	 */
 	onCartClick() {
-		this.props.dispatch({type: "TOGGLE_CART", payload: {}})
+		this.props.toggleCart();
 	}
 
 	/**
@@ -102,6 +104,7 @@ export default connect(
 		cart: state.cart
 	}),
 	dispatch => bindActionCreators({
-		toggleMobileMenu
+		toggleMobileMenu,
+		toggleCart
 	}, dispatch)
 )(Header)
