@@ -3,11 +3,11 @@ import React from 'react'
 import PlayButton from './PlayButton'
 import PauseButton from './PauseButton'
 
-export const TogglePlayButton = ({ playing=false }) => (
-    <button className="player-btn">
+export const TogglePlayButton = ({ playing=false, onClick }) => (
+    <button className="player-btn" onClick={onClick}>
         { playing
-            ? <PlayButton playing={playing} />
-            : <PauseButton playing={playing} />
+            ? <PauseButton />
+            : <PlayButton />
         }
     </button>
 )

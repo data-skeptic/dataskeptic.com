@@ -1,5 +1,6 @@
 import React from "react"
 import ReactHowler from 'react-howler'
+import moment from 'moment'
 import { connect } from 'react-redux'
 
 import MiniPlayer from '../Components/MiniPlayer'
@@ -56,18 +57,23 @@ class PlayerContainer extends React.Component {
 		this.props.onPlayToggle(undefined)
 		this.props.dispatch({type: "STOP_PLAYBACK", payload: {} })
 	}
-	onPlayToggle() {
-		const {episode} = this.props;
 
-		this.props.dispatch({type: "PLAY_EPISODE", payload: episode })
+	/**
+	 * Toggle podcast play state
+	 *
+	 */
+	onPlayToggle() {
+		const { episode } = this.props;
+
+		this.props.dispatch({type: "PLAY_EPISODE", payload: episode.toJS() })
 	}
 
 	render() {
 		var oplayer = this.props.player.toJS();
 
-		// if (!oplayer.has_shown) {
-		// 	return <div></div>
-		// }
+		if (!oplayer.has_shown) {
+			return null
+		}
 
 		var position_updated = oplayer.position_updated
 		var position = oplayer.position
@@ -87,13 +93,15 @@ class PlayerContainer extends React.Component {
 		var playback_loaded = oplayer.playback_loaded
 		var is_playing = oplayer.is_playing
 		var howler = ""
-		var title = "[No episode loaded yet]"
+		var title = ""
 		var duration = "--:--"
 		var realDur = "--:--"
 		var realPos = "--:--"
+		var pubDate = null
 		if (oplayer.episode != undefined) {
 			var episode = oplayer.episode
 			title = episode.title
+			pubDate = episode.pubDate
 			var mp3 = episode.mp3
 			howler = <ReactHowler src={mp3} playing={is_playing} ref={(ref) => this.state.howler = ref} onEnd={this.onEnd.bind(this)} />
 			duration = episode.duration
@@ -123,12 +131,17 @@ class PlayerContainer extends React.Component {
 			realPos = this.formatPosition(right)
 		}
 
+		if (pubDate) {
+			pubDate = moment(pubDate).format('MMMM D, YYYY');
+		}
+		
 		return (
 			<MiniPlayer
-				playing={true}
+				playing={is_playing}
 				episode={episode}
 				title={title}
 				duration={realDur}
+				date={pubDate}
 				position={position}
 				realPos={realPos}
 				onPlayToggle={this.onPlayToggle}
@@ -138,4 +151,9 @@ class PlayerContainer extends React.Component {
 	}
 }
 
-export default connect(state => ({ player: state.player }))(PlayerContainer)
+export default connect(
+	state => ({
+		player: state.player,
+		episode: state.player.getIn(['episode'])
+	})
+)(PlayerContainer)

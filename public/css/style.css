@@ -420,7 +420,8 @@ ul.topnav li.right {float: right;}
     padding: 4px;
     border: none;
     /*TODO: add transition to scale, disable for left*/
-    /*transition: all 300ms, left 0s;*/
+    transition: 300ms;
+    transition-property: transform;
 }
 .thin-player-container .slider:hover .rc-slider-handle {
     transform: scale(1.4);
@@ -542,7 +543,7 @@ ul.topnav li.right {float: right;}
     margin-left: 86px;
     padding-top: 16px;
     font-size: 12px;
-    line-height: 13px;
+    line-height: 14px;
 }
 .thin-player-container .preview .description > p {
     padding: 0px;
