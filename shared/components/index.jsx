@@ -10,7 +10,7 @@ import { extractFolders } from '../utils/blog_utils'
 import Footer from './Footer'
 import Header from './Header'
 import Menu from './Menu'
-import Player from './Player'
+import PlayerContainer from '../Player'
 import Sidebar from './Sidebar'
 
 class MainView extends React.Component {
@@ -150,8 +150,8 @@ class MainView extends React.Component {
             <div className="row row-centered">
               <Header pathname={pathname} />
             </div>
-            <div className="row row-centered">
-              <Player />
+            <div className="row">
+              <PlayerContainer />
             </div>
             {this.props.children}
             <Footer />

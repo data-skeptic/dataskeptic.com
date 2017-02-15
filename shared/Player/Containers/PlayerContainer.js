@@ -1,11 +1,10 @@
 import React from "react"
-import ReactDOM from "react-dom"
 import ReactHowler from 'react-howler'
 import { connect } from 'react-redux'
 
-import PlayerProgressBar from './PlayerProgressBar'
+import MiniPlayer from '../Components/MiniPlayer'
 
-class Player extends React.Component {
+class PlayerContainer extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -14,6 +13,7 @@ class Player extends React.Component {
 			howler: undefined
 		}
 
+		this.onPlayToggle = this.onPlayToggle.bind(this)
 		this.update = this.update.bind(this)
 		setInterval(this.update, 1000)
 	}
@@ -47,14 +47,17 @@ class Player extends React.Component {
 		this.props.onPlayToggle(undefined)
 		this.props.dispatch({type: "STOP_PLAYBACK", payload: {} })
 	}
-	onPlayToggle(episode) {
+	onPlayToggle() {
+		const {episode} = this.props;
+
 		this.props.dispatch({type: "PLAY_EPISODE", payload: episode })
 	}
 	render() {
-		var oplayer = this.props.player.toJS()
-		if (!oplayer.has_shown) {
-			return <div></div>
-		}
+		var oplayer = this.props.player.toJS();
+
+		// if (!oplayer.has_shown) {
+		// 	return <div></div>
+		// }
 
 		var position_updated = oplayer.position_updated
 		var position = oplayer.position
@@ -105,6 +108,8 @@ class Player extends React.Component {
 			sec = Math.floor(left - min * 60)
 			duration = min + ":" + this.pad(sec, 2)
 		}
+
+		play_symb = null
 		if (is_playing) {
 			play_symb = <span>&#10073;&#10073;</span>
 		}
@@ -113,21 +118,18 @@ class Player extends React.Component {
 		}
 
 		return (
-			<div className="thin-player-container">
-				<div className="center">
-					<div className="player" className="thin-player">
-						<div className="player-inner">
-							<button className="episode-button-sm" onClick={this.onPlayToggle.bind(this, episode)}>{play_symb}</button>
-							<div className="player-title-container"><span className="player-title">{title}</span></div>
-							<PlayerProgressBar playing={is_playing} progress={position} />
-							<div className="player-duration-container"><span className="player-duration">{duration}</span></div>
-							{howler}
-						</div>
-					</div>
-				</div>
-			</div>
+			<MiniPlayer
+				playing={true}
+				episode={episode}
+				title={title}
+				duration={duration}
+				position={position}
+				playSymb={play_symb}
+				onPlayToggle={this.onPlayToggle}
+				howler={howler}
+			/>
 		)
 	}
 }
 
-export default connect(state => ({ player: state.player }))(Player)
+export default connect(state => ({ player: state.player }))(PlayerContainer)
