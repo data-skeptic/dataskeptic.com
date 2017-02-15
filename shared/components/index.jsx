@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react'
 import ReactGA from 'react-ga'
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
 import xml2js from "xml2js"
@@ -13,12 +14,18 @@ import Menu from './Menu'
 import Player from './Player'
 import Sidebar from './Sidebar'
 
+import { toggleMobileMenu } from '../Layout/Actions/LayoutActions';
+import MobileMenu from '../MobileMenu/Components/MobileMenu'
+import { getItemsCount as getCartItemsCount } from '../Cart/Helpers';
+
 class MainView extends React.Component {
   constructor(props) {
     super(props)
     var persisted = this.loadState()
     var total = calculateTotal(persisted.cart_items, persisted.country.short)
     var shipping = calculateShipping(persisted.cart_items, persisted.country.short)
+
+    this.onNavigationItemClick = this.onNavigationItemClick.bind(this)
   }
 
   loadState() {
@@ -140,16 +147,51 @@ class MainView extends React.Component {
       children: PropTypes.object
   }
 
+
+  /**
+   * Handler for mobile menu navigation item click
+   *
+   */
+  onNavigationItemClick() {
+    this.props.toggleMobileMenu()
+  }
+
+  /**
+   * Determinate current class list
+   *
+   * @param {Boolean} isMobileMenuVisible Mobile Menu visibility state
+   */
+  getClassList({isMobileMenuVisible}) {
+    let classes = ['site'];
+
+    if (isMobileMenuVisible) {
+      classes.push('no-scroll');
+    }
+
+    return classes.join(' ');
+  }
+
   render() {
     this.logPageView()
-    
-    const {pathname} = this.props.location;
+    const {isMobileMenuVisible, cart} = this.props;
+    const {pathname} = this.props.location
+    const itemsCount = getCartItemsCount(cart.toJS().cart_items);
+    const classList = this.getClassList({isMobileMenuVisible});
+
     return (
-        <div className="site">
+        <div className={classList}>
           <div className="container-fluid">
+            <MobileMenu
+                itemClick={this.onNavigationItemClick}
+                pathname={pathname}
+                cartItemsCount={itemsCount}
+                visible={isMobileMenuVisible}
+            />
+
             <div className="row row-centered">
               <Header pathname={pathname} />
             </div>
+
             <div className="row row-centered">
               <Player />
             </div>
@@ -162,5 +204,14 @@ class MainView extends React.Component {
   }
 }
 
-export default connect(state => ({ cart: state.cart, site: state.site }))(MainView)
+export default connect(
+    state => ({ 
+      cart: state.cart, 
+      site: state.site,
+      isMobileMenuVisible: state.layout.getIn(['isMobileMenuVisible']),
+    }),
+    dispatch => bindActionCreators({
+      toggleMobileMenu
+    }, dispatch)
+)(MainView)
 
