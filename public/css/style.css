@@ -567,6 +567,10 @@ ul.topnav li.right {float: right;}
     padding: 22px 10px;
 }
 
+.thin-player-container .slider .rc-slider-step {
+    cursor: pointer;
+}
+
 
 @media (max-width: 880px) {
     .thin-player-container {
