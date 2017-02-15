@@ -53,7 +53,7 @@ class LatestEpisodePlayer extends React.Component {
 					play_symb = <span>?</span>
 				}
 			}
-		}
+		} 
 		var d = new Date(episode.pubDate)
 		var dstr = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate()
 		return (

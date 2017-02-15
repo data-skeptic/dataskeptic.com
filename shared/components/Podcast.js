@@ -37,17 +37,20 @@ class Podcast extends React.Component {
 			year = years[0]
 		}
 		return (
-			<div className="center">
-				<YearSelector years={years} year={year} />
-				<div className="clear"></div>
-				<div className="episodes-container">
-					{
-						episodes.map(function(episode) {
-							return <Episode key={episode.guid} episode={episode} />
-						})
-					}
+			<div className="row podcasts">
+				<div className="col-md-8 col-xs-12">
+					<div className="episodes-container">
+						{
+							episodes.map(function(episode) {
+								return <Episode key={episode.guid} episode={episode} />
+							})
+						}
+					</div>
 				</div>
-				<YearSelector years={years} year={year} />
+				<div className="col-md-offset-1 col-md-3 col-xs-12 episodes-sidebar">
+					<h3>Year</h3>
+					<YearSelector years={years} year={year} />
+				</div>
 			</div>
 		)
 	}

@@ -1,5 +1,6 @@
 import xml2js from 'xml2js'
 import axios  from 'axios'
+
 import { convert_items_to_json } from 'daos/episodes'
 import { extractFolders } from '../utils/blog_utils'
 
@@ -71,7 +72,8 @@ export function loadBlogs(store, env, my_cache) {
   })
 }
 
-export function loadEpisodes(env, feed_uri, my_cache) {
+export function loadEpisodes(env, feed_uri, my_cache, aws) {
+  var domain = "dataskeptic.com"
   axios
     .get(feed_uri)
     .then(function(result) {
@@ -84,9 +86,49 @@ export function loadEpisodes(env, feed_uri, my_cache) {
         var list = []
         for (var i=0; i < episodes.length; i++) {
           var episode = episodes[i]
-          my_cache.episodes_map[episode.guid] = episode
+          var link = episode['link']
+          var prettyname = link.replace("http://" + domain, "").replace("https://" + domain, '').replace('.php', '').replace('/blog/', '/')
+          var guid = episode.guid
+          my_cache.episodes_map[guid] = episode
           if (i == 0) {
             my_cache.episodes_map["latest"] = episode
+            var blogs = my_cache.blogmetadata_map
+            var shownotes = blogs[prettyname]
+            if (shownotes == undefined) {
+              console.log("ERROR: Unlinkable episode: " + episode['guid'] + ' ' + episode['title'])
+              console.log(prettyname)
+            } else {
+              if (shownotes['guid'] == undefined) {
+                console.log("Going to link " + episode['title'] + ' to ' + shownotes['prettyname'])
+                my_cache.blogmetadata_map['guid'] = guid
+                // TODO: Save to dynamo
+                var docClient = new aws.DynamoDB.DocumentClient()
+                var table = "blog"
+                var pre = ""
+                if (env != "prod" && env != "master") {
+                  pre = env + "."
+                }
+                var uri = shownotes['uri']
+                var params = {
+                    TableName:table,
+                    Key:{
+                        "uri": uri
+                    },
+                    UpdateExpression: "set guid = :g",
+                    ExpressionAttributeValues:{
+                        ":g": guid
+                    },
+                    ReturnValues:"UPDATED_NEW"
+                };
+                docClient.update(params, function(err, data) {
+                    if (err) {
+                        console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
+                    } else {
+                        console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
+                    }
+                });
+              }
+            }
           }
           list.push(episode.guid)
         }

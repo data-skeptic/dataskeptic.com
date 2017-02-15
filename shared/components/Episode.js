@@ -65,9 +65,11 @@ class Episode extends React.Component {
 		return (
 			<div className="row episode">
 				<div className="col-xs-12 col-sm-3 episode-left">
-					<img className="episode-img" src={ep.img} />
+					<a href={ep.link}>
+						<img className="episode-img" src={ep.img} />
+					</a>
 				</div>
-				<div className="col-xs-12 col-sm-9 episode-middle">
+				<div className="col-xs-12 col-sm-8 episode-middle">
                     <div className="blog-date">{dstr}</div>
 					<a className="blog-title" href={ep.link}>{ep.title}</a>
 					<br/>
@@ -80,8 +82,7 @@ class Episode extends React.Component {
 						{transcript}
 					</div>
 					<div className="clear"></div>
-					<div className="episode-desc">{desc}</div>
-					<a href={ep.link}> [more]</a>
+					<div className="episode-desc">{desc}<a href={ep.link} className="episode-view-more">View More <i className="glyphicon glyphicon-more glyphicon-chevron-right">&nbsp;</i> </a></div>
 				</div>
 				<div className="clear"></div>
 			</div>
