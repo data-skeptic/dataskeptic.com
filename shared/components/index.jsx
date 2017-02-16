@@ -20,6 +20,7 @@ import Overflow from '../Layout/Components/Overflow'
 import { toggleMobileMenu } from '../Layout/Actions/LayoutActions';
 import MobileMenu from '../MobileMenu/Components/MobileMenu'
 import { getItemsCount as getCartItemsCount } from '../Cart/Helpers';
+import { toggleCart } from '../Cart/Actions/CartActions'
 
 class MainView extends React.Component {
   constructor(props) {
@@ -29,6 +30,7 @@ class MainView extends React.Component {
     var shipping = calculateShipping(persisted.cart_items, persisted.country.short)
 
     this.onNavigationItemClick = this.onNavigationItemClick.bind(this)
+    this.onOverflowClick = this.onOverflowClick.bind(this)
   }
 
   loadState() {
@@ -173,6 +175,13 @@ class MainView extends React.Component {
     return classes.join(' ');
   }
 
+  /**
+   * Click handler for overflow view
+   */
+  onOverflowClick() {
+    this.props.toggleCart()
+  }
+
   render() {
     this.logPageView()
     const {isMobileMenuVisible, cart, isCartVisible} = this.props;
@@ -200,7 +209,7 @@ class MainView extends React.Component {
             <Footer />
             <Sidebar />
           </div>
-          <Overflow visible={isOverflowMode}/>
+          <Overflow visible={isOverflowMode} onClick={this.onOverflowClick}/>
         </div>
     )
   }
@@ -214,7 +223,8 @@ export default connect(
       isMobileMenuVisible: state.layout.getIn(['isMobileMenuVisible']),
     }),
     dispatch => bindActionCreators({
-      toggleMobileMenu
+      toggleMobileMenu,
+      toggleCart
     }, dispatch)
 )(MainView)
 

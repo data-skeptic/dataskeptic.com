@@ -17,7 +17,7 @@ class CartContainer extends React.Component {
 			return (
 				<div>
 					<h2>Cart</h2>
-					<div className="row cart-rows">
+					<div className="cart-rows">
 						<div className="col-sm-12 cart-top cart-inner">
 							{cart_items.map(function(item) {
 								var subtotal = item.product.price * item.quantity
