@@ -8,7 +8,7 @@ import xml2js from "xml2js"
 import { calculateShipping, calculateTotal } from '../utils/store_utils'
 import { extractFolders } from '../utils/blog_utils'
 
-import Footer from './Footer'
+import Footer from '../Layout/Components/Footer'
 import Header from './Header'
 import Menu from './Menu'
 import PlayerContainer from '../Player'
@@ -195,9 +195,9 @@ class MainView extends React.Component {
               <PlayerContainer />
             </div>
             {this.props.children}
-            <Footer />
             <Sidebar />
-          </div> 
+          </div>
+          <Footer />
         </div>
     )
   }
