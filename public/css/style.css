@@ -466,6 +466,7 @@ ul.topnav li.right {
     color: #A2A6A6;
 
     padding-top: 60px;
+    padding-bottom: 60px;
 }
 
 @media (max-width: 880px) {
