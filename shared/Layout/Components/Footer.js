@@ -9,7 +9,11 @@ const LINKS = {
 	ITUNES: 'https://itunes.apple.com/us/podcast/the-data-skeptic-podcast/id890348705',
 	GOOGLE: 'https://goo.gl/app/playmusic?ibi=com.google.PlayMusic&amp;isi=691797987&amp;ius=googleplaymusic&amp;link=https://play.google.com/music/m/Ibr6e2jb7ot6m6gupwdjgsfmoqa?t%3DData_Skeptic',
 	SWITCHER: 'http://www.stitcher.com/s?fid=50561&amp;refid=stpr',
-	RSS: '/feed.rss'
+	RSS: '/feed.rss',
+
+	TWITTER: 'https://twitter.com/dataskeptic',
+	FACEBOOK: 'https://www.facebook.com/dataskeptic',
+	YOUTUBE: 'https://youtube.com/dataskeptic'
 }
 
 export const Footer = ({ foo, pathname, linkClick }) => (
@@ -38,18 +42,18 @@ export const Footer = ({ foo, pathname, linkClick }) => (
 				<div className="col-md-2 links-block">
 					<h3>Data Skeptic</h3>
 					<div className="links">
-						<NavLink active={pathname} to="/podcast" onClick={linkClick}>About</NavLink>
-						<NavLink active={pathname} to="/blog" onClick={linkClick}>Sponsor</NavLink>
-						<NavLink active={pathname} to="/projects" onClick={linkClick}>Store</NavLink>
-						<NavLink active={pathname} to="/services" onClick={linkClick}>Contact</NavLink>
+						<NavLink active={pathname} to="/" onClick={linkClick}>About</NavLink>
+						<NavLink active={pathname} to="/members" onClick={linkClick}>Membership</NavLink>
+						<NavLink active={pathname} to="/store" onClick={linkClick}>Store</NavLink>
+						<NavLink active={pathname} to="/contact-us" onClick={linkClick}>Contact</NavLink>
 					</div>
 				</div>
 				<div className="col-md-2 links-block">
-					<h3>Connent</h3>
+					<h3>Connect</h3>
 					<div className="links">
-						<NavLink className='twitter' active={pathname} to="/podcast" onClick={linkClick}>Twitter</NavLink>
-						<NavLink className='facebook' active={pathname} to="/blog" onClick={linkClick}>Facebook</NavLink>
-						<NavLink className='youtube' active={pathname} to="/projects" onClick={linkClick}>Youtube</NavLink>
+						<a className='twitter' href={LINKS.TWITTER} onClick={linkClick}>Twitter</a>
+						<a className='facebook' href={LINKS.FACEBOOK} onClick={linkClick}>Facebook</a>
+						<a className='youtube' href={LINKS.YOUTUBE} onClick={linkClick}>Youtube</a>
 					</div>
 				</div>
 				<div className="col-md-2 links-block">
