@@ -468,6 +468,12 @@ ul.topnav li.right {
     padding-top: 60px;
 }
 
+@media (max-width: 880px) {
+    .footer {
+        height: auto;
+    }
+}
+
 .footer .philosophy {
     margin-top: 28px;
     color: #A2A6A6;

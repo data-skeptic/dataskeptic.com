@@ -23,14 +23,14 @@ export const Footer = ({ foo, pathname, linkClick }) => (
 		</div>
 		<div className="footer">
 			<div className="container">
-				<div className="col-md-3">
+				<div className="col-xs-12 col-md-3">
 					<Link to="/"><img src="/img/svg/logo.svg" alt="Data Skeptic logo" /></Link>
 					<p className="philosophy">
 						Data science, statistics, machine learning, artificial intelligence, and scientific skepticism.
 					</p>
 					<a className="creative-commons" href="https://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="/img/png/by-nc-sa.eu.png" className="footer-img" alt="Data Skeptic is released under a creative commons attribution non-comercial share alike 4.0 license" /></a>
 				</div>
-				<div className="col-md-offset-1 col-md-2 links-block">
+				<div className="col-xs-6 col-md-offset-1 col-md-2 links-block">
 					<h3>Content</h3>
 					<div className="links">
 						<NavLink active={pathname} to="/podcast" onClick={linkClick}>Podcasts</NavLink>
@@ -39,7 +39,7 @@ export const Footer = ({ foo, pathname, linkClick }) => (
 						<NavLink active={pathname} to="/services" onClick={linkClick}>Services</NavLink>
 					</div>
 				</div>
-				<div className="col-md-2 links-block">
+				<div className="col-xs-6 col-md-2 links-block">
 					<h3>Data Skeptic</h3>
 					<div className="links">
 						<NavLink active={pathname} to="/" onClick={linkClick}>About</NavLink>
@@ -48,7 +48,7 @@ export const Footer = ({ foo, pathname, linkClick }) => (
 						<NavLink active={pathname} to="/contact-us" onClick={linkClick}>Contact</NavLink>
 					</div>
 				</div>
-				<div className="col-md-2 links-block">
+				<div className="col-xs-6 col-md-2 links-block">
 					<h3>Connect</h3>
 					<div className="links">
 						<a className='twitter' href={LINKS.TWITTER} onClick={linkClick}>Twitter</a>
@@ -56,7 +56,7 @@ export const Footer = ({ foo, pathname, linkClick }) => (
 						<a className='youtube' href={LINKS.YOUTUBE} onClick={linkClick}>Youtube</a>
 					</div>
 				</div>
-				<div className="col-md-2 links-block">
+				<div className="col-xs-6 col-md-2 links-block">
 					<h3>Subscribe</h3>
 					<div className="links">
 						<a className='itunes' href={LINKS.ITUNES} onClick={linkClick}>iTunes</a>
