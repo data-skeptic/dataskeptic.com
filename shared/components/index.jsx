@@ -8,7 +8,7 @@ import xml2js from "xml2js"
 import { calculateShipping, calculateTotal } from '../utils/store_utils'
 import { extractFolders } from '../utils/blog_utils'
 
-import Footer from './Footer'
+import Footer from '../Layout/Components/Footer'
 import Header from './Header'
 import Menu from './Menu'
 import PlayerContainer from '../Player'
@@ -26,6 +26,7 @@ class MainView extends React.Component {
     var shipping = calculateShipping(persisted.cart_items, persisted.country.short)
 
     this.onNavigationItemClick = this.onNavigationItemClick.bind(this)
+    this.onFooterItemClick = this.onFooterItemClick.bind(this)
   }
 
   loadState() {
@@ -171,6 +172,15 @@ class MainView extends React.Component {
     return classes.join(' ');
   }
 
+  /**
+   * Handler for footer link click
+   *
+   */
+  onFooterItemClick() {
+    // scroll page to the top
+    window.scrollTo(0, 0);
+  }
+
   render() {
     this.logPageView()
     const {isMobileMenuVisible, cart} = this.props;
@@ -195,9 +205,9 @@ class MainView extends React.Component {
               <PlayerContainer />
             </div>
             {this.props.children}
-            <Footer />
             <Sidebar />
-          </div> 
+          </div>
+          <Footer linkClick={this.onFooterItemClick} />
         </div>
     )
   }
