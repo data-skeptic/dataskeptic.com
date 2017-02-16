@@ -26,6 +26,7 @@ class MainView extends React.Component {
     var shipping = calculateShipping(persisted.cart_items, persisted.country.short)
 
     this.onNavigationItemClick = this.onNavigationItemClick.bind(this)
+    this.onFooterItemClick = this.onFooterItemClick.bind(this)
   }
 
   loadState() {
@@ -171,6 +172,15 @@ class MainView extends React.Component {
     return classes.join(' ');
   }
 
+  /**
+   * Handler for footer link click
+   *
+   */
+  onFooterItemClick() {
+    // scroll page to the top
+    window.scrollTo(0, 0);
+  }
+
   render() {
     this.logPageView()
     const {isMobileMenuVisible, cart} = this.props;
@@ -197,7 +207,7 @@ class MainView extends React.Component {
             {this.props.children}
             <Sidebar />
           </div>
-          <Footer />
+          <Footer linkClick={this.onFooterItemClick} />
         </div>
     )
   }

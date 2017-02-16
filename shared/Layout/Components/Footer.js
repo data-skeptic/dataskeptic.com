@@ -12,7 +12,7 @@ const LINKS = {
 	RSS: '/feed.rss'
 }
 
-export const Footer = ({ foo, pathname, itemClick }) => (
+export const Footer = ({ foo, pathname, linkClick }) => (
 	<div>
 		<div className="advert center">
 			<AdSense.Google client='ca-pub-4495792015968395' slot='2320193863' />
@@ -29,36 +29,36 @@ export const Footer = ({ foo, pathname, itemClick }) => (
 				<div className="col-md-offset-1 col-md-2 links-block">
 					<h3>Content</h3>
 					<div className="links">
-						<NavLink active={pathname} to="/podcast" onClick={itemClick}>Podcasts</NavLink>
-						<NavLink active={pathname} to="/blog" onClick={itemClick}>Blog</NavLink>
-						<NavLink active={pathname} to="/projects" onClick={itemClick}>Projects</NavLink>
-						<NavLink active={pathname} to="/services" onClick={itemClick}>Services</NavLink>
+						<NavLink active={pathname} to="/podcast" onClick={linkClick}>Podcasts</NavLink>
+						<NavLink active={pathname} to="/blog" onClick={linkClick}>Blog</NavLink>
+						<NavLink active={pathname} to="/projects" onClick={linkClick}>Projects</NavLink>
+						<NavLink active={pathname} to="/services" onClick={linkClick}>Services</NavLink>
 					</div>
 				</div>
 				<div className="col-md-2 links-block">
 					<h3>Data Skeptic</h3>
 					<div className="links">
-						<NavLink active={pathname} to="/podcast" onClick={itemClick}>About</NavLink>
-						<NavLink active={pathname} to="/blog" onClick={itemClick}>Sponsor</NavLink>
-						<NavLink active={pathname} to="/projects" onClick={itemClick}>Store</NavLink>
-						<NavLink active={pathname} to="/services" onClick={itemClick}>Contact</NavLink>
+						<NavLink active={pathname} to="/podcast" onClick={linkClick}>About</NavLink>
+						<NavLink active={pathname} to="/blog" onClick={linkClick}>Sponsor</NavLink>
+						<NavLink active={pathname} to="/projects" onClick={linkClick}>Store</NavLink>
+						<NavLink active={pathname} to="/services" onClick={linkClick}>Contact</NavLink>
 					</div>
 				</div>
 				<div className="col-md-2 links-block">
 					<h3>Connent</h3>
 					<div className="links">
-						<NavLink className='twitter' active={pathname} to="/podcast" onClick={itemClick}>Twitter</NavLink>
-						<NavLink className='facebook' active={pathname} to="/blog" onClick={itemClick}>Facebook</NavLink>
-						<NavLink className='youtube' active={pathname} to="/projects" onClick={itemClick}>Youtube</NavLink>
+						<NavLink className='twitter' active={pathname} to="/podcast" onClick={linkClick}>Twitter</NavLink>
+						<NavLink className='facebook' active={pathname} to="/blog" onClick={linkClick}>Facebook</NavLink>
+						<NavLink className='youtube' active={pathname} to="/projects" onClick={linkClick}>Youtube</NavLink>
 					</div>
 				</div>
 				<div className="col-md-2 links-block">
 					<h3>Subscribe</h3>
 					<div className="links">
-						<a className='itunes' href={LINKS.ITUNES} onClick={itemClick}>iTunes</a>
-						<a className='google_play' href={LINKS.GOOGLE} onClick={itemClick}>Google Play</a>
-						<a className='switcher' href={LINKS.SWITCHER} onClick={itemClick}>Switcher</a>
-						<a className='rss' href={LINKS.RSS} onClick={itemClick}>RSS Feed</a>
+						<a className='itunes' href={LINKS.ITUNES} onClick={linkClick}>iTunes</a>
+						<a className='google_play' href={LINKS.GOOGLE} onClick={linkClick}>Google Play</a>
+						<a className='switcher' href={LINKS.SWITCHER} onClick={linkClick}>Switcher</a>
+						<a className='rss' href={LINKS.RSS} onClick={linkClick}>RSS Feed</a>
 					</div>
 				</div>
 			</div>
