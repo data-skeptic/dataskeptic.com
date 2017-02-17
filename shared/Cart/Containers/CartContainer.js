@@ -10,6 +10,16 @@ import CartItem from '../Components/CartItem'
 
 class CartContainer extends React.Component {
 
+    constructor() {
+        super();
+
+        this.onRemoveClick = this.onRemoveClick.bind(this);
+    }
+
+    onRemoveClick(product) {
+        this.props.dispatch({type: "REMOVE_CART_PRODUCT", payload: {product} })
+    }
+
     renderCartItems(items = []) {
         return items.map((item, index) => {
             const subtotal = (item.product.price * item.quantity)
@@ -29,6 +39,7 @@ class CartContainer extends React.Component {
                           quantity={item.quantity}
                           size={item.size}
                           subtotal={subtotal.toFixed(2)}
+                          onRemoveClick={this.onRemoveClick}
                 />
             )
         })

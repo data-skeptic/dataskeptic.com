@@ -305,6 +305,18 @@ export default function CartReducer(state = defaultState, action) {
         }
       }
       break;
+    case 'REMOVE_CART_PRODUCT':
+      var product = action.payload.product
+      var found_index = -1
+      for (var i=0; i < nstate.cart_items.length; i++) {
+        var citem = nstate.cart_items[i]
+        if (citem.product.id == product.id && citem.size == size) {
+          found_index = i
+          i = nstate.cart_items.length
+        }
+      }
+      nstate.cart_items.splice(found_index,1)
+      break;
     case 'SET_STORE_ENVIRONMENT':
       var env = action.payload
       if (env == "prod") {
