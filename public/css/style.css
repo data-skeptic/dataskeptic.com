@@ -1761,6 +1761,20 @@ ul.topnav li.right {
     /*position: relative;*/
 }
 
+.sidebar .title h4 {
+    float: left;
+    font-size: 24px;
+    color: #575959;
+}
+
+.sidebar .title .count {
+    margin-left: 14px;
+    font-size: 14px;
+    color: #7D7F7F;
+    line-height: 7px;
+    vertical-align: text-bottom;
+}
+
 .sidebar .cart-rows {
     position: absolute;
     top: 80px;
@@ -1773,6 +1787,7 @@ ul.topnav li.right {
 
 .sidebar .cart-inner {
     padding-bottom: 30px;
+    border-top: 1px solid #D7D9D9;
 }
 
 .sidebar .cart-inner .cart-items {

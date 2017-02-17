@@ -52,7 +52,10 @@ class CartContainer extends React.Component {
             const items = this.renderCartItems(cart_items);
             return (
                 <div>
-                    <h2>Cart</h2>
+                    <div className="title">
+                        <h4>Cart</h4>
+                        <span className="count">{items.length} items</span>
+                    </div>
                     <div className="cart-rows">
                         <div className="cart-inner">
                             <div className="cart-items">
