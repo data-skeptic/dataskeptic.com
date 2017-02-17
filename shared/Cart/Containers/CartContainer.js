@@ -11,9 +11,6 @@ import CartItem from '../Components/CartItem'
 class CartContainer extends React.Component {
 
     renderCartItems(items = []) {
-        items = items.concat(items)
-        items = items.concat(items)
-
         return items.map((item, index) => {
             const subtotal = (item.product.price * item.quantity)
             let title = item.product.title
