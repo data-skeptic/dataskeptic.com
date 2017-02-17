@@ -42,7 +42,7 @@ class CartContainer extends React.Component {
 
         const { onCheckoutClick, needCheckout } = this.props
 
-        const subtotal = 0.00
+        const subtotal = cart_items.reduce((mem, item) => (item.product.price * item.quantity), 0);
         if (cart_items.length == 0) {
             return <EmptyCart />
         } else {
@@ -67,7 +67,10 @@ class CartContainer extends React.Component {
                         </div>
                         <div className="cart-value shipping">
                             <div className="price"><span>${shipping.toFixed(2)}</span></div>
-                            <div className="attribute"><span>Shipping</span></div>
+                            <div className="attribute">
+                                <span>Shipping</span>
+                                <CountrySelector />
+                            </div>
                         </div>
                         <div className="cart-value title">
                             <div className="price"><span className="usd">usd</span><span>${total.toFixed(2)}</span></div>
@@ -85,8 +88,6 @@ class CartContainer extends React.Component {
         }
     }
 }
-
-// <CountrySelector />
 
 export default connect(
     (state, ownProps) => ({

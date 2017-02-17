@@ -1668,7 +1668,7 @@ ul.topnav li.right {
     margin-bottom: 50px;
     padding-top: 50px;
     padding-bottom: 50px;
-    color: white
+    color: #000000;
 }
 
 .spinner {
@@ -1821,12 +1821,16 @@ ul.topnav li.right {
     min-height: 32px;
 }
 .sidebar .cart-end .cart-value .attribute {
-    margin-right: 20%;
+    margin-right: 100px;
 }
 .cart-end .cart-value .price {
     float: right;
     text-align: right;
-    width: 20%;
+    width: 100px;
+}
+.cart-end .cart-value .country-selector {
+    display: inline-block;
+    max-width: 50%;
 }
 .cart-end .cart-value.subtotal {
     margin-top: 24px;
