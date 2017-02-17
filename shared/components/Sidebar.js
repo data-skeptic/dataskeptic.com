@@ -13,6 +13,7 @@ class Sidebar extends React.Component {
 	constructor(props) {
 		super(props)
 		this.onClick = this.onClick.bind(this)
+		this.toggleCart = this.toggleCart.bind(this)
 	}
 	onClick(event) {
 		this.props.toggleCart();
@@ -31,13 +32,12 @@ class Sidebar extends React.Component {
 	    return (
 	    	<div className={ classNames('sidebar', { 'opened': cart_visible, 'closed': !cart_visible }) }>
 		    	<div className="inner">
-					<button onClick={this.toggleCart.bind(this)}>X - Close</button>
-					<div>
-						<CartContainer updatable={true} />
-					</div>
-					<div className="btnCheckoutContainer">
-						<Link className="btnCheckout" to="/checkout" onClick={this.onClick.bind(this)}>Checkout</Link>
-					</div>
+					<button className="sidebar-close" onClick={this.toggleCart}><img src="img/svg/x.svg" alt=""/></button>
+
+					<CartContainer
+						needCheckout={true}
+						onCheckoutClick={this.onClick}
+						updatable={true} />
 			    </div>
 		    </div>
 		)

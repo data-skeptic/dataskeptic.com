@@ -34,12 +34,7 @@ class Store extends React.Component {
 							return <StoreItem key={product.id} product={product} />
 						})}
 					</div>
-					<div>
-						<CartContainer updatable={true} />
-					</div>
-					<div className="btnCheckoutContainer">
-						<Link className="btnCheckout" to="/checkout">Checkout</Link>
-					</div>
+					<CartContainer needCheckout={true} updatable={true} />
 				</div>
 			)
 		}
