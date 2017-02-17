@@ -6,8 +6,8 @@
  */
 export function getItemsCount(items) {
     items = items || []
-
+    
     return items.reduce((mem, item) => {
-        mem += item.quantity
+         return mem + item.quantity
     }, 0);
 }

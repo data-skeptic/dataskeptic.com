@@ -383,7 +383,7 @@ h1 {
 }
 
 .menu-cart-container {
-    background-image: url("/img/png/checkout.png");
+    background-image: url("/img/svg/icon-cart.svg");
     position: relative;
     height: 18px;
     width: 18px;

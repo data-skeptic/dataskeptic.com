@@ -9,12 +9,12 @@ export const MobileMenu = ({ pathname, visible = false, itemClick }) => {
 
     return (
         <div className={classList}>
-            <div class="first">
+            <div className="first">
                 <Menu pathname={pathname} itemClick={itemClick}>
                     <NavLink active={pathname} to="/" onClick={itemClick}>Home</NavLink>
                 </Menu>
             </div>
-            <div class="second">
+            <div className="second">
                 <CartMenu pathname={pathname}
                           itemClick={itemClick}
                           cartButton={false}
