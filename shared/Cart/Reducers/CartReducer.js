@@ -25,7 +25,7 @@ const init = {
   cart_items: [],
   total: 0,
   shipping: 0,
-  cart_visible: false,
+  cart_visible: true,
   prod: true, // client/index.jsx will dispatch SET_STORE_ENVIRONMENT on init
   go_to_checkout: false,
   country_short: "us",

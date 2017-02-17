@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import CartQuantity from '../Components/CartQuantity'
 import CountrySelector from '../../components/CountrySelector'
 import EmptyCart from '../Components/EmptyCart'
+import CartItem from '../Components/CartItem'
 
 class CartContainer extends React.Component {
 	render() {
@@ -20,6 +21,7 @@ class CartContainer extends React.Component {
 					<div className="cart-rows">
 						<div className="col-sm-12 cart-top cart-inner">
 							{cart_items.map(function(item) {
+								console.dir(item);
 								var subtotal = item.product.price * item.quantity
 								var title = item.product.title
 								var key = "key_" + item.product.id
@@ -28,14 +30,14 @@ class CartContainer extends React.Component {
 									key += "_" + item.size
 								}
 								return (
-									<div key={key} className="row cart-row cart-inner-inner">
-										<div className="col-xs-4 cart-title">{title}</div>
-										<div className="col-xs-1 cart-price">${item.product.price}</div>
-										<div className="col-xs-4 cart-quan">
-											<CartQuantity quantity={item.quantity} updateable={true} product={item.product} size={item.size} />
-										</div>
-										<div className="col-xs-2 cart-subtotal">${subtotal}</div>
-									</div>
+									<CartItem key={key}
+											  title={title}
+											  product={item.product}
+											  subtype={item.size}
+											  quantity={item.quantity}
+											  size={item.size}
+											  subtotal={subtotal.toFixed(2)}
+									/>
 								)
 							})}
 							<div className="cart-end">
