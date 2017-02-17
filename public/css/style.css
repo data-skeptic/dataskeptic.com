@@ -8,6 +8,11 @@ html, body {
     outline: none;
 }
 
+*, body {
+    font-size: 15px;
+    font-weight: 500;
+}
+
 .site.no-scroll {
     overflow: hidden;
 }
@@ -451,11 +456,58 @@ ul.topnav li.right {
     margin-right: 5px;
 }
 
+.advert {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
 .footer {
-    text-align: center;
-    margin: auto;
-    margin-top: 5px;
-    margin-bottom: 45px;
+    height: 374px;
+    background: #3A3B3B;
+    color: #A2A6A6;
+
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+@media (max-width: 880px) {
+    .footer {
+        height: auto;
+    }
+}
+
+.footer .philosophy {
+    margin-top: 28px;
+    color: #A2A6A6;
+}
+.footer .creative-commons {
+    opacity: 0.2;
+}
+.footer h3 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #FFFFFF;
+
+    padding: 0px;
+    margin: 0px;
+}
+
+.footer .links-block {
+    padding-top: 16px;
+}
+
+.footer .links-block > .links {
+    padding-top: 28px;
+}
+
+.footer .links-block > .links a {
+    display: block;
+    margin-bottom: 12px;
+    color: #A2A6A6;
+    text-decoration: none;
+}
+.footer .links-block > .links a:hover {
+    color: #FFFFFF;
 }
 
 .footer-links {

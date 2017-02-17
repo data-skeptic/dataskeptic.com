@@ -10,7 +10,7 @@ import xml2js from "xml2js"
 import { calculateShipping, calculateTotal } from '../utils/store_utils'
 import { extractFolders } from '../utils/blog_utils'
 
-import Footer from './Footer'
+import Footer from '../Layout/Components/Footer'
 import Header from './Header'
 import Menu from './Menu'
 import PlayerContainer from '../Player'
@@ -31,6 +31,7 @@ class MainView extends React.Component {
 
     this.onNavigationItemClick = this.onNavigationItemClick.bind(this)
     this.onOverflowClick = this.onOverflowClick.bind(this)
+    this.onFooterItemClick = this.onFooterItemClick.bind(this)
   }
 
   loadState() {
@@ -151,7 +152,8 @@ class MainView extends React.Component {
   static propTypes = {
       children: PropTypes.object
   }
-  
+
+
   /**
    * Handler for mobile menu navigation item click
    *
@@ -182,6 +184,15 @@ class MainView extends React.Component {
     this.props.toggleCart()
   }
 
+  /**
+   * Handler for footer link click
+   *
+   */
+  onFooterItemClick() {
+    // scroll page to the top
+    window.scrollTo(0, 0);
+  }
+
   render() {
     this.logPageView()
     const {isMobileMenuVisible, cart, isCartVisible} = this.props;
@@ -206,9 +217,9 @@ class MainView extends React.Component {
               <PlayerContainer />
             </div>
             {this.props.children}
-            <Footer />
             <Sidebar />
           </div>
+          <Footer linkClick={this.onFooterItemClick} />
           <Overflow visible={isOverflowMode} onClick={this.onOverflowClick}/>
         </div>
     )
