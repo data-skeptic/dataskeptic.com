@@ -296,11 +296,6 @@ h1 {
     }
 }
 
-@media screen and (max-width: 625px) {
-    .header-p {
-        font-size: 10pt
-    }
-}
 
 @media screen and (max-width: 580px) {
     .header-p {
@@ -311,6 +306,10 @@ h1 {
 @media screen and (max-width: 530px) {
     .header-p {
         font-size: 8pt
+    }
+    .carousel {
+        visibility: hidden;
+        display: none;
     }
 }
 
