@@ -19,6 +19,7 @@ export default class AdvertiserCard extends React.Component {
 						<p>Please visit <a href="https://www.periscopedata.com/skeptics">https://www.periscopedata.com/skeptics</a><br/>
 						to learn more about what you can do with their tools.</p>
 
+					</div>
 				</div>
 			</div>
 		)
