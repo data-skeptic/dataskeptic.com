@@ -2,19 +2,19 @@ import React from 'react'
 
 import Menu from '../../components/Menu'
 import NavLink from '../../components/NavLink'
-import CartMenu from '../../components/CartMenu'
+import CartMenu from '../../Cart/Components/CartMenu'
 
 export const MobileMenu = ({ pathname, visible = false, itemClick }) => {
     const classList = 'mobile-menu ' + (visible ? 'overlay': '');
 
     return (
         <div className={classList}>
-            <div class="first">
+            <div className="first">
                 <Menu pathname={pathname} itemClick={itemClick}>
                     <NavLink active={pathname} to="/" onClick={itemClick}>Home</NavLink>
                 </Menu>
             </div>
-            <div class="second">
+            <div className="second">
                 <CartMenu pathname={pathname}
                           itemClick={itemClick}
                           cartButton={false}

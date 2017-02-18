@@ -1,6 +1,6 @@
 import React from 'react'
 
-import NavLink from './NavLink'
+import NavLink from '../../components/NavLink'
 import CartLink from './CartLink'
 
 export const CartMenu = ({pathname, cartItemsCount, cartClick, cartButton = true, itemClick}) => (
