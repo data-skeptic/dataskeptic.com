@@ -2,6 +2,8 @@ import React from "react"
 import ReactDOM from "react-dom"
 import { connect } from 'react-redux'
 
+import contact_form_send from '../daos/contact_form_send'
+
 class ContactForm extends React.Component {
 	constructor(props) {
 		super(props)
@@ -42,7 +44,8 @@ class ContactForm extends React.Component {
 		}
 		else {
 			var dispatch = this.props.dispatch
-			dispatch({type: "CONTACT_FORM", payload: {dispatch} })
+			dispatch({type: "SET_SENDING", payload: {}})
+			contact_form_send(name, email, msg, dispatch)
 		}
 	}
 

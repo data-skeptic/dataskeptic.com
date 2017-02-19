@@ -1,5 +1,6 @@
 import axios from "axios"
 import {get_contributors} from 'backend/get_contributors'
+import contact_form_send from '../daos/contact_form_send'
 
 export function pay_invoice(prod, dispatch, event, id, amount) {
 	dispatch({type: "START_INVOICE_PAYMENT", payload: {}})
@@ -21,7 +22,8 @@ export function pay_invoice(prod, dispatch, event, id, amount) {
 			dispatch({type: "INVOICE_ERROR", payload: {paymentError: pubError}})
 			var msg = {err: paymentError, invoice: "yes"}
 			var email = "invoice"
-			dispatch({type: "CONTACT_FORM", payload: {msg, email} })
+			contact_form_send("dataskeptic.com", email, msg, undefined)
+
 		} else {
 			var uri = "/api/invoice/pay?id=" + id + "&token=" + token + "&amount=" + amount
 			axios
