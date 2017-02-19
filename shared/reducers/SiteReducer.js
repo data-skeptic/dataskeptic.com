@@ -50,34 +50,6 @@ export default function siteReducer(state = defaultState, action) {
     case 'SET_TITLE':
     	nstate.title = action.payload
     	break
-    case 'JOIN_SLACK':
-      var dispatch = action.payload.dispatch
-    	var email = action.payload.email
-    	var token = ""
-  		var req = {email: email, token: token, set_active: true}
-      nstate.slackstatus = "Sending..."
-      var config = {
-       // headers: {'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'}
-      };
-  		axios
-  			.post("/api/slack/join", req, config)
-  			.then(function(resp) {
-          var data = resp['data']
-          var msg = data['msg']
-          dispatch({type: "SLACK_UPDATE", payload: {msg} })            
-  			})
-  			.catch(function(err) {
-          var data = err['data']
-          var msg = "Sorry, we're having a problem getting that done :("
-          if (data != undefined) {
-            if (data['msg'] != undefined) {
-              msg = data['msg']
-            }
-          }
-          dispatch({type: "SLACK_UPDATE", payload: {msg} })
-  			  console.log(err)
-  			})
-      break;
     case 'SLACK_UPDATE':
       var msg = action.payload.msg
       nstate.slackstatus = msg
