@@ -117,13 +117,16 @@ export function get_homepage_content(dispatch) {
 	} else {
 		console.log("Loading homepage content")
 		axios
-			.get("/api/blog?limit=2")
+			.get("/api/blog?limit=4")
 	  		.then(function(result) {
 	  			var blogs = result["data"]
 	  			var blog = blogs[0]
 	  			var pn = blog.prettyname
-	  			if (pn.indexOf("/episodes/") == 0 || pn.indexOf("/transcripts/") == 0) {
-	  				blog = blogs[1]
+	  			var i = 1
+	  			while (i < blogs.length && (pn.indexOf("/episodes/") == 0 || pn.indexOf("/transcripts/") == 0)) {
+	  				blog = blogs[i]
+	  				pn = blog.prettyname
+	  				i += 1
 	  			}
 	  			var loaded = 1
 	  			var pathname = "/blog" + blog["prettyname"]
