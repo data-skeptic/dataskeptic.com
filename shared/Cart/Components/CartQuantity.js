@@ -20,9 +20,11 @@ class CartQuantity extends React.Component {
 		if (this.props.updateable) {
 			return (
 				<div className="cart-quantity-container">
-					<button className="cart-button" onClick={this.update.bind(this, -1)}>-</button>
-					<span className="cart-quantity">{this.props.quantity}</span>
-					<button className="cart-button" onClick={this.update.bind(this, 1)}>+</button>
+					<button className="cart-button minus" onClick={this.update.bind(this, -1)}>-</button>
+					<p className="cart-quantity">
+						<span className="next">{this.props.quantity}</span>
+					</p>
+					<button className="cart-button plus" onClick={this.update.bind(this, 1)}>+</button>
 				</div>
 			)
 		} else {	

@@ -24,7 +24,28 @@ class ContactUs extends React.Component {
 		var address = ocart.address
 		var email = address.email
 		var dispatch = this.props.dispatch
-		dispatch({type: "JOIN_SLACK", payload: {dispatch, email} })
+		var token = ""
+		var req = {email: email, token: token, set_active: true}
+		dispatch({type: "SLACK_UPDATE", payload: {msg: "Sending..."} })
+		var config = {}
+		axios
+			.post("/api/slack/join", req, config)
+			.then(function(resp) {
+				var data = resp['data']
+				var msg = data['msg']
+				dispatch({type: "SLACK_UPDATE", payload: {msg} })            
+			})
+			.catch(function(err) {
+				var data = err['data']
+				var msg = "Sorry, we're having a problem getting that done :("
+				if (data != undefined) {
+					if (data['msg'] != undefined) {
+						msg = data['msg']
+					}
+				}
+				dispatch({type: "SLACK_UPDATE", payload: {msg} })
+				console.log(err)
+			})
 	}
 
 	render() {

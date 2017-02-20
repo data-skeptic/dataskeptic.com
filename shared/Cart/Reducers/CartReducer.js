@@ -2,7 +2,24 @@ import Immutable from 'immutable';
 import { fromJS } from 'immutable';
 import axios from 'axios';
 
-import { calculateShipping, calculateTotal } from "../utils/store_utils"
+import {
+    RESET_INVOICE,
+    START_INVOICE_PAYMENT,
+    INVOICE_ERROR,
+    INVOICE_RESULT,
+    ADD_TO_CART,
+    CHANGE_CART_QUANTITY,
+    SET_STORE_ENVIRONMENT,
+    CHANGE_COUNTRY,
+    TOGGLE_CART,
+    SHOW_CART,
+    UPDATE_ADDRESS,
+    DO_CHECKOUT,
+    TOKEN_RECIEVED,
+    PROCESS_CHECKOUT
+} from '../Actions/CartActions'
+
+import { calculateShipping, calculateTotal } from "../../utils/store_utils"
 
 const init = {
   cart_items: [],
@@ -211,7 +228,7 @@ function clearCart(nstate) {
   return nstate
 }
 
-export default function cartReducer(state = defaultState, action) {
+export default function CartReducer(state = defaultState, action) {
   var nstate = state.toJS()
   if (nstate.country_short == undefined) {
     console.log("Setting default country to us")
@@ -288,6 +305,18 @@ export default function cartReducer(state = defaultState, action) {
         }
       }
       break;
+    case 'REMOVE_CART_PRODUCT':
+      var product = action.payload.product
+      var found_index = -1
+      for (var i=0; i < nstate.cart_items.length; i++) {
+        var citem = nstate.cart_items[i]
+        if (citem.product.id == product.id && citem.size == size) {
+          found_index = i
+          i = nstate.cart_items.length
+        }
+      }
+      nstate.cart_items.splice(found_index,1)
+      break;
     case 'SET_STORE_ENVIRONMENT':
       var env = action.payload
       if (env == "prod") {
@@ -302,10 +331,10 @@ export default function cartReducer(state = defaultState, action) {
         nstate.country_long = action.payload.long        
       }
       break;
-    case 'TOGGLE_CART':
+    case TOGGLE_CART:
       nstate.cart_visible = !nstate.cart_visible
       break;
-    case 'SHOW_CART':
+    case SHOW_CART:
       nstate.cart_visible = action.payload
       break;
     case 'UPDATE_ADDRESS':

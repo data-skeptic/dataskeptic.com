@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Redirect } from 'react-router'
 
 import AddressForm from './AddressForm'
-import Cart from './Cart'
+import CartContainer from '../Cart/Containers/CartContainer'
 import CreditCardForm from './CreditCardForm'
 import Error from './Error'
 import Loading from './Loading'
@@ -41,14 +41,14 @@ class Checkout extends React.Component {
 			return <ThankYouPage />
 		}
 		if (cart_items.length == 0) {
-			return <Cart updateable={true} />
+			return <CartContainer updateable={true} />
 		}
 		else {
 			var me = this
 			var checkout = <div></div>
 			return (
 				<div className="center">
-					<Cart updateable={false} />
+					<CartContainer updateable={false} />
 					<div>
 						<h2>Checkout</h2>
 					    <div className="col-xs-12">

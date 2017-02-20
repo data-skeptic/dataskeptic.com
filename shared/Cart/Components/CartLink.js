@@ -13,7 +13,7 @@ export const CartLink = ({onClick, itemCount}) => (
     </div>
 );
 
-CartLink.contextTypes = {
+CartLink.propTypes = {
     onClick: React.PropTypes.func,
     itemCount: React.PropTypes.number
 };

@@ -3,7 +3,7 @@ import { Link } from 'react-router'
 import { connect } from 'react-redux'
 
 import Loading from './Loading'
-import Cart from './Cart'
+import CartContainer from '../Cart/Containers/CartContainer'
 import StoreItem from './StoreItem'
 
 import {get_products} from '../utils/redux_loader'
@@ -34,12 +34,7 @@ class Store extends React.Component {
 							return <StoreItem key={product.id} product={product} />
 						})}
 					</div>
-					<div>
-						<Cart updatable={true} />
-					</div>
-					<div className="btnCheckoutContainer">
-						<Link className="btnCheckout" to="/checkout">Checkout</Link>
-					</div>
+					<CartContainer needCheckout={true} updatable={true} />
 				</div>
 			)
 		}

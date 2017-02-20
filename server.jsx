@@ -4,6 +4,7 @@ import {get_blogs}               from 'backend/get_blogs'
 import {get_contributors}        from 'backend/get_contributors'
 import {get_episodes}            from 'backend/get_episodes'
 import {get_invoice}             from 'backend/get_invoice'
+import {get_rfc_metadata}        from 'backend/get_rfc_metadata'
 import {join_slack}              from 'backend/join_slack'
 import {send_email}              from 'backend/send_email'
 import {order_create}            from 'backend/order_create'
@@ -184,6 +185,10 @@ function api_router(req, res) {
   }
   else if (req.url.indexOf('/api/episodes/list') == 0) {
     get_episodes(req, res, my_cache.episodes_map, my_cache.episodes_list)
+    return true
+  }
+  else if (req.url == '/api/rfc/list') {
+    get_rfc_metadata(req, res, my_cache)
     return true
   }
   return false

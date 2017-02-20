@@ -1,11 +1,11 @@
 import React from "react"
-import ReactDOM from "react-dom"
 import ReactHowler from 'react-howler'
+import moment from 'moment'
 import { connect } from 'react-redux'
 
-import PlayerProgressBar from './PlayerProgressBar'
+import MiniPlayer from '../Components/MiniPlayer'
 
-class Player extends React.Component {
+class PlayerContainer extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -14,6 +14,7 @@ class Player extends React.Component {
 			howler: undefined
 		}
 
+		this.onPlayToggle = this.onPlayToggle.bind(this)
 		this.update = this.update.bind(this)
 		setInterval(this.update, 1000)
 	}
@@ -41,19 +42,37 @@ class Player extends React.Component {
 		return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 	}
 
+	formatPosition(val) {
+		const m = val / 60
+		const min = Math.floor(m)
+		const sec = Math.floor(val - min * 60)
+		const duration = min + ":" + this.pad(sec, 2)
+
+		return duration
+	}
+
 	onEnd() {
 		var howler = this.state.howler
 		howler.stop()
 		this.props.onPlayToggle(undefined)
 		this.props.dispatch({type: "STOP_PLAYBACK", payload: {} })
 	}
-	onPlayToggle(episode) {
-		this.props.dispatch({type: "PLAY_EPISODE", payload: episode })
+
+	/**
+	 * Toggle podcast play state
+	 *
+	 */
+	onPlayToggle() {
+		const { episode } = this.props;
+
+		this.props.dispatch({type: "PLAY_EPISODE", payload: episode.toJS() })
 	}
+
 	render() {
-		var oplayer = this.props.player.toJS()
+		var oplayer = this.props.player.toJS();
+
 		if (!oplayer.has_shown) {
-			return <div></div>
+			return null
 		}
 
 		var position_updated = oplayer.position_updated
@@ -74,15 +93,22 @@ class Player extends React.Component {
 		var playback_loaded = oplayer.playback_loaded
 		var is_playing = oplayer.is_playing
 		var howler = ""
-		var title = "[No episode loaded yet]"
+		var title = ""
 		var duration = "--:--"
-		var play_symb = <span>&#9658;</span>
+		var realDur = "--:--"
+		var realPos = "--:--"
+		var pubDate = null
+		var preview = null
 		if (oplayer.episode != undefined) {
 			var episode = oplayer.episode
 			title = episode.title
+			preview = episode.img
+			pubDate = episode.pubDate
 			var mp3 = episode.mp3
 			howler = <ReactHowler src={mp3} playing={is_playing} ref={(ref) => this.state.howler = ref} onEnd={this.onEnd.bind(this)} />
 			duration = episode.duration
+			realDur = duration
+
 			var min = 0
 			var sec = 0
 			var hr = 0
@@ -99,35 +125,38 @@ class Player extends React.Component {
 			}
 			var d = min * 60 + sec
 			var p = 1.0 * d * position/100
+
 			var left = d - p
-			var m = left / 60
-			min = Math.floor(m)
-			sec = Math.floor(left - min * 60)
-			duration = min + ":" + this.pad(sec, 2)
+			duration = this.formatPosition(left)
+
+			var right = p
+			realPos = this.formatPosition(right)
 		}
-		if (is_playing) {
-			play_symb = <span>&#10073;&#10073;</span>
-		}
-		if (!playback_loaded) {			
-			play_symb = <span>?</span>
+
+		if (pubDate) {
+			pubDate = moment(pubDate).format('MMMM D, YYYY');
 		}
 
 		return (
-			<div className="thin-player-container">
-				<div className="center">
-					<div className="player" className="thin-player">
-						<div className="player-inner">
-							<button className="episode-button-sm" onClick={this.onPlayToggle.bind(this, episode)}>{play_symb}</button>
-							<div className="player-title-container"><span className="player-title">{title}</span></div>
-							<PlayerProgressBar playing={is_playing} progress={position} />
-							<div className="player-duration-container"><span className="player-duration">{duration}</span></div>
-							{howler}
-						</div>
-					</div>
-				</div>
-			</div>
+			<MiniPlayer
+				preview={preview}
+				playing={is_playing}
+				episode={episode}
+				title={title}
+				duration={realDur}
+				date={pubDate}
+				position={position}
+				realPos={realPos}
+				onPlayToggle={this.onPlayToggle}
+				howler={howler}
+			/>
 		)
 	}
 }
 
-export default connect(state => ({ player: state.player }))(Player)
+export default connect(
+	state => ({
+		player: state.player,
+		episode: state.player.getIn(['episode'])
+	})
+)(PlayerContainer)

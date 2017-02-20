@@ -51,7 +51,7 @@ class LatestBlogCard extends React.Component {
 							<img className="home-latest-blog-img" src={contributor.img} />
 						</div>
 						<div className="home-latest-blog-header-right">
-							<Link className="blog-title" to={pn}>{blog.title}</Link>
+							<Link className="latest-blog-title" to={pn}>{blog.title}</Link>
 							<div className="blog-author">{contributor.prettyname}</div>
 							<div className="blog-date">{dstr}</div>
 						</div>

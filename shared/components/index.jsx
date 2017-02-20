@@ -1,17 +1,26 @@
 import React, { PropTypes } from 'react'
 import ReactGA from 'react-ga'
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import classNames from 'classnames'
+
 
 import xml2js from "xml2js"
 
 import { calculateShipping, calculateTotal } from '../utils/store_utils'
 import { extractFolders } from '../utils/blog_utils'
 
-import Footer from './Footer'
+import Footer from '../Layout/Components/Footer'
 import Header from './Header'
 import Menu from './Menu'
-import Player from './Player'
+import PlayerContainer from '../Player'
 import Sidebar from './Sidebar'
+import Overflow from '../Layout/Components/Overflow'
+
+import { toggleMobileMenu } from '../Layout/Actions/LayoutActions';
+import MobileMenu from '../MobileMenu/Components/MobileMenu'
+import { getItemsCount as getCartItemsCount } from '../Cart/Helpers';
+import { toggleCart } from '../Cart/Actions/CartActions'
 
 class MainView extends React.Component {
   constructor(props) {
@@ -19,6 +28,10 @@ class MainView extends React.Component {
     var persisted = this.loadState()
     var total = calculateTotal(persisted.cart_items, persisted.country.short)
     var shipping = calculateShipping(persisted.cart_items, persisted.country.short)
+
+    this.onNavigationItemClick = this.onNavigationItemClick.bind(this)
+    this.onOverflowClick = this.onOverflowClick.bind(this)
+    this.onFooterItemClick = this.onFooterItemClick.bind(this)
   }
 
   loadState() {
@@ -140,27 +153,89 @@ class MainView extends React.Component {
       children: PropTypes.object
   }
 
+
+  /**
+   * Handler for mobile menu navigation item click
+   *
+   */
+  onNavigationItemClick() {
+    this.props.toggleMobileMenu()
+  }
+
+  /**
+   * Determinate current class list
+   *
+   * @param {Boolean} isMobileMenuVisible Mobile Menu visibility state
+   */
+  getClassList({isMobileMenuVisible}) {
+    let classes = ['site'];
+
+    if (isMobileMenuVisible) {
+      classes.push('no-scroll');
+    }
+
+    return classes.join(' ');
+  }
+
+  /**
+   * Click handler for overflow view
+   */
+  onOverflowClick() {
+    this.props.toggleCart()
+  }
+
+  /**
+   * Handler for footer link click
+   *
+   */
+  onFooterItemClick() {
+    // scroll page to the top
+    window.scrollTo(0, 0);
+  }
+
   render() {
     this.logPageView()
-    
-    const {pathname} = this.props.location;
+    const {isMobileMenuVisible, cart, isCartVisible} = this.props;
+    const {pathname} = this.props.location
+    const itemsCount = getCartItemsCount(cart.toJS().cart_items);
+    const isOverflowMode = isCartVisible
+
     return (
-        <div className="site">
+        <div className={ classNames('site', {'no-scroll' : isMobileMenuVisible}) }>
           <div className="container-fluid">
+            <MobileMenu
+                itemClick={this.onNavigationItemClick}
+                pathname={pathname}
+                cartItemsCount={itemsCount}
+                visible={isMobileMenuVisible}
+            />
+
             <div className="row row-centered">
               <Header pathname={pathname} />
             </div>
-            <div className="row row-centered">
-              <Player />
+            <div className="row">
+              <PlayerContainer />
             </div>
             {this.props.children}
-            <Footer />
             <Sidebar />
-          </div> 
+          </div>
+          <Footer linkClick={this.onFooterItemClick} />
+          <Overflow visible={isOverflowMode} onClick={this.onOverflowClick}/>
         </div>
     )
   }
 }
 
-export default connect(state => ({ cart: state.cart, site: state.site }))(MainView)
+export default connect(
+    state => ({ 
+      cart: state.cart,
+      isCartVisible: state.cart.getIn(['cart_visible']),
+      site: state.site,
+      isMobileMenuVisible: state.layout.getIn(['isMobileMenuVisible']),
+    }),
+    dispatch => bindActionCreators({
+      toggleMobileMenu,
+      toggleCart
+    }, dispatch)
+)(MainView)
 
