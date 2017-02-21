@@ -51,11 +51,13 @@ class Checkout extends Component {
 						<CartContainer updateable={true} />
 					</div>
 					<div className="checkout-form">
-						<h2>Checkout</h2>
+						<div className="inner">
+							<h2>Checkout</h2>
 
-						<AddressForm title="Shipping Information" />
-						<CreditCardForm title="Billing Information"/>
-					    <div className="clear"></div>
+							<AddressForm title="Shipping Information" />
+							<CreditCardForm title="Billing Information"/>
+							<div className="clear"></div>
+						</div>
 					</div>
 				</div>
 			)

@@ -1593,56 +1593,10 @@ ul.topnav li.right {
 
 .address-input {
     width: 100%;
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 3px;
-    margin-bottom: 10px;
 }
 
 .checkout-name-field {
     float: left;
-}
-
-.cc-container {
-    margin: auto;
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 5px;
-    max-width: 250px;
-    padding: 0px 15px 0px 15px;
-}
-
-.cc-outer {
-    text-align: center;
-    margin-top: 10px;
-    padding: 15px;
-    background-color: #fff;
-}
-
-.cc-yymm {
-    margin-top: 10px;
-    border-width: 1px;
-    border-style: solid;
-}
-
-.cc-cvc {
-    margin-top: 10px;
-    border-width: 1px;
-    border-style: solid;
-}
-
-.cc-num {
-    margin-top: 10px;
-    border-width: 1px;
-    border-style: solid;
-}
-
-.cc-purchase {
-    margin-top: 10px;
-    border-color: #aaa;
-    border-width: 1px;
-    padding: 5px 2px 2px 5px;
-    border-style: solid;
 }
 
 .payment-error {
@@ -3067,6 +3021,9 @@ button.slick-arrow.slick-prev {
     background: #FAFAFA;
     border-bottom: 1px solid #D7D9D9;
 }
+.checkout-page .required {
+    color: red;
+}
 
 .checkout-page .checkout-form {
     margin-right: 400px;
@@ -3074,6 +3031,10 @@ button.slick-arrow.slick-prev {
     border-right: 1px solid #D7D9D9;
     padding-top: 57px;
     padding-bottom: 57px;
+}
+
+.checkout-page .checkout-form .inner {
+    padding-right: 15%;
 }
 
 .checkout-page .checkout-form h2,
@@ -3088,9 +3049,42 @@ button.slick-arrow.slick-prev {
     float: right;
 }
 
-.checkout-page  .address-form-container {
+.checkout-page .address-form-container {
     margin: auto;
 }
 
+.checkout-page .address-form-container .country {
+    width: 100%;
+    margin: 0px;
+}
+
 .checkout-page .address-form {
+}
+
+.checkout-page .credit-cart-form {
+    margin-top: 48px;
+}
+
+.checkout-page input[type="text"],
+.checkout-page select {
+    padding: 12px 16px;
+    background: #FFFFFF;
+    border: 1px solid #D7D9D9;
+    border-radius: 4px;
+}
+
+.checkout-page select {
+}
+
+.checkout-page label,
+.checkout-page .address-label,
+.checkout-page .card-label {
+    font-size: 14px;
+    color: #575959;
+    letter-spacing: 0;
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+.checkout-page .no-clear:after{
+    display: none;
 }

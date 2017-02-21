@@ -108,18 +108,31 @@ class CreditCardForm extends React.Component {
 			<div className="credit-cart-form">
 				<div className="shipping-address-title">{title}</div>
 				{spinner}
-				<div className="">
+				<div className="container-fluid">
 					<form onSubmit={this.handleSubmit.bind(this)}>
 						{abox}
-						<div>
-							<input id="cc-n" className="cc-num" type='text' data-stripe='number' placeholder='credit card number' onChange={this.onCCChange.bind(this)} /><br />
+						<div className="row">
+							<div className="card-label">Credit Card Number <span className="required">*</span></div>
+							<input id="cc-n" type='text' data-stripe='number' placeholder='4242 4242 4242 4242' onChange={this.onCCChange.bind(this)} />
 						</div>
 						{errors}
-						<div>
-							<input id="cc-m" className="cc-yymm" type='text' data-stripe='exp-month' placeholder='month' onChange={this.onCCChange.bind(this)} />
-							<input id="cc-y" className="cc-yymm" type='text' data-stripe='exp-year' placeholder='year' onChange={this.onCCChange.bind(this)} />
-							<input id="cc-c" className="cc-cvc" type='text' data-stripe='cvc' placeholder='cvc' onChange={this.onCCChange.bind(this)} /><br />
+
+
+						<div className="row">
+							<div className="col-md-6">
+								<div className="card-label">Cardholder Name <span className="required">*</span></div>
+								<input id="cc-m" type='text' data-stripe='exp-month' placeholder='John A. Smith' onChange={this.onCCChange.bind(this)} />
+							</div>
+							<div className="col-md-3">
+								<div className="card-label">Expiration <span className="required">*</span></div>
+								<input id="cc-y" type='text' data-stripe='exp-year' placeholder='02 / 19' onChange={this.onCCChange.bind(this)} />
+							</div>
+							<div className="col-md-3">
+								<div className="card-label">CVV <span className="required">*</span></div>
+								<input id="cc-c" type='text' data-stripe='cvc' placeholder='123' onChange={this.onCCChange.bind(this)} /><br />
+							</div>
 						</div>
+
 						<div>
 							<input className="" type='submit' disabled={submitDisabled} value='Purchase' />
 						</div>
