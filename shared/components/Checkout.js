@@ -52,14 +52,9 @@ class Checkout extends Component {
 					</div>
 					<div className="checkout-form">
 						<h2>Checkout</h2>
-						<h3>Shipping Information</h3>
-					    <div className="col-xs-12">
-					        <AddressForm title="Shipping Address" />
-					    </div>
-					    <div>&nbsp;</div>
-					    <div className="col-xs-12">
-					        <CreditCardForm />
-					    </div>
+
+						<AddressForm title="Shipping Information" />
+						<CreditCardForm title="Billing Information"/>
 					    <div className="clear"></div>
 					</div>
 				</div>

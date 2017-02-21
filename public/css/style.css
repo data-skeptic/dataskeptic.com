@@ -1563,18 +1563,6 @@ ul.topnav li.right {
     background-color: #eee;
 }
 
-.address-form-container {
-    max-width: 500px;
-    border-width: 1px;
-    border-radius: 5px;
-    border-style: solid;
-    padding: 0px 10px 10px 10px;
-    margin: auto;
-}
-
-.address-form {
-}
-
 .checkout-country {
     font-size: 10pt;
     line-height: 10pt;
@@ -3100,3 +3088,9 @@ button.slick-arrow.slick-prev {
     float: right;
 }
 
+.checkout-page  .address-form-container {
+    margin: auto;
+}
+
+.checkout-page .address-form {
+}
