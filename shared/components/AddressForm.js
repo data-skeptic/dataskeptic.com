@@ -38,7 +38,7 @@ class AddressForm extends Component {
 			<div className="address-form-container">
 				<div className="address-form">
 					<div className="shipping-address-title">{title}</div>
-					{abox}
+					<div className="text-warning">{abox}</div>
 
 					<div className="row no-clear">
 						<div className="col-md-6">

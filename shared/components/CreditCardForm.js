@@ -108,15 +108,19 @@ class CreditCardForm extends React.Component {
 			<div className="credit-cart-form">
 				<div className="shipping-address-title">{title}</div>
 				{spinner}
-				<div className="container-fluid">
+				<div className="">
 					<form onSubmit={this.handleSubmit.bind(this)}>
-						{abox}
-						<div className="row">
-							<div className="card-label">Credit Card Number <span className="required">*</span></div>
-							<input id="cc-n" type='text' data-stripe='number' placeholder='4242 4242 4242 4242' onChange={this.onCCChange.bind(this)} />
-						</div>
-						{errors}
 
+						<div className="text-warning">{abox}</div>
+
+						<div className="row">
+							<div className="col-md-12">
+								<div className="card-label">Credit Card Number <span className="required">*</span></div>
+								<input id="cc-n" type='text' data-stripe='number' placeholder='4242 4242 4242 4242' onChange={this.onCCChange.bind(this)} />
+							</div>
+						</div>
+
+						<div className="text-danger">{errors}</div>
 
 						<div className="row">
 							<div className="col-md-6">
@@ -133,9 +137,12 @@ class CreditCardForm extends React.Component {
 							</div>
 						</div>
 
-						<div>
-							<input className="" type='submit' disabled={submitDisabled} value='Purchase' />
+						<div className="row complete-btn">
+							<div className="col-md-12">
+								<input className="btn" type="submit" disabled={submitDisabled} value='Complete Order' />
+							</div>
 						</div>
+
 					</form>
 				</div>
 			</div>

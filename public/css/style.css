@@ -3071,6 +3071,14 @@ button.slick-arrow.slick-prev {
     background: #FFFFFF;
     border: 1px solid #D7D9D9;
     border-radius: 4px;
+    width: 100%;
+}
+
+.checkout-page .success {
+    border-color: #3c763d !important;
+}
+.checkout-page .error {
+    border-color: #a94442 !important;
 }
 
 .checkout-page select {
@@ -3082,9 +3090,18 @@ button.slick-arrow.slick-prev {
     font-size: 14px;
     color: #575959;
     letter-spacing: 0;
-    margin-top: 16px;
+    margin-top: 32px;
     margin-bottom: 16px;
 }
 .checkout-page .no-clear:after{
     display: none;
+}
+.checkout-page .credit-cart-form .complete-btn {
+    margin-top: 48px;
+}
+.checkout-page .credit-cart-form .complete-btn .btn {
+    background: #F0D943;
+    border-radius: 4px;
+    min-width: 340px;
+    font-size: 16px;
 }
