@@ -15,6 +15,8 @@ import { createStore,
          combineReducers,
          applyMiddleware }  from 'redux';
 
+import axios from 'axios';
+
 var initialState = immutifyState(window.__INITIAL_STATE__);
 
 console.log("Initialize GA")
