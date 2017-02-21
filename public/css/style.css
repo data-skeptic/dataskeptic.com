@@ -3049,6 +3049,24 @@ button.slick-arrow.slick-prev {
     float: right;
 }
 
+@media (max-width: 880px) {
+    .checkout-page .checkout-cart {
+        margin: 0px;
+        width: auto;
+        float: inherit;
+        display: none;
+    }
+
+    .checkout-page .checkout-form {
+        margin: 0px 0px 0px 10%;
+    }
+
+    .checkout-page .credit-cart-form .complete-btn .btn {
+        min-width: 100% !important;
+        max-width: 100% !important;
+    }
+}
+
 .checkout-page .address-form-container {
     margin: auto;
 }

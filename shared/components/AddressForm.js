@@ -31,8 +31,8 @@ class AddressForm extends Component {
 		var focus_msg = ocart.focus_msg
 		var title = this.props.title
 		var abox = <div></div>
-		if (focus_msg != "") {
-			abox = <div className="col-xs-12 address-validation-msg">{focus_msg}</div>
+		if (focus_msg !== "") {
+			abox = <div className="alert alert-danger" role="alert">{focus_msg}</div>
 		}
 		return (
 			<div className="address-form-container">
