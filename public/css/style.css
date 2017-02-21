@@ -3072,5 +3072,31 @@ button.slick-arrow.slick-prev {
     z-index: 555;
 }
 
+.checkout-page {
+    clear: both;
+    margin-left: -15px;
+    margin-right: -15px;
+    background: #FAFAFA;
+    border-bottom: 1px solid #D7D9D9;
+}
 
+.checkout-page .checkout-form {
+    margin-right: 400px;
+    margin-left: 10%;
+    border-right: 1px solid #D7D9D9;
+    padding-top: 57px;
+    padding-bottom: 57px;
+}
+
+.checkout-page .checkout-form h2,
+.checkout-page .checkout-form h3 {
+    padding: 0px;
+    margin: 0px;
+}
+
+.checkout-page .checkout-cart {
+    padding: 25px 32px;
+    width: 400px;
+    float: right;
+}
 

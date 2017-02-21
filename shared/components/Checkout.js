@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router'
 
@@ -10,7 +10,7 @@ import Loading from './Loading'
 import SizeSelector from './SizeSelector'
 import ThankYouPage from './ThankYouPage'
 
-class Checkout extends React.Component {
+class Checkout extends Component {
 	constructor(props) {
 		super(props)
 	}
@@ -24,13 +24,14 @@ class Checkout extends React.Component {
 	}
 
 	render() {
-		var ocart = this.props.cart.toJS()
-		var cart_items = ocart.cart_items
-		var country_long = ocart.country_long
-		var address = ocart.address
-		var stripeLoading = ocart.stripeLoading
-		var stripeLoadingError = ocart.stripeLoadError
-		var paymentComplete = ocart.paymentComplete
+		const ocart = this.props.cart.toJS();
+		const cart_items = ocart.cart_items;
+		const country_long = ocart.country_long;
+		const address = ocart.address;
+		const stripeLoading = ocart.stripeLoading;
+		const stripeLoadingError = ocart.stripeLoadError;
+		const paymentComplete = ocart.paymentComplete;
+
 		if (stripeLoading) {
 			return <div><Loading /></div>
 		}
@@ -44,13 +45,14 @@ class Checkout extends React.Component {
 			return <CartContainer updateable={true} />
 		}
 		else {
-			var me = this
-			var checkout = <div></div>
 			return (
-				<div className="center">
-					<CartContainer updateable={false} />
-					<div>
+				<div className="checkout-page">
+					<div className="checkout-cart">
+						<CartContainer updateable={true} />
+					</div>
+					<div className="checkout-form">
 						<h2>Checkout</h2>
+						<h3>Shipping Information</h3>
 					    <div className="col-xs-12">
 					        <AddressForm title="Shipping Address" />
 					    </div>
@@ -60,8 +62,6 @@ class Checkout extends React.Component {
 					    </div>
 					    <div className="clear"></div>
 					</div>
-				    <div>&nbsp;</div>
-				    <div>&nbsp;</div>
 				</div>
 			)
 		}
