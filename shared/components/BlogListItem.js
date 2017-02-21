@@ -22,7 +22,7 @@ class BlogListItem extends Component {
                 pn = pn.substring(1, pn.length)
             }
             pn = "/blog/" + pn
-            var date = blog["publish_date"]
+            var date = blog["publish_date"].replace(/-/g, "/")
             date = new Date(date)
             datestr = monthNames[date.getMonth()].toUpperCase() + " " + date.getDate() + ", " + (date.getYear()+1900)
         }
