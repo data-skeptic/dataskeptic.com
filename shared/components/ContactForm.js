@@ -9,7 +9,7 @@ class ContactForm extends React.Component {
 		super(props)
 	}
 	
-	onClick(event, name, email, msg) {
+	onClick(name, email, msg, event) {
 		var validated = true
 		var name_missing = false
 		var email_missing = false
