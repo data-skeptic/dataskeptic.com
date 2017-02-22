@@ -2,17 +2,18 @@ import React from "react"
 import ReactDOM from "react-dom"
 import { connect } from 'react-redux'
 
-import NotFound from './NotFound'
-import BlogList from "./BlogList"
-import BlogNav from "./BlogNav"
-import BlogItem from "./BlogItem"
-import Error from "./Error"
-import Loading from "./Loading"
-import transform_pathname from "../utils/transform_pathname"
+import NotFound from '../../NotFound/Components/NotFound'
+import BlogList from "../Components/BlogList"
+import BlogNav from "../Components/BlogNav"
+import BlogItem from "../Components/BlogItem"
+import Error from "../../Common/Components/Error"
+import Loading from "../../Common/Components/Loading"
 
-import {get_blogs_list} from '../utils/redux_loader'
+import transform_pathname from "../../utils/transform_pathname"
 
-class Blog extends React.Component {
+import {get_blogs_list} from '../../utils/redux_loader'
+
+class BlogContainer extends React.Component {
 	constructor(props) {
 		super(props)
 	}
@@ -57,17 +58,18 @@ class Blog extends React.Component {
 	}
 
 	render() {
-		var oblogs = this.props.blogs.toJS()
-		var blog_focus = oblogs.blog_focus
-		var folders = oblogs.folders || []
-		var blogs = oblogs.blogs || []
+		const {total} = this.props;
+		const oblogs = this.props.blogs.toJS();
+		const blog_focus = oblogs.blog_focus;
+		const folders = oblogs.folders || [];
+		let blogs = oblogs.blogs || [];
 
-		if (blogs.length == 0) {
+		if (blogs.length === 0) {
 			return <div><Loading /></div>
 		}
 
-		var opathname = this.props.pathname
-		if (opathname == undefined) {
+		let opathname = this.props.pathname
+		if (!opathname) {
 			opathname = this.props.location.pathname
 		}
 		var pathname = transform_pathname(opathname)
@@ -80,7 +82,7 @@ class Blog extends React.Component {
 			}
 		}
 
-		if (pathname == "" || pathname == "/") {
+		if (pathname === "" || pathname === "/") {
 			blogs = this.remove_type("episodes", blogs)
 			blogs = this.remove_type("transcripts", blogs)
 		}
@@ -94,5 +96,14 @@ class Blog extends React.Component {
 	}
 }
 
-export default connect(state => ({ player: state.player, blogs: state.blogs, episodes: state.episodes, site: state.site }))(Blog)
+export default connect(
+	state => ({
+		player: state.player,
+		pagination: state.blogs.getIn(['pagination']),
+		total: state.blogs.getIn(['total']),
+		blogs: state.blogs,
+		episodes: state.episodes,
+		site: state.site
+	})
+)(BlogContainer)
 

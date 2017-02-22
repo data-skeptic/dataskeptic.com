@@ -1,7 +1,7 @@
 import React from "react"
 import ReactDOM from "react-dom"
 
-import MailingList from "./MailingList"
+import MailingList from "../../Common/Components/MailingList"
 
 const MailingListBlogFooter = props => {
 	return (

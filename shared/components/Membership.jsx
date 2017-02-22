@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
 
-import Loading from './Loading'
-import Error from './Error'
+import Loading from '../Common/Components/Loading'
+import Error from '../Common/Components/Error'
 import LightsOut from './LightsOut'
 
 import {get_products} from '../utils/redux_loader'

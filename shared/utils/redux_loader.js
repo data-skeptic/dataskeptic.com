@@ -190,7 +190,7 @@ export function get_blogs_list(dispatch, pathname) {
 		dispatch({type: "ADD_BLOGS", payload: blogs})
 	} else {
 		console.log("Getting blogs")
-		var url = "/api" + pathname
+		var url = "/api" + pathname;
 		axios
 			.get(url)
 	  		.then(function(result) {
@@ -199,7 +199,18 @@ export function get_blogs_list(dispatch, pathname) {
 			})
 			.catch((err) => {
 				console.log(err)
-			})			
+			})
+
+		const totalUrl = url + '/total';
+		axios
+			.get(totalUrl)
+	  		.then(function(result) {
+	  			var total = result["data"]
+				dispatch({type: "SET_BLOGS_TOTAL", payload: total})
+			})
+			.catch((err) => {
+				console.log(err)
+			})
 	}	
 }
 

@@ -5,12 +5,12 @@ import { connect }            from 'react-redux';
 import Slider from "react-slick"
 
 import Episode from "./Episode"
-import MailingList from "./MailingList"
+import MailingList from "../Common/Components/MailingList"
 import SocialMediaCard from "./SocialMediaCard"
 import AdvertiserCard from "./AdvertiserCard"
 import EpisodeCard from "./EpisodeCard"
-import LatestBlogCard from "./LatestBlogCard"
-import LatestEpisodePlayer from "./LatestEpisodePlayer"
+import LatestBlogCard from "../Blog/Containers/LatestBlogCard"
+import LatestEpisodePlayer from "../Blog/Containers/LatestEpisodePlayer"
 
 import {get_homepage_content} from '../utils/redux_loader'
 

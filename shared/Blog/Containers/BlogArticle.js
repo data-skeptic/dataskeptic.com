@@ -4,15 +4,15 @@ import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import ReactDisqusComments from 'react-disqus-comments'
 import LatestEpisodePlayer from "./LatestEpisodePlayer"
-import MailingListBlogFooter from "./MailingListBlogFooter"
-import BlogLink from './BlogLink'
-import BlogAuthorTop from './BlogAuthorTop'
-import BlogAuthorBottom from './BlogAuthorBottom'
-import Loading from './Loading'
-import RelatedContent from './RelatedContent'
+import MailingListBlogFooter from "../Components/MailingListBlogFooter"
+import BlogLink from '../Components/BlogLink'
+import BlogAuthorTop from '../Components/BlogAuthorTop'
+import BlogAuthorBottom from '../Components/BlogAuthorBottom'
+import Loading from '../../Common/Components/Loading'
+import RelatedContent from '../Components/RelatedContent'
 
-import {get_folders} from '../utils/redux_loader'
-import {get_related_content} from '../utils/redux_loader'
+import {get_folders} from '../../utils/redux_loader'
+import {get_related_content} from '../../utils/redux_loader'
 
 class BlogArticle extends React.Component {
 	constructor(props) {

@@ -3,6 +3,11 @@ import Immutable from 'immutable';
 import getBlogContent from 'daos/getBlogContent'
 
 const init = {
+  pagination: {
+    current: 0,
+    next: 1,
+  },
+  total: 0,
   blogs: [],
   folders: [],
   blogs_loaded: 0,
@@ -34,7 +39,7 @@ export default function blogsReducer(state = defaultState, action) {
       break
     case 'REQUEST_INJECT_BLOG':
       var i = 0
-      nstate.blog_focus.loaded = 0        
+      nstate.blog_focus.loaded = 0
       while (i < nstate.blogs.length) {
         var b = nstate.blogs[i]
         if (b.uri.indexOf('/episodes/') == -1 && b.uri.indexOf('/transcripts/') == -1) {
@@ -85,7 +90,7 @@ export default function blogsReducer(state = defaultState, action) {
       }
       break
     case 'ADD_FOLDERS':
-      nstate.folders = action.payload 
+      nstate.folders = action.payload
       break
     case 'ADD_BLOGS':
   	  nstate.blogs = action.payload
@@ -103,6 +108,9 @@ export default function blogsReducer(state = defaultState, action) {
       nstate.blogs_loaded = -1
       nstate.blog_focus.loaded = -1
       break
+    case 'SET_BLOGS_TOTAL':
+      nstate.total = action.payload.total;
+      break;
   }
   return Immutable.fromJS(nstate)
 }

@@ -3,7 +3,7 @@ import React from "react"
 import ReactDOM from "react-dom"
 import { connect } from 'react-redux'
 
-import Loading from '../Loading'
+import Loading from '../../Common/Components/Loading'
 import Order from './Order'
 
 class OpenOrders extends React.Component {
