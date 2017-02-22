@@ -1,4 +1,3 @@
-import axios from "axios"
 import Immutable from 'immutable';
 
 import getBlogContent from 'daos/getBlogContent'

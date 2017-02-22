@@ -58,6 +58,8 @@ export function loadBlogs(store, env, my_cache) {
       if (latest == undefined) {
         if (pn.indexOf("/episodes/") != 0 && pn.indexOf("/transcripts/") != 0) {
           latest = blog
+          console.log("latest")
+          console.log(pn)
           my_cache.blogmetadata_map["latest"] = latest
         }
       }

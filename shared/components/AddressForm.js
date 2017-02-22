@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 
 import CountrySelector from './CountrySelector'
 
-class AddressForm extends React.Component {
+class AddressForm extends Component {
 	constructor(props) {
 		super(props)
 	}
@@ -31,61 +31,89 @@ class AddressForm extends React.Component {
 		var focus_msg = ocart.focus_msg
 		var title = this.props.title
 		var abox = <div></div>
-		if (focus_msg != "") {
-			abox = <div className="col-xs-12 address-validation-msg">{focus_msg}</div>
+		if (focus_msg !== "") {
+			abox = <div className="alert alert-danger" role="alert">{focus_msg}</div>
 		}
 		return (
 			<div className="address-form-container">
-				<div className="row address-form">
-					<div className="col-xs-12 shipping-address-title">{title}</div>
-					{abox}
-					<div className="col-xs-12 col-sm-2 address-label">First name:</div>
-					<div className="col-xs-12 col-sm-4">
-						<input autoFocus={true} type="text" className="address-input first_name" ref="first_name" value={address.first_name} onChange={this.onAddressChange.bind(this)} />
+				<div className="address-form">
+					<div className="shipping-address-title">{title}</div>
+					<div className="text-warning">{abox}</div>
+
+					<div className="row no-clear">
+						<div className="col-md-6">
+							<div className="address-label">First name <span className="required">*</span></div>
+							<div className="">
+								<input autoFocus={true} type="text" className="address-input first_name" ref="first_name" value={address.first_name} onChange={this.onAddressChange.bind(this)} placeholder="John"/>
+							</div>
+						</div>
+
+						<div className="col-md-6">
+							<div className="address-label">Last name <span className="required">*</span></div>
+							<div className="">
+								<input type="text" className="address-input last_name" ref="last_name" value={address.last_name} onChange={this.onAddressChange.bind(this)} placeholder="Smith"/>
+							</div>
+						</div>
 					</div>
 
-					<div className="col-xs-12 col-sm-2 address-label">Last name:</div>
-					<div className="col-xs-12 col-sm-4">
-						<input type="text" className="address-input last_name" ref="last_name" value={address.last_name} onChange={this.onAddressChange.bind(this)} />
+					<div className="row no-clear">
+						<div className="col-md-8">
+							<div className="address-label">Street Address <span className="required">*</span></div>
+							<div className="">
+								<input className="address-input street_1" type="text" ref="street_1" value={address.street_1} onChange={this.onAddressChange.bind(this)} placeholder="123 Main Street"/>
+							</div>
+						</div>
+						<div className="col-md-4">
+							<div className="address-label">Apt, suite, etc. <span className="required">*</span></div>
+							<div className="">
+								<input className="address-input street_2" type="text" ref="street_2" value={address.street_2} onChange={this.onAddressChange.bind(this)} placeholder="Apt 101"/>
+							</div>
+						</div>
 					</div>
 
-					<div className="col-xs-12 col-sm-2 address-label">Street address 1:</div>
-					<div className="col-xs-12 col-sm-10">
-						<input className="address-input street_1" type="text" ref="street_1" value={address.street_1} onChange={this.onAddressChange.bind(this)} />
-				    </div>
+					<div className="row no-clear">
+						<div className="col-md-12">
+							<div className="address-label">City / Town <span className="required">*</span></div>
+							<div className="">
+								<input className="address-input city" type="text" ref="city" value={address.city} onChange={this.onAddressChange.bind(this)} placeholder="Los Angeles"/>
+							</div>
+						</div>
+					</div>
 
-					<div className="col-xs-12 col-sm-2 address-label">Street address 2:</div>
-					<div className="col-xs-12 col-sm-10">
-						<input className="address-input street_2" type="text" ref="street_2" value={address.street_2} onChange={this.onAddressChange.bind(this)} />
-				    </div>
+					<div className="row no-clear">
+						<div className="col-md-5">
+							<div className="address-label">Country <span className="required">*</span></div>
+							<div className=""><CountrySelector /></div>
+						</div>
+						<div className="col-md-4">
+							<div className="address-label">State / Province <span className="required">*</span></div>
+							<div className="">
+								<input className="address-input state" type="text" ref="state" value={address.state} onChange={this.onAddressChange.bind(this)} />
+							</div>
+						</div>
+						<div className="col-md-3">
+							<div className="address-label">Zip Code <span className="required">*</span></div>
+							<div className="">
+								<input className="address-input zip" type="text" ref="zip" value={address.zip} onChange={this.onAddressChange.bind(this)} placeholder="12345"/>
+							</div>
+						</div>
+					</div>
 
-					<div className="col-xs-12 col-sm-2 address-label">City / town:</div>
-					<div className="col-xs-12 col-sm-10">
-						<input className="address-input city" type="text" ref="city" value={address.city} onChange={this.onAddressChange.bind(this)} />
-				    </div>
+					<div className="row">
+						<div className="col-md-6">
+							<div className="address-label">Email <span className="required">*</span></div>
+							<div className="">
+								<input className="address-input email" type="text" ref="email" value={address.email} onChange={this.onAddressChange.bind(this)} placeholder="j.smith@work.com"/>
+							</div>
+						</div>
+						<div className="col-md-6">
+							<div className="address-label">Phone </div>
+							<div className="">
+								<input className="address-input phone" type="text" ref="phone" value={address.phone} onChange={this.onAddressChange.bind(this)} placeholder="(310) 313 - 3413"/>
+							</div>
+						</div>
+					</div>
 
-					<div className="col-xs-12 col-sm-2 address-label">State / province:</div>
-					<div className="col-xs-12 col-sm-10">
-						<input className="address-input state" type="text" ref="state" value={address.state} onChange={this.onAddressChange.bind(this)} />
-				    </div>
-
-					<div className="col-xs-12 col-sm-2 address-label">Country</div>
-					<div className="col-xs-12 col-sm-10"><CountrySelector /></div>
-
-					<div className="col-xs-12 col-sm-2 address-label">Postal / zipcode:</div>
-					<div className="col-xs-12 col-sm-10">
-						<input className="address-input zip" type="text" ref="zip" value={address.zip} onChange={this.onAddressChange.bind(this)} />
-				    </div>
-
-					<div className="col-xs-12 col-sm-2 address-label">Email:</div>
-					<div className="col-xs-12 col-sm-10">
-						<input className="address-input email" type="text" ref="email" value={address.email} onChange={this.onAddressChange.bind(this)} />
-				    </div>
-				    
-					<div className="col-xs-12 col-sm-2 address-label">Phone:</div>
-					<div className="col-xs-12 col-sm-10">
-						<input className="address-input phone" type="text" ref="phone" value={address.phone} onChange={this.onAddressChange.bind(this)} />
-				    </div>
 				</div>
 			</div>
 		)

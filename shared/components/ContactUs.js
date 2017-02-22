@@ -2,6 +2,7 @@ import React from "react"
 import ReactDOM from "react-dom"
 import ContactForm from './ContactForm'
 import { connect } from 'react-redux'
+import axios from 'axios'
 
 class ContactUs extends React.Component {
 	constructor(props) {

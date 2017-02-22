@@ -2,6 +2,8 @@ import Immutable from 'immutable';
 import { fromJS } from 'immutable';
 import axios from 'axios';
 
+import contact_form_send from '../../daos/contact_form_send'
+
 import {
     RESET_INVOICE,
     START_INVOICE_PAYMENT,
@@ -90,7 +92,8 @@ function get_token(nstate, event, dispatch) {
       nstate.submitDisabled = false
       var msg = {err: paymentError, address: nstate.address}
       var email = nstate.address.email
-      dispatch({type: "CONTACT_FORM", payload: {msg, email} })
+      contact_form_send("dataskeptic.com", email, msg, undefined)
+
     }
    dispatch({type: "TOKEN_RECIEVED", payload: { dispatch, token, paymentError } })
   })
@@ -150,7 +153,7 @@ function token_recieved(dispatch, nstate) {
         var address = nstate.address
         var msg = {paymentError, address}
         var email = nstate.address.email
-        dispatch({type: "CONTACT_FORM", payload: {msg, email} })
+        contact_form_send("dataskeptic.com", email, msg, undefined)
       } else {
         paymentComplete = true
       }
@@ -365,11 +368,7 @@ export default function CartReducer(state = defaultState, action) {
         nstate.submitDisabled = false
         var msg = {paymentError: nstate.paymentError, address: nstate.address}
         var email = nstate.address.email
-        setTimeout(
-          function() {
-            dispatch({type: "CONTACT_FORM", payload: {msg, email} })
-          }
-        , 10)
+        contact_form_send("dataskeptic.com", email, msg, undefined)
       }
       if (token != undefined) {
         token_recieved(dispatch, nstate)
@@ -386,11 +385,7 @@ export default function CartReducer(state = defaultState, action) {
       } else {
         var msg = {error: nstate.paymentError, address: nstate.address}
         var email = nstate.address.email
-        setTimeout(
-          function() {
-            dispatch({type: "CONTACT_FORM", payload: {msg, email} })
-          }
-        , 10)
+        contact_form_send("dataskeptic.com", email, msg, undefined)
       }
       nstate.submitDisabled = false
       break;

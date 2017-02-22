@@ -79,10 +79,11 @@ class CreditCardForm extends React.Component {
 		}
 	}
 	render() {
-		var ocart = this.props.cart.toJS()
-		var paymentError = ocart.paymentError
-		var submitDisabled = ocart.submitDisabled
-		var abox = <div></div>
+		const { title } = this.props;
+		const ocart = this.props.cart.toJS();
+		const paymentError = ocart.paymentError;
+		const submitDisabled = ocart.submitDisabled;
+		let abox = <div></div>;
 		if (paymentError != "") {
 			abox = (
 				<div className="row">
@@ -90,38 +91,58 @@ class CreditCardForm extends React.Component {
 				</div>
 			)
 		}
-		var spinner = <div></div>
+		let spinner = <div></div>;
 		if (submitDisabled) {
 			spinner = <div className="spinner">
 				<img src="/img/svg/spinner.svg" />
 			</div>
 		}
-		var errors = <div></div>
+		let errors = <div></div>;
 		if (this.state.numeric_error) {
 			errors = <div>{this.state.error_msg}</div>
 		}
-		if (this.state.error_msg == "<img>") {
+		if (this.state.error_msg === "<img>") {
 			errors = <div><p>For your month m, please ensure that</p><img src="/img/svg/cc-error.svg" /></div>
 		}
 		return (
-			<div className="cc-container">
-				<div className="col-xs-12 shipping-address-title">Credit Cart Info</div>
+			<div className="credit-cart-form">
+				<div className="shipping-address-title">{title}</div>
 				{spinner}
-				<div className="cc-outer">
+				<div className="">
 					<form onSubmit={this.handleSubmit.bind(this)}>
-						{abox}
+
+						<div className="text-warning">{abox}</div>
+
 						<div className="row">
-							<input id="cc-n" className="col-xs-12 cc-num" type='text' data-stripe='number' placeholder='credit card number' onChange={this.onCCChange.bind(this)} /><br />
+							<div className="col-md-12">
+								<div className="card-label">Credit Card Number <span className="required">*</span></div>
+								<input id="cc-n" type='text' data-stripe='number' placeholder='4242 4242 4242 4242' onChange={this.onCCChange.bind(this)} />
+							</div>
 						</div>
-						{errors}
+
+						<div className="text-danger">{errors}</div>
+
 						<div className="row">
-							<input id="cc-m" className="col-xs-4 cc-yymm" type='text' data-stripe='exp-month' placeholder='month' onChange={this.onCCChange.bind(this)} />
-							<input id="cc-y" className="col-xs-4 cc-yymm" type='text' data-stripe='exp-year' placeholder='year' onChange={this.onCCChange.bind(this)} />
-							<input id="cc-c" className="col-xs-4 cc-cvc" type='text' data-stripe='cvc' placeholder='cvc' onChange={this.onCCChange.bind(this)} /><br />
+							<div className="col-md-6">
+								<div className="card-label">Cardholder Name <span className="required">*</span></div>
+								<input id="cc-m" type='text' data-stripe='exp-month' placeholder='John A. Smith' onChange={this.onCCChange.bind(this)} />
+							</div>
+							<div className="col-md-3">
+								<div className="card-label">Expiration <span className="required">*</span></div>
+								<input id="cc-y" type='text' data-stripe='exp-year' placeholder='02 / 19' onChange={this.onCCChange.bind(this)} />
+							</div>
+							<div className="col-md-3">
+								<div className="card-label">CVV <span className="required">*</span></div>
+								<input id="cc-c" type='text' data-stripe='cvc' placeholder='123' onChange={this.onCCChange.bind(this)} /><br />
+							</div>
 						</div>
-						<div className="row">
-							<input className="col-xs-12 cc-purchase" type='submit' disabled={submitDisabled} value='Purchase' />
+
+						<div className="row complete-btn">
+							<div className="col-md-12">
+								<input className="btn" type="submit" disabled={submitDisabled} value='Complete Order' />
+							</div>
 						</div>
+
 					</form>
 				</div>
 			</div>

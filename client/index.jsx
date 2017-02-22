@@ -15,6 +15,8 @@ import { createStore,
          combineReducers,
          applyMiddleware }  from 'redux';
 
+import axios from 'axios';
+
 var initialState = immutifyState(window.__INITIAL_STATE__);
 
 console.log("Initialize GA")
@@ -47,6 +49,17 @@ store.dispatch({type: "SET_BLOG_ENVIRONMENT", payload: env })
 store.dispatch({type: "SET_COUNTRY", payload: country })
 store.dispatch({type: "INITIALIZE_PLAYER", payload: player})
 store.dispatch({type: "INITIALIZE_SITE", payload: {dispatch: store.dispatch}})
+
+axios
+  .get("/api/contributors/list")
+  .then(function(resp) {
+    var contributors = resp["data"]
+    store.dispatch({type: "SET_CONTRIBUTORS", payload: contributors})
+  })
+  .catch(function(err) {
+    console.log(err)
+  })      
+
 
 setTimeout(function() {
   doRefresh(store, env)

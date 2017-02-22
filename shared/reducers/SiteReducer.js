@@ -1,6 +1,5 @@
-import Immutable from 'immutable';
-import { fromJS } from 'immutable';
-import axios from 'axios';
+import Immutable from 'immutable'
+import { fromJS } from 'immutable'
 
 const init = {
   title: "Data Skeptic - The intersection of data science, artificial intelligence, machine learning, statistics, and scientific skepticism",
@@ -33,16 +32,6 @@ export default function siteReducer(state = defaultState, action) {
       }
       nstate.contact_form.send = "no"
       var dispatch = action.payload.dispatch
-      axios
-        .get("/api/contributors/list")
-        .then(function(resp) {
-          var contributors = resp["data"]
-          dispatch({type: "SET_CONTRIBUTORS", payload: contributors})
-        })
-        .catch(function(err) {
-          console.log(err)
-          self.setState({contributor: undefined})
-        })      
       break
     case 'SET_CONTRIBUTORS':
       nstate.contributors = action.payload
@@ -69,6 +58,8 @@ export default function siteReducer(state = defaultState, action) {
       var error = action.payload.error
       nstate.contact_form.error = error
       nstate.contact_form.send = "no"
+    case 'SET_SENDING':
+      nstate.contact_form.send = "sending"
     case 'CONTACT_FORM_COMPLETE':
       var success = action.payload.success
       if (success) {
@@ -79,36 +70,6 @@ export default function siteReducer(state = defaultState, action) {
         nstate.contact_form.send = "error"
       }
       break
-    case 'CONTACT_FORM':
-      var dispatch = action.payload.dispatch
-      var data = nstate.contact_form
-      var msg = action.payload.msg
-      if (msg != undefined) {
-        data.msg = msg
-      }
-      var email = action.payload.email
-      if (email != undefined) {
-        data.email = email
-      }
-      var url = "https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/contact"
-      var error = ""
-      nstate.contact_form.send = "sending"
-      var me = this
-      axios
-        .post(url, JSON.stringify(data))
-        .then(function(result) {
-          if (dispatch != undefined) {
-            var success = true
-            dispatch({type: "CONTACT_FORM_COMPLETE", payload: {success} })
-          }
-        })
-        .catch(function (err) {
-          console.log(err)
-          if (dispatch != undefined) {
-            var success = false
-            dispatch({type: "CONTACT_FORM_COMPLETE", payload: {success} })
-          }
-        });
   }
   return Immutable.fromJS(nstate)
 }

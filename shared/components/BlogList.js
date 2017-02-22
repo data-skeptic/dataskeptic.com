@@ -5,11 +5,12 @@ import BlogListItem from "./BlogListItem"
 
 export default class BlogList extends Component {
     render() {
-    	var blogs = this.props.blogs
+    	var blogs = this.props.blogs || []
         return (
             <div className="row blog-summary-container">
-                {blogs.map(function(blog) {
-                    return <BlogListItem key={blog.uri} blog={blog} />
+                {blogs.map(function(blog, index) {
+                    const id = index;
+                    return <BlogListItem key={id} blog={blog} />
                 })}
             </div>
         )
