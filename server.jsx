@@ -1,6 +1,7 @@
 import aws                       from 'aws-sdk'
 import axios                     from 'axios';
 import {get_blogs}               from 'backend/get_blogs'
+import {get_blogs_rss}           from 'backend/get_blogs_rss'
 import {get_contributors}        from 'backend/get_contributors'
 import {get_episodes}            from 'backend/get_episodes'
 import {get_invoice}             from 'backend/get_invoice'
@@ -174,6 +175,10 @@ function api_router(req, res) {
   else if (req.url == '/api/blog/categories') {
     var folders = my_cache.folders
     return res.status(200).end(JSON.stringify(folders))
+  }
+  else if (req.url.indexOf('/api/blog/rss') === 0) {
+      get_blogs_rss(req, res, my_cache.blogmetadata_map)
+      return true
   }
   else if (req.url.indexOf('/api/blog') == 0) {
     get_blogs(req, res, my_cache.blogmetadata_map)
