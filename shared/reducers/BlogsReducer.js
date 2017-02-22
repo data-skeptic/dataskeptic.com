@@ -6,6 +6,7 @@ const init = {
   pagination: {
     current: 0,
     next: 1,
+    prev: 0
   },
   total: 0,
   blogs: [],

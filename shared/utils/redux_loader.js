@@ -201,7 +201,7 @@ export function get_blogs_list(dispatch, pathname) {
 				console.log(err)
 			})
 
-		const totalUrl = url + '/total';
+		const totalUrl = '/api' + prefix + '/total';
 		axios
 			.get(totalUrl)
 	  		.then(function(result) {

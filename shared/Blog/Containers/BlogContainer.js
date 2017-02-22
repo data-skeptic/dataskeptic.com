@@ -9,26 +9,38 @@ import BlogItem from "../Components/BlogItem"
 import Error from "../../Common/Components/Error"
 import Loading from "../../Common/Components/Loading"
 
+import PaginationContainer from '../../Pagination/Containers/PaginationContainer';
+
 import transform_pathname from "../../utils/transform_pathname"
 
 import {get_blogs_list} from '../../utils/redux_loader'
 
 class BlogContainer extends React.Component {
 	constructor(props) {
-		super(props)
+		super(props);
+
+		this.fetchPosts = this.fetchPosts.bind(this);
+	}
+
+    fetchPosts() {
+        window.scrollTo(0, 0);
+        const location = this.props.location;
+
+        if (location) {
+            const offset = (this.props.params.pageNum * this.props.perPage) || 0;
+            const limit = this.props.perPage;
+
+            const pathname = `/blog?offset=${offset}&limit=${limit}`;
+            console.log(pathname);
+            const dispatch = this.props.dispatch;
+            get_blogs_list(dispatch, pathname)
+        } else {
+            console.log("location is not defined")
+        }
 	}
 
 	componentWillMount() {
-		var location = this.props.location
-		if (location != undefined) {
-			var pathname = location.pathname
-			console.log(pathname)
-			var dispatch = this.props.dispatch
-			get_blogs_list(dispatch, pathname)
-		}
-		else {
-			console.log("location is not defined")
-		}
+		this.fetchPosts();
 	}
 
 	remove_type(typ, arr) {
@@ -58,7 +70,9 @@ class BlogContainer extends React.Component {
 	}
 
 	render() {
-		const {total} = this.props;
+		let {pageNum} = this.props;
+		const {total, perPage} = this.props;
+
 		const oblogs = this.props.blogs.toJS();
 		const blog_focus = oblogs.blog_focus;
 		const folders = oblogs.folders || [];
@@ -91,16 +105,28 @@ class BlogContainer extends React.Component {
 			<div className="center">
 				<BlogNav folders={folders} pathname={pathname} />
 				<BlogList blogs={blogs} />
+
+				<div className="row">
+					<PaginationContainer
+						currentPage={pageNum}
+						total={total}
+						perPage={perPage}
+						onPageClick={this.fetchPosts}
+					/>
+				</div>
 			</div>
 		)
 	}
 }
 
 export default connect(
-	state => ({
+	(state, ownProps) => ({
 		player: state.player,
-		pagination: state.blogs.getIn(['pagination']),
+        pageNum: ownProps.params.pageNum || 1,
+
+		perPage: 30,
 		total: state.blogs.getIn(['total']),
+
 		blogs: state.blogs,
 		episodes: state.episodes,
 		site: state.site

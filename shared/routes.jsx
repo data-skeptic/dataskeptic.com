@@ -48,7 +48,7 @@ function onUpdate() {
 
 export default (
 	<Router onUpdate={onUpdate}>
-		<Route path="/blog" component={App} onEnter={loadData}>
+		<Route path="/blog(/:pageNum)" component={App} onEnter={loadData}>
 			<IndexRoute component={BlogContainer}/>
 		</Route>
 		<Route path="/blog/*" component={App} onEnter={loadData}>
