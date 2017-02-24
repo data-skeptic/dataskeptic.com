@@ -1,6 +1,7 @@
 import axios from "axios"
 import {get_contributors} from 'backend/get_contributors'
 import contact_form_send from '../daos/contact_form_send'
+import getBlog from '../daos/getBlog'
 
 export function pay_invoice(prod, dispatch, event, id, amount) {
 	dispatch({type: "START_INVOICE_PAYMENT", payload: {}})

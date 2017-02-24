@@ -65,7 +65,7 @@ export default function blogsReducer(state = defaultState, action) {
         nstate.blog_focus.loaded = 1
         nstate.blog_focus.content = action.payload.content
       } else {
-        console.log([blog['uri'], 'does not match', cblog['uri']])
+        console.log([nblog['uri'], 'does not match', cblog['uri']])
       }
       break
     case 'ADD_RELATED':

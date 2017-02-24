@@ -15,6 +15,9 @@ class BlogAuthorTop extends React.Component {
 			return <div></div>
 		}
 		var pn = oblogs.blog_focus.blog.prettyname
+		if (pn == undefined) {
+			return <div></div>
+		}
 		if (pn.indexOf('/episodes/') == 0 || pn.indexOf('/transcripts/') == 0) {
 			return <div></div>
 		}

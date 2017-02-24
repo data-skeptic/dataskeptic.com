@@ -13,6 +13,7 @@ import RelatedContent from './RelatedContent'
 
 import {get_folders} from '../utils/redux_loader'
 import {get_related_content} from '../utils/redux_loader'
+import getBlog from '../daos/getBlog'
 
 class BlogArticle extends React.Component {
 	constructor(props) {
@@ -45,10 +46,11 @@ class BlogArticle extends React.Component {
 		var pathname = this.getPN()
 		var oblogs = this.props.blogs.toJS()
 		var blog_focus = oblogs.blog_focus
+		var env = oblogs.env
 		if (blog_focus.pathname != pathname) {
-			console.log("Need to retrieve blog")
+			console.log("Need to retrieve blog...")
 			console.log(blog_focus.pathname)
-			//dispatch({type: "LOAD_BLOG_AND_CONTENT", payload: {pathname, dispatch} })
+			getBlog(dispatch, env, pathname)
 		}
 		get_related_content(dispatch, pathname)
 	}
