@@ -1,7 +1,11 @@
-import React from "react"
+import React, {Component} from "react"
 import ReactDOM from "react-dom"
-import { Link } from 'react-router'
-import { connect } from 'react-redux'
+import {Link} from 'react-router'
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux'
+
+import isUndefined from 'lodash/isUndefined';
+
 import ReactDisqusComments from 'react-disqus-comments'
 import LatestEpisodePlayer from "./LatestEpisodePlayer"
 import MailingListBlogFooter from "../Components/MailingListBlogFooter"
@@ -14,163 +18,175 @@ import RelatedContent from '../Components/RelatedContent'
 import {get_folders} from '../../utils/redux_loader'
 import {get_related_content} from '../../utils/redux_loader'
 
-class BlogArticle extends React.Component {
-	constructor(props) {
-		super(props)
-	}
+import {loadBlogPost} from '../Actions/BlogsActions';
 
-	getPN(blog_focus) {
-		if (typeof location != 'undefined') {
-			if (location.pathname != undefined) {
-				return location.pathname
-			}
-		}
-		if (this.props.location != undefined) {
-			if (this.props.location.pathname != undefined) {
-				return this.props.location.pathname
-			}
-		}
-		if (blog_focus != undefined) {
-			return blog_focus.pathname | ""
-		}
-		return ""
-	}
+class BlogArticle extends Component {
+    constructor(props) {
+        super(props)
+    }
 
-	componentWillMount() {
-		debugger;
-		var dispatch = this.props.dispatch
-		var oblogs = this.props.blogs.toJS()
-		if (oblogs.folders.length == 0) {
-			get_folders(dispatch)			
-		}
-		var pathname = this.getPN()
-		var oblogs = this.props.blogs.toJS()
-		var blog_focus = oblogs.blog_focus
+    getPN() {
+        console.dir(this.props.p);
 
-		console.log("Need to retrieve blog")
-		console.log(blog_focus.pathname)
+        if (window && location && location.pathname) {
+            return location.pathname
+        }
 
-		get_related_content(dispatch, pathname)
-	}
+        if (this.props.location && this.props.location.pathname) {
+            return this.props.location.pathname
+        }
+
+        return ""
+    }
+
+    componentWillMount() {
+        // debugger;
+        // var dispatch = this.props.dispatch
+        // var oblogs = this.props.blogs.toJS()
+        // if (oblogs.folders.length == 0) {
+        // 	get_folders(dispatch)
+        // }
+        var pathname = this.getPN()
+        // var oblogs = this.props.blogs.toJS()
+        // var blog_focus = oblogs.blog_focus
+        //
+        // console.log("Need to retrieve blog")
+        // console.log(blog_focus.pathname)
+        //
+        // get_related_content(dispatch, pathname)
+        this.props.loadBlogPost(pathname);
+    }
 
     handleNewComment(comment) {
-    	// TODO: Maybe use a cognitive service here?
+        // TODO: Maybe use a cognitive service here?
         console.log(comment.text);
     }
 
-	render() {
-		var pn = this.getPN()
-		var oepisodes = this.props.episodes.toJS()
-		var oblogs = this.props.blogs.toJS()
-		var blog_focus = oblogs.blog_focus
-		var osite = this.props.site.toJS()
-		var disqus_username = osite.disqus_username
-		var title = this.props.title
-		var isEpisode = false
 
-		if (blog_focus == undefined || blog_focus.blog == undefined) {
-			return <Loading />
-		}
-		var showBio = true
-		pn = blog_focus.blog.prettyname
-		if (pn != undefined) {
-			if (pn.indexOf('/episodes/')==0 || pn.indexOf('/transcripts/')==0) {
-				showBio = false
-			}			
-		} else {
-			showBio = false
-		} 
-		var top = <div></div>
-		var focus_episode = oepisodes.focus_episode
-		if (focus_episode.episode != undefined) {
-			debugger;
-			console.log("!!!")
-			console.log(blog_focus)
-			console.log(focus_episode)
-			if (focus_episode.episode.guid == blog_focus.blog.guid) {
-				try {
-					top = (
-						<div className="home-player">
-							<LatestEpisodePlayer guid={focus_episode.guid} />
-						</div>
-					)
-					isEpisode = true					
-				}
-				catch (err) {
-					console.log(err)
-					top = <div></div>
-				}
-			}
-		}
-		var bot = <div></div>
-		if (isEpisode && false) {
-			var tm = oblogs.transcript_map
-			if (tm != undefined) {
-				var guid = blog_focus.blog.guid
-				var b = tm[guid]
-				if (b != undefined) {
-					if (b.prettyname != undefined) {
-						if (b.prettyname.indexOf('/transcripts/') == -1) {
-							var pn = "/blog" + b.prettyname
-							bot = (
-								<div className='blog-transcript-link'>
-									Read the full transcript here:
-									<Link to={pn}>{title} transcripts</Link>.
-								</div>
-							)
-						}						
-					}
-				}
-			}
-		}
-		var content = blog_focus.content || ""
-		if (content == "") {
-			if (blog_focus.blog != undefined) {
-				var title = blog_focus.blog.title
-				content = "<div id='blog-content'><h2>" + title + "</h2><p>Loading...</p></div>"
-			} else {
-				content = "<div id='blog-content'><p>Loading....</p></div>"
-			}
-		} else if (blog_focus.content == "") {
-				content = "<div id='blog-content'><p>Loading...</p></div>"
-		} else {
-			content = "<div id='blog-content'>" + content + "</div>"
-		}
+    isEpisode(prettyName) {
+        return prettyName.indexOf('/episodes/') === 0;
+    }
 
-		var pn = blog_focus.blog.prettyname
-		var uid = 'http://dataskeptic.com/blog' + pn
-		var author = ""
-		if (blog_focus != undefined && showBio) {
-			var blog = blog_focus.blog
-			if (blog != undefined) {
-				if (blog.author == undefined) {
-					author = ""
-				} else {
-					author = blog.author.toLowerCase()					
-				}
-			}
-		}
-		return (
-			<div className="center">
-				{top}
-				<BlogAuthorTop author={author} />
-				<span dangerouslySetInnerHTML={{__html: content}} />
-				{bot}
-				<RelatedContent />
-				<BlogAuthorBottom author={author} />
-				<MailingListBlogFooter />
-	            <ReactDisqusComments
-	                shortname={disqus_username}
-	                identifier={uid}
-	                title={title}
-	                url={uid}
-	                onNewComment={this.handleNewComment}/>
-			</div>
-		)
-	}
+    isTranscript(prettyName) {
+        return prettyName.indexOf('/transcripts/') === 0;
+    }
+
+    render() {
+        // var pn = this.getPN()
+        // var oepisodes = this.props.episodes.toJS()
+        // var oblogs = this.props.blogs.toJS()
+        // var blog_focus = oblogs.blog_focus
+        // var osite = this.props.site.toJS()
+        // var disqus_username = osite.disqus_username
+        // var title = this.props.title
+        // var isEpisode = false
+
+
+        // var top = <div></div>
+        // var focus_episode = oepisodes.focus_episode
+        // if (focus_episode.episode != undefined) {
+        // 	debugger;
+        // 	console.log("!!!")
+        // 	console.log(blog_focus)
+        // 	console.log(focus_episode)
+        // 	if (focus_episode.episode.guid == blog_focus.blog.guid) {
+        // 		try {
+        // 			top = (
+        // 				<div className="home-player">
+        // 					<LatestEpisodePlayer guid={focus_episode.guid} />
+        // 				</div>
+        // 			)
+        // 			isEpisode = true
+        // 		}
+        // 		catch (err) {
+        // 			console.log(err)
+        // 			top = <div></div>
+        // 		}
+        // 	}
+        // }
+        // var bot = <div></div>
+        // if (isEpisode && false) {
+        // 	var tm = oblogs.transcript_map
+        // 	if (tm != undefined) {
+        // 		var guid = blog_focus.blog.guid
+        // 		var b = tm[guid]
+        // 		if (b != undefined) {
+        // 			if (b.prettyname != undefined) {
+        // 				if (b.prettyname.indexOf('/transcripts/') == -1) {
+        // 					var pn = "/blog" + b.prettyname
+        // 					bot = (
+        // 						<div className='blog-transcript-link'>
+        // 							Read the full transcript here:
+        // 							<Link to={pn}>{title} transcripts</Link>.
+        // 						</div>
+        // 					)
+        // 				}
+        // 			}
+        // 		}
+        // 	}
+
+        const {currentPost, isLoading, contributors} = this.props;
+
+        if (isLoading || !currentPost) {
+            return <Loading />
+        }
+
+        const post = currentPost.toJS();
+        const prettyName = post.prettyname;
+
+        const showBio = (this.isEpisode(prettyName) || this.isTranscript(prettyName));
+        const author = (post.author || '').toLowerCase();
+
+        const disqus_username = '';
+        const uid = 'http://dataskeptic.com/blog' + prettyName;
+        const { content, title } = post;
+        const bot = '';
+        const top = '';
+
+        const contributor = contributors.getIn([author]).toJS();
+
+        console.dir(author);
+
+        return (
+            <div className="center">
+                {top}
+
+                <BlogAuthorTop contributor={contributor}/>
+
+                <div id='blog-content'>
+                    <span dangerouslySetInnerHTML={{__html: content}}/>
+                </div>
+
+                {bot}
+
+                <RelatedContent />
+
+                <BlogAuthorBottom author={author}/>
+
+                <MailingListBlogFooter />
+
+                <ReactDisqusComments
+                    shortname={disqus_username}
+                    identifier={uid}
+                    title={title}
+                    url={uid}
+                    onNewComment={this.handleNewComment}/>
+            </div>
+        )
+    }
 }
-export default connect(state => ({
-	site: state.site,
-	episodes: state.episodes,
-	blogs: state.blogs
-}))(BlogArticle)
+export default connect(
+    (state, ownProps) => ({
+        site: state.site,
+        episodes: state.episodes,
+        blogs: state.blogs,
+
+        isLoading: state.blogs.getIn(['postLoading']),
+        currentPost: state.blogs.getIn(['currentPost']),
+
+        contributors: state.contributors.getIn(['list']),
+    }),
+    (dispatch) => bindActionCreators({
+        loadBlogPost
+    }, dispatch)
+)(BlogArticle)

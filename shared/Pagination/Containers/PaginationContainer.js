@@ -30,7 +30,7 @@ export class PaginationContainer extends Component {
     }
 
     canGoToNextPage() {
-        return this.getNextPage() < this.getPagesCount();
+        return this.getNextPage() <= this.getPagesCount();
     }
 
     goToNextPage(e) {

@@ -1,6 +1,5 @@
 import Immutable from 'immutable';
-
-import getBlogContent from 'daos/getBlogContent'
+import each from 'lodash/each';
 
 import {
     LOAD_BLOGS_REQUEST,
@@ -24,7 +23,10 @@ const init = {
     blog_focus: {blog: undefined, contributor: undefined, loaded: 0, content: "", pathname: ""},
     related: [],
     transcript_map: {},
-    env: "prod"  // client/index.jsx will dispatch SET_BLOG_ENVIRONMENT on init
+    env: "prod",  // client/index.jsx will dispatch SET_BLOG_ENVIRONMENT on init
+
+    currentPost: {},
+    postLoading: true,
 }
 
 const defaultState = Immutable.fromJS(init);
@@ -123,8 +125,29 @@ export default function blogsReducer(state = defaultState, action) {
             nstate.total = action.payload;
             break;
 
+
+        // new code
+        case LOAD_BLOGS_SUCCESS:
+            nstate.blogs = action.payload.blogs;
+            nstate.total = action.payload.total;
+
+            each(nstate.blogs, (blog) => {
+                if (blog.guid && blog.uri.indexOf('/transcripts/') > -1) {
+                    nstate.transcript_map[blog.guid] = blog
+                }
+            });
+
+            nstate.blogs_loaded = 1;
+            break;
+
+        case LOAD_BLOGS_REQUEST:
+            nstate.currentPost = {};
+            nstate.postLoading = true;
+            break;
+
         case LOAD_BLOG_POST_SUCCESS:
-            debugger;
+            nstate.currentPost = action.payload.post;
+            nstate.postLoading = false;
             break;
 
     }
