@@ -23,10 +23,12 @@ class BlogContainer extends React.Component {
 	}
 
     fetchPosts() {
-        window.scrollTo(0, 0);
         const location = this.props.location;
 
         if (location) {
+        	if (window) {
+                window.scrollTo(0, 0);
+			}
             const offset = (this.props.params.pageNum * this.props.perPage) || 0;
             const limit = this.props.perPage;
 

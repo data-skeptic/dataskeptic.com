@@ -68,7 +68,7 @@ export class PaginationContainer extends Component {
                     <Link to={`/blog/${prevPage}`} onClick={this.goToPrevPage}>previous</Link>
                 </li>
                 {[,...Array(count)].map((x, i) =>
-                    <li key={i}><Link to={`/blog/${i}`} activeClassName="current" onClick={onPageClick}>{i}</Link></li>
+                    <li key={i}><Link to={`/blog/${i}`} className={ classNames({'current': i == currentPage}) } onClick={onPageClick}>{i}</Link></li>
                 )}
                 <li className={ classNames('next', {'disabled': !canNext} ) }>
                     <Link to={`/blog/${nextPage}`} onClick={this.goToNextPage}>next</Link>

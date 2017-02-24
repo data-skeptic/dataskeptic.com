@@ -195,19 +195,10 @@ export function get_blogs_list(dispatch, pathname) {
 			.get(url)
 	  		.then(function(result) {
 	  			var blogs = result["data"]
+				debugger;
 				dispatch({type: "ADD_BLOGS", payload: blogs})
-			})
-			.catch((err) => {
-				console.log(err)
-			})
-
-		const totalUrl = '/api' + prefix + '/total';
-		axios
-			.get(totalUrl)
-	  		.then(function(result) {
-	  			var total = result["data"]
-				dispatch({type: "SET_BLOGS_TOTAL", payload: total})
-			})
+                dispatch({type: "SET_BLOGS_TOTAL", payload: total})
+            })
 			.catch((err) => {
 				console.log(err)
 			})
