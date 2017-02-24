@@ -2,6 +2,8 @@ import axios from "axios"
 import {get_contributors} from 'backend/get_contributors'
 import contact_form_send from '../daos/contact_form_send'
 
+import { loadBlogs } from '../../shared/Blog/Actions/BlogsActions';
+
 export function pay_invoice(prod, dispatch, event, id, amount) {
 	dispatch({type: "START_INVOICE_PAYMENT", payload: {}})
 	if (prod) {
@@ -121,7 +123,7 @@ export function get_homepage_content(dispatch) {
 		axios
 			.get("/api/blog?limit=4")
 	  		.then(function(result) {
-	  			var blogs = result["data"]
+	  			const { blogs }= result["data"]
 	  			var blog = blogs[0]
 	  			var pn = blog.prettyname
 	  			var i = 1
@@ -187,21 +189,10 @@ export function get_blogs_list(dispatch, pathname) {
 				blogs.push(blog)
 			}
 		}
-		dispatch({type: "ADD_BLOGS", payload: blogs})
+		dispatch({type: "ADD_BLOGS", payload: {blogs}})
 	} else {
 		console.log("Getting blogs")
-		var url = "/api" + pathname;
-		axios
-			.get(url)
-	  		.then(function(result) {
-	  			var blogs = result["data"]
-				debugger;
-				dispatch({type: "ADD_BLOGS", payload: blogs})
-                dispatch({type: "SET_BLOGS_TOTAL", payload: total})
-            })
-			.catch((err) => {
-				console.log(err)
-			})
+        loadBlogs(pathname, dispatch);
 	}	
 }
 

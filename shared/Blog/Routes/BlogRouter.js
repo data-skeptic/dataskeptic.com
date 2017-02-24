@@ -44,6 +44,7 @@ class BlogRouter extends React.Component {
 		/*
 			Must be a blog page if we got here
 		*/
+
 		return (
 			<div className="center">
 				<BlogNav folders={folders} pathname={pathname} />
@@ -53,5 +54,12 @@ class BlogRouter extends React.Component {
 	}
 }
 
-export default connect(state => ({ player: state.player, blogs: state.blogs, episodes: state.episodes, site: state.site }))(BlogRouter)
+export default connect(
+	(state, ownProps) => ({
+		player: state.player,
+		blogs: state.blogs,
+		episodes: state.episodes,
+		site: state.site
+	}))
+(BlogRouter)
 

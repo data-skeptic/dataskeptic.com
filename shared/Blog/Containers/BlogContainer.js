@@ -1,5 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom"
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
 import NotFound from '../../NotFound/Components/NotFound'
@@ -13,7 +14,7 @@ import PaginationContainer from '../../Pagination/Containers/PaginationContainer
 
 import transform_pathname from "../../utils/transform_pathname"
 
-import {get_blogs_list} from '../../utils/redux_loader'
+import { loadBlogs } from '../Actions/BlogsActions';
 
 class BlogContainer extends React.Component {
 	constructor(props) {
@@ -26,16 +27,16 @@ class BlogContainer extends React.Component {
         const location = this.props.location;
 
         if (location) {
-        	if (window) {
-                window.scrollTo(0, 0);
-			}
+            // if (window) {
+             //    window.scrollTo(0, 0);
+			// }
             const offset = (this.props.params.pageNum * this.props.perPage) || 0;
             const limit = this.props.perPage;
 
             const pathname = `/blog?offset=${offset}&limit=${limit}`;
             console.log(pathname);
             const dispatch = this.props.dispatch;
-            get_blogs_list(dispatch, pathname)
+            this.props.loadBlogs(pathname);
         } else {
             console.log("location is not defined")
         }
@@ -132,6 +133,9 @@ export default connect(
 		blogs: state.blogs,
 		episodes: state.episodes,
 		site: state.site
-	})
+	}),
+	(dispatch) => (bindActionCreators({
+		loadBlogs
+	}, dispatch))
 )(BlogContainer)
 

@@ -1,4 +1,4 @@
-export { default as blogs } from './BlogsReducer';
+export { default as blogs } from '../Blog/Reducers/BlogsReducer';
 export { default as cart } from '../Cart/Reducers/CartReducer';
 export { default as episodes } from './EpisodesReducer';
 export { default as products } from './ProductsReducer';

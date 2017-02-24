@@ -37,6 +37,7 @@ class BlogArticle extends React.Component {
 	}
 
 	componentWillMount() {
+		debugger;
 		var dispatch = this.props.dispatch
 		var oblogs = this.props.blogs.toJS()
 		if (oblogs.folders.length == 0) {
@@ -45,11 +46,10 @@ class BlogArticle extends React.Component {
 		var pathname = this.getPN()
 		var oblogs = this.props.blogs.toJS()
 		var blog_focus = oblogs.blog_focus
-		if (blog_focus.pathname != pathname) {
-			console.log("Need to retrieve blog")
-			console.log(blog_focus.pathname)
-			//dispatch({type: "LOAD_BLOG_AND_CONTENT", payload: {pathname, dispatch} })
-		}
+
+		console.log("Need to retrieve blog")
+		console.log(blog_focus.pathname)
+
 		get_related_content(dispatch, pathname)
 	}
 
@@ -83,6 +83,7 @@ class BlogArticle extends React.Component {
 		var top = <div></div>
 		var focus_episode = oepisodes.focus_episode
 		if (focus_episode.episode != undefined) {
+			debugger;
 			console.log("!!!")
 			console.log(blog_focus)
 			console.log(focus_episode)
@@ -168,4 +169,8 @@ class BlogArticle extends React.Component {
 		)
 	}
 }
-export default connect(state => ({ site: state.site, episodes: state.episodes, blogs: state.blogs }))(BlogArticle)
+export default connect(state => ({
+	site: state.site,
+	episodes: state.episodes,
+	blogs: state.blogs
+}))(BlogArticle)

@@ -50,7 +50,7 @@ export function loadBlogs(store, env, my_cache) {
     var folders = extractFolders(blogs)
     my_cache.folders = folders
     store.dispatch({type: "ADD_FOLDERS", payload: folders })
-    store.dispatch({type: "ADD_BLOGS", payload: blogs })
+    store.dispatch({type: "ADD_BLOGS", payload: {blogs} })
     for (var i=0; i < blogs.length; i++) {
       var blog = blogs[i]
       var pn = blog['prettyname']

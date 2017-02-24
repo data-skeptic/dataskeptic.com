@@ -14,38 +14,42 @@ module.exports = {
         var limit = query['limit'] || 30
         var c = 0
         var keys = Object.keys(blogmetadata_map)
-        var total = 0;
+
+        let total = 0;
+        let finishedLookup = false;
         for (var i = 0; i < keys.length; i++) {
             var key = keys[i]
-            if (key !== "latest") {
+            if (key !== "latest" && key !== "guid") {
                 var blog = blogmetadata_map[key]
+                if (!blog) continue;
                 var match = false
-                if (blog['prettyname'].indexOf(url) === 0) {
+
+                if (blog['prettyname'].indexOf(url) == 0) {
                     match = true
                 }
-                if (url === '/') {
-                    for (let ex in exclude) {
-                        if (blog['prettyname'].indexOf(ex) === 0) {
+                if (url == '/') {
+                    for (ex in exclude) {
+                        if (blog['prettyname'].indexOf(ex) == 0) {
                             match = false
                         }
                     }
                 }
                 if (match) {
-                    if (c >= offset) {
+                    if (c >= offset && !finishedLookup) {
                         blogs.push(blog);
                     }
                     c += 1
                     if (blogs.length >= limit) {
-                        break;
+                        finishedLookup = true;
                     }
+
                     total++;
                 }
             }
         }
-
         return res.status(200).end(JSON.stringify({
             blogs,
-            total
+            total: 100
         }))
     }
 }

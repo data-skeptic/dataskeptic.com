@@ -25,6 +25,7 @@ import fs                        from 'fs'
 import createLocation            from 'history/lib/createLocation';
 import Immutable                 from 'immutable'
 import promiseMiddleware         from 'lib/promiseMiddleware';
+import thunk                     from 'redux-thunk';
 import fetchComponentData        from 'lib/fetchComponentData';
 import morgan                    from 'morgan'
 import path                      from 'path';
@@ -58,12 +59,12 @@ app.use(morgan('combined', {stream: accessLogStream}))
 
 var env = "prod"
 
-aws.config.loadFromPath('awsconfig.json');
-
-if (process.env.NODE_ENV !== 'production') {
+// aws.config.loadFromPath('awsconfig.json');
+//
+// if (process.env.NODE_ENV !== 'production') {
   require('./webpack.dev').default(app);
   env = "dev"
-}
+// }
 console.log("Environment: ", env)
 
 var my_cache = {
@@ -77,7 +78,7 @@ var my_cache = {
 }
 
 const reducer  = combineReducers(reducers);
-const store    = applyMiddleware(promiseMiddleware)(createStore)(reducer);
+const store    = applyMiddleware(thunk,promiseMiddleware)(createStore)(reducer);
 const initialState = store.getState()
 
 global.env              = env
@@ -93,7 +94,7 @@ var doRefresh = function() {
   loadProducts(env, my_cache)
 }
 
-setInterval(doRefresh, 5 * 60 * 1000)
+// setInterval(doRefresh, 5 * 60 * 1000)
 
 doRefresh()
 
@@ -120,18 +121,18 @@ var stripe_key = "sk_test_81PZIV6UfHDlapSAkn18bmQi"
 var sp_key = "test_Z_gOWbE8iwjhXf4y4vqizQ"
 var slack_key = ""
 
-fs.open("config.json", "r", function(error, fd) {
-  var buffer = new Buffer(10000)
-  fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
-    var data = buffer.toString("utf8", 0, bytesRead)
-    var c = JSON.parse(data)
-    var env2 = env
-    stripe_key = c[env2]['stripe']
-    sp_key = c[env2]['sp']
-    slack_key = c[env2]['slack']
-    fs.close(fd)
-  })
-})
+// fs.open("config.json", "r", function(error, fd) {
+//   var buffer = new Buffer(10000)
+//   fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
+//     var data = buffer.toString("utf8", 0, bytesRead)
+//     var c = JSON.parse(data)
+//     var env2 = env
+//     stripe_key = c[env2]['stripe']
+//     sp_key = c[env2]['sp']
+//     slack_key = c[env2]['slack']
+//     fs.close(fd)
+//   })
+// })
 
 function api_router(req, res) {
   if (req.url.indexOf('/api/slack/join') == 0) {
