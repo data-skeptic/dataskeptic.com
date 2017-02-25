@@ -125,7 +125,7 @@ class BlogArticle extends Component {
         // 		}
         // 	}
 
-        const {currentPost, isLoading, contributors} = this.props;
+        const {currentPost, isLoading, contributors, disqusUsername} = this.props;
 
         if (isLoading || !currentPost) {
             return <Loading />
@@ -137,15 +137,12 @@ class BlogArticle extends Component {
         const showBio = (this.isEpisode(prettyName) || this.isTranscript(prettyName));
         const author = (post.author || '').toLowerCase();
 
-        const disqus_username = '';
         const uid = 'http://dataskeptic.com/blog' + prettyName;
         const { content, title } = post;
         const bot = '';
         const top = '';
 
         const contributor = contributors.getIn([author]).toJS();
-
-        console.dir(author);
 
         return (
             <div className="center">
@@ -161,12 +158,12 @@ class BlogArticle extends Component {
 
                 <RelatedContent />
 
-                <BlogAuthorBottom author={author}/>
+                <BlogAuthorBottom contributor={contributor}/>
 
                 <MailingListBlogFooter />
 
                 <ReactDisqusComments
-                    shortname={disqus_username}
+                    shortname={disqusUsername}
                     identifier={uid}
                     title={title}
                     url={uid}
@@ -180,6 +177,8 @@ export default connect(
         site: state.site,
         episodes: state.episodes,
         blogs: state.blogs,
+
+        disqusUsername: state.site.getIn(['disqus_username']),
 
         isLoading: state.blogs.getIn(['postLoading']),
         currentPost: state.blogs.getIn(['currentPost']),

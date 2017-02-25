@@ -274,7 +274,7 @@ function inject_blog(store, my_cache, pathname) {
   if (blog_metadata == undefined) {
     blog_metadata = {}
     var dispatch = store.dispatch
-    // var blogs = get_blogs_list(dispatch, pathname)
+    var blogs = get_blogs_list(dispatch, pathname)
   } else {
     var guid = blog_metadata.guid
     if (guid != undefined) {
