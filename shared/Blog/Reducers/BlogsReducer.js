@@ -8,6 +8,7 @@ import {
     LOAD_BLOG_POST_REQUEST,
     LOAD_BLOG_POST_SUCCESS,
     LOAD_BLOG_POST_FAILED,
+    STOP_BLOG_LOADING
 } from '../Actions/BlogsActions'
 
 const init = {
@@ -142,6 +143,10 @@ export default function blogsReducer(state = defaultState, action) {
 
         case LOAD_BLOGS_REQUEST:
             nstate.postLoading = true;
+            break;
+
+        case STOP_BLOG_LOADING:
+            nstate.postLoading = false;
             break;
 
         case LOAD_BLOG_POST_SUCCESS:

@@ -20,15 +20,28 @@ import {get_related_content} from '../../utils/redux_loader'
 
 
 import isEmpty from 'lodash/isEmpty';
-import {loadBlogPost} from '../Actions/BlogsActions';
+import { loadBlogPost, stopBlogLoading } from '../Actions/BlogsActions';
 
 class BlogArticle extends Component {
     constructor(props) {
         super(props)
     }
 
+    isPostFetched() {
+        const post = this.props.currentPost.toJS();
+        if (!post || !post.prettyname) {
+            return false;
+        }
+
+        return ('/blog' + post.prettyname) === this.props.postUrl;
+    }
+
     componentWillMount() {
-        this.props.loadBlogPost(this.props.postUrl);
+        if (!this.isPostFetched()) {
+            this.props.loadBlogPost(this.props.postUrl);
+        } else {
+            this.props.stopBlogLoading();
+        }
     }
 
     handleNewComment(comment) {
@@ -161,6 +174,7 @@ export default connect(
         contributors: state.contributors.getIn(['list']),
     }),
     (dispatch) => bindActionCreators({
-        loadBlogPost
+        loadBlogPost,
+        stopBlogLoading
     }, dispatch)
 )(BlogArticle)

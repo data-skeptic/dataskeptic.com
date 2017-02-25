@@ -293,7 +293,6 @@ function inject_blog(store, my_cache, pathname) {
       console.log("No episode guid found")
     }
 
-    console.dir('install_blog');
     install_blog(store, blog_metadata, content)
   }
   console.log("done with blog inject")
