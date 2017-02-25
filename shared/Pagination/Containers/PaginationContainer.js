@@ -60,9 +60,7 @@ export class PaginationContainer extends Component {
     generatePages(count = 1) {
        let p = [];
        // server side rendering doesn't support [,...Array(count)] generation
-       for (let i=0;i<count;i++) {
-            p.push()
-       }
+       for (let i=0;i<count;i++) { p.push(i+1) }
        return p;
     }
 
@@ -85,7 +83,7 @@ export class PaginationContainer extends Component {
                     <Link to={`/blog/${prevPage}`} onClick={this.goToPrevPage}>previous</Link>
                 </li>
                 {pages.map((x, i) =>
-                    <li key={i}><Link to={`/blog/${i}`} className={ classNames({'current': i == currentPage}) } onClick={onPageClick}>{i}</Link></li>
+                    <li key={i}><Link to={`/blog/${x}`} className={ classNames({'current': x == currentPage}) } onClick={onPageClick}>{x}</Link></li>
                 )}
                 <li className={ classNames('next', {'disabled': !canNext} ) }>
                     <Link to={`/blog/${nextPage}`} onClick={this.goToNextPage}>next</Link>
