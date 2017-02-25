@@ -128,7 +128,14 @@ class BlogArticle extends Component {
         const bot = '';
         const top = '';
 
-        const contributor = contributors.getIn([author]).toJS();
+
+        let contributor = {};
+
+        try {
+            contributor = contributors.getIn([author]).toJS();
+        } catch(e) {
+            // TODO:
+        }
 
         return (
             <div className="center">

@@ -142,6 +142,7 @@ export default function blogsReducer(state = defaultState, action) {
             break;
 
         case LOAD_BLOGS_REQUEST:
+            nstate.blogs = [];
             nstate.postLoading = true;
             break;
 

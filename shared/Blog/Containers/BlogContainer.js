@@ -17,25 +17,23 @@ import transform_pathname from "../../utils/transform_pathname"
 import { loadBlogs } from '../Actions/BlogsActions';
 
 class BlogContainer extends React.Component {
+
 	constructor(props) {
 		super(props);
 
 		this.fetchPosts = this.fetchPosts.bind(this);
+		this.onPaginatorPageClick = this.onPaginatorPageClick.bind(this);
 	}
 
-    fetchPosts() {
+    fetchPosts(pageNum = 1) {
         const location = this.props.location;
 
         if (location) {
-            // if (window) {
-             //    window.scrollTo(0, 0);
-			// }
-            const offset = (this.props.params.pageNum * this.props.perPage) || 0;
+            const offset = ((pageNum - 1) * this.props.perPage);
+            const add = ((pageNum === 1) ? 0 : 1);
             const limit = this.props.perPage;
 
-            const pathname = `/blog?offset=${offset}&limit=${limit}`;
-            console.log(pathname);
-            const dispatch = this.props.dispatch;
+            const pathname = `/blog?offset=${offset+add}&limit=${limit}`;
             this.props.loadBlogs(pathname);
         } else {
             console.log("location is not defined")
@@ -43,7 +41,15 @@ class BlogContainer extends React.Component {
 	}
 
 	componentWillMount() {
-		this.fetchPosts();
+		this.fetchPosts(this.props.pageNum);
+	}
+
+    onPaginatorPageClick(pageNum) {
+        if (window) {
+            window.scrollTo(0, 0);
+        }
+
+        this.fetchPosts(pageNum);
 	}
 
 	remove_type(typ, arr) {
@@ -114,7 +120,7 @@ class BlogContainer extends React.Component {
 						currentPage={pageNum}
 						total={total}
 						perPage={perPage}
-						onPageClick={this.fetchPosts}
+						onPageClick={this.onPaginatorPageClick}
 					/>
 				</div>
 			</div>
@@ -125,7 +131,7 @@ class BlogContainer extends React.Component {
 export default connect(
 	(state, ownProps) => ({
 		player: state.player,
-        pageNum: ownProps.params.pageNum || 1,
+        pageNum: +ownProps.params.pageNum || 1,
 
 		perPage: 30,
 		total: state.blogs.getIn(['total']),

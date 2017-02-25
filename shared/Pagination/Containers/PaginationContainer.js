@@ -14,12 +14,7 @@ export class PaginationContainer extends Component {
     }
 
     getPagesCount() {
-        let count = 0;
-        try {
-            count = Math.ceil(this.props.total / this.props.perPage);
-        } catch(e) {
-
-        }
+        const count = Math.ceil(this.props.total / this.props.perPage);
         return count;
     }
 
@@ -83,7 +78,7 @@ export class PaginationContainer extends Component {
                     <Link to={`/blog/${prevPage}`} onClick={this.goToPrevPage}>previous</Link>
                 </li>
                 {pages.map((x, i) =>
-                    <li key={i}><Link to={`/blog/${x}`} className={ classNames({'current': x == currentPage}) } onClick={onPageClick}>{x}</Link></li>
+                    <li key={i}><Link to={`/blog/${x}`} className={ classNames({'current': x == currentPage}) } onClick={ (e) => { onPageClick(x, e) } }>{x}</Link></li>
                 )}
                 <li className={ classNames('next', {'disabled': !canNext} ) }>
                     <Link to={`/blog/${nextPage}`} onClick={this.goToNextPage}>next</Link>
