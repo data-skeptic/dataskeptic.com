@@ -40,7 +40,7 @@ module.exports = {
 		},
 		"kristine": {
 			"prettyname": "Kristine de Leon",
-			"img": "",
+			"img": "https://s3.amazonaws.com/dataskeptic.com/contributors/kristen-de-leon.png",
 			"twitter": "deleonkrist",
 			"linkedin": "www.linkedin.com/in/kristine-de-leon-a7544149",
 			"bio": "Kristine is a fledgling science writer based in sunny Los Angeles, CA. Once a researcher in soil microbiology, Kristine is passionate about translating science into thrilling stories for all. She enjoys reading, the great outdoors, playing with logical systems, learning how stuff in the world works, and making things with metal.",
