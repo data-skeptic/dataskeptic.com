@@ -141,7 +141,6 @@ export default function blogsReducer(state = defaultState, action) {
             break;
 
         case LOAD_BLOGS_REQUEST:
-            nstate.currentPost = {};
             nstate.postLoading = true;
             break;
 

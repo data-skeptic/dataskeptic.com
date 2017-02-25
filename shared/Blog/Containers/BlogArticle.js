@@ -18,6 +18,8 @@ import RelatedContent from '../Components/RelatedContent'
 import {get_folders} from '../../utils/redux_loader'
 import {get_related_content} from '../../utils/redux_loader'
 
+
+import isEmpty from 'lodash/isEmpty';
 import {loadBlogPost} from '../Actions/BlogsActions';
 
 class BlogArticle extends Component {

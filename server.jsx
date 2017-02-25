@@ -255,9 +255,14 @@ function install_blog(store, blog_metadata, content) {
   var blog = blog_metadata
   var pathname = "/blog" + blog.prettyname
   var blog_focus = {blog, loaded, content, pathname, contributor}
-  store.dispatch({type: "SET_FOCUS_BLOG", payload: {blog_focus} })
-  store.dispatch({type: "ADD_BLOG_CONTENT", payload: {content, blog} })
-  store.dispatch({type: "LOAD_CONTRIBUTORS_LIST_SUCCESS", payload: {contributors} })
+
+  const post = {
+    ...blog,
+      content
+  };
+
+  store.dispatch({type: "LOAD_CONTRIBUTORS_LIST_SUCCESS", payload: {contributors} });
+  store.dispatch({type: "LOAD_BLOG_POST_SUCCESS", payload: {post} })
 }
 
 function install_episode(store, episode) {
@@ -287,6 +292,8 @@ function inject_blog(store, my_cache, pathname) {
     } else {
       console.log("No episode guid found")
     }
+
+    console.dir('install_blog');
     install_blog(store, blog_metadata, content)
   }
   console.log("done with blog inject")
