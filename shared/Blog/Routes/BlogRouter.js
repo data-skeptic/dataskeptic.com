@@ -48,7 +48,7 @@ class BlogRouter extends React.Component {
 		return (
 			<div className="center">
 				<BlogNav folders={folders} pathname={pathname} />
-				<BlogArticle />
+				<BlogArticle postUrl={pathname}/>
 			</div>
 		)
 	}

@@ -14,7 +14,13 @@ export class PaginationContainer extends Component {
     }
 
     getPagesCount() {
-        return Math.ceil(this.props.total / this.props.perPage);
+        let count = 0;
+        try {
+            count = Math.ceil(this.props.total / this.props.perPage);
+        } catch(e) {
+
+        }
+        return count;
     }
 
     getPrevPage() {
@@ -51,10 +57,21 @@ export class PaginationContainer extends Component {
         this.props.onPageClick();
     }
 
+    generatePages(count = 1) {
+       let p = [];
+       // server side rendering doesn't support [,...Array(count)] generation
+       for (let i=0;i<count;i++) {
+            p.push()
+       }
+       return p;
+    }
+
     render() {
         const { currentPage, total, perPage } = this.props;
         const { onPageClick } = this.props;
         const count = this.getPagesCount();
+
+        const pages = this.generatePages(count);
 
         const prevPage = this.getPrevPage();
         const nextPage = this.getNextPage();
@@ -67,7 +84,7 @@ export class PaginationContainer extends Component {
                 <li className={ classNames('prev', {'disabled': !canPrev} ) }>
                     <Link to={`/blog/${prevPage}`} onClick={this.goToPrevPage}>previous</Link>
                 </li>
-                {[,...Array(count)].map((x, i) =>
+                {pages.map((x, i) =>
                     <li key={i}><Link to={`/blog/${i}`} className={ classNames({'current': i == currentPage}) } onClick={onPageClick}>{i}</Link></li>
                 )}
                 <li className={ classNames('next', {'disabled': !canNext} ) }>

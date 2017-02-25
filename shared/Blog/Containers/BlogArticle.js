@@ -25,43 +25,14 @@ class BlogArticle extends Component {
         super(props)
     }
 
-    getPN() {
-        console.dir(this.props.p);
-
-        if (window && location && location.pathname) {
-            return location.pathname
-        }
-
-        if (this.props.location && this.props.location.pathname) {
-            return this.props.location.pathname
-        }
-
-        return ""
-    }
-
     componentWillMount() {
-        // debugger;
-        // var dispatch = this.props.dispatch
-        // var oblogs = this.props.blogs.toJS()
-        // if (oblogs.folders.length == 0) {
-        // 	get_folders(dispatch)
-        // }
-        var pathname = this.getPN()
-        // var oblogs = this.props.blogs.toJS()
-        // var blog_focus = oblogs.blog_focus
-        //
-        // console.log("Need to retrieve blog")
-        // console.log(blog_focus.pathname)
-        //
-        // get_related_content(dispatch, pathname)
-        this.props.loadBlogPost(pathname);
+        this.props.loadBlogPost(this.props.postUrl);
     }
 
     handleNewComment(comment) {
         // TODO: Maybe use a cognitive service here?
         console.log(comment.text);
     }
-
 
     isEpisode(prettyName) {
         return prettyName.indexOf('/episodes/') === 0;
@@ -125,7 +96,7 @@ class BlogArticle extends Component {
         // 		}
         // 	}
 
-        const {currentPost, isLoading, contributors, disqusUsername} = this.props;
+        const {currentPost, isLoading, contributors, disqusUsername, postUrl} = this.props;
 
         if (isLoading || !currentPost) {
             return <Loading />
@@ -174,6 +145,8 @@ class BlogArticle extends Component {
 }
 export default connect(
     (state, ownProps) => ({
+        postUrl: ownProps.postUrl,
+
         site: state.site,
         episodes: state.episodes,
         blogs: state.blogs,

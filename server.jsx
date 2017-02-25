@@ -365,7 +365,7 @@ app.use( (req, res) => {
     }
 
     function renderView() {
-      const store = applyMiddleware(promiseMiddleware)(createStore)(reducer)
+      const store = applyMiddleware(thunk, promiseMiddleware)(createStore)(reducer)
       updateState(store, location.pathname)
 
       const InitialView = (
@@ -395,7 +395,11 @@ app.use( (req, res) => {
     fetchComponentData(store.dispatch, renderProps.components, renderProps.params)
       .then(renderView)
       .then(html => res.status(200).end(html))
-      .catch(err => res.end(err.message));
+      .catch(err => {
+        console.error('HTML generation error');
+        console.dir(err);
+        return res.end(err)
+      });
   });
 });
 
