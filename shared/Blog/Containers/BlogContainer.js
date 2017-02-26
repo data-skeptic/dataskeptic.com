@@ -133,7 +133,7 @@ export default connect(
 		player: state.player,
         pageNum: +ownProps.params.pageNum || 1,
 
-		perPage: 30,
+		perPage: 10,
 		total: state.blogs.getIn(['total']),
 
 		blogs: state.blogs,
