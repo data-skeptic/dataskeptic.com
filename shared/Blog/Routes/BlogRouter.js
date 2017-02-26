@@ -6,15 +6,13 @@ import React from "react"
 import ReactDOM from "react-dom"
 import { connect } from 'react-redux'
 
-import NotFound from './NotFound'
-import Blog from "./Blog"
-import BlogArticle from "./BlogArticle"
-import BlogNav from "./BlogNav"
-import BlogItem from "./BlogItem"
-import Error from "./Error"
-import Loading from "./Loading"
-import transform_pathname from "../utils/transform_pathname"
-import getBlog from '../daos/getBlog'
+import NotFound from '../../NotFound/Components/NotFound'
+import BlogArticle from "../Containers/BlogArticle"
+import BlogNav from "../Components/BlogNav"
+import BlogItem from "../Components/BlogItem"
+import Error from "../../Common/Components/Error"
+import Loading from "../../Common/Components/Loading"
+import transform_pathname from "../../utils/transform_pathname"
 
 class BlogRouter extends React.Component {
 	constructor(props) {
@@ -65,14 +63,22 @@ class BlogRouter extends React.Component {
 		/*
 			Must be a blog page if we got here
 		*/
+
 		return (
 			<div className="center">
 				<BlogNav folders={folders} pathname={pathname} />
-				<BlogArticle />
+				<BlogArticle postUrl={pathname}/>
 			</div>
 		)
 	}
 }
 
-export default connect(state => ({ player: state.player, blogs: state.blogs, episodes: state.episodes, site: state.site }))(BlogRouter)
+export default connect(
+	(state, ownProps) => ({
+		player: state.player,
+		blogs: state.blogs,
+		episodes: state.episodes,
+		site: state.site
+	}))
+(BlogRouter)
 

@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux';
 
-import Loading from "./Loading"
-import Error from "./Error"
+import Loading from "../Common/Components/Loading"
+import Error from "../Common/Components/Error"
 
 class EpisodeCard extends React.Component {
 	constructor(props) {
