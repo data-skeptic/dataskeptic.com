@@ -1,8 +1,10 @@
 import React from "react"
-import ReactDOM from "react-dom"
-import ContactForm from './ContactForm'
-import { connect } from 'react-redux'
-import axios from 'axios'
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
+import axios from 'axios';
+
+import ContactFormContainer from '../Containers/ContactFormContainer/ContactFormContainer';
 
 class ContactUs extends React.Component {
 	constructor(props) {
@@ -114,13 +116,23 @@ class ContactUs extends React.Component {
 					</div>
 					&nbsp;
 					<br/>
-					<ContactForm />
+
+					test
+					<ContactFormContainer/>
 				</div>
 			</div>
 		)
 	}
 }
 
-export default connect(state => ({ cart: state.cart, site: state.site }))(ContactUs)
+export default connect(
+	state => ({
+		cart: state.cart,
+		site: state.site
+	}),
+	(dispatch) => bindActionCreators({
+
+	}, dispatch)
+)(ContactUs)
 
 

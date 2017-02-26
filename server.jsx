@@ -45,6 +45,8 @@ import { get_blogs_list,
        }                         from 'utils/redux_loader';
 import redirects_map             from './redirects';
 
+import { reducer as formReducer } from 'redux-form'
+
 const app = express()
 
 var logDirectory = path.join(__dirname, 'log')
@@ -78,7 +80,10 @@ var my_cache = {
 , products : {}
 }
 
-const reducer  = combineReducers(reducers);
+const reducer  = combineReducers({
+    ...reducers,
+    form: formReducer
+});
 const store    = applyMiddleware(thunk,promiseMiddleware)(createStore)(reducer);
 const initialState = store.getState()
 
