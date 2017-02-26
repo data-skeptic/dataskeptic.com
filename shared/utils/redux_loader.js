@@ -5,6 +5,18 @@ import getBlog from '../daos/getBlog'
 
 import { loadBlogs } from '../../shared/Blog/Actions/BlogsActions';
 
+export function loadEpisode(guid, dispatch) {
+	axios
+		.get("/api/episodes/get/" + guid)
+  		.then(function(result) {
+  			var episode = result["data"]
+			dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
+		})
+		.catch((err) => {
+			console.log(err)
+		})
+}
+
 export function pay_invoice(prod, dispatch, event, id, amount) {
 	dispatch({type: "START_INVOICE_PAYMENT", payload: {}})
 	if (prod) {

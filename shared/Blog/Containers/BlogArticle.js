@@ -66,8 +66,6 @@ class BlogArticle extends Component {
         }
 
         const post = currentPost.toJS();
-        console.log("post")
-        console.log(post)
         var guid = post.guid // Will be undefined unless it's in /episodes
         const prettyName = post.prettyname;
 

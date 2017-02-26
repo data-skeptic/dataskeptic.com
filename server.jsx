@@ -4,6 +4,7 @@ import {get_blogs}               from 'backend/get_blogs'
 import {get_blogs_rss}           from 'backend/get_blogs_rss'
 import {get_contributors}        from 'backend/get_contributors'
 import {get_episodes}            from 'backend/get_episodes'
+import {get_episodes_by_guid}    from 'backend/get_episodes_by_guid'
 import {get_invoice}             from 'backend/get_invoice'
 import {get_rfc_metadata}        from 'backend/get_rfc_metadata'
 import {join_slack}              from 'backend/join_slack'
@@ -191,6 +192,10 @@ function api_router(req, res) {
   }
   else if (req.url.indexOf('/api/episodes/list') == 0) {
     get_episodes(req, res, my_cache.episodes_map, my_cache.episodes_list)
+    return true
+  }
+  else if (req.url.indexOf('/api/episodes/get') == 0) {
+    get_episodes_by_guid(req, res, my_cache.episodes_map, my_cache.episodes_list)
     return true
   }
   else if (req.url == '/api/rfc/list') {

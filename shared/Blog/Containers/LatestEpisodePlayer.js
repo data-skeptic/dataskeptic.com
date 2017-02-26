@@ -2,6 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux';
 
 import Loading from "../../Common/Components/Loading"
+import Error from "../../Common/Components/Error"
+import {loadEpisode} from "../../utils/redux_loader"
 
 class LatestEpisodePlayer extends React.Component {
 	constructor(props) {
@@ -9,14 +11,12 @@ class LatestEpisodePlayer extends React.Component {
 	}
 
 	componentWillMount() {
+		var dispatch = this.props.dispatch
 		var episodes = this.props.episodes.toJS()
 		var focus_episode = episodes.focus_episode
 		var guid = this.props.guid
 		if (guid != undefined) {
-			this.props.dispatch({type: "REQUEST_INJECT_EPISODE", payload: {guid} })			
-		}
-		else if (focus_episode.pubData == null) {
-			this.props.dispatch({type: "REQUEST_INJECT_EPISODE", payload: {} })
+			loadEpisode(guid, dispatch)
 		}
 	}
 
