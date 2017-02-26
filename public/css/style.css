@@ -3140,6 +3140,7 @@ button.slick-arrow.slick-prev {
 .paginator > li {
     display: block;
     float: left;
+    min-width: 22px;
     margin-left: 4px;
     margin-right: 4px;
 }
