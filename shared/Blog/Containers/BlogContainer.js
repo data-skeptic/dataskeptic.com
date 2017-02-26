@@ -57,10 +57,8 @@ class BlogContainer extends React.Component {
     componentWillMount() {
         const folderName = this.props.folderName || '';
         if (isNaN(+folderName)) {
-            alert('folder');
             this.fetchAllPosts();
         } else {
-            alert('page');
             this.fetchPosts(this.props.pageNum);
         }
     }
