@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
-import {Link} from 'react-router';
+import { Link } from 'react-router';
 
 import classNames from 'classnames';
 
@@ -40,7 +40,8 @@ export class PaginationContainer extends Component {
             return;
         }
 
-        this.props.onPageClick();
+        const next = this.getNextPage();
+        this.props.onPageClick(next);
     }
 
     goToPrevPage(e) {
@@ -49,27 +50,23 @@ export class PaginationContainer extends Component {
             return;
         }
 
-        this.props.onPageClick();
+        const prev = this.getPrevPage();
+        this.props.onPageClick(prev);
     }
 
-    generatePages(count = 1, currentPage, pagesCount, canNext, canPrev) {
-        let p = [];
-
-        let from = 1;
-        let to = count;
-
-        for (let i = from; i <= to; i++) {
-            p.push(i)
-        }
-
-        return p;
+    generatePages(count = 1) {
+       let p = [];
+       // server side rendering doesn't support [,...Array(count)] generation
+       for (let i=0;i<count;i++) { p.push(i+1) }
+       return p;
     }
 
     render() {
-        const {currentPage, total, perPage, pagesCount = 10} = this.props;
-        const {onPageClick} = this.props;
+        const { currentPage, total, perPage } = this.props;
+        const { onPageClick } = this.props;
         const count = this.getPagesCount();
 
+        const pages = this.generatePages(count);
 
         const prevPage = this.getPrevPage();
         const nextPage = this.getNextPage();
@@ -77,24 +74,15 @@ export class PaginationContainer extends Component {
         const canPrev = this.canGoToPrevPage();
         const canNext = this.canGoToNextPage();
 
-        const pages = this.generatePages(count, currentPage, pagesCount, canNext, canPrev);
-
         return (
             <ul className="paginator col-md-4">
-                <li className={ classNames('prev', {'disabled': !canPrev}) }>
+                <li className={ classNames('prev', {'disabled': !canPrev} ) }>
                     <Link to={`/blog/${prevPage}`} onClick={this.goToPrevPage}>previous</Link>
                 </li>
                 {pages.map((x, i) =>
-                    <li key={i}>
-                        <Link to={`/blog/${x}`}
-                              className={ classNames({'current': x === currentPage}) }
-                              onClick={ (e) => {
-                                  onPageClick(x, e)
-                              } }>{x}
-                        </Link>
-                    </li>
+                    <li key={i}><Link to={`/blog/${x}`} className={ classNames({'current': x == currentPage}) } onClick={ (e) => { onPageClick(x, e) } }>{x}</Link></li>
                 )}
-                <li className={ classNames('next', {'disabled': !canNext}) }>
+                <li className={ classNames('next', {'disabled': !canNext} ) }>
                     <Link to={`/blog/${nextPage}`} onClick={this.goToNextPage}>next</Link>
                 </li>
             </ul>

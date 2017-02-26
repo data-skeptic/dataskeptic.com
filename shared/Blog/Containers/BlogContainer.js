@@ -49,6 +49,8 @@ class BlogContainer extends React.Component {
             window.scrollTo(0, 0);
         }
 
+        console.log('go to', pageNum);
+
         this.fetchPosts(pageNum);
 	}
 
