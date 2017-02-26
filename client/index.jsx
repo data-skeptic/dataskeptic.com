@@ -17,6 +17,8 @@ import { createStore,
 
 import axios from 'axios';
 
+import { reducer as formReducer } from 'redux-form'
+
 var initialState = immutifyState(window.__INITIAL_STATE__);
 
 console.log("Initialize GA")
@@ -26,7 +28,10 @@ ReactGA.initialize("UA-51062432-1", {
 
 const history = createBrowserHistory();
 
-const reducer = combineReducers(reducers);
+const reducer  = combineReducers({
+    ...reducers,
+    form: formReducer
+});
 
 const logger = (store) => (next) => (action) => {
   console.log("action fired", action)
@@ -58,7 +63,7 @@ axios
   })
   .catch(function(err) {
     console.log(err)
-  })      
+  })
 
 
 setTimeout(function() {
@@ -76,9 +81,15 @@ store.subscribe(()=>{
   for (var i=0; i < keys.length; i++) {
     var key = keys[i]
     var val = state[key]
-    nstate[key] = val.toJS()
-    if (key == "player") {
-      nstate[key].is_playing = false
+    try {
+        // fix for non immutable states
+        // f.e. redux-forms
+        nstate[key] = val.toJS()
+        if (key == "player") {
+            nstate[key].is_playing = false
+        }
+    } catch (e) {
+
     }
   }
   var s = JSON.stringify(state)
