@@ -8,6 +8,8 @@ class BlogListItem extends Component {
     }
 
     render() {
+        const { onClick } = this.props;
+
         var monthNames = [
           "January", "February", "March",
           "April", "May", "June", "July",
@@ -30,7 +32,7 @@ class BlogListItem extends Component {
             <div className="col-xs-12">
 	            <div className="blog-summary" key={blog.uri}>
                     <div className="blog-date">{datestr}</div>
-	                <a className="blog-title" href={pn}>{blog.title}</a>
+	                <Link className="blog-title" to={pn} onClick={ onClick }>{blog.title}</Link>
 	                <p className="blog-desc">
                         {blog.desc}
                         ... <Link className="blog-view-more" to={pn}>View More &gt;</Link>
@@ -41,4 +43,13 @@ class BlogListItem extends Component {
     }
 }
 
-export default connect(state => ({ player: state.player, blogs: state.blogs, episodes: state.episodes, site: state.site }))(BlogListItem)
+export default connect(
+    (state, ownProps) => ({
+        onClick: ownProps.onClick,
+
+        player: state.player,
+        blogs: state.blogs,
+        episodes: state.episodes,
+        site: state.site
+    })
+)(BlogListItem)

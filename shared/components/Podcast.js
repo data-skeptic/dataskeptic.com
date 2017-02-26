@@ -3,7 +3,7 @@ import ReactDOM from "react-dom"
 import { connect } from 'react-redux'
 
 import Episode from "./Episode"
-import Loading from "./Loading"
+import Loading from "../Common/Components/Loading"
 import YearSelector from './YearSelector.js'
 
 import {get_podcasts} from '../utils/redux_loader'

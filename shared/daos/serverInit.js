@@ -12,15 +12,19 @@ function generate_content_map(env, blog, my_cache) {
   }
   var key = blog["rendered"]
   var pn = blog["prettyname"]
-  var uri = "https://s3.amazonaws.com/" + envv + 'dataskeptic.com/' + key
-  axios.get(uri).then(function(result) {
-    var content = result.data
-    my_cache.content_map[pn] = content
-  })
-  .catch((err) => {
-    console.log("Content cache error trying to store blog content")
-    console.log(err)
-  })
+  var check = my_cache.content_map[pn]
+  if (check == undefined) {
+    var uri = "https://s3.amazonaws.com/" + envv + 'dataskeptic.com/' + key
+    console.log("Getting " + uri)
+    axios.get(uri).then(function(result) {
+      var content = result.data
+      my_cache.content_map[pn] = content
+    })
+    .catch((err) => {
+      console.log("Content cache error trying to store blog content")
+      console.log(err)
+    })    
+  }
 }
 
 export function loadProducts(env, my_cache) {
@@ -50,7 +54,7 @@ export function loadBlogs(store, env, my_cache) {
     var folders = extractFolders(blogs)
     my_cache.folders = folders
     store.dispatch({type: "ADD_FOLDERS", payload: folders })
-    store.dispatch({type: "ADD_BLOGS", payload: blogs })
+    store.dispatch({type: "ADD_BLOGS", payload: {blogs} })
     for (var i=0; i < blogs.length; i++) {
       var blog = blogs[i]
       var pn = blog['prettyname']
@@ -93,6 +97,7 @@ export function loadEpisodes(env, feed_uri, my_cache, aws) {
           var guid = episode.guid
           my_cache.episodes_map[guid] = episode
           if (i == 0) {
+            console.log("i==0")
             my_cache.episodes_map["latest"] = episode
             var blogs = my_cache.blogmetadata_map
             var shownotes = blogs[prettyname]
@@ -103,7 +108,6 @@ export function loadEpisodes(env, feed_uri, my_cache, aws) {
               if (shownotes['guid'] == undefined) {
                 console.log("Going to link " + episode['title'] + ' to ' + shownotes['prettyname'])
                 my_cache.blogmetadata_map['guid'] = guid
-                // TODO: Save to dynamo
                 var docClient = new aws.DynamoDB.DocumentClient()
                 var table = "blog"
                 var pre = ""

@@ -3,6 +3,20 @@ import {get_contributors} from 'backend/get_contributors'
 import contact_form_send from '../daos/contact_form_send'
 import getBlog from '../daos/getBlog'
 
+import { loadBlogs } from '../../shared/Blog/Actions/BlogsActions';
+
+export function loadEpisode(guid, dispatch) {
+	axios
+		.get("/api/episodes/get/" + guid)
+  		.then(function(result) {
+  			var episode = result["data"]
+			dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
+		})
+		.catch((err) => {
+			console.log(err)
+		})
+}
+
 export function pay_invoice(prod, dispatch, event, id, amount) {
 	dispatch({type: "START_INVOICE_PAYMENT", payload: {}})
 	if (prod) {
@@ -122,7 +136,7 @@ export function get_homepage_content(dispatch) {
 		axios
 			.get("/api/blog?limit=4")
 	  		.then(function(result) {
-	  			var blogs = result["data"]
+	  			const { blogs }= result["data"]
 	  			var blog = blogs[0]
 	  			var pn = blog.prettyname
 	  			var i = 1
@@ -172,35 +186,33 @@ export function get_homepage_content(dispatch) {
 }
 
 export function get_blogs_list(dispatch, pathname) {
-	var prefix = "/blog"
-	var bpathname = pathname.substring(prefix.length, pathname.length)
-	var my_cache = global.my_cache
+	const prefix = "/blog"
+	const bpathname = pathname.substring(prefix.length, pathname.length)
+	const my_cache = global.my_cache
 	if (my_cache != undefined) {
-		var blogmetadata_map = my_cache.blogmetadata_map
-		var keys = Object.keys(blogmetadata_map)
-		var blogs = []
-		var limit = 30
-		for (var i=0; i < keys.length & blogs.length < limit; i++) {
-			var key = keys[i]
-			var blog = blogmetadata_map[key]
-			var pn = blog.prettyname
+		const blogmetadata_map = my_cache.blogmetadata_map
+		const keys = Object.keys(blogmetadata_map)
+		let blogs = []
+		let limit = 30
+		for (let i=0; i < keys.length & blogs.length < limit; i++) {
+			const key = keys[i]
+
+			// cached blogs structure
+            if (key === "latest" || key === "guid") {
+				continue;
+            }
+
+			const blog = blogmetadata_map[key]
+			const pn = blog.prettyname
 			if (pn.indexOf(bpathname) == 0) {
 				blogs.push(blog)
 			}
 		}
-		dispatch({type: "ADD_BLOGS", payload: blogs})
+		const total = blogs.length;
+		dispatch({type: "ADD_BLOGS", payload: {blogs, total}})
 	} else {
 		console.log("Getting blogs")
-		var url = "/api" + pathname
-		axios
-			.get(url)
-	  		.then(function(result) {
-	  			var blogs = result["data"]
-				dispatch({type: "ADD_BLOGS", payload: blogs})
-			})
-			.catch((err) => {
-				console.log(err)
-			})			
+        loadBlogs(pathname, dispatch);
 	}	
 }
 

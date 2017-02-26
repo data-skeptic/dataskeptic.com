@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import Loading from './Loading'
+import Loading from '../Common/Components/Loading'
 import CartContainer from '../Cart/Containers/CartContainer'
 import SizeSelector from './SizeSelector'
 

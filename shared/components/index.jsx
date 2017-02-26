@@ -190,7 +190,7 @@ class MainView extends React.Component {
    */
   onFooterItemClick() {
     // scroll page to the top
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
   }
 
   render() {

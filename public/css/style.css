@@ -3123,3 +3123,32 @@ button.slick-arrow.slick-prev {
     min-width: 340px;
     font-size: 16px;
 }
+
+.pagination {
+    text-align: center;
+}
+
+.paginator {
+    list-style: none;
+    float: none;
+    margin: 0 auto;
+    padding: 0px;
+}
+
+.paginator > li {
+    display: block;
+    float: left;
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.paginator > li a {
+    text-decoration: none;
+    color: #3A3B3B;
+}
+.paginator > li a.current {
+    color: #F0D943;
+}
+.paginator > li.disabled a {
+    color: #dddddd;
+}

@@ -8,9 +8,6 @@ export default class BlogLink extends Component {
         var active = this.props.active
         var isActive = active == to
         return (
-            <a href={to} key={to}>{this.props.children}</a>
-        );
-        return (
             <Link key={to} onClick={onClick} className="blog-link" to={to}>{this.props.children}</Link>
         );
     }
