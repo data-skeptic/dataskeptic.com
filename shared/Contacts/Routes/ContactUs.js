@@ -1,6 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import ContactForm from './ContactForm'
+import ContactForm from '../Components/ContactForm/ContactForm';
 import { connect } from 'react-redux'
 import axios from 'axios'
 

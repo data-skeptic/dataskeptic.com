@@ -2,7 +2,7 @@ import React from "react"
 import ReactDOM from "react-dom"
 import { connect } from 'react-redux'
 
-import contact_form_send from '../daos/contact_form_send'
+import contact_form_send from '../../../daos/contact_form_send'
 
 class ContactForm extends React.Component {
 	constructor(props) {

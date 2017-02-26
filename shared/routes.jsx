@@ -13,7 +13,7 @@ import BlogRouter              from 'Blog/Routes/BlogRouter';
 import Checkout                from 'components/Checkout';
 import Coaching                from 'components/Coaching';
 import Coaching2               from 'components/Coaching2';
-import ContactUs               from 'components/ContactUs';
+import ContactUs               from 'Contacts/Routes/ContactUs';
 import DontHackMe              from 'components/DontHackMe';
 import Home                    from 'components/Home';
 import LightsOut               from 'components/LightsOut';
