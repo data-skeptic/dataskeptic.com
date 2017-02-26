@@ -1,6 +1,6 @@
 import React from 'react'
 
-import ContactForm from "../Contacts/Components/ContactFormOld/ContactForm";
+import ContactFormContainer from "../Contacts/Containers/ContactFormContainer/ContactFormContainer";
 
 const Services = () => {
   return (
@@ -34,7 +34,7 @@ const Services = () => {
         </div>
       </div>
       <div className="clear"></div>
-      <ContactForm />
+      <ContactFormContainer />
     </div>
   )
 }

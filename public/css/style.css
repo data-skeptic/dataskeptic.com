@@ -2111,7 +2111,7 @@ button.slick-arrow.slick-prev {
     margin-top: 10px;
     border-radius: 4px;
     max-width: 600px;
-    background: #FAFAFA;
+    background: #ffffff;
     padding: 10px;
     border: 1px solid #D7D9D9;
 }
@@ -2172,6 +2172,7 @@ button.slick-arrow.slick-prev {
 }
 
 .contact-send {
+    margin-top: 14px;
     border: 0px;
     background: #F0D943;
     border-radius: 4px;
@@ -2189,11 +2190,21 @@ button.slick-arrow.slick-prev {
 }
 
 .contact-status {
-    border-width: 1px;
-    height: 70px;
-    width: 100%;
-    padding: 25px 5px 5px 5px;
     text-align: center;
+}
+.contact-status.error { color: red; }
+.contact-status.success { color: green; }
+
+.contact-form .required {
+    color: red;
+}
+
+.has-danger {
+    border: 1px solid red !important;
+}
+
+.error-message {
+    color: indianred;
 }
 
 /*****************************************************************************
