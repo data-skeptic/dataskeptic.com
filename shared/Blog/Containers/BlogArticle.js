@@ -69,26 +69,8 @@ class BlogArticle extends Component {
         const guid = post.guid;
         const isEpisode = !isUndefined(guid);
 
-        // if (guid) {
-        //     if (focus_episode.episode.guid == blog_focus.blog.guid) {
-        //         try {
-        //             top = (
-        //                 <div className="home-player">
-        //                     <LatestEpisodePlayer guid={focus_episode.guid} />
-        //                 </div>
-        //             )
-        //             isEpisode = true
-        //         }
-        //         catch (err) {
-        //             console.log(err)
-        //             top = <div></div>
-        //         }
-        //     }
-        // }
-
         const prettyName = post.prettyname;
 
-        const showBio = (this.isEpisode(prettyName) || this.isTranscript(prettyName));
         const author = (post.author || '').toLowerCase();
 
         const uid = 'http://dataskeptic.com/blog' + prettyName;
