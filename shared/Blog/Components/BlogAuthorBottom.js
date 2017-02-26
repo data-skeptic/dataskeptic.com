@@ -4,6 +4,10 @@ import { connect } from 'react-redux'
 import showdown from 'showdown'
 
 export const BlogAuthorBottom = ({contributor}) => {
+	if (contributor == undefined || contributor.prettyname == undefined) {
+		return <div></div>
+	}
+
     let twitterhref = null;
     let twitterdiv = null;
     let linkedindiv = null;

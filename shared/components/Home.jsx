@@ -45,20 +45,14 @@ class Home extends Component {
       autoplaySpeed: 10000,
       pauseOnHover: 1
     };
-    var episode = oepisodes.focus_episode
-    var blog_focus = oblogs.blog_focus
-    /*
-    var old_episode = undefined
-    var episodes = oepisodes.episodes
-    if (episodes.length > 0) {
-      episode = episodes[0]
-      var i = 52
-      if (episodes.length < i+1) {
-        i = episodes.length - 1
+    var guid = undefined
+    var fe = oepisodes.focus_episode
+    if (fe != undefined) {
+      if (fe.episode != undefined) {
+        guid = fe.episode.guid
       }
-      old_episode = episodes[i]
     }
-    */
+    var blog_focus = oblogs.blog_focus
     return (
       <div className="center">
         <div className="row">
@@ -84,9 +78,7 @@ class Home extends Component {
             </div>          
           </div>
           <div className="col-xs-12 col-sm-4">
-            <div className="home-player">
-              <LatestEpisodePlayer title="Latest episode:" episode={episode} />
-            </div>
+            <LatestEpisodePlayer guid={guid} />
             <MailingList />
           </div>
         </div>

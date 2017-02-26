@@ -25,6 +25,7 @@ class LatestEpisodePlayer extends React.Component {
 	}
 
 	render() {
+		console.log("lep")
 		var guid = this.props.guid
 		if (guid == undefined) {
 			return <div></div>

@@ -19,7 +19,7 @@ export default function getBlog(dispatch, env, prettyname) {
 			if (blog != undefined) {
 				var uri = blog["uri"]
 				if (uri != undefined) {
-					dispatch({type: "ADD_BLOG", payload: {blog, dispatch} })
+					dispatch({type: "ADD_BLOG", payload: {blog} })
 					getBlogContent(dispatch, blog, env)
 				} else {
 					console.log("Did not get blog back as expected")

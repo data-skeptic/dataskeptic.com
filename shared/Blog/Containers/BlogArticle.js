@@ -67,6 +67,8 @@ class BlogArticle extends Component {
 
         const post = currentPost.toJS();
         var guid = post.guid // Will be undefined unless it's in /episodes
+        console.log("guid")
+        console.log(guid)
         const prettyName = post.prettyname;
 
         const showBio = (this.isEpisode(prettyName) || this.isTranscript(prettyName));
@@ -84,6 +86,14 @@ class BlogArticle extends Component {
             contributor = contributors.getIn([author]).toJS();
         } catch(e) {
             // TODO:
+        }
+
+        // Don't show author box for episodes and transcripts
+        if (prettyName.indexOf("/episodes/") == 0) {
+            contributor = undefined
+        }
+        if (prettyName.indexOf("/transcripts/") == 0) {
+            contributor = undefined
         }
 
         return (

@@ -36,6 +36,8 @@ class BlogItem extends React.Component {
 		var top = <div></div>
 		if (blog_focus.blog != undefined && blog_focus.blog.guid != undefined) {
 			var ep = oepisodes.episodes_map[blog_focus.blog.guid]
+			console.log("ep")
+			console.log(ep)
 			try {
 				top = (
 					<div className="home-player">
@@ -50,24 +52,6 @@ class BlogItem extends React.Component {
 			}
 		}
 		var bot = <div></div>
-		if (isEpisode) {
-			var tm = oblogs.transcript_map
-			if (tm != undefined) {
-				var guid = blog_focus.blog.guid
-				var b = tm[guid]
-				if (b != undefined) {
-					if (b.prettyname.indexOf('/transcripts/') == -1) {
-						var pn = "/blog" + b.prettyname
-						bot = (
-							<div className='blog-transcript-link'>
-								Read the full transcript here:
-								<Link to={pn}>{title} transcripts</Link>.
-							</div>
-						)
-					}
-				}
-			}
-		}
 		var content = blog_focus.content || "Loading...."
 		if (content == "") {
 			content = "Loading....."

@@ -3,6 +3,9 @@ import ReactDOM from "react-dom"
 import { connect } from 'react-redux'
 
 export const BlogAuthorTop = ({ contributor={} }) => {
+	if (contributor == undefined || contributor.prettyname == undefined) {
+		return <div></div>
+	}
     let twitterimg = '';
 	let twitterlink = '';
 	let linkedinimg = '';
