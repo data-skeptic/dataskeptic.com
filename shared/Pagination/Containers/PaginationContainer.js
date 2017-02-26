@@ -40,7 +40,8 @@ export class PaginationContainer extends Component {
             return;
         }
 
-        this.props.onPageClick();
+        const next = this.getNextPage();
+        this.props.onPageClick(next);
     }
 
     goToPrevPage(e) {
@@ -49,7 +50,8 @@ export class PaginationContainer extends Component {
             return;
         }
 
-        this.props.onPageClick();
+        const prev = this.getPrevPage();
+        this.props.onPageClick(prev);
     }
 
     generatePages(count = 1) {

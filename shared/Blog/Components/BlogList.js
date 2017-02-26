@@ -18,7 +18,7 @@ export default class BlogList extends Component {
     }
 
     render() {
-    	const { blogs = [] } = this.props;
+    	const { blogs = [], onClick } = this.props;
 
         return (
             <div className="row blog-summary-container">

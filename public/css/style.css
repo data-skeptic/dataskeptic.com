@@ -1172,7 +1172,6 @@ ul.topnav li.right {
     font-size: 14px;
     color: #000000;
     letter-spacing: 0;
-    margin-left: 20px;
 }
 
 .blog-date {
@@ -1215,6 +1214,9 @@ ul.topnav li.right {
 }
 
 .blog-link {
+}
+.blog-link.active {
+    text-decoration: underline;
 }
 
 .blog-categories {
@@ -3170,6 +3172,7 @@ button.slick-arrow.slick-prev {
 .paginator > li {
     display: block;
     float: left;
+    min-width: 22px;
     margin-left: 4px;
     margin-right: 4px;
 }

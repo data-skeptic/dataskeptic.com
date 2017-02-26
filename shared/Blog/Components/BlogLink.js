@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 
+import className from 'classnames';
+
 export default class BlogLink extends Component {
     render() {
-    	var onClick = this.props.onClick
-        var to = this.props.to
-        var active = this.props.active
-        var isActive = active == to
+        const { isActive, onClick, to } = this.props;
+
         return (
-            <Link key={to} onClick={onClick} className="blog-link" to={to}>{this.props.children}</Link>
+            <Link key={to} onClick={onClick} className={ className('blog-link', {'active': isActive}) } to={to}>{this.props.children}</Link>
         );
     }
 }

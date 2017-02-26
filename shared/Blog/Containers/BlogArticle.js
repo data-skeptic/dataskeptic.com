@@ -66,21 +66,18 @@ class BlogArticle extends Component {
         }
 
         const post = currentPost.toJS();
-        var guid = post.guid // Will be undefined unless it's in /episodes
-        console.log("guid")
-        console.log(guid)
+        const guid = post.guid;
+        const isEpisode = !isUndefined(guid);
+
         const prettyName = post.prettyname;
 
-        const showBio = (this.isEpisode(prettyName) || this.isTranscript(prettyName));
         const author = (post.author || '').toLowerCase();
 
         const uid = 'http://dataskeptic.com/blog' + prettyName;
+
         const { content, title } = post;
-        const bot = '';
-        const top = '';
 
-
-        let contributor = {};
+        let contributor = null;
 
         try {
             contributor = contributors.getIn([author]).toJS();
@@ -89,30 +86,27 @@ class BlogArticle extends Component {
         }
 
         // Don't show author box for episodes and transcripts
-        if (prettyName.indexOf("/episodes/") == 0) {
-            contributor = undefined
+        if (prettyName.indexOf("/episodes/") === 0) {
+            contributor = null;
         }
-        if (prettyName.indexOf("/transcripts/") == 0) {
-            contributor = undefined
+
+        if (prettyName.indexOf("/transcripts/") === 0) {
+            contributor = null;
         }
 
         return (
             <div className="center">
-                {top}
+                { isEpisode ? <LatestEpisodePlayer guid={guid} /> : null }
 
-                <LatestEpisodePlayer guid={guid} />
-
-                <BlogAuthorTop contributor={contributor}/>
+                {contributor ? <BlogAuthorTop contributor={contributor}/> : null }
 
                 <div id='blog-content'>
                     <span dangerouslySetInnerHTML={{__html: content}}/>
                 </div>
 
-                {bot}
-
                 <RelatedContent />
 
-                <BlogAuthorBottom contributor={contributor}/>
+                { contributor ? <BlogAuthorBottom contributor={contributor} /> : null }
 
                 <MailingListBlogFooter />
 

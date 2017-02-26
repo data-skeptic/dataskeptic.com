@@ -7,6 +7,8 @@ import BlogLink from './BlogLink'
 export default class BlogNav extends React.Component {
 	
 	render() {
+		const { onClick, activeFolder } = this.props;
+
 		var folders = this.props.folders
 		var pathname = this.props.pathname
 		var up = ".."
@@ -17,13 +19,13 @@ export default class BlogNav extends React.Component {
 			<div className="blog-nav">
 				<div className="blog-categories">
 					<div className="blog-link-container">
-						<BlogLink active="/blog" to="/blog">{up}</BlogLink>
+						<BlogLink onClick={onClick} active="/blog" to="/blog">{up}</BlogLink>
 					</div>
 					{folders.map(function(folder) {
-						var path = "/blog/" + folder + "/"
+						const path = "/blog/" + folder + "/"
 						return (
 							<div key={path} className="blog-link-container">
-								<BlogLink active={pathname} to={path}>{folder}</BlogLink>
+								<BlogLink active={pathname} to={path} onClick={onClick} isActive={activeFolder == folder}>{folder}</BlogLink>
 							</div>
 						)
 					})}
