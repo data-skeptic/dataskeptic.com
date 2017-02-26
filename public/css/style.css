@@ -1215,6 +1215,9 @@ ul.topnav li.right {
 
 .blog-link {
 }
+.blog-link.active {
+    text-decoration: underline;
+}
 
 .blog-categories {
     height: 1px;
