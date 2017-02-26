@@ -60,12 +60,12 @@ app.use(morgan('combined', {stream: accessLogStream}))
 
 var env = "prod"
 
-// aws.config.loadFromPath('awsconfig.json');
-//
-// if (process.env.NODE_ENV !== 'production') {
+aws.config.loadFromPath('awsconfig.json')
+
+if (process.env.NODE_ENV !== 'production') {
   require('./webpack.dev').default(app);
   env = "dev"
-// }
+}
 console.log("Environment: ", env)
 
 var my_cache = {
@@ -91,11 +91,11 @@ var doRefresh = function() {
   var env = global.env
   var my_cache = global.my_cache
   loadBlogs(store, env, my_cache)
-  loadEpisodes(env, feed_uri, my_cache, aws)
   loadProducts(env, my_cache)
+  loadEpisodes(env, feed_uri, my_cache, aws)
 }
 
-// setInterval(doRefresh, 5 * 60 * 1000)
+setInterval(doRefresh, 5 * 60 * 1000)
 
 doRefresh()
 

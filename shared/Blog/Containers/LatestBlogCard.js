@@ -14,6 +14,10 @@ class LatestBlogCard extends React.Component {
 		var osite = this.props.site.toJS()
 		var blog = this.props.blog
 		var contributor = this.props.contributor
+		var contributor_img = ""
+		if (contributor != undefined) {
+			contributor_img = contributor.img | ""
+		}
 		if (blog == undefined) {
 			return <Loading />			
 		}
@@ -48,7 +52,7 @@ class LatestBlogCard extends React.Component {
 				<div className="home-latest-blog-card-container">
 					<div className="home-latest-blog-header">
 						<div className="home-latest-blog-header-left">
-							<img className="home-latest-blog-img" src={contributor.img} />
+							<img className="home-latest-blog-img" src={contributor_img} />
 						</div>
 						<div className="home-latest-blog-header-right">
 							<Link className="latest-blog-title" to={pn}>{blog.title}</Link>
