@@ -16,7 +16,7 @@ class LatestBlogCard extends React.Component {
 		var contributor = this.props.contributor
 		var contributor_img = ""
 		if (contributor != undefined) {
-			contributor_img = contributor.img | ""
+			contributor_img = contributor.img || ""
 		}
 		if (blog == undefined) {
 			return <Loading />			
