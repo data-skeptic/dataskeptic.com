@@ -68,49 +68,6 @@ class BlogArticle extends Component {
         // var isEpisode = false
 
 
-        // var top = <div></div>
-        // var focus_episode = oepisodes.focus_episode
-        // if (focus_episode.episode != undefined) {
-        // 	debugger;
-        // 	console.log("!!!")
-        // 	console.log(blog_focus)
-        // 	console.log(focus_episode)
-        // 	if (focus_episode.episode.guid == blog_focus.blog.guid) {
-        // 		try {
-        // 			top = (
-        // 				<div className="home-player">
-        // 					<LatestEpisodePlayer guid={focus_episode.guid} />
-        // 				</div>
-        // 			)
-        // 			isEpisode = true
-        // 		}
-        // 		catch (err) {
-        // 			console.log(err)
-        // 			top = <div></div>
-        // 		}
-        // 	}
-        // }
-        // var bot = <div></div>
-        // if (isEpisode && false) {
-        // 	var tm = oblogs.transcript_map
-        // 	if (tm != undefined) {
-        // 		var guid = blog_focus.blog.guid
-        // 		var b = tm[guid]
-        // 		if (b != undefined) {
-        // 			if (b.prettyname != undefined) {
-        // 				if (b.prettyname.indexOf('/transcripts/') == -1) {
-        // 					var pn = "/blog" + b.prettyname
-        // 					bot = (
-        // 						<div className='blog-transcript-link'>
-        // 							Read the full transcript here:
-        // 							<Link to={pn}>{title} transcripts</Link>.
-        // 						</div>
-        // 					)
-        // 				}
-        // 			}
-        // 		}
-        // 	}
-
         const {currentPost, isLoading, contributors, disqusUsername, postUrl} = this.props;
 
         if (isLoading || !currentPost) {
@@ -118,6 +75,9 @@ class BlogArticle extends Component {
         }
 
         const post = currentPost.toJS();
+        console.log("post")
+        console.log(post)
+        var guid = post.guid // Will be undefined unless it's in /episodes
         const prettyName = post.prettyname;
 
         const showBio = (this.isEpisode(prettyName) || this.isTranscript(prettyName));
@@ -140,6 +100,8 @@ class BlogArticle extends Component {
         return (
             <div className="center">
                 {top}
+
+                <LatestEpisodePlayer guid={guid} />
 
                 <BlogAuthorTop contributor={contributor}/>
 
