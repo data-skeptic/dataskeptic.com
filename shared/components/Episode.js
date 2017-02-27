@@ -10,6 +10,12 @@ class Episode extends React.Component {
 	onPlayToggle(episode) {
 		this.props.dispatch({type: "PLAY_EPISODE", payload: episode })
 	}
+    formatLink(link) {
+		return link.replace('https://dataskeptic.com', '');
+	}
+    onEpisodeClick() {
+		window.scrollTo(0, 0);
+	}
 	render() {
         var monthNames = [
           "January", "February", "March",
@@ -54,14 +60,19 @@ class Episode extends React.Component {
 		} catch (err) {
 			console.log(err)
 		}
-		if (tep != undefined) {
-			var pn = "/blog" + tep.prettyname
+
+		if (tep) {
+			const pn = "/blog" + tep.prettyname;
 			transcript = (
 					<div className='episode-transcript-link'>
 						<Link to={pn}>Read transcript</Link>
 					</div>
 			)
 		}
+
+
+		const episodeLink = this.formatLink(ep.link);
+
 		return (
 			<div className="row episode">
 				<div className="col-xs-12 col-sm-3 episode-left">
@@ -71,7 +82,7 @@ class Episode extends React.Component {
 				</div>
 				<div className="col-xs-12 col-sm-8 episode-middle">
                     <div className="blog-date">{dstr}</div>
-					<a className="blog-title" href={ep.link}>{ep.title}</a>
+					<Link className="blog-title" to={episodeLink} onClick={this.onEpisodeClick}>{ep.title}</Link>
 					<br/>
 					<div className="episode-button-row">
 						<button className="episode-play-button" onClick={this.onPlayToggle.bind(this, ep)}>{play_symb} <span className="episode-play">PLAY</span> <span className="episode-duration">{duration}</span></button>
@@ -82,7 +93,7 @@ class Episode extends React.Component {
 						{transcript}
 					</div>
 					<div className="clear"></div>
-					<div className="episode-desc">{desc}<a href={ep.link} className="episode-view-more">View More <i className="glyphicon glyphicon-more glyphicon-chevron-right">&nbsp;</i> </a></div>
+					<div className="episode-desc">{desc}<Link to={episodeLink} className="episode-view-more">View More <i className="glyphicon glyphicon-more glyphicon-chevron-right">&nbsp;</i> </Link></div>
 				</div>
 				<div className="clear"></div>
 			</div>
