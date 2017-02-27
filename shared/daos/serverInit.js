@@ -62,8 +62,6 @@ export function loadBlogs(store, env, my_cache) {
       if (latest == undefined) {
         if (pn.indexOf("/episodes/") != 0 && pn.indexOf("/transcripts/") != 0) {
           latest = blog
-          console.log("latest")
-          console.log(pn)
           my_cache.blogmetadata_map["latest"] = latest
         }
       }
@@ -97,7 +95,6 @@ export function loadEpisodes(env, feed_uri, my_cache, aws) {
           var guid = episode.guid
           my_cache.episodes_map[guid] = episode
           if (i == 0) {
-            console.log("i==0")
             my_cache.episodes_map["latest"] = episode
             var blogs = my_cache.blogmetadata_map
             var shownotes = blogs[prettyname]

@@ -1,4 +1,5 @@
 import React from "react"
+import ReactDOM from "react-dom"
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -9,7 +10,6 @@ import ContactFormContainer from '../Containers/ContactFormContainer/ContactForm
 class ContactUs extends React.Component {
 	constructor(props) {
 		super(props)
-		this.onChangeEmail = this.onChangeEmail.bind(this)
 	}
 
 	onChangeEmail(event) {
@@ -19,7 +19,8 @@ class ContactUs extends React.Component {
 		var target = event.target
 		var cls = "email"
 		var val = target.value
-		this.props.dispatch({type: "UPDATE_ADDRESS", payload: {cls, val} })
+		var dispatch = this.props.dispatch
+		dispatch({type: "UPDATE_ADDRESS", payload: {cls, val} })
 	}
 
 	onClick(event) {
@@ -129,10 +130,7 @@ export default connect(
 	state => ({
 		cart: state.cart,
 		site: state.site
-	}),
-	(dispatch) => bindActionCreators({
-
-	}, dispatch)
+	})
 )(ContactUs)
 
 
