@@ -37,7 +37,9 @@ module.exports = {
         });
 
         each(blogs, (blog) => {
-            feed.item(BlogItemModel(blog));
+            if (blog.env === 'master') { // don't share dev on master
+                feed.item(BlogItemModel(blog));
+            }
         });
 
         const xml = feed.xml();
