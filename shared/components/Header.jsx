@@ -11,7 +11,7 @@ import CartLink from '../Cart/Components/CartLink'
 
 import { toggleCart } from '../Cart/Actions/CartActions';
 
-import { getItemsCount as getCartItemsCount } from '../Cart/Helpers';
+import { getItemsCount as getCartItemsCount } from '../Cart/Helpers/getItemsCount';
 
 class Header extends React.Component {
 	constructor(props) {

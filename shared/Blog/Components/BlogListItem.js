@@ -1,41 +1,43 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
+import moment from 'moment';
+
+import { redirects_map } from '../../../redirects';
 
 class BlogListItem extends Component {
     constructor(props) {
         super(props)
     }
 
-    render() {
-        const { onClick } = this.props;
-
-        var monthNames = [
-          "January", "February", "March",
-          "April", "May", "June", "July",
-          "August", "September", "October",
-          "November", "December"
-        ];
-    	var blog = this.props.blog
-        var pn = blog.prettyname
-        var datestr = ""
-        if (pn != undefined) {
-            if (pn[0] == "/") {
-                pn = pn.substring(1, pn.length)
-            }
-            pn = "/blog/" + pn
-            var date = blog["publish_date"].replace(/-/g, "/")
-            date = new Date(date)
-            datestr = monthNames[date.getMonth()].toUpperCase() + " " + date.getDate() + ", " + (date.getYear()+1900)
+    formatLink(link) {
+        if (link.indexOf('/') === 0) {
+            link = link.substring(1, link.length);
         }
+
+        link = "/blog/" + link;
+
+        if (!!redirects_map[link]) {
+            return redirects_map[link];
+        }
+
+        return link;
+    }
+
+    render() {
+        const { onClick, blog } = this.props;
+
+        const link = this.formatLink(blog.prettyname);
+        const date = moment(blog.publish_date).format('MMMM d, YYYY');
+
         return (
             <div className="col-xs-12">
 	            <div className="blog-summary" key={blog.uri}>
-                    <div className="blog-date">{datestr}</div>
-	                <Link className="blog-title" to={pn} onClick={ onClick }>{blog.title}</Link>
+                    <div className="blog-date">{date}</div>
+	                <Link className="blog-title" to={link} onClick={ onClick }>{blog.title}</Link>
 	                <p className="blog-desc">
                         {blog.desc}
-                        ... <Link className="blog-view-more" to={pn}>View More &gt;</Link>
+                        ... <Link className="blog-view-more" to={link}>View More &gt;</Link>
                     </p>
 	            </div>
             </div>

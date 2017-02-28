@@ -118,8 +118,7 @@ class ContactUs extends React.Component {
 					&nbsp;
 					<br/>
 
-					test
-					<ContactFormContainer/>
+					<ContactFormContainer />
 				</div>
 			</div>
 		)

@@ -3187,3 +3187,27 @@ button.slick-arrow.slick-prev {
 .paginator > li.disabled a {
     color: #dddddd;
 }
+
+
+/**
+ * Forms
+ */
+
+.form {
+
+}
+
+.form-label {
+
+}
+
+.form-input input[type=text],
+.form-input input[type=email],
+.form-input input[type=password],
+.form-input textarea {
+
+}
+
+.form-submit {
+
+}
