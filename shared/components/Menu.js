@@ -28,7 +28,7 @@ class Menu extends Component {
             <div className="nav">
                 {children}
 
-                {links.map(({to, name}, ind) => <NavLink keu={ind} isActive={this.isLinkActive(to)} to={to} onClick={itemClick}>{name}</NavLink>)}
+                {links.map(({to, name}, ind) => <NavLink key={ind} isActive={this.isLinkActive(to)} to={to} onClick={itemClick}>{name}</NavLink>)}
             </div>
         )
     }
