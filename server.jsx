@@ -4,6 +4,7 @@ import {get_blogs}               from 'backend/get_blogs'
 import {get_blogs_rss}           from 'backend/get_blogs_rss'
 import {get_contributors}        from 'backend/get_contributors'
 import {get_episodes}            from 'backend/get_episodes'
+import {get_episodes_by_guid}    from 'backend/get_episodes_by_guid'
 import {get_invoice}             from 'backend/get_invoice'
 import {get_rfc_metadata}        from 'backend/get_rfc_metadata'
 import {join_slack}              from 'backend/join_slack'
@@ -25,6 +26,7 @@ import fs                        from 'fs'
 import createLocation            from 'history/lib/createLocation';
 import Immutable                 from 'immutable'
 import promiseMiddleware         from 'lib/promiseMiddleware';
+import thunk                     from 'redux-thunk';
 import fetchComponentData        from 'lib/fetchComponentData';
 import morgan                    from 'morgan'
 import path                      from 'path';
@@ -43,6 +45,8 @@ import { get_blogs_list,
        }                         from 'utils/redux_loader';
 import redirects_map             from './redirects';
 
+import { reducer as formReducer } from 'redux-form'
+
 const app = express()
 
 var logDirectory = path.join(__dirname, 'log')
@@ -58,7 +62,7 @@ app.use(morgan('combined', {stream: accessLogStream}))
 
 var env = "prod"
 
-aws.config.loadFromPath('awsconfig.json');
+aws.config.loadFromPath('awsconfig.json')
 
 if (process.env.NODE_ENV !== 'production') {
   require('./webpack.dev').default(app);
@@ -76,8 +80,11 @@ var my_cache = {
 , products : {}
 }
 
-const reducer  = combineReducers(reducers);
-const store    = applyMiddleware(promiseMiddleware)(createStore)(reducer);
+const reducer  = combineReducers({
+    ...reducers,
+    form: formReducer
+});
+const store    = applyMiddleware(thunk,promiseMiddleware)(createStore)(reducer);
 const initialState = store.getState()
 
 global.env              = env
@@ -89,8 +96,8 @@ var doRefresh = function() {
   var env = global.env
   var my_cache = global.my_cache
   loadBlogs(store, env, my_cache)
-  loadEpisodes(env, feed_uri, my_cache, aws)
   loadProducts(env, my_cache)
+  loadEpisodes(env, feed_uri, my_cache, aws)
 }
 
 setInterval(doRefresh, 5 * 60 * 1000)
@@ -192,6 +199,10 @@ function api_router(req, res) {
     get_episodes(req, res, my_cache.episodes_map, my_cache.episodes_list)
     return true
   }
+  else if (req.url.indexOf('/api/episodes/get') == 0) {
+    get_episodes_by_guid(req, res, my_cache.episodes_map, my_cache.episodes_list)
+    return true
+  }
   else if (req.url == '/api/rfc/list') {
     get_rfc_metadata(req, res, my_cache)
     return true
@@ -254,8 +265,14 @@ function install_blog(store, blog_metadata, content) {
   var blog = blog_metadata
   var pathname = "/blog" + blog.prettyname
   var blog_focus = {blog, loaded, content, pathname, contributor}
-  store.dispatch({type: "SET_FOCUS_BLOG", payload: {blog_focus} })
-  store.dispatch({type: "ADD_BLOG_CONTENT", payload: {content, blog} })
+
+  const post = {
+    ...blog,
+      content
+  };
+
+  store.dispatch({type: "LOAD_CONTRIBUTORS_LIST_SUCCESS", payload: {contributors} });
+  store.dispatch({type: "LOAD_BLOG_POST_SUCCESS", payload: {post} })
 }
 
 function install_episode(store, episode) {
@@ -285,6 +302,7 @@ function inject_blog(store, my_cache, pathname) {
     } else {
       console.log("No episode guid found")
     }
+
     install_blog(store, blog_metadata, content)
   }
   console.log("done with blog inject")
@@ -363,7 +381,7 @@ app.use( (req, res) => {
     }
 
     function renderView() {
-      const store = applyMiddleware(promiseMiddleware)(createStore)(reducer)
+      const store = applyMiddleware(thunk, promiseMiddleware)(createStore)(reducer)
       updateState(store, location.pathname)
 
       const InitialView = (
@@ -393,7 +411,11 @@ app.use( (req, res) => {
     fetchComponentData(store.dispatch, renderProps.components, renderProps.params)
       .then(renderView)
       .then(html => res.status(200).end(html))
-      .catch(err => res.end(err.message));
+      .catch(err => {
+        console.error('HTML generation error');
+        console.dir(err);
+        return res.end(err)
+      });
   });
 });
 

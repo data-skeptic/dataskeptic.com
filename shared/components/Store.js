@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
 
-import Loading from './Loading'
+import Loading from '../Common/Components/Loading'
 import CartContainer from '../Cart/Containers/CartContainer'
 import StoreItem from './StoreItem'
 

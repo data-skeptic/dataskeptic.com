@@ -64,7 +64,7 @@ class AddressForm extends Component {
 							</div>
 						</div>
 						<div className="col-md-4">
-							<div className="address-label">Apt, suite, etc. <span className="required">*</span></div>
+							<div className="address-label">Apt, suite, etc.</div>
 							<div className="">
 								<input className="address-input street_2" type="text" ref="street_2" value={address.street_2} onChange={this.onAddressChange.bind(this)} placeholder="Apt 101"/>
 							</div>
@@ -107,7 +107,7 @@ class AddressForm extends Component {
 							</div>
 						</div>
 						<div className="col-md-6">
-							<div className="address-label">Phone </div>
+							<div className="address-label">Phone <span className="required">*</span></div>
 							<div className="">
 								<input className="address-input phone" type="text" ref="phone" value={address.phone} onChange={this.onAddressChange.bind(this)} placeholder="(310) 313 - 3413"/>
 							</div>

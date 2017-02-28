@@ -37,7 +37,15 @@ module.exports = {
 			"linkedin": "https://au.linkedin.com/in/jackbrucesimpson",
 			"bio": "Jack Simpson is completing a PhD in computational biology at the Australian National University in 2017. Over the course of his PhD, Jack has gained a keen interest in how machine learning can be used to solve problems in both research and industry. Jack is also passionate about science, programming and beekeeping.  His personal blog can be found at [jacksimpson.co](http://www.jacksimpson.co).  He also blogs about medical research on [biosky.co](http://biosky.co).",
 			"sort-rank": 2
-		}
+		},
+		"kristine": {
+			"prettyname": "Kristine de Leon",
+			"img": "https://s3.amazonaws.com/dataskeptic.com/contributors/kristen-de-leon.png",
+			"twitter": "deleonkrist",
+			"linkedin": "www.linkedin.com/in/kristine-de-leon-a7544149",
+			"bio": "Kristine is a fledgling science writer based in sunny Los Angeles, CA. Once a researcher in soil microbiology, Kristine is passionate about translating science into thrilling stories for all. She enjoys reading, the great outdoors, playing with logical systems, learning how stuff in the world works, and making things with metal.",
+			"sort-rank": 2
+		}	
 	}
 	return resp
   }

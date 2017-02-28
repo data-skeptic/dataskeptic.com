@@ -1,7 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux';
 
-import Loading from "./Loading"
+import Loading from "../../Common/Components/Loading"
+import Error from "../../Common/Components/Error"
+import {loadEpisode} from "../../utils/redux_loader"
 
 class LatestEpisodePlayer extends React.Component {
 	constructor(props) {
@@ -9,14 +11,12 @@ class LatestEpisodePlayer extends React.Component {
 	}
 
 	componentWillMount() {
+		var dispatch = this.props.dispatch
 		var episodes = this.props.episodes.toJS()
 		var focus_episode = episodes.focus_episode
 		var guid = this.props.guid
 		if (guid != undefined) {
-			this.props.dispatch({type: "REQUEST_INJECT_EPISODE", payload: {guid} })			
-		}
-		else if (focus_episode.pubData == null) {
-			this.props.dispatch({type: "REQUEST_INJECT_EPISODE", payload: {} })
+			loadEpisode(guid, dispatch)
 		}
 	}
 
@@ -25,7 +25,10 @@ class LatestEpisodePlayer extends React.Component {
 	}
 
 	render() {
-		var title = this.props.title
+		var guid = this.props.guid
+		if (guid == undefined) {
+			return <div></div>
+		}
 		var oplayer = this.props.player.toJS()
 		var playback_loaded = oplayer.playback_loaded
 		var episodes = this.props.episodes.toJS()
@@ -53,12 +56,13 @@ class LatestEpisodePlayer extends React.Component {
 		var d = new Date(episode.pubDate)
 		var dstr = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate()
 		return (
-			<div className="home-player-card">
-					<p><span className="home-player-latest">{title}</span></p>
-					<div className="home-player-title"><a className="home-player-link" href={episode.link}>{episode.title}</a></div>
-					<p>{dstr}</p>
-					<button className="episode-button" onClick={this.onClick.bind(this, episode)}>{play_symb}</button>
-			</div>
+            <div className="home-player">
+				<div className="home-player-card">
+						<div className="home-player-title"><a className="home-player-link" href={episode.link}>{episode.title}</a></div>
+						<p>{dstr}</p>
+						<button className="episode-button" onClick={this.onClick.bind(this, episode)}>{play_symb}</button>
+				</div>
+            </div>
 		)
 	}
 }

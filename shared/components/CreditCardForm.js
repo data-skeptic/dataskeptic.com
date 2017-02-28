@@ -123,13 +123,17 @@ class CreditCardForm extends React.Component {
 						<div className="text-danger">{errors}</div>
 
 						<div className="row">
-							<div className="col-md-6">
+							<div className="col-md-5">
 								<div className="card-label">Cardholder Name <span className="required">*</span></div>
-								<input id="cc-m" type='text' data-stripe='exp-month' placeholder='John A. Smith' onChange={this.onCCChange.bind(this)} />
+								<input id="cc-m" type='text' data-stripe='cardholder' placeholder='John A. Smith' />
 							</div>
-							<div className="col-md-3">
-								<div className="card-label">Expiration <span className="required">*</span></div>
-								<input id="cc-y" type='text' data-stripe='exp-year' placeholder='02 / 19' onChange={this.onCCChange.bind(this)} />
+							<div className="col-md-2">
+								<div className="card-label">Mon <span className="required">*</span></div>
+								<input id="cc-y" type='text' data-stripe='exp-month' placeholder='02' onChange={this.onCCChange.bind(this)} />
+							</div>
+							<div className="col-md-2">
+								<div className="card-label">Year <span className="required">*</span></div>
+								<input id="cc-y" type='text' data-stripe='exp-year' placeholder='19' onChange={this.onCCChange.bind(this)} />
 							</div>
 							<div className="col-md-3">
 								<div className="card-label">CVV <span className="required">*</span></div>

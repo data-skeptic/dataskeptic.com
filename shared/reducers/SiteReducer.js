@@ -31,7 +31,6 @@ export default function siteReducer(state = defaultState, action) {
         }
       }
       nstate.contact_form.send = "no"
-      var dispatch = action.payload.dispatch
       break
     case 'SET_CONTRIBUTORS':
       nstate.contributors = action.payload
