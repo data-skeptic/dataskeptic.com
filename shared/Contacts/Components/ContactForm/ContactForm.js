@@ -9,26 +9,12 @@ import { ContactFormValidator } from '../../Helpers/ContactFormValidator/Contact
 
 import Loading from "../../../Common/Components/Loading";
 
-const renderField = ({ input, label, type, textarea, required, meta: { touched, error, warning, invalid } }) => {
-    const textareaType = <textarea {...input} placeholder={label}  type={type} className={`form-control ${touched && invalid ? 'has-danger' : ''}`}/>;
-    const inputType = <input {...input} placeholder={label}  type={type} className={`form-control ${touched && invalid ? 'has-danger' : ''}`}/>;
-
-    return (
-        <div>
-            <div className="col-xs-12 col-sm-12 contact-label contact-name-lbl">{label}&nbsp;{required ? <span className="required">*</span> : null}</div>
-            <div className="col-xs-12 col-sm-12">
-                {textarea ? textareaType : inputType}
-
-                <p className="error-message">{touched && ((error && <span>{error}</span>) || (warning && <span>{warning}</span>))}</p>
-            </div>
-        </div>
-    );
-};
+import FormController from '../../../Forms/Components/FormController/FormController';
+import { renderField } from '../../../Forms/Components/Field/Field';
 
 const Form = ({ handleSubmit, pristine, reset, submitting, invalid, submitSucceeded, submitFailed }) => (
-    <form className="row contact-form" onSubmit={handleSubmit} autocomplete="false">
+    <FormController name="contacts" handleSubmit={handleSubmit} submitValue="Send">
         <div className="col-xs-12 col-md-12"><h2>Contact Us</h2></div>
-
 
         <Field label="Name" component={renderField} name="name" type="text" className="contact-name" placeholder="John Smith" autocomplete="false" required/>
         <Field label="Email" component={renderField} name="email" type="email" className="contact-name" placeholder="j.smith@work.com" autocomplete="false" required/>
@@ -47,12 +33,7 @@ const Form = ({ handleSubmit, pristine, reset, submitting, invalid, submitSuccee
         </div>
         }
 
-        { !submitSucceeded && !submitting ?
-        <div className="col-xs-12 col-sm-12">
-            <button className="btn contact-send" type="submit" disabled={(pristine || invalid) || submitting} >Send</button>
-        </div>
-        : null}
-    </form>
+    </FormController>
 );
 
 
