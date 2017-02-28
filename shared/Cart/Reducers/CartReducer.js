@@ -58,7 +58,7 @@ const init = {
     paymentError: "",
     paymentComplete: false
   }
-}
+};
 
 const defaultState = Immutable.fromJS(init);
 
