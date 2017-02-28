@@ -82,7 +82,7 @@ class Episode extends React.Component {
 				</div>
 				<div className="col-xs-12 col-sm-8 episode-middle">
                     <div className="blog-date">{dstr}</div>
-					<Link className="blog-title" to={episodeLink} onClick={this.onEpisodeClick}>{ep.title}</Link>
+					<a className="blog-title" href={episodeLink} onClick={this.onEpisodeClick}>{ep.title}</a>
 					<br/>
 					<div className="episode-button-row">
 						<button className="episode-play-button" onClick={this.onPlayToggle.bind(this, ep)}>{play_symb} <span className="episode-play">PLAY</span> <span className="episode-duration">{duration}</span></button>
@@ -93,13 +93,15 @@ class Episode extends React.Component {
 						{transcript}
 					</div>
 					<div className="clear"></div>
-					<div className="episode-desc">{desc}<Link to={episodeLink} className="episode-view-more">View More <i className="glyphicon glyphicon-more glyphicon-chevron-right">&nbsp;</i> </Link></div>
+					<div className="episode-desc">{desc}<a href={episodeLink} className="episode-view-more">View More <i className="glyphicon glyphicon-more glyphicon-chevron-right">&nbsp;</i> </a></div>
 				</div>
 				<div className="clear"></div>
 			</div>
 		)
 	}
 }
+//					<Link className="blog-title" to={episodeLink} onClick={this.onEpisodeClick}>{ep.title}</Link>
+//					<div className="episode-desc">{desc}<Link to={episodeLink} className="episode-view-more">View More <i className="glyphicon glyphicon-more glyphicon-chevron-right">&nbsp;</i> </Link></div>
 
 export default connect(state => ({ player: state.player, episodes: state.episodes, blogs: state.blogs }))(Episode)
 
