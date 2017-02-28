@@ -14,7 +14,7 @@ export class PaginationContainer extends Component {
     }
 
     getPagesCount() {
-        const count = Math.ceil(this.props.total / this.props.perPage);
+        const count = Math.ceil(Math.round(this.props.total / this.props.perPage));
         return count;
     }
 
