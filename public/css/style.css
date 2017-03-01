@@ -1203,34 +1203,27 @@ ul.topnav li.right {
 }
 
 .blog-nav {
-    margin: 10px;
-    height: 25px;
-    display: table;
+
 }
 
-.blog-categories {
-    margin-top: 20px;
-    margin-bottom: 10px;
+.blog-link{
+    color: #ffffff;
+    font-size: 16px;
+}
+.blog-link:hover {
+    color: #ffffff;
 }
 
-.blog-link {
-}
 .blog-link.active {
-    text-decoration: underline;
-}
-
-.blog-categories {
-    height: 1px;
-    clear: both;
+    text-decoration: none;
+    color: #F8E81C;
 }
 
 .blog-link-container {
-    float: left;
-    background-color: #eee;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    margin-right: 20px;
-    padding: 2px 10px 2px 10px;
+    display: block;
+    margin: auto;
+    padding: 6px 0px;
+    color: #ffffff;
 }
 
 /*****************************************************************************
@@ -3210,4 +3203,31 @@ button.slick-arrow.slick-prev {
 
 .form-submit {
 
+}
+
+/**
+ * Layout
+ */
+
+.page-container {
+    margin: 60px 5% 0px;
+}
+
+.page-content {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.page-content-title {
+    padding: 0px;
+    margin: 0px 0px 0px 8px;
+    font-size: 26px;
+    color: #3A3B3B;
+}
+
+.page-sidebar {
+    margin-top: 10px;
+    background: #38383A;
+    padding: 28px 42px;
+    color: #ffffff;
 }
