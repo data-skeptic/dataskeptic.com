@@ -3,7 +3,7 @@ import AdSense from 'react-adsense'
 import { Link } from 'react-router'
 import ReactDOM from "react-dom"
 
-import NavLink from '../../components/NavLink'
+import NavLink from '../../../components/NavLink'
 
 const LINKS = {
 	ITUNES: 'https://itunes.apple.com/us/podcast/the-data-skeptic-podcast/id890348705',
@@ -68,6 +68,6 @@ export const Footer = ({ foo, pathname, linkClick }) => (
 			</div>
 		</div>
 	</div>
-)
+);
 
 export default Footer
