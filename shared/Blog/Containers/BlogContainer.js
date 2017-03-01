@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component } from "react"
 import ReactDOM from "react-dom"
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
@@ -18,7 +18,14 @@ import {loadBlogs} from '../Actions/BlogsActions';
 
 import isNaN from 'lodash/isNaN';
 
-class BlogContainer extends React.Component {
+import Container from '../../Layout/Components/Container/Container';
+import Content from '../../Layout/Components/Content/Content';
+import SideBar from '../../Layout/Components/SideBar/SideBar';
+
+const DEFAULT_ACTIVE_FOLDER = 'All';
+import BLOGS_NAV_MAP from '../Constants/navMap';
+
+class BlogContainer extends Component {
 
     constructor(props) {
         super(props);
@@ -102,11 +109,30 @@ class BlogContainer extends React.Component {
             window.scrollTo(0, 0);
         }
 
-        if (e.target.innerText === '..') {
+        if (e.target.innerText === DEFAULT_ACTIVE_FOLDER) {
             return this.fetchPosts();
         }
 
         this.fetchAllPosts();
+    }
+
+    getPageTitle(activeFolder) {
+        const {pageNum} = this.props;
+        const activeFolderIsDefault = (activeFolder === DEFAULT_ACTIVE_FOLDER);
+        const folderTranscription = BLOGS_NAV_MAP[activeFolder];
+
+        let title = '';
+
+        if (!activeFolderIsDefault || pageNum !== 1) {
+            title = folderTranscription;
+        }
+
+        if (pageNum > 1) {
+
+            title += ` / Page ${pageNum}`;
+        }
+
+        return title;
     }
 
     render() {
@@ -118,50 +144,58 @@ class BlogContainer extends React.Component {
         const folders = oblogs.folders || [];
         let blogs = oblogs.blogs || [];
 
-        if (blogs.length === 0) {
-            return <div><Loading /></div>
-        }
 
         let opathname = this.props.pathname
         if (!opathname) {
             opathname = this.props.location.pathname
         }
-        var pathname = transform_pathname(opathname)
+        const pathname = transform_pathname(opathname);
 
-        let activeFolder = null;
-        for (var i = 0; i < folders.length; i++) {
-            var folder = folders[i]
-            var sfolder = "/" + folder
-            if (pathname.indexOf(sfolder) == 0 && pathname.length == sfolder.length) {
+        let activeFolder = DEFAULT_ACTIVE_FOLDER;
+        for (let i = 0; i < folders.length; i++) {
+            const folder = folders[i]
+            const sfolder = "/" + folder
+            if (pathname.indexOf(sfolder) === 0 && pathname.length === sfolder.length) {
                 activeFolder = folder;
                 blogs = this.only_type(folder, blogs)
             }
         }
 
         if (pathname === "" || pathname === "/") {
-            blogs = this.remove_type("episodes", blogs)
-            blogs = this.remove_type("transcripts", blogs)
+            blogs = this.remove_type("episodes", blogs);
+            blogs = this.remove_type("transcripts", blogs);
         }
 
 
-        const latestBlogId = oblogs.latestId;
-
+        const contentTitle = this.getPageTitle(activeFolder);
 
         return (
-            <div className="center">
-                <BlogNav folders={folders} pathname={pathname} activeFolder={activeFolder} onClick={this.onNavClick} />
+            <div className="blog-page">
+                <Container>
 
-                <BlogList blogs={blogs} latestId={latestBlogId}/>
+                    <Content title={contentTitle}>
+                        { blogs.length === 0
+                            ? <Loading />
+                            : <BlogList blogs={blogs}/>
+                        }
+                    </Content>
 
-                { !activeFolder ?
-                    <div className="row">
-                        <PaginationContainer
-                            currentPage={pageNum}
-                            total={total}
-                            perPage={perPage}
-                            onPageClick={this.onPaginatorPageClick}
-                        />
-                    </div>
+                    <SideBar title="Categories">
+                        <BlogNav folders={folders} pathname={pathname} activeFolder={activeFolder} onClick={this.onNavClick} />
+                    </SideBar>
+                </Container>
+                { activeFolder === DEFAULT_ACTIVE_FOLDER ?
+                    <Container>
+                        <div className="row">
+                            <PaginationContainer
+                                currentPage={pageNum}
+                                total={total}
+                                perPage={perPage}
+                                onPageClick={this.onPaginatorPageClick}
+                            />
+                        </div>
+                    </Container>
+
                 : null }
             </div>
         )
