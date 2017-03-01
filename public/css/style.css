@@ -13,6 +13,16 @@ html, body {
     font-weight: 500;
 }
 
+a {
+    color: #000;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #333333;
+    text-decoration: none;
+}
+
 .site.no-scroll {
     overflow: hidden;
 }
@@ -827,9 +837,11 @@ ul.topnav li.right {
     margin-top: 5px;
     border-style: solid;
     border-radius: 2px;
-    border-width: 1px;
     padding: 20px 2px 20px 5px;
-    background-color: #eee;
+
+    background-color: #FFFFFF;
+    border: 1px solid #f1f1f1;
+    box-shadow: 0px 1px 15px rgba(146, 146, 146, 0.1);
 }
 
 .home-player {
@@ -842,7 +854,9 @@ ul.topnav li.right {
     height: 25px;
 }
 
-.home-player-link {
+.home-player-link,
+.home-player-link:hover {
+    color: #323333;
     font-size: 11pt;
 }
 
@@ -882,6 +896,8 @@ ul.topnav li.right {
     padding: 10px 10px 10px 10px;
     font-size: 12pt;
     height: 300px;
+
+    border: 1px solid rgba(255, 255, 0, 0.2);
 }
 
 .home-player-title {
@@ -940,11 +956,15 @@ ul.topnav li.right {
 .episode-button {
     border-radius: 30px;
     border-width: 1px;
-    background-color: #ffa;
     width: 50px;
     height: 50px;
     font-size: 16pt;
     text-align: center;
+
+    background: #565858;
+    color: #fff;
+    border: none;
+    outline: none;
 }
 
 .episode-button-row {
@@ -1339,17 +1359,21 @@ ul.topnav li.right {
     width: 40px;
     height: 40px;
     text-align: center;
-    border-radius: 5px;
+    border-radius: 0px;
     font-size: 20pt;
+    border: 0px;
+    background-color: #323333;
+    color: #ffffff;
 }
 
 .add-to-cart-clicked {
+    border: 0px;
     width: 40px;
     height: 40px;
     text-align: center;
-    border-radius: 5px;
     font-size: 20pt;
-    background-color: #ff0;
+    color: #323333;
+    background-color: #FAFAFA;
 }
 
 .product-outer {
@@ -1648,10 +1672,9 @@ ul.topnav li.right {
 
 .card {
     border-radius: 5px;
-    border-width: 1px;
-    border-color: #000;
-    border-style: solid;
     font-size: 12pt;
+    border: 1px solid #f1f1f1;
+    box-shadow: 0px 1px 15px rgba(146, 146, 146, 0.1);
 }
 
 .home-episode-card {
@@ -1997,11 +2020,14 @@ div.mailing-list-signup-container {
 #mc_embed_signup input.email {
     font-size: 15px;
     display: block;
-    padding: 0 0.4em;
     margin-bottom: 10px;
     min-height: 32px;
+
+    padding: 12px 16px;
+    background: #FFFFFF;
+    border: 1px solid #D7D9D9;
+    border-radius: 4px;
     width: 100%;
-    border-radius: 3px;
 }
 
 #mc_embed_signup input.button {
@@ -2033,14 +2059,13 @@ button.slick-arrow.slick-prev {
 }
 
 .project-box {
-    background-color: #eeeeee;
     padding: 10px;
     margin: 15px 0px 0px 10px;
     border-radius: 5px;
-    border-color: #333;
-    border-width: 1px;
-    border-style: solid;
     height: 300px;
+
+    background: #FAFAFA;
+    border: 1px solid #D7D9D9;
 }
 
 .project-title {
@@ -2216,19 +2241,60 @@ button.slick-arrow.slick-prev {
 .membership-container {
     margin: 0px;
     padding: 25px;
+
 }
 
 .membership-bottom-container {
     text-align: center;
+    position: relative;
 }
 
 .membership-inner {
     border-radius: 5px;
-    border-color: #333;
-    border-width: 1px;
-    border-style: solid;
     min-height: 350px;
-    padding: 5px;
+    padding: 15px 10px;
+
+    border: 1px solid #D7D9D9;
+    box-shadow: 10px 1px 15px rgba(146, 146, 146, 0.1);
+
+    background: #FAFAFA;
+    transition: all 0.3s;
+}
+
+.membership-ds2 .membership-inner {
+    background-color: rgba(218, 187, 58, 0.1)
+}
+.membership-ds3 {
+    transform: scale(1.08);
+}
+.membership-ds3 .membership-inner {
+    background-color: rgba(41, 109, 222, 0.1);
+}
+.membership-ds4 .membership-inner {
+    background-color: rgba(103, 173, 180, 0.1);
+}
+.membership-ds32 {
+    margin-left: 17.3%;
+    transform: scale(1.1);
+}
+.membership-ds32 .membership-inner {
+    background-color: rgba(30, 160, 97, 0.1);
+}
+.membership-ds64 {
+    transform: scale(1.12);
+}
+.membership-ds64 .membership-inner {
+    background-color: rgba(200, 73, 65, 0.1);
+}
+
+.membership-inner:hover {
+    z-index: 5;
+    transform: scale(1.1);
+}
+
+.membership-inner p {
+    margin: 0px;
+    padding: 0px;
 }
 
 .membership-btn {
@@ -2236,41 +2302,67 @@ button.slick-arrow.slick-prev {
     height: 70px;
 }
 
-.per_month {
-    font-weight: normal;
-}
-
-.membership-img {
-    height: 50px;
-}
-
 .membership-title {
     text-align: center;
     font-weight: bold;
+
+    font-size: 26px;
 }
 
 .membership-desc {
     text-align: center;
     padding: 5px;
-    min-height: 100px;
+    min-height: 80px;
 }
 
 .membership-price {
-    font-weight: bold;
-    font-size: 14pt;
-    float: left;
     margin-bottom: 10px;
     width: 100%;
 }
 
-.membership-add {
-    background-color: #a3b2a2;
-    border-radius: 10px;
+.membership-price > span {
+    font-size: 22px;
     font-weight: bold;
+    color: #575959;
+}
+
+.membership-add {
     margin: 0 auto;
+
+    line-height: 48px;
+    background: #F0D943;
+    border-radius: 4px;
+    font-size: 18px;
+    color: #575959;
+    letter-spacing: 0;
+    display: block;
+    height: 48px;
+    text-align: center;
+    text-decoration: none;
+    width: 100%;
+    border: 0px;
 }
 
 .membership-add-paypal {
+    font-weight: bold;
+    margin: 0 auto;
+
+    line-height: 30px;
+    background: #3A85D0;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #ffffff;
+    letter-spacing: 0;
+    display: block;
+    height: 32px;
+    text-align: center;
+    text-decoration: none;
+    width: 100%;
+    border: 0px;
+}
+
+.membership-link {
+    color: #d2bf41;
 }
 
 /*****************************************************************************
@@ -2327,13 +2419,12 @@ button.slick-arrow.slick-prev {
 }
 
 .services-inner {
-    background-color: #eeeeee;
     padding: 10px;
     border-radius: 5px;
-    border-color: #333;
-    border-width: 1px;
     margin: 10px 0px 0px 0px;
-    border-style: solid;
+
+    background: #FAFAFA;
+    border: 1px solid #D7D9D9;
 }
 
 .services-title {
@@ -2562,7 +2653,8 @@ button.slick-arrow.slick-prev {
 .slick-prev:before,
 .slick-next:before {
     font-family: 'slick';
-    font-size: 20px;
+    font-size: 14px;
+    font-weight: bolder;
     line-height: 1;
 
     opacity: .75;
@@ -2677,7 +2769,7 @@ button.slick-arrow.slick-prev {
     width: 15px;
     height: 15px;
 
-    content: 'o';
+    content: '';
     text-align: center;
 
     opacity: .25;
