@@ -69,10 +69,13 @@ module.exports = {
             .filter((blog, index) => matchingOffset(blog, index, offset))
             .filter((blog, index) => matchingLimit(blog, index, limit));
 
+        const latestId = blogmetadata_map['latest']['c_hash'];
+
         return res.status(200).end(JSON.stringify({
             env,
             blogs,
-            total
+            total,
+            latestId
         }))
     }
 };

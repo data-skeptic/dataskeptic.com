@@ -81,9 +81,9 @@ class Episode extends React.Component {
 		return (
 			<div className="row episode">
 				<div className="col-xs-12 col-sm-3 episode-left">
-					<a href={ep.link}>
+					<Link to={episodeLink} onClick={this.onEpisodeClick}>
 						<img className="episode-img" src={ep.img} />
-					</a>
+					</Link>
 				</div>
 				<div className="col-xs-12 col-sm-8 episode-middle">
                     <div className="blog-date">{date}</div>

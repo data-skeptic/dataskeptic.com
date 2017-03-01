@@ -17,6 +17,7 @@ const init = {
         next: 1,
         prev: 0
     },
+    latestId: null,
     total: 0,
     blogs: [],
     folders: [],
@@ -138,6 +139,7 @@ export default function blogsReducer(state = defaultState, action) {
                 }
             });
 
+            nstate.latestId = action.payload.latestId;
             nstate.blogs_loaded = 1;
             break;
 

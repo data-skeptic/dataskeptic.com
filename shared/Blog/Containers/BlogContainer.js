@@ -195,6 +195,7 @@ class BlogContainer extends Component {
                             />
                         </div>
                     </Container>
+
                 : null }
             </div>
         )
@@ -203,7 +204,6 @@ class BlogContainer extends Component {
 
 export default connect(
     (state, ownProps) => ({
-        player: state.player,
         pageNum: +ownProps.params.pageNum || 1,
 
         folderName: ownProps.params.pageNum,
@@ -212,8 +212,6 @@ export default connect(
         total: state.blogs.getIn(['total']),
 
         blogs: state.blogs,
-        episodes: state.episodes,
-        site: state.site
     }),
     (dispatch) => (bindActionCreators({
         loadBlogs

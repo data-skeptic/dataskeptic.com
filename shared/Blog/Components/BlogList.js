@@ -18,13 +18,13 @@ export default class BlogList extends Component {
     }
 
     render() {
-    	const { blogs = [], onClick } = this.props;
+    	const { blogs = [], onClick, latestId } = this.props;
 
         return (
             <div className="row blog-summary-container">
                 {blogs.map((blog, index) => {
                     const id = index;
-                    return <BlogListItem key={id} blog={blog} onClick={this.onItemClick}/>
+                    return <BlogListItem key={id} blog={blog} onClick={this.onItemClick} isLatest={blog.c_hash===latestId}/>
                 })}
             </div>
         )

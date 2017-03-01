@@ -15,8 +15,10 @@ class LatestBlogCard extends React.Component {
 		var blog = this.props.blog
 		var contributor = this.props.contributor
 		var contributor_img = ""
+		var contributor_prettyname = ""
 		if (contributor != undefined) {
 			contributor_img = contributor.img || ""
+			contributor_prettyname = contributor.prettyname
 		}
 		if (blog == undefined) {
 			return <Loading />			
@@ -56,7 +58,7 @@ class LatestBlogCard extends React.Component {
 						</div>
 						<div className="home-latest-blog-header-right">
 							<Link className="latest-blog-title" to={pn}>{blog.title}</Link>
-							<div className="blog-author">{contributor.prettyname}</div>
+							<div className="blog-author">{contributor_prettyname}</div>
 							<div className="blog-date">{dstr}</div>
 						</div>
 					</div>
