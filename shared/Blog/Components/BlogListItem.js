@@ -25,10 +25,10 @@ class BlogListItem extends Component {
     }
 
     render() {
-        const { onClick, blog } = this.props;
+        const { onClick, blog, isLatest=false } = this.props;
 
         const link = this.formatLink(blog.prettyname);
-        const date = moment(blog.publish_date).format('MMMM d, YYYY');
+        const date = isLatest ? moment(blog.publish_date).fromNow() : moment(blog.publish_date).format('MMMM D, YYYY');
 
         return (
             <div className="col-xs-12">
