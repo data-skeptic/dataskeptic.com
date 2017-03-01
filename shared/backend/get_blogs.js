@@ -6,7 +6,7 @@ function isIgnoredKey(key='') {
     return ignoredKeys.includes(key);
 }
 
-function isMatchingQuery(blog, {url = '', exclude = []}) {
+function isMatchingQuery(blog, {url = '', exclude = [], env}) {
     let match = false;
 
     if (blog['prettyname'].indexOf(url) === 0) {
@@ -21,6 +21,10 @@ function isMatchingQuery(blog, {url = '', exclude = []}) {
         }
     }
 
+    if (match) {
+        match = blog.env === env;
+    }
+
     return match;
 }
 
@@ -33,7 +37,9 @@ function matchingLimit(blog, index, limit) {
 }
 
 module.exports = {
-    get_blogs: function (req, res, blogmetadata_map, exclude = ['/episodes', '/transcripts']) {
+    get_blogs: function (req, res, blogmetadata_map, env, exclude = ['/episodes', '/transcripts']) {
+        env = (env === 'prod') ? 'master' : 'dev';
+
         const params = req['params'];
         const query = req.query;
 
@@ -53,7 +59,7 @@ module.exports = {
         let blogs = filter(blogmetadata_map, (blog, id) => !isIgnoredKey(id));
 
         // filter only relative blogs
-        blogs = blogs.filter((blog, id) => isMatchingQuery(blog, {url, exclude}));
+        blogs = blogs.filter((blog, id) => isMatchingQuery(blog, {url, exclude, env}));
 
         // calculate total matched blogs count
         const total = blogs.length;
@@ -64,6 +70,7 @@ module.exports = {
             .filter((blog, index) => matchingLimit(blog, index, limit));
 
         return res.status(200).end(JSON.stringify({
+            env,
             blogs,
             total
         }))

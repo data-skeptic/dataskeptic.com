@@ -1,7 +1,9 @@
-import React from "react"
-import ReactDOM from "react-dom"
-import { Link } from 'react-router'
-import { connect } from 'react-redux'
+import React from "react";
+import { Link } from 'react-router';
+import { connect } from 'react-redux';
+import moment from 'moment';
+
+import { redirects_map } from '../../redirects';
 
 class Episode extends React.Component {
 	constructor(props) {
@@ -10,19 +12,23 @@ class Episode extends React.Component {
 	onPlayToggle(episode) {
 		this.props.dispatch({type: "PLAY_EPISODE", payload: episode })
 	}
-    formatLink(link) {
-		return link.replace('https://dataskeptic.com', '');
+
+	formatLink(link) {
+		link = link.replace('https://dataskeptic.com', '');
+		link = link.replace('http://dataskeptic.com', '');
+
+		if (!!redirects_map[link]) {
+            return redirects_map[link];
+        }
+
+		return link;
 	}
+
     onEpisodeClick() {
 		window.scrollTo(0, 0);
 	}
+
 	render() {
-        var monthNames = [
-          "January", "February", "March",
-          "April", "May", "June", "July",
-          "August", "September", "October",
-          "November", "December"
-        ];
 		var ep = this.props.episode
 		var oplayer = this.props.player.toJS()
 		var oblogs = this.props.blogs.toJS()
@@ -50,8 +56,8 @@ class Episode extends React.Component {
 				)				
 			}
 		}
-		var d = new Date(ep.pubDate)
-		var dstr = monthNames[d.getMonth()].toUpperCase() + " " + d.getDate() + ", " + (d.getYear()+1900)
+
+        const date = moment(ep.publish_date).format('MMMM d, YYYY');
 
 		var transcript = <div></div>
 		var tep = undefined
@@ -60,6 +66,8 @@ class Episode extends React.Component {
 		} catch (err) {
 			console.log(err)
 		}
+
+		const episodeLink = this.formatLink(ep.link);
 
 		if (tep) {
 			const pn = "/blog" + tep.prettyname;
@@ -70,19 +78,16 @@ class Episode extends React.Component {
 			)
 		}
 
-
-		const episodeLink = this.formatLink(ep.link);
-
 		return (
 			<div className="row episode">
 				<div className="col-xs-12 col-sm-3 episode-left">
-					<a href={ep.link}>
+					<Link to={episodeLink} onClick={this.onEpisodeClick}>
 						<img className="episode-img" src={ep.img} />
-					</a>
+					</Link>
 				</div>
 				<div className="col-xs-12 col-sm-8 episode-middle">
-                    <div className="blog-date">{dstr}</div>
-					<a className="blog-title" href={episodeLink} onClick={this.onEpisodeClick}>{ep.title}</a>
+                    <div className="blog-date">{date}</div>
+					<Link className="blog-title" to={episodeLink} onClick={this.onEpisodeClick}>{ep.title}</Link>
 					<br/>
 					<div className="episode-button-row">
 						<button className="episode-play-button" onClick={this.onPlayToggle.bind(this, ep)}>{play_symb} <span className="episode-play">PLAY</span> <span className="episode-duration">{duration}</span></button>
@@ -93,15 +98,13 @@ class Episode extends React.Component {
 						{transcript}
 					</div>
 					<div className="clear"></div>
-					<div className="episode-desc">{desc}<a href={episodeLink} className="episode-view-more">View More <i className="glyphicon glyphicon-more glyphicon-chevron-right">&nbsp;</i> </a></div>
+					<div className="episode-desc">{desc}<Link to={episodeLink} className="episode-view-more">View More <i className="glyphicon glyphicon-more glyphicon-chevron-right">&nbsp;</i> </Link></div>
 				</div>
 				<div className="clear"></div>
 			</div>
 		)
 	}
 }
-//					<Link className="blog-title" to={episodeLink} onClick={this.onEpisodeClick}>{ep.title}</Link>
-//					<div className="episode-desc">{desc}<Link to={episodeLink} className="episode-view-more">View More <i className="glyphicon glyphicon-more glyphicon-chevron-right">&nbsp;</i> </Link></div>
 
 export default connect(state => ({ player: state.player, episodes: state.episodes, blogs: state.blogs }))(Episode)
 

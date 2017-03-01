@@ -19,7 +19,7 @@ import Overflow from '../Layout/Components/Overflow'
 
 import { toggleMobileMenu } from '../Layout/Actions/LayoutActions';
 import MobileMenu from '../MobileMenu/Components/MobileMenu'
-import { getItemsCount as getCartItemsCount } from '../Cart/Helpers';
+import { getItemsCount as getCartItemsCount } from '../Cart/Helpers/getItemsCount';
 import { toggleCart } from '../Cart/Actions/CartActions'
 
 class MainView extends React.Component {
