@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import {pay_invoice} from '../utils/redux_loader'
+import {pay_invoice} from '../../utils/redux_loader';
 
 class CreditCardForm2 extends React.Component {
 	constructor(props) {

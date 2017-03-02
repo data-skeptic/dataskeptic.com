@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 
-import CountrySelector from './CountrySelector'
+import CountrySelector from '../../Common/Components/CountrySelector'
 
 class AddressForm extends Component {
 	constructor(props) {

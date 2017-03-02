@@ -1,14 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Redirect } from 'react-router'
 
-import AddressForm from './AddressForm'
-import CartContainer from '../Cart/Containers/CartContainer'
-import CreditCardForm from './CreditCardForm'
-import Error from '../Common/Components/Error'
-import Loading from '../Common/Components/Loading'
-import SizeSelector from './SizeSelector'
-import ThankYouPage from './ThankYouPage'
+import AddressForm from '../../Containers/AddressForm';
+import CartContainer from '../../../Cart/Containers/CartContainer';
+import CreditCardForm from '../../Components/CreditCardForm';
+import Error from '../../../Common/Components/Error';
+import Loading from '../../../Common/Components/Loading';
+import ThankYouPage from '../ThankYou/ThankYouPage';
 
 class Checkout extends Component {
 	constructor(props) {
@@ -41,27 +39,26 @@ class Checkout extends Component {
 		if (paymentComplete) {
 			return <ThankYouPage />
 		}
-		if (cart_items.length == 0) {
+		if (cart_items.length === 0) {
 			return <CartContainer updateable={true} />
 		}
-		else {
-			return (
-				<div className="checkout-page">
-					<div className="checkout-cart">
-						<CartContainer updateable={true} />
-					</div>
-					<div className="checkout-form">
-						<div className="inner">
-							<h2>Checkout</h2>
 
-							<AddressForm title="Shipping Information" />
-							<CreditCardForm title="Billing Information"/>
-							<div className="clear"></div>
-						</div>
+		return (
+			<div className="checkout-page">
+				<div className="checkout-cart">
+					<CartContainer updateable={true} />
+				</div>
+				<div className="checkout-form">
+					<div className="inner">
+						<h2>Checkout</h2>
+
+						<AddressForm title="Shipping Information" />
+						<CreditCardForm title="Billing Information"/>
+						<div className="clear"></div>
 					</div>
 				</div>
-			)
-		}
+			</div>
+		)
 	}
 }
 
