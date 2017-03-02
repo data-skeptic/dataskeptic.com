@@ -1,7 +1,5 @@
 var path = require('path');
 var webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
 
 module.exports = {
   entry: [
@@ -24,8 +22,8 @@ module.exports = {
         loaders: ['babel']
       },
       {
-        test: /\.less$/,
-        loader: "style!css!less"
+          test: /\.less$/,
+          loader: "style!css!less?strictMath&noIeCompat"
       }
     ]
   },
@@ -39,7 +37,6 @@ module.exports = {
       compress: {
         warnings: false
       }
-    }),
-    new ExtractTextPlugin("styles.css")
+    })
   ]
 };
