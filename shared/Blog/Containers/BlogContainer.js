@@ -168,6 +168,7 @@ class BlogContainer extends Component {
 
 
         const contentTitle = this.getPageTitle(activeFolder);
+        const latestBlogId = oblogs.latestId;
 
         return (
             <div className="blog-page">
@@ -176,7 +177,7 @@ class BlogContainer extends Component {
                     <Content title={contentTitle}>
                         { blogs.length === 0
                             ? <Loading />
-                            : <BlogList blogs={blogs}/>
+                            : <BlogList blogs={blogs} latestId={latestBlogId}/>
                         }
                     </Content>
 
