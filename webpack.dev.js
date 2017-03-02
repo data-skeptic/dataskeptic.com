@@ -45,6 +45,10 @@ export default function(app) {
         {
             test: /\.less$/,
             loader: "style!css!less?strictMath&noIeCompat"
+        },
+        {
+            test: /.jpe?g$|.gif$|.png$|.svg$|.woff$|.ttf$|.wav$|.mp3$/,
+            loader: require.resolve("file-loader") + "?name=[path][name].[ext]"
         }
       ]
     },
