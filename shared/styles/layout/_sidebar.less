@@ -1,0 +1,86 @@
+.sidebar {
+  background: #FFFFFF;
+  -webkit-transition: 1s;
+  z-index: 999;
+  transform: translate(0);
+  width: 400px;
+  height: 100%;
+  position: fixed;
+  margin: 0px;
+  padding: 0px;
+  top: 0px;
+  transition: right 0.3s cubic-bezier(0.17, 0.68, 0.38, 0.84) 0.1s;
+}
+
+@media (max-width: 880px) {
+  .sidebar {
+    width: 100%;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    z-index: -1;
+
+    transition: all 0.3s;
+  }
+
+  .sidebar.closed {
+    opacity: 0;
+  }
+
+  .sidebar.opened {
+    z-index: 999;
+    opacity: 1;
+  }
+}
+
+.sidebar.opened {
+  right: 0px;
+}
+
+.sidebar.closed {
+  right: -500px;
+}
+
+.sidebar .inner {
+  padding: 25px 32px;
+  min-height: 100%;
+  position: relative;
+}
+
+.sidebar .inner h1,
+.sidebar .inner h2,
+.sidebar .inner h3,
+.sidebar .inner h4 {
+  margin: 0px;
+  padding: 0px;
+}
+
+.sidebar .inner .sidebar-close {
+  position: absolute;
+  top: 32px;
+  right: 32px;
+  border: 0px;
+  background: transparent;
+  width: 26px;
+  height: 26px;
+  padding: 0px;
+  margin: 0px;
+}
+
+.sidebar .inner .sidebar-close > img {
+  width: 100%;
+  height: 100%;
+  vertical-align: baseline;
+}
+
+.btn-open-cart-drawer {
+  cursor: pointer;
+  border-bottom: 0px !important;
+}
+
+.desktop .btn-open-cart-drawer {
+  background: #323333;
+  padding: 31px !important;
+}

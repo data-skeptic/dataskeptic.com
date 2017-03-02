@@ -19,6 +19,8 @@ import {
 
 import axios from 'axios';
 
+import '../shared/styles/main.less';
+
 import {reducer as formReducer} from 'redux-form'
 
 import initCart from '../shared/Cart/Helpers/initCart';
