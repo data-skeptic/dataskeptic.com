@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import AddressForm from '../../Containers/AddressForm';
 import CartContainer from '../../../Cart/Containers/CartContainer';
-import CreditCardForm from '../../Components/CreditCardForm';
 import Error from '../../../Common/Components/Error';
 import Loading from '../../../Common/Components/Loading';
 import ThankYouPage from '../ThankYou/ThankYouPage';
+
+import CheckoutFormContainer from '../../Containers/CheckoutFormContainer';
 
 class Checkout extends Component {
 	constructor(props) {
@@ -52,9 +52,7 @@ class Checkout extends Component {
 					<div className="inner">
 						<h2>Checkout</h2>
 
-						<AddressForm title="Shipping Information" />
-						<CreditCardForm title="Billing Information"/>
-						<div className="clear"></div>
+						<CheckoutFormContainer />
 					</div>
 				</div>
 			</div>

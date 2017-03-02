@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
 
-export const FormController = ({ name, children, handleSubmit, submitSucceeded, submitting, pristine, invalid, submitValue }) => (
+export const FormController = ({ name, children, handleSubmit, submitSucceeded, submitting, pristine, invalid, submitValue, btnWrapperClasses='col-xs-12 col-sm-12' }) => (
     <form className={`form ${name}-form row`} onSubmit={handleSubmit} autocomplete="false">
         {children}
 
         { !submitSucceeded && !submitting ?
-            <div className="col-xs-12 col-sm-12">
+            <div className={btnWrapperClasses}>
                 <button className="btn contact-send" type="submit" disabled={(pristine || invalid) || submitting} >{submitValue}</button>
             </div>
         : null}
