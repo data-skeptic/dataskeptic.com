@@ -9,7 +9,6 @@ export default function getContentWrapper(title, initialState, injects) {
           <title>${title}</title>
           <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" />
           <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cosmo/bootstrap.min.css" type="text/css" rel="stylesheet"/>
-            <link rel="stylesheet" type="text/css" href="/css/style.css">
           <script>
             window.__INITIAL_STATE__ = ${JSON.stringify(initialState)};
           </script>

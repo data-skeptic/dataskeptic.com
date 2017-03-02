@@ -1,24 +1,61 @@
 
-/*****************************************************************************
- Membership.js
-*****************************************************************************/
-
 .membership-container {
   margin: 0px;
   padding: 25px;
+
 }
 
 .membership-bottom-container {
   text-align: center;
+  position: relative;
 }
 
 .membership-inner {
   border-radius: 5px;
-  border-color: #333;
-  border-width: 1px;
-  border-style: solid;
   min-height: 350px;
-  padding: 5px;
+  padding: 15px 10px;
+
+  border: 1px solid #D7D9D9;
+  box-shadow: 10px 1px 15px rgba(146, 146, 146, 0.1);
+
+  background: #FAFAFA;
+  transition: all 0.3s;
+}
+
+.membership-ds2 .membership-inner {
+  background-color: rgba(218, 187, 58, 0.1)
+}
+.membership-ds3 {
+  transform: scale(1.08);
+}
+.membership-ds3 .membership-inner {
+  background-color: rgba(41, 109, 222, 0.1);
+}
+.membership-ds4 .membership-inner {
+  background-color: rgba(103, 173, 180, 0.1);
+}
+.membership-ds32 {
+  margin-left: 17.3%;
+  transform: scale(1.1);
+}
+.membership-ds32 .membership-inner {
+  background-color: rgba(30, 160, 97, 0.1);
+}
+.membership-ds64 {
+  transform: scale(1.12);
+}
+.membership-ds64 .membership-inner {
+  background-color: rgba(200, 73, 65, 0.1);
+}
+
+.membership-inner:hover {
+  z-index: 5;
+  transform: scale(1.1);
+}
+
+.membership-inner p {
+  margin: 0px;
+  padding: 0px;
 }
 
 .membership-btn {
@@ -26,39 +63,65 @@
   height: 70px;
 }
 
-.per_month {
-  font-weight: normal;
-}
-
-.membership-img {
-  height: 50px;
-}
-
 .membership-title {
   text-align: center;
   font-weight: bold;
+
+  font-size: 26px;
 }
 
 .membership-desc {
   text-align: center;
   padding: 5px;
-  min-height: 100px;
+  min-height: 80px;
 }
 
 .membership-price {
-  font-weight: bold;
-  font-size: 14pt;
-  float: left;
   margin-bottom: 10px;
   width: 100%;
 }
 
-.membership-add {
-  background-color: #a3b2a2;
-  border-radius: 10px;
+.membership-price > span {
+  font-size: 22px;
   font-weight: bold;
+  color: #575959;
+}
+
+.membership-add {
   margin: 0 auto;
+
+  line-height: 48px;
+  background: #F0D943;
+  border-radius: 4px;
+  font-size: 18px;
+  color: #575959;
+  letter-spacing: 0;
+  display: block;
+  height: 48px;
+  text-align: center;
+  text-decoration: none;
+  width: 100%;
+  border: 0px;
 }
 
 .membership-add-paypal {
+  font-weight: bold;
+  margin: 0 auto;
+
+  line-height: 30px;
+  background: #3A85D0;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #ffffff;
+  letter-spacing: 0;
+  display: block;
+  height: 32px;
+  text-align: center;
+  text-decoration: none;
+  width: 100%;
+  border: 0px;
+}
+
+.membership-link {
+  color: #d2bf41;
 }

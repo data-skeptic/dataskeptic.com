@@ -214,11 +214,19 @@
 
 .home-player {
   margin-top: 5px;
-  border-style: solid;
   border-radius: 2px;
-  border-width: 1px;
   padding: 20px 2px 20px 5px;
+
+  background-color: #FFFFFF;
+  border: 1px solid #f1f1f1;
+  box-shadow: 0px 1px 15px rgba(146, 146, 146, 0.1);
+}
+
+.home-episode-card-right {
+  padding: 10px;
   background-color: #eee;
+  border-radius: 5px;
+  text-align: center;
 }
 
 .home-player {
@@ -231,7 +239,9 @@
   height: 25px;
 }
 
-.home-player-link {
+.home-player-link,
+.home-player-link:hover {
+  color: #323333;
   font-size: 11pt;
 }
 
@@ -253,11 +263,4 @@
 }
 
 .home-player-button-container {
-}
-
-.home-episode-card-right {
-  padding: 10px;
-  background-color: #eee;
-  border-radius: 5px;
-  text-align: center;
 }
