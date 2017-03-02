@@ -1,84 +1,67 @@
 import React from 'react';
 
+import { renderField } from '../../Forms/Components/Field/Field';
+
+import { Field } from 'redux-form';
+
 import CountrySelector from '../../Common/Components/CountrySelector';
 
-export const AddressForm = ({ title='Shipping Information', address = {} }) => (
+export const AddressForm = ({ title='Shipping Information' }) => (
     <div className="address-form-container">
         <div className="address-form">
             <div className="shipping-address-title">{title}</div>
 
             <div className="row no-clear">
-                <div className="col-md-6">
-                    <div className="address-label">First name <span className="required">*</span></div>
-                    <div className="">
-                        <input autoFocus={true} type="text" className="address-input first_name" ref="first_name" value={address.first_name} placeholder="John"/>
-                    </div>
-                </div>
 
-                <div className="col-md-6">
-                    <div className="address-label">Last name <span className="required">*</span></div>
-                    <div className="">
-                        <input type="text" className="address-input last_name" ref="last_name" value={address.last_name} placeholder="Smith"/>
-                    </div>
-                </div>
+                <Field fieldWrapperClasses="col-md-6" component={renderField}  autocomplete="false" required
+                       label="First Name" name="first-name" type="text" className="first_name" placeholder="Smith"/>
+
+                <Field fieldWrapperClasses="col-md-6" component={renderField}  autocomplete="false" required
+                       label="Last Name" name="last-name" type="text" className="last_name" placeholder="Smith"/>
+
             </div>
 
             <div className="row no-clear">
-                <div className="col-md-8">
-                    <div className="address-label">Street Address <span className="required">*</span></div>
-                    <div className="">
-                        <input className="address-input street_1" type="text" ref="street_1" value={address.street_1} placeholder="123 Main Street"/>
-                    </div>
-                </div>
-                <div className="col-md-4">
-                    <div className="address-label">Apt, suite, etc.</div>
-                    <div className="">
-                        <input className="address-input street_2" type="text" ref="street_2" value={address.street_2} placeholder="Apt 101"/>
-                    </div>
-                </div>
+
+                <Field fieldWrapperClasses="col-md-8" component={renderField}  autocomplete="false" required
+                       label="Street Address" name="street_1" type="text" className="street_1" placeholder="123 Main Street"/>
+
+                <Field fieldWrapperClasses="col-md-4" component={renderField}  autocomplete="false" required
+                       label="Apt, suite, etc." name="street_2" type="text" className="street_2" placeholder="Apt 101"/>
+
             </div>
 
             <div className="row no-clear">
-                <div className="col-md-12">
-                    <div className="address-label">City / Town <span className="required">*</span></div>
-                    <div className="">
-                        <input className="address-input city" type="text" ref="city" value={address.city} placeholder="Los Angeles"/>
-                    </div>
-                </div>
+
+                <Field fieldWrapperClasses="col-md-12" component={renderField}  autocomplete="false" required
+                       label="City / Town" name="city" type="text" className="city" placeholder="Los Angeles"/>
+
             </div>
 
             <div className="row no-clear">
+
                 <div className="col-md-5">
                     <div className="address-label">Country <span className="required">*</span></div>
                     <div className=""><CountrySelector /></div>
                 </div>
-                <div className="col-md-4">
-                    <div className="address-label">State / Province <span className="required">*</span></div>
-                    <div className="">
-                        <input className="address-input state" type="text" ref="state" value={address.state} />
-                    </div>
-                </div>
-                <div className="col-md-3">
-                    <div className="address-label">Zip Code <span className="required">*</span></div>
-                    <div className="">
-                        <input className="address-input zip" type="text" ref="zip" value={address.zip} placeholder="12345"/>
-                    </div>
-                </div>
+
+                <Field fieldWrapperClasses="col-md-4" component={renderField}  autocomplete="false" required
+                       label="State / Province" name="state" type="text" className="city" placeholder=""/>
+
+                <Field fieldWrapperClasses="col-md-3" component={renderField}  autocomplete="false" required
+                       label="Zip Code" name="zip" type="text" className="zip" placeholder="12345"/>
+
             </div>
 
+
             <div className="row">
-                <div className="col-md-6">
-                    <div className="address-label">Email <span className="required">*</span></div>
-                    <div className="">
-                        <input className="address-input email" type="text" ref="email" value={address.email}  placeholder="j.smith@work.com"/>
-                    </div>
-                </div>
-                <div className="col-md-6">
-                    <div className="address-label">Phone <span className="required">*</span></div>
-                    <div className="">
-                        <input className="address-input phone" type="text" ref="phone" value={address.phone} placeholder="(310) 313 - 3413"/>
-                    </div>
-                </div>
+
+                <Field fieldWrapperClasses="col-md-6" component={renderField}  autocomplete="false" required
+                       label="Email" name="city" type="text" className="email" placeholder="j.smith@work.com"/>
+
+                <Field fieldWrapperClasses="col-md-6" component={renderField}  autocomplete="false" required
+                       label="Phone" name="city" type="text" className="phone" placeholder="(310) 313 - 3413"/>
+
             </div>
 
         </div>

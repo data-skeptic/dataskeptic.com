@@ -2,14 +2,14 @@ import React from 'react';
 import className from 'classnames';
 
 export const renderField = ({
-    input, label, type, textarea, required, meta: { touched, error, warning, invalid,
-    labelWrapperClasses = 'col-xs-12 col-sm-12', inputWrapperStyles = 'col-xs-12 col-sm-12'
-} }) => {
+    input, label, type, textarea, required, meta: { touched, error, warning, invalid },
+    fieldWrapperClasses = '', labelWrapperClasses = '', inputWrapperStyles = ''
+}) => {
     const textareaType = <textarea {...input} placeholder={label}  type={type} className={`form-control ${touched && invalid ? 'has-danger' : ''}`}/>;
     const inputType = <input {...input} placeholder={label}  type={type} className={`form-control ${touched && invalid ? 'has-danger' : ''}`}/>;
 
     return (
-        <div>
+        <div className={fieldWrapperClasses}>
             <div className={labelWrapperClasses}>{label}&nbsp;{required ? <span className="required">*</span> : null}</div>
             <div className={inputWrapperStyles}>
                 {textarea ? textareaType : inputType}
