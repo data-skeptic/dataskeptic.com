@@ -1,0 +1,148 @@
+.site.no-scroll {
+  overflow: hidden;
+}
+
+.header {
+  background-color: #3A3B3B;
+  height: 80px;
+  overflow: hidden;
+}
+
+.header .nav {
+  overflow: hidden;
+  text-align: center;
+}
+
+.header .nav .navlink-li-container {
+  display: block;
+  float: left;
+  margin: 1px 20px 0;
+}
+
+.header .nav :last-child {
+  margin-right: 0 !important;
+}
+
+.header .nav .navlink-li-container a {
+  display: block;
+  padding: 28px 0;
+  list-style: none;
+  text-decoration: none;
+  border-bottom: 2px transparent solid;
+  color: #FFFFFF;
+}
+
+.header .nav .navlink-li-container a:hover {
+  color: #f0e8b4;
+  border-bottom-color: #f0e8b4;
+}
+
+.header .nav .navlink-li-container a.menu-active {
+  color: #F0D943;
+  border-bottom-color: #F0D943;
+}
+
+.header .mainnav {
+  width: 375px;
+  padding-right: 25px;
+  margin-left: auto;
+  margin-right: auto;
+  float: none;
+}
+
+@media (max-width: 880px) {
+  .site {
+    padding-top: 80px;
+  }
+
+  .header {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    z-index: 3;
+  }
+
+  .header .mainnav {
+    padding-right: 0px;
+    padding-right: 25px;
+  }
+
+  .header .nav .navlink-li-container {
+    margin-right: 16px;
+    margin-left: 16px;
+  }
+
+  #logo_desktop {
+    margin-left: 20px !important;
+  }
+}
+
+.header .mobile .collapse-btn,
+.header .mobile .cart {
+  width: 80px;
+  height: 80px;
+}
+
+.header .mobile .logo {
+  width: 90px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 24px;
+}
+
+.header #logo_mobile {
+  margin-left: 12px;
+}
+
+.header .mobile .cart .btn-open-cart-drawer {
+  padding: 31px 30px !important;
+  display: block;
+}
+.header .mobile .menu-collapse button.btn-collapse {
+  position: relative;
+  border: none;
+  width: 80px;
+  height: 80px;
+  padding: 30px;
+  background: transparent;
+}
+
+.header .mobile .menu-collapse button.btn-collapse .icon-container {
+  position: relative;
+  width: 23px;
+  height: 23px;
+  margin-top: 3px;
+}
+
+.header .mobile .menu-collapse button.btn-collapse .icon-bar {
+  display: block;
+  width: 22px;
+  height: 1px;
+  border-radius: 1px;
+  transition: all 0.1s ease;
+  opacity: 1;
+  position: absolute;
+  background-color: #FFFFFF;
+}
+
+.header .mobile .menu-collapse button.btn-collapse .icon-bar-f { top: 0px; }
+.header .mobile .menu-collapse button.btn-collapse .icon-bar-s { top: 6px; }
+.header .mobile .menu-collapse button.btn-collapse .icon-bar-t { top: 13px; }
+
+.header.collapsed .mobile .menu-collapse button.btn-collapse .icon-bar-f { opacity: 0; }
+.header.collapsed .mobile .menu-collapse button.btn-collapse .icon-bar-t {
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  margin-top: -7px;
+}
+.header.collapsed .mobile .menu-collapse button.btn-collapse .icon-bar-s {
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+}

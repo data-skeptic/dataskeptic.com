@@ -1,4 +1,3 @@
-const MIN_NAME_LENGTH = 6;
 const MIN_MESSAGE_LENGTH = 6;
 
 const isEmail = value =>
@@ -10,9 +9,7 @@ export const ContactFormValidator = values => {
     if (!values.name) {
         errors.name = 'Please provide your name.';
     } else {
-        if (values.name.length < MIN_NAME_LENGTH) {
-            errors.name = 'Please write your real name';
-        }
+
     }
 
     if (!values.email) {

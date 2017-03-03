@@ -10,12 +10,12 @@ import xml2js from "xml2js"
 import { calculateShipping, calculateTotal } from '../utils/store_utils'
 import { extractFolders } from '../utils/blog_utils'
 
-import Footer from '../Layout/Components/Footer'
+import Footer from '../Layout/Components/Footer/Footer'
 import Header from './Header'
 import Menu from './Menu'
 import PlayerContainer from '../Player'
 import Sidebar from './Sidebar'
-import Overflow from '../Layout/Components/Overflow'
+import Overflow from '../Layout/Components/Overflow/Overflow'
 
 import { toggleMobileMenu } from '../Layout/Actions/LayoutActions';
 import MobileMenu from '../MobileMenu/Components/MobileMenu'

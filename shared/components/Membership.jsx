@@ -50,15 +50,25 @@ class Membership extends Component {
 					<p>Are you a corporation or group?  Contact <a href="mailto:kyle@dataskeptic.com">kyle@dataskeptic.com</a> regarding opportunties to partner with Data Skeptic.</p>
 					<p>Your membership supports Data Skeptic's ability to continue delivering quality content on a weekly basis and expand into new mediums.  For $1 per episode, your contributions can help us launch more projects and continuously improve the content of the podcast.</p>
 					<p>We have some surprise members only perks planned for 2017.  Sign up now so you don't miss out.  If you'd like, you can play <Link to="/lightsout">lights out</Link> on this site.</p>
+					<div>
+						<h3>Donations</h3>
+						<p>If you prefer to make a one time contribution, you can do so via the Paypal button below.</p>
+						<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+							<input type="hidden" name="cmd" value="_s-xclick" />
+							<input type="hidden" name="hosted_button_id" value="3FNHXLXMGRGFY" />
+							<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!" />
+							<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1" />
+						</form>
+					</div>
 					<h3>Monthly Memberships</h3>
 					<div className="row">
 						{products.map(function(product) {
 							if (product.active == 1 && product.type=="membership" && product.price < 128) {
-								var pid = product.id
+								const pid = product.id;
+								const uid = product.sku.toLowerCase();
 								return (
-									<div key={pid} className="col-xs-12 col-sm-4 membership-container">
+									<div key={pid} className={`col-xs-12 col-sm-4 membership-container membership-${uid}`}>
 										<div className="membership-inner">
-											<img className="membership-img" src={product.img} />
 											<div className="membership-title">{product.title}</div>
 											<div className="membership-desc">{product.desc}</div>
 											<div className="membership-bottom-container">
@@ -79,15 +89,6 @@ class Membership extends Component {
 								)
 							}
 						})}
-					</div>
-					<div>
-						<p>If you prefer to make a one time contribution, you can do so via the Paypal button below.</p>
-						<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-							<input type="hidden" name="cmd" value="_s-xclick" />
-							<input type="hidden" name="hosted_button_id" value="3FNHXLXMGRGFY" />
-							<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!" />
-							<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1" />
-						</form>
 					</div>
 					<div className="clear"></div>
 				</div>
