@@ -7,9 +7,7 @@ export class CheckoutFormContainer extends Component {
 
 	render() {
 		return (
-			<div>
-				<CheckoutForm></CheckoutForm>
-			</div>
+			<CheckoutForm />
 		)
 	}
 }
