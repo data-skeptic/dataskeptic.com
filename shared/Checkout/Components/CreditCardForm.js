@@ -11,25 +11,25 @@ export const CreditCard = ({ title = 'Billing Details' }) => (
         <div className="row">
 
             <Field fieldWrapperClasses="col-md-12" component={renderField}  autocomplete="false" required
-                   label="Credit Card Number" name="card-number" type="text" className="number" placeholder="4242 4242 4242 4242"/>
+                   label="Credit Card Number" name="card_number" type="text" className="number" placeholder="4242 4242 4242 4242"/>
 
         </div>
 
         <div className="row">
 
             <Field fieldWrapperClasses="col-md-5" component={renderField}  autocomplete="false" required
-                   label="Cardholder Name" name="card-name" type="text" className="month" placeholder="02"/>
+                   label="Cardholder Name" name="card_name" type="text" className="month" placeholder="02"/>
 
 
             <Field fieldWrapperClasses="col-md-2" component={renderField}  autocomplete="false" required
-                   label="Month" name="card-month" type="text" className="month" placeholder="19"/>
+                   label="Month" name="card_month" type="text" className="month" placeholder="19"/>
 
 
             <Field fieldWrapperClasses="col-md-2" component={renderField}  autocomplete="false" required
-                   label="Year" name="card-year" type="text" className="year" placeholder="20"/>
+                   label="Year" name="card_year" type="text" className="year" placeholder="20"/>
 
             <Field fieldWrapperClasses="col-md-3" component={renderField}  autocomplete="false" required
-                   label="CVV" name="card-cvv" type="text" className="cvv" placeholder="123"/>
+                   label="CVV" name="card_cvv" type="text" className="cvv" placeholder="123"/>
 
         </div>
     </div>

@@ -14,10 +14,10 @@ export const AddressForm = ({ title='Shipping Information' }) => (
             <div className="row no-clear">
 
                 <Field fieldWrapperClasses="col-md-6" component={renderField}  autocomplete="false" required
-                       label="First Name" name="first-name" type="text" className="first_name" placeholder="Smith"/>
+                       label="First Name" name="first_name" type="text" className="first_name" placeholder="Smith"/>
 
                 <Field fieldWrapperClasses="col-md-6" component={renderField}  autocomplete="false" required
-                       label="Last Name" name="last-name" type="text" className="last_name" placeholder="Smith"/>
+                       label="Last Name" name="last_name" type="text" className="last_name" placeholder="Smith"/>
 
             </div>
 
@@ -26,7 +26,7 @@ export const AddressForm = ({ title='Shipping Information' }) => (
                 <Field fieldWrapperClasses="col-md-8" component={renderField}  autocomplete="false" required
                        label="Street Address" name="street_1" type="text" className="street_1" placeholder="123 Main Street"/>
 
-                <Field fieldWrapperClasses="col-md-4" component={renderField}  autocomplete="false" required
+                <Field fieldWrapperClasses="col-md-4" component={renderField}  autocomplete="false"
                        label="Apt, suite, etc." name="street_2" type="text" className="street_2" placeholder="Apt 101"/>
 
             </div>
