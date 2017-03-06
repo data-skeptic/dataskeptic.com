@@ -100,7 +100,7 @@ var doRefresh = function() {
   loadEpisodes(env, feed_uri, my_cache, aws)
 }
 
-setInterval(doRefresh, 5 * 60 * 1000)
+setInterval(doRefresh, 60 * 60 * 1000)
 
 doRefresh()
 
@@ -145,6 +145,10 @@ function api_router(req, res) {
     var req = req.body
     join_slack(req, res, slack_key)
     return true
+  }
+  if (req.url.indexOf('/api/refresh') == 0) {
+    doRefresh()
+    return res.status(200).end(JSON.stringify({'status': 'ok'}))
   }
   else if (req.url.indexOf('/api/email/send') == 0) {
     send_email(req, res)

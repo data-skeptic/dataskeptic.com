@@ -6,6 +6,7 @@ import { reduxReactRouter, routerStateReducer, ReduxRouter } from 'redux-react-r
 import createBrowserHistory                                  from 'history/lib/createBrowserHistory';
 import configureStore                                        from './store';
 
+import Advertising             from 'components/Advertising';
 import App                     from 'components/index';
 import BlogContainer           from 'Blog/Containers/BlogContainer';
 import BlogArticle             from 'Blog/Containers/BlogArticle';
@@ -48,6 +49,9 @@ function onUpdate() {
 
 export default (
 	<Router onUpdate={onUpdate}>
+		<Route path="/advertising" name="app" component={App} onEnter={loadData}>
+			<IndexRoute component={Advertising}/>
+		</Route>
 		<Route path="/blog(/:pageNum)" component={App} onEnter={loadData}>
 			<IndexRoute component={BlogContainer}/>
 		</Route>
