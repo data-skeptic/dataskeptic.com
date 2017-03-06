@@ -1,5 +1,7 @@
 import isEmpty from 'lodash/isEmpty';
 
+import { cvv, cardMonth, cardYear, phone } from '../../../Forms/Validators';
+
 const defaultValues = {
     // address
     first_name: '',
@@ -74,6 +76,10 @@ export const CheckoutFormValidator = (values) => {
 
     if (isEmpty(values.card_cvv)) {
         errors.card_cvv = 'Please provide Card CVV';
+    } else {
+        if (!cvv(values.card_cvv)) {
+            errors.card_cvv = 'Invalid CVV format';
+        }
     }
 
     return errors;
