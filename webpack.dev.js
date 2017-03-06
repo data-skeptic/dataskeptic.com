@@ -41,7 +41,11 @@ export default function(app) {
           exclude: /node_modules/,
           loader:  'babel',
           query:   BABEL_QUERY
-        }
+        },
+        {
+            test: /\.less$/,
+            loader: "style!css!less?strictMath&noIeCompat"
+        },
       ]
     },
     plugins: [
