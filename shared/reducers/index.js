@@ -1,6 +1,6 @@
 export { default as blogs } from '../Blog/Reducers/BlogsReducer';
 export { default as cart } from '../Cart/Reducers/CartReducer';
-export { default as episodes } from './EpisodesReducer';
+export { default as episodes } from '../Podcasts/Reducers/EpisodesReducer';
 export { default as products } from './ProductsReducer';
 export { default as player } from '../Player/Reducers/PlayerReducer';
 export { default as contributors } from '../Contributors/Reducers/ContributorsReducer';

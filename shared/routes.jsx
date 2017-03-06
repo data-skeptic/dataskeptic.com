@@ -7,7 +7,7 @@ import createBrowserHistory                                  from 'history/lib/c
 import configureStore                                        from './store';
 
 import App                     from 'components/index';
-import BlogContainer           from 'Blog/Containers/BlogContainer';
+import BlogContainer           from 'Blog/Routes/BlogContainer';
 import BlogArticle             from 'Blog/Containers/BlogArticle';
 import BlogRouter              from 'Blog/Routes/BlogRouter';
 import Checkout                from 'components/Checkout';
@@ -20,7 +20,7 @@ import LightsOut               from 'components/LightsOut';
 import Menu                    from 'components/Menu';
 import Membership              from 'components/Membership';
 import NotFound                from 'NotFound/Components/NotFound';
-import Podcast                 from 'components/Podcast';
+import Podcast                 from 'Podcasts/Routes/Podcast';
 import Press                   from 'components/Press';
 import Projects                from 'components/Projects';
 import Services                from 'components/Services';
