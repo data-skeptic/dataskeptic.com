@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 
 import Loading from '../../../Common/Components/Loading'
 import Error from '../../../Common/Components/Error'
-import CreditCardForm2 from '../../Components/CreditCardForm2'
+// TODO implement credit card form container!!!
+import CreditCardForm from '../../Components/CreditCardForm'
 
 import {get_invoice} from '../../../utils/redux_loader'
 
@@ -70,7 +71,7 @@ class Invoice extends Component {
 					</div>
 				</div>
 
-				<CreditCardForm2 invoice_id={id} total={invoice.total} />
+				<CreditCardForm invoice_id={id} total={invoice.total} />
 
 				<div><p> &nbsp; </p></div>
 				<div><p> &nbsp; </p></div>

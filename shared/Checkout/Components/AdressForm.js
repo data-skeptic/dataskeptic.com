@@ -57,10 +57,10 @@ export const AddressForm = ({ title='Shipping Information' }) => (
             <div className="row">
 
                 <Field fieldWrapperClasses="col-md-6" component={renderField}  autocomplete="false" required
-                       label="Email" name="city" type="text" className="email" placeholder="j.smith@work.com"/>
+                       label="Email" name="email" type="text" className="email" placeholder="j.smith@work.com"/>
 
                 <Field fieldWrapperClasses="col-md-6" component={renderField}  autocomplete="false" required
-                       label="Phone" name="city" type="text" className="phone" placeholder="(310) 313 - 3413"/>
+                       label="Phone" name="phone" type="text" className="phone" placeholder="(310) 313 - 3413"/>
 
             </div>
 

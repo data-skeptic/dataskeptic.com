@@ -5,11 +5,22 @@ import CheckoutForm from '../Components/CheckoutForm';
 
 export class CheckoutFormContainer extends Component {
 
-	render() {
-		return (
-			<CheckoutForm />
-		)
-	}
+    constructor() {
+        super();
+
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleSubmit(data) {
+    	console.dir(data);
+     	debugger;
+    }
+
+    render() {
+        return (
+			<CheckoutForm onSubmit={this.handleSubmit}/>
+        );
+    }
 }
 
 export default CheckoutFormContainer;
