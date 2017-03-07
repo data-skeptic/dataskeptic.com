@@ -1,6 +1,6 @@
 import isEmpty from 'lodash/isEmpty';
 
-import { cvv, cardMonth, cardYear, cardNumber, phone } from '../../../Forms/Validators';
+import { cvv, cardMonth, cardYear, cardNumber, phone, email } from '../../../Forms/Validators';
 
 const defaultValues = {
     // address
@@ -51,10 +51,18 @@ export const CheckoutFormValidator = (values) => {
 
     if (isEmpty(values.email)) {
         errors.email = 'Please provide Email';
+    } else {
+        if (!email(values.email)) {
+            errors.email = 'Invalid email';
+        }
     }
 
     if (isEmpty(values.phone)) {
         errors.phone = 'Please provide Phone Number';
+    } else {
+        if (!phone(values.phone)) {
+            errors.phone = 'Invalid Phone Number';
+        }
     }
 
     // card
@@ -62,7 +70,7 @@ export const CheckoutFormValidator = (values) => {
         errors.card_number = 'Please provide Card Number';
     } else {
         if (!cardNumber(values.card_number)) {
-            errors.card_number = 'Invalid Card Number'
+            errors.card_number = 'Invalid Card Number';
         }
     }
 

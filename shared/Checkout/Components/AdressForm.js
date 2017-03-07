@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { renderField } from '../../Forms/Components/Field/Field';
-
+import { phone } from '../../Forms/Normalizers';
 import { Field } from 'redux-form';
 
 import CountrySelector from '../../Common/Components/CountrySelector';
@@ -14,7 +14,7 @@ export const AddressForm = ({ title='Shipping Information' }) => (
             <div className="row no-clear">
 
                 <Field fieldWrapperClasses="col-md-6" component={renderField}  autocomplete="false" required
-                       label="First Name" name="first_name" type="text" className="first_name" placeholder="Smith"/>
+                       label="First Name" name="first_name" type="text" className="first_name" placeholder="John"/>
 
                 <Field fieldWrapperClasses="col-md-6" component={renderField}  autocomplete="false" required
                        label="Last Name" name="last_name" type="text" className="last_name" placeholder="Smith"/>
@@ -48,19 +48,26 @@ export const AddressForm = ({ title='Shipping Information' }) => (
                 <Field fieldWrapperClasses="col-md-4" component={renderField}  autocomplete="false" required
                        label="State / Province" name="state" type="text" className="city" placeholder=""/>
 
-                <Field fieldWrapperClasses="col-md-3" component={renderField}  autocomplete="false" required
-                       label="Zip Code" name="zip" type="text" className="zip" placeholder="12345"/>
+                <Field fieldWrapperClasses="col-md-3" autocomplete="false" required
+                       label="Zip Code" name="zip" type="text" className="zip" placeholder="12345"
+                       component={renderField}
+                />
 
             </div>
 
 
             <div className="row">
 
-                <Field fieldWrapperClasses="col-md-6" component={renderField}  autocomplete="false" required
-                       label="Email" name="email" type="text" className="email" placeholder="j.smith@work.com"/>
+                <Field fieldWrapperClasses="col-md-6" autocomplete="false" required
+                       label="Email" name="email" type="text" className="email" placeholder="j.smith@work.com"
+                       component={renderField}
+                />
 
-                <Field fieldWrapperClasses="col-md-6" component={renderField}  autocomplete="false" required
-                       label="Phone" name="phone" type="text" className="phone" placeholder="(310) 313 - 3413"/>
+                <Field fieldWrapperClasses="col-md-6" autocomplete="false" required
+                       label="Phone" name="phone" type="text" className="phone" placeholder="(310) 313 - 3413"
+                       component={renderField}
+                       normalize={phone}
+                />
 
             </div>
 

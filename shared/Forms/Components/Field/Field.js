@@ -2,11 +2,11 @@ import React from 'react';
 import className from 'classnames';
 
 export const renderField = ({
-    input, label, type, textarea, required, meta: { touched, error, warning, invalid },
+    input, label, type, textarea, placeholder, required, meta: { touched, error, warning, invalid },
     fieldWrapperClasses = '', labelWrapperClasses = '', inputWrapperStyles = ''
 }) => {
-    const textareaType = <textarea {...input} placeholder={label}  type={type} className={`${inputWrapperStyles} ${touched && invalid ? 'has-danger' : ''}`}/>;
-    const inputType = <input {...input} placeholder={label}  type={type} className={`${touched && invalid ? 'has-danger' : ''}`}/>;
+    const textareaType = <textarea {...input} placeholder={placeholder}  type={type} className={`${inputWrapperStyles} ${touched && invalid ? 'has-danger' : ''}`}/>;
+    const inputType = <input {...input} placeholder={placeholder}  type={type} className={`${touched && invalid ? 'has-danger' : ''}`}/>;
 
     return (
         <div className={`field-container ${fieldWrapperClasses}`}>
