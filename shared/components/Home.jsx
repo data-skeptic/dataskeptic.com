@@ -4,7 +4,7 @@ import { connect }            from 'react-redux';
 
 import Slider from "react-slick"
 
-import Episode from "./Episode"
+import Episode from "../Podcasts/Components/Episode"
 import MailingList from "../Common/Components/MailingList"
 import SocialMediaCard from "./SocialMediaCard"
 import AdvertiserCard from "./AdvertiserCard"
