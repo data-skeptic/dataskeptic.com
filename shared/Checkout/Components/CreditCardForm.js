@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {renderField} from '../../Forms/Components/Field/Field';
-import {cardNumber} from '../../Forms/Normalizers';
+import {cardNumber, cardMonth, cardYear, cvv} from '../../Forms/Normalizers';
 import {Field} from 'redux-form';
 
 export const CreditCard = ({title = 'Billing Details'}) => (
@@ -28,16 +28,23 @@ export const CreditCard = ({title = 'Billing Details'}) => (
                    required
             />
 
+            <Field fieldWrapperClasses="col-md-2" autocomplete="false" required
+                   label="Month" name="card_month" type="text" className="month" placeholder="19"
+                   component={renderField}
+                   normalize={cardMonth}
+            />
 
-            <Field fieldWrapperClasses="col-md-2" component={renderField} autocomplete="false" required
-                   label="Month" name="card_month" type="text" className="month" placeholder="19"/>
+            <Field fieldWrapperClasses="col-md-2" autocomplete="false" required
+                   label="Year" name="card_year" type="text" className="year" placeholder="20"
+                   component={renderField}
+                   normalize={cardYear}
+            />
 
-
-            <Field fieldWrapperClasses="col-md-2" component={renderField} autocomplete="false" required
-                   label="Year" name="card_year" type="text" className="year" placeholder="20"/>
-
-            <Field fieldWrapperClasses="col-md-3" component={renderField} autocomplete="false" required
-                   label="CVV" name="card_cvv" type="text" className="cvv" placeholder="123"/>
+            <Field fieldWrapperClasses="col-md-3" autocomplete="false" required
+                   label="CVV" name="card_cvv" type="text" className="cvv" placeholder="123"
+                   component={renderField}
+                   normalize={cvv}
+            />
 
         </div>
     </div>

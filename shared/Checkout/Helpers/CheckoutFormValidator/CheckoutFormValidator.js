@@ -73,7 +73,7 @@ export const CheckoutFormValidator = (values) => {
     if (isEmpty(values.card_month)) {
         errors.card_month = 'Please provide Expiration Month';
     } else {
-        if(!cardMonth(value.card_month)) {
+        if(!cardMonth(values.card_month)) {
             errors.card_month = 'Invalid month';
         }
     }
@@ -81,7 +81,7 @@ export const CheckoutFormValidator = (values) => {
     if (isEmpty(values.card_year)) {
         errors.card_year = 'Please provide Expiration Year';
     } else {
-        if(!cardYear(value.card_year)) {
+        if(!cardYear(values.card_year)) {
             errors.card_year = 'Invalid Year';
         }
     }
