@@ -1,7 +1,10 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, {Component} from 'react'
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux'
 
 import CheckoutForm from '../Components/CheckoutForm';
+
+import {checkout} from '../Actions/CheckoutActions';
 
 export class CheckoutFormContainer extends Component {
 
@@ -12,32 +15,33 @@ export class CheckoutFormContainer extends Component {
     }
 
     handleSubmit(data) {
-        // {
-        //     "first_name":"name",
-        //     "last_name":"last",
-        //     "street_1":"street",
-        //     "street_2":"apt",
-        //     "city":"city",
-        //     "state":"state",
-        //     "zip":"123123",
-        //     "email":"test@mail.com",
-        //     "phone":"(310) 123 - 1231",
-        //     "card_number":"4242 4242 4244 2422",
-        //     "card_name":"123123",
-        //     "card_month":"12",
-        //     "card_year":"1990",
-        //     "card_cvv":"123"
-        // }
+        data.country = this.props.country;
+        data.total = this.props.total;
+        data.shipping = this.props.shipping;
+        data.products = this.props.products;
 
-    	console.dir(data);
-     	debugger;
+        this.props.checkout(data);
     }
 
     render() {
+        const {error, processing} = this.props;
+
         return (
-			<CheckoutForm onSubmit={this.handleSubmit}/>
+            <CheckoutForm onSubmit={this.handleSubmit} customError={error} submitting={processing}/>
         );
     }
 }
 
-export default CheckoutFormContainer;
+export default connect(
+    (state) => ({
+        error: state.checkout.getIn(['error']),
+        processing: state.checkout.getIn(['processing']),
+        country: state.cart.getIn(['country_short']) || 'us',
+        shipping: state.cart.getIn(['shipping']),
+        total: state.cart.getIn(['total']),
+        products: state.cart.getIn(['cart_items'])
+    }),
+    (dispatch) => bindActionCreators({
+        checkout
+    }, dispatch)
+)(CheckoutFormContainer);

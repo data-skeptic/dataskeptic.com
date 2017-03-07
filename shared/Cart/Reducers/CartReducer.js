@@ -352,6 +352,7 @@ export default function CartReducer(state = defaultState, action) {
       nstate = validate_address(nstate)
       if (!nstate.invalid_submit) {
         nstate.submitDisabled = true
+        // todo: investigate checkout process
         nstate = get_token(nstate, event, dispatch)
       } else {
         console.log("invalid")

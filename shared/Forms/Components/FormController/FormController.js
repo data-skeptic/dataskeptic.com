@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 
-export const FormController = ({ name, children, handleSubmit, submitSucceeded, submitting, pristine, invalid, submitValue, btnWrapperClasses='col-xs-12 col-sm-12' }) => (
-    <form className={`form ${name}-form row`} onSubmit={handleSubmit} autocomplete="false">
+export const FormController = ({ name, children, handleSubmit, submitSucceeded, submitting, pristine, invalid, submitValue, btnWrapperClasses='col-xs-12 col-sm-12', customError }) => (
+    <form className={`form ${name}-form row`} onSubmit={handleSubmit} autoComplete="false">
         {children}
 
         { !submitSucceeded && !submitting ?
@@ -11,6 +11,10 @@ export const FormController = ({ name, children, handleSubmit, submitSucceeded, 
                 </button>
             </div>
         : null}
+
+        <div className="col-md-12">
+            { customError ? <p className="error-message">{customError}</p> : null }
+        </div>
     </form>
 );
 
@@ -22,6 +26,7 @@ FormController.propTypes = {
     submitting: PropTypes.bool,
     pristine: PropTypes.bool,
     invalid: PropTypes.bool,
+    customError: PropTypes.string,
     submitValue: PropTypes.node
 };
 
