@@ -13,7 +13,7 @@ import FormController from '../../../Forms/Components/FormController/FormControl
 import { renderField } from '../../../Forms/Components/Field/Field';
 
 const Form = ({ handleSubmit, pristine, reset, submitting, invalid, submitSucceeded, submitFailed }) => (
-    <FormController name="contacts" handleSubmit={handleSubmit} submitValue="Send">
+    <FormController name="contacts" handleSubmit={handleSubmit} submitValue={<span>Submit</span>}>
         <div className="col-xs-12 col-md-12"><h2>Contact Us</h2></div>
 
         <Field label="Name" component={renderField} name="name" type="text" className="contact-name" placeholder="John Smith" autocomplete="false" labelWrapperClasses='col-xs-12 col-sm-12' inputWrapperStyles='col-xs-12 col-sm-12' required/>

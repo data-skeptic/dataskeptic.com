@@ -6,6 +6,7 @@ const carRegex = /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][‌
  * @return {boolean} valid state
  */
 export const CardNumberValidator = (number='') => {
+    number = number.replace(/\s/g, ''); // replace empty spaces
     return number.match(carRegex) !== null;
 };
 

@@ -6,7 +6,9 @@ export const FormController = ({ name, children, handleSubmit, submitSucceeded, 
 
         { !submitSucceeded && !submitting ?
             <div className={btnWrapperClasses}>
-                <button className="btn contact-send" type="submit" disabled={(pristine || invalid) || submitting} >{submitValue}</button>
+                <button className="btn contact-send" type="submit" disabled={(pristine || invalid) || submitting} >
+                    {submitValue}
+                </button>
             </div>
         : null}
     </form>
@@ -20,7 +22,7 @@ FormController.propTypes = {
     submitting: PropTypes.bool,
     pristine: PropTypes.bool,
     invalid: PropTypes.bool,
-    submitValue: PropTypes.string.required
+    submitValue: PropTypes.node
 };
 
 export default FormController;

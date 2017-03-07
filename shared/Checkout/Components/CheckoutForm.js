@@ -10,7 +10,10 @@ import CheckoutFormValidator from '../Helpers/CheckoutFormValidator/CheckoutForm
 import FormController from '../../Forms/Components/FormController/FormController';
 
 const Form = ({ handleSubmit, pristine, reset, submitting, invalid, submitSucceeded, submitFailed }) => (
-    <FormController name="address-credit" handleSubmit={handleSubmit} submitValue="Checkout">
+    <FormController
+        name="address-credit"
+        handleSubmit={handleSubmit}
+        submitValue={<span><i className="glyphicon glyphicon-lock"> </i> Checkout</span>}>
         <div className="col-xs-12 col-sm-12"><AddressForm /></div>
         <div className="col-xs-12 col-sm-12"><CreditCardForm /></div>
     </FormController>

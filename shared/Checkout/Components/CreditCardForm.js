@@ -1,34 +1,42 @@
 import React from 'react';
 
-import { renderField } from '../../Forms/Components/Field/Field';
+import {renderField} from '../../Forms/Components/Field/Field';
+import {cardNumber} from '../../Forms/Normalizers';
+import {Field} from 'redux-form';
 
-import { Field } from 'redux-form';
-
-export const CreditCard = ({ title = 'Billing Details' }) => (
+export const CreditCard = ({title = 'Billing Details'}) => (
     <div className="credit-cart-form-container">
         <div className="shipping-address-title">{title}</div>
 
         <div className="row">
 
-            <Field fieldWrapperClasses="col-md-12" component={renderField}  autocomplete="false" required
-                   label="Credit Card Number" name="card_number" type="text" className="number" placeholder="4242 4242 4242 4242"/>
+            <Field fieldWrapperClasses="col-md-12" autocomplete="false"
+                   label="Credit Card Number" name="card_number" type="text" className="number"
+                   placeholder="4242 4242 4242 4242"
+                   component={renderField}
+                   normalize={cardNumber}
+                   required
+            />
 
         </div>
 
         <div className="row">
 
-            <Field fieldWrapperClasses="col-md-5" component={renderField}  autocomplete="false" required
-                   label="Cardholder Name" name="card_name" type="text" className="month" placeholder="02"/>
+            <Field fieldWrapperClasses="col-md-5" autocomplete="false"
+                   label="Cardholder Name" name="card_name" type="text" className="month" placeholder="02"
+                   component={renderField}
+                   required
+            />
 
 
-            <Field fieldWrapperClasses="col-md-2" component={renderField}  autocomplete="false" required
+            <Field fieldWrapperClasses="col-md-2" component={renderField} autocomplete="false" required
                    label="Month" name="card_month" type="text" className="month" placeholder="19"/>
 
 
-            <Field fieldWrapperClasses="col-md-2" component={renderField}  autocomplete="false" required
+            <Field fieldWrapperClasses="col-md-2" component={renderField} autocomplete="false" required
                    label="Year" name="card_year" type="text" className="year" placeholder="20"/>
 
-            <Field fieldWrapperClasses="col-md-3" component={renderField}  autocomplete="false" required
+            <Field fieldWrapperClasses="col-md-3" component={renderField} autocomplete="false" required
                    label="CVV" name="card_cvv" type="text" className="cvv" placeholder="123"/>
 
         </div>

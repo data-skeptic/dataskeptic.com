@@ -1,3 +1,2 @@
-/**
- * Created by lozhk on 3/6/17.
- */
+export { default as phone } from './PhoneNumberNormalizer/PhoneNumberNormalizer';
+export { default as cardNumber } from './CardNumberNormalizer/CardNumberNormalizer';
