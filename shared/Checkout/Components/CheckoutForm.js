@@ -13,7 +13,8 @@ const Form = ({ handleSubmit, pristine, reset, submitting, invalid, submitSuccee
     <FormController
         name="address-credit"
         handleSubmit={handleSubmit}
-        submitValue={<span><i className="glyphicon glyphicon-lock"> </i> Checkout</span>}>
+        btnWrapperClasses='col-xs-12 col-md-6 complete-btn'
+        submitValue={<span><i className="glyphicon glyphicon-lock"> </i> Complete Order</span>}>
         <div className="col-xs-12 col-sm-12"><AddressForm /></div>
         <div className="col-xs-12 col-sm-12"><CreditCardForm /></div>
     </FormController>

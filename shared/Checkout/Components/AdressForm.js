@@ -41,8 +41,8 @@ export const AddressForm = ({ title='Shipping Information' }) => (
             <div className="row no-clear">
 
                 <div className="col-md-5">
-                    <div className="address-label">Country <span className="required">*</span></div>
-                    <div className=""><CountrySelector /></div>
+                    <div className="field-label">Country <span className="required">*</span></div>
+                    <div className="field-input"><CountrySelector /></div>
                 </div>
 
                 <Field fieldWrapperClasses="col-md-4" component={renderField}  autocomplete="false" required

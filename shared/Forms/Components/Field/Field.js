@@ -3,10 +3,10 @@ import className from 'classnames';
 
 export const renderField = ({
     input, label, type, textarea, required, meta: { touched, error, warning, invalid },
-    fieldWrapperClasses = '', labelWrapperClasses = '', inputWrapperStyles = ''
+    fieldWrapperClasses = 'field-container', labelWrapperClasses = 'field-label', inputWrapperStyles = 'field-input'
 }) => {
-    const textareaType = <textarea {...input} placeholder={label}  type={type} className={`form-control ${touched && invalid ? 'has-danger' : ''}`}/>;
-    const inputType = <input {...input} placeholder={label}  type={type} className={`form-control ${touched && invalid ? 'has-danger' : ''}`}/>;
+    const textareaType = <textarea {...input} placeholder={label}  type={type} className={`${inputWrapperStyles} ${touched && invalid ? 'has-danger' : ''}`}/>;
+    const inputType = <input {...input} placeholder={label}  type={type} className={`${inputWrapperStyles} ${touched && invalid ? 'has-danger' : ''}`}/>;
 
     return (
         <div className={fieldWrapperClasses}>
