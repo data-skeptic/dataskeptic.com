@@ -3,15 +3,15 @@ import className from 'classnames';
 
 export const renderField = ({
     input, label, type, textarea, required, meta: { touched, error, warning, invalid },
-    fieldWrapperClasses = 'field-container', labelWrapperClasses = 'field-label', inputWrapperStyles = 'field-input'
+    fieldWrapperClasses = '', labelWrapperClasses = '', inputWrapperStyles = ''
 }) => {
     const textareaType = <textarea {...input} placeholder={label}  type={type} className={`${inputWrapperStyles} ${touched && invalid ? 'has-danger' : ''}`}/>;
-    const inputType = <input {...input} placeholder={label}  type={type} className={`${inputWrapperStyles} ${touched && invalid ? 'has-danger' : ''}`}/>;
+    const inputType = <input {...input} placeholder={label}  type={type} className={`${touched && invalid ? 'has-danger' : ''}`}/>;
 
     return (
-        <div className={fieldWrapperClasses}>
-            <div className={labelWrapperClasses}>{label}&nbsp;{required ? <span className="required">*</span> : null}</div>
-            <div className={inputWrapperStyles}>
+        <div className={`field-container ${fieldWrapperClasses}`}>
+            <div className={`field-label ${labelWrapperClasses}`}>{label}&nbsp;{required ? <span className="required">*</span> : null}</div>
+            <div className={`field-input ${inputWrapperStyles}`}>
                 {textarea ? textareaType : inputType}
 
                 <p className="error-message">{touched && ((error && <span>{error}</span>) || (warning && <span>{warning}</span>))}</p>
