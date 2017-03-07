@@ -1,6 +1,6 @@
 import isEmpty from 'lodash/isEmpty';
 
-import { cvv, cardMonth, cardYear, cardNumber, phone, email } from '../../../Forms/Validators';
+import { cvv, cardMonth, cardYear, cardNumber, phone, email, numbers } from '../../../Forms/Validators';
 
 const defaultValues = {
     // address
@@ -47,6 +47,10 @@ export const CheckoutFormValidator = (values) => {
 
     if (isEmpty(values.zip)) {
         errors.zip = 'Please provide Zip Code';
+    } else {
+        if (!numbers(values.zip)) {
+            errors.zip = 'Invalid Zip Code'
+        }
     }
 
     if (isEmpty(values.email)) {
