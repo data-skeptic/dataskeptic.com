@@ -12,9 +12,10 @@ export function checkout(data) {
         dispatch(checkoutRequestStart(data));
 
         const prod = getState().cart.prod;
-        const key = (prod) ? 'pk_live_JcvvQ05E9jgvtPjONUQdCqYg' : 'pk_test_oYGXSwgw9Jde2TOg7vZtCRGo';
+        // const key = (prod) ? 'pk_live_JcvvQ05E9jgvtPjONUQdCqYg' : 'pk_test_oYGXSwgw9Jde2TOg7vZtCRGo';
+        const key = 'pk_test_oYGXSwgw9Jde2TOg7vZtCRGo';
 
-        Stripe.setPublishableKey(key)
+        Stripe.setPublishableKey(key);
 
         const cardData = {
             number: data.card_number,
@@ -95,8 +96,23 @@ export function checkoutMakeOrder(data, token, prod) {
     return axios
         .post("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/order", order)
         .then(function(resp) {
-            return resp.data;
-        })
+            debugger;
+            const result = resp.data;
+            let paymentComplete = false;
+            let paymentError = '';
+            if (result.msg !== 'ok') {
+                paymentComplete = false
+                paymentError = result.msg || result.errorMessage || "";
+            } else {
+                paymentComplete = true
+            }
+
+            if (paymentComplete) {
+                return result;
+            } else {
+                return new Error(paymentError);
+            }
+        });
 }
 
 

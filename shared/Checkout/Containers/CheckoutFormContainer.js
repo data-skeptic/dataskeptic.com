@@ -20,6 +20,7 @@ export class CheckoutFormContainer extends Component {
         data.shipping = this.props.shipping;
         data.products = this.props.products;
 
+        console.dir(JSON.stringify(data));
         this.props.checkout(data);
     }
 
@@ -27,7 +28,7 @@ export class CheckoutFormContainer extends Component {
         const {error, processing} = this.props;
 
         return (
-            <CheckoutForm onSubmit={this.handleSubmit} customError={error} submitting={processing}/>
+            <CheckoutForm onSubmit={this.handleSubmit} customError={error} customSubmitting={processing}/>
         );
     }
 }
