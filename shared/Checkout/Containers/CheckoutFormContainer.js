@@ -6,6 +6,8 @@ import CheckoutForm from '../Components/CheckoutForm';
 
 import {checkout} from '../Actions/CheckoutActions';
 
+import Loading from "../../Common/Components/Loading";
+
 export class CheckoutFormContainer extends Component {
 
     constructor() {

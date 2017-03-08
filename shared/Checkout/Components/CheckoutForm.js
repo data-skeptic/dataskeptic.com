@@ -14,7 +14,7 @@ const Form = ({ handleSubmit, pristine, reset, submitting, customSubmitting, inv
         name="address-credit"
         handleSubmit={handleSubmit}
         btnWrapperClasses='col-xs-12 col-md-6 complete-btn'
-        submitValue={<span><i className="glyphicon glyphicon-lock"> </i> Complete Order</span>}
+        submitValue={ customSubmitting ? <span><img src="/img/spinner.gif" width="15"/> Processing order...</span> :  <span><i className="glyphicon glyphicon-lock"> </i>&nbsp;Complete Order</span> }
         customError={customError}
         customSubmitting={customSubmitting}
     >

@@ -32,7 +32,7 @@ export function checkout(data) {
 
                 checkoutMakeOrder(data, token, prod)
                     .then((data) => dispatch(checkoutRequestSuccess(data)))
-                    .catch((err) => dispatch(checkoutRequestFailed(err)));
+                    .catch(({message}) => dispatch(checkoutRequestFailed(message)));
             }
         })
     }
@@ -110,7 +110,7 @@ export function checkoutMakeOrder(data, token, prod) {
             if (paymentComplete) {
                 return result;
             } else {
-                return new Error(paymentError);
+                throw new Error(paymentError);
             }
         });
 }

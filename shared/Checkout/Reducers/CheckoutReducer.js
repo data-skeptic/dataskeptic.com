@@ -25,7 +25,7 @@ export default function CheckoutReducer(state=initialState, action) {
         case CHECKOUT_REQUEST_FAILED:
             debugger;
             nstate.error = action.payload.error;
-            nstate.processing = true;
+            nstate.processing = false;
             break;
 
         default:
