@@ -9,12 +9,13 @@ import CheckoutFormValidator from '../Helpers/CheckoutFormValidator/CheckoutForm
 
 import FormController from '../../Forms/Components/FormController/FormController';
 
-const Form = ({ handleSubmit, pristine, reset, submitting, customSubmitting, invalid, submitSucceeded, submitFailed, customError }) => (
+const Form = ({ handleSubmit, pristine, reset, submitting, customSubmitting, invalid, submitSucceeded, submitFailed, customSuccess, customError }) => (
     <FormController
         name="address-credit"
         handleSubmit={handleSubmit}
         btnWrapperClasses='col-xs-12 col-md-6 complete-btn'
         submitValue={ customSubmitting ? <span><img src="/img/spinner.gif" width="15"/> Processing order...</span> :  <span><i className="glyphicon glyphicon-lock"> </i>&nbsp;Complete Order</span> }
+        customSuccess={customSuccess}
         customError={customError}
         customSubmitting={customSubmitting}
     >
@@ -25,41 +26,7 @@ const Form = ({ handleSubmit, pristine, reset, submitting, customSubmitting, inv
 
 const CheckoutForm = reduxForm({
     form: 'checkout',
-    validate: CheckoutFormValidator,
-    initialValues: {
-        "first_name": "Jonh",
-        "last_name": "Smith",
-        "street_1": "123 Sttreet",
-        "street_2": "Apt",
-        "city": "Los Angeles",
-        "state": "state",
-        "zip": "12345",
-        "phone": "(310) 312 - 3123",
-        "card_number": "4242424242424242",
-        "email": "1@mail.ru",
-        "card_name": "cardholder",
-        "card_month": "12",
-        "card_year": "2017",
-        "card_cvv": "123",
-        "country": "us",
-        "total": 3,
-        "shipping": 1,
-        "products": [
-            {
-                "product": {
-                    "img": "/img/jpg/button-0.jpg",
-                    "title": "1/2 inch pin",
-                    "price": 2,
-                    "active": 1,
-                    "type": "misc",
-                    "id": "5",
-                    "desc": "One inch pins allow you to proudly show off your Data Skeptic affiliation on your hoodie, backpack, or sombrero."
-                },
-                "size": "",
-                "quantity": 1
-            }
-        ]
-    }
+    validate: CheckoutFormValidator
 })(Form);
 
 export default CheckoutForm;

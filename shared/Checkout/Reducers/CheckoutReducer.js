@@ -16,14 +16,15 @@ export default function CheckoutReducer(state=initialState, action) {
     switch (action.type) {
         case CHECKOUT_REQUEST_START:
             nstate.error = '';
+            nstate.success = '';
             nstate.processing = true;
             break;
         case CHECKOUT_REQUEST_SUCCESS:
-            debugger;
+            nstate.success = 'Checkout completed! Thanks.';
             nstate.processing = false;
             break;
         case CHECKOUT_REQUEST_FAILED:
-            debugger;
+            nstate.success = '';
             nstate.error = action.payload.error;
             nstate.processing = false;
             break;

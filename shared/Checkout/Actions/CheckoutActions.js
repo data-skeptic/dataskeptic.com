@@ -1,19 +1,25 @@
 import axios from 'axios';
 
+import {clearCart} from '../../Cart/Actions/CartActions';
+
 export const CHECKOUT_REQUEST_START = 'CHECKOUT_REQUEST_START';
 export const CHECKOUT_REQUEST_SUCCESS = 'CHECKOUT_REQUEST_SUCCESS';
 export const CHECKOUT_REQUEST_FAILED = 'CHECKOUT_REQUEST_FAILED';
 
 export const CHECKOUT_MAKE_ORDER = 'CHECKOUT_MAKE_ORDER';
 
+const SUCCESS_REDIRECT_DELAY = 1000;
+
+function redirectToThankYouPage() {
+    window.location.href = '/thank-you';
+}
+
 export function checkout(data) {
     return (dispatch, getState) => {
-
         dispatch(checkoutRequestStart(data));
 
-        const prod = getState().cart.prod;
-        // const key = (prod) ? 'pk_live_JcvvQ05E9jgvtPjONUQdCqYg' : 'pk_test_oYGXSwgw9Jde2TOg7vZtCRGo';
-        const key = 'pk_test_oYGXSwgw9Jde2TOg7vZtCRGo';
+        const prod = getState().cart.get('prod');
+        const key = (prod) ? 'pk_live_JcvvQ05E9jgvtPjONUQdCqYg' : 'pk_test_oYGXSwgw9Jde2TOg7vZtCRGo';
 
         Stripe.setPublishableKey(key);
 
@@ -31,7 +37,14 @@ export function checkout(data) {
                 const token = response.id;
 
                 checkoutMakeOrder(data, token, prod)
-                    .then((data) => dispatch(checkoutRequestSuccess(data)))
+                    .then((data) => {
+                        dispatch(checkoutRequestSuccess(data));
+                        setTimeout(() => {
+                            dispatch(clearCart());
+                            // react-redux-router push doesn't work
+                            redirectToThankYouPage();
+                        }, SUCCESS_REDIRECT_DELAY);
+                    })
                     .catch(({message}) => dispatch(checkoutRequestFailed(message)));
             }
         })
@@ -66,17 +79,17 @@ export function checkoutRequestFailed(error) {
 }
 
 export function checkoutMakeOrder(data, token, prod) {
-    debugger;
     const dt = (new Date()).toString();
     const customer = {
         first_name: data.first_name,
         last_name: data.last_name,
         street_1: data.street_1,
+        street_2: data.street_2,
         city: data.city,
-        state: data.street_1,
+        state: data.state,
         zip: data.zip,
         email: data.email,
-        phone: data.phone,
+        phone: data.phone
     };
 
     let order = {

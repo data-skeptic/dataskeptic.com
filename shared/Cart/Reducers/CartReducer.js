@@ -11,6 +11,7 @@ import {
     INVOICE_RESULT,
     ADD_TO_CART,
     CHANGE_CART_QUANTITY,
+    REMOVE_CART_PRODUCT,
     SET_STORE_ENVIRONMENT,
     CHANGE_COUNTRY,
     TOGGLE_CART,
@@ -18,7 +19,9 @@ import {
     UPDATE_ADDRESS,
     DO_CHECKOUT,
     TOKEN_RECIEVED,
-    PROCESS_CHECKOUT
+    PROCESS_CHECKOUT,
+    CLEAR_CART,
+    CLEAR_FOCUS,
 } from '../Actions/CartActions'
 
 import { calculateShipping, calculateTotal } from "../../utils/store_utils"
@@ -239,22 +242,22 @@ export default function CartReducer(state = defaultState, action) {
     nstate.country_long = "United States of America"
   }
   switch(action.type) {
-    case 'RESET_INVOICE':
+    case RESET_INVOICE:
         nstate.invoice.submitDisabled = false
         nstate.invoice.paymentError = ""
         nstate.invoice.paymentComplete = false
         break
-    case 'START_INVOICE_PAYMENT':
+    case START_INVOICE_PAYMENT:
         nstate.invoice.submitDisabled = true
         nstate.invoice.paymentError = ""
         nstate.invoice.paymentComplete = false
         break
-    case 'INVOICE_ERROR':
+    case INVOICE_ERROR:
         nstate.invoice.submitDisabled = false
         nstate.invoice.paymentError = action.payload.paymentError
         nstate.invoice.paymentComplete = false
         break
-    case 'INVOICE_RESULT':
+    case INVOICE_RESULT:
       var r = action.payload
       var error = r['error']
       var msg = r['msg']
@@ -268,7 +271,7 @@ export default function CartReducer(state = defaultState, action) {
         nstate.invoice.paymentComplete = true
       }
       break
-  	case 'ADD_TO_CART':
+  	case ADD_TO_CART:
       nstate.paymentComplete = false
       var found_index = -1
       var cart_item = action.payload
@@ -286,7 +289,7 @@ export default function CartReducer(state = defaultState, action) {
         nstate.cart_items[found_index].quantity += 1
       }
       break;
-    case 'CHANGE_CART_QUANTITY':
+    case CHANGE_CART_QUANTITY:
       var delta = action.payload.delta
       var product = action.payload.product
       var size = action.payload.size
@@ -308,7 +311,7 @@ export default function CartReducer(state = defaultState, action) {
         }
       }
       break;
-    case 'REMOVE_CART_PRODUCT':
+    case REMOVE_CART_PRODUCT:
       var product = action.payload.product
       var found_index = -1
       for (var i=0; i < nstate.cart_items.length; i++) {
@@ -320,7 +323,7 @@ export default function CartReducer(state = defaultState, action) {
       }
       nstate.cart_items.splice(found_index,1)
       break;
-    case 'SET_STORE_ENVIRONMENT':
+    case SET_STORE_ENVIRONMENT:
       var env = action.payload
       if (env == "prod") {
         nstate.prod = true
@@ -340,7 +343,7 @@ export default function CartReducer(state = defaultState, action) {
     case SHOW_CART:
       nstate.cart_visible = action.payload
       break;
-    case 'UPDATE_ADDRESS':
+    case UPDATE_ADDRESS:
       var cls = action.payload.cls
       var val = action.payload.val
       nstate.address[cls] = val
@@ -358,7 +361,7 @@ export default function CartReducer(state = defaultState, action) {
         console.log("invalid")
       }
       break;
-    case 'TOKEN_RECIEVED':
+    case TOKEN_RECIEVED:
       var dispatch = action.payload.dispatch
       var token = action.payload.token
       var paymentError = action.payload.paymentError
@@ -377,7 +380,7 @@ export default function CartReducer(state = defaultState, action) {
         nstate.submitDisabled = false        
       }
       break;
-    case 'PROCESS_CHECKOUT':
+    case PROCESS_CHECKOUT:
       var dispatch = action.payload.dispatch
       nstate.paymentComplete = action.payload.paymentComplete
       nstate.paymentError = action.payload.paymentError
@@ -390,8 +393,12 @@ export default function CartReducer(state = defaultState, action) {
       }
       nstate.submitDisabled = false
       break;
-    case 'CLEAR_FOCUS':
+    case CLEAR_FOCUS:
       nstate.focus = ""
+      break;
+
+    case CLEAR_CART:
+      nstate = clearCart(nstate);
       break;
   }
   nstate.total = calculateTotal(nstate.cart_items, nstate.country_short)

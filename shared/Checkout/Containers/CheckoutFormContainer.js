@@ -27,10 +27,10 @@ export class CheckoutFormContainer extends Component {
     }
 
     render() {
-        const {error, processing} = this.props;
+        const {success, error, processing} = this.props;
 
         return (
-            <CheckoutForm onSubmit={this.handleSubmit} customError={error} customSubmitting={processing}/>
+            <CheckoutForm onSubmit={this.handleSubmit} customSuccess={success} customError={error} customSubmitting={processing}/>
         );
     }
 }
@@ -38,6 +38,7 @@ export class CheckoutFormContainer extends Component {
 export default connect(
     (state) => ({
         error: state.checkout.getIn(['error']),
+        success: state.checkout.getIn(['success']),
         processing: state.checkout.getIn(['processing']),
         country: state.cart.getIn(['country_short']) || 'us',
         shipping: state.cart.getIn(['shipping']),
