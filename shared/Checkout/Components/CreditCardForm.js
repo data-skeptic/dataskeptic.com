@@ -23,19 +23,19 @@ export const CreditCard = ({title = 'Billing Details'}) => (
         <div className="row">
 
             <Field fieldWrapperClasses="col-md-5" autocomplete="false"
-                   label="Cardholder Name" name="card_name" type="text" className="month" placeholder="02"
+                   label="Cardholder Name" name="card_name" type="text" className="month" placeholder="Jonh Smith"
                    component={renderField}
                    required
             />
 
             <Field fieldWrapperClasses="col-md-2" autocomplete="false" required
-                   label="Month" name="card_month" type="text" className="month" placeholder="19"
+                   label="Month" name="card_month" type="text" className="month" placeholder="12"
                    component={renderField}
                    normalize={cardMonth}
             />
 
             <Field fieldWrapperClasses="col-md-2" autocomplete="false" required
-                   label="Year" name="card_year" type="text" className="year" placeholder="20"
+                   label="Year" name="card_year" type="text" className="year" placeholder="2020"
                    component={renderField}
                    normalize={cardYear}
             />
