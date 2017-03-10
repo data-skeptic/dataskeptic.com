@@ -1,8 +1,8 @@
 import React                                                 from 'react';
-import { Provider }                                          from 'react-redux';
-import { Router, Route, IndexRoute }                         from 'react-router';
+import {Provider}                                          from 'react-redux';
+import {Router, Route, IndexRoute}                         from 'react-router';
 import ReactGA from 'react-ga'
-import { reduxReactRouter, routerStateReducer, ReduxRouter } from 'redux-react-router';
+import {reduxReactRouter, routerStateReducer, ReduxRouter} from 'redux-react-router';
 import createBrowserHistory                                  from 'history/lib/createBrowserHistory';
 import configureStore                                        from './store';
 
@@ -22,6 +22,7 @@ import Menu                    from 'components/Menu';
 import Membership              from 'components/Membership';
 import NotFound                from 'NotFound/Components/NotFound';
 import Podcast                 from 'Podcasts/Routes/Podcast';
+import Proposals               from 'Proposals/Routes/Proposals';
 import Press                   from 'components/Press';
 import Projects                from 'components/Projects';
 import Services                from 'components/Services';
@@ -34,87 +35,91 @@ import Invoice                 from 'components/invoices/Invoice';
 import SnlImpact               from 'components/l/SnlImpact';
 
 function loadData() {
-	if (typeof window !== 'undefined') {
-		var p = window.location.pathname
-		console.log("ga:" + p)
-		ReactGA.set({ page: p });
-		ReactGA.pageview(p);		
-	}
+    if (typeof window !== 'undefined') {
+        var p = window.location.pathname
+        console.log("ga:" + p)
+        ReactGA.set({page: p});
+        ReactGA.pageview(p);
+    }
 }
 
 function onUpdate() {
-	console.log("onUpdate")
+    console.log("onUpdate")
 }
 
 
 export default (
-	<Router onUpdate={onUpdate}>
-		<Route path="/advertising" name="app" component={App} onEnter={loadData}>
-			<IndexRoute component={Advertising}/>
-		</Route>
-		<Route path="/blog(/:pageNum)" component={App} onEnter={loadData}>
-			<IndexRoute component={BlogContainer}/>
-		</Route>
-		<Route path="/blog/*" component={App} onEnter={loadData}>
-			<IndexRoute component={BlogRouter}/>
-		</Route>
-		<Route path="/coaching" name="app" component={App} onEnter={loadData}>
-			<IndexRoute component={Coaching}/>
-		</Route>
-		<Route path="/coaching2" name="app" component={App} onEnter={loadData}>
-			<IndexRoute component={Coaching2}/>
-		</Route>
-		<Route path="/" name="app" component={App} onEnter={loadData}>
-			<IndexRoute component={Home}/>
-		</Route>
-		<Route path="/checkout" name="app" component={App} onEnter={loadData}>
-			<IndexRoute component={Checkout}/>
-		</Route>						
-		<Route path="/contact-us" component={App} onEnter={loadData}>
-			<IndexRoute component={ContactUs} />
-		</Route>
-		<Route path="/lightsout" component={App} onEnter={loadData}>
-			<IndexRoute component={LightsOut} />
-		</Route>
-		<Route path="/members" component={App} onEnter={loadData}>
-			<IndexRoute component={Membership} />
-		</Route>
-		<Route path="/podcast*" component={App} onEnter={loadData}>
-			<IndexRoute component={Podcast} />
-		</Route>
-		<Route path="/services" component={App} onEnter={loadData}>
-			<IndexRoute component={props => (<Services foo="value" bar="v2" location={props} />)} />
-		</Route>
-		<Route path="/store" component={App} onEnter={loadData}>
-			<IndexRoute component={Store} />
-		</Route>
-		<Route path="/press" component={App} onEnter={loadData}>
-			<IndexRoute component={Press} />
-		</Route>
-		<Route path="/projects" component={App} onEnter={loadData}>
-			<IndexRoute component={Projects} />
-		</Route>
-		<Route path="/thank-you" component={App} onEnter={loadData}>
-			<IndexRoute component={ThankYouPage} />
-		</Route>
+    <Router onUpdate={onUpdate}>
+        <Route path="/advertising" name="app" component={App} onEnter={loadData}>
+            <IndexRoute component={Advertising}/>
+        </Route>
+        <Route path="/blog(/:pageNum)" component={App} onEnter={loadData}>
+            <IndexRoute component={BlogContainer}/>
+        </Route>
+        <Route path="/blog/*" component={App} onEnter={loadData}>
+            <IndexRoute component={BlogRouter}/>
+        </Route>
+        <Route path="/coaching" name="app" component={App} onEnter={loadData}>
+            <IndexRoute component={Coaching}/>
+        </Route>
+        <Route path="/coaching2" name="app" component={App} onEnter={loadData}>
+            <IndexRoute component={Coaching2}/>
+        </Route>
+        <Route path="/" name="app" component={App} onEnter={loadData}>
+            <IndexRoute component={Home}/>
+        </Route>
+        <Route path="/checkout" name="app" component={App} onEnter={loadData}>
+            <IndexRoute component={Checkout}/>
+        </Route>
+        <Route path="/contact-us" component={App} onEnter={loadData}>
+            <IndexRoute component={ContactUs}/>
+        </Route>
+        <Route path="/lightsout" component={App} onEnter={loadData}>
+            <IndexRoute component={LightsOut}/>
+        </Route>
+        <Route path="/members" component={App} onEnter={loadData}>
+            <IndexRoute component={Membership}/>
+        </Route>
+        <Route path="/podcast*" component={App} onEnter={loadData}>
+            <IndexRoute component={Podcast}/>
+        </Route>
+        <Route path="/services" component={App} onEnter={loadData}>
+            <IndexRoute component={props => (<Services foo="value" bar="v2" location={props}/>)}/>
+        </Route>
+        <Route path="/store" component={App} onEnter={loadData}>
+            <IndexRoute component={Store}/>
+        </Route>
+        <Route path="/press" component={App} onEnter={loadData}>
+            <IndexRoute component={Press}/>
+        </Route>
+        <Route path="/projects" component={App} onEnter={loadData}>
+            <IndexRoute component={Projects}/>
+        </Route>
+        <Route path="/thank-you" component={App} onEnter={loadData}>
+            <IndexRoute component={ThankYouPage}/>
+        </Route>
 
-		<Route path="/admin" component={App}>
-			<IndexRoute component={Admin} />
-		</Route>
-		<Route path="/invoice" component={App}>
-			<IndexRoute component={Invoice} />
-		</Route>
+        <Route path="/rfc" component={App} onEnter={loadData}>
+            <IndexRoute component={Proposals}/>
+        </Route>
 
-		<Route path="/wp-login.php" component={App} onEnter={loadData}>
-			<IndexRoute component={DontHackMe} />
-		</Route>
-		<Route path="/l/snl-impact" component={App} onEnter={loadData}>
-			<IndexRoute component={SnlImpact} />
-		</Route>
+        <Route path="/admin" component={App}>
+            <IndexRoute component={Admin}/>
+        </Route>
+        <Route path="/invoice" component={App}>
+            <IndexRoute component={Invoice}/>
+        </Route>
 
-		<Route path="/*" component={App} onEnter={loadData}>
-			<IndexRoute component={NotFound} />
-		</Route>
+        <Route path="/wp-login.php" component={App} onEnter={loadData}>
+            <IndexRoute component={DontHackMe}/>
+        </Route>
+        <Route path="/l/snl-impact" component={App} onEnter={loadData}>
+            <IndexRoute component={SnlImpact}/>
+        </Route>
 
-	</Router>
+        <Route path="/*" component={App} onEnter={loadData}>
+            <IndexRoute component={NotFound}/>
+        </Route>
+
+    </Router>
 );
