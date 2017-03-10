@@ -2,44 +2,39 @@ import React, { Component, PropTypes } from 'react'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
 
-import Loading from '../../Common/Components/Loading'
-import Error from '../../Common/Components/Error'
-import CreditCardForm2 from '../CreditCardForm2'
+import Loading from '../../../Common/Components/Loading'
+import Error from '../../../Common/Components/Error'
+// TODO implement credit card form container!!!
+import CreditCardForm from '../../Components/CreditCardForm'
 
-import {get_invoice} from '../../utils/redux_loader'
+import {get_invoice} from '../../../utils/redux_loader'
 
 class Invoice extends Component {
 	get_id(props) {
-		if (props.location == undefined) {
-			return undefined
-		}
-		if (props.location.query == undefined) {
-			return undefined
-		}
-		if (props.location.query.id == undefined) {
-			return undefined
-		}
+		if (!props.location) { return undefined }
+		if (!props.location.query) { return undefined }
+		if (!props.location.query.id) { return undefined }
+
 		return props.location.query.id
 	}
 
 	componentWillMount() {
-		var dispatch = this.props.dispatch
-		var id = this.get_id(this.props)
-		get_invoice(dispatch, id)
+		const dispatch = this.props.dispatch;
+		const id = this.get_id(this.props);
+		get_invoice(dispatch, id);
 	}
 
 	render() {
-		var id = this.get_id(this.props)
-		if (id == undefined) {
+		const id = this.get_id(this.props);
+		if (!id) {
 			return <Error />
 		}
-		console.log(id)
-		var oadmin = this.props.admin.toJS()
-		var invoice = oadmin.invoice
-		if (invoice == undefined) {
+		const oadmin = this.props.admin.toJS();
+		const invoice = oadmin.invoice;
+		if (!invoice) {
 			return <Loading />
 		}
-		console.log(invoice)
+
 		return (
 			<div className="center">
 				<h2>Data Skeptic Invoicing</h2>
@@ -76,7 +71,7 @@ class Invoice extends Component {
 					</div>
 				</div>
 
-				<CreditCardForm2 invoice_id={id} total={invoice.total} />
+				<CreditCardForm invoice_id={id} total={invoice.total} />
 
 				<div><p> &nbsp; </p></div>
 				<div><p> &nbsp; </p></div>
