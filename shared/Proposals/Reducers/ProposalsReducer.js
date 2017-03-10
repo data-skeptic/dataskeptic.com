@@ -1,12 +1,17 @@
 import Immutable, {fromJS} from 'immutable';
 
+import * as types from '../Constants/CommentTypes';
 import {FETCH_CURRENT_PROPOSAL_REQUEST, FETCH_CURRENT_PROPOSAL_SUCCESS, FETCH_CURRENT_PROPOSAL_FAIL} from '../Actions/ProposalsActions';
+import {CHANGE_COMMENT_TYPE} from '../Actions/CommentBoxFormActions';
 
 const defaultState = {
     loading: false,
     error: false,
     proposal: {
 
+    },
+    form: {
+        type: types.UPLOAD
     }
 };
 
@@ -30,6 +35,10 @@ export default function ProposalsReducer(state=initialState, action) {
         case FETCH_CURRENT_PROPOSAL_FAIL:
             nstate.loading = false;
             nstate.error = action.payload.error;
+            break;
+
+        case CHANGE_COMMENT_TYPE:
+            nstate.form.type = action.payload.type;
             break;
 
         default:

@@ -9,12 +9,13 @@ import Loading from "../../../Common/Components/Loading";
 import FormController from '../../../Forms/Components/FormController/FormController';
 import { renderField } from '../../../Forms/Components/Field/Field';
 
+import * as types from '../../Constants/CommentTypes';
+
 const Form = ({ handleSubmit, pristine, reset, submitting, invalid, submitSucceeded, submitFailed }) => (
-    <FormController name="commentBox" handleSubmit={handleSubmit} submitValue="Send">
+    <FormController name="commentBox" handleSubmit={handleSubmit} submitValue={'Send'}>
 
     </FormController>
 );
-
 
 const CommentBoxForm = reduxForm({
     form: 'commentBox'

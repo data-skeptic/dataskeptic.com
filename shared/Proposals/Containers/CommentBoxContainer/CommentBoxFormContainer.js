@@ -1,55 +1,38 @@
 import React, {Component,PropTypes} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import {formValueSelector} from 'redux-form';
 
 import CommentBoxForm from '../../Components/CommentBoxForm/CommentBoxForm';
+import CommentTypeSelectorContainer from '../../Containers/CommentTypeSelectorContainer/CommentTypeSelectorContainer';
 
 export class CommentBoxFormContainer extends Component {
 
     constructor() {
         super();
+
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleSubmit(data) {
+        alert(JSON.stringify(data));
     }
 
     render() {
+        const {values} = this.props;
         return (
             <div className="comment-box-form-container">
-                <div className="comment-type-selector">
-                    <div className="btn-group btn-group-justified" role="group" aria-label="...">
-                        <div className="btn-group" role="group">
-                            <div type="button" className="btn btn-default btn-type active">
-                                <div className="description">
-                                    Comment <small>Post a few words</small>
-                                </div>
-                                <div className="icon icon-keyboard"></div>
-                            </div>
-                        </div>
-                        <div className="btn-group" role="group">
-                            <div type="button" className="btn btn-default btn-type">
-                                <div className="description">
-                                    Upload <small>Drag or drop file</small>
-                                </div>
-                                <div className="icon icon-upload"></div>
-                            </div>
-                        </div>
-                        <div className="btn-group" role="group">
-                            <div type="button" className="btn btn-default btn-type">
-                                <div className="description">
-                                    Audio Comment <small>Record via microphone</small>
-                                </div>
-                                <div className="icon icon-record"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <CommentBoxForm />
+                <CommentTypeSelectorContainer />
+                <CommentBoxForm onSubmit={this.handleSubmit}/>
             </div>
         )
     }
 }
 
 export default connect(
-    (state) => ({}),
+    (state) => ({
+
+    }),
     (dispatch) => bindActionCreators({
 
     }, dispatch)

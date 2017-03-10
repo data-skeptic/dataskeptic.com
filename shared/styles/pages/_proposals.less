@@ -4,11 +4,8 @@
 
     .btn-type {
       text-align: center;
-
-      padding: 10px;
-      margin: 15px 0px 0px 10px;
+      padding: 20px 10px;
       border-radius: 5px;
-      height: 300px;
       background: #FAFAFA;
       border: 1px solid #D7D9D9;
 
@@ -18,21 +15,38 @@
 
       }
 
+      .description {
+        width: 100%;
+        word-wrap: break-word;
+        color: #3a3b3b;
+
+        .title {
+          font-weight: bolder;
+        }
+
+        .subtitle {
+          font-size: 98%;
+          font-weight: normal;
+        }
+      }
+
       .icon {
-        height: 20px;
-        padding: 20px;
+        height: 128px;
+        width: 128px;
+        margin: 0px auto;
+
         background-position: center center;
         background-repeat: no-repeat;
         background-size: 100%;
 
         &.icon-keyboard {
-          background-image: url('/img/proposals/keyboard.png');
+          background-image: url('/img/proposals/keyboard1x.png');
         }
         &.icon-upload {
-          background-image: url('/img/proposals/upload.png');
+          background-image: url('/img/proposals/upload1x.png');
         }
         &.icon-record {
-          background-image: url('/img/proposals/micro.png');
+          background-image: url('/img/proposals/micro1x.png');
         }
       }
     }
