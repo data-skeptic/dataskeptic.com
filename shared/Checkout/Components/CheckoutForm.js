@@ -26,41 +26,7 @@ const Form = ({ handleSubmit, pristine, reset, submitting, customSubmitting, inv
 
 const CheckoutForm = reduxForm({
     form: 'checkout',
-    validate: CheckoutFormValidator,
-    initialValues: {
-        "first_name": "Jonh",
-        "last_name": "Smith",
-        "street_1": "123 Sttreet",
-        "street_2": "",
-        "city": "Los Angeles",
-        "state": "state",
-        "zip": "12345",
-        "phone": "(310) 312 - 3123",
-        "card_number": "4242424242424242",
-        "email": "1@mail.ru",
-        "card_name": "cardholder",
-        "card_month": "12",
-        "card_year": "2017",
-        "card_cvv": "123",
-        "country": "us",
-        "total": 3,
-        "shipping": 1,
-        "products": [
-            {
-                "product": {
-                    "img": "/img/jpg/button-0.jpg",
-                    "title": "1/2 inch pin",
-                    "price": 2,
-                    "active": 1,
-                    "type": "misc",
-                    "id": "5",
-                    "desc": "One inch pins allow you to proudly show off your Data Skeptic affiliation on your hoodie, backpack, or sombrero."
-                },
-                "size": "",
-                "quantity": 1
-            }
-        ]
-    }
+    validate: CheckoutFormValidator
 })(Form);
 
 export default CheckoutForm;
