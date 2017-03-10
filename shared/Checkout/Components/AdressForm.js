@@ -49,7 +49,7 @@ export const AddressForm = ({ title='Shipping Information' }) => (
                        label="State / Province" name="state" type="text" className="city" placeholder=""/>
 
                 <Field fieldWrapperClasses="col-md-3" autocomplete="false" required
-                       label="Zip Code" name="zip" type="text" className="zip" placeholder="12345"
+                       label="Postal Code" name="zip" type="text" className="zip" placeholder="12345"
                        component={renderField}
                 />
 
