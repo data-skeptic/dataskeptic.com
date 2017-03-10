@@ -1,4 +1,5 @@
 import axios from 'axios';
+import isEmpty from 'lodash/isEmpty';
 
 import {clearCart} from '../../Cart/Actions/CartActions';
 
@@ -39,11 +40,11 @@ export function checkout(data) {
                 checkoutMakeOrder(data, token, prod)
                     .then((data) => {
                         dispatch(checkoutRequestSuccess(data));
-                        setTimeout(() => {
-                            dispatch(clearCart());
-                            // react-redux-router push doesn't work
-                            redirectToThankYouPage();
-                        }, SUCCESS_REDIRECT_DELAY);
+                        // setTimeout(() => {
+                        //     dispatch(clearCart());
+                        //     // react-redux-router push doesn't work
+                        //     redirectToThankYouPage();
+                        // }, SUCCESS_REDIRECT_DELAY);
                     })
                     .catch(({message}) => dispatch(checkoutRequestFailed(message)));
             }
@@ -73,7 +74,7 @@ export function checkoutRequestFailed(error) {
     return {
         type: CHECKOUT_REQUEST_FAILED,
         payload: {
-            error
+            error: `Cannot process your transaction: '${error}'`
         }
     }
 }
@@ -91,6 +92,10 @@ export function checkoutMakeOrder(data, token, prod) {
         email: data.email,
         phone: data.phone
     };
+
+    if (isEmpty(data.street_2)) {
+        delete customer.street_2;
+    }
 
     let order = {
         customer: customer,

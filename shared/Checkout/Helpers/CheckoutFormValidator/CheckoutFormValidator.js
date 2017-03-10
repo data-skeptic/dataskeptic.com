@@ -64,9 +64,7 @@ export const CheckoutFormValidator = (values) => {
     if (isEmpty(values.phone)) {
         errors.phone = 'Please provide Phone Number';
     } else {
-        if (!phone(values.phone)) {
-            errors.phone = 'Invalid Phone Number';
-        }
+
     }
 
     // card

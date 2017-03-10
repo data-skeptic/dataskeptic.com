@@ -66,7 +66,6 @@ export const AddressForm = ({ title='Shipping Information' }) => (
                 <Field fieldWrapperClasses="col-md-6" autocomplete="false" required
                        label="Phone" name="phone" type="text" className="phone" placeholder="(310) 313 - 3413"
                        component={renderField}
-                       normalize={phone}
                 />
 
             </div>
