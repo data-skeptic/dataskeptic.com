@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import moment from 'moment';
 
-import { redirects_map } from '../../redirects';
+import { redirects_map } from '../../../redirects';
 
 class Episode extends React.Component {
 	constructor(props) {
@@ -57,7 +57,7 @@ class Episode extends React.Component {
 			}
 		}
 
-        const date = moment(ep.publish_date).format('MMMM d, YYYY');
+        const date = moment(ep.pubDate).format('MMMM D, YYYY');
 
 		var transcript = <div></div>
 		var tep = undefined
