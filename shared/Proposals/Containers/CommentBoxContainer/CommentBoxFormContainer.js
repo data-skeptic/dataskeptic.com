@@ -22,8 +22,9 @@ export class CommentBoxFormContainer extends Component {
         const {values} = this.props;
         return (
             <div className="comment-box-form-container">
-                <CommentTypeSelectorContainer />
-                <CommentBoxForm onSubmit={this.handleSubmit}/>
+                <CommentBoxForm onSubmit={this.handleSubmit}>
+                    <CommentTypeSelectorContainer />
+                </CommentBoxForm>
             </div>
         )
     }

@@ -41,13 +41,7 @@ class Proposals extends Component {
                         <p><b>Current topic:</b> {topic}</p>
                         <p>{long_description}</p>
                         <b>Time to comment: <Countdown sec={diff} /></b>
-                        <p>Name: <input id="name"/></p>
-                        <p>Email: <input id="email"/></p>
-                        {/*<CommentFormatContainer />*/}
-
-                        <CommentBoxFormContainer>
-
-                        </CommentBoxFormContainer>
+                        <CommentBoxFormContainer />
                     </Content>
                 </Container>
             </div>
