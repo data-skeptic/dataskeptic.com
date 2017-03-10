@@ -10,6 +10,7 @@ const https = require('https')
 const path = require('path')
 
 var app = require('./server').default;
+var recordingServer = require('./recordingServer').default;
 
 if (fs.existsSync('/ssl/cert.pem')) {
 	const httpsOptions = {
@@ -23,7 +24,7 @@ if (fs.existsSync('/ssl/cert.pem')) {
 	    console.log('Serving in https')
 	  })
 
-	http.createServer(function (req, res) {
+    http.createServer(function (req, res) {
 	    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
 	    res.end();
 	}).listen(80);	
@@ -31,5 +32,10 @@ if (fs.existsSync('/ssl/cert.pem')) {
 	app.listen(3000, function () {
 		console.log('Server listening on 3000');
 	});
+
+	recordingServer.listen(9001, function () {
+		console.log('Recording Server listening on 90001');
+	});
+
 }
 

@@ -6,6 +6,8 @@ import {formValueSelector} from 'redux-form';
 import CommentBoxForm from '../../Components/CommentBoxForm/CommentBoxForm';
 import CommentTypeSelectorContainer from '../../Containers/CommentTypeSelectorContainer/CommentTypeSelectorContainer';
 
+import Recorder from '../../../Recorder';
+
 export class CommentBoxFormContainer extends Component {
 
     constructor() {
@@ -24,6 +26,7 @@ export class CommentBoxFormContainer extends Component {
             <div className="comment-box-form-container">
                 <CommentBoxForm onSubmit={this.handleSubmit}>
                     <CommentTypeSelectorContainer />
+                    <Recorder />
                 </CommentBoxForm>
             </div>
         )
