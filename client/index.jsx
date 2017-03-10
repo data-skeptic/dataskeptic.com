@@ -42,8 +42,8 @@ ReactGA.initialize("UA-51062432-1", {
 const history = createBrowserHistory();
 
 const reducer = combineReducers({
-    ...reducers,
-    form: formReducer
+    form: formReducer,
+    ...reducers
 });
 
 const logger = (store) => (next) => (action) => {
@@ -103,7 +103,8 @@ store.subscribe(() => {
         }
     }
 
-    const s = JSON.stringify(state);
+    delete nstate.checkout;
+    const s = JSON.stringify(nstate);
     localStorage.setItem('reduxState', s);
 
     persistCart(nstate);

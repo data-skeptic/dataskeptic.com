@@ -8,7 +8,6 @@ import ContactForm from '../../Components/ContactForm/ContactForm'
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
-
 class ContactFormContainer extends Component {
 
     constructor() {

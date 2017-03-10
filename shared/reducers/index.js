@@ -7,3 +7,4 @@ export { default as contributors } from '../Contributors/Reducers/ContributorsRe
 export { default as site } from './SiteReducer';
 export { default as admin } from './AdminReducer';
 export { default as layout } from '../Layout/Reducers/LayoutReducer'
+export { default as checkout } from '../Checkout/Reducers/CheckoutReducer'

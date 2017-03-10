@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import { Link } from 'react-router'
 
 import CartQuantity from '../Components/CartQuantity'
-import CountrySelector from '../../components/CountrySelector'
+import CountrySelector from '../../Common/Components/CountrySelector'
 import EmptyCart from '../Components/EmptyCart'
 import CartItem from '../Components/CartItem'
 
