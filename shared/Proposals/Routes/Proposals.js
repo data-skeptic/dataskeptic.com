@@ -9,6 +9,8 @@ import Container from '../../Layout/Components/Container/Container';
 import Content from '../../Layout/Components/Content/Content';
 import SideBar from '../../Layout/Components/SideBar/SideBar';
 
+import CommentBoxFormContainer from '../Containers/CommentBoxContainer/CommentBoxFormContainer';
+
 class Proposals extends Component {
 
     constructor(props) {
@@ -25,7 +27,6 @@ class Proposals extends Component {
         const {proposal} = this.props;
         const {topic, long_description, deadline} = proposal;
 
-        debugger;
         return (
             <div className="proposals-page">
                 <Container>
@@ -41,6 +42,10 @@ class Proposals extends Component {
                         <p>Name: <input id="name"/></p>
                         <p>Email: <input id="email"/></p>
                         {/*<CommentFormatContainer />*/}
+
+                        <CommentBoxFormContainer>
+
+                        </CommentBoxFormContainer>
                     </Content>
                 </Container>
             </div>
