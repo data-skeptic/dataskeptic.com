@@ -22,7 +22,6 @@ export class CheckoutFormContainer extends Component {
         data.shipping = this.props.shipping;
         data.products = this.props.products;
 
-        console.dir(JSON.stringify(data));
         this.props.checkout(data);
     }
 

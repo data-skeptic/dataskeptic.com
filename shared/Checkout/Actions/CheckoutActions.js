@@ -40,11 +40,11 @@ export function checkout(data) {
                 checkoutMakeOrder(data, token, prod)
                     .then((data) => {
                         dispatch(checkoutRequestSuccess(data));
-                        // setTimeout(() => {
-                        //     dispatch(clearCart());
-                        //     // react-redux-router push doesn't work
-                        //     redirectToThankYouPage();
-                        // }, SUCCESS_REDIRECT_DELAY);
+                        setTimeout(() => {
+                            dispatch(clearCart());
+                            // react-redux-router push doesn't work
+                            redirectToThankYouPage();
+                        }, SUCCESS_REDIRECT_DELAY);
                     })
                     .catch(({message}) => dispatch(checkoutRequestFailed(message)));
             }
@@ -114,12 +114,11 @@ export function checkoutMakeOrder(data, token, prod) {
     return axios
         .post("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/order", order)
         .then(function(resp) {
-            debugger;
             const result = resp.data;
-            let paymentComplete = false;
+            let paymentComplete = false;;
             let paymentError = '';
             if (result.msg !== 'ok') {
-                paymentComplete = false
+                paymentComplete = false;
                 paymentError = result.msg || result.errorMessage || "";
             } else {
                 paymentComplete = true
