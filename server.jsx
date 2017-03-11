@@ -86,7 +86,9 @@ const reducer  = combineReducers({
     form: formReducer
 });
 const store    = applyMiddleware(thunk,promiseMiddleware)(createStore)(reducer);
-const initialState = store.getState()
+let initialState = store.getState()
+delete initialState.checkout;
+
 
 global.env              = env
 global.my_cache         = my_cache

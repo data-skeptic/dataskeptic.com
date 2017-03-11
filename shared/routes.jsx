@@ -11,7 +11,7 @@ import App                     from 'components/index';
 import BlogContainer           from 'Blog/Routes/BlogContainer';
 import BlogArticle             from 'Blog/Containers/BlogArticle';
 import BlogRouter              from 'Blog/Routes/BlogRouter';
-import Checkout                from 'components/Checkout';
+import Checkout                from 'Checkout/Routes/Checkout/Checkout';
 import Coaching                from 'components/Coaching';
 import Coaching2               from 'components/Coaching2';
 import ContactUs               from 'Contacts/Routes/ContactUs';
@@ -27,20 +27,19 @@ import Press                   from 'components/Press';
 import Projects                from 'components/Projects';
 import Services                from 'components/Services';
 import Store                   from 'components/Store';
-import ThankYouPage            from 'components/ThankYouPage';
+import ThankYouPage            from 'Checkout/Routes/ThankYou/ThankYouPage';
 
 import Admin                   from 'components/admin/Admin';
-import Invoice                 from 'components/invoices/Invoice';
+import Invoice                 from 'Checkout/Routes/Invoices/Invoice';
 
 import SnlImpact               from 'components/l/SnlImpact';
 
 function loadData() {
-    if (typeof window !== 'undefined') {
-        var p = window.location.pathname
-        console.log("ga:" + p)
-        ReactGA.set({page: p});
-        ReactGA.pageview(p);
-    }
+	if (typeof window !== 'undefined') {
+		const p = window.location.pathname;
+		ReactGA.set({ page: p });
+		ReactGA.pageview(p);		
+	}
 }
 
 function onUpdate() {
