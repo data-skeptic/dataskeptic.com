@@ -1,37 +1,35 @@
-var fs = require('fs');
-var http = require('http');
+const fs = require('fs');
+const http = require('http');
+const BinaryServer = require('binaryjs').BinaryServer;
 
-// Serve client side statically
-var express = require('express');
-var app = express();
+export const RecordingServer = (server) => {
+    console.info('[RecordingServer] started');
+    // Start Binary.js server
+    const bs = BinaryServer({server: server});
+    const wav = require('wav');
 
-// Start Binary.js server
-var BinaryServer = require('binaryjs').BinaryServer;
-var bs = BinaryServer({server: server});
-var wav = require('wav');
+    const outFile = 'demo.wav';
 
-var outFile = 'demo.wav';
+    console.log(`Wait for new user connections`);
+    bs.on('connection', function(client){
+        console.log(`Incoming stream from browsers`);
+        //
+        const fileWriter = new wav.FileWriter(outFile, {
+            channels: 1,
+            sampleRate: 48000,
+            bitDepth: 16
+        });
 
-console.log(`Wait for new user connections`);
-bs.on('connection', function(client){
-    console.log(`Incoming stream from browsers`);
-    //
-    var fileWriter = new wav.FileWriter(outFile, {
-        channels: 1,
-        sampleRate: 48000,
-        bitDepth: 16
-    });
+        client.on('stream', function(stream, meta) {
+            console.log('new stream');
+            stream.pipe(fileWriter);
 
-    client.on('stream', function(stream, meta) {
-        console.log('new stream');
-        stream.pipe(fileWriter);
-
-        stream.on('end', function() {
-            fileWriter.end();
-            console.log('wrote to file ' + outFile);
+            stream.on('end', function() {
+                fileWriter.end();
+                console.log('wrote to file ' + outFile);
+            });
         });
     });
-});
+};
 
-
-export default app;
+export default RecordingServer;
