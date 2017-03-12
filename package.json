@@ -37,6 +37,7 @@
     "extract-text-webpack-plugin": "^2.0.0",
     "file-stream-rotator": "0.0.7",
     "fs": "0.0.1-security",
+    "fs-extra": "^2.0.0",
     "history": "^1.17.0",
     "http-server": "^0.8.5",
     "immutable": "^3.7.6",

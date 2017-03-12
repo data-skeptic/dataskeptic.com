@@ -46,3 +46,5 @@ api/place_tshirt_order.py
 *.json
 *.csv
 .idea
+
+recordings/*

@@ -2,14 +2,10 @@ import React, {Component} from 'react';
 
 import Recorder from '../Components/Recorder';
 
-function convertoFloat32ToInt16(buffer) {
-    let l = buffer.length;
-    let buf = new Int16Array(l);
-    while (l--) {
-        buf[l] = Math.min(1, buffer[l])*0x7FFF;
-    }
-    return buf.buffer;
-}
+import {START, UPLOAD, RESUME, STOP} from '../Constants/actions';
+import {float32ToInt16} from '../Helpers/Converter';
+
+const INITIAL_CHUNK_ID_VAL = 0;
 
 export class RecorderContainer extends Component {
 
@@ -21,10 +17,13 @@ export class RecorderContainer extends Component {
         super();
 
         this.state = {
+            recordId: 'test',
+            chunkId: INITIAL_CHUNK_ID_VAL,
             recording: false
         };
 
         this.togglePlaying = this.togglePlaying.bind(this);
+        this.callAction = this.callAction.bind(this);
         this.onChunkProcessing = this.onChunkProcessing.bind(this);
     }
 
@@ -32,27 +31,36 @@ export class RecorderContainer extends Component {
         // this.initializeRecorder();
     }
 
-    shouldComponentUpdate() {
-        return false;
+    isInitialized() {
+        return (this.state.chunkId > INITIAL_CHUNK_ID_VAL);
     }
 
     initializeRecorder() {
         const BinaryClient = require('binaryjs-client').BinaryClient;
-        const client = new BinaryClient('ws://localhost:9001');
+        const hostname = window.location.hostname;
+        const client = new BinaryClient(`ws://${hostname}:9001`);
 
         client.on('open', () => {
-            this.Stream = client.createStream();
+            console.log('[Recording]', 'connection open');
+            this.Stream = client.createStream({id: 'test'});
 
-            if (!navigator.getUserMedia)
+            if (!navigator.getUserMedia) {
                 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
                     navigator.mozGetUserMedia || navigator.msGetUserMedia;
+            }
 
             if (navigator.getUserMedia) {
-                navigator.getUserMedia({audio:true}, this.onChunkProcessing, function(e) {
-                    alert('Error capturing audio.');
+                navigator.getUserMedia({audio:true}, this.onChunkProcessing, (e) => {
+                    this.handleError('Error capturing audio.');
                 });
-            } else alert('getUserMedia not supported in this browser.');
+            } else {
+                this.handleError('Audio recording is not supported in this browser.');
+            }
         });
+
+        client.on('error', () => {
+            this.handleError('Server unreachable.')
+        })
     }
 
     onChunkProcessing(e) {
@@ -69,28 +77,84 @@ export class RecorderContainer extends Component {
             if(!this.state.recording) return;
             console.log ('recording');
             var left = e.inputBuffer.getChannelData(0);
-            this.Stream.write(convertoFloat32ToInt16(left));
+            this.uploadChunk(float32ToInt16(left));
         };
 
         audioInput.connect(recorder);
         recorder.connect(context.destination);
     }
 
-    togglePlaying() {
-        alert('hey!');
-        const nextPlaying = !this.state.recording;
-        if (nextPlaying) {
-            this.initializeRecorder();
+    callAction(action) {
+        if (!action) {
+            return console.error('Specify recording action');
+        } else {
+            console.log('[Recording]', action);
+            console.dir(arguments);
         }
-        this.setState({recording: nextPlaying});
+
+        this.Stream.apply(arguments);
     }
 
+    uploadChunk(convertedChunk) {
+        const {recordId, chunkId} = this.state;
+
+        this.callAction(UPLOAD, {
+            id: recordId,
+            chunkId: chunkId
+        }, convertedChunk);
+    }
+
+    resumeRecording() {
+        this.startRecordingNextChunk();
+        this.callAction(RESUME, {
+
+        });
+    }
+
+    startRecording() {
+        debugger;
+        if (!this.isInitialized()) {
+            this.initializeRecorder();
+        }
+
+        this.callAction(START, {
+
+        });
+    }
+
+    stopRecording() {
+        this.callAction(STOP, {
+
+        });
+    }
+
+    startRecordingNextChunk() {
+        const chunkId = this.state.chunkId + 1;
+        this.setState({chunkId})
+    }
+
+    handleError(error) {
+        this.setState({error: error});
+    }
+
+    togglePlaying() {
+        const recording = !this.state.recording;
+        this.setState({recording});
+
+        if (recording) {
+            this.startRecording();
+        } else {
+            this.stopRecording();
+        }
+    }
 
     render() {
-        const {playing} = this.state;
+        const {playing, error} = this.state;
+
         return (
             <Recorder
                 playing={playing}
+                error={error}
                 onClick={this.togglePlaying}
             />
         )
