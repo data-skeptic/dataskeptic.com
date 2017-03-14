@@ -8,7 +8,7 @@ class Advertising extends Component {
 				<h2>Advertising with Data Skeptic</h2>
 				<ul>
 					<li className="adv-li"><b>Data Skeptic consistently ranks in the top 5% of <u>all</u> podcasts</b> by downloads; but is special because of its devoted following among the data science community.</li>
-					<li className="adv-li">We reached an <b>influential and targeted segment of practicing professionals including data scientists, analysts, and engineers</b> on a weekly basis.  From the top CEOs, to the tech movers and shakers, we fulfill their regular data-driven, facts-based appetite for expand their knowledge in bite-sized audio bites.</li>
+					<li className="adv-li">We reach a <b>targeted segment of  professionals including data scientists, analysts, and engineers</b> on a weekly basis.  From the top CEOs, to the tech movers and shakers, we fulfill their appetite for facts-based knowledge in bite-sized audio.</li>
 					<li className="adv-li">Our followers look towards us to sniff out the top data trends; to see how the community gathers and interpret data.  <b>That makes Data Skeptic influential and powerful</b>.</li>
 					<li className="adv-li"><b>In the end, we're a community</b>.  And we can help you craft and deliver a message about your product or service to our highly targeted, devoted following.</li>
 				</ul>
@@ -27,7 +27,7 @@ class Advertising extends Component {
 				<ul>
 					<li className="adv-li">We can help through a variety of ad types; see below two examples of the exceptional quality of our ads.  Notice how the natural format allows seamless integration into the content.</li>
 					<li className="adv-li">The first example shows an interview format which mirrors the regular DataSkeptic format to grab the viewer's attention.</li>
-					<li className="adv-li">The second example highlights our sponsor in an approachable, down-to-earth style that engages the listeners.</li>
+					<li className="adv-li">The second example highlights our sponsor in an approachable, down-to-earth style that engages listeners.</li>
 				</ul>
 
 				<h3>Interview style ads</h3>
