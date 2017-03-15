@@ -17,7 +17,7 @@ export class CommentBoxFormContainer extends Component {
     }
 
     handleSubmit(data) {
-        alert(JSON.stringify(data));
+        console.log(JSON.stringify(data));
     }
 
     render() {

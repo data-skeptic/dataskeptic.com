@@ -6,7 +6,7 @@ import CommentTypeSelector from '../../Components/CommentTypeSelector/CommentTyp
 
 import {changeCommentType} from '../../Actions/CommentBoxFormActions';
 
-export class CommentTypeSelectorContainer extends Component {
+class CommentTypeSelectorContainer extends Component {
     constructor() {
         super();
         this.onChoose = this.onChoose.bind(this);

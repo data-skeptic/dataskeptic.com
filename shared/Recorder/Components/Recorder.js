@@ -1,10 +1,10 @@
 import React, {PropTypes}  from 'react';
 import classNames from 'classnames';
 
-export const Recorder = ({playing = false, error, onClick}) => (
+export const Recorder = ({recording = false, error, onClick}) => (
     <div>
-        <button className="btn btn-default" type="submit" onClick={onClick}>
-            {playing ? 'pause' : 'play'}
+        <button className="btn btn-default" type="button" onClick={onClick}>
+            {recording ? 'Stop' : 'Start'}
         </button>
 
         { error ? <p className="text-danger">{error}</p> : null }
@@ -12,7 +12,7 @@ export const Recorder = ({playing = false, error, onClick}) => (
 );
 
 Recorder.propTypes = {
-    playing: PropTypes.bool,
+    recording: PropTypes.bool,
     error: PropTypes.string,
     onClick: PropTypes.func
 };

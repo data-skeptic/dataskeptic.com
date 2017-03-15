@@ -6,7 +6,7 @@ export const FormController = ({ name, children, handleSubmit, submitSucceeded, 
 
         { !submitSucceeded && !submitting ?
             <div className={btnWrapperClasses}>
-                <button className="btn contact-send" type="submit" disabled={(pristine || invalid) || submitting || customSubmitting} >
+                <button className="btn form-submit" type="submit" disabled={(pristine || invalid) || submitting || customSubmitting} >
                     {submitValue}
                 </button>
             </div>

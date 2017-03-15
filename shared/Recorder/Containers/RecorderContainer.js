@@ -17,7 +17,7 @@ export class RecorderContainer extends Component {
         super();
 
         this.state = {
-            recordId: this.generateRandomRecordId(),
+            recordId: 'default',
             chunkId: INITIAL_CHUNK_ID_VAL,
             recording: false
         };
@@ -30,10 +30,6 @@ export class RecorderContainer extends Component {
         return v4();
     }
 
-    componentDidMount() {
-        // this.initializeRecorder();
-    }
-
     isInitialized() {
         return (this.state.chunkId > INITIAL_CHUNK_ID_VAL);
     }
@@ -41,11 +37,11 @@ export class RecorderContainer extends Component {
     initializeRecorder() {
         const BinaryClient = require('binaryjs-client').BinaryClient;
         const hostname = window.location.hostname;
-        const client = new BinaryClient(`ws://${hostname}:9001`);
+        this.client = new BinaryClient(`ws://${hostname}:9001`);
 
-        client.on('open', () => {
+        this.client.on('open', () => {
             console.log('[Recording]', 'connection open');
-            this.Stream = client.createStream({
+            this.Stream = this.client.createStream({
                 id: this.state.recordId,
                 chunkId: this.state.chunkId
             });
@@ -64,17 +60,18 @@ export class RecorderContainer extends Component {
             }
         });
 
-        client.on('error', () => {
+        this.client.on('error', () => {
             this.handleError('Server unreachable.')
         })
     }
 
-    onChunkProcessing(e) {
+    onChunkProcessing(stream) {
+        this.browserStream = stream;
         const audioContext = window.AudioContext || window.webkitAudioContext;
         const context = new audioContext();
 
         // the sample rate is in context.sampleRate
-        let audioInput = context.createMediaStreamSource(e);
+        let audioInput = context.createMediaStreamSource(stream);
 
         const bufferSize = 2048;
         let recorder = context.createScriptProcessor(bufferSize, 1, 1);
@@ -83,7 +80,7 @@ export class RecorderContainer extends Component {
         recorder.onaudioprocess = (e) => {
             if(!this.state.recording) return;
             console.log ('recording');
-            var left = e.inputBuffer.getChannelData(0);
+            const left = e.inputBuffer.getChannelData(0);
             this.uploadChunk(float32ToInt16(left));
         };
 
@@ -100,7 +97,10 @@ export class RecorderContainer extends Component {
     }
 
     startRecording() {
-        this.setState({recording: true});
+        this.setState({
+            recording: true,
+            recordId: this.generateRandomRecordId(),
+        });
 
         if (!this.isInitialized()) {
             this.initializeRecorder();
@@ -108,10 +108,26 @@ export class RecorderContainer extends Component {
     }
 
     stopRecording() {
-        this.setState({recording: false});
+        this.setState({
+            recording: false,
+            chunkId: INITIAL_CHUNK_ID_VAL
+        });
+
         if (this.recorder) {
-            this.recorder.stop();
+            this.recorder.disconnect();
         }
+
+        if (this.client) {
+            this.client.close();
+        }
+
+        if (this.browserStream) {
+            this.stopStreams(this.browserStream);
+        }
+    }
+
+    stopStreams(stream) {
+        for (let track of stream.getTracks()) { track.stop() }
     }
 
     startRecordingNextChunk() {
@@ -126,7 +142,6 @@ export class RecorderContainer extends Component {
     togglePlaying() {
         const recording = this.state.recording;
 
-        debugger;
         if (recording) {
             this.stopRecording();
         } else {
@@ -135,11 +150,11 @@ export class RecorderContainer extends Component {
     }
 
     render() {
-        const {playing, error} = this.state;
+        const {recording, error} = this.state;
 
         return (
             <Recorder
-                playing={playing}
+                recording={recording}
                 error={error}
                 onClick={this.togglePlaying}
             />
