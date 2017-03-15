@@ -65,10 +65,10 @@ var env = "prod"
 
 // aws.config.loadFromPath('awsconfig.json')
 
-if (process.env.NODE_ENV !== 'production') {
+// if (process.env.NODE_ENV !== 'production') {
   require('./webpack.dev').default(app);
   env = "dev"
-}
+// }
 console.log("Environment: ", env)
 
 var my_cache = {

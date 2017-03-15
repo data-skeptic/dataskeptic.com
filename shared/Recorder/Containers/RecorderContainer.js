@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-
+import {v4} from 'uuid';
 import Recorder from '../Components/Recorder';
 
 import {START, UPLOAD, RESUME, STOP} from '../Constants/actions';
@@ -17,14 +17,17 @@ export class RecorderContainer extends Component {
         super();
 
         this.state = {
-            recordId: 'test',
+            recordId: this.generateRandomRecordId(),
             chunkId: INITIAL_CHUNK_ID_VAL,
             recording: false
         };
 
         this.togglePlaying = this.togglePlaying.bind(this);
-        this.callAction = this.callAction.bind(this);
         this.onChunkProcessing = this.onChunkProcessing.bind(this);
+    }
+
+    generateRandomRecordId() {
+        return v4();
     }
 
     componentDidMount() {
@@ -42,7 +45,10 @@ export class RecorderContainer extends Component {
 
         client.on('open', () => {
             console.log('[Recording]', 'connection open');
-            this.Stream = client.createStream({id: 'test'});
+            this.Stream = client.createStream({
+                id: this.state.recordId,
+                chunkId: this.state.chunkId
+            });
 
             if (!navigator.getUserMedia) {
                 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
@@ -72,6 +78,7 @@ export class RecorderContainer extends Component {
 
         const bufferSize = 2048;
         let recorder = context.createScriptProcessor(bufferSize, 1, 1);
+        this.recorder = recorder;
 
         recorder.onaudioprocess = (e) => {
             if(!this.state.recording) return;
@@ -84,48 +91,27 @@ export class RecorderContainer extends Component {
         recorder.connect(context.destination);
     }
 
-    callAction(action) {
-        if (!action) {
-            return console.error('Specify recording action');
-        } else {
-            console.log('[Recording]', action);
-            console.dir(arguments);
-        }
-
-        this.Stream.apply(arguments);
-    }
-
     uploadChunk(convertedChunk) {
-        const {recordId, chunkId} = this.state;
-
-        this.callAction(UPLOAD, {
-            id: recordId,
-            chunkId: chunkId
-        }, convertedChunk);
+        this.Stream.write(convertedChunk);
     }
 
     resumeRecording() {
         this.startRecordingNextChunk();
-        this.callAction(RESUME, {
-
-        });
     }
 
     startRecording() {
-        debugger;
+        this.setState({recording: true});
+
         if (!this.isInitialized()) {
             this.initializeRecorder();
         }
-
-        this.callAction(START, {
-
-        });
     }
 
     stopRecording() {
-        this.callAction(STOP, {
-
-        });
+        this.setState({recording: false});
+        if (this.recorder) {
+            this.recorder.stop();
+        }
     }
 
     startRecordingNextChunk() {
@@ -138,13 +124,13 @@ export class RecorderContainer extends Component {
     }
 
     togglePlaying() {
-        const recording = !this.state.recording;
-        this.setState({recording});
+        const recording = this.state.recording;
 
+        debugger;
         if (recording) {
-            this.startRecording();
-        } else {
             this.stopRecording();
+        } else {
+            this.startRecording();
         }
     }
 

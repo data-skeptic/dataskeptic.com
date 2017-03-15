@@ -7,9 +7,10 @@ const path = require('path');
 const baseRecordsPath = path.join(__dirname, 'recordings');
 const lockedFileName = '.locked';
 
-import {START, UPLOAD, RESUME, STOP} from 'shared/Recorder/Constants/actions';
+const actions = require('./shared/Recorder/Constants/actions');
 
 const generateRecordPath = (recordId) => path.join(baseRecordsPath, recordId);
+const generateChunkPath = (recordId, chunkId) => path.join(generateRecordPath(recordId), `${chunkId}.wav`);
 
 const startRecording = (recordId) => {
     const recordingPath = generateRecordPath(recordId);
@@ -31,7 +32,7 @@ const lockRecording = (recordId) => {
     const recordingPath = generateRecordPath(recordId);
     const lockFile = path.join(recordingPath, lockedFileName);
 
-    fse.outputFileSync(lockFile, 'hello!')
+    fse.outputFileSync(lockFile, 'complete')
 };
 
 const unlockRecording = (recordId) => {
@@ -71,25 +72,33 @@ console.log(`Wait for new user connections`);
 bs.on('connection', (client) => {
     console.dir('connection');
 
+    let fileWriter = null
     client.on('stream', (stream, meta) => {
         console.log('stream');
         console.log('meta', meta);
 
-        switch (meta.event) {
-            case START:
-                console.dir('starting...');
+        const {id, chunkId} = meta;
+        startRecording(id);
 
-            case UPLOAD:
-                console.dir('uploading...');
-                break;
+        const filePath = generateChunkPath(id, chunkId);
+        console.log('writing in:', filePath);
+        var fileWriter = new wav.FileWriter(filePath, {
+            channels: 1,
+            sampleRate: 48000,
+            bitDepth: 16
+        });
 
-            case RESUME:
-                console.dir('resuming...');
-                break;
 
-            case STOP:
-                console.dir('stopping...');
-                break;
+        stream.pipe(fileWriter);
+        stream.on('end', () => {
+            fileWriter.end();
+        });
+    });
+
+    client.on('close', () => {
+        console.log('Connection closed')
+        if (fileWriter !== null) {
+            fileWriter.end();
         }
     });
 
@@ -111,9 +120,3 @@ bs.on('connection', (client) => {
     //     });
     // });
 });
-
-const testId = 'test';
-// startRecording(testId);
-// unlockRecording(testId);
-const r = getRecordingChunks(testId);
-console.log(r);

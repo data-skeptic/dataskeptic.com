@@ -5,10 +5,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=production NODE_PATH=$NODE_PATH:./shared node --harmony .",
-    "dev": "NODE_PATH=$NODE_PATH:./shared node --harmony .",
-    "prod": "webpack --progress --color -p --config webpack.prod.config.js",
-    "build": "webpack --progress --color -p --config webpack.prod.config.js"
+    "recording-server": "nodemon ./recordingServer.js",
+    "start": "npm run recording-server & NODE_ENV=production NODE_PATH=$NODE_PATH:./shared node --harmony .",
+    "dev": "npm run recording-server & NODE_PATH=$NODE_PATH:./shared node --harmony .",
+    "prod": "npm run recording-server & webpack --progress --color -p --config webpack.prod.config.js",
+    "build": "npm run ecording-server & webpack --progress --color -p --config webpack.prod.config.js"
   },
   "author": "kyle@dataskeptic.com",
   "license": "MIT",
@@ -74,6 +75,7 @@
     "striptags": "^3.0.0",
     "style-loader": "^0.13.2",
     "tls": "0.0.1",
+    "uuid": "^3.0.1",
     "wav": "^1.0.1",
     "webpack": "^1.12.9",
     "xml2js": "^0.4.17"
@@ -85,6 +87,7 @@
     "eslint-plugin-react": "^3.12.0",
     "extract-text-webpack-plugin": "^1.0.1",
     "less-loader": "^2.2.3",
+    "nodemon": "^1.11.0",
     "postcss-loader": "^1.3.3",
     "react-transform-hmr": "^1.0.1",
     "style-loader": "^0.13.2",
