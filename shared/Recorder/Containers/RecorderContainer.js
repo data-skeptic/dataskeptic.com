@@ -26,6 +26,10 @@ export class RecorderContainer extends Component {
         this.onChunkProcessing = this.onChunkProcessing.bind(this);
     }
 
+    componentWillUnmount() {
+        this.stopRecording();
+    }
+
     generateRandomRecordId() {
         return v4();
     }
@@ -118,6 +122,7 @@ export class RecorderContainer extends Component {
         }
 
         if (this.client) {
+            // this.Stream.send('')
             this.client.close();
         }
 

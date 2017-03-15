@@ -5,6 +5,7 @@ const fs = require('fs');
 const fse = require('fs-extra');
 const path = require('path');
 const baseRecordsPath = path.join(__dirname, 'recordings');
+const AWS = require("aws-sdk");
 const lockedFileName = '.locked';
 
 const actions = require('./shared/Recorder/Constants/actions');
@@ -25,7 +26,8 @@ const isRecordingLocked = (recordId) => {
 
 const completeRecording = (recordId) => {
     const recordingPath = generateRecordPath(recordId);
-
+    lockRecording(recordId);
+    uploadToS3(recordingPath);
 };
 
 const lockRecording = (recordId) => {
@@ -68,55 +70,52 @@ const getRecordingChunks = (recordId) => {
     return fileList(recordingPath);
 };
 
-console.log(`Wait for new user connections`);
-bs.on('connection', (client) => {
-    console.dir('connection');
+const mergeFiles = (files, output) => {
 
-    let fileWriter = null
-    client.on('stream', (stream, meta) => {
-        console.log('stream');
-        console.log('meta', meta);
+};
 
-        const {id, chunkId} = meta;
-        startRecording(id);
+const uploadToS3 = (filePath) => {
+    console.log('Uploading to s3', filePath);
+};
 
-        const filePath = generateChunkPath(id, chunkId);
-        console.log('writing in:', filePath);
-        var fileWriter = new wav.FileWriter(filePath, {
-            channels: 1,
-            sampleRate: 48000,
-            bitDepth: 16
+const run = () => {
+    console.log(`Wait for new user connections`);
+    bs.on('connection', (client) => {
+        console.dir('connection');
+
+        let fileWriter = null;
+        client.on('stream', (stream, meta) => {
+            console.log('stream');
+            console.log('meta', meta);
+
+            const {id, chunkId} = meta;
+            client.meta = {
+                id,
+                chunkId
+            };
+            startRecording(id);
+
+            const filePath = generateChunkPath(id, chunkId);
+            console.log('writing in:', filePath);
+            let fileWriter = new wav.FileWriter(filePath, {
+                channels: 1,
+                sampleRate: 48000,
+                bitDepth: 16
+            });
+
+            stream.pipe(fileWriter);
         });
 
-
-        stream.pipe(fileWriter);
-        stream.on('end', () => {
-            fileWriter.end();
+        client.on('close', () => {
+            const {id} = client.meta;
+            console.log('Connection closed', id);
+            completeRecording(id);
+            if (fileWriter !== null) {
+                fileWriter.end();
+            }
         });
     });
+};
 
-    client.on('close', () => {
-        console.log('Connection closed')
-        if (fileWriter !== null) {
-            fileWriter.end();
-        }
-    });
-
-    // console.log(`Incoming stream from browsers`);
-    // //
-    // var fileWriter = new wav.FileWriter(outFile, {
-    //     channels: 1,
-    //     sampleRate: 48000,
-    //     bitDepth: 16
-    // });
-    //
-    // client.on('stream', function(stream, meta) {
-    //     console.log('new stream');
-    //     stream.pipe(fileWriter);
-    //
-    //     stream.on('end', function() {
-    //         fileWriter.end();
-    //         console.log('wrote to file ' + outFile);
-    //     });
-    // });
-});
+AWS.config.loadFromPath('awsconfig.json');
+run();
