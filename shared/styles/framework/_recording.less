@@ -9,17 +9,40 @@
 
 @recording-button-width: 50px;
 
+@animation-speed: 0.8s;
+
+
+.recording-steps-container {
+  >.step {
+    display: none;
+
+    &.visible {
+      display: block;
+    }
+  }
+}
+
 .recording-container {
 
   margin-top: (@shadow-box-height + @recording-margin-top);
 
+  .recorder {
+    height: @recording-button-width;
+  }
+
   .messages {
     margin-left: 60px;
-    line-height: @recording-button-width;
 
     > p {
       margin: 0px;
       padding: 0px;
+    }
+
+    .info {
+      vertical-align: middle;
+      line-height: @recording-button-width;
+      word-wrap: break-word;
+      line-break: loose;
     }
   }
 
@@ -53,7 +76,7 @@
     }
 
     &.recording {
-      animation: recorder 1.5s cubic-bezier(.5, 0, 1, 1) infinite alternate;
+      animation: recorder @animation-speed cubic-bezier(.5, 0, 1, 1) infinite alternate;
 
       .icon {
         color: @recording-button-shadow-color;

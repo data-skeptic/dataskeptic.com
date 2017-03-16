@@ -7,6 +7,7 @@ import {START, UPLOAD, RESUME, STOP} from '../../Constants/actions';
 import {float32ToInt16} from '../../Helpers/Converter';
 
 const INITIAL_CHUNK_ID_VAL = 0;
+const INITIAL_DURATION_VAL = '00:00:00';
 
 import Recorder from '../../Components/Recorder/Recorder';
 import RecordingTimeTracker from '../../Components/RecordingTimeTracker/RecordingTimeTracker';
@@ -24,7 +25,7 @@ export class RecorderContainer extends Component {
             recordId: 'default',
             chunkId: INITIAL_CHUNK_ID_VAL,
             recording: false,
-            duration: '00:00:00'
+            duration: INITIAL_DURATION_VAL
         };
 
         this.togglePlaying = this.togglePlaying.bind(this);
@@ -94,6 +95,7 @@ export class RecorderContainer extends Component {
         const bufferSize = 2048;
         let recorder = context.createScriptProcessor(bufferSize, 1, 1);
         this.recorder = recorder;
+        this.startTimeCounter();
 
         recorder.onaudioprocess = (e) => {
             if(!this.state.recording) return;
@@ -105,8 +107,6 @@ export class RecorderContainer extends Component {
 
         audioInput.connect(recorder);
         recorder.connect(context.destination);
-
-        this.startTimeCounter();
     }
 
     startTimeCounter() {
@@ -152,9 +152,12 @@ export class RecorderContainer extends Component {
     }
 
     stopRecording() {
+        this.stopTimeCounter();
+
         this.setState({
             recording: false,
-            chunkId: INITIAL_CHUNK_ID_VAL
+            chunkId: INITIAL_CHUNK_ID_VAL,
+            duration: INITIAL_DURATION_VAL
         });
 
         if (this.recorder) {
@@ -169,12 +172,17 @@ export class RecorderContainer extends Component {
             this.stopStreams(this.browserStream);
         }
 
-        this.stopTimeCounter();
         this.recordingComplete();
     }
 
     recordingComplete() {
         const {id} = this.state;
+
+        // dummy
+        this.setState({
+            uploaded: true
+        });
+
         if (this.props.recordingComplete) {
             this.props.recordingComplete(id);
         }
@@ -208,9 +216,11 @@ export class RecorderContainer extends Component {
 
         if (this.state.recording) {
             return <RecordingTimeTracker duration={this.state.duration} />
+        } else if(this.state.uploaded) {
+            return <div className="text-success"><i className="fa fa-check-circle" aria-hidden="true"/> Uploaded!</div>
         }
 
-        return 'Recording will start when you hit the button below. You will have a chance to review your recording before submitting.';
+        return <div className="text-muted">Recording will start when you hit the button below. <i>You will have a chance to review your recording before submitting.</i></div>;
     }
 
     render() {

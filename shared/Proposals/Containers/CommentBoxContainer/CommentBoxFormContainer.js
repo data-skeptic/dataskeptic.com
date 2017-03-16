@@ -6,9 +6,9 @@ import {formValueSelector} from 'redux-form';
 import CommentBoxForm from '../../Components/CommentBoxForm/CommentBoxForm';
 import CommentTypeSelectorContainer from '../../Containers/CommentTypeSelectorContainer/CommentTypeSelectorContainer';
 
-import Recorder from '../../../Recorder';
+import Recorder, {steps as RECORDING_STEPS} from '../../../Recorder';
 
-export class CommentBoxFormContainer extends Component {
+class CommentBoxFormContainer extends Component {
 
     constructor() {
         super();
@@ -21,12 +21,12 @@ export class CommentBoxFormContainer extends Component {
     }
 
     render() {
-        const {values} = this.props;
+        const {values, activeStep} = this.props;
         return (
             <div className="comment-box-form-container">
                 <CommentBoxForm onSubmit={this.handleSubmit}>
                     <CommentTypeSelectorContainer />
-                    <Recorder />
+                    <Recorder activeStep={activeStep}/>
                 </CommentBoxForm>
             </div>
         )
@@ -35,7 +35,7 @@ export class CommentBoxFormContainer extends Component {
 
 export default connect(
     (state) => ({
-
+        activeStep: RECORDING_STEPS.INITIAL
     }),
     (dispatch) => bindActionCreators({
 
