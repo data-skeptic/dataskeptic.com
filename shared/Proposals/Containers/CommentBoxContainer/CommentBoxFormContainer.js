@@ -42,6 +42,10 @@ class CommentBoxFormContainer extends Component {
                 <CommentBoxForm onSubmit={this.handleSubmit}>
                     <CommentTypeSelectorContainer onChangeCommentType={this.onChangeCommentType} messageType={messageType} />
 
+                    <pre>
+                        {JSON.stringify(values)}
+                    </pre>
+
                     <Wizard activeKey={messageType}>
                         <div key={TEXT}>text</div>
                         <div key={UPLOAD}>upload</div>
@@ -55,7 +59,9 @@ class CommentBoxFormContainer extends Component {
 
 export default connect(
     (state) => ({
-        activeStep: state.proposals.get('step'),
+        values: state.proposals.getIn(['form']).toJS(),
+
+        activeStep: state.proposals.getIn(['form', 'step']),
         messageType: state.proposals.getIn(['form', 'type']),
         recording: state.proposals.getIn(['recording', 'type'])
     }),

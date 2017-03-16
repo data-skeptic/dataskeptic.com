@@ -12,6 +12,8 @@ import {
     SERVER_ERROR
 } from '../../Constants/steps';
 
+import Wizard from '../../../Wizard';
+
 /**
  * Recording flow
  *

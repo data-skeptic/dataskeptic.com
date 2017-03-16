@@ -16,12 +16,12 @@ import {
 } from '../../Recorder/Constants/steps';
 
 const defaultState = {
-    step: INIT,
     loading: false,
     error: false,
     proposal: {},
     form: {
-        type: types.UPLOAD
+        step: 'TEST',
+        type: types.TEXT
     }
 };
 

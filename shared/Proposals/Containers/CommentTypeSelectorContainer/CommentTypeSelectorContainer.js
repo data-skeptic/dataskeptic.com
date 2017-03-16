@@ -25,7 +25,6 @@ class CommentTypeSelectorContainer extends Component {
 
         return (
             <CommentTypeSelector onChoose={this.onChoose} active={messageType}/>
-
         );
     }
 
