@@ -8,8 +8,7 @@ import {
     RECORDING,
     REVIEW,
     SUBMITTING,
-    COMPLETE,
-    SERVER_ERROR
+    COMPLETE
 } from '../../Constants/steps';
 
 import Wizard from '../../../Wizard';
@@ -22,63 +21,53 @@ import Wizard from '../../../Wizard';
  * 2. RECORDING -
  * 3. REVIEW - user able to review recording or try to record again.
  * 4. SUBMITTING - user submit recording
- * 5. COMPLETE - user successfully submitted record | SERVER_ERROR - server response with error message
+ * 5. COMPLETE - user successfully submitted record | ERROR - server response with error message
  */
 class RecorderFlowContainer extends Component {
 
     static propTypes = {
-        activeKey: PropTypes.string
+        activeStep: PropTypes.string
     };
 
     constructor() {
         super();
     }
 
-    getVisibleKey() {
-        return this.props.activeStep || ERROR;
-    }
-
-    isStepVisible(candidateKey) {
-        const visibleKey = this.getVisibleKey();
-
-        return (candidateKey === visibleKey);
-    }
-
     render() {
-        const visibleKey = this.getVisibleKey();
+        const {activeStep} = this.props;
 
         return (
             <div className="recording-steps-container">
-                <p>Visible key: <b>{visibleKey}</b></p>
 
-                <div className={classNames('step step-init', {'visible': this.isStepVisible(INIT)})}>
-                    init
-                </div>
+                <Wizard activeKey={activeStep}>
+                    <div key={INIT}>
+                        init
+                    </div>
 
-                <div className={classNames('step step-ready', {'visible': this.isStepVisible(READY)})}>
-                    ready
-                </div>
+                    <div key={READY}>
+                        ready
+                    </div>
 
-                <div className={classNames('step step-recording', {'visible': this.isStepVisible(RECORDING)})}>
-                    recording
-                </div>
+                    <div key={RECORDING}>
+                        recording
+                    </div>
 
-                <div className={classNames('step step-review', {'visible': this.isStepVisible(REVIEW)})}>
-                    review
-                </div>
+                    <div key={REVIEW}>
+                        review
+                    </div>
 
-                <div className={classNames('step step-submitting', {'visible': this.isStepVisible(SUBMITTING)})}>
-                    submitting
-                </div>
+                    <div key={SUBMITTING}>
+                        submitting
+                    </div>
 
-                <div className={classNames('step step-complete', {'visible': this.isStepVisible(COMPLETE)})}>
-                    complete
-                </div>
+                    <div key={COMPLETE}>
+                        complete
+                    </div>
 
-                <div
-                    className={classNames('step step-error', {'visible': this.isStepVisible(ERROR) || this.isStepVisible(SERVER_ERROR)})}>
-                    error
-                </div>
+                    <div key={ERROR}>
+                        error
+                    </div>
+                </Wizard>
             </div>
         )
     }

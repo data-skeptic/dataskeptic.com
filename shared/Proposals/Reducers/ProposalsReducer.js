@@ -12,7 +12,8 @@ import {
 } from '../Actions/CommentBoxFormActions';
 
 import {
-    INIT
+    INIT,
+    RECORDING
 } from '../../Recorder/Constants/steps';
 
 const defaultState = {
@@ -20,7 +21,7 @@ const defaultState = {
     error: false,
     proposal: {},
     form: {
-        step: INIT,
+        step: RECORDING,
         type: types.TEXT
     }
 };
