@@ -7,17 +7,30 @@
 @recording-button-bg-color: #fff;
 @recording-button-border-color: #D7D9D9;
 
+@recording-button-width: 50px;
+
 .recording-container {
 
   margin-top: (@shadow-box-height + @recording-margin-top);
 
+  .messages {
+    margin-left: 60px;
+    line-height: @recording-button-width;
+
+    > p {
+      margin: 0px;
+      padding: 0px;
+    }
+  }
+
   .btn-recorder {
+    float: left;
     outline: none;
     border: 2px solid @recording-button-border-color;
     background: @recording-button-bg-color;
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
+    width: @recording-button-width;
+    height: @recording-button-width;
 
     line-height: 50px;
     text-align: center;

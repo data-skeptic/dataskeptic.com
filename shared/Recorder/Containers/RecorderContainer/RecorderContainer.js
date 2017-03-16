@@ -1,11 +1,15 @@
 import React, {Component} from 'react';
 import {v4} from 'uuid';
-import Recorder from '../Components/Recorder';
+import moment from 'moment';
+import isEmpty from 'lodash/isEmpty';
 
-import {START, UPLOAD, RESUME, STOP} from '../Constants/actions';
-import {float32ToInt16} from '../Helpers/Converter';
+import {START, UPLOAD, RESUME, STOP} from '../../Constants/actions';
+import {float32ToInt16} from '../../Helpers/Converter';
 
 const INITIAL_CHUNK_ID_VAL = 0;
+
+import Recorder from '../../Components/Recorder/Recorder';
+import RecordingTimeTracker from '../../Components/RecordingTimeTracker/RecordingTimeTracker';
 
 export class RecorderContainer extends Component {
 
@@ -19,11 +23,16 @@ export class RecorderContainer extends Component {
         this.state = {
             recordId: 'default',
             chunkId: INITIAL_CHUNK_ID_VAL,
-            recording: false
+            recording: false,
+            duration: '00:00:00'
         };
 
         this.togglePlaying = this.togglePlaying.bind(this);
         this.onChunkProcessing = this.onChunkProcessing.bind(this);
+
+        this.startTimeCounter = this.startTimeCounter.bind(this);
+        this.stopTimeCounter = this.stopTimeCounter.bind(this);
+        this.updateDuration = this.updateDuration.bind(this);
     }
 
     componentWillUnmount() {
@@ -70,6 +79,11 @@ export class RecorderContainer extends Component {
     }
 
     onChunkProcessing(stream) {
+        this.setState({
+            startedAt: (new Date()),
+            recording: true
+        });
+
         this.browserStream = stream;
         const audioContext = window.AudioContext || window.webkitAudioContext;
         const context = new audioContext();
@@ -83,6 +97,7 @@ export class RecorderContainer extends Component {
 
         recorder.onaudioprocess = (e) => {
             if(!this.state.recording) return;
+
             console.log ('recording');
             const left = e.inputBuffer.getChannelData(0);
             this.uploadChunk(float32ToInt16(left));
@@ -90,6 +105,32 @@ export class RecorderContainer extends Component {
 
         audioInput.connect(recorder);
         recorder.connect(context.destination);
+
+        this.startTimeCounter();
+    }
+
+    startTimeCounter() {
+        this.timeCounter = setInterval(this.updateDuration, 1000);
+    }
+
+    stopTimeCounter() {
+        if (this.timeCounter) {
+            clearInterval(this.timeCounter);
+            this.timeCounter = null;
+        }
+    }
+
+    updateDuration() {
+        const then = this.state.startedAt;
+        const now = new Date();
+
+        const duration = moment.utc(moment(now,"DD/MM/YYYY HH:mm:ss").diff(moment(then,"DD/MM/YYYY HH:mm:ss"))).format("HH:mm:ss")
+
+        console.log('update duration', duration)
+
+        this.setState({
+            duration
+        })
     }
 
     uploadChunk(convertedChunk) {
@@ -102,7 +143,6 @@ export class RecorderContainer extends Component {
 
     startRecording() {
         this.setState({
-            recording: true,
             recordId: this.generateRandomRecordId(),
         });
 
@@ -129,6 +169,7 @@ export class RecorderContainer extends Component {
             this.stopStreams(this.browserStream);
         }
 
+        this.stopTimeCounter();
         this.recordingComplete();
     }
 
@@ -162,8 +203,18 @@ export class RecorderContainer extends Component {
         }
     }
 
+    getInfoMessage() {
+        if (!isEmpty(this.state.error)) return false;
+
+        if (this.state.recording) {
+            return <RecordingTimeTracker duration={this.state.duration} />
+        }
+
+        return 'Recording will start when you hit the button below. You will have a chance to review your recording before submitting.';
+    }
+
     render() {
-        const {recording, error} = this.state;
+        const {recording, error, duration} = this.state;
 
         return (
             <div className="recording-container">
@@ -173,6 +224,7 @@ export class RecorderContainer extends Component {
                     startComponent={<i className="fa fa-microphone icon">&nbsp;</i>}
                     stopComponent={<i className="fa fa-circle icon">&nbsp;</i>}
                     onClick={this.togglePlaying}
+                    info={this.getInfoMessage()}
                 />
             </div>
         )
