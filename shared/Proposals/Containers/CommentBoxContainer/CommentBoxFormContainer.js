@@ -35,7 +35,7 @@ class CommentBoxFormContainer extends Component {
 
 export default connect(
     (state) => ({
-        activeStep: RECORDING_STEPS.INITIAL
+        activeStep: RECORDING_STEPS.READY
     }),
     (dispatch) => bindActionCreators({
 

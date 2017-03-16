@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import classNames from 'classnames';
 
 import {
@@ -24,16 +24,16 @@ import {
  */
 class RecorderFlowContainer extends Component {
 
+    static propTypes = {
+        activeKey: PropTypes.string
+    };
+
     constructor() {
         super();
-
-        this.state = {
-            activeKey: INIT
-        }
     }
 
     getVisibleKey() {
-        return this.state.activeKey;
+        return this.props.activeStep || ERROR;
     }
 
     isStepVisible(candidateKey) {
@@ -43,8 +43,12 @@ class RecorderFlowContainer extends Component {
     }
 
     render() {
+        const visibleKey = this.getVisibleKey();
+
         return (
             <div className="recording-steps-container">
+                <p>Visible key: <b>{visibleKey}</b></p>
+
                 <div className={classNames('step step-init', {'visible': this.isStepVisible(INIT)})}>
                     init
                 </div>
@@ -69,7 +73,8 @@ class RecorderFlowContainer extends Component {
                     complete
                 </div>
 
-                <div className={classNames('step step-error', {'visible': this.isStepVisible(ERROR) || this.isStepVisible(SERVER_ERROR)})}>
+                <div
+                    className={classNames('step step-error', {'visible': this.isStepVisible(ERROR) || this.isStepVisible(SERVER_ERROR)})}>
                     error
                 </div>
             </div>

@@ -11,7 +11,7 @@ import {
 } from './Constants/steps';
 
 export default RecorderFlowContainer;
-export const types = {
+export const steps = {
     INIT,
     READY,
     ERROR,
