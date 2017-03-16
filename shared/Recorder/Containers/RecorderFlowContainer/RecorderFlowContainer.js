@@ -13,6 +13,8 @@ import {
 
 import Wizard from '../../../Wizard';
 
+import RecorderContainer from '../../Containers/RecorderContainer/RecorderContainer';
+
 /**
  * Recording flow
  *
@@ -37,7 +39,7 @@ class RecorderFlowContainer extends Component {
         const {activeStep} = this.props;
 
         return (
-            <div className="recording-steps-container">
+            <div className="recording-flow-container">
 
                 <Wizard activeKey={activeStep}>
                     <div key={INIT}>
@@ -49,7 +51,7 @@ class RecorderFlowContainer extends Component {
                     </div>
 
                     <div key={RECORDING}>
-                        recording
+                        <RecorderContainer />
                     </div>
 
                     <div key={REVIEW}>
