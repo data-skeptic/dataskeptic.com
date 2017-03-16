@@ -57,6 +57,7 @@
     "react-adsense": "0.0.1",
     "react-disqus-comments": "^0.5.2",
     "react-dom": "^0.14.3",
+    "react-dropzone": "^3.12.1",
     "react-ga": "^2.1.2",
     "react-howler": "^3.3.0",
     "react-logger": "^1.1.0",
