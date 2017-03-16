@@ -8,6 +8,9 @@ import CommentTypeSelectorContainer from '../../Containers/CommentTypeSelectorCo
 
 import {changeCommentType} from '../../Actions/CommentBoxFormActions';
 import {TEXT, UPLOAD, RECORDING} from '../../Constants/CommentTypes';
+
+import CommentTypeBox from '../../Components/CommentTypeBox/CommentTypeBox';
+import UploadFileTypeBox from '../../Components/UploadFileTypeBox/UploadFileTypeBox';
 import Recorder, {steps as RECORDING_STEPS} from '../../../Recorder';
 
 import Wizard from '../../../Wizard';
@@ -39,16 +42,13 @@ class CommentBoxFormContainer extends Component {
 
         return (
             <div className="comment-box-form-container">
+                <CommentTypeSelectorContainer onChangeCommentType={this.onChangeCommentType} messageType={messageType} />
                 <CommentBoxForm onSubmit={this.handleSubmit}>
-                    <CommentTypeSelectorContainer onChangeCommentType={this.onChangeCommentType} messageType={messageType} />
-
-                    <pre>
-                        {JSON.stringify(values)}
-                    </pre>
-
                     <Wizard activeKey={messageType}>
-                        <div key={TEXT}>text</div>
-                        <div key={UPLOAD}>upload</div>
+                        <CommentTypeBox key={TEXT} />
+
+                        <UploadFileTypeBox key={UPLOAD} />
+
                         <Recorder activeStep={activeStep} key={RECORDING}/>
                     </Wizard>
                 </CommentBoxForm>

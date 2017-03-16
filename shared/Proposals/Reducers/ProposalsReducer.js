@@ -20,7 +20,7 @@ const defaultState = {
     error: false,
     proposal: {},
     form: {
-        step: 'TEST',
+        step: INIT,
         type: types.TEXT
     }
 };
