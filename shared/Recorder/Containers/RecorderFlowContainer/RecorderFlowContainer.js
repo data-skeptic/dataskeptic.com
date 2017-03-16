@@ -83,12 +83,4 @@ class RecorderFlowContainer extends Component {
 
 }
 
-// export default connect(
-//     (state) => ({
-//         messageType: state.proposals.getIn(['form', 'type'])
-//     }),
-//     (dispatch) => bindActionCreators({
-//         changeCommentType
-//     }, dispatch)
-// )(RecorderFlowContainer);
 export default RecorderFlowContainer;

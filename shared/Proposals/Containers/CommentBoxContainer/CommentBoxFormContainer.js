@@ -7,7 +7,10 @@ import CommentBoxForm from '../../Components/CommentBoxForm/CommentBoxForm';
 import CommentTypeSelectorContainer from '../../Containers/CommentTypeSelectorContainer/CommentTypeSelectorContainer';
 
 import {changeCommentType} from '../../Actions/CommentBoxFormActions';
+import {TEXT, UPLOAD, RECORDING} from '../../Constants/CommentTypes';
 import Recorder, {steps as RECORDING_STEPS} from '../../../Recorder';
+
+import Wizard from '../../../Wizard';
 
 class CommentBoxFormContainer extends Component {
 
@@ -38,7 +41,12 @@ class CommentBoxFormContainer extends Component {
             <div className="comment-box-form-container">
                 <CommentBoxForm onSubmit={this.handleSubmit}>
                     <CommentTypeSelectorContainer onChangeCommentType={this.onChangeCommentType} messageType={messageType} />
-                    <Recorder activeStep={activeStep}/>
+
+                    <Wizard activeKey={messageType}>
+                        <div key={TEXT}>text</div>
+                        <div key={UPLOAD}>upload</div>
+                        <Recorder activeStep={activeStep} key={RECORDING}/>
+                    </Wizard>
                 </CommentBoxForm>
             </div>
         )
