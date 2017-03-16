@@ -122,12 +122,20 @@ export class RecorderContainer extends Component {
         }
 
         if (this.client) {
-            // this.Stream.send('')
             this.client.close();
         }
 
         if (this.browserStream) {
             this.stopStreams(this.browserStream);
+        }
+
+        this.recordingComplete();
+    }
+
+    recordingComplete() {
+        const {id} = this.state;
+        if (this.props.recordingComplete) {
+            this.props.recordingComplete(id);
         }
     }
 
@@ -158,11 +166,15 @@ export class RecorderContainer extends Component {
         const {recording, error} = this.state;
 
         return (
-            <Recorder
-                recording={recording}
-                error={error}
-                onClick={this.togglePlaying}
-            />
+            <div className="recording-container">
+                <Recorder
+                    recording={recording}
+                    error={error}
+                    startComponent={<i className="fa fa-microphone icon">&nbsp;</i>}
+                    stopComponent={<i className="fa fa-circle icon">&nbsp;</i>}
+                    onClick={this.togglePlaying}
+                />
+            </div>
         )
     }
 }

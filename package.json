@@ -6,8 +6,8 @@
   "main": "index.js",
   "scripts": {
     "recording-server": "nodemon ./recordingServer.js",
-    "start": "npm run recording-server & NODE_ENV=production NODE_PATH=$NODE_PATH:./shared node --harmony .",
-    "dev": "npm run recording-server & NODE_PATH=$NODE_PATH:./shared node --harmony .",
+    "start": "NODE_ENV=production NODE_PATH=$NODE_PATH:./shared node --harmony .",
+    "dev": "NODE_PATH=$NODE_PATH:./shared node --harmony .",
     "prod": "npm run recording-server & webpack --progress --color -p --config webpack.prod.config.js",
     "build": "npm run ecording-server & webpack --progress --color -p --config webpack.prod.config.js"
   },
