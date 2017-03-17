@@ -1,11 +1,10 @@
 import React, {Component, PropTypes} from 'react';
-import isArray from 'lodash/isArray';
 
 class WizardContainer extends Component {
 
     static propTypes = {
         children: PropTypes.node,
-        activeKey: PropTypes.string
+        activeKey: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
     };
 
     constructor() {
@@ -18,10 +17,21 @@ class WizardContainer extends Component {
         return this.props.activeKey;
     }
 
+    isArrayKey(key) {
+        return key.indexOf(',') > -1;
+    }
+
+    parseArrayKey(key) {
+        return key.split(',');
+    }
+
     isStepVisible(candidateKey) {
         const visibleKey = this.getVisibleKey();
-        // TODO array
 
+        if (this.isArrayKey(candidateKey)) {
+            candidateKey = this.parseArrayKey(candidateKey);
+            return candidateKey.indexOf(visibleKey) > -1
+        }
 
         return (candidateKey === visibleKey);
     }

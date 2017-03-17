@@ -16,6 +16,7 @@ import {
 } from '../../../Recorder/Constants/steps';
 
 import Wizard from '../../../Wizard';
+import TogglePlayButton from '../../../Player/Components/TogglePlayButton';
 
 /**
  * Recording flow
@@ -47,11 +48,13 @@ class RecorderFlowContainer extends Component {
 
                 <Wizard activeKey={activeStep}>
                     <div key={INIT}>init</div>
-                    <div key={READY}>ready</div>
-                    <div key={RECORDING}>recording</div>
+                    <div key={[READY, RECORDING]}>ready & recording</div>
                     <div key={COMPLETE}>completed</div>
-                    <div key={REVIEW}>review</div>
-                    <div key={SUBMITTING}>submitting</div>
+                    <div key={[REVIEW, SUBMITTING]}>
+                        <TogglePlayButton
+                            recording={false}
+                        />
+                    </div>
                     <div key={ERROR}>error</div>
                 </Wizard>
 
