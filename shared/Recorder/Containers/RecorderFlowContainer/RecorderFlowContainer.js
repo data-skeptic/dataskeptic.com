@@ -36,10 +36,11 @@ class RecorderFlowContainer extends Component {
     }
 
     render() {
-        const {activeStep} = this.props;
+        const {activeStep, onStepReady} = this.props;
 
         return (
             <div className="recording-flow-container">
+
 
                 <Wizard activeKey={activeStep}>
                     <div key={INIT}>

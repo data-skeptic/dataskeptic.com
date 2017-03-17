@@ -21,7 +21,7 @@ const defaultState = {
     error: false,
     proposal: {},
     form: {
-        step: RECORDING,
+        step: INIT,
         type: types.TEXT
     }
 };

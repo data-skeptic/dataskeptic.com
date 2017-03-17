@@ -27,6 +27,9 @@ class CommentBoxFormContainer extends Component {
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onChangeCommentType = this.onChangeCommentType.bind(this);
+
+        this.recordingStarted = this.recordingStarted.bind(this);
+        this.recordingUploaded = this.recordingUploaded.bind(this);
     }
 
     handleSubmit(data) {
@@ -35,6 +38,18 @@ class CommentBoxFormContainer extends Component {
 
     onChangeCommentType(type) {
         this.props.changeCommentType(type);
+    }
+
+    recordingStarted() {
+        console.log('started');
+    }
+
+    recordingUploaded() {
+        console.log('uploaded');
+    }
+
+    nextStep() {
+        console.log('next step');
     }
 
     render() {
@@ -49,7 +64,12 @@ class CommentBoxFormContainer extends Component {
 
                         <UploadFileTypeBox key={UPLOAD} />
 
-                        <Recorder activeStep={activeStep} key={RECORDING}/>
+                        <Recorder activeStep={activeStep}
+                                  key={RECORDING}
+                                  onStepReady={this.nextStep}
+                                  onRecordingStart={this.recordingStarted}
+                                  onRecordingUploaded={this.recordingUploaded}
+                        />
                     </Wizard>
                 </CommentBoxForm>
             </div>
