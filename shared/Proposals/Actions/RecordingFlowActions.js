@@ -1,4 +1,4 @@
-import {steps as RECORDING_STEPS} from '../../Recorder';
+import {steps} from '../../Recorder';
 
 /**
  * Recording flow
@@ -33,6 +33,8 @@ export const RECORDING_FLOW_SUBMIT_FAIL = 'RECORDING_FLOW_SUBMIT_FAIL';
 
 export const RECORDING_FLOW_COMPLETE = 'RECORDING_FLOW_COMPLETE';
 
+export const RECORDING_FLOW_FAIL = 'RECORDING_FLOW_FAIL';
+
 /**
  * STEPS CONTROL
  **/
@@ -47,7 +49,11 @@ export function changeStep(nextStep) {
 
 export function reset() {
     return (dispatch) => {
-        dispatch(changeStep(RECORDING_STEPS.INIT));
+        dispatch({
+            type: RECORDING_FLOW_RESET
+        });
+
+        dispatch(init());
     }
 }
 
@@ -57,6 +63,8 @@ export function reset() {
 export function init() {
     return (dispatch) => {
         dispatch(initRequest());
+
+        dispatch(changeStep(steps.INIT))
     }
 }
 
@@ -82,6 +90,7 @@ export function initError() {
 export function ready() {
     return (dispatch) => {
         dispatch(readyRequest());
+        dispatch(changeStep(steps.READY));
     }
 }
 
@@ -108,21 +117,42 @@ export function readyError() {
  * RECORDING
  */
 export function recordingStart() {
-    return {
-        type: RECORDING_FLOW_RECORDING_START
+    return (dispatch) => {
+        dispatch({
+            type: RECORDING_FLOW_RECORDING_START
+        });
+
+        dispatch(changeStep(steps.RECORDING))
     }
 }
 
 export function recordingFinish() {
-    return {
-        type: RECORDING_FLOW_RECORDING_FINISH
+    return (dispatch) => {
+        dispatch({
+            type: RECORDING_FLOW_RECORDING_FINISH
+        });
+
+        dispatch(changeStep(steps.REVIEW));
+    }
+}
+
+/**
+ * REVIEW
+ **/
+
+export function review() {
+    return (dispatch) => {
+        dispatch({
+            type: RECORDING_FLOW_REVIEW
+        });
+
+        dispatch(changeStep(steps.SUBMITTING));
     }
 }
 
 /**
  * SUBMIT
  */
-
 export function submit() {
     return (dispatch) => {
         dispatch(submitRequest());
@@ -150,8 +180,20 @@ export function submitError(data) {
 /**
  * COMPLETE
  */
-export function recordingFlowComplete() {
+export function complete() {
     return {
         type: RECORDING_FLOW_COMPLETE
+    }
+}
+
+/**
+ * ERROR
+ */
+export function fail(error) {
+    return {
+        type: RECORDING_FLOW_FAIL,
+        payload: {
+            error
+        }
     }
 }

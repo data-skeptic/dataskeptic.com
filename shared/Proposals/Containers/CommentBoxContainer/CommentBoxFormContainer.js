@@ -13,13 +13,22 @@ import CommentTypeBox from '../../Components/CommentTypeBox/CommentTypeBox';
 import UploadFileTypeBox from '../../Components/UploadFileTypeBox/UploadFileTypeBox';
 import Recorder, {steps as RECORDING_STEPS} from '../../../Recorder';
 
+
+import {init, ready, recordingStart, recordingFinish, review, submit, complete, fail} from '../../Actions/RecordingFlowActions';
 import Wizard from '../../../Wizard';
 
 class CommentBoxFormContainer extends Component {
 
     static propTypes = {
         messageType: PropTypes.string,
-        changeCommentType: PropTypes.func
+
+        changeCommentType: PropTypes.func,
+        init: PropTypes.func,
+        ready: PropTypes.func,
+        recordingStart: PropTypes.func,
+        recordingFinish: PropTypes.func,
+        submit: PropTypes.func,
+        complete: PropTypes.func,
     };
 
     constructor() {
@@ -28,8 +37,13 @@ class CommentBoxFormContainer extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onChangeCommentType = this.onChangeCommentType.bind(this);
 
-        this.recordingStarted = this.recordingStarted.bind(this);
-        this.recordingUploaded = this.recordingUploaded.bind(this);
+        this.recordingReady = this.recordingReady.bind(this);
+        this.recorderRecording = this.recorderRecording.bind(this);
+        this.recorderStop = this.recorderStop.bind(this);
+        this.recorderReview = this.recorderReview.bind(this);
+        this.recorderSubmitting = this.recorderSubmitting.bind(this);
+        this.recorderComplete = this.recorderComplete.bind(this);
+        this.recorderError = this.recorderError.bind(this);
     }
 
     handleSubmit(data) {
@@ -40,16 +54,32 @@ class CommentBoxFormContainer extends Component {
         this.props.changeCommentType(type);
     }
 
-    recordingStarted() {
-        console.log('started');
+    recordingReady() {
+        this.props.ready();
     }
 
-    recordingUploaded() {
-        console.log('uploaded');
+    recorderRecording() {
+        this.props.recordingStart();
     }
 
-    nextStep() {
-        console.log('next step');
+    recorderStop() {
+        this.props.recordingFinish();
+    }
+
+    recorderReview() {
+        this.props.review()
+    }
+
+    recorderSubmitting() {
+        this.props.submit()
+    }
+
+    recorderComplete() {
+        this.props.complete()
+    }
+
+    recorderError(error) {
+        this.props.fail(error);
     }
 
     render() {
@@ -57,18 +87,24 @@ class CommentBoxFormContainer extends Component {
 
         return (
             <div className="comment-box-form-container">
-                <CommentTypeSelectorContainer onChangeCommentType={this.onChangeCommentType} messageType={messageType} />
+                <CommentTypeSelectorContainer onChangeCommentType={this.onChangeCommentType} messageType={messageType}/>
                 <CommentBoxForm onSubmit={this.handleSubmit}>
                     <Wizard activeKey={messageType}>
-                        <CommentTypeBox key={TEXT} />
+                        <CommentTypeBox key={TEXT}/>
 
-                        <UploadFileTypeBox key={UPLOAD} />
+                        <UploadFileTypeBox key={UPLOAD}/>
 
-                        <Recorder activeStep={activeStep}
-                                  key={RECORDING}
-                                  onStepReady={this.nextStep}
-                                  onRecordingStart={this.recordingStarted}
-                                  onRecordingUploaded={this.recordingUploaded}
+                        <Recorder
+                            key={RECORDING}
+                            activeStep={activeStep}
+
+                            ready={this.recordingReady}
+                            recording={this.recorderRecording}
+                            stop={this.recorderStop}
+                            review={this.recorderReview}
+                            submitting={this.recorderSubmitting}
+                            complete={this.recorderComplete}
+                            error={this.recorderError}
                         />
                     </Wizard>
                 </CommentBoxForm>
@@ -86,6 +122,14 @@ export default connect(
         recording: state.proposals.getIn(['recording', 'type'])
     }),
     (dispatch) => bindActionCreators({
-        changeCommentType
+        changeCommentType,
+        init,
+        ready,
+        recordingStart,
+        recordingFinish,
+        submit,
+        review,
+        complete,
+        fail
     }, dispatch)
 )(CommentBoxFormContainer);

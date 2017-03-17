@@ -16,6 +16,32 @@ import {
     RECORDING
 } from '../../Recorder/Constants/steps';
 
+import {
+    RECORDING_FLOW_CHANGE_STEP,
+    RECORDING_FLOW_RETURN,
+    RECORDING_FLOW_RESET,
+
+    RECORDING_FLOW_INIT_REQUEST,
+    RECORDING_FLOW_INIT_SUCCESS,
+    RECORDING_FLOW_INIT_FAIL,
+
+    RECORDING_FLOW_READY_REQUEST,
+    RECORDING_FLOW_READY_SUCCESS,
+    RECORDING_FLOW_READY_FAIL,
+
+    RECORDING_FLOW_RECORDING_START,
+    RECORDING_FLOW_RECORDING_FINISH,
+
+    RECORDING_FLOW_REVIEW,
+
+    RECORDING_FLOW_SUBMIT_REQUEST,
+    RECORDING_FLOW_SUBMIT_SUCCESS,
+    RECORDING_FLOW_SUBMIT_FAIL,
+
+    RECORDING_FLOW_COMPLETE,
+    RECORDING_FLOW_FAIL
+} from '../Actions/RecordingFlowActions';
+
 const defaultState = {
     loading: false,
     error: false,
@@ -50,6 +76,10 @@ export default function ProposalsReducer(state = initialState, action) {
 
         case CHANGE_COMMENT_TYPE:
             nstate.form.type = action.payload.type;
+            break;
+
+        case RECORDING_FLOW_CHANGE_STEP:
+            nstate.form.step = action.payload.nextStep;
             break;
 
         default:

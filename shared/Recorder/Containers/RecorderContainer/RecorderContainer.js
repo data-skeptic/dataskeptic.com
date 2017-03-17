@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import {v4} from 'uuid';
 import moment from 'moment';
 import isEmpty from 'lodash/isEmpty';
@@ -15,7 +15,12 @@ import RecordingTimeTracker from '../../Components/RecordingTimeTracker/Recordin
 export class RecorderContainer extends Component {
 
     static propTypes = {
-
+        onReady: PropTypes.func,
+        onRecording: PropTypes.func,
+        onReview: PropTypes.func,
+        onSubmitting: PropTypes.func,
+        onComplete: PropTypes.func,
+        onError: PropTypes.func,
     };
 
     constructor() {
@@ -60,6 +65,8 @@ export class RecorderContainer extends Component {
                 chunkId: this.state.chunkId
             });
 
+            this.props.onReady();
+
             if (!navigator.getUserMedia) {
                 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
                     navigator.mozGetUserMedia || navigator.msGetUserMedia;
@@ -85,6 +92,8 @@ export class RecorderContainer extends Component {
             recording: true
         });
 
+        this.props.onRecording();
+
         this.browserStream = stream;
         const audioContext = window.AudioContext || window.webkitAudioContext;
         const context = new audioContext();
@@ -100,7 +109,6 @@ export class RecorderContainer extends Component {
         recorder.onaudioprocess = (e) => {
             if(!this.state.recording) return;
 
-            console.log ('recording');
             const left = e.inputBuffer.getChannelData(0);
             this.uploadChunk(float32ToInt16(left));
         };
@@ -125,8 +133,6 @@ export class RecorderContainer extends Component {
         const now = new Date();
 
         const duration = moment.utc(moment(now,"DD/MM/YYYY HH:mm:ss").diff(moment(then,"DD/MM/YYYY HH:mm:ss"))).format("HH:mm:ss")
-
-        console.log('update duration', duration)
 
         this.setState({
             duration
@@ -172,6 +178,7 @@ export class RecorderContainer extends Component {
             this.stopStreams(this.browserStream);
         }
 
+        this.props.onStop();
         this.recordingComplete();
     }
 
@@ -186,6 +193,8 @@ export class RecorderContainer extends Component {
         if (this.props.recordingComplete) {
             this.props.recordingComplete(id);
         }
+
+        this.props.onComplete(id);
     }
 
     stopStreams(stream) {
@@ -198,6 +207,7 @@ export class RecorderContainer extends Component {
     }
 
     handleError(error) {
+        this.props.onError(error);
         this.setState({error: error});
     }
 

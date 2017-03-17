@@ -1,6 +1,9 @@
 import React, {Component, PropTypes} from 'react';
-import classNames from 'classnames';
 
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+
+import RecorderContainer from '../../Containers/RecorderContainer/RecorderContainer';
 import {
     INIT,
     READY,
@@ -8,12 +11,11 @@ import {
     RECORDING,
     REVIEW,
     SUBMITTING,
-    COMPLETE
-} from '../../Constants/steps';
+    COMPLETE,
+    SERVER_ERROR
+} from '../../../Recorder/Constants/steps';
 
 import Wizard from '../../../Wizard';
-
-import RecorderContainer from '../../Containers/RecorderContainer/RecorderContainer';
 
 /**
  * Recording flow
@@ -37,40 +39,31 @@ class RecorderFlowContainer extends Component {
 
     render() {
         const {activeStep, onStepReady} = this.props;
+        const {ready, recording, stop, review, submitting, complete, error} = this.props;
 
         return (
             <div className="recording-flow-container">
-
+                <p>{activeStep}</p>
 
                 <Wizard activeKey={activeStep}>
-                    <div key={INIT}>
-                        init
-                    </div>
-
-                    <div key={READY}>
-                        ready
-                    </div>
-
-                    <div key={RECORDING}>
-                        <RecorderContainer />
-                    </div>
-
-                    <div key={REVIEW}>
-                        review
-                    </div>
-
-                    <div key={SUBMITTING}>
-                        submitting
-                    </div>
-
-                    <div key={COMPLETE}>
-                        complete
-                    </div>
-
-                    <div key={ERROR}>
-                        error
-                    </div>
+                    <div key={INIT}>init</div>
+                    <div key={READY}>ready</div>
+                    <div key={RECORDING}>recording</div>
+                    <div key={COMPLETE}>completed</div>
+                    <div key={REVIEW}>review</div>
+                    <div key={SUBMITTING}>submitting</div>
+                    <div key={ERROR}>error</div>
                 </Wizard>
+
+                <RecorderContainer
+                    onReady={ready}
+                    onRecording={recording}
+                    onStop={stop}
+                    onReview={review}
+                    onSubmitting={submitting}
+                    onComplete={complete}
+                    onError={error}
+                />
             </div>
         )
     }

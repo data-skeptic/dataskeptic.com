@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import isArray from 'lodash/isArray';
 
 class WizardContainer extends Component {
 
@@ -19,6 +20,8 @@ class WizardContainer extends Component {
 
     isStepVisible(candidateKey) {
         const visibleKey = this.getVisibleKey();
+        // TODO array
+
 
         return (candidateKey === visibleKey);
     }
