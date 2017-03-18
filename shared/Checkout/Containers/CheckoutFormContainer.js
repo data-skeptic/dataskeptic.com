@@ -29,7 +29,9 @@ export class CheckoutFormContainer extends Component {
         const {success, error, processing} = this.props;
 
         return (
-            <CheckoutForm onSubmit={this.handleSubmit} customSuccess={success} customError={error} customSubmitting={processing}/>
+            <div className="row">
+                <CheckoutForm onSubmit={this.handleSubmit} customSuccess={success} customError={error} customSubmitting={processing}/>
+            </div>
         );
     }
 }

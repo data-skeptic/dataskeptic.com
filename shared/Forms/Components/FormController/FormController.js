@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 
 export const FormController = ({ name, children, handleSubmit, submitSucceeded, submitting, customSubmitting, pristine, invalid, submitValue, btnWrapperClasses='col-xs-12 col-sm-12', customSuccess, customError }) => (
-    <form className={`form ${name}-form row`} onSubmit={handleSubmit} autoComplete="false">
+    <form className={`form ${name}-form`} onSubmit={handleSubmit} autoComplete="false">
         {children}
 
         { !submitSucceeded && !submitting ?

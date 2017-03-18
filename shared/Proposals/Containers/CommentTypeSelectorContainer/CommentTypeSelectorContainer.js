@@ -1,19 +1,23 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import CommentTypeSelector from '../../Components/CommentTypeSelector/CommentTypeSelector';
 
-import {changeCommentType} from '../../Actions/CommentBoxFormActions';
-
 class CommentTypeSelectorContainer extends Component {
+
+    static propTypes = {
+        messageType: PropTypes.string,
+        onChangeCommentType: PropTypes.func
+    };
+
     constructor() {
         super();
         this.onChoose = this.onChoose.bind(this);
     }
 
     onChoose(type) {
-        this.props.changeCommentType(type);
+        this.props.onChangeCommentType(type);
     }
 
     render() {
@@ -21,16 +25,9 @@ class CommentTypeSelectorContainer extends Component {
 
         return (
             <CommentTypeSelector onChoose={this.onChoose} active={messageType}/>
-
         );
     }
+
 }
 
-export default connect(
-    (state) => ({
-        messageType: state.proposals.getIn(['form', 'type'])
-    }),
-    (dispatch) => bindActionCreators({
-        changeCommentType
-    }, dispatch)
-)(CommentTypeSelectorContainer);
+export default CommentTypeSelectorContainer;
