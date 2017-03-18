@@ -1,12 +1,18 @@
 export const START_RECORDING = 'START_RECORDING';
 export const STOP_RECORDING = 'STOP_RECORDING';
+export const RESET_RECORDING = 'RESET_RECORDING';
+export const UPDATE_DURATION = 'UPDATE_DURATION';
 
-export const SET_RECORDING_ID = 'SET_RECORDING_ID';
-export const CHANGE_RECORDING_FLOW_STEP = 'CHANGE_RECORDING_FLOW_STEP';
+export function startRecording(id, chunkId) {
+    const now = (new Date()) + '';
 
-export function startRecording() {
     return {
-        type: START_RECORDING
+        type: START_RECORDING,
+        payload: {
+            id,
+            chunkId,
+            startedAt: now
+        }
     }
 }
 
@@ -16,20 +22,17 @@ export function stopRecording() {
     }
 }
 
-export function setRecordingId(recordingId) {
+export function resetRecording() {
     return {
-        type: SET_RECORDING_ID,
-        payload: {
-            recordingId
-        }
+        type: RESET_RECORDING
     }
 }
 
-export function changeRecordingFlowStep(step) {
+export function updateRecordingDuration(duration) {
     return {
-        type: CHANGE_RECORDING_FLOW_STEP,
+        type: UPDATE_DURATION,
         payload: {
-            step
+            duration
         }
     }
 }
