@@ -12,7 +12,7 @@
 @animation-speed: 0.8s;
 
 
-.recording-container {
+.recording-flow-container {
 
   margin-top: (@shadow-box-height + @recording-margin-top);
 
@@ -33,6 +33,53 @@
       line-height: @recording-button-width;
       word-wrap: break-word;
       line-break: loose;
+    }
+  }
+
+  .player-btn {
+    width: 48px;
+    height: 48px;
+
+    outline: none;
+
+    border: 2px solid #D7D9D9;
+    border-radius: 50%;
+    background: transparent;
+
+    position: relative;
+    padding: 15px;
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: 0px 0px 5px -2px #F4E26E;
+    }
+
+    &:active {
+      top: 1px;
+    }
+
+    .player-btn__play {
+      display: block;
+      width: 0;
+      height: 0;
+      border-top: 7px solid transparent;
+      border-left: 100px solid #575959;
+      border-left: 13px solid #575959;
+      border-bottom: 7px solid transparent;
+      margin-left: 2px;
+    }
+
+    .player-btn__pause {
+      height: 100%;
+
+      .player-btn__pause__line {
+        width: 4px;
+        height: 100%;
+        background: #575959;
+
+        .l-1 { float: left; }
+        .l-2 { float: right; }
+      }
     }
   }
 
@@ -82,6 +129,35 @@
     to {
       border-color: transparent;
       box-shadow: 0px 0px 0px @shadow-box-height @recording-button-shadow-color;
+    }
+  }
+
+  .review-box {
+    .buttons {
+      margin-top: 10px;
+
+      .btn-recording-discard,
+      .btn-recording-submit {
+        color: #fff;
+        padding: 0px 4px;
+        border-radius: 4px;
+        float: left;
+        border: none;
+        outline: none;
+        margin-right: 10px;
+      }
+
+      .btn-recording-discard {
+        color: #333;
+        background-color: #fff;
+        border: 1px solid #ccc;
+      }
+
+      .btn-recording-submit {
+        color: #fff;
+        background-color: #449d44;
+        border-color: #398439;
+      }
     }
   }
 
