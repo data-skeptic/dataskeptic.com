@@ -87,10 +87,13 @@ class RecorderFlowContainer extends Component {
                 .then(() => this.props.ready())
                 .catch((err) => this.props.error({
                     title: 'Server unreachable',
-                    body: 'Error in connection establishment'
+                    body: 'Error in connection establishment.'
                 }));
         } else {
-            this.props.error('Browser doents support recording')
+            this.props.error({
+                title: 'Browser error',
+                body: 'Your browser does not support audio recording.'
+            })
         }
     }
 
@@ -120,8 +123,6 @@ class RecorderFlowContainer extends Component {
     }
 
     isBrowserSupportRecording() {
-        return true;
-
         if (!navigator.getUserMedia) {
             navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
                 navigator.mozGetUserMedia || navigator.msGetUserMedia;
@@ -169,17 +170,23 @@ class RecorderFlowContainer extends Component {
         const {activeStep, errorMessage={}} = this.props;
         const {init, ready, recording, stop, review, submitting, complete, error} = this.props;
 
-        // const errorMessage={
-        //     title:'et',
-        //     body:'eb',
-        // };
         const duration = '';
         return (
             <div className="recording-flow-container">
-                <p>{activeStep}</p>
-
                 <Wizard activeKey={activeStep}>
-                    <div key={INIT}>init</div>
+
+                    <div key={INIT} className="init-step">
+                        <div className="media init-box">
+                            <div className="media-left">
+                                <i className="glyphicon glyphicon-wrench icon" />
+                            </div>
+                            <div className="media-body">
+                                <h4 className="media-heading">Setting up recorder</h4>
+                                <p className="text">Checking browser microphone access and server availability.</p>
+                            </div>
+                        </div>
+                    </div>
+
                     <div key={[READY, RECORDING]} className="recording-step">
                         <Recorder
                             recording={this.isRecording()}
@@ -192,6 +199,7 @@ class RecorderFlowContainer extends Component {
 
                         <RecordingTimeTracker duration={duration} />
                     </div>
+
                     <div key={[REVIEW, SUBMITTING]} className="review-step">
                         <TogglePlayButton
                             recording={false}
@@ -201,22 +209,21 @@ class RecorderFlowContainer extends Component {
                             <button type="button" onClick={this.submitRecord} className="btn btn-recording-submit btn-xs"><i className="fa fa-check" aria-hidden="true" /> Ready to submit</button>
                         </div>
                     </div>
+
                     <div key={COMPLETE} className="complete-step">
                         <div className="text-success"><i className="fa fa-check-circle" aria-hidden="true"/> Submitted</div>
                     </div>
-                    <div key={ERROR} className="error-step">
 
-                        {JSON.stringify(errorMessage)}
+                    <div key={ERROR} className="error-step">
                         <div className="media error-box">
                             <div className="media-left">
-                                <i className="fa fa-exclamation icon" />
+                                <i className="glyphicon glyphicon-warning-sign icon" />
                             </div>
                             <div className="media-body">
                                 <h4 className="media-heading">{errorMessage.title}</h4>
-                                <p className="text-danger">{errorMessage.body}</p>
+                                <p className="text">{errorMessage.body}</p>
                             </div>
                         </div>
-
                     </div>
                 </Wizard>
             </div>

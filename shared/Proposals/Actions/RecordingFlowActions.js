@@ -35,6 +35,8 @@ export const RECORDING_FLOW_COMPLETE = 'RECORDING_FLOW_COMPLETE';
 
 export const RECORDING_FLOW_FAIL = 'RECORDING_FLOW_FAIL';
 
+
+const STEP_CHANGIN_DELAY = 1000;
 /**
  * STEPS CONTROL
  **/
@@ -90,7 +92,7 @@ export function initError() {
 export function ready() {
     return (dispatch) => {
         dispatch(readyRequest());
-        dispatch(changeStep(steps.READY));
+        setTimeout(() => dispatch(changeStep(steps.READY)), STEP_CHANGIN_DELAY);
     }
 }
 

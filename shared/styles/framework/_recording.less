@@ -135,6 +135,22 @@
     }
   }
 
+  .media {
+    .media-heading {
+      font-weight: normal;
+      font-family: inherit;
+    }
+
+    .media-left {
+      padding-top: 2px;
+      text-align: center;
+
+      .icon {
+        font-size: 20px;
+      }
+    }
+  }
+
   .review-step {
     .buttons {
       margin-top: 10px;
@@ -167,16 +183,14 @@
 
   .error-step {
     .error-box {
+      color: @recording-button-shadow-color;
+
       .media-left {
-        .icon {
-          font-size: 20px;
-        }
+        color: @recording-button-shadow-color;
       }
 
       .media-body {
-        .media-heading {
-          font-family: inherit;
-        }
+        color: @recording-button-shadow-color;
       }
     }
   }
