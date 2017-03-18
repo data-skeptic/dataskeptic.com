@@ -41,7 +41,7 @@ class CommentBoxFormContainer extends Component {
         this.recorderRecording = this.recorderRecording.bind(this);
         this.recorderStop = this.recorderStop.bind(this);
         this.recorderReview = this.recorderReview.bind(this);
-        this.recorderSubmitting = this.recorderSubmitting.bind(this);
+        this.recorderSubmit = this.recorderSubmit.bind(this);
         this.recorderComplete = this.recorderComplete.bind(this);
         this.recorderError = this.recorderError.bind(this);
     }
@@ -70,7 +70,7 @@ class CommentBoxFormContainer extends Component {
         this.props.review()
     }
 
-    recorderSubmitting() {
+    recorderSubmit() {
         this.props.submit()
     }
 
@@ -83,11 +83,16 @@ class CommentBoxFormContainer extends Component {
     }
 
     render() {
-        const {values, messageType, activeStep} = this.props;
+        const {values, messageType, errorMessage, activeStep} = this.props;
+
+        if (errorMessage) {
+
+        }
 
         return (
             <div className="comment-box-form-container">
                 <CommentTypeSelectorContainer onChangeCommentType={this.onChangeCommentType} messageType={messageType}/>
+
                 <CommentBoxForm onSubmit={this.handleSubmit}>
                     <Wizard activeKey={messageType}>
                         <CommentTypeBox key={TEXT}/>
@@ -97,12 +102,13 @@ class CommentBoxFormContainer extends Component {
                         <Recorder
                             key={RECORDING}
                             activeStep={activeStep}
+                            errorMessage={errorMessage}
 
                             ready={this.recordingReady}
                             recording={this.recorderRecording}
                             stop={this.recorderStop}
                             review={this.recorderReview}
-                            submitting={this.recorderSubmitting}
+                            submit={this.recorderSubmit}
                             complete={this.recorderComplete}
                             error={this.recorderError}
                         />
@@ -119,7 +125,8 @@ export default connect(
 
         activeStep: state.proposals.getIn(['form', 'step']),
         messageType: state.proposals.getIn(['form', 'type']),
-        recording: state.proposals.getIn(['recording', 'type'])
+
+        errorMessage: state.proposals.getIn(['form', 'error']).toJS()
     }),
     (dispatch) => bindActionCreators({
         changeCommentType,

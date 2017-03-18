@@ -48,6 +48,7 @@ const defaultState = {
     proposal: {},
     form: {
         step: INIT,
+        error: {},
         type: types.TEXT
     }
 };
@@ -80,6 +81,10 @@ export default function ProposalsReducer(state = initialState, action) {
 
         case RECORDING_FLOW_CHANGE_STEP:
             nstate.form.step = action.payload.nextStep;
+            break;
+
+        case RECORDING_FLOW_FAIL:
+            nstate.form.error = action.payload.error;
             break;
 
         default:

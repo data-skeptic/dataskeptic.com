@@ -53,6 +53,9 @@ class RecorderFlowContainer extends Component {
         };
 
         this.togglePlaying = this.togglePlaying.bind(this);
+
+        this.discardRecord = this.discardRecord.bind(this);
+        this.submitRecord = this.submitRecord.bind(this);
     }
 
     componentWillMount() {
@@ -82,7 +85,10 @@ class RecorderFlowContainer extends Component {
         if (this.isBrowserSupportRecording()) {
             this.haveServerConnection()
                 .then(() => this.props.ready())
-                .catch((err) => this.props.error('Server unreachable'));
+                .catch((err) => this.props.error({
+                    title: 'Server unreachable',
+                    body: 'Error in connection establishment'
+                }));
         } else {
             this.props.error('Browser doents support recording')
         }
@@ -105,7 +111,8 @@ class RecorderFlowContainer extends Component {
     }
 
     onComplete() {
-        console.log('onComlete()');
+        debugger;
+        console.log('error()');
     }
 
     onError() {
@@ -150,17 +157,30 @@ class RecorderFlowContainer extends Component {
         return 'test';
     }
 
-    render() {
-        const {activeStep, onStepReady} = this.props;
-        const {ready, recording, stop, review, submitting, complete, error} = this.props;
+    discardRecord() {
+        this.props.ready();
+    }
 
+    submitRecord() {
+        this.props.submit();
+    }
+
+    render() {
+        const {activeStep, errorMessage={}} = this.props;
+        const {init, ready, recording, stop, review, submitting, complete, error} = this.props;
+
+        // const errorMessage={
+        //     title:'et',
+        //     body:'eb',
+        // };
+        const duration = '';
         return (
             <div className="recording-flow-container">
                 <p>{activeStep}</p>
 
                 <Wizard activeKey={activeStep}>
                     <div key={INIT}>init</div>
-                    <div key={[READY, RECORDING]}>
+                    <div key={[READY, RECORDING]} className="recording-step">
                         <Recorder
                             recording={this.isRecording()}
                             error={''}
@@ -169,29 +189,36 @@ class RecorderFlowContainer extends Component {
                             onClick={this.togglePlaying}
                             info={this.getInfoMessage()}
                         />
+
+                        <RecordingTimeTracker duration={duration} />
                     </div>
-                    <div key={COMPLETE}>completed</div>
-                    <div key={[COMPLETE, REVIEW, SUBMITTING]} className="review-box">
+                    <div key={[REVIEW, SUBMITTING]} className="review-step">
                         <TogglePlayButton
                             recording={false}
                         />
                         <div className="buttons">
-                            <button type="button" className="btn btn-recording-discard btn-xs"><i className="fa fa-undo" aria-hidden="true" /> Discard and record again</button>
-                            <button type="button" className="btn btn-recording-submit btn-xs"><i className="fa fa-check" aria-hidden="true" /> Ready to submit</button>
+                            <button type="button" onClick={this.discardRecord} className="btn btn-recording-discard btn-xs"><i className="fa fa-undo" aria-hidden="true" /> Discard and record again</button>
+                            <button type="button" onClick={this.submitRecord} className="btn btn-recording-submit btn-xs"><i className="fa fa-check" aria-hidden="true" /> Ready to submit</button>
                         </div>
                     </div>
-                    <div key={ERROR}>error</div>
-                </Wizard>
+                    <div key={COMPLETE} className="complete-step">
+                        <div className="text-success"><i className="fa fa-check-circle" aria-hidden="true"/> Submitted</div>
+                    </div>
+                    <div key={ERROR} className="error-step">
 
-                {/*<RecorderContainer
-                    onReady={ready}
-                    onRecording={recording}
-                    onStop={stop}
-                    onReview={review}
-                    onSubmitting={submitting}
-                    onComplete={complete}
-                    onError={error}
-                />*/}
+                        {JSON.stringify(errorMessage)}
+                        <div className="media error-box">
+                            <div className="media-left">
+                                <i className="fa fa-exclamation icon" />
+                            </div>
+                            <div className="media-body">
+                                <h4 className="media-heading">{errorMessage.title}</h4>
+                                <p className="text-danger">{errorMessage.body}</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </Wizard>
             </div>
         )
     }

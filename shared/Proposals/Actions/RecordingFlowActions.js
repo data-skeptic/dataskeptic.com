@@ -156,6 +156,8 @@ export function review() {
 export function submit() {
     return (dispatch) => {
         dispatch(submitRequest());
+
+        dispatch(changeStep(steps.COMPLETE));
     }
 }
 
@@ -190,10 +192,14 @@ export function complete() {
  * ERROR
  */
 export function fail(error) {
-    return {
-        type: RECORDING_FLOW_FAIL,
-        payload: {
-            error
-        }
-    }
+    return (dispatch) => {
+        dispatch({
+            type: RECORDING_FLOW_FAIL,
+            payload: {
+                error
+            }
+        });
+
+        dispatch(changeStep(steps.ERROR));
+    };
 }
