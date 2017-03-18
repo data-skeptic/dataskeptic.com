@@ -181,7 +181,7 @@ class RecorderFlowContainer extends Component {
                                 <i className="glyphicon glyphicon-wrench icon" />
                             </div>
                             <div className="media-body">
-                                <h4 className="media-heading">Setting up recorder</h4>
+                                <h4 className="media-heading">Setting up recorder...</h4>
                                 <p className="text">Checking browser microphone access and server availability.</p>
                             </div>
                         </div>

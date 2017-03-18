@@ -76,7 +76,10 @@ export default function ProposalsReducer(state = initialState, action) {
             break;
 
         case CHANGE_COMMENT_TYPE:
-            nstate.form.type = action.payload.type;
+            if (nstate.form.type !== action.payload.type) {
+                nstate.form.type = action.payload.type;
+            }
+
             break;
 
         case RECORDING_FLOW_CHANGE_STEP:
