@@ -213,10 +213,16 @@ class RecorderFlowContainer extends Component {
     initRecorder() {
         if (navigator.getUserMedia) {
             navigator.getUserMedia({audio: true}, this.initRecorderSuccess, (e) => {
-                this.handleError('Error capturing audio.');
+                this.props.error({
+                    title: 'Recording error',
+                    body: 'Enable(link based on browser) dataskeptic.com to use your microphone.'
+                });
             });
         } else {
-            this.handleError('Audio recording is not supported in this browser.');
+            this.props.error({
+                title: 'Recording error',
+                body: 'Audio recording is not supported in this browser.'
+            });
         }
     }
 
