@@ -24,6 +24,8 @@ import {
 } from '../../Actions/RecorderActions';
 
 import Wizard from '../../../Wizard';
+import Debug from '../../../Debug';
+
 import TogglePlayButton from '../../../Player/Components/TogglePlayButton';
 import Recorder from '../../Components/Recorder/Recorder';
 import RecordingTimeTracker from '../../Components/RecordingTimeTracker/RecordingTimeTracker';
@@ -295,65 +297,70 @@ class RecorderFlowContainer extends Component {
         const {isRecording, isUploading, duration, recordingId, chunkId} = recorder;
 
         return (
-            <div className="recording-flow-container">
-                <Wizard activeKey={activeStep}>
+            <div>
+                <Debug data={{...recorder, activeStep}} />
 
-                    <div key={INIT} className="init-step">
-                        <div className="media init-box">
-                            <div className="media-left">
-                                <i className="glyphicon glyphicon-wrench icon"/>
-                            </div>
-                            <div className="media-body">
-                                <h4 className="media-heading">Setting up recorder...</h4>
-                                <p className="text">Checking browser microphone access and server availability.</p>
-                            </div>
-                        </div>
-                    </div>
+                <div className="recording-flow-container">
 
-                    <div key={[READY, RECORDING]} className="recording-step">
-                        <Recorder
-                            recording={this.isRecording()}
-                            startComponent={<i className="fa fa-microphone icon">&nbsp;</i>}
-                            stopComponent={<i className="fa fa-circle icon">&nbsp;</i>}
-                            onClick={this.togglePlaying}
-                            info={this.getInfoMessage()}
-                        />
-                    </div>
+                    <Wizard activeKey={activeStep}>
 
-                    <div key={[REVIEW, SUBMITTING]} className="review-step">
-                        <TogglePlayButton
-                            recording={false}
-                        />
-                        <div className="buttons">
-                            <button type="button" onClick={this.discardRecord}
-                                    className="btn btn-recording-discard btn-xs">
-                                <i className="fa fa-undo" aria-hidden="true"/> Discard and record again
-                            </button>
-                            <button type="button" onClick={this.submitRecord}
-                                    className="btn btn-recording-submit btn-xs">
-                                <i className="fa fa-check" aria-hidden="true"/> Ready to submit
-                            </button>
-                        </div>
-                    </div>
-
-                    <div key={COMPLETE} className="complete-step">
-                        <div className="text-success">
-                            <i className="fa fa-check-circle" aria-hidden="true"/> Submitted
-                        </div>
-                    </div>
-
-                    <div key={ERROR} className="error-step">
-                        <div className="media error-box">
-                            <div className="media-left">
-                                <i className="glyphicon glyphicon-warning-sign icon"/>
-                            </div>
-                            <div className="media-body">
-                                <h4 className="media-heading">{errorMessage.title}</h4>
-                                <p className="text">{errorMessage.body}</p>
+                        <div key={INIT} className="init-step">
+                            <div className="media init-box">
+                                <div className="media-left">
+                                    <i className="glyphicon glyphicon-wrench icon"/>
+                                </div>
+                                <div className="media-body">
+                                    <h4 className="media-heading">Setting up recorder...</h4>
+                                    <p className="text">Checking browser microphone access and server availability.</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </Wizard>
+
+                        <div key={[READY, RECORDING]} className="recording-step">
+                            <Recorder
+                                recording={this.isRecording()}
+                                startComponent={<i className="fa fa-microphone icon">&nbsp;</i>}
+                                stopComponent={<i className="fa fa-circle icon">&nbsp;</i>}
+                                onClick={this.togglePlaying}
+                                info={this.getInfoMessage()}
+                            />
+                        </div>
+
+                        <div key={[REVIEW, SUBMITTING]} className="review-step">
+                            <TogglePlayButton
+                                recording={false}
+                            />
+                            <div className="buttons">
+                                <button type="button" onClick={this.discardRecord}
+                                        className="btn btn-recording-discard btn-xs">
+                                    <i className="fa fa-undo" aria-hidden="true"/> Discard and record again
+                                </button>
+                                <button type="button" onClick={this.submitRecord}
+                                        className="btn btn-recording-submit btn-xs">
+                                    <i className="fa fa-check" aria-hidden="true"/> Ready to submit
+                                </button>
+                            </div>
+                        </div>
+
+                        <div key={COMPLETE} className="complete-step">
+                            <div className="text-success">
+                                <i className="fa fa-check-circle" aria-hidden="true"/> Submitted
+                            </div>
+                        </div>
+
+                        <div key={ERROR} className="error-step">
+                            <div className="media error-box">
+                                <div className="media-left">
+                                    <i className="glyphicon glyphicon-warning-sign icon"/>
+                                </div>
+                                <div className="media-body">
+                                    <h4 className="media-heading">{errorMessage.title}</h4>
+                                    <p className="text">{errorMessage.body}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </Wizard>
+                </div>
             </div>
         )
     }

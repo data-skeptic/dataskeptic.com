@@ -16,6 +16,7 @@ import Recorder, {steps as RECORDING_STEPS} from '../../../Recorder';
 
 import {init, ready, recordingStart, recordingFinish, review, submit, complete, fail} from '../../Actions/RecordingFlowActions';
 import Wizard from '../../../Wizard';
+import Debug from '../../../Debug';
 
 class CommentBoxFormContainer extends Component {
 
@@ -91,6 +92,9 @@ class CommentBoxFormContainer extends Component {
 
         return (
             <div className="comment-box-form-container">
+                <Debug data={values} />
+
+
                 <CommentTypeSelectorContainer onChangeCommentType={this.onChangeCommentType} messageType={messageType}/>
 
                 <CommentBoxForm onSubmit={this.handleSubmit}>
