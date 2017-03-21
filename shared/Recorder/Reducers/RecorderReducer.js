@@ -38,7 +38,6 @@ export default function RecorderReducer(state=initialState, action) {
             return state;
 
         case RESET_RECORDING:
-            debugger;
             state = fromJS(defaultState);
             state = state.set('id', getRandomId());
             return state;
