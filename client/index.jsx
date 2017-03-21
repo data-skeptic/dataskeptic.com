@@ -115,6 +115,8 @@ store.subscribe(() => {
     }
 
     delete nstate.checkout;
+    delete nstate.recording;
+
     const s = JSON.stringify(nstate);
     localStorage.setItem('reduxState', s);
 

@@ -107,7 +107,10 @@ class RecorderFlowContainer extends Component {
 
         if (this.isBrowserSupportRecording()) {
             this.haveServerConnection()
-                .then(() => this.props.ready())
+                .then(() => {
+                    this.props.resetRecording();
+                    this.props.ready()
+                })
                 .catch((err) => this.props.error({
                     title: 'Server unreachable',
                     body: 'Error in connection establishment.'
@@ -183,8 +186,7 @@ class RecorderFlowContainer extends Component {
         if (!this.isRecording()) {
             this.props.recording();
             const {id, chunkId} = this.props.recorder;
-            debugger;
-            this.props.startRecording();
+            this.props.startRecording(id, chunkId);
         } else {
             this.props.stop();
             this.props.stopRecording();
@@ -204,6 +206,7 @@ class RecorderFlowContainer extends Component {
 
     discardRecord() {
         this.props.ready();
+        this.props.resetRecording();
     }
 
     submitRecord() {

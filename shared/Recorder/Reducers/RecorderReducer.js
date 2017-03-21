@@ -1,4 +1,5 @@
 import Immutable, {fromJS} from 'immutable';
+import {v4} from 'uuid';
 
 const INITIAL_CHUNK_ID_VAL = 0;
 const INITIAL_DURATION_VAL = '00:00:00';
@@ -10,8 +11,10 @@ import {
     UPDATE_DURATION
 } from '../Actions/RecorderActions';
 
+const getRandomId = () => v4();
+
 const defaultState = {
-    id: 0,
+    id: getRandomId(),
     chunkId: INITIAL_CHUNK_ID_VAL,
     startedAt: null,
     isRecording: false,
@@ -35,7 +38,9 @@ export default function RecorderReducer(state=initialState, action) {
             return state;
 
         case RESET_RECORDING:
+            debugger;
             state = fromJS(defaultState);
+            state = state.set('id', getRandomId());
             return state;
 
         case UPDATE_DURATION:
