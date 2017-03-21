@@ -1,0 +1,24 @@
+.panel-debug{
+  .panel-heading {
+    cursor: pointer !important;
+
+    span {
+      border-bottom: 1px dashed #000000;
+    }
+  }
+
+  &.closed {
+    .panel-body {
+      height: 30px;
+      overflow: hidden;
+
+      padding: 0px;
+      pre {
+        margin-top: -40px;
+        border: 0px;
+        padding: 0px;
+        opacity: 0.4;
+      }
+    }
+  }
+}

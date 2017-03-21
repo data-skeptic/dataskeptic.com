@@ -197,11 +197,17 @@ class RecorderFlowContainer extends Component {
         const {duration} = this.props.recorder;
 
         if (this.isRecording()) {
-            return <RecordingTimeTracker duration={duration}/>
+            return (
+                <RecordingTimeTracker duration={duration}/>
+            )
         }
 
-        return <div className="text-muted">Recording will start when you hit the button below. <i>You will have a chance
-            to review your recording before submitting.</i></div>;
+        return (
+            <div className="text-muted">
+                Recording will start when you hit the button below. <i>You will have a chance to review your recording
+                before submitting.</i>
+            </div>
+        );
     }
 
     discardRecord() {
