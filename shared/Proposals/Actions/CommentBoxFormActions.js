@@ -19,9 +19,9 @@ export function changeCommentType(nextType) {
             return;
         }
 
-        if (nextType === UPLOAD && prevType === RECORDING) {
+        if (prevType === RECORDING) {
             agreedChange = confirm('You will loose recorded audio file. Are you sure?');
-        } else if (nextType === RECORDING && prevType === UPLOAD) {
+        } else if (prevType === UPLOAD) {
             agreedChange = confirm('You will loose uploaded files. Are you sure?');
         }
 
