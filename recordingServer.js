@@ -8,7 +8,7 @@ const AWS = require("aws-sdk");
 
 const LOCKED_FILE_NAME = '.locked';
 const BASE_RECORDS_PATH = path.join(__dirname, 'recordings');
-const AWS_RECORDS_BUCKET = 'datasketpitc-records';
+const AWS_RECORDS_BUCKET = 'dataskeptic-records';
 
 const actions = require('./shared/Recorder/Constants/actions');
 
