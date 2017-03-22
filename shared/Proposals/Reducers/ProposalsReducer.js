@@ -9,9 +9,12 @@ import {
 
 import {
     CHANGE_COMMENT_TYPE,
-    UPLOAD_FILES,
 
-    RESET_UPLOAD
+    UPLOAD_FILES,
+    COMPLETE_RECORDING,
+
+    RESET_COMPLETED_UPLOAD,
+    RESET_COMPLETED_RECORDING
 } from '../Actions/CommentBoxFormActions';
 
 import {
@@ -54,7 +57,7 @@ const defaultState = {
         error: {},
         type: types.TEXT,
         files: [],
-        recording: {}
+        recording: null
     }
 };
 
@@ -99,10 +102,20 @@ export default function ProposalsReducer(state = initialState, action) {
             nstate.form.files = nstate.form.files.concat(action.payload.files);
             break;
 
-
-        case RESET_UPLOAD:
+        case RESET_COMPLETED_UPLOAD:
             nstate.form.files = [];
             break;
+
+        case RESET_COMPLETED_RECORDING:
+            nstate.form.recording = null;
+            break;
+
+        case COMPLETE_RECORDING:
+            nstate.form.recording = {
+                id: action.payload.id
+            };
+            break;
+
 
         default:
             break;

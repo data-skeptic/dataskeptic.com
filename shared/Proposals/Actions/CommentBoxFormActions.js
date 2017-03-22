@@ -3,10 +3,12 @@ import {TEXT, UPLOAD, RECORDING, SUBMIT} from '../Constants/CommentTypes';
 import {reset as resetRecording} from './RecordingFlowActions';
 
 export const CHANGE_COMMENT_TYPE = 'CHANGE_COMMENT_TYPE';
-export const GO_TO_SUBMIT_STEP = 'GO_TO_SUBMIT_STEP';
-export const UPLOAD_FILES = 'UPLOAD_FILES';
 
-export const RESET_UPLOAD = 'RESET_UPLOAD';
+export const UPLOAD_FILES = 'UPLOAD_FILES';
+export const COMPLETE_RECORDING = 'COMPLETE_RECORDING';
+
+export const RESET_COMPLETED_UPLOAD = 'RESET_COMPLETED_UPLOAD';
+export const RESET_COMPLETED_RECORDING = 'RESET_COMPLETED_RECORDING';
 
 export function changeCommentType(nextType) {
     return (dispatch, getState) => {
@@ -27,7 +29,8 @@ export function changeCommentType(nextType) {
 
         if (agreedChange) {
             dispatch(resetRecording());
-            dispatch(resetUpload());
+            dispatch(resetCompletedUpload());
+            dispatch(resetCompletedRecording());
             dispatch(changeType(nextType));
         }
     }
@@ -51,8 +54,23 @@ export const uploadFiles = (files) => {
     }
 };
 
-export const resetUpload = () => {
+export const resetCompletedUpload = () => {
     return {
-        type: RESET_UPLOAD
+        type: RESET_COMPLETED_UPLOAD
+    }
+};
+
+export const completeRecording = (id) => {
+    return {
+        type: COMPLETE_RECORDING,
+        payload: {
+            id
+        }
+    }
+};
+
+export const resetCompletedRecording = () => {
+    return {
+        type: RESET_COMPLETED_RECORDING
     }
 };
