@@ -6,15 +6,24 @@ import {formValueSelector} from 'redux-form';
 import CommentBoxForm from '../../Components/CommentBoxForm/CommentBoxForm';
 import CommentTypeSelectorContainer from '../../Containers/CommentTypeSelectorContainer/CommentTypeSelectorContainer';
 
-import {changeCommentType} from '../../Actions/CommentBoxFormActions';
-import {TEXT, UPLOAD, RECORDING} from '../../Constants/CommentTypes';
+import {changeCommentType, goToSubmitStep} from '../../Actions/CommentBoxFormActions';
+import {TEXT, UPLOAD, RECORDING, SUBMIT} from '../../Constants/CommentTypes';
 
 import CommentTypeBox from '../../Components/CommentTypeBox/CommentTypeBox';
+import UserInfoBox from '../../Components/UserInfoBox/UserInfoBox';
 import UploadFileTypeBox from '../../Components/UploadFileTypeBox/UploadFileTypeBox';
 import Recorder, {steps as RECORDING_STEPS} from '../../../Recorder';
 
-
-import {init, ready, recordingStart, recordingFinish, review, submit, complete, fail} from '../../Actions/RecordingFlowActions';
+import {
+    init,
+    ready,
+    recordingStart,
+    recordingFinish,
+    review,
+    submit,
+    complete,
+    fail
+} from '../../Actions/RecordingFlowActions';
 import Wizard from '../../../Wizard';
 import Debug from '../../../Debug';
 
@@ -72,32 +81,33 @@ class CommentBoxFormContainer extends Component {
     }
 
     recorderSubmit() {
-        this.props.submit()
+        this.props.submit();
     }
 
     recorderComplete() {
-        this.props.complete()
+        this.props.complete();
+        this.props.goToSubmitStep();
     }
 
     recorderError(error) {
         this.props.fail(error);
     }
 
+    shouldShowSubmitButton() {
+        return [TEXT, UPLOAD, SUBMIT].indexOf(this.props.messageType) > -1;
+    }
+
     render() {
         const {values, messageType, errorMessage, activeStep} = this.props;
-
-        if (errorMessage) {
-
-        }
+        const showSubmit = this.shouldShowSubmitButton();
 
         return (
             <div className="comment-box-form-container">
-                <Debug data={values} />
-
+                <Debug data={values}/>
 
                 <CommentTypeSelectorContainer onChangeCommentType={this.onChangeCommentType} messageType={messageType}/>
 
-                <CommentBoxForm onSubmit={this.handleSubmit}>
+                <CommentBoxForm onSubmit={this.handleSubmit} showSubmit={showSubmit}>
                     <Wizard activeKey={messageType}>
                         <CommentTypeBox key={TEXT}/>
 
@@ -116,6 +126,8 @@ class CommentBoxFormContainer extends Component {
                             complete={this.recorderComplete}
                             error={this.recorderError}
                         />
+
+                        <UserInfoBox key={[TEXT,UPLOAD,SUBMIT]}/>
                     </Wizard>
                 </CommentBoxForm>
             </div>
@@ -134,6 +146,8 @@ export default connect(
     }),
     (dispatch) => bindActionCreators({
         changeCommentType,
+        goToSubmitStep,
+
         init,
         ready,
         recordingStart,

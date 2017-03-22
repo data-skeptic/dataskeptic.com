@@ -1,12 +1,9 @@
-import {TEXT, UPLOAD, RECORDING} from '../Constants/CommentTypes';
+import {TEXT, UPLOAD, RECORDING, SUBMIT} from '../Constants/CommentTypes';
 
 import {reset} from './RecordingFlowActions';
 
 export const CHANGE_COMMENT_TYPE = 'CHANGE_COMMENT_TYPE';
-
-export function controlFlow() {
-
-}
+export const GO_TO_SUBMIT_STEP = 'GO_TO_SUBMIT_STEP';
 
 export function changeCommentType(type) {
     return (dispatch) => {
@@ -35,3 +32,7 @@ export function changeType(type) {
         }
     }
 }
+
+export const goToSubmitStep = () => {
+    return changeType(SUBMIT);
+};

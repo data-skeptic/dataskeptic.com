@@ -12,7 +12,7 @@ export const CommentTypeSelector = ({active, onChoose}) => (
                         <h4 className="title">Comment</h4>
                         <p className="subtitle">Post a few words</p>
                     </div>
-                    <div className="icon icon-keyboard"></div>
+                    <div className="icon icon-keyboard"> </div>
                 </div>
             </div>
             <div className="btn-group" role="group">
@@ -23,7 +23,7 @@ export const CommentTypeSelector = ({active, onChoose}) => (
                             <p className="subtitle">Drag or drop file</p>
                         </div>
                     </div>
-                    <div className="icon icon-upload"></div>
+                    <div className="icon icon-upload"> </div>
                 </div>
             </div>
             <div className="btn-group" role="group">
@@ -32,7 +32,7 @@ export const CommentTypeSelector = ({active, onChoose}) => (
                         <h4 className="title">Audio Comment</h4>
                         <p className="subtitle">Record via microphone</p>
                     </div>
-                    <div className="icon icon-record"></div>
+                    <div className="icon icon-record"> </div>
                 </div>
             </div>
         </div>

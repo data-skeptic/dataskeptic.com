@@ -143,10 +143,12 @@ class RecorderFlowContainer extends Component {
 
     onSubmitting() {
         console.log('onSubmitting()');
+        this.props.submit();
     }
 
     onComplete() {
         console.log('onComplete()');
+        this.props.complete();
     }
 
     onError() {

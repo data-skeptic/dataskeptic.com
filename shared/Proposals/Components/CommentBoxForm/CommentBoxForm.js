@@ -11,12 +11,9 @@ import { renderField } from '../../../Forms/Components/Field/Field';
 
 import * as types from '../../Constants/CommentTypes';
 
-const Form = ({ children, handleSubmit, pristine, reset, submitting, invalid, submitSucceeded, submitFailed }) => (
-    <FormController name="commentBox" handleSubmit={handleSubmit} submitValue={'Send'}>
+const Form = ({ children, handleSubmit, pristine, reset, submitting, invalid, submitSucceeded, submitFailed, showSubmit }) => (
+    <FormController name="commentBox" handleSubmit={handleSubmit} submitValue={'Send'} showSubmit={showSubmit} >
         {children}
-
-        <Field label="Name" component={renderField} name="name" type="text" className="contact-name" placeholder="John Smith" autocomplete="false" required/>
-        <Field label="Email" component={renderField} name="email" type="email" className="contact-name" placeholder="j.smith@work.com" autocomplete="false" required/>
     </FormController>
 );
 
