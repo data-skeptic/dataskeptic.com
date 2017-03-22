@@ -11,7 +11,7 @@ import { renderField } from '../../../Forms/Components/Field/Field';
 
 import * as types from '../../Constants/CommentTypes';
 
-const Form = ({ children, handleSubmit, pristine, reset, submitting, invalid, submitSucceeded, submitFailed, showSubmit }) => (
+const Form = ({ children, handleSubmit, pristine, reset, submitting, invalid, submitSucceeded, submitFailed, showSubmit=true }) => (
     <FormController name="commentBox" handleSubmit={handleSubmit} submitValue={'Submit proposal'} showSubmit={showSubmit} >
         {children}
     </FormController>
