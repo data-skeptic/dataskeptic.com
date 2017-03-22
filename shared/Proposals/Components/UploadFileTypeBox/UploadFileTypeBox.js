@@ -10,12 +10,14 @@ const UploadFileTypeBox = ({onDrop, files}) => (
         <Debug data={files} />
 
         <Dropzone onDrop={onDrop} className="dropzone" activeClassName="active">
-            <div>Try dropping some files here, or click to select files to upload.</div>
+            { (files.length > 0) ?
+                <div className="upload-files-preview row">
+                    {files.map((file, index) => <FilePreview key={index} file={file}/>)}
+                </div>
+            :
+                <div>Try dropping some files here, or click to select files to upload.</div>
+            }
         </Dropzone>
-
-        <div className="upload-files-preview row">
-            {files.map((file, index) => <FilePreview key={index} file={file}/>)}
-        </div>
     </div>
 );
 
