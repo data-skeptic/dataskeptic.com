@@ -9,7 +9,9 @@ import {
 
 import {
     CHANGE_COMMENT_TYPE,
-    UPLOAD_FILES
+    UPLOAD_FILES,
+
+    RESET_UPLOAD
 } from '../Actions/CommentBoxFormActions';
 
 import {
@@ -95,6 +97,11 @@ export default function ProposalsReducer(state = initialState, action) {
 
         case UPLOAD_FILES:
             nstate.form.files = nstate.form.files.concat(action.payload.files);
+            break;
+
+
+        case RESET_UPLOAD:
+            nstate.form.files = [];
             break;
 
         default:

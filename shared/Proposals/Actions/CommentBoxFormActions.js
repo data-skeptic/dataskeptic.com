@@ -1,27 +1,35 @@
 import {TEXT, UPLOAD, RECORDING, SUBMIT} from '../Constants/CommentTypes';
 
-import {reset} from './RecordingFlowActions';
+import {reset as resetRecording} from './RecordingFlowActions';
 
 export const CHANGE_COMMENT_TYPE = 'CHANGE_COMMENT_TYPE';
 export const GO_TO_SUBMIT_STEP = 'GO_TO_SUBMIT_STEP';
 export const UPLOAD_FILES = 'UPLOAD_FILES';
 
-export function changeCommentType(type) {
-    return (dispatch) => {
-        dispatch(changeType(type));
+export const RESET_UPLOAD = 'RESET_UPLOAD';
 
-        switch (type) {
-            case TEXT:
-                return;
+export function changeCommentType(nextType) {
+    return (dispatch, getState) => {
 
-            case UPLOAD:
-                return;
+        const state = getState();
+        const prevType = state.proposals.getIn(['form', 'type']);
+        let agreedChange = true;
 
-            case RECORDING:
-                dispatch(reset());
-                return;
+        if (nextType === prevType) {
+            return;
         }
 
+        if (nextType === UPLOAD && prevType === RECORDING) {
+            agreedChange = confirm('You will loose recorded audio file. Are you sure?');
+        } else if (nextType === RECORDING && prevType === UPLOAD) {
+            agreedChange = confirm('You will loose uploaded files. Are you sure?');
+        }
+
+        if (agreedChange) {
+            dispatch(resetRecording());
+            dispatch(resetUpload());
+            dispatch(changeType(nextType));
+        }
     }
 }
 
@@ -34,18 +42,17 @@ export function changeType(type) {
     }
 }
 
-export const goToSubmitStep = () => {
-    return (dispatch) => {
-        dispatch({type: GO_TO_SUBMIT_STEP});
-        dispatch(changeType(SUBMIT));
-    }
-};
-
 export const uploadFiles = (files) => {
     return {
         type: UPLOAD_FILES,
         payload: {
             files
         }
+    }
+};
+
+export const resetUpload = () => {
+    return {
+        type: RESET_UPLOAD
     }
 };
