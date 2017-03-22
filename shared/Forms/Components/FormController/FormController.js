@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-export const FormController = ({ name, children, handleSubmit, showSubmit, submitSucceeded, submitting, customSubmitting, pristine, invalid, submitValue, btnWrapperClasses='col-xs-12 col-sm-12', customSuccess, customError }) => (
+export const FormController = ({ name, children, handleSubmit, showSubmit, submitSucceeded, submitting, customSubmitting, pristine, invalid, submitValue, btnWrapperClasses='', customSuccess, customError }) => (
     <form className={`form ${name}-form`} onSubmit={handleSubmit} autoComplete="false">
         {children}
 

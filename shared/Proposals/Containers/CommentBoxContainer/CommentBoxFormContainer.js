@@ -6,7 +6,7 @@ import {formValueSelector} from 'redux-form';
 import CommentBoxForm from '../../Components/CommentBoxForm/CommentBoxForm';
 import CommentTypeSelectorContainer from '../../Containers/CommentTypeSelectorContainer/CommentTypeSelectorContainer';
 
-import {changeCommentType, goToSubmitStep, uploadFiles} from '../../Actions/CommentBoxFormActions';
+import {changeCommentType, uploadFiles} from '../../Actions/CommentBoxFormActions';
 import {TEXT, UPLOAD, RECORDING, SUBMIT} from '../../Constants/CommentTypes';
 
 import CommentTypeBox from '../../Components/CommentTypeBox/CommentTypeBox';
@@ -88,7 +88,6 @@ class CommentBoxFormContainer extends Component {
 
     recorderComplete() {
         this.props.complete();
-        // this.props.goToSubmitStep();
     }
 
     recorderError(error) {
@@ -189,7 +188,6 @@ export default connect(
     }),
     (dispatch) => bindActionCreators({
         changeCommentType,
-        goToSubmitStep,
         uploadFiles,
 
         init,
