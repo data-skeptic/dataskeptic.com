@@ -14,6 +14,41 @@
     .dropzone {
       height: 105px;
     }
+
+    .upload-files-preview {
+      margin-top: 20px;
+
+      .upload-file-item-box {
+
+        .thumbnail {
+          position: relative;
+
+          button.close {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            opacity: 1;
+
+            background: #FAFAFA;
+            border: 0;
+            box-shadow: 0px 0px 4px #D7D9D9;
+            border-radius: 50%;
+
+            width: 24px;
+            height: 24px;
+
+            &:hover {
+              background-color: #FFFFFF;
+            }
+
+            >span {
+              font-size: 1em;
+              color: #000;
+            }
+          }
+        }
+      }
+    }
   }
 
   .comment-type-selector {

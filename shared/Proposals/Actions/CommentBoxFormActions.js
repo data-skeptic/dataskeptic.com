@@ -42,7 +42,6 @@ export const goToSubmitStep = () => {
 };
 
 export const uploadFiles = (files) => {
-    debugger;
     return {
         type: UPLOAD_FILES,
         payload: {
