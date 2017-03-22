@@ -12,7 +12,7 @@ import {TEXT, UPLOAD, RECORDING, SUBMIT} from '../../Constants/CommentTypes';
 import CommentTypeBox from '../../Components/CommentTypeBox/CommentTypeBox';
 import UserInfoBox from '../../Components/UserInfoBox/UserInfoBox';
 import UploadFileTypeBox from '../../Components/UploadFileTypeBox/UploadFileTypeBox';
-import Recorder, {steps as RECORDING_STEPS} from '../../../Recorder';
+import Recorder, {steps} from '../../../Recorder';
 
 import {
     init,
@@ -88,15 +88,42 @@ class CommentBoxFormContainer extends Component {
 
     recorderComplete() {
         this.props.complete();
-        this.props.goToSubmitStep();
+        // this.props.goToSubmitStep();
     }
 
     recorderError(error) {
         this.props.fail(error);
     }
 
+    isRecordingComplete() {
+        const {messageType, activeStep} = this.props;
+        if (messageType === RECORDING) {
+            return (activeStep === steps.COMPLETE);
+        }
+
+        return false;
+    }
+
     shouldShowSubmitButton() {
-        return [TEXT, UPLOAD, SUBMIT].indexOf(this.props.messageType) > -1;
+        const {messageType} = this.props;
+
+        if (this.isRecordingComplete()) {
+            return true;
+        }
+
+        return [TEXT, UPLOAD, SUBMIT].indexOf(messageType) > -1;
+    }
+
+    shouldShowInfoBox() {
+        const {messageType} = this.props;
+
+        if (messageType === TEXT || messageType === UPLOAD) {
+            return true;
+        } else if (this.isRecordingComplete()) {
+            return true;
+        }
+
+        return false;
     }
 
     fileDrop(files) {
@@ -107,6 +134,7 @@ class CommentBoxFormContainer extends Component {
         const {values, messageType, errorMessage, activeStep} = this.props;
         const {files} = values;
         const showSubmit = this.shouldShowSubmitButton();
+        const showInfoBox = this.shouldShowInfoBox();
 
         return (
             <div className="comment-box-form-container">
@@ -138,8 +166,12 @@ class CommentBoxFormContainer extends Component {
                             error={this.recorderError}
                         />
 
-                        <UserInfoBox key={[TEXT,UPLOAD,SUBMIT]}/>
                     </Wizard>
+
+                    { showInfoBox ?
+                        <UserInfoBox />
+                    : null }
+
                 </CommentBoxForm>
             </div>
         )

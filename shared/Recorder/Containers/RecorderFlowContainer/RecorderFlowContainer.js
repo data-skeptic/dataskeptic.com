@@ -302,7 +302,7 @@ class RecorderFlowContainer extends Component {
             <div>
                 <Debug data={{...recorder, activeStep}} />
 
-                <div className="recording-flow-container">
+                <div className={`recording-flow-container step-${activeStep}`}>
 
                     <Wizard activeKey={activeStep}>
 
@@ -346,7 +346,7 @@ class RecorderFlowContainer extends Component {
 
                         <div key={COMPLETE} className="complete-step">
                             <div className="text-success">
-                                <i className="fa fa-check-circle" aria-hidden="true"/> Submitted
+                                <i className="fa fa-check-circle" aria-hidden="true"/> Audio recording submitted
                             </div>
                         </div>
 
