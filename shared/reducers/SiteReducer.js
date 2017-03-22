@@ -5,7 +5,7 @@ import { fromJS } from 'immutable'
  * Whenever some reducer initial state have been changed update current schema version
  * Unique version number is total count of commits in `master`
  */
-export const SCHEMA_VER = 'v569';
+export const SCHEMA_VER = 'v570';
 
 const init = {
   title: "Data Skeptic - The intersection of data science, artificial intelligence, machine learning, statistics, and scientific skepticism",

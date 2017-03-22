@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {formValueSelector} from 'redux-form';
 
 import CommentBoxForm from '../../Components/CommentBoxForm/CommentBoxForm';
 import CommentTypeSelectorContainer from '../../Containers/CommentTypeSelectorContainer/CommentTypeSelectorContainer';
@@ -171,7 +170,7 @@ class CommentBoxFormContainer extends Component {
 
                     { showInfoBox ?
                         <UserInfoBox />
-                    : null }
+                        : null }
 
                 </CommentBoxForm>
             </div>

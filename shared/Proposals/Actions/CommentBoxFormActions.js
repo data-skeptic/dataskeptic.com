@@ -1,6 +1,6 @@
 import {TEXT, UPLOAD, RECORDING, SUBMIT} from '../Constants/CommentTypes';
-
 import {reset as resetRecording} from './RecordingFlowActions';
+import {reduxForm, reset, change as changeFieldValue, formValueSelector} from 'redux-form';
 
 export const CHANGE_COMMENT_TYPE = 'CHANGE_COMMENT_TYPE';
 
@@ -37,40 +37,60 @@ export function changeCommentType(nextType) {
 }
 
 export function changeType(type) {
-    return {
-        type: CHANGE_COMMENT_TYPE,
-        payload: {
-            type
-        }
-    }
+    return (dispatch) => {
+        dispatch({
+            type: CHANGE_COMMENT_TYPE,
+            payload: {
+                type
+            }
+        });
+
+        dispatch(changeFieldValue('commentBox', 'type', type));
+    };
 }
 
 export const uploadFiles = (files) => {
-    return {
-        type: UPLOAD_FILES,
-        payload: {
-            files
-        }
-    }
+    return (dispatch) => {
+        dispatch({
+            type: UPLOAD_FILES,
+            payload: {
+                files
+            }
+        });
+
+        dispatch(changeFieldValue('commentBox', 'files', files));
+    };
 };
 
 export const resetCompletedUpload = () => {
-    return {
-        type: RESET_COMPLETED_UPLOAD
+    return (dispatch) => {
+        dispatch({
+            type: RESET_COMPLETED_UPLOAD
+        });
+
+        dispatch(changeFieldValue('commentBox', 'files', []));
     }
 };
 
 export const completeRecording = (id) => {
-    return {
-        type: COMPLETE_RECORDING,
-        payload: {
-            id
-        }
+    return (dispatch) => {
+        dispatch({
+            type: COMPLETE_RECORDING,
+            payload: {
+                id
+            }
+        });
+
+        dispatch(changeFieldValue('commentBox', 'recording', {id}));
     }
 };
 
 export const resetCompletedRecording = () => {
-    return {
-        type: RESET_COMPLETED_RECORDING
+    return (dispatch) => {
+        dispatch({
+            type: RESET_COMPLETED_RECORDING
+        });
+
+        dispatch(changeFieldValue('commentBox', 'recording', {}));
     }
 };
