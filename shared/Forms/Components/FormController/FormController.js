@@ -23,7 +23,7 @@ export const FormController = ({ name, children, handleSubmit, showSubmit, submi
 );
 
 FormController.propTypes = {
-    name: PropTypes.string.required,
+    name: PropTypes.string.isRequired,
     children: PropTypes.node,
     handleSubmit: PropTypes.func,
     submitSucceeded: PropTypes.bool,
