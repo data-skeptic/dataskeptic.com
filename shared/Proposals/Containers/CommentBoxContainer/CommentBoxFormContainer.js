@@ -1,21 +1,31 @@
 import React, {Component, PropTypes} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {formValueSelector} from 'redux-form';
 
 import CommentBoxForm from '../../Components/CommentBoxForm/CommentBoxForm';
 import CommentTypeSelectorContainer from '../../Containers/CommentTypeSelectorContainer/CommentTypeSelectorContainer';
 
-import {changeCommentType} from '../../Actions/CommentBoxFormActions';
-import {TEXT, UPLOAD, RECORDING} from '../../Constants/CommentTypes';
+import {changeCommentType, uploadFiles, completeRecording} from '../../Actions/CommentBoxFormActions';
+import {TEXT, UPLOAD, RECORDING, SUBMIT} from '../../Constants/CommentTypes';
 
 import CommentTypeBox from '../../Components/CommentTypeBox/CommentTypeBox';
+import UserInfoBox from '../../Components/UserInfoBox/UserInfoBox';
 import UploadFileTypeBox from '../../Components/UploadFileTypeBox/UploadFileTypeBox';
-import Recorder, {steps as RECORDING_STEPS} from '../../../Recorder';
+import Recorder, {steps} from '../../../Recorder';
 
+import {
+    init,
+    ready,
+    recordingStart,
+    recordingFinish,
+    review,
+    submit,
+    complete,
+    fail
+} from '../../Actions/RecordingFlowActions';
 
-import {init, ready, recordingStart, recordingFinish, review, submit, complete, fail} from '../../Actions/RecordingFlowActions';
 import Wizard from '../../../Wizard';
+import Debug from '../../../Debug';
 
 class CommentBoxFormContainer extends Component {
 
@@ -44,6 +54,8 @@ class CommentBoxFormContainer extends Component {
         this.recorderSubmit = this.recorderSubmit.bind(this);
         this.recorderComplete = this.recorderComplete.bind(this);
         this.recorderError = this.recorderError.bind(this);
+
+        this.fileDrop = this.fileDrop.bind(this);
     }
 
     handleSubmit(data) {
@@ -71,33 +83,74 @@ class CommentBoxFormContainer extends Component {
     }
 
     recorderSubmit() {
-        this.props.submit()
+        this.props.submit();
     }
 
-    recorderComplete() {
-        this.props.complete()
+    recorderComplete(id) {
+        this.props.complete(id);
+        this.props.completeRecording(id);
     }
 
     recorderError(error) {
         this.props.fail(error);
     }
 
+    isRecordingComplete() {
+        const {messageType, activeStep} = this.props;
+        if (messageType === RECORDING) {
+            return (activeStep === steps.COMPLETE);
+        }
+
+        return false;
+    }
+
+    shouldShowSubmitButton() {
+        const {messageType} = this.props;
+
+        if (this.isRecordingComplete()) {
+            return true;
+        }
+
+        return [TEXT, UPLOAD, SUBMIT].indexOf(messageType) > -1;
+    }
+
+    shouldShowInfoBox() {
+        const {messageType} = this.props;
+
+        if (messageType === TEXT || messageType === UPLOAD) {
+            return true;
+        } else if (this.isRecordingComplete()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    fileDrop(files) {
+        this.props.uploadFiles(files);
+    }
+
     render() {
         const {values, messageType, errorMessage, activeStep} = this.props;
-
-        if (errorMessage) {
-
-        }
+        const {files} = values;
+        const showSubmit = this.shouldShowSubmitButton();
+        const showInfoBox = this.shouldShowInfoBox();
 
         return (
             <div className="comment-box-form-container">
+                <Debug data={values}/>
+
                 <CommentTypeSelectorContainer onChangeCommentType={this.onChangeCommentType} messageType={messageType}/>
 
-                <CommentBoxForm onSubmit={this.handleSubmit}>
+                <CommentBoxForm onSubmit={this.handleSubmit} showSubmit={showSubmit}>
                     <Wizard activeKey={messageType}>
                         <CommentTypeBox key={TEXT}/>
 
-                        <UploadFileTypeBox key={UPLOAD}/>
+                        <UploadFileTypeBox
+                            key={UPLOAD}
+                            onDrop={this.fileDrop}
+                            files={files}
+                        />
 
                         <Recorder
                             key={RECORDING}
@@ -112,7 +165,13 @@ class CommentBoxFormContainer extends Component {
                             complete={this.recorderComplete}
                             error={this.recorderError}
                         />
+
                     </Wizard>
+
+                    { showInfoBox ?
+                        <UserInfoBox />
+                        : null }
+
                 </CommentBoxForm>
             </div>
         )
@@ -130,6 +189,9 @@ export default connect(
     }),
     (dispatch) => bindActionCreators({
         changeCommentType,
+        uploadFiles,
+        completeRecording,
+
         init,
         ready,
         recordingStart,

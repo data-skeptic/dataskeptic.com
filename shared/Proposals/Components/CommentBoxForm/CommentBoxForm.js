@@ -11,17 +11,22 @@ import { renderField } from '../../../Forms/Components/Field/Field';
 
 import * as types from '../../Constants/CommentTypes';
 
-const Form = ({ children, handleSubmit, pristine, reset, submitting, invalid, submitSucceeded, submitFailed }) => (
-    <FormController name="commentBox" handleSubmit={handleSubmit} submitValue={'Send'}>
-        {children}
+import ProposalFormValidator from '../../Helpers/CommentFormValidator/CommentFormValidator';
 
-        <Field label="Name" component={renderField} name="name" type="text" className="contact-name" placeholder="John Smith" autocomplete="false" required/>
-        <Field label="Email" component={renderField} name="email" type="email" className="contact-name" placeholder="j.smith@work.com" autocomplete="false" required/>
+const Form = ({ children, handleSubmit, pristine, reset, submitting, invalid, submitSucceeded, submitFailed, showSubmit=true }) => (
+    <FormController name="commentBox" handleSubmit={handleSubmit} submitValue={'Submit proposal'} showSubmit={showSubmit} >
+        {children}
     </FormController>
 );
 
 const CommentBoxForm = reduxForm({
-    form: 'commentBox'
+    form: 'commentBox',
+    validate: ProposalFormValidator,
+    initialValues: {
+        type: '',
+        files: [],
+        recording: {}
+    }
 })(Form);
 
 export default CommentBoxForm;

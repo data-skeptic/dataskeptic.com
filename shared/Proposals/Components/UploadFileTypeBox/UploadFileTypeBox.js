@@ -1,16 +1,29 @@
 import React, {PropTypes} from 'react';
 import Dropzone from 'react-dropzone';
 
-export const UploadFileTypeBox = ({onDrop}) => (
+import FilePreview from '../FilePreview/FilePreview';
+
+import Debug from '../../../Debug';
+
+const UploadFileTypeBox = ({onDrop, files}) => (
     <div className="upload-file-type-box">
+        <Debug data={files} />
+
         <Dropzone onDrop={onDrop} className="dropzone" activeClassName="active">
-            <div>Try dropping some files here, or click to select files to upload.</div>
+            { (files.length > 0) ?
+                <div className="upload-files-preview row">
+                    {files.map((file, index) => <FilePreview key={index} file={file}/>)}
+                </div>
+            :
+                <div>Try dropping some files here, or click to select files to upload.</div>
+            }
         </Dropzone>
     </div>
 );
 
 UploadFileTypeBox.propTypes = {
-
+    onDrop: PropTypes.func,
+    files: PropTypes.array,
 };
 
 export default UploadFileTypeBox;
