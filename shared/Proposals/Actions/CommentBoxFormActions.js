@@ -4,6 +4,7 @@ import {reset} from './RecordingFlowActions';
 
 export const CHANGE_COMMENT_TYPE = 'CHANGE_COMMENT_TYPE';
 export const GO_TO_SUBMIT_STEP = 'GO_TO_SUBMIT_STEP';
+export const UPLOAD_FILES = 'UPLOAD_FILES';
 
 export function changeCommentType(type) {
     return (dispatch) => {
@@ -34,5 +35,18 @@ export function changeType(type) {
 }
 
 export const goToSubmitStep = () => {
-    return changeType(SUBMIT);
+    return (dispatch) => {
+        dispatch({type: GO_TO_SUBMIT_STEP});
+        dispatch(changeType(SUBMIT));
+    }
+};
+
+export const uploadFiles = (files) => {
+    debugger;
+    return {
+        type: UPLOAD_FILES,
+        payload: {
+            files
+        }
+    }
 };

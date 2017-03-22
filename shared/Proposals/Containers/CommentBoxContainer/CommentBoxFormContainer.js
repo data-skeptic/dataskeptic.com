@@ -6,7 +6,7 @@ import {formValueSelector} from 'redux-form';
 import CommentBoxForm from '../../Components/CommentBoxForm/CommentBoxForm';
 import CommentTypeSelectorContainer from '../../Containers/CommentTypeSelectorContainer/CommentTypeSelectorContainer';
 
-import {changeCommentType, goToSubmitStep} from '../../Actions/CommentBoxFormActions';
+import {changeCommentType, goToSubmitStep, uploadFiles} from '../../Actions/CommentBoxFormActions';
 import {TEXT, UPLOAD, RECORDING, SUBMIT} from '../../Constants/CommentTypes';
 
 import CommentTypeBox from '../../Components/CommentTypeBox/CommentTypeBox';
@@ -54,6 +54,8 @@ class CommentBoxFormContainer extends Component {
         this.recorderSubmit = this.recorderSubmit.bind(this);
         this.recorderComplete = this.recorderComplete.bind(this);
         this.recorderError = this.recorderError.bind(this);
+
+        this.fileDrop = this.fileDrop.bind(this);
     }
 
     handleSubmit(data) {
@@ -97,8 +99,13 @@ class CommentBoxFormContainer extends Component {
         return [TEXT, UPLOAD, SUBMIT].indexOf(this.props.messageType) > -1;
     }
 
+    fileDrop(files) {
+        this.props.uploadFiles(files);
+    }
+
     render() {
         const {values, messageType, errorMessage, activeStep} = this.props;
+        const {files} = values;
         const showSubmit = this.shouldShowSubmitButton();
 
         return (
@@ -111,7 +118,11 @@ class CommentBoxFormContainer extends Component {
                     <Wizard activeKey={messageType}>
                         <CommentTypeBox key={TEXT}/>
 
-                        <UploadFileTypeBox key={UPLOAD}/>
+                        <UploadFileTypeBox
+                            key={UPLOAD}
+                            onDrop={this.fileDrop}
+                            files={files}
+                        />
 
                         <Recorder
                             key={RECORDING}
@@ -147,6 +158,7 @@ export default connect(
     (dispatch) => bindActionCreators({
         changeCommentType,
         goToSubmitStep,
+        uploadFiles,
 
         init,
         ready,
