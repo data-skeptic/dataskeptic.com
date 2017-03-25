@@ -30,11 +30,20 @@ export function checkout(data) {
             exp_month: data.card_month,
             exp_year: data.card_year
         };
+        console.log("test")
 
         Stripe.createToken(cardData, (status, response) => {
             if (response.error) {
+                console.log("response")
+                console.log(response)
                 dispatch(checkoutRequestFailed(response.error.message));
             } else {
+                console.log("data")
+                console.log(data)
+                if (data['street_2'] == undefined) {
+                    console.log("adding empty street 2")
+                    data['street_2'] = ""
+                }
                 const token = response.id;
 
                 checkoutMakeOrder(data, token, prod)
@@ -93,9 +102,9 @@ export function checkoutMakeOrder(data, token, prod) {
         phone: data.phone
     };
 
-    if (isEmpty(data.street_2)) {
-        delete customer.street_2;
-    }
+    //if (isEmpty(data.street_2)) {
+    ///    delete customer.street_2;
+    //}
 
     let order = {
         customer: customer,

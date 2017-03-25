@@ -26,35 +26,35 @@ export const CheckoutFormValidator = (values) => {
 
     // address
     if (isEmpty(values.first_name)) {
-        errors.first_name = 'Please provide First Name';
+        errors.first_name = 'Please provide your first name';
     }
 
     if (isEmpty(values.last_name)) {
-        errors.last_name = 'Please provide Last Name';
+        errors.last_name = 'Please provide your last name';
     }
 
     if (isEmpty(values.street_1)) {
-        errors.street_1 = 'Please provide Street Address';
+        errors.street_1 = 'Please provide shipping street address';
     }
 
     if (isEmpty(values.city)) {
-        errors.city = 'Please provide City';
+        errors.city = 'Please provide city';
     }
 
     if (isEmpty(values.state)) {
-        errors.state = 'Please provide State or Province';
+        errors.state = 'Please provide state or province';
     }
 
     if (isEmpty(values.zip)) {
-        errors.zip = 'Please provide Zip Code';
+        errors.zip = 'Please provide postal code';
     } else {
         if (!numbers(values.zip)) {
-            errors.zip = 'Invalid Zip Code'
+            errors.zip = 'Invalid postal code'
         }
     }
 
     if (isEmpty(values.email)) {
-        errors.email = 'Please provide Email';
+        errors.email = 'Please provide email';
     } else {
         if (!email(values.email)) {
             errors.email = 'Invalid email';
@@ -62,26 +62,26 @@ export const CheckoutFormValidator = (values) => {
     }
 
     if (isEmpty(values.phone)) {
-        errors.phone = 'Please provide Phone Number';
+        errors.phone = 'Please provide phone number';
     } else {
 
     }
 
     // card
     if (isEmpty(values.card_number)) {
-        errors.card_number = 'Please provide Card Number';
+        errors.card_number = 'Please provide card number';
     } else {
         if (!cardNumber(values.card_number)) {
-            errors.card_number = 'Invalid Card Number';
+            errors.card_number = 'Invalid card number';
         }
     }
 
     if (isEmpty(values.card_name)) {
-        errors.card_name = 'Please provide Cardholder Name';
+        errors.card_name = 'Please provide cardholder name';
     }
 
     if (isEmpty(values.card_month)) {
-        errors.card_month = 'Please provide Expiration Month';
+        errors.card_month = 'Please provide expiration month';
     } else {
         if(!cardMonth(values.card_month)) {
             errors.card_month = 'Invalid month';
@@ -89,10 +89,10 @@ export const CheckoutFormValidator = (values) => {
     }
 
     if (isEmpty(values.card_year)) {
-        errors.card_year = 'Please provide Expiration Year';
+        errors.card_year = 'Please provide expiration year';
     } else {
         if(!cardYear(values.card_year)) {
-            errors.card_year = 'Invalid Year';
+            errors.card_year = 'Invalid year';
         }
     }
 
