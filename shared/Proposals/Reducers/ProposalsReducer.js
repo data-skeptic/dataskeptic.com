@@ -12,9 +12,10 @@ import {
 
     UPLOAD_FILES,
     COMPLETE_RECORDING,
+    REVIEW_RECORDING,
 
     RESET_COMPLETED_UPLOAD,
-    RESET_COMPLETED_RECORDING
+    RESET_COMPLETED_RECORDING,
 } from '../Actions/CommentBoxFormActions';
 
 import {
@@ -58,6 +59,9 @@ const defaultState = {
         type: types.TEXT,
         files: [],
         recording: null
+    },
+    review: {
+        url: ''
     }
 };
 
@@ -113,6 +117,12 @@ export default function ProposalsReducer(state = initialState, action) {
         case COMPLETE_RECORDING:
             nstate.form.recording = {
                 id: action.payload.id
+            };
+            break;
+
+        case REVIEW_RECORDING:
+            nstate.review = {
+                url: action.payload.url
             };
             break;
 

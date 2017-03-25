@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import CommentBoxForm from '../../Components/CommentBoxForm/CommentBoxForm';
 import CommentTypeSelectorContainer from '../../Containers/CommentTypeSelectorContainer/CommentTypeSelectorContainer';
 
-import {changeCommentType, uploadFiles, completeRecording} from '../../Actions/CommentBoxFormActions';
+import {changeCommentType, uploadFiles, reviewRecording, completeRecording} from '../../Actions/CommentBoxFormActions';
 import {TEXT, UPLOAD, RECORDING, SUBMIT} from '../../Constants/CommentTypes';
 
 import CommentTypeBox from '../../Components/CommentTypeBox/CommentTypeBox';
@@ -74,15 +74,19 @@ class CommentBoxFormContainer extends Component {
         this.props.recordingStart();
     }
 
-    recorderStop() {
-        this.props.recordingFinish();
+    recorderStop(id) {
+        this.props.recordingFinish(id);
+
+        const recordingUrl = `${id}`;
+        this.props.reviewRecording(recordingUrl);
     }
 
-    recorderReview() {
+    recorderReview(id) {
         this.props.review()
     }
 
-    recorderSubmit() {
+    recorderSubmit(id) {
+        debugger;
         this.props.submit();
     }
 
@@ -131,7 +135,7 @@ class CommentBoxFormContainer extends Component {
     }
 
     render() {
-        const {values, messageType, errorMessage, activeStep} = this.props;
+        const {values, messageType, errorMessage, activeStep, submittedUrl = ''} = this.props;
         const {files} = values;
         const showSubmit = this.shouldShowSubmitButton();
         const showInfoBox = this.shouldShowInfoBox();
@@ -141,6 +145,8 @@ class CommentBoxFormContainer extends Component {
                 <Debug data={values}/>
 
                 <CommentTypeSelectorContainer onChangeCommentType={this.onChangeCommentType} messageType={messageType}/>
+
+                <b>{submittedUrl}</b>
 
                 <CommentBoxForm onSubmit={this.handleSubmit} showSubmit={showSubmit}>
                     <Wizard activeKey={messageType}>
@@ -164,6 +170,8 @@ class CommentBoxFormContainer extends Component {
                             submit={this.recorderSubmit}
                             complete={this.recorderComplete}
                             error={this.recorderError}
+
+                            submittedUrl={submittedUrl}
                         />
 
                     </Wizard>
@@ -185,12 +193,14 @@ export default connect(
         activeStep: state.proposals.getIn(['form', 'step']),
         messageType: state.proposals.getIn(['form', 'type']),
 
-        errorMessage: state.proposals.getIn(['form', 'error']).toJS()
+        errorMessage: state.proposals.getIn(['form', 'error']).toJS(),
+        submittedUrl: state.proposals.getIn(['review', 'url'])
     }),
     (dispatch) => bindActionCreators({
         changeCommentType,
         uploadFiles,
         completeRecording,
+        reviewRecording,
 
         init,
         ready,

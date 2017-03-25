@@ -6,6 +6,7 @@ export const CHANGE_COMMENT_TYPE = 'CHANGE_COMMENT_TYPE';
 
 export const UPLOAD_FILES = 'UPLOAD_FILES';
 export const COMPLETE_RECORDING = 'COMPLETE_RECORDING';
+export const REVIEW_RECORDING = 'REVIEW_RECORDING';
 
 export const RESET_COMPLETED_UPLOAD = 'RESET_COMPLETED_UPLOAD';
 export const RESET_COMPLETED_RECORDING = 'RESET_COMPLETED_RECORDING';
@@ -92,5 +93,16 @@ export const resetCompletedRecording = () => {
         });
 
         dispatch(changeFieldValue('commentBox', 'recording', {}));
+    }
+};
+
+export const reviewRecording = (url) => {
+    return (dispatch) => {
+        dispatch({
+            type: REVIEW_RECORDING,
+            payload: {
+                url
+            }
+        });
     }
 };

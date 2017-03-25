@@ -64,6 +64,7 @@ class RecorderFlowContainer extends Component {
             [ERROR]: this.onError.bind(this),
         };
 
+        this.toggleRecording = this.toggleRecording.bind(this);
         this.togglePlaying = this.togglePlaying.bind(this);
 
         this.discardRecord = this.discardRecord.bind(this);
@@ -184,17 +185,18 @@ class RecorderFlowContainer extends Component {
     }
 
     isRecording() {
-        return this.props.activeStep === RECORDING;
+        return (this.props.activeStep === RECORDING);
     }
 
-    togglePlaying() {
+    toggleRecording() {
+        const {id, chunkId} = this.props.recorder;
+
         if (!this.isRecording()) {
             this.props.recording();
-            const {id, chunkId} = this.props.recorder;
             this.props.startRecording(id, chunkId);
         } else {
-            this.props.stop();
-            this.props.stopRecording();
+            this.props.stop(id);
+            this.props.stopRecording(id);
         }
     }
 
@@ -221,6 +223,7 @@ class RecorderFlowContainer extends Component {
     }
 
     submitRecord() {
+        debugger;
         this.props.submit();
     }
 
@@ -296,13 +299,17 @@ class RecorderFlowContainer extends Component {
     }
 
     closeConnection() {
-        debugger;
         this.client.close();
         this.Stream.end();
     }
 
+    togglePlaying() {
+        alert('toogle playing');
+        const audioUrl = 'https://s3.amazonaws.com/proposals-recordings/06ce324f-047b-4ce9-a406-5a7f2bf47a13';
+    }
+
     render() {
-        const {activeStep, recorder, errorMessage = {}} = this.props;
+        const {activeStep, recorder, errorMessage = {}, submittedUrl} = this.props;
         const {isRecording, isUploading, duration, recordingId, chunkId} = recorder;
 
         return (
@@ -330,15 +337,21 @@ class RecorderFlowContainer extends Component {
                                 recording={this.isRecording()}
                                 startComponent={<i className="fa fa-microphone icon">&nbsp;</i>}
                                 stopComponent={<i className="fa fa-circle icon">&nbsp;</i>}
-                                onClick={this.togglePlaying}
+                                onClick={this.toggleRecording}
                                 info={this.getInfoMessage()}
                             />
                         </div>
 
                         <div key={[REVIEW, SUBMITTING]} className="review-step">
                             <TogglePlayButton
+                                onClick={this.togglePlaying}
                                 recording={false}
                             />
+
+                            <audio src={submittedUrl}>
+
+                            </audio>
+
                             <div className="buttons">
                                 <button type="button" onClick={this.discardRecord}
                                         className="btn btn-recording-discard btn-xs">
@@ -377,7 +390,8 @@ class RecorderFlowContainer extends Component {
 }
 
 export default connect(
-    (state) => ({
+    (state, ownProps) => ({
+        submittedUrl: ownProps.submittedUrl,
         recorder: state.recorder.toJS()
     }),
     (dispatch) => bindActionCreators({
