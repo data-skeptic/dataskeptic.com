@@ -78,6 +78,7 @@ class CommentBoxFormContainer extends Component {
     }
 
     recorderStop(id) {
+        debugger;
         this.props.recordingFinish(id);
 
         const recordingUrl = `https://s3.amazonaws.com/${AWS_BUCKET}/${id}`;
@@ -89,7 +90,6 @@ class CommentBoxFormContainer extends Component {
     }
 
     recorderSubmit(id) {
-        debugger;
         this.props.submit();
     }
 

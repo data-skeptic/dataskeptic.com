@@ -21,7 +21,8 @@ import {
     startRecording,
     stopRecording,
     resetRecording,
-    updateRecordingDuration
+    updateRecordingDuration,
+    getNextId
 } from '../../Actions/RecorderActions';
 
 import Wizard from '../../../Wizard';
@@ -77,7 +78,9 @@ class RecorderFlowContainer extends Component {
         this.uploadChunk = this.uploadChunk.bind(this);
         this.updateDuration = this.updateDuration.bind(this);
 
-        this.state = {};
+        this.state = {
+            uploading: false
+        };
     }
 
     componentWillMount() {
@@ -111,15 +114,8 @@ class RecorderFlowContainer extends Component {
         console.log('onInit()');
 
         if (this.isBrowserSupportRecording()) {
-            this.haveServerConnection()
-                .then(() => {
-                    this.props.resetRecording();
-                    this.props.ready()
-                })
-                .catch((err) => this.props.error({
-                    title: 'Server unreachable',
-                    body: 'Error in connection establishment.'
-                }));
+            this.props.getNextId();
+            this.props.ready();
         } else {
             this.props.error({
                 title: 'Browser error',
@@ -129,7 +125,14 @@ class RecorderFlowContainer extends Component {
     }
 
     onReady() {
-        console.log('onReady()');
+        this.haveServerConnection()
+            .then(() => {
+                this.props.resetRecording();
+            })
+            .catch((err) => this.props.error({
+                title: 'Server unreachable',
+                body: 'Error in connection establishment.'
+            }));
     }
 
     onRecording() {
@@ -139,14 +142,20 @@ class RecorderFlowContainer extends Component {
 
     onUploading() {
         console.log('onUploading()');
+
+        if (!this.state.uploading) {
+            this.stopTimeCounter();
+            this.stopStreams(this.browserStream);
+            this.closeConnection();
+
+            this.setState({
+                uploading: true
+            })
+        }
     }
 
     onReview() {
         console.log('onReview()');
-
-        this.stopTimeCounter();
-        this.stopStreams(this.browserStream);
-        this.closeConnection();
     }
 
     onSubmitting() {
@@ -175,6 +184,7 @@ class RecorderFlowContainer extends Component {
     haveServerConnection() {
         return new Promise((res, rej) => {
             const {id, chunkId} = this.props.recorder;
+            debugger;
 
             const BinaryClient = require('binaryjs-client').BinaryClient;
             const hostname = window.location.hostname;
@@ -406,6 +416,7 @@ export default connect(
         recorder: state.recorder.toJS()
     }),
     (dispatch) => bindActionCreators({
+        getNextId,
         startRecording,
         stopRecording,
         resetRecording,
