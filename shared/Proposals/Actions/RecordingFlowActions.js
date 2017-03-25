@@ -5,10 +5,11 @@ import {steps} from '../../Recorder';
  *
  * 0. INIT - initialize
  * 1. READY - browser recording supported | ERROR - browser doesn't support recording
- * 2. RECORDING -
- * 3. REVIEW - user able to review recording or try to record again.
- * 4. SUBMITTING - user submit recording
- * 5. COMPLETE - user successfully submitted record | ERROR - server response with error message
+ * 2. RECORDING - user recording
+ * 4. UPLOADING - server uploading
+ * 4. REVIEW - user able to review recording or try to record again.
+ * 5. SUBMITTING - user submit recording
+ * 6. COMPLETE - user successfully submitted record | ERROR - server response with error message
  */
 export const RECORDING_FLOW_CHANGE_STEP = 'RECORDING_FLOW_CHANGE_STEP';
 export const RECORDING_FLOW_RETURN = 'RECORDING_FLOW_RETURN';
@@ -26,6 +27,10 @@ export const RECORDING_FLOW_RECORDING_START = 'RECORDING_FLOW_RECORDING_START';
 export const RECORDING_FLOW_RECORDING_FINISH = 'RECORDING_FLOW_RECORDING_FINISH';
 
 export const RECORDING_FLOW_REVIEW = 'RECORDING_FLOW_REVIEW';
+
+export const RECORDING_FLOW_UPLOADING_REQUEST = 'RECORDING_FLOW_UPLOADING_REQUEST';
+export const RECORDING_FLOW_UPLOADING_SUCCESS = 'RECORDING_FLOW_UPLOADING_SUCCESS';
+export const RECORDING_FLOW_UPLOADING_FAIL = 'RECORDING_FLOW_UPLOADING_FAIL';
 
 export const RECORDING_FLOW_SUBMIT_REQUEST = 'RECORDING_FLOW_SUBMIT_REQUEST';
 export const RECORDING_FLOW_SUBMIT_SUCCESS = 'RECORDING_FLOW_SUBMIT_SUCCESS';
@@ -134,14 +139,56 @@ export function recordingFinish() {
             type: RECORDING_FLOW_RECORDING_FINISH
         });
 
-        dispatch(changeStep(steps.REVIEW));
+        debugger;
+        dispatch(changeStep(steps.UPLOADING));
     }
 }
+
+export function upload(id='test') {
+    return (dispatch) => {
+        dispatch(uploadRequestRequest(id));
+
+        setInterval(() => {
+            dispatch(uploadRequestSuccess(id));
+        }, 100);
+    }
+}
+
+export function uploadRequestRequest(id) {
+    return {
+        type: RECORDING_FLOW_UPLOADING_REQUEST,
+        payload: {
+            id
+        }
+    }
+}
+export function uploadRequestSuccess(data) {
+    return (dispatch) => {
+        debugger;
+        dispatch({
+            type: RECORDING_FLOW_UPLOADING_SUCCESS,
+            payload: {
+                data
+            }
+        });
+
+        dispatch(changeStep(steps.REVIEW));
+    };
+}
+
+export function uploadRequestFail(error) {
+    return {
+        type: RECORDING_FLOW_UPLOADING_FAIL,
+        payload: {
+            error
+        }
+    }
+}
+
 
 /**
  * REVIEW
  **/
-
 export function review() {
     return (dispatch) => {
         dispatch({

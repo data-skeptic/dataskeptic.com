@@ -11,6 +11,7 @@ import {
     READY,
     ERROR,
     RECORDING,
+    UPLOADING,
     REVIEW,
     SUBMITTING,
     COMPLETE
@@ -58,6 +59,7 @@ class RecorderFlowContainer extends Component {
             [INIT]: this.onInit.bind(this),
             [READY]: this.onReady.bind(this),
             [RECORDING]: this.onRecording.bind(this),
+            [UPLOADING]: this.onUploading.bind(this),
             [REVIEW]: this.onReview.bind(this),
             [SUBMITTING]: this.onSubmitting.bind(this),
             [COMPLETE]: this.onComplete.bind(this),
@@ -133,6 +135,10 @@ class RecorderFlowContainer extends Component {
     onRecording() {
         console.log('onRecording()');
         this.initRecorder();
+    }
+
+    onUploading() {
+        console.log('onUploading()');
     }
 
     onReview() {
@@ -340,6 +346,10 @@ class RecorderFlowContainer extends Component {
                                 onClick={this.toggleRecording}
                                 info={this.getInfoMessage()}
                             />
+                        </div>
+
+                        <div key={UPLOADING} className="uploading-step">
+                            uploading...
                         </div>
 
                         <div key={[REVIEW, SUBMITTING]} className="review-step">
