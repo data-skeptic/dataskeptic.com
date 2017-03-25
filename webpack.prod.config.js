@@ -7,7 +7,7 @@ module.exports = {
   ],
   resolve: {
     modulesDirectories: ['node_modules', 'shared'],
-    extensions:         ['', '.js', '.jsx']
+    extensions:         ['', '.js', '.jsx', '.json']
   },
   output: {
     path:       path.join(__dirname, 'public'),
@@ -24,7 +24,11 @@ module.exports = {
       {
           test: /\.less$/,
           loader: "style!css!less?strictMath&noIeCompat"
+      },
+      {
+          test: /\.json$/, loader: "json"
       }
+
     ]
   },
   plugins: [

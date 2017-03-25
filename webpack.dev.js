@@ -46,6 +46,9 @@ export default function(app) {
             test: /\.less$/,
             loader: "style!css!less?strictMath&noIeCompat"
         },
+        {
+          test: /\.json$/, loader: "json"
+        }
       ]
     },
     plugins: [

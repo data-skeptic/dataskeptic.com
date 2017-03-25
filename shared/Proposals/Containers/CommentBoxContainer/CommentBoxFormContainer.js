@@ -27,6 +27,9 @@ import {
 import Wizard from '../../../Wizard';
 import Debug from '../../../Debug';
 
+import json from '../../../../recording-config.json';
+const AWS_BUCKET = json.aws_bucket;
+
 class CommentBoxFormContainer extends Component {
 
     static propTypes = {
@@ -77,7 +80,7 @@ class CommentBoxFormContainer extends Component {
     recorderStop(id) {
         this.props.recordingFinish(id);
 
-        const recordingUrl = `${id}`;
+        const recordingUrl = `https://s3.amazonaws.com/${AWS_BUCKET}/${id}`;
         this.props.reviewRecording(recordingUrl);
     }
 
@@ -147,6 +150,7 @@ class CommentBoxFormContainer extends Component {
                 <CommentTypeSelectorContainer onChangeCommentType={this.onChangeCommentType} messageType={messageType}/>
 
                 <b>{submittedUrl}</b>
+                <b>{AWS_BUCKET}</b>
 
                 <CommentBoxForm onSubmit={this.handleSubmit} showSubmit={showSubmit}>
                     <Wizard activeKey={messageType}>

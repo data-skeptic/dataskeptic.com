@@ -12,6 +12,7 @@ import {
 } from '../Actions/RecorderActions';
 
 const getRandomId = () => v4();
+// const getRandomId = () => 'test';
 
 const defaultState = {
     id: getRandomId(),
@@ -39,7 +40,6 @@ export default function RecorderReducer(state=initialState, action) {
 
         case RESET_RECORDING:
             state = fromJS(defaultState);
-            state = state.set('id', getRandomId());
             return state;
 
         case UPDATE_DURATION:

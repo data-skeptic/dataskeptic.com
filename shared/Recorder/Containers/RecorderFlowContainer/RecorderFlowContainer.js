@@ -348,7 +348,8 @@ class RecorderFlowContainer extends Component {
                                 recording={false}
                             />
 
-                            <audio src={submittedUrl}>
+                            <b>{submittedUrl}</b>
+                            <audio src={submittedUrl} controls>
 
                             </audio>
 

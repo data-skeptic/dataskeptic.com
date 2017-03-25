@@ -137,6 +137,7 @@ const run = () => {
                 if (err) {
                     console.error(err);
                 } else {
+                    console.log('Success upload to S3', id);
                     clearRecordingPath(id);
                 }
             });
