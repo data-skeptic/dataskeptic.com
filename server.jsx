@@ -14,7 +14,7 @@ import {order_fulfill}           from 'backend/order_fulfill'
 import {order_list}              from 'backend/order_list'
 import {pay_invoice}             from 'backend/pay_invoice'
 import {related_content}         from 'backend/related_content'
-import {recording}               from 'backend/v1/recording';
+import {ready}                   from 'backend/v1/recording';
 import bodyParser                from 'body-parser'
 import compression               from 'compression';
 import { feed_uri }              from 'daos/episodes'
@@ -142,14 +142,19 @@ var slack_key = ""
 //     fs.close(fd)
 //   })
 // })
-
 function api_router(req, res) {
+
+
   if (req.url.indexOf('/api/slack/join') == 0) {
     var req = req.body
     join_slack(req, res, slack_key)
     return true
   }
-  if (req.url.indexOf('/api/refresh') == 0) {
+
+  if (req.url.indexOf('/api/v1/recording/ready') == 0) {
+    ready(req, res);
+    return true;
+  } else if (req.url.indexOf('/api/refresh') == 0) {
     doRefresh()
     return res.status(200).end(JSON.stringify({'status': 'ok'}))
   }

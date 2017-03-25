@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {steps} from '../../Recorder';
 
 /**
@@ -133,24 +134,36 @@ export function recordingStart() {
     }
 }
 
-export function recordingFinish() {
+export function recordingFinish(id) {
     return (dispatch) => {
         dispatch({
             type: RECORDING_FLOW_RECORDING_FINISH
         });
 
-        debugger;
-        dispatch(changeStep(steps.UPLOADING));
+        dispatch(upload(id));
     }
 }
 
-export function upload(id='test') {
+export function upload(id) {
     return (dispatch) => {
+        dispatch(changeStep(steps.UPLOADING));
         dispatch(uploadRequestRequest(id));
+        const isUploadedUrl = `/api/v1/ready?id=${id}`;
 
-        setInterval(() => {
-            dispatch(uploadRequestSuccess(id));
-        }, 100);
+        function checkUpload() {
+            console.log('checkUpload');
+            axios.get(isUploadedUrl)
+                .then(() => {
+                    debugger;
+                    setTimeout(() => dispatch(uploadRequestSuccess()), 1500);
+                })
+                .catch((err) => {
+                    setTimeout(() => checkUpload(), 1500);
+                    debugger;
+                })
+        }
+
+        checkUpload();
     }
 }
 
