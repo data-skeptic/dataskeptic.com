@@ -184,7 +184,6 @@ class RecorderFlowContainer extends Component {
     haveServerConnection() {
         return new Promise((res, rej) => {
             const {id, chunkId} = this.props.recorder;
-            debugger;
 
             const BinaryClient = require('binaryjs-client').BinaryClient;
             const hostname = window.location.hostname;
@@ -236,10 +235,14 @@ class RecorderFlowContainer extends Component {
     discardRecord() {
         this.props.ready();
         this.props.resetRecording();
+        this.props.getNextId();
+
+        this.setState({
+            uploading: false
+        });
     }
 
     submitRecord() {
-        debugger;
         this.props.submit();
     }
 

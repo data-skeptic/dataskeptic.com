@@ -148,22 +148,31 @@ export function upload(id) {
     return (dispatch) => {
         dispatch(changeStep(steps.UPLOADING));
         dispatch(uploadRequestRequest(id));
-        const isUploadedUrl = `/api/v1/ready?id=${id}`;
 
-        function checkUpload() {
-            console.log('checkUpload');
-            axios.get(isUploadedUrl)
-                .then(() => {
-                    debugger;
-                    setTimeout(() => dispatch(uploadRequestSuccess()), 1500);
-                })
-                .catch((err) => {
-                    setTimeout(() => checkUpload(), 1500);
-                    debugger;
-                })
-        }
+        const reqDeelay = 1500;
+        const isUploadedUrl = `/api/v1/recording/ready?id=${id}`;
 
-        checkUpload();
+        return new Promise((res, rej) => {
+            function checkUpload() {
+                console.log('checkUpload', id);
+                axios.get(isUploadedUrl)
+                    .then((res) => res.data)
+                    .then(({ready}) => {
+                        if (ready) {
+                            setTimeout(() => dispatch(uploadRequestSuccess()), reqDeelay);
+                            res();
+                        } else {
+                            setTimeout(() => checkUpload(), reqDeelay);
+                        }
+                    })
+                    .catch((err) => {
+                        setTimeout(() => dispatch(uploadRequestFail(err)), reqDeelay);
+                        rej();
+                    })
+            }
+
+            checkUpload()
+        })
     }
 }
 
@@ -177,7 +186,6 @@ export function uploadRequestRequest(id) {
 }
 export function uploadRequestSuccess(data) {
     return (dispatch) => {
-        debugger;
         dispatch({
             type: RECORDING_FLOW_UPLOADING_SUCCESS,
             payload: {
