@@ -1,0 +1,5 @@
+{
+  "source": "recordings",
+  "aws_bucket": "proposals-recordings",
+  "locked_file_name": ".locked"
+}

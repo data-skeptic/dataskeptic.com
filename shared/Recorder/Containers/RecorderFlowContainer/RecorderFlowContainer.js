@@ -139,6 +139,7 @@ class RecorderFlowContainer extends Component {
 
         this.stopTimeCounter();
         this.stopStreams(this.browserStream);
+        this.closeConnection();
     }
 
     onSubmitting() {
@@ -292,6 +293,12 @@ class RecorderFlowContainer extends Component {
         for (let track of stream.getTracks()) {
             track.stop()
         }
+    }
+
+    closeConnection() {
+        debugger;
+        this.client.close();
+        this.Stream.end();
     }
 
     render() {
