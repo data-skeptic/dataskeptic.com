@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import CommentBoxForm from '../../Components/CommentBoxForm/CommentBoxForm';
 import CommentTypeSelectorContainer from '../../Containers/CommentTypeSelectorContainer/CommentTypeSelectorContainer';
 
-import {changeCommentType, uploadFiles, reviewRecording, completeRecording} from '../../Actions/CommentBoxFormActions';
+import {changeCommentType, uploadFiles, reviewRecording, completeRecording, submitCommentForm} from '../../Actions/CommentBoxFormActions';
 import {TEXT, UPLOAD, RECORDING, SUBMIT} from '../../Constants/CommentTypes';
 
 import CommentTypeBox from '../../Components/CommentTypeBox/CommentTypeBox';
@@ -62,7 +62,10 @@ class CommentBoxFormContainer extends Component {
     }
 
     handleSubmit(data) {
-        console.log(JSON.stringify(data));
+        const type = this.props.messageType;
+
+        data.type = type;
+        this.props.submitCommentForm(data);
     }
 
     onChangeCommentType(type) {
@@ -204,6 +207,7 @@ export default connect(
         uploadFiles,
         completeRecording,
         reviewRecording,
+        submitCommentForm,
 
         init,
         ready,

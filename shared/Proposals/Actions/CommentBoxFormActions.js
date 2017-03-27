@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 import {TEXT, UPLOAD, RECORDING, SUBMIT} from '../Constants/CommentTypes';
 import {reset as resetRecording} from './RecordingFlowActions';
 import {reduxForm, reset, change as changeFieldValue, formValueSelector} from 'redux-form';
@@ -10,6 +12,10 @@ export const REVIEW_RECORDING = 'REVIEW_RECORDING';
 
 export const RESET_COMPLETED_UPLOAD = 'RESET_COMPLETED_UPLOAD';
 export const RESET_COMPLETED_RECORDING = 'RESET_COMPLETED_RECORDING';
+
+export const SUBMIT_COMMENT_FORM_REQUEST = 'SUBMIT_COMMENT_FORM_REQUEST';
+export const SUBMIT_COMMENT_SUCCESS = 'SUBMIT_COMMENT_SUCCESS';
+export const SUBMIT_COMMENT_FAIL = 'SUBMIT_COMMENT_FAIL';
 
 export function changeCommentType(nextType) {
     return (dispatch, getState) => {
@@ -104,5 +110,41 @@ export const reviewRecording = (url) => {
                 url
             }
         });
+    }
+};
+
+export const submitCommentForm = (data) => {
+    return (dispatch) => {
+        dispatch(submitCommentFormRequest(data));
+
+        axios.post('/api/v1/proposals', data)
+            .then((res) => res.data)
+            .then((res) => {
+                debugger;
+            })
+            .catch((err) => dispatch(submitCommentFormFail(err)));
+    }
+};
+
+export const submitCommentFormRequest = (data) => {
+    return {
+        type: SUBMIT_COMMENT_FORM_REQUEST,
+        data
+    }
+};
+
+export const submitCommentFormSuccess = (data) => {
+    return {
+        type: SUBMIT_COMMENT_SUCCESS,
+        data
+    }
+};
+
+export const submitCommentFormFail = (error) => {
+    return {
+        type: SUBMIT_COMMENT_FAIL,
+        payload: {
+            error
+        }
     }
 };
