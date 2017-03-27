@@ -426,11 +426,11 @@ class RecorderFlowContainer extends Component {
                             />
 
                             <div className="buttons">
-                                <button type="button" onClick={this.discardRecord}
+                                <button type="button" onClick={this.discardRecord} disabled={!isMetaReady}
                                         className="btn btn-recording-discard btn-xs">
                                     <i className="fa fa-undo" aria-hidden="true"/> Discard and record again
                                 </button>
-                                <button type="button" onClick={this.submitRecord}
+                                <button type="button" onClick={this.submitRecord} disabled={!isMetaReady}
                                         className="btn btn-recording-submit btn-xs">
                                     <i className="fa fa-check" aria-hidden="true"/> Ready to submit
                                 </button>
@@ -456,8 +456,7 @@ class RecorderFlowContainer extends Component {
                         </div>
                     </Wizard>
 
-                    <b>{submittedUrl}</b>
-                    <audio ref="listen_controller" className="recording-listener" controls="true"/>
+                    <audio ref="listen_controller" className="recording-listener" controls="false"/>
                 </div>
             </div>
         )
