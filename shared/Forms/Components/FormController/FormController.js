@@ -13,11 +13,11 @@ export const FormController = ({ name, children, handleSubmit, showSubmit, submi
         : null}
 
         <div className="col-md-12 error">
-            { customError ? <p><i className="glyphicon glyphicon-warning-sign"> </i>{customError}</p> : null }
+            { customError ? <p><i className="glyphicon glyphicon-warning-sign"> </i> {customError}</p> : null }
         </div>
 
         <div className="col-md-12 success">
-            { customSuccess ? <p><i className="glyphicon glyphicon-ok"> </i>{customSuccess}</p> : null }
+            { customSuccess ? <p><i className="glyphicon glyphicon-ok"> </i> {customSuccess}</p> : null }
         </div>
     </form>
 );

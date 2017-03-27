@@ -16,6 +16,9 @@ import {
 
     RESET_COMPLETED_UPLOAD,
     RESET_COMPLETED_RECORDING,
+
+    SUBMIT_COMMENT_FORM_REQUEST,
+    SUBMIT_COMMENT_FORM_SUCCESS
 } from '../Actions/CommentBoxFormActions';
 
 import {
@@ -58,7 +61,8 @@ const defaultState = {
         error: {},
         type: types.TEXT,
         files: [],
-        recording: null
+        recording: null,
+        submitted: false
     },
     review: {
         url: ''
@@ -124,6 +128,14 @@ export default function ProposalsReducer(state = initialState, action) {
             nstate.review = {
                 url: action.payload.url
             };
+            break;
+
+        case SUBMIT_COMMENT_FORM_REQUEST:
+            nstate.form.submitted = false;
+            break;
+
+        case SUBMIT_COMMENT_FORM_SUCCESS:
+            nstate.form.submitted = true;
             break;
 
 

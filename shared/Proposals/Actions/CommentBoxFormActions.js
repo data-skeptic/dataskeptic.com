@@ -14,8 +14,8 @@ export const RESET_COMPLETED_UPLOAD = 'RESET_COMPLETED_UPLOAD';
 export const RESET_COMPLETED_RECORDING = 'RESET_COMPLETED_RECORDING';
 
 export const SUBMIT_COMMENT_FORM_REQUEST = 'SUBMIT_COMMENT_FORM_REQUEST';
-export const SUBMIT_COMMENT_SUCCESS = 'SUBMIT_COMMENT_SUCCESS';
-export const SUBMIT_COMMENT_FAIL = 'SUBMIT_COMMENT_FAIL';
+export const SUBMIT_COMMENT_FORM_SUCCESS = 'SUBMIT_COMMENT_FORM_SUCCESS';
+export const SUBMIT_COMMENT_FORM_FAIL = 'SUBMIT_COMMENT_FORM_FAIL';
 
 export function changeCommentType(nextType) {
     return (dispatch, getState) => {
@@ -119,9 +119,7 @@ export const submitCommentForm = (data) => {
 
         axios.post('/api/v1/proposals', data)
             .then((res) => res.data)
-            .then((res) => {
-                debugger;
-            })
+            .then((res) => dispatch(submitCommentFormSuccess(res)))
             .catch((err) => dispatch(submitCommentFormFail(err)));
     }
 };
@@ -135,14 +133,14 @@ export const submitCommentFormRequest = (data) => {
 
 export const submitCommentFormSuccess = (data) => {
     return {
-        type: SUBMIT_COMMENT_SUCCESS,
+        type: SUBMIT_COMMENT_FORM_SUCCESS,
         data
     }
 };
 
 export const submitCommentFormFail = (error) => {
     return {
-        type: SUBMIT_COMMENT_FAIL,
+        type: SUBMIT_COMMENT_FORM_FAIL,
         payload: {
             error
         }

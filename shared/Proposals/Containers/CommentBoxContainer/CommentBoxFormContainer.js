@@ -42,6 +42,8 @@ class CommentBoxFormContainer extends Component {
         recordingFinish: PropTypes.func,
         submit: PropTypes.func,
         complete: PropTypes.func,
+
+        customSubmitting: PropTypes.bool
     };
 
     constructor() {
@@ -139,11 +141,24 @@ class CommentBoxFormContainer extends Component {
         this.props.uploadFiles(files);
     }
 
+    getSuccessMessage() {
+        const {customSubmitting} = this.props;
+
+        if (customSubmitting) {
+            return 'Thank you for proposal!'
+        } else {
+            return false;
+        }
+    }
+
     render() {
         const {values, messageType, errorMessage, activeStep, submittedUrl = ''} = this.props;
+        const {customSubmitting} = this.props;
+
         const {files} = values;
         const showSubmit = this.shouldShowSubmitButton();
         const showInfoBox = this.shouldShowInfoBox();
+        const successMessage = this.getSuccessMessage();
 
         return (
             <div className="comment-box-form-container">
@@ -151,10 +166,9 @@ class CommentBoxFormContainer extends Component {
 
                 <CommentTypeSelectorContainer onChangeCommentType={this.onChangeCommentType} messageType={messageType}/>
 
-                <b>{submittedUrl}</b>
-                <b>{AWS_BUCKET}</b>
+                <b>{customSubmitting}</b>
 
-                <CommentBoxForm onSubmit={this.handleSubmit} showSubmit={showSubmit}>
+                <CommentBoxForm onSubmit={this.handleSubmit} showSubmit={showSubmit} customSubmitting={customSubmitting} customSuccess={successMessage}>
                     <Wizard activeKey={messageType}>
                         <CommentTypeBox key={TEXT}/>
 
@@ -195,6 +209,8 @@ class CommentBoxFormContainer extends Component {
 export default connect(
     (state) => ({
         values: state.proposals.getIn(['form']).toJS(),
+
+        customSubmitting: state.proposals.getIn(['form', 'submitted']),
 
         activeStep: state.proposals.getIn(['form', 'step']),
         messageType: state.proposals.getIn(['form', 'type']),
