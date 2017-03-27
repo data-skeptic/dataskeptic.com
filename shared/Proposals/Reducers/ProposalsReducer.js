@@ -138,7 +138,6 @@ export default function ProposalsReducer(state = initialState, action) {
             nstate.form.submitted = true;
             break;
 
-
         default:
             break;
     }
