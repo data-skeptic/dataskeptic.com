@@ -149,7 +149,7 @@ export function upload(id) {
         dispatch(changeStep(steps.UPLOADING));
         dispatch(uploadRequestRequest(id));
 
-        const reqDeelay = 1500;
+        const reqDelay = 500;
         const isUploadedUrl = `/api/v1/recording/ready?id=${id}`;
 
         return new Promise((res, rej) => {
@@ -159,14 +159,14 @@ export function upload(id) {
                     .then((res) => res.data)
                     .then(({ready}) => {
                         if (ready) {
-                            setTimeout(() => dispatch(uploadRequestSuccess()), reqDeelay);
+                            setTimeout(() => dispatch(uploadRequestSuccess()), reqDelay);
                             res();
                         } else {
-                            setTimeout(() => checkUpload(), reqDeelay);
+                            setTimeout(() => checkUpload(), reqDelay);
                         }
                     })
                     .catch((err) => {
-                        setTimeout(() => dispatch(uploadRequestFail(err)), reqDeelay);
+                        setTimeout(() => dispatch(uploadRequestFail(err)), reqDelay);
                         rej();
                     })
             }

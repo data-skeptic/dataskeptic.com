@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import ReactDOM from 'react-dom';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -79,12 +80,18 @@ class RecorderFlowContainer extends Component {
         this.updateDuration = this.updateDuration.bind(this);
 
         this.state = {
-            uploading: false
+            uploading: false,
+            metaReady: false,
+            playing: false
         };
     }
 
     componentWillMount() {
         this.controlFlow(this.props);
+    }
+
+    componentDidMount() {
+        this.audioController = ReactDOM.findDOMNode(this.refs.listen_controller);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -138,6 +145,9 @@ class RecorderFlowContainer extends Component {
     onRecording() {
         console.log('onRecording()');
         this.initRecorder();
+
+        const audio = ReactDOM.findDOMNode(this.refs.listen_controller);
+        audio.src = '';
     }
 
     onUploading() {
@@ -149,13 +159,24 @@ class RecorderFlowContainer extends Component {
             this.closeConnection();
 
             this.setState({
-                uploading: true
+                uploading: true,
+                metaReady: false
             })
         }
     }
 
     onReview() {
         console.log('onReview()');
+
+        this.audioController.src = this.props.submittedUrl;
+
+        this.audioController.onloadedmetadata = () => {
+            this.setState({metaReady: true});
+        };
+
+        this.audioController.onended = () => {
+            this.pauseAudio();
+        }
     }
 
     onSubmitting() {
@@ -323,13 +344,40 @@ class RecorderFlowContainer extends Component {
     }
 
     togglePlaying() {
-        alert('toogle playing');
         const audioUrl = 'https://s3.amazonaws.com/proposals-recordings/06ce324f-047b-4ce9-a406-5a7f2bf47a13';
+
+        if (this.isPlaying()) {
+            this.pauseAudio();
+        } else {
+            this.playAudio();
+        }
+    }
+
+    isMetaReady() {
+        return this.state.metaReady;
+    }
+
+    isPlaying() {
+        return this.state.playing;
+    }
+
+    pauseAudio() {
+        this.setState({playing: false});
+
+        this.audioController.pause();
+    }
+
+    playAudio() {
+        this.setState({playing: true});
+        this.audioController.play();
     }
 
     render() {
         const {activeStep, recorder, errorMessage = {}, submittedUrl} = this.props;
         const {isRecording, isUploading, duration, recordingId, chunkId} = recorder;
+
+        const isMetaReady = this.isMetaReady();
+        const isPlaying = this.isPlaying();
 
         return (
             <div>
@@ -362,19 +410,20 @@ class RecorderFlowContainer extends Component {
                         </div>
 
                         <div key={UPLOADING} className="uploading-step">
-                            uploading...
+                            Uploading...
+                            <div className="progress">
+                                <div className="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style={{'width': '35%'}}>
+                                    <span className="sr-only">45% Complete</span>
+                                </div>
+                            </div>
                         </div>
 
                         <div key={[REVIEW, SUBMITTING]} className="review-step">
                             <TogglePlayButton
                                 onClick={this.togglePlaying}
-                                recording={false}
+                                playing={isPlaying}
+                                disabled={!isMetaReady}
                             />
-
-                            <b>{submittedUrl}</b>
-                            <audio src={submittedUrl} controls>
-
-                            </audio>
 
                             <div className="buttons">
                                 <button type="button" onClick={this.discardRecord}
@@ -406,6 +455,9 @@ class RecorderFlowContainer extends Component {
                             </div>
                         </div>
                     </Wizard>
+
+                    <b>{submittedUrl}</b>
+                    <audio ref="listen_controller" className="recording-listener" controls="true"/>
                 </div>
             </div>
         )
