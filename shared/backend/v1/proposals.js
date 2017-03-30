@@ -6,7 +6,7 @@ const mime = require('mime');
 
 const uuid = require('uuid').v4;
 const AWS = require("aws-sdk");
-const config = require('../../../recording-config.json');
+const config = require('../../../global-config.json');
 const AWS_RECORDS_BUCKET = config.aws_proposals_bucket;
 const AWS_FILES_BUCKET = config.aws_files_bucket;
 

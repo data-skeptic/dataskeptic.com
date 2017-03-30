@@ -6,7 +6,7 @@ const fse = require('fs-extra');
 const path = require('path');
 const AWS = require("aws-sdk");
 
-const recordingConfig = require('./recording-config.json');
+const recordingConfig = require('./global-config.json');
 
 const LOCKED_FILE_NAME = recordingConfig.locked_file_name;
 const AWS_RECORDS_BUCKET = recordingConfig.aws_proposals_bucket;
@@ -121,7 +121,7 @@ const run = () => {
             console.log('writing in:', filePath);
             let fileWriter = new wav.FileWriter(filePath, {
                 channels: 1,
-                sampleRate: 48000,
+                sampleRate: 44100,
                 bitDepth: 16
             });
 

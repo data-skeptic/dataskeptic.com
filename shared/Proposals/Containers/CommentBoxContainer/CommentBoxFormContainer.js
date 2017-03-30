@@ -40,7 +40,7 @@ import {
 import Wizard from '../../../Wizard';
 import Debug from '../../../Debug';
 
-import json from '../../../../recording-config.json';
+import json from '../../../../global-config.json';
 const AWS_BUCKET = json.aws_proposals_bucket;
 
 class CommentBoxFormContainer extends Component {
