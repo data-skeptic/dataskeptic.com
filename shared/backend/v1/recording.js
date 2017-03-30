@@ -1,7 +1,7 @@
 const path = require('path');
 
 const AWS = require("aws-sdk");
-const config = require('../../../recording-config.json');
+const config = require('../../../global-config.json');
 const AWS_RECORDS_BUCKET = config.aws_proposals_bucket;
 
 AWS.config.loadFromPath(path.resolve(__dirname, '../../../awsconfig.json'));
