@@ -41,7 +41,7 @@ import Wizard from '../../../Wizard';
 import Debug from '../../../Debug';
 
 import json from '../../../../recording-config.json';
-const AWS_BUCKET = json.aws_bucket;
+const AWS_BUCKET = json.aws_proposals_bucket;
 
 class CommentBoxFormContainer extends Component {
 
