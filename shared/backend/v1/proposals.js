@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 
 const multer = require('multer');
 const mime = require('mime');
@@ -10,8 +11,8 @@ const AWS_RECORDS_BUCKET = config.aws_proposals_bucket;
 const AWS_FILES_BUCKET = config.aws_files_bucket;
 
 AWS.config.loadFromPath(path.resolve(__dirname, '../../../awsconfig.json'));
-const s3bucket = new AWS.S3({params: {Bucket: AWS_FILES_BUCKET}});
-const docClient = new AWS.DynamoDB.DocumentClient();
+const filesBucket = new AWS.S3({params: {Bucket: AWS_FILES_BUCKET}});
+const proposalsDocs = new AWS.DynamoDB.DocumentClient();
 
 const PROPOSALS_TABLE_NAME = 'proposals';
 
@@ -24,7 +25,7 @@ function saveProposal(proposal) {
     };
 
     return new Promise((res, rej) => {
-        docClient.put(params, function(err, data) {
+        proposalsDocs.put(params, function(err, data) {
             if (err) {
                 rej(err);
             } else {
@@ -34,8 +35,36 @@ function saveProposal(proposal) {
     });
 }
 
-function uploadFilesS3Async(files) {
+function uploadProposalFile(file) {
+    console.log('[PROPOSALS] upload proposal file');
+    console.dir(file);
 
+    return new Promise((res, rej) => {
+        fs.readFile(file.path, (err, data) => {
+            if (err) {
+                rej(err);
+            }
+
+            filesBucket.createBucket(() => {
+                const params = {
+                    Key: file.filename,
+                    Body: data
+                };
+
+                filesBucket.upload(params, (err, data) => {
+                    if (err) {
+                        rej(err);
+                    } else {
+                        res(data);
+                    }
+                });
+            });
+        });
+    });
+}
+
+function uploadFilesS3Async(files) {
+    return Promise.all(files.map(file => uploadProposalFile(file)));
 }
 
 const storage = multer.diskStorage({
