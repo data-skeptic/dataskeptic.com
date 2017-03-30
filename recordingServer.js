@@ -153,13 +153,4 @@ const run = () => {
 
 
 AWS.config.loadFromPath('awsconfig.json');
-
-if (process.env.NODE_ENV !== 'production') {
-    fse.emptyDir(BASE_RECORDS_PATH, err => {
-        if (err) return console.error(err);
-
-        run();
-    })
-} else {
-    run();
-}
+run();
