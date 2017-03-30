@@ -27,7 +27,8 @@ import Press                   from 'components/Press';
 import Projects                from 'components/Projects';
 import Services                from 'components/Services';
 import Store                   from 'components/Store';
-import ThankYouPage            from 'Checkout/Routes/ThankYou/ThankYouPage';
+import CheckoutThankYouPage    from 'Checkout/Routes/ThankYouRoute/ThankYouRoute';
+import ProposalsThankYouPage   from 'Proposals/Routes/ThankYou/ThankYouPage';
 
 import Admin                   from 'components/admin/Admin';
 import Invoice                 from 'Checkout/Routes/Invoices/Invoice';
@@ -70,6 +71,9 @@ export default (
         <Route path="/checkout" name="app" component={App} onEnter={loadData}>
             <IndexRoute component={Checkout}/>
         </Route>
+        <Route path="/checkout/thank-you" component={App} onEnter={loadData}>
+            <IndexRoute component={CheckoutThankYouPage}/>
+        </Route>
         <Route path="/contact-us" component={App} onEnter={loadData}>
             <IndexRoute component={ContactUs}/>
         </Route>
@@ -94,12 +98,12 @@ export default (
         <Route path="/projects" component={App} onEnter={loadData}>
             <IndexRoute component={Projects}/>
         </Route>
-        <Route path="/thank-you" component={App} onEnter={loadData}>
-            <IndexRoute component={ThankYouPage}/>
-        </Route>
 
         <Route path="/rfc" component={App} onEnter={loadData}>
             <IndexRoute component={Proposals}/>
+        </Route>
+        <Route path="/rfc/thank-you" component={App} onEnter={loadData}>
+            <IndexRoute component={ProposalsThankYouPage}/>
         </Route>
 
         <Route path="/admin" component={App}>

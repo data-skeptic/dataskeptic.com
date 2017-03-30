@@ -21,6 +21,12 @@ export const SUBMIT_COMMENT_FORM_REQUEST = 'SUBMIT_COMMENT_FORM_REQUEST';
 export const SUBMIT_COMMENT_FORM_SUCCESS = 'SUBMIT_COMMENT_FORM_SUCCESS';
 export const SUBMIT_COMMENT_FORM_FAIL = 'SUBMIT_COMMENT_FORM_FAIL';
 
+function redirectToThankYouPage() {
+    setInterval(() => {
+        window.location.href = '/rfc/thank-you';
+    }, 2000);
+}
+
 export function changeCommentType(nextType) {
     return (dispatch, getState) => {
 
@@ -133,7 +139,10 @@ export const reviewRecording = (url) => {
 const submitFlow = (data, dispatch) => {
     return axios.post('/api/v1/proposals', data)
         .then((res) => res.data)
-        .then((res) => dispatch(submitCommentFormSuccess(res)))
+        .then((res) => {
+            dispatch(submitCommentFormSuccess(res));
+            redirectToThankYouPage();
+        })
         .catch((err) => dispatch(submitCommentFormFail(err)));
 };
 
