@@ -48,3 +48,4 @@ api/place_tshirt_order.py
 .idea
 
 recordings/*
+temp_files/*

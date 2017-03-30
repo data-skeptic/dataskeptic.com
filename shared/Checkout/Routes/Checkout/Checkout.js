@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import CartContainer from '../../../Cart/Containers/CartContainer';
 import Error from '../../../Common/Components/Error';
 import Loading from '../../../Common/Components/Loading';
-import ThankYouPage from '../ThankYou/ThankYouPage';
+import CheckoutThankYouRoute from '../ThankYouRoute/ThankYouRoute';
 
 import CheckoutFormContainer from '../../Containers/CheckoutFormContainer';
 
@@ -37,7 +37,7 @@ class Checkout extends Component {
 			return <Error />
 		}
 		if (paymentComplete) {
-			return <ThankYouPage />
+			return <CheckoutThankYouRoute />
 		}
 		if (cart_items.length === 0) {
 			return <CartContainer updateable={true} />

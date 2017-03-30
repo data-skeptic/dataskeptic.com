@@ -4,9 +4,13 @@ import {TEXT, UPLOAD, RECORDING, SUBMIT} from '../Constants/CommentTypes';
 import {reset as resetRecording} from './RecordingFlowActions';
 import {reduxForm, reset, change as changeFieldValue, formValueSelector} from 'redux-form';
 
+import Request from '../../Request';
+
 export const CHANGE_COMMENT_TYPE = 'CHANGE_COMMENT_TYPE';
 
 export const UPLOAD_FILES = 'UPLOAD_FILES';
+export const UPDATE_FILES = 'UPDATE_FILES';
+
 export const COMPLETE_RECORDING = 'COMPLETE_RECORDING';
 export const REVIEW_RECORDING = 'REVIEW_RECORDING';
 
@@ -16,6 +20,12 @@ export const RESET_COMPLETED_RECORDING = 'RESET_COMPLETED_RECORDING';
 export const SUBMIT_COMMENT_FORM_REQUEST = 'SUBMIT_COMMENT_FORM_REQUEST';
 export const SUBMIT_COMMENT_FORM_SUCCESS = 'SUBMIT_COMMENT_FORM_SUCCESS';
 export const SUBMIT_COMMENT_FORM_FAIL = 'SUBMIT_COMMENT_FORM_FAIL';
+
+function redirectToThankYouPage() {
+    setInterval(() => {
+        window.location.href = '/rfc/thank-you';
+    }, 2000);
+}
 
 export function changeCommentType(nextType) {
     return (dispatch, getState) => {
@@ -69,6 +79,19 @@ export const uploadFiles = (files) => {
     };
 };
 
+export const updateFiles = (files) => {
+    return (dispatch) => {
+        dispatch({
+            type: UPDATE_FILES,
+            payload: {
+                files
+            }
+        });
+
+        dispatch(changeFieldValue('commentBox', 'files', files));
+    };
+};
+
 export const resetCompletedUpload = () => {
     return (dispatch) => {
         dispatch({
@@ -113,14 +136,35 @@ export const reviewRecording = (url) => {
     }
 };
 
-export const submitCommentForm = (data) => {
-    return (dispatch) => {
-        dispatch(submitCommentFormRequest(data));
+const submitFlow = (data, dispatch) => {
+    return axios.post('/api/v1/proposals', data)
+        .then((res) => res.data)
+        .then((res) => {
+            dispatch(submitCommentFormSuccess(res));
+            redirectToThankYouPage();
+        })
+        .catch((err) => dispatch(submitCommentFormFail(err)));
+};
 
-        axios.post('/api/v1/proposals', data)
-            .then((res) => res.data)
-            .then((res) => dispatch(submitCommentFormSuccess(res)))
-            .catch((err) => dispatch(submitCommentFormFail(err)));
+export const submitCommentForm = (formData) => {
+    return (dispatch) => {
+        dispatch(submitCommentFormRequest(formData));
+
+        if (formData.type === "UPLOAD") {
+            Request.upload('/api/v1/proposals/files', formData.files)
+                .then((res) => res.data)
+                .then((data) => {
+                    if (data.success) {
+                        formData.files = data.files;
+                        return submitFlow(formData, dispatch)
+                    }   else {
+                        dispatch(submitCommentFormFail(data.error));
+                    }
+                });
+
+        } else {
+            return submitFlow(formData, dispatch);
+        }
     }
 };
 

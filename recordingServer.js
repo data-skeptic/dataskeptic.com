@@ -9,7 +9,7 @@ const AWS = require("aws-sdk");
 const recordingConfig = require('./recording-config.json');
 
 const LOCKED_FILE_NAME = recordingConfig.locked_file_name;
-const AWS_RECORDS_BUCKET = recordingConfig.aws_bucket;
+const AWS_RECORDS_BUCKET = recordingConfig.aws_proposals_bucket;
 const BASE_RECORDS_PATH = path.join(__dirname, recordingConfig.source);
 
 const actions = require('./shared/Recorder/Constants/actions');

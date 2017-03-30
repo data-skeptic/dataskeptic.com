@@ -11,6 +11,8 @@ import {
     CHANGE_COMMENT_TYPE,
 
     UPLOAD_FILES,
+    UPDATE_FILES,
+
     COMPLETE_RECORDING,
     REVIEW_RECORDING,
 
@@ -108,6 +110,10 @@ export default function ProposalsReducer(state = initialState, action) {
 
         case UPLOAD_FILES:
             nstate.form.files = nstate.form.files.concat(action.payload.files);
+            break;
+
+        case UPDATE_FILES:
+            nstate.form.files = action.payload.files;
             break;
 
         case RESET_COMPLETED_UPLOAD:

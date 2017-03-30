@@ -5,8 +5,21 @@ import {connect} from 'react-redux';
 import CommentBoxForm from '../../Components/CommentBoxForm/CommentBoxForm';
 import CommentTypeSelectorContainer from '../../Containers/CommentTypeSelectorContainer/CommentTypeSelectorContainer';
 
-import {changeCommentType, uploadFiles, reviewRecording, completeRecording, submitCommentForm} from '../../Actions/CommentBoxFormActions';
-import {TEXT, UPLOAD, RECORDING, SUBMIT} from '../../Constants/CommentTypes';
+import {
+    changeCommentType,
+    uploadFiles,
+    updateFiles,
+    reviewRecording,
+    completeRecording,
+    submitCommentForm
+} from '../../Actions/CommentBoxFormActions';
+
+import {
+    TEXT,
+    UPLOAD,
+    RECORDING,
+    SUBMIT
+} from '../../Constants/CommentTypes';
 
 import CommentTypeBox from '../../Components/CommentTypeBox/CommentTypeBox';
 import UserInfoBox from '../../Components/UserInfoBox/UserInfoBox';
@@ -28,7 +41,7 @@ import Wizard from '../../../Wizard';
 import Debug from '../../../Debug';
 
 import json from '../../../../recording-config.json';
-const AWS_BUCKET = json.aws_bucket;
+const AWS_BUCKET = json.aws_proposals_bucket;
 
 class CommentBoxFormContainer extends Component {
 
@@ -61,6 +74,7 @@ class CommentBoxFormContainer extends Component {
         this.recorderError = this.recorderError.bind(this);
 
         this.fileDrop = this.fileDrop.bind(this);
+        this.fileRemove = this.fileRemove.bind(this);
     }
 
     handleSubmit(data) {
@@ -141,6 +155,13 @@ class CommentBoxFormContainer extends Component {
         this.props.uploadFiles(files);
     }
 
+    fileRemove(removeIndex) {
+        let {files} = this.props.values;
+
+        files = files.filter((file, index) => index !== removeIndex);
+        this.props.updateFiles(files);
+    }
+
     getSuccessMessage() {
         const {customSubmitting} = this.props;
 
@@ -168,13 +189,15 @@ class CommentBoxFormContainer extends Component {
 
                 <b>{customSubmitting}</b>
 
-                <CommentBoxForm onSubmit={this.handleSubmit} showSubmit={showSubmit} customSubmitting={customSubmitting} customSuccess={successMessage}>
+                <CommentBoxForm onSubmit={this.handleSubmit} showSubmit={showSubmit} customSubmitting={customSubmitting}
+                                customSuccess={successMessage}>
                     <Wizard activeKey={messageType}>
                         <CommentTypeBox key={TEXT}/>
 
                         <UploadFileTypeBox
                             key={UPLOAD}
                             onDrop={this.fileDrop}
+                            onRemove={this.fileRemove}
                             files={files}
                         />
 
@@ -220,7 +243,10 @@ export default connect(
     }),
     (dispatch) => bindActionCreators({
         changeCommentType,
+
         uploadFiles,
+        updateFiles,
+
         completeRecording,
         reviewRecording,
         submitCommentForm,

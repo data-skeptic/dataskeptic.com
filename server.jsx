@@ -16,7 +16,7 @@ import {pay_invoice}             from 'backend/pay_invoice'
 import {related_content}         from 'backend/related_content'
 
 import {ready}                   from 'backend/v1/recording';
-import {write as writeProposal}  from 'backend/v1/proposals'
+import {write as writeProposal, upload as uploadProposalFiles}  from 'backend/v1/proposals'
 
 import bodyParser                from 'body-parser'
 import compression               from 'compression';
@@ -159,7 +159,10 @@ function api_router(req, res) {
     return true
   }
 
-  if (req.url.indexOf('/api/v1/proposals') == 0) {
+  if (req.url.indexOf('/api/v1/proposals/files') == 0) {
+    uploadProposalFiles(req, res);
+    return true;
+  } if (req.url.indexOf('/api/v1/proposals') == 0) {
     writeProposal(req, res);
     return true;
   } else if (req.url.indexOf('/api/v1/recording/ready') == 0) {

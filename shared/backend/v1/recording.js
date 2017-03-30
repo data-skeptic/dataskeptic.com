@@ -2,7 +2,7 @@ const path = require('path');
 
 const AWS = require("aws-sdk");
 const config = require('../../../recording-config.json');
-const AWS_RECORDS_BUCKET = config.aws_bucket;
+const AWS_RECORDS_BUCKET = config.aws_proposals_bucket;
 
 AWS.config.loadFromPath(path.resolve(__dirname, '../../../awsconfig.json'));
 const s3bucket = new AWS.S3({params: {Bucket: AWS_RECORDS_BUCKET}});
