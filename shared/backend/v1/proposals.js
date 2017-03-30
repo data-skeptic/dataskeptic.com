@@ -10,7 +10,7 @@ const AWS_RECORDS_BUCKET = config.aws_proposals_bucket;
 const AWS_FILES_BUCKET = config.aws_files_bucket;
 
 AWS.config.loadFromPath(path.resolve(__dirname, '../../../awsconfig.json'));
-const s3bucket = new AWS.S3({params: {Bucket: AWS_RECORDS_BUCKET}});
+const s3bucket = new AWS.S3({params: {Bucket: AWS_FILES_BUCKET}});
 const docClient = new AWS.DynamoDB.DocumentClient();
 
 const PROPOSALS_TABLE_NAME = 'proposals';
@@ -79,7 +79,7 @@ module.exports = {
             .then((data) => {
                 res.send({
                     success: true,
-                    data
+                    data: JSON.stringify(data, null, 2)
                 })
             })
             .catch((err) => {
@@ -106,7 +106,7 @@ module.exports = {
                 uploadFilesS3Async(req.files);
 
                 res.send({
-                    success: false,
+                    success: true,
                     files: req.files.map((file) => file.filename)
                 })
             }

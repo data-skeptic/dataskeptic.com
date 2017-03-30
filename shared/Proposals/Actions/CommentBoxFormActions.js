@@ -132,7 +132,7 @@ export const submitCommentForm = (formData) => {
                 .then((data) => {
                     if (data.success) {
                         formData.files = data.files;
-                        return submitFlow(data, dispatch)
+                        return submitFlow(formData, dispatch)
                     }   else {
                         dispatch(submitCommentFormFail(data.error));
                     }
