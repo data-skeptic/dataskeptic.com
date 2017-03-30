@@ -4,6 +4,8 @@ import {TEXT, UPLOAD, RECORDING, SUBMIT} from '../Constants/CommentTypes';
 import {reset as resetRecording} from './RecordingFlowActions';
 import {reduxForm, reset, change as changeFieldValue, formValueSelector} from 'redux-form';
 
+import Request from '../../Request';
+
 export const CHANGE_COMMENT_TYPE = 'CHANGE_COMMENT_TYPE';
 
 export const UPLOAD_FILES = 'UPLOAD_FILES';
@@ -113,14 +115,32 @@ export const reviewRecording = (url) => {
     }
 };
 
-export const submitCommentForm = (data) => {
-    return (dispatch) => {
-        dispatch(submitCommentFormRequest(data));
+const submitFlow = (data, dispatch) => {
+    return axios.post('/api/v1/proposals', data)
+        .then((res) => res.data)
+        .then((res) => dispatch(submitCommentFormSuccess(res)))
+        .catch((err) => dispatch(submitCommentFormFail(err)));
+};
 
-        axios.post('/api/v1/proposals', data)
-            .then((res) => res.data)
-            .then((res) => dispatch(submitCommentFormSuccess(res)))
-            .catch((err) => dispatch(submitCommentFormFail(err)));
+export const submitCommentForm = (formData) => {
+    return (dispatch) => {
+        dispatch(submitCommentFormRequest(formData));
+
+        if (formData.type === "UPLOAD") {
+            Request.upload('/api/v1/proposals/files', formData.files)
+                .then((res) => res.data)
+                .then((data) => {
+                    if (data.success) {
+                        formData.files = data.files;
+                        return submitFlow(data, dispatch)
+                    }   else {
+                        dispatch(submitCommentFormFail(data.error));
+                    }
+                });
+
+        } else {
+            return submitFlow(formData, dispatch);
+        }
     }
 };
 
