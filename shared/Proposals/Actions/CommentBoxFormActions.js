@@ -9,6 +9,8 @@ import Request from '../../Request';
 export const CHANGE_COMMENT_TYPE = 'CHANGE_COMMENT_TYPE';
 
 export const UPLOAD_FILES = 'UPLOAD_FILES';
+export const UPDATE_FILES = 'UPDATE_FILES';
+
 export const COMPLETE_RECORDING = 'COMPLETE_RECORDING';
 export const REVIEW_RECORDING = 'REVIEW_RECORDING';
 
@@ -62,6 +64,19 @@ export const uploadFiles = (files) => {
     return (dispatch) => {
         dispatch({
             type: UPLOAD_FILES,
+            payload: {
+                files
+            }
+        });
+
+        dispatch(changeFieldValue('commentBox', 'files', files));
+    };
+};
+
+export const updateFiles = (files) => {
+    return (dispatch) => {
+        dispatch({
+            type: UPDATE_FILES,
             payload: {
                 files
             }
