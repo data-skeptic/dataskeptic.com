@@ -8,7 +8,7 @@ export class Countdown extends Component {
         super();
 
         this.state = {
-            diff: '00:00:00'
+            diff: '00:00:00:00'
         };
 
         this.tick = this.tick.bind(this);
@@ -22,7 +22,7 @@ export class Countdown extends Component {
 
         const now = moment(new Date());
         const end = moment(this.props.to || 0); // another date
-        const diff = moment.utc(moment(end, "DD/MM/YYYY HH:mm:ss").diff(moment(now, "DD/MM/YYYY HH:mm:ss"))).format("HH:mm:ss")
+        const diff = moment.utc(moment(end, "DD/MM/YYYY HH:mm:ss").diff(moment(now, "DD/MM/YYYY HH:mm:ss"))).format("DD:HH:mm:ss")
 
         console.log('update');
         if (now > end) {
