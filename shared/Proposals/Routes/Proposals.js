@@ -3,7 +3,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import isEmpty from 'lodash/isEmpty';
-import {fetchCurrentProposal} from '../Actions/ProposalsActions';
+import {fetchCurrentProposal, proposalDeadlineReached} from '../Actions/ProposalsActions';
 
 import Debug from '../../Debug'
 
@@ -18,13 +18,19 @@ import Countdown from '../../Common/Components/Countdown';
 class Proposals extends Component {
 
     constructor(props) {
-        super(props)
+        super(props);
+
+        this.deadline = this.deadline.bind(this);
     }
 
     componentWillMount() {
         if (isEmpty(this.props.proposal)) {
             this.props.fetchCurrentProposal();
         }
+    }
+
+    deadline() {
+        this.props.proposalDeadlineReached();
     }
 
     render() {
@@ -46,7 +52,7 @@ class Proposals extends Component {
                         <p>{long_description}</p>
 
                         {deadline ?
-                            <p className="deadline">Time to comment: <kbd><i className="glyphicon glyphicon-time"/> <Countdown to={to}/></kbd></p>
+                            <p className="deadline">Time to comment: <kbd><i className="glyphicon glyphicon-time"/> <Countdown to={to} onDeadlineReached={this.deadline}/></kbd></p>
                         : null}
 
                         {isClosed
@@ -76,7 +82,8 @@ export default connect(
         proposal: state.proposals.get('proposal').toJS()
     }),
     dispatch => bindActionCreators({
-        fetchCurrentProposal
+        fetchCurrentProposal,
+        proposalDeadlineReached
     }, dispatch)
 )(Proposals)
 

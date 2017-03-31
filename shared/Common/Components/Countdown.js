@@ -1,8 +1,12 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 
 import moment from 'moment';
 
 export class Countdown extends Component {
+
+    static propTypes = {
+        onDeadlineReached: PropTypes.func,
+    };
 
     constructor() {
         super();
@@ -27,6 +31,7 @@ export class Countdown extends Component {
         console.log('update');
         if (now > end) {
             this.stopTick();
+            this.props.onDeadlineReached();
         } else {
             this.setState({diff: diff});
         }
@@ -55,7 +60,7 @@ export class Countdown extends Component {
         }
 
         this.setState({
-            diff: '00:00:00'
+            diff: '00:00:00:00'
         });
     }
 

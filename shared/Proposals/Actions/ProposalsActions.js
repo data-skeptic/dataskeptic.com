@@ -4,6 +4,8 @@ export const FETCH_CURRENT_PROPOSAL_REQUEST = 'FETCH_CURRENT_PROPOSAL_REQUEST';
 export const FETCH_CURRENT_PROPOSAL_SUCCESS = 'FETCH_CURRENT_PROPOSAL_SUCCESS';
 export const FETCH_CURRENT_PROPOSAL_FAIL = 'FETCH_CURRENT_PROPOSAL_FAIL';
 
+export const PROPOSAL_DEADLINE_REACHED = 'PROPOSAL_DEADLINE_REACHED';
+
 export function fetchCurrentProposal() {
     return (dispatch) => {
         dispatch(fetchCurrentProposalRequest());
@@ -35,5 +37,10 @@ export function fetchCurrentProposalFail(error) {
         payload: {
             error
         }
+    }
+}
+export function proposalDeadlineReached() {
+    return {
+        type: PROPOSAL_DEADLINE_REACHED
     }
 }
