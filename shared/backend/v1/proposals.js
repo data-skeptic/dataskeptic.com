@@ -7,6 +7,9 @@ const mime = require('mime');
 const uuid = require('uuid').v4;
 const AWS = require("aws-sdk");
 const config = require('../../../global-config.json');
+
+const send = require('../modules/emails').send;
+
 const AWS_RECORDS_BUCKET = config.aws_proposals_bucket;
 const AWS_FILES_BUCKET = config.aws_files_bucket;
 
@@ -76,6 +79,51 @@ const storage = multer.diskStorage({
     }
 });
 
+const generateUrserDataBlock = (userData) => {
+    return `
+        <p><b>Name:</b> ${userData.name}</p>  
+        <p><b>Email:</b> ${userData.email}</p>  
+    `;
+};
+
+const awsFileLink = (filename) => {
+    return `https://s3.amazonaws.com/${AWS_FILES_BUCKET}/${filename}`
+};
+
+const awsRecordLink = (recordId) => {
+    return `https://s3.amazonaws.com/${AWS_RECORDS_BUCKET}/${recordId}`
+};
+
+const generateProposalBody = (type, proposal) => {
+    let body = '';
+
+    let heading = '<h3>You have received a new ';
+    if (type === 'UPLOAD') {
+        heading += 'proposal with attachments.';
+
+        body += `<p>See attachments files</p>`;
+        body += `<ul>`;
+        let files = proposal.files.map((file, index) => {
+            console.log('parse file');
+            console.dir(file);
+            body += `<a href="${awsFileLink(file)}">${file}</a>`;
+        });
+        body += `</ul>`;
+
+    } else if (type === 'RECORDING') {
+        heading += 'audio proposal.';
+
+        body += `<a href="${awsRecordLink(proposal.recording)}">Listen it now ></a>`;
+    } else {
+        heading += 'proposal.';
+
+        body += `<i>Comment:</i><q>${proposal.comment}</q>`;
+    }
+    heading += '</h3>';
+
+    return heading + body + generateUrserDataBlock(proposal);
+};
+
 module.exports = {
     write: function (req, res) {
         const ip = req.headers['x-forwarded-for'] ||
@@ -105,12 +153,24 @@ module.exports = {
         }
 
         saveProposal(userData)
+            .then((proposal) => {
+                const destination = config.emails.admin;
+                const subject = '[Notification] New proposal';
+
+                let message = generateProposalBody(req.body.type, userData);
+
+                return send(destination, message, subject)
+                    .then(() => userData)
+            })
             .then((data) => {
                 res.send({
                     success: true,
                     data: JSON.stringify(data, null, 2)
-                })
+                });
+
+                return data;
             })
+
             .catch((err) => {
                 res.send({
                     success: false,

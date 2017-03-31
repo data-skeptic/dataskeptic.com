@@ -1,0 +1,12 @@
+{
+  "source": "recordings",
+  "aws_proposals_bucket": "proposals-recordings",
+  "aws_files_bucket": "proposals-files",
+  "locked_file_name": ".locked",
+  "temp_files": "temp_files",
+
+  "emails": {
+    "adminProd": "kyle@dataskeptic.com",
+    "admin": "lozhkovoygleb@icloud.com"
+  }
+}

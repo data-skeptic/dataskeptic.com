@@ -4,7 +4,9 @@ import * as types from '../Constants/CommentTypes';
 import {
     FETCH_CURRENT_PROPOSAL_REQUEST,
     FETCH_CURRENT_PROPOSAL_SUCCESS,
-    FETCH_CURRENT_PROPOSAL_FAIL
+    FETCH_CURRENT_PROPOSAL_FAIL,
+
+    PROPOSAL_DEADLINE_REACHED
 } from '../Actions/ProposalsActions';
 
 import {
@@ -142,6 +144,12 @@ export default function ProposalsReducer(state = initialState, action) {
 
         case SUBMIT_COMMENT_FORM_SUCCESS:
             nstate.form.submitted = true;
+            break;
+
+        case PROPOSAL_DEADLINE_REACHED:
+            if (nstate.proposal) {
+                nstate.proposal.active = false;
+            }
             break;
 
         default:
