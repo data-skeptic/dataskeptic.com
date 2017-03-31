@@ -7,6 +7,9 @@ const mime = require('mime');
 const uuid = require('uuid').v4;
 const AWS = require("aws-sdk");
 const config = require('../../../global-config.json');
+
+const send = require('../modules/emails').send;
+
 const AWS_RECORDS_BUCKET = config.aws_proposals_bucket;
 const AWS_FILES_BUCKET = config.aws_files_bucket;
 
@@ -105,12 +108,23 @@ module.exports = {
         }
 
         saveProposal(userData)
+            .then((proposal) => {
+                const destination = config.emails.admin;
+                const subject = '[Notification] New proposal';
+                const message = JSON.stringify(proposal);
+
+                return send(destination, message, subject)
+                    .then(() => proposal)
+            })
             .then((data) => {
                 res.send({
                     success: true,
                     data: JSON.stringify(data, null, 2)
-                })
+                });
+
+                return data;
             })
+
             .catch((err) => {
                 res.send({
                     success: false,
