@@ -1,29 +1,62 @@
 import React, {Component} from 'react';
 
+import moment from 'moment';
+
 export class Countdown extends Component {
 
     constructor() {
         super();
 
         this.state = {
-            sec: 0
-        }
+            diff: '00:00:00'
+        };
 
         this.tick = this.tick.bind(this);
     };
 
     tick() {
-        this.setState({sec: this.state.sec - 1});
-        console.log('[Count] tick', this.state.sec)
-        if (this.state.sec <= 0) {
-            clearInterval(this.interval);
+        if (!this.props.to) {
+            this.stopTick();
+            return;
+        }
+
+        const now = moment(new Date());
+        const end = moment(this.props.to || 0); // another date
+        const diff = moment.utc(moment(end, "DD/MM/YYYY HH:mm:ss").diff(moment(now, "DD/MM/YYYY HH:mm:ss"))).format("HH:mm:ss")
+
+        console.log('update');
+        if (now > end) {
+            this.stopTick();
+        } else {
+            this.setState({diff: diff});
         }
     }
 
     componentDidMount() {
-        this.setState({ sec : this.props.sec || 0 });
-        console.log('[Count] init', this.state.sec)
+        this.startTick();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const diff = (moment(nextProps.to)).diff(moment(this.props.to));
+        if (diff !== 0) {
+            this.stopTick();
+            this.startTick();
+        }
+    }
+
+    startTick() {
         this.interval = setInterval(this.tick, 1000);
+    }
+
+    stopTick() {
+        if (this.interval) {
+            clearInterval(this.interval);
+            this.interval = null;
+        }
+
+        this.setState({
+            diff: '00:00:00'
+        });
     }
 
     componentWillUnmount() {
@@ -31,12 +64,12 @@ export class Countdown extends Component {
     }
 
     render() {
-        const {sec} = this.state;
+        const {diff} = this.state;
 
         return (
-            <div className="countdown">
-                {sec}
-            </div>
+            <span className="countdown">
+                {diff.toString()}
+            </span>
         )
     }
 }

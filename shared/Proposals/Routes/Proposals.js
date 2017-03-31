@@ -5,6 +5,8 @@ import {connect} from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
 import {fetchCurrentProposal} from '../Actions/ProposalsActions';
 
+import Debug from '../../Debug'
+
 import Container from '../../Layout/Components/Container/Container';
 import Content from '../../Layout/Components/Content/Content';
 import SideBar from '../../Layout/Components/SideBar/SideBar';
@@ -27,9 +29,11 @@ class Proposals extends Component {
 
     render() {
         const {proposal} = this.props;
-        const {topic, long_description, deadline} = proposal;
+        const {topic, long_description, deadline, active} = proposal;
 
-        const diff = 0;
+        const to = new Date(deadline);
+
+        const isClosed = !active;
         return (
             <div className="proposals-page">
                 <Container>
@@ -40,8 +44,25 @@ class Proposals extends Component {
                             comment submitted, but we will do our best and appreciate your input.</p>
                         <p><b>Current topic:</b> {topic}</p>
                         <p>{long_description}</p>
-                        <b>Time to comment: <Countdown sec={diff} /></b>
-                        <CommentBoxFormContainer />
+
+                        {deadline ?
+                            <p className="deadline">Time to comment: <kbd><i className="glyphicon glyphicon-time"/> <Countdown to={to}/></kbd></p>
+                        : null}
+
+                        {isClosed
+                            ?
+                            <div className="panel panel-default">
+                                <div className="panel-heading">
+                                    <h3 className="panel-title">This RFC has closed.</h3>
+                                </div>
+                                <div className="panel-body">
+                                    Please check back later, as we open new topics
+                                    regularly.
+                                </div>
+                            </div>
+                            :
+                            <CommentBoxFormContainer />
+                        }
                     </Content>
                 </Container>
             </div>
