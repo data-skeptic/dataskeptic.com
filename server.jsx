@@ -92,17 +92,22 @@ delete initialState.checkout;
 global.env              = env
 global.my_cache         = my_cache
 
-var doRefresh = function() {
-  console.log("---[Refreshing cache]------------------")
-  console.log(process.memoryUsage())
-  var env = global.env
-  var my_cache = global.my_cache
-  loadBlogs(store, env, my_cache)
-  loadProducts(env, my_cache)
-  loadEpisodes(env, feed_uri, my_cache, aws)
-}
+const doRefresh = () => {
+    process.nextTick(() => {
+        console.log("---[Refreshing cache]------------------");
+        console.log(process.memoryUsage());
 
-setInterval(doRefresh, 60 * 60 * 1000)
+        let env = global.env;
+        let my_cache = global.my_cache;
+
+        loadBlogs(store, env, my_cache);
+        loadProducts(env, my_cache);
+        loadEpisodes(env, feed_uri, my_cache, aws);
+    });
+};
+
+setInterval(doRefresh, 60 * 60 * 1000);
+doRefresh();
 
 doRefresh()
 
