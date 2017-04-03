@@ -45,7 +45,7 @@
     "lodash": "^4.17.4",
     "mathjax": "^2.7.0",
     "moment": "^2.17.1",
-    "morgan": "^1.7.0",
+    "morgan": "^1.8.1",
     "ncp": "^2.0.0",
     "object-assign": "^4.0.1",
     "rc-slider": "^5.3.5",

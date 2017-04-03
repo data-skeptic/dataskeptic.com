@@ -3,25 +3,29 @@
 require('babel-core/register')({});
 require('babel-polyfill');
 
-const express = require('express')
+const express = require('express');
 const fs = require('fs')
 const http = require('http');
-const https = require('https')
-const path = require('path')
+const https = require('https');
+const path = require('path');
 
-var app = require('./server').default;
+const app = require('./server').default;
 
 if (fs.existsSync('/ssl/cert.pem')) {
 	const httpsOptions = {
 	  cert: fs.readFileSync('/ssl/cert.pem'),
 	  ca: [ fs.readFileSync('/ssl/fullchain.pem') ],
 	  key: fs.readFileSync('/ssl/privkey.pem')
-	}
+	};
 
-	https.createServer(httpsOptions, app)
+    const server = https.createServer(httpsOptions, app)
 	  .listen(443, '0.0.0.0', function () {
 	    console.log('Serving in https')
-	  })
+	  });
+
+	server.on('error', (err) => {
+		console.error(err);
+	});
 
 	http.createServer(function (req, res) {
 	    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
