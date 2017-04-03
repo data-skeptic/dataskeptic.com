@@ -15,7 +15,6 @@ function generate_content_map(env, blog, my_cache) {
   var check = my_cache.content_map[pn]
   if (check == undefined) {
     var uri = "https://s3.amazonaws.com/" + envv + 'dataskeptic.com/' + key
-    console.log("Getting " + uri)
     axios.get(uri).then(function(result) {
       var content = result.data
       my_cache.content_map[pn] = content
