@@ -48,7 +48,7 @@ class Proposals extends Component {
                         <p>Thanks for considering contributing your thoughts for an upcoming episode. Please review the
                             topic below and share any thoughts you have on it. We aren't always able to use every
                             comment submitted, but we will do our best and appreciate your input.</p>
-                        <p><b>Current topic:</b> {topic}</p>
+                        <h3><b>Current topic:</b> {topic}</h3>
                         <p>{long_description}</p>
 
                         {deadline ?

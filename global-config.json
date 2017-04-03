@@ -6,7 +6,6 @@
   "temp_files": "temp_files",
 
   "emails": {
-    "adminProd": "kyle@dataskeptic.com",
-    "admin": "lozhkovoygleb@icloud.com"
+    "admin": "kyle@dataskeptic.com",
   }
 }
