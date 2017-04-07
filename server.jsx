@@ -106,8 +106,7 @@ const doRefresh = () => {
     });
 };
 
-setInterval(doRefresh, 60 * 60 * 1000);
-doRefresh();
+//setInterval(doRefresh, 60 * 60 * 1000);
 
 doRefresh()
 

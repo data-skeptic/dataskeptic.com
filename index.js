@@ -11,6 +11,16 @@ const path = require('path')
 
 var app = require('./server').default;
 
+const onError = (err) => {
+	fs.writeFile('./error.err', err, function(e) {
+		if (e) {
+			return console.log(err)
+		}
+	})
+}
+
+onError("test writing files")
+
 if (fs.existsSync('/ssl/cert.pem')) {
 	const httpsOptions = {
 	  cert: fs.readFileSync('/ssl/cert.pem'),
@@ -18,10 +28,14 @@ if (fs.existsSync('/ssl/cert.pem')) {
 	  key: fs.readFileSync('/ssl/privkey.pem')
 	}
 
-	https.createServer(httpsOptions, app)
+	var server = https.createServer(httpsOptions, app)
 	  .listen(443, '0.0.0.0', function () {
 	    console.log('Serving in https')
 	  })
+	
+	server.on('error', (err) => {
+		onError(err)
+	})
 
 	http.createServer(function (req, res) {
 	    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
