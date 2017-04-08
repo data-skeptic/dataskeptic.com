@@ -5,8 +5,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=production NODE_PATH=$NODE_PATH:./shared node --harmony .",
-    "dev": "NODE_PATH=$NODE_PATH:./shared node --harmony .",
+    "start": "NODE_ENV=production NODE_PATH=$NODE_PATH:./shared node --harmony --expose-gc .",
+    "dev": "NODE_PATH=$NODE_PATH:./shared node --harmony --expose-gc .",
     "prod": "webpack --progress --color -p --config webpack.prod.config.js",
     "build": "webpack --progress --color -p --config webpack.prod.config.js"
   },
