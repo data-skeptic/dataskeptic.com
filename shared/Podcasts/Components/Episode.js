@@ -81,13 +81,13 @@ class Episode extends React.Component {
 		return (
 			<div className="row episode">
 				<div className="col-xs-12 col-sm-3 episode-left">
-					<Link to={episodeLink} onClick={this.onEpisodeClick}>
+					<a href={episodeLink} onClick={this.onEpisodeClick}>
 						<img className="episode-img" src={ep.img} />
-					</Link>
+					</a>
 				</div>
 				<div className="col-xs-12 col-sm-8 episode-middle">
                     <div className="blog-date">{date}</div>
-					<Link className="blog-title" to={episodeLink} onClick={this.onEpisodeClick}>{ep.title}</Link>
+					<a className="blog-title" href={episodeLink} onClick={this.onEpisodeClick}>{ep.title}</a>
 					<br/>
 					<div className="episode-button-row">
 						<button className="episode-play-button" onClick={this.onPlayToggle.bind(this, ep)}>{play_symb} <span className="episode-play">PLAY</span> <span className="episode-duration">{duration}</span></button>
@@ -98,7 +98,7 @@ class Episode extends React.Component {
 						{transcript}
 					</div>
 					<div className="clear"></div>
-					<div className="episode-desc">{desc}<Link to={episodeLink} className="episode-view-more">View More <i className="glyphicon glyphicon-more glyphicon-chevron-right" /></Link></div>
+					<div className="episode-desc">{desc}<a href={episodeLink} className="episode-view-more">View More <i className="glyphicon glyphicon-more glyphicon-chevron-right" /></a></div>
 				</div>
 				<div className="clear"></div>
 			</div>

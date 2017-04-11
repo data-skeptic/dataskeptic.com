@@ -99,9 +99,9 @@ class BlogArticle extends Component {
 
         return (
             <div className="center">
-                {/*{isEpisode ?*/}
+                {isEpisode ?
                     <LatestEpisodePlayer guid={guid}/>
-                    {/*: null }*/}
+                    : null }
 
                 {contributor ? <BlogAuthorTop contributor={contributor}/> : <div></div> }
 
