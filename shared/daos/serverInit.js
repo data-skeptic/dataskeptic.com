@@ -1,6 +1,7 @@
 import xml2js from 'xml2js'
 import axios  from 'axios'
 
+import moment from 'moment';
 import {convert_items_to_json} from 'daos/episodes'
 import {extractFolders} from '../utils/blog_utils'
 
@@ -44,6 +45,15 @@ export function loadProducts(env) {
         })
 
 }
+
+function compare(dateTimeA, dateTimeB) {
+    const momentA = moment(dateTimeA,"YYYY-MM-DD");
+    const momentB = moment(dateTimeB,"YYYY-MM-DD");
+    if (momentA > momentB) return 1;
+    else if (momentA < momentB) return -1;
+    else return 0;
+}
+
 export function loadBlogs(store, env,) {
     let data = {
         folders: [],
@@ -71,9 +81,9 @@ export function loadBlogs(store, env,) {
             store.dispatch({type: "ADD_BLOGS", payload: {blogs}});
 
             let contentMapRequests = [];
-            blogs = blogs.sort((blog) => {
+            blogs = blogs.sort((a, b) => {
                 // custom sort by publish data
-                return +blog['publish_date'];
+                return compare(b['publish_date'], a['publish_date']);
             });
 
             for (let i = 0; i < blogs.length; i++) {
