@@ -43,12 +43,12 @@ class Podcast extends Component {
                 <Container>
 
                     <Content>
-                    { isLoaded ?
-                        list.map(function (episode) {
-                            return <Episode key={episode.guid} episode={episode}/>
-                        })
-                      : <Loading />
-                    }
+                        { isLoaded ?
+                            list.map(function (episode, index) {
+                                return <Episode key={index} episode={episode}/>
+                            })
+                          : <Loading />
+                        }
                     </Content>
                     <SideBar title="Year">
                         <YearSelector years={years} year={year}/>

@@ -98,7 +98,7 @@ class Episode extends React.Component {
 						{transcript}
 					</div>
 					<div className="clear"></div>
-					<div className="episode-desc">{desc}<Link to={episodeLink} className="episode-view-more">View More <i className="glyphicon glyphicon-more glyphicon-chevron-right">&nbsp;</i> </Link></div>
+					<div className="episode-desc">{desc}<Link to={episodeLink} className="episode-view-more">View More <i className="glyphicon glyphicon-more glyphicon-chevron-right" /></Link></div>
 				</div>
 				<div className="clear"></div>
 			</div>

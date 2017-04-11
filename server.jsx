@@ -343,7 +343,6 @@ function updateState(store, pathname) {
         inject_homepage(store, my_cache, pathname)
     }
     if (pathname.indexOf('/blog') == 0) {
-        inject_podcast(store, my_cache, pathname)
         inject_blog(store, my_cache, pathname)
     }
     else if (pathname == "/members" || pathname == "/store") {

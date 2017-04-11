@@ -38,12 +38,13 @@ class BlogArticle extends Component {
     }
 
     componentDidMount() {
-        if (!this.isPostFetched()) {
-            this.props.loadBlogPost(this.props.postUrl);
-        } else {
-            this.props.stopBlogLoading();
-        }
+        this.props.loadBlogPost(this.props.postUrl);
+        // if (!this.isPostFetched()) {
+        // } else {
+        //     this.props.stopBlogLoading();
+        // }
     }
+
 
     handleNewComment(comment) {
         // TODO: Maybe use a cognitive service here?
@@ -98,10 +99,9 @@ class BlogArticle extends Component {
 
         return (
             <div className="center">
-                { isEpisode ?
+                {/*{isEpisode ?*/}
                     <LatestEpisodePlayer guid={guid}/>
-                    : <div></div>
-                }
+                    {/*: null }*/}
 
                 {contributor ? <BlogAuthorTop contributor={contributor}/> : <div></div> }
 

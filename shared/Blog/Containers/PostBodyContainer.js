@@ -20,7 +20,8 @@ class PostBodyContainer extends Component {
 
     render() {
         const {content=''} = this.props;
-        return <div key="some_unique_key" dangerouslySetInnerHTML={{__html: content}}/>
+        // return <div></div>;
+        return <div key={Date()} dangerouslySetInnerHTML={{__html: content}}/>
     }
 }
 

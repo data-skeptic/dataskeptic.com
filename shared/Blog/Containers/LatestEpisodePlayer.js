@@ -18,8 +18,27 @@ class LatestEpisodePlayer extends Component {
         var episodes = this.props.episodes.toJS();
         var focus_episode = episodes.focus_episode;
         var guid = this.props.guid;
+        clearEpisode(dispatch);
         if (guid) {
             loadEpisode(guid, dispatch)
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+
+        const episodes = nextProps.episodes.toJS();
+        const focus_episode = episodes.focus_episode;
+        const episode = focus_episode.episode;
+
+        const dispatch = this.props.dispatch;
+        const {guid} = this.props;
+
+        if (focus_episode.episode) {
+            if (episode.guid !== guid || focus_episode.loaded !== 1) {
+                clearEpisode(dispatch);
+                loadEpisode(guid, dispatch);
+                console.log('guid', guid)
+            }
         }
     }
 
