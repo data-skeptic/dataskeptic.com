@@ -108,6 +108,8 @@ const doRefresh = () => {
         loadBlogs(store, env, my_cache);
         loadProducts(env, my_cache);
         loadEpisodes(env, feed_uri, my_cache, aws);
+
+        global.gc();
     });
 };
 
