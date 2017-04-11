@@ -10,10 +10,4 @@ export const NavLink = ({onClick, to, isActive, children}) => (
     </div>
 );
 
-NavLink.propTypes = {
-    onClick: PropTypes.func,
-    to: PropTypes.string,
-    children: PropTypes.node
-};
-
 export default NavLink;

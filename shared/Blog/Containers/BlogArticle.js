@@ -14,13 +14,14 @@ import BlogAuthorTop from '../Components/BlogAuthorTop'
 import BlogAuthorBottom from '../Components/BlogAuthorBottom'
 import Loading from '../../Common/Components/Loading'
 import RelatedContent from '../Components/RelatedContent'
+import PostBodyContainer from './PostBodyContainer'
 
 import {get_folders} from '../../utils/redux_loader'
 import {get_related_content} from '../../utils/redux_loader'
 
 
 import isEmpty from 'lodash/isEmpty';
-import { loadBlogPost, stopBlogLoading } from '../Actions/BlogsActions';
+import {loadBlogPost, stopBlogLoading} from '../Actions/BlogsActions';
 
 class BlogArticle extends Component {
     constructor(props) {
@@ -36,7 +37,7 @@ class BlogArticle extends Component {
         return ('/blog' + post.prettyname) === this.props.postUrl;
     }
 
-    componentWillMount() {
+    componentDidMount() {
         if (!this.isPostFetched()) {
             this.props.loadBlogPost(this.props.postUrl);
         } else {
@@ -57,6 +58,7 @@ class BlogArticle extends Component {
         return prettyName.indexOf('/transcripts/') === 0;
     }
 
+
     render() {
 
         const {currentPost, isLoading, contributors, disqusUsername, postUrl} = this.props;
@@ -75,13 +77,13 @@ class BlogArticle extends Component {
 
         const uid = 'http://dataskeptic.com/blog' + prettyName;
 
-        const { content, title } = post;
+        const {content, title} = post;
 
         let contributor = null;
 
         try {
             contributor = contributors.getIn([author]).toJS();
-        } catch(e) {
+        } catch (e) {
             // TODO:
         }
 
@@ -96,17 +98,21 @@ class BlogArticle extends Component {
 
         return (
             <div className="center">
-                { isEpisode ? <LatestEpisodePlayer guid={guid} /> : null }
+                { isEpisode ?
+                    <LatestEpisodePlayer guid={guid}/>
+                    : <div></div>
+                }
 
-                {contributor ? <BlogAuthorTop contributor={contributor}/> : null }
+                {contributor ? <BlogAuthorTop contributor={contributor}/> : <div></div> }
 
                 <div id='blog-content'>
-                    <span dangerouslySetInnerHTML={{__html: content}}/>
+                    <PostBodyContainer content={content}/>
+
                 </div>
 
                 <RelatedContent />
 
-                { contributor ? <BlogAuthorBottom contributor={contributor} /> : null }
+                { contributor ? <BlogAuthorBottom contributor={contributor}/> : <div></div> }
 
                 <MailingListBlogFooter />
 

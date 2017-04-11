@@ -23,8 +23,7 @@ export default class BlogList extends Component {
         return (
             <div className="row blog-summary-container">
                 {blogs.map((blog, index) => {
-                    const id = index;
-                    return <BlogListItem key={id} blog={blog} onClick={this.onItemClick} isLatest={blog.c_hash===latestId}/>
+                    return <BlogListItem key={index} blog={blog} onClick={this.onItemClick} isLatest={blog.c_hash===latestId}/>
                 })}
             </div>
         )

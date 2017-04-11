@@ -5,6 +5,10 @@ import getBlog from '../daos/getBlog'
 
 import { loadBlogs } from '../../shared/Blog/Actions/BlogsActions';
 
+export function clearEpisode(dispatch) {
+	dispatch({type: "CLEAR_FOCUS_EPISODE"})
+}
+
 export function loadEpisode(guid, dispatch) {
 	axios
 		.get("/api/episodes/get/" + guid)

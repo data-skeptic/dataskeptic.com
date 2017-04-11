@@ -19,7 +19,7 @@ class Podcast extends Component {
         super(props)
     }
 
-    componentWillMount() {
+    componentDidMount() {
         const dispatch = this.props.dispatch;
         const { isLoaded } = this.props;
         const pathname = this.props.location.pathname;
@@ -31,7 +31,7 @@ class Podcast extends Component {
 
     render() {
         const pathname = this.props.location.pathname;
-        const {list, years, isLoaded} = this.props;
+        const {list = [], years = [], isLoaded = false} = this.props;
 
         let year = year_from_path(pathname);
         if (year === -1) {
