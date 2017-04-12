@@ -35,8 +35,9 @@ class BlogArticle extends Component {
     }
 
     componentDidMount() {
-        this.props.loadBlogPost(this.props.postUrl);
-        if (this.isPostFetched()) {
+        if (!this.isPostFetched()) {
+            this.props.loadBlogPost(this.props.postUrl);
+        } else {
             this.props.stopBlogLoading();
         }
     }
@@ -95,6 +96,7 @@ class BlogArticle extends Component {
 
         return (
             <div className="center">
+
                 { isEpisode ? <LatestEpisodePlayer guid={guid} /> : null }
 
                 {contributor ? <BlogAuthorTop contributor={contributor}/> : null }

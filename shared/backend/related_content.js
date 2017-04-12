@@ -43,6 +43,7 @@ var related_content_cache = {
 }
 
 module.exports = {
+  related_cache: related_content_cache,
   related_content: function(req, res) {
     var resp = []
     var uri = req.query.uri

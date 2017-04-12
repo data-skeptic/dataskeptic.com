@@ -13,7 +13,7 @@ import {order_create}            from 'backend/order_create'
 import {order_fulfill}           from 'backend/order_fulfill'
 import {order_list}              from 'backend/order_list'
 import {pay_invoice}             from 'backend/pay_invoice'
-import {related_content}         from 'backend/related_content'
+import {related_content, related_cache}         from 'backend/related_content'
 import bodyParser                from 'body-parser'
 import compression               from 'compression';
 import {feed_uri}              from 'daos/episodes'
@@ -292,7 +292,10 @@ function install_blog(store, blog_metadata, content) {
     var loaded = 1
     var blog = blog_metadata
     var pathname = "/blog" + blog.prettyname
-    var blog_focus = {blog, loaded, content, pathname, contributor}
+
+    const related = related_cache[pathname] || [];
+    blog.related = related;
+    var blog_focus = {blog, loaded, content, pathname, contributor};
 
     const post = {
         ...blog,
@@ -301,7 +304,8 @@ function install_blog(store, blog_metadata, content) {
 
     store.dispatch({type: "LOAD_CONTRIBUTORS_LIST_SUCCESS", payload: {contributors}});
     store.dispatch({type: "LOAD_BLOG_POST_SUCCESS", payload: {post}});
-    get_related_content(store.dispatch, pathname);
+
+    store.dispatch({type: "SET_FOCUS_BLOG", payload: {blog_focus}});
 }
 
 function install_episode(store, episode) {
