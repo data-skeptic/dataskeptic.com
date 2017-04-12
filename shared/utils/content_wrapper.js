@@ -1,4 +1,4 @@
-export default function getContentWrapper(title, initialState, injects) {
+export default function getContentWrapper(title, initialState, injects, env) {
   var doc = `<!DOCTYPE html>
       <html>
         <head>
@@ -9,6 +9,7 @@ export default function getContentWrapper(title, initialState, injects) {
           <title>${title}</title>
           <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" />
           <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cosmo/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+          ${env==='prod'? '<link href="/main.css" type="text/css" rel="stylesheet"/>' : ''}
           <script>
             window.__INITIAL_STATE__ = ${JSON.stringify(initialState)};
           </script>

@@ -13,7 +13,7 @@ import {order_create}            from 'backend/order_create'
 import {order_fulfill}           from 'backend/order_fulfill'
 import {order_list}              from 'backend/order_list'
 import {pay_invoice}             from 'backend/pay_invoice'
-import {related_content}         from 'backend/related_content'
+import {related_content, related_cache}         from 'backend/related_content'
 import bodyParser                from 'body-parser'
 import compression               from 'compression';
 import {feed_uri}              from 'daos/episodes'
@@ -46,7 +46,8 @@ import {
 import getContentWrapper         from 'utils/content_wrapper';
 import {
     get_blogs_list,
-    get_podcasts_from_cache
+    get_podcasts_from_cache,
+    get_related_content
 }                         from 'utils/redux_loader';
 import redirects_map             from './redirects';
 
@@ -75,7 +76,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 console.log("Environment: ", env)
 
-var my_cache = {
+let Cache = {
     title_map: {}         // `uri`             -> <title>
     , content_map: {}       // `uri`             -? {s3 blog content}
     , blogmetadata_map: {}  // `uri`             -> {blog}
@@ -83,7 +84,7 @@ var my_cache = {
     , episodes_map: {}      // `guid` | 'latest' -> {episode}
     , episodes_list: []     // guids
     , products: {}
-}
+};
 
 const reducer = combineReducers({
     ...reducers,
@@ -93,24 +94,71 @@ const store = applyMiddleware(thunk, promiseMiddleware)(createStore)(reducer);
 let initialState = store.getState()
 delete initialState.checkout;
 
-
-global.env = env
-global.my_cache = my_cache
+global.env = env;
 
 const doRefresh = () => {
-    process.nextTick(() => {
-        console.log("---[Refreshing cache]------------------");
-        console.log(process.memoryUsage());
+    console.log("---[Refreshing cache]------------------");
+    console.log(process.memoryUsage());
 
-        let env = global.env;
-        let my_cache = global.my_cache;
+    let env = global.env;
 
-        loadBlogs(store, env, my_cache);
-        loadProducts(env, my_cache);
-        loadEpisodes(env, feed_uri, my_cache, aws);
+    return loadBlogs(store, env)
+        .then(function ({folders, blogmetadata_map, title_map, content_map}) {
+            console.log("-[Refreshing blogs]-");
 
-        global.gc();
-    });
+            // clear references
+            Cache.folders = null;
+            delete Cache.folders;
+
+            Cache.blogmetadata_map = null;
+            delete Cache.blogmetadata_map;
+
+            Cache.title_map = null;
+            delete Cache.title_map;
+
+            Cache.content_map = null;
+            delete Cache.content_map;
+
+            // fill the data again
+            Cache.folders = folders;
+            Cache.blogmetadata_map = blogmetadata_map;
+            Cache.title_map = title_map;
+            Cache.content_map = content_map;
+
+            return loadEpisodes(env, feed_uri, blogmetadata_map, aws);
+        })
+        .then(function ({episodes_map, episodes_list}, guid) {
+            console.log("-[Refreshing blogs]-");
+            // clear references
+            Cache.episodes_map = null;
+            delete Cache.episodes_map;
+
+            Cache.episodes_list = null;
+            delete Cache.episodes_list;
+
+            // fill the data again
+            Cache.blogmetadata_map[guid] = guid;
+            Cache.episodes_map = episodes_map;
+            Cache.episodes_list = episodes_list;
+
+            return loadProducts(env, Cache);
+        })
+        .then((products) => {
+            console.log("-[Refreshing products]-");
+            // clear references
+            Cache.products = null;
+            delete Cache.products;
+
+            // fill the data
+            Cache.products = {};
+            Cache.products.items = products;
+
+            console.log("Refreshing Finished")
+        })
+        .then(() => global.gc())
+        .catch((err) => {
+            console.log(err);
+        })
 };
 
 setInterval(() => {
@@ -120,8 +168,6 @@ setInterval(() => {
         console.error(err);
     }
 }, 60 * 60 * 1000);
-
-doRefresh();
 
 if (process.env.NODE_ENV == 'production') {
     function shouldCompress(req, res) {
@@ -207,33 +253,36 @@ function api_router(req, res) {
         return true
     }
     else if (req.url == '/api/blog/categories') {
-        var folders = my_cache.folders
+        var folders = Cache.folders
         return res.status(200).end(JSON.stringify(folders))
     }
     else if (req.url.indexOf('/api/blog/rss') === 0) {
-        get_blogs_rss(req, res, my_cache.blogmetadata_map);
+        get_blogs_rss(req, res, Cache.blogmetadata_map);
         return true
     }
     else if (req.url.indexOf('/api/blog') === 0) {
-        get_blogs(req, res, my_cache.blogmetadata_map, env);
+        get_blogs(req, res, Cache.blogmetadata_map, env);
         return true
     }
     else if (req.url.indexOf('/api/store/list') == 0) {
-        var products = my_cache.products
+        var products = Cache.products
         return res.status(200).end(JSON.stringify(products))
     }
     else if (req.url.indexOf('/api/episodes/list') == 0) {
-        get_episodes(req, res, my_cache.episodes_map, my_cache.episodes_list)
+        get_episodes(req, res, Cache.episodes_map, Cache.episodes_list)
         return true
     }
     else if (req.url.indexOf('/api/episodes/get') == 0) {
-        get_episodes_by_guid(req, res, my_cache.episodes_map, my_cache.episodes_list)
+        get_episodes_by_guid(req, res, Cache.episodes_map, Cache.episodes_list)
         return true
     }
     else if (req.url == '/api/rfc/list') {
-        get_rfc_metadata(req, res, my_cache)
+        get_rfc_metadata(req, res, Cache)
         return true
+    } else if (req.url == '/api/test') {
+        return res.status(200).end(JSON.stringify(Cache.blogmetadata_map));
     }
+
     return false
 }
 
@@ -291,15 +340,18 @@ function install_blog(store, blog_metadata, content) {
     var loaded = 1
     var blog = blog_metadata
     var pathname = "/blog" + blog.prettyname
-    var blog_focus = {blog, loaded, content, pathname, contributor}
+
+    const related = related_cache[pathname] || [];
+    blog.related = related;
+    var blog_focus = {blog, loaded, content, pathname, contributor};
 
     const post = {
         ...blog,
         content
     };
 
-    store.dispatch({type: "LOAD_CONTRIBUTORS_LIST_SUCCESS", payload: {contributors}});
-    store.dispatch({type: "LOAD_BLOG_POST_SUCCESS", payload: {post}})
+    store.dispatch({type: "LOAD_BLOG_POST_SUCCESS", payload: {post}});
+    store.dispatch({type: "SET_FOCUS_BLOG", payload: {blog_focus}});
 }
 
 function install_episode(store, episode) {
@@ -336,113 +388,123 @@ function inject_blog(store, my_cache, pathname) {
 }
 
 function updateState(store, pathname) {
-    var my_cache = global.my_cache
-    inject_folders(store, my_cache)
-    inject_years(store, my_cache)
+    inject_folders(store, Cache)
+    inject_years(store, Cache)
+
+    var contributors = get_contributors();
+    store.dispatch({type: "LOAD_CONTRIBUTORS_LIST_SUCCESS", payload: {contributors}});
+
     if (pathname == "" || pathname == "/") {
-        inject_homepage(store, my_cache, pathname)
+        inject_homepage(store, Cache, pathname)
     }
     if (pathname.indexOf('/blog') == 0) {
-        inject_blog(store, my_cache, pathname)
+        inject_blog(store, Cache, pathname)
     }
     else if (pathname == "/members" || pathname == "/store") {
-        inject_products(store, my_cache, pathname)
+        inject_products(store, Cache, pathname)
     }
     else if (pathname.indexOf("/podcast") == 0) {
-        inject_podcast(store, my_cache, pathname)
+        inject_podcast(store, Cache, pathname)
     }
 }
 
-app.use((req, res) => {
-    if (req.url == '/favicon.ico') {
-        return res.redirect(301, 'https://s3.amazonaws.com/dataskeptic.com/favicon.ico')
-    }
-    if (req.url.indexOf('/src-') > 0) {
-        var u = req.url
-        var i = u.indexOf('/blog/') + '/blog'.length
-        if (i > 0) {
-            var hostname = 's3.amazonaws.com/dataskeptic.com'
-            if (env != 'prod') {
-                hostname = 's3.amazonaws.com/' + env + '.dataskeptic.com'
+
+doRefresh().then(() => {
+    console.log('CACHE IS READY');
+
+    app.use((req, res) => {
+        if (req.url == '/favicon.ico') {
+            return res.redirect(301, 'https://s3.amazonaws.com/dataskeptic.com/favicon.ico')
+        }
+        if (req.url.indexOf('/src-') > 0) {
+            var u = req.url
+            var i = u.indexOf('/blog/') + '/blog'.length
+            if (i > 0) {
+                var hostname = 's3.amazonaws.com/dataskeptic.com'
+                if (env != 'prod') {
+                    hostname = 's3.amazonaws.com/' + env + '.dataskeptic.com'
+                }
+                var redir = u.substring(i, u.length)
+                return res.redirect(301, 'https://' + hostname + redir)
             }
-            var redir = u.substring(i, u.length)
-            return res.redirect(301, 'https://' + hostname + redir)
         }
-    }
-    else if (req.url.indexOf('/api') == 0) {
-        var routed = api_router(req, res)
-        if (routed) {
-            return
+        else if (req.url.indexOf('/api') == 0) {
+            var routed = api_router(req, res)
+            if (routed) {
+                return
+            }
         }
-    }
-    var redir = redirects_map['redirects_map'][req.url]
-    var hostname = req.headers.host
-    if (redir != undefined) {
-        console.log("Redirecting to " + hostname + redir)
-        return res.redirect(301, 'http://' + hostname + redir)
-    }
-    if (req.url == '/feed.rss') {
-        return res.redirect(307, 'http://dataskeptic.libsyn.com/rss')
-    }
-
-    const location = createLocation(req.url);
-
-    match({routes, location}, (err, redirectLocation, renderProps) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).end('Internal server error');
+        var redir = redirects_map['redirects_map'][req.url]
+        var hostname = req.headers.host
+        if (redir != undefined) {
+            console.log("Redirecting to " + hostname + redir)
+            return res.redirect(301, 'http://' + hostname + redir)
+        }
+        if (req.url == '/feed.rss') {
+            return res.redirect(307, 'http://dataskeptic.libsyn.com/rss')
         }
 
-        if (!renderProps) {
-            var title = "Page not found"
-            var componentHTML = "<div><h1>Not Found</h1><p>You've encountered a bogus link, deprecated link, or bug in our site.  Either way, please nagivate to <a href=\"http://dataskeptic.com\">dataskeptic.com</a> to get back on course.</p></div>"
+        const location = createLocation(req.url);
 
-            var injects = {
-                "react-view": componentHTML
+        match({routes, location}, (err, redirectLocation, renderProps) => {
+            console.log('doing response');
+
+            if (err) {
+                console.error(err);
+                return res.status(500).end('Internal server error');
             }
 
-            var HTML = getContentWrapper(title, initialState, injects)
-            var pathname = location.pathname
-            console.log("page not found:" + pathname)
-            return res.status(404).end(componentHTML);
-        }
+            if (!renderProps) {
+                var title = "Page not found"
+                var componentHTML = "<div><h1>Not Found</h1><p>You've encountered a bogus link, deprecated link, or bug in our site.  Either way, please nagivate to <a href=\"http://dataskeptic.com\">dataskeptic.com</a> to get back on course.</p></div>"
 
-        function renderView() {
-            const store = applyMiddleware(thunk, promiseMiddleware)(createStore)(reducer)
-            updateState(store, location.pathname)
+                var injects = {
+                    "react-view": componentHTML
+                }
 
-            const InitialView = (
-                <Provider store={store}>
-                    <RoutingContext {...renderProps} />
-                </Provider>
-            );
-
-            var title = "Data Skeptic"
-            var pathname = location.pathname.substring('/blog'.length, location.pathname.length)
-            var alt_title = my_cache.title_map[pathname]
-            if (alt_title != undefined) {
-                title = alt_title
+                var HTML = getContentWrapper(title, initialState, injects, env)
+                var pathname = location.pathname
+                console.log("page not found:" + pathname)
+                return res.status(404).end(componentHTML);
             }
 
-            const componentHTML = renderToString(InitialView)
+            function renderView() {
+                const store = applyMiddleware(thunk, promiseMiddleware)(createStore)(reducer)
+                updateState(store, location.pathname)
 
-            var injects = {
-                "react-view": componentHTML
+                const InitialView = (
+                    <Provider store={store}>
+                        <RoutingContext {...renderProps} />
+                    </Provider>
+                );
+
+                var title = "Data Skeptic"
+                var pathname = location.pathname.substring('/blog'.length, location.pathname.length)
+                var alt_title = Cache.title_map[pathname]
+                if (alt_title != undefined) {
+                    title = alt_title
+                }
+
+                const componentHTML = renderToString(InitialView)
+
+                var injects = {
+                    "react-view": componentHTML
+                }
+
+                const state = store.getState()
+                const HTML = getContentWrapper(title, state, injects, env)
+                return HTML;
             }
 
-            const state = store.getState()
-            const HTML = getContentWrapper(title, state, injects)
-            return HTML;
-        }
-
-        fetchComponentData(store.dispatch, renderProps.components, renderProps.params)
-            .then(renderView)
-            .then(html => res.status(200).end(html))
-            .catch(err => {
-                console.error('HTML generation error');
-                console.dir(err);
-                return res.end(err)
-            });
+            fetchComponentData(store.dispatch, renderProps.components, renderProps.params)
+                .then(renderView)
+                .then(html => res.status(200).end(html))
+                .catch(err => {
+                    console.error('HTML generation error');
+                    console.dir(err);
+                    return res.end(err)
+                });
+        });
     });
 });
 

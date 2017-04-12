@@ -61,7 +61,7 @@ class BlogContainer extends Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         const folderName = this.props.folderName || '';
         if (isNaN(+folderName)) {
             this.fetchAllPosts();
@@ -173,7 +173,6 @@ class BlogContainer extends Component {
         return (
             <div className="blog-page">
                 <Container>
-
                     <Content title={contentTitle}>
                         { blogs.length === 0
                             ? <Loading />
