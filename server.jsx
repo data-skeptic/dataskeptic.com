@@ -454,7 +454,7 @@ doRefresh().then(() => {
                     "react-view": componentHTML
                 }
 
-                var HTML = getContentWrapper(title, initialState, injects)
+                var HTML = getContentWrapper(title, initialState, injects, env)
                 var pathname = location.pathname
                 console.log("page not found:" + pathname)
                 return res.status(404).end(componentHTML);
@@ -484,7 +484,7 @@ doRefresh().then(() => {
                 }
 
                 const state = store.getState()
-                const HTML = getContentWrapper(title, state, injects)
+                const HTML = getContentWrapper(title, state, injects, env)
                 return HTML;
             }
 
