@@ -9,9 +9,9 @@ import CartContainer from '../Cart/Containers/CartContainer'
 
 import { toggleCart } from '../Cart/Actions/CartActions'
 
-class Sidebar extends React.Component {
+class Sidebar extends Component {
 	constructor(props) {
-		super(props)
+		super()
 		this.onClick = this.onClick.bind(this)
 		this.toggleCart = this.toggleCart.bind(this)
 	}

@@ -12,7 +12,3 @@ export default class BlogLink extends Component {
         );
     }
 }
-
-BlogLink.contextTypes = {
-    router: React.PropTypes.object
-};
