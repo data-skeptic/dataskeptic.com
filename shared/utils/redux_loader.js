@@ -213,6 +213,7 @@ export function get_blogs_list(dispatch, pathname) {
             }
 
 			const blog = blogmetadata_map[key]
+			if (!blog) continue;
 			const pn = blog.prettyname
 			if (pn.indexOf(bpathname) == 0) {
 				blogs.push(blog)

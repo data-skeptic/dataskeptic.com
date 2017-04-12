@@ -18,7 +18,6 @@ class LatestEpisodePlayer extends Component {
         var episodes = this.props.episodes.toJS();
         var focus_episode = episodes.focus_episode;
         var guid = this.props.guid;
-        clearEpisode(dispatch);
         if (guid) {
             loadEpisode(guid, dispatch)
         }
@@ -35,9 +34,7 @@ class LatestEpisodePlayer extends Component {
 
         if (focus_episode.episode) {
             if (episode.guid !== guid || focus_episode.loaded !== 1) {
-                clearEpisode(dispatch);
                 loadEpisode(guid, dispatch);
-                console.log('guid', guid)
             }
         }
     }
@@ -65,9 +62,6 @@ class LatestEpisodePlayer extends Component {
         var episode = focus_episode.episode;
         if (loaded === -1) {
             return <Error />
-        }
-        else if (loaded === 0) {
-            return <Loading />
         }
         else if (!loaded || !episode) {
             return <Error />

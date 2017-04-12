@@ -24,9 +24,7 @@ class Podcast extends Component {
         const { isLoaded } = this.props;
         const pathname = this.props.location.pathname;
 
-        if (!isLoaded) {
-            get_podcasts(dispatch, pathname)
-        }
+        get_podcasts(dispatch, pathname);
     }
 
     render() {
