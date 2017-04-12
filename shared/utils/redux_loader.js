@@ -5,12 +5,22 @@ import getBlog from '../daos/getBlog'
 
 import { loadBlogs } from '../../shared/Blog/Actions/BlogsActions';
 
+export function clearEpisode(dispatch) {
+	dispatch({type: "CLEAR_FOCUS_EPISODE"})
+}
+
 export function loadEpisode(guid, dispatch) {
+	let lastReqGuid = guid;
+
 	axios
 		.get("/api/episodes/get/" + guid)
   		.then(function(result) {
   			var episode = result["data"]
-			dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
+
+			// update only with latest request
+			if (lastReqGuid === episode.guid) {
+  				dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
+			}
 		})
 		.catch((err) => {
 			console.log(err)

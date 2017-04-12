@@ -21,8 +21,4 @@ export const BlogNav = ({folders=[], pathname, up='All', onClick, activeFolder})
 	</div>
 );
 
-BlogNav.propTypes = {
-	folders: PropTypes.array,
-};
-
 export default BlogNav;

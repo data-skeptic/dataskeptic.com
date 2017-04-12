@@ -33,10 +33,6 @@ export const BlogAuthorTop = ({ contributor={} }) => {
 	)
 };
 
-BlogAuthorTop.propTypes = {
-    contributor: PropTypes.object
-};
-
 export default BlogAuthorTop;
 
 // class BlogAuthorTop extends React.Component {
