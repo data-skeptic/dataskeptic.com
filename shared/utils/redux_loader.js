@@ -83,12 +83,12 @@ export function get_invoice(dispatch, id) {
 }
 
 export function get_related_content(dispatch, pathname) {
-    var uri = "/api/related?uri=" + pathname
-    axios
-        .get(uri)
+    const uri = "/api/related?uri=" + pathname;
+
+    return axios.get(uri)
         .then(function(resp) {
-          var data = resp['data']
-          var items = data
+          const data = resp['data'];
+          const items = data;
           dispatch({type: "ADD_RELATED", payload: {items, uri: pathname} })
         })
         .catch(function(err) {

@@ -17,8 +17,6 @@ import RelatedContent from '../Components/RelatedContent'
 import PostBodyContainer from './PostBodyContainer'
 
 import {get_folders} from '../../utils/redux_loader'
-import {get_related_content} from '../../utils/redux_loader'
-
 
 import isEmpty from 'lodash/isEmpty';
 import {loadBlogPost, stopBlogLoading} from '../Actions/BlogsActions';
@@ -38,11 +36,11 @@ class BlogArticle extends Component {
     }
 
     componentDidMount() {
-        this.props.loadBlogPost(this.props.postUrl);
-        // if (!this.isPostFetched()) {
-        // } else {
-        //     this.props.stopBlogLoading();
-        // }
+        if (!this.isPostFetched()) {
+            this.props.loadBlogPost(this.props.postUrl);
+        } else {
+            this.props.stopBlogLoading();
+        }
     }
 
 
@@ -97,11 +95,12 @@ class BlogArticle extends Component {
             contributor = null;
         }
 
+        const related = post.related || [];
+
         return (
             <div className="center">
-                {isEpisode ?
-                    <LatestEpisodePlayer guid={guid}/>
-                    : null }
+
+                { isEpisode ? <LatestEpisodePlayer guid={guid} /> : null }
 
                 {contributor ? <BlogAuthorTop contributor={contributor}/> : <div></div> }
 
@@ -110,7 +109,7 @@ class BlogArticle extends Component {
 
                 </div>
 
-                <RelatedContent />
+                <RelatedContent items={related} />
 
                 { contributor ? <BlogAuthorBottom contributor={contributor}/> : <div></div> }
 
