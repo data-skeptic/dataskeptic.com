@@ -25,8 +25,9 @@ import {get_homepage_content} from '../utils/redux_loader'
 
 class Home extends Component {
 
-  componentWillMount() {
+  componentDidMount() {
       var dispatch = this.props.dispatch
+      // this will be not work
       get_homepage_content(dispatch)
   }
 
