@@ -302,9 +302,7 @@ function install_blog(store, blog_metadata, content) {
         content
     };
 
-    store.dispatch({type: "LOAD_CONTRIBUTORS_LIST_SUCCESS", payload: {contributors}});
     store.dispatch({type: "LOAD_BLOG_POST_SUCCESS", payload: {post}});
-
     store.dispatch({type: "SET_FOCUS_BLOG", payload: {blog_focus}});
 }
 
@@ -345,6 +343,10 @@ function updateState(store, pathname) {
     var my_cache = global.my_cache
     inject_folders(store, my_cache)
     inject_years(store, my_cache)
+
+    var contributors = get_contributors();
+    store.dispatch({type: "LOAD_CONTRIBUTORS_LIST_SUCCESS", payload: {contributors}});
+
     if (pathname == "" || pathname == "/") {
         inject_homepage(store, my_cache, pathname)
     }
