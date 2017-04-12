@@ -32,7 +32,6 @@
     "css-loader": "^0.26.2",
     "exports-loader": "^0.6.2",
     "express": "^4.13.3",
-    "extract-text-webpack-plugin": "^2.0.0",
     "file-stream-rotator": "0.0.7",
     "fs": "0.0.1-security",
     "history": "^1.17.0",

@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import {get_related_content} from '../../utils/redux_loader'
+
 export const LOAD_BLOGS_REQUEST = 'LOAD_BLOGS_REQUEST';
 export const LOAD_BLOGS_SUCCESS = 'LOAD_BLOGS_SUCCESS';
 export const LOAD_BLOGS_FAILED = 'LOAD_BLOGS_FAILED';
@@ -48,7 +50,7 @@ export function loadBlogPost(pathname) {
         const url = "/api" + pathname;
         const env = getState().blogs.getIn(['env']);
 
-        dispatch(loadBlogsRequest());
+        dispatch(loadBlogPostRequest());
         return axios.get(url)
             .then(({data}) => {
                 const post = data.blogs[0] || {};
@@ -58,6 +60,9 @@ export function loadBlogPost(pathname) {
                         const content = result.data;
                         post.content = content;
                         dispatch(loadBlogPostSuccess(post));
+                    })
+                    .then((post) => {
+                        get_related_content(dispatch, pathname);
                     })
             })
             .catch((err) => { dispatch(loadBlogPostFailed(err)) })

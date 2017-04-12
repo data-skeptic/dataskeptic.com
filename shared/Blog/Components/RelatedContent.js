@@ -9,8 +9,7 @@ class RelatedContent extends React.Component {
 	}
 
 	render() {
-		var oblogs = this.props.blogs.toJS()
-		var items = oblogs.related || []
+		const {items} = this.props;
 		if (items.length == 0) {
 			return <div></div>
 		}
@@ -31,4 +30,4 @@ class RelatedContent extends React.Component {
 		)
 	}
 }
-export default connect(state => ({ blogs: state.blogs }))(RelatedContent)
+export default RelatedContent;

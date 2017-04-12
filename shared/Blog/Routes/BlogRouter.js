@@ -20,7 +20,7 @@ class BlogRouter extends React.Component {
 		super(props)
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		var dispatch = this.props.dispatch
 		var pathname = this.props.location.pathname
 		var k = '/blog'
@@ -55,6 +55,7 @@ class BlogRouter extends React.Component {
 		while (i < folders.length) {
 			var folder = "/" + folders[i] + "/"
 			if (folder == prettyname) {
+				return null;
 				return <Blog pathname={pathname} />
 			}
 			i += 1
@@ -65,7 +66,6 @@ class BlogRouter extends React.Component {
 
 		return (
 			<div className="center">
-				<br />
 				<BlogArticle postUrl={pathname} />
 			</div>
 		)

@@ -2,12 +2,13 @@ import each from 'lodash/each';
 import filter from 'lodash/filter';
 
 const ignoredKeys = ['latest', 'guid'];
-function isIgnoredKey(key='') {
+function isIgnoredKey(key) {
     return ignoredKeys.includes(key);
 }
 
 function isMatchingQuery(blog, {url = '', exclude = [], env}) {
     let match = false;
+    if (!blog) return match;
 
     if (blog['prettyname'].indexOf(url) === 0) {
         match = true
@@ -59,7 +60,7 @@ module.exports = {
         let blogs = filter(blogmetadata_map, (blog, id) => !isIgnoredKey(id));
 
         // filter only relative blogs
-        blogs = blogs.filter((blog, id) => isMatchingQuery(blog, {url, exclude, env}));
+        blogs = filter(blogs, (blog, id) => isMatchingQuery(blog, {url, exclude, env}));
 
         // calculate total matched blogs count
         const total = blogs.length;

@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react'
+import React  from 'react'
 import ReactGA from 'react-ga'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -148,11 +148,6 @@ class MainView extends React.Component {
     ReactGA.set({ page });
     ReactGA.pageview(page);
   }
-
-  static propTypes = {
-      children: PropTypes.object
-  }
-
 
   /**
    * Handler for mobile menu navigation item click

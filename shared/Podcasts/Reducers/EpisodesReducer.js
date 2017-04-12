@@ -22,7 +22,11 @@ export default function EpisodesReducer(state = defaultState, action) {
             break;
         case 'SET_FOCUS_EPISODE':
             nstate.focus_episode.episode = action.payload;
-            nstate.focus_episode.loaded = false;
+            nstate.focus_episode.loaded = 1;
+            break;
+
+        case 'CLEAR_FOCUS_EPISODE':
+            nstate.focus_episode = {episode: undefined, loaded: 0};
             break;
     }
 

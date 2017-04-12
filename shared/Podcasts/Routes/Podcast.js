@@ -19,19 +19,17 @@ class Podcast extends Component {
         super(props)
     }
 
-    componentWillMount() {
+    componentDidMount() {
         const dispatch = this.props.dispatch;
         const { isLoaded } = this.props;
         const pathname = this.props.location.pathname;
 
-        if (!isLoaded) {
-            get_podcasts(dispatch, pathname)
-        }
+        get_podcasts(dispatch, pathname);
     }
 
     render() {
         const pathname = this.props.location.pathname;
-        const {list, years, isLoaded} = this.props;
+        const {list = [], years = [], isLoaded = false} = this.props;
 
         let year = year_from_path(pathname);
         if (year === -1) {
@@ -43,12 +41,12 @@ class Podcast extends Component {
                 <Container>
 
                     <Content>
-                    { isLoaded ?
-                        list.map(function (episode) {
-                            return <Episode key={episode.guid} episode={episode}/>
-                        })
-                      : <Loading />
-                    }
+                        { isLoaded ?
+                            list.map(function (episode, index) {
+                                return <Episode key={index} episode={episode}/>
+                            })
+                          : <Loading />
+                        }
                     </Content>
                     <SideBar title="Year">
                         <YearSelector years={years} year={year}/>

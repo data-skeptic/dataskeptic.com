@@ -7,10 +7,9 @@ export default class YearSelector extends React.Component {
 		return (
 			<div className="year-select-outer">
 				<div className="episode-selector">
-					{this.props.years.map(function(year) {
-						var key = Math.random().toString().substring(2,99)
-						var active = (dyear == year)
-						return <YearNav key={key} year={year} active={active} />
+					{this.props.years.map(function(year, index) {
+						var active = (dyear === year)
+						return <YearNav key={index} year={year} active={active} />
 					})}
 				</div>
 			</div>

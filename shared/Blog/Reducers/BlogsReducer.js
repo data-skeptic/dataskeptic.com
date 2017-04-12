@@ -91,6 +91,7 @@ export default function blogsReducer(state = defaultState, action) {
             var items = action.payload.items
             var uri = action.payload.uri
             var b = nstate.blog_focus.blog
+            // debugger;
             if (b != undefined) {
                 var key = '/blog'
                 if (uri.indexOf(key) == 0) {

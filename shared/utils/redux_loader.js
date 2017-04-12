@@ -5,12 +5,22 @@ import getBlog from '../daos/getBlog'
 
 import { loadBlogs } from '../../shared/Blog/Actions/BlogsActions';
 
+export function clearEpisode(dispatch) {
+	dispatch({type: "CLEAR_FOCUS_EPISODE"})
+}
+
 export function loadEpisode(guid, dispatch) {
+	let lastReqGuid = guid;
+
 	axios
 		.get("/api/episodes/get/" + guid)
   		.then(function(result) {
   			var episode = result["data"]
-			dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
+
+			// update only with latest request
+			if (lastReqGuid === episode.guid) {
+  				dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
+			}
 		})
 		.catch((err) => {
 			console.log(err)
@@ -73,12 +83,12 @@ export function get_invoice(dispatch, id) {
 }
 
 export function get_related_content(dispatch, pathname) {
-    var uri = "/api/related?uri=" + pathname
-    axios
-        .get(uri)
+    const uri = "/api/related?uri=" + pathname;
+
+    return axios.get(uri)
         .then(function(resp) {
-          var data = resp['data']
-          var items = data
+          const data = resp['data'];
+          const items = data;
           dispatch({type: "ADD_RELATED", payload: {items, uri: pathname} })
         })
         .catch(function(err) {
@@ -203,6 +213,7 @@ export function get_blogs_list(dispatch, pathname) {
             }
 
 			const blog = blogmetadata_map[key]
+			if (!blog) continue;
 			const pn = blog.prettyname
 			if (pn.indexOf(bpathname) == 0) {
 				blogs.push(blog)
