@@ -319,8 +319,7 @@ function inject_homepage(store, my_cache, pathname) {
         }
         install_blog(store, blog_metadata, content)
         var episode = my_cache.episodes_map["latest"]
-        install_episode(store, episode)
-        console.log('HOMEPAGE EPISODE', episode)
+        install_episode(store, episode);
     }
 }
 
@@ -396,18 +395,11 @@ function updateState(store, pathname) {
     var contributors = get_contributors();
     store.dispatch({type: "LOAD_CONTRIBUTORS_LIST_SUCCESS", payload: {contributors}});
 
-    // if (pathname == "" || pathname == "/") {
-        inject_blog(store, Cache, pathname)
-        inject_podcast(store, Cache, pathname)
-        inject_homepage(store, Cache, pathname)
-        inject_products(store, Cache, pathname)
-    // }
-    // if (pathname.indexOf('/blog') == 0) {
-    // }
-    // else if (pathname == "/members" || pathname == "/store") {
-    // }
-    // else if (pathname.indexOf("/podcast") == 0) {
-    // }
+    // inject anything
+    inject_blog(store, Cache, pathname);
+    inject_podcast(store, Cache, pathname);
+    inject_homepage(store, Cache, pathname);
+    inject_products(store, Cache, pathname);
 }
 
 
