@@ -46,7 +46,8 @@ import {
 import getContentWrapper         from 'utils/content_wrapper';
 import {
     get_blogs_list,
-    get_podcasts_from_cache
+    get_podcasts_from_cache,
+    get_related_content
 }                         from 'utils/redux_loader';
 import redirects_map             from './redirects';
 
@@ -299,7 +300,8 @@ function install_blog(store, blog_metadata, content) {
     };
 
     store.dispatch({type: "LOAD_CONTRIBUTORS_LIST_SUCCESS", payload: {contributors}});
-    store.dispatch({type: "LOAD_BLOG_POST_SUCCESS", payload: {post}})
+    store.dispatch({type: "LOAD_BLOG_POST_SUCCESS", payload: {post}});
+    get_related_content(store.dispatch, pathname);
 }
 
 function install_episode(store, episode) {
