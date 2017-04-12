@@ -48,7 +48,7 @@ export function loadBlogPost(pathname) {
         const url = "/api" + pathname;
         const env = getState().blogs.getIn(['env']);
 
-        dispatch(loadBlogsRequest());
+        dispatch(loadBlogPostRequest());
         return axios.get(url)
             .then(({data}) => {
                 const post = data.blogs[0] || {};
@@ -59,6 +59,7 @@ export function loadBlogPost(pathname) {
                         post.content = content;
                         dispatch(loadBlogPostSuccess(post));
                     })
+                    .catch((err) => dispatch(loadBlogPostFailed(err)))
             })
             .catch((err) => { dispatch(loadBlogPostFailed(err)) })
     }
