@@ -392,6 +392,9 @@ function updateState(store, pathname) {
 }
 
 
+const api = require('./backend/api/v1');
+app.use('/api/v1/', api);
+
 doRefresh().then(() => {
     console.log('CACHE IS READY');
 
