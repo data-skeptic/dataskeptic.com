@@ -59,10 +59,7 @@ var accessLogStream = FileStreamRotator.getStream({
   frequency: 'daily',
   verbose: false
 })
-app.use(morgan('combined', {stream: accessLogStream}))
-
-
-var env = "prod"
+var env = "prod";
 
 aws.config.loadFromPath('awsconfig.json')
 
@@ -70,7 +67,13 @@ if (process.env.NODE_ENV !== 'production') {
   require('./webpack.dev').default(app);
   env = "dev"
 }
-console.log("Environment: ", env)
+console.log("Environment: ", env);
+
+if (env === 'production') {
+    app.use(morgan('combined', {stream: accessLogStream}))
+} else {
+    app.use(morgan('dev'));
+}
 
 let Cache = {
     title_map: {}         // `uri`             -> <title>
