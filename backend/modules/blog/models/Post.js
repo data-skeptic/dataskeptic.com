@@ -1,14 +1,15 @@
 const Post = (data) => ({
     id: data.hash,
+    apiUrl: `/api/v1/blog${data['prettyname']}`,
 
     url: data['prettyname'],
     title: data['title'],
-    content: '',
+    content: data['content'] || '',
 
-    isEpisode: false,
+    isEpisode: data['isEpisode'] || false,
 
-    contributor: null,
-    relative: [],
+    contributor: data['contributor'],
+    related: data['related'],
 
     rendered: data['rendered'],
 
@@ -18,7 +19,8 @@ const Post = (data) => ({
 
     author: data['author'],
 
-    env: data['env']
+    env: data['env'],
+
 });
 
 export default Post;

@@ -1,6 +1,10 @@
 import axios from 'axios';
+import isEmpty from 'lodash/isEmpty';
 
 import PostModel from '../models/Post';
+
+const ContributorsService = require('../../contributors/services/ContributorsService');
+const RelatedService = require('../../related/services/RelatedService');
 
 const ENV = global.env;
 const DB_ENV = (ENV === 'prod' ? 'master' : ENV);
@@ -16,15 +20,28 @@ const RENDER_ENV = (() => {
     return ENV + '.';
 })();
 
+const POST_NOT_FOUND_ERROR = {
+    error: 'Post not found'
+};
+
 const isBlog = (pn) => pn.indexOf("/episodes/") !== 0 && pn.indexOf("/transcripts/") !== 0;
+
+export const extendPost = (post) => {
+    post.contributor = ContributorsService.getByAuthor(post.author);
+    post.related = RelatedService.getByUrl(post.prettyname);
+    return post;
+};
 
 export const getAll = () => {
     const uri = "https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + ENV + "/blogs?env=" + DB_ENV;
     return axios.get(uri)
         .then((result) => {
             return result.data
-                .filter((blog) => isBlog(blog.prettyname))
-                .map((blog) => PostModel(blog));
+                .filter((post) => isBlog(post.prettyname))
+                .map((post) => {
+                    post = extendPost(post);
+                    return PostModel(post);
+                });
         })
         .catch((err) => {
             console.log(err);
@@ -35,8 +52,13 @@ export const getPost = (prettyName) => {
     const uri = "https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + ENV + "/blog?env=" + DB_ENV + "&pn=" + prettyName;
     return axios.get(uri)
         .then((result) => {
-            const post = PostModel(result.data);
+            const postExists = !isEmpty(result.data);
+            if (!postExists) {
+                return POST_NOT_FOUND_ERROR;
+            }
 
+            const postData = extendPost(result.data);
+            const post = PostModel(postData);
             return getPostContent(post.rendered)
                 .then((contentRes) => {
                     post.content = contentRes;
