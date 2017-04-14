@@ -70,6 +70,7 @@ if (process.env.NODE_ENV !== 'production') {
   require('./webpack.dev').default(app);
   env = "dev"
 }
+console.log(new Date())
 console.log("Environment: ", env)
 
 let Cache = {
