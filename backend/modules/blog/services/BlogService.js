@@ -82,6 +82,28 @@ export const getPostContent = (rendered) => {
         })
 };
 
-export const getCategories = () => {
+export const extractCategories = (blogs) => {
+    let folders = []
+    for (var i in blogs) {
+        var b = blogs[i]
+        var pn = b.url;
+        if (pn != undefined) {
+            var arr = pn.split("/")
+            var level = 0
+            if (arr.length >= level+2) {
+                var folder = arr[level+1]
+                folders.push(folder)
+            }
+        }
+    }
+    folders = folders.reduce((a, x) => a.includes(x) ? a : [...a, x], []).sort();
+    return folders;
+};
 
+
+export const getCategories = () => {
+    return getAll()
+        .then((blogs = []) => {
+            return extractCategories(blogs);
+        })
 };

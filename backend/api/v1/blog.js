@@ -27,4 +27,14 @@ router.get('/:category/:year/:name', (req, res) => {
         })
 });
 
+router.get('/categories', (req, res) => {
+    BlogServices.getCategories()
+        .then((categories) => {
+            res.send(categories);
+        })
+        .catch((err) => {
+            res.send(err);
+        })
+});
+
 module.exports = router;
