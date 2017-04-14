@@ -1,8 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
+const EpisodeServices = require('../../modules/episodes/services/EpisodeServices');
+
 router.get('/', function(req, res) {
-    res.send('Episodes');
+    EpisodeServices.getAll()
+        .then((episodes) => {
+            res.send(episodes);
+        })
+        .catch((err) => {
+            res.send(err);
+        })
 });
 
 router.get('/latest', function(req, res) {
