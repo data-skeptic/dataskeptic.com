@@ -8,7 +8,9 @@ import {
     LOAD_BLOG_POST_REQUEST,
     LOAD_BLOG_POST_SUCCESS,
     LOAD_BLOG_POST_FAILED,
-    STOP_BLOG_LOADING
+
+    STOP_BLOG_LOADING,
+    REMOVE_FOCUS_POST
 } from '../Actions/BlogsActions'
 
 const init = {
@@ -29,7 +31,7 @@ const init = {
 
     currentPost: {},
     postLoading: true,
-}
+};
 
 const defaultState = Immutable.fromJS(init);
 
@@ -150,11 +152,8 @@ export default function blogsReducer(state = defaultState, action) {
             break;
 
         case STOP_BLOG_LOADING:
-            nstate.postLoading = false;
-            break;
-
+        case REMOVE_FOCUS_POST:
         case LOAD_BLOG_POST_REQUEST:
-            nstate.currentPost = null;
             nstate.postLoading = true;
             break;
 

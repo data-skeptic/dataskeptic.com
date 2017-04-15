@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import {changePageTitle} from '../../Layout/Actions/LayoutActions';
+import {DEFAULT_APP_TITLE} from '../../Layout/Reducers/LayoutReducer';
 import {get_related_content} from '../../utils/redux_loader'
 
 export const LOAD_BLOGS_REQUEST = 'LOAD_BLOGS_REQUEST';
@@ -13,6 +15,8 @@ export const LOAD_BLOG_POST_FAILED = 'LOAD_BLOG_POST_FAILED';
 export const ADD_BLOG_CONTENT = 'ADD_BLOG_CONTENT';
 
 export const STOP_BLOG_LOADING = 'STOP_BLOG_LOADING';
+
+export const REMOVE_FOCUS_POST = 'REMOVE_FOCUS_POST';
 
 export function loadBlogs(pathname) {
     return (dispatch) => {
@@ -54,6 +58,7 @@ export function loadBlogPost(pathname) {
         return axios.get(url)
             .then(({data}) => {
                 const post = data.blogs[0] || {};
+                dispatch(dispatch(changePageTitle(`${post.title} | ${DEFAULT_APP_TITLE}`)));
 
                 return getPostContent(post, env)
                     .then((result) => {
@@ -94,6 +99,11 @@ export function loadBlogPostSuccess(post) {
 export function stopBlogLoading() {
     return {
         type: STOP_BLOG_LOADING,
+    }
+}
+export function removeFocusPost() {
+    return {
+        type: REMOVE_FOCUS_POST,
     }
 }
 
