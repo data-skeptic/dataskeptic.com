@@ -377,6 +377,7 @@ function inject_blog(store, my_cache, pathname) {
         if (guid != undefined) {
             var episode = my_cache.episodes_map[guid]
             if (episode != undefined) {
+                blog_metadata['preview'] = episode.img;
                 install_episode(store, episode)
             } else {
                 console.log("Bogus guid found")
@@ -483,12 +484,6 @@ doRefresh().then(() => {
 
                 var pathname = location.pathname.substring('/blog'.length, location.pathname.length)
 
-                let activePageComponent = InitialView.props.children.props.components.filter((comp) => comp && isFunction(comp.getPageMeta));
-                activePageComponent = (activePageComponent.length > 0) ? activePageComponent[0] : null;
-                if (activePageComponent) {
-                    meta = extend(meta, activePageComponent.getPageMeta());
-                }
-
                 console.dir(meta);
 
                 const componentHTML = renderToString(InitialView);
@@ -497,7 +492,13 @@ doRefresh().then(() => {
                     "react-view": componentHTML
                 };
 
-                const state = store.getState()
+                const state = store.getState();
+                let activePageComponent = InitialView.props.children.props.components.filter((comp) => comp && isFunction(comp.getPageMeta));
+                activePageComponent = (activePageComponent.length > 0) ? activePageComponent[0] : null;
+                if (activePageComponent) {
+                    meta = extend(meta, activePageComponent.getPageMeta(state));
+                }
+
                 const HTML = getContentWrapper(meta, state, injects, env)
                 return HTML;
             }

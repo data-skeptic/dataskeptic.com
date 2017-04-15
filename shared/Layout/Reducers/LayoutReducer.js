@@ -11,9 +11,11 @@ const IS_CLIENT = (() => {
     return isDefined;
 })();
 
+export const DEFAULT_APP_TITLE = 'Data Skeptic';
+
 const init = {
     isMobileMenuVisible: false,
-    title: 'Data Skeptic'
+    title: DEFAULT_APP_TITLE
 };
 
 const defaultState = fromJS(init);
