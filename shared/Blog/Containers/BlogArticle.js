@@ -26,23 +26,22 @@ class BlogArticle extends Component {
         super(props)
     }
 
-    isPostFetched() {
-        const post = this.props.currentPost.toJS();
+    isPostFetched(props) {
+        const post = props.currentPost.toJS();
         if (!post || !post.prettyname) {
             return false;
         }
 
-        return ('/blog' + post.prettyname) === this.props.postUrl;
+        return ('/blog' + post.prettyname) === props.postUrl;
     }
 
-    componentDidMount() {
-        if (!this.isPostFetched()) {
+    componentWillMount() {
+        if (!this.isPostFetched(this.props)) {
             this.props.loadBlogPost(this.props.postUrl);
         } else {
             this.props.stopBlogLoading();
         }
     }
-
 
     handleNewComment(comment) {
         // TODO: Maybe use a cognitive service here?
