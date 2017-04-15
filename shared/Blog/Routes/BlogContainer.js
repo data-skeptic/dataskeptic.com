@@ -37,7 +37,7 @@ class BlogContainer extends Component {
         this.onNavClick = this.onNavClick.bind(this);
     }
 
-    getPageMeta() {
+    static getPageMeta() {
         return {
             title: 'Blogs | Data Skeptic'
         }
@@ -77,7 +77,7 @@ class BlogContainer extends Component {
             this.fetchPosts(this.props.pageNum);
         }
 
-        const {title} = this.getPageMeta();
+        const {title} = BlogContainer.getPageMeta();
         this.props.changePageTitle(title);
     }
 
@@ -127,8 +127,8 @@ class BlogContainer extends Component {
         this.fetchAllPosts();
     }
 
-    getPageTitle(activeFolder) {
-        const {pageNum} = this.props;
+    static getPageTitle(props, activeFolder) {
+        const {pageNum} = props;
         const activeFolderIsDefault = (activeFolder === DEFAULT_ACTIVE_FOLDER);
         const folderTranscription = BLOGS_NAV_MAP[activeFolder];
 
@@ -178,7 +178,7 @@ class BlogContainer extends Component {
         }
 
 
-        const contentTitle = this.getPageTitle(activeFolder);
+        const contentTitle = BlogContainer.getPageTitle(this.props, activeFolder);
         const latestBlogId = oblogs.latestId;
 
         return (
