@@ -36,6 +36,8 @@ import React                     from 'react';
 import {renderToString}        from 'react-dom/server';
 import {Provider}              from 'react-redux';
 import {RoutingContext, match} from 'react-router';
+import isFunction from 'lodash/isFunction';
+import extend from 'lodash/extend';
 import routes                    from 'routes';
 import * as reducers             from 'reducers';
 import {
@@ -372,9 +374,10 @@ function inject_blog(store, my_cache, pathname) {
         var blogs = get_blogs_list(dispatch, pathname)
     } else {
         var guid = blog_metadata.guid
-        if (guid != undefined) {
+        if (guid) {
             var episode = my_cache.episodes_map[guid]
-            if (episode != undefined) {
+            if (episode) {
+                blog_metadata['preview'] = episode.img;
                 install_episode(store, episode)
             } else {
                 console.log("Bogus guid found")
@@ -395,11 +398,18 @@ function updateState(store, pathname) {
     var contributors = get_contributors();
     store.dispatch({type: "LOAD_CONTRIBUTORS_LIST_SUCCESS", payload: {contributors}});
 
-    // inject anything
-    inject_blog(store, Cache, pathname);
-    inject_podcast(store, Cache, pathname);
-    inject_homepage(store, Cache, pathname);
-    inject_products(store, Cache, pathname);
+    if (pathname === "" || pathname === "/") {
+        inject_homepage(store, Cache, pathname)
+    }
+    if (pathname.indexOf('/blog') === 0) {
+        inject_blog(store, Cache, pathname)
+    }
+    else if (pathname === "/members" || pathname === "/store") {
+        inject_products(store, Cache, pathname)
+    }
+    else if (pathname.indexOf("/podcast") === 0) {
+        inject_podcast(store, Cache, pathname)
+    }
 }
 
 
@@ -472,21 +482,31 @@ doRefresh().then(() => {
                     </Provider>
                 );
 
-                var title = "Data Skeptic"
-                var pathname = location.pathname.substring('/blog'.length, location.pathname.length)
-                var alt_title = Cache.title_map[pathname]
-                if (alt_title != undefined) {
-                    title = alt_title
-                }
+                let meta = {
+                    title: 'Data Skeptic',
+                    description: 'Data Skeptic is your source for a perseptive of scientific skepticism on topics in statistics, machine learning, big data, artificial intelligence, and data science. Our weekly podcast and blog bring you stories and tutorials to help understand our data-driven world.',
+                    author: 'Kyle Polich',
+                    keywoards: 'data skeptic, podcast,',
+                };
 
-                const componentHTML = renderToString(InitialView)
+                var pathname = location.pathname.substring('/blog'.length, location.pathname.length)
+
+                console.dir(meta);
+
+                const componentHTML = renderToString(InitialView);
 
                 var injects = {
                     "react-view": componentHTML
+                };
+
+                const state = store.getState();
+                let activePageComponent = InitialView.props.children.props.components.filter((comp) => comp && isFunction(comp.getPageMeta));
+                activePageComponent = (activePageComponent.length > 0) ? activePageComponent[0] : null;
+                if (activePageComponent) {
+                    meta = extend(meta, activePageComponent.getPageMeta(state));
                 }
 
-                const state = store.getState()
-                const HTML = getContentWrapper(title, state, injects, env)
+                const HTML = getContentWrapper(meta, state, injects, env)
                 return HTML;
             }
 

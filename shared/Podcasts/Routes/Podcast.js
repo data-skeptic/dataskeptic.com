@@ -13,6 +13,8 @@ import SideBar from '../../Layout/Components/SideBar/SideBar';
 import { get_podcasts } from '../../utils/redux_loader'
 import { year_from_path } from '../../utils/redux_loader'
 
+import { changePageTitle } from '../../Layout/Actions/LayoutActions';
+
 class Podcast extends Component {
 
     constructor(props) {
@@ -25,6 +27,15 @@ class Podcast extends Component {
         const pathname = this.props.location.pathname;
 
         get_podcasts(dispatch, pathname);
+
+        const {title} = Podcast.getPageMeta();
+        dispatch(changePageTitle(title));
+    }
+
+    static getPageMeta() {
+        return {
+            title: 'Podcasts | Data Skeptic'
+        }
     }
 
     render() {
