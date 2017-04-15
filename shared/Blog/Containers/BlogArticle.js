@@ -36,10 +36,10 @@ class BlogArticle extends Component {
     }
 
     componentWillMount() {
+        this.props.stopBlogLoading();
         if (!this.isPostFetched(this.props)) {
             this.props.loadBlogPost(this.props.postUrl);
         } else {
-            this.props.stopBlogLoading();
         }
     }
 
@@ -61,7 +61,7 @@ class BlogArticle extends Component {
 
         const {currentPost, isLoading, contributors, disqusUsername, postUrl} = this.props;
 
-        if (isLoading || !currentPost) {
+        if (isLoading) {
             return <Loading />
         }
 
