@@ -1,8 +1,24 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
+import {changePageTitle} from '../Layout/Actions/LayoutActions';
+
 class Coaching extends Component {
-	addToCart() {
+
+	componentWillMount() {
+        const {dispatch} = this.props;
+        const {title} = Coaching.getPageMeta();
+
+        dispatch(changePageTitle(title));
+    }
+
+    static getPageMeta() {
+        return {
+            title: 'Coaching | Data Skeptic'
+        }
+    }
+
+    addToCart() {
 		var product = {
 			active: 1,
 			desc: "Weekly check-ins for advice, portfolio development, tutoring, and interview prep.",
@@ -17,6 +33,9 @@ class Coaching extends Component {
 		this.props.dispatch({type: "ADD_TO_CART", payload: {product, size} })
 		this.props.dispatch({type: "SHOW_CART", payload: true })
 	}
+
+
+
 	render() {
 		return (
 			<div className="center">

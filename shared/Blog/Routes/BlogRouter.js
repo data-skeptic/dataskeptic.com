@@ -15,7 +15,11 @@ import Loading from "../../Common/Components/Loading"
 import transform_pathname from "../../utils/transform_pathname"
 import getBlog from "../../daos/getBlog"
 
+
+import {changePageTitle} from '../../Layout/Actions/LayoutActions';
+
 class BlogRouter extends React.Component {
+
 	constructor(props) {
 		super(props)
 	}

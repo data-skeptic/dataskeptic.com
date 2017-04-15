@@ -1,7 +1,22 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
+import {changePageTitle} from '../Layout/Actions/LayoutActions';
+
 class Advertising extends Component {
+
+	componentWillMount() {
+		const {dispatch} = this.props;
+        const {title} = Advertising.getPageMeta();
+        dispatch(changePageTitle(title));
+    }
+
+    static getPageMeta() {
+        return {
+            title: 'Advertising | Data Skeptic'
+        }
+    }
+
 	render() {
 		return (
 			<div className="center">

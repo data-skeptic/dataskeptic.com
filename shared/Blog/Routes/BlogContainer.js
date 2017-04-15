@@ -22,6 +22,8 @@ import Container from '../../Layout/Components/Container/Container';
 import Content from '../../Layout/Components/Content/Content';
 import SideBar from '../../Layout/Components/SideBar/SideBar';
 
+import {changePageTitle} from '../../Layout/Actions/LayoutActions';
+
 const DEFAULT_ACTIVE_FOLDER = 'All';
 import BLOGS_NAV_MAP from '../Constants/navMap';
 
@@ -33,6 +35,12 @@ class BlogContainer extends Component {
         this.fetchPosts = this.fetchPosts.bind(this);
         this.onPaginatorPageClick = this.onPaginatorPageClick.bind(this);
         this.onNavClick = this.onNavClick.bind(this);
+    }
+
+    getPageMeta() {
+        return {
+            title: 'Blogs | Data Skeptic'
+        }
     }
 
     fetchPosts(pageNum = 1) {
@@ -68,6 +76,9 @@ class BlogContainer extends Component {
         } else {
             this.fetchPosts(this.props.pageNum);
         }
+
+        const {title} = this.getPageMeta();
+        this.props.changePageTitle(title);
     }
 
     onPaginatorPageClick(pageNum) {
@@ -214,7 +225,8 @@ export default connect(
         blogs: state.blogs,
     }),
     (dispatch) => (bindActionCreators({
-        loadBlogs
+        loadBlogs,
+        changePageTitle
     }, dispatch))
 )(BlogContainer)
 

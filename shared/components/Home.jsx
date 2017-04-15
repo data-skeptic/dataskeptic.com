@@ -26,13 +26,19 @@ import {get_homepage_content} from '../utils/redux_loader'
 
 class Home extends Component {
 
-  componentDidMount() {
-      console.dir('get_homepage_content');
+  componentWillMount() {
       var dispatch = this.props.dispatch;
-      dispatch(changePageTitle('Data Skeptic'));
-      get_homepage_content(dispatch)
+      get_homepage_content(dispatch);
+
+      const {title} = Home.getPageMeta();
+      dispatch(changePageTitle(title));
   }
 
+  static getPageMeta() {
+      return {
+          title: 'Data Skeptic'
+      }
+  }
 
   render() {
     var oepisodes = this.props.episodes.toJS()

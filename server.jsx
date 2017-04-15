@@ -36,6 +36,8 @@ import React                     from 'react';
 import {renderToString}        from 'react-dom/server';
 import {Provider}              from 'react-redux';
 import {RoutingContext, match} from 'react-router';
+import isFunction from 'lodash/isFunction';
+import extend from 'lodash/extend';
 import routes                    from 'routes';
 import * as reducers             from 'reducers';
 import {
@@ -472,21 +474,31 @@ doRefresh().then(() => {
                     </Provider>
                 );
 
-                var title = "Data Skeptic"
+                let meta = {
+                    title: 'Data Skeptic',
+                    description: 'Data Skeptic is your source for a perseptive of scientific skepticism on topics in statistics, machine learning, big data, artificial intelligence, and data science. Our weekly podcast and blog bring you stories and tutorials to help understand our data-driven world.',
+                    author: 'Kyle Polich',
+                    keywoards: 'data skeptic, podcast,',
+                };
+
                 var pathname = location.pathname.substring('/blog'.length, location.pathname.length)
-                var alt_title = Cache.title_map[pathname]
-                if (alt_title != undefined) {
-                    title = alt_title
+
+                let activePageComponent = InitialView.props.children.props.components.filter((comp) => comp && isFunction(comp.getPageMeta));
+                activePageComponent = (activePageComponent.length > 0) ? activePageComponent[0] : null;
+                if (activePageComponent) {
+                    meta = extend(meta, activePageComponent.getPageMeta());
                 }
 
-                const componentHTML = renderToString(InitialView)
+                console.dir(meta);
+
+                const componentHTML = renderToString(InitialView);
 
                 var injects = {
                     "react-view": componentHTML
-                }
+                };
 
                 const state = store.getState()
-                const HTML = getContentWrapper(title, state, injects, env)
+                const HTML = getContentWrapper(meta, state, injects, env)
                 return HTML;
             }
 
