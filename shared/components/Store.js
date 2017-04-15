@@ -8,6 +8,8 @@ import StoreItem from './StoreItem'
 
 import {get_products} from '../utils/redux_loader'
 
+import {changePageTitle} from '../Layout/Actions/LayoutActions';
+
 class Store extends React.Component {
 
 	componentWillMount() {
@@ -15,9 +17,20 @@ class Store extends React.Component {
 		if (oproducts.products.length == 0) {
 			get_products(this.props.dispatch)			
 		}
-	}
 
-	render() {
+        const {dispatch} = this.props;
+        const {title} = Store.getPageMeta();
+
+        dispatch(changePageTitle(title));
+    }
+
+    static getPageMeta() {
+        return {
+            title: 'Store | Data Skeptic'
+        }
+    }
+
+    render() {
 		var oproducts = this.props.products.toJS()
 		var products_loaded = oproducts.products_loaded
 		if (products_loaded == undefined) {

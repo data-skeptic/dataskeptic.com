@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import {changePageTitle} from '../../Layout/Actions/LayoutActions';
+import {DEFAULT_APP_TITLE} from '../../Layout/Reducers/LayoutReducer';
 import {get_related_content} from '../../utils/redux_loader'
 
 export const LOAD_BLOGS_REQUEST = 'LOAD_BLOGS_REQUEST';
@@ -56,6 +58,7 @@ export function loadBlogPost(pathname) {
         return axios.get(url)
             .then(({data}) => {
                 const post = data.blogs[0] || {};
+                dispatch(dispatch(changePageTitle(`${post.title} | ${DEFAULT_APP_TITLE}`)));
 
                 return getPostContent(post, env)
                     .then((result) => {
