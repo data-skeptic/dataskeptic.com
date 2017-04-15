@@ -372,9 +372,9 @@ function inject_blog(store, my_cache, pathname) {
         var blogs = get_blogs_list(dispatch, pathname)
     } else {
         var guid = blog_metadata.guid
-        if (guid != undefined) {
+        if (guid) {
             var episode = my_cache.episodes_map[guid]
-            if (episode != undefined) {
+            if (episode) {
                 install_episode(store, episode)
             } else {
                 console.log("Bogus guid found")
@@ -395,11 +395,18 @@ function updateState(store, pathname) {
     var contributors = get_contributors();
     store.dispatch({type: "LOAD_CONTRIBUTORS_LIST_SUCCESS", payload: {contributors}});
 
-    // inject anything
-    inject_blog(store, Cache, pathname);
-    inject_podcast(store, Cache, pathname);
-    inject_homepage(store, Cache, pathname);
-    inject_products(store, Cache, pathname);
+    if (pathname === "" || pathname === "/") {
+        inject_homepage(store, Cache, pathname)
+    }
+    if (pathname.indexOf('/blog') === 0) {
+        inject_blog(store, Cache, pathname)
+    }
+    else if (pathname === "/members" || pathname === "/store") {
+        inject_products(store, Cache, pathname)
+    }
+    else if (pathname.indexOf("/podcast") === 0) {
+        inject_podcast(store, Cache, pathname)
+    }
 }
 
 

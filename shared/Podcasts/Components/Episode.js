@@ -87,7 +87,7 @@ class Episode extends React.Component {
 				</div>
 				<div className="col-xs-12 col-sm-8 episode-middle">
                     <div className="blog-date">{date}</div>
-					<a className="blog-title" href={episodeLink} onClick={this.onEpisodeClick}>{ep.title}</a>
+					<Link className="blog-title" to={episodeLink} onClick={this.onEpisodeClick}>{ep.title}</Link>
 					<br/>
 					<div className="episode-button-row">
 						<button className="episode-play-button" onClick={this.onPlayToggle.bind(this, ep)}>{play_symb} <span className="episode-play">PLAY</span> <span className="episode-duration">{duration}</span></button>
