@@ -24,7 +24,7 @@ class BlogRouter extends React.Component {
 		super(props)
 	}
 
-    componentWillMount() {
+    componentDidMount() {
         const {dispatch} = this.props;
         const {title} = BlogRouter.getPageMeta(this.props);
         dispatch(changePageTitle(title));
