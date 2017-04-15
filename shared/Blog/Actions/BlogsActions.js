@@ -16,6 +16,8 @@ export const ADD_BLOG_CONTENT = 'ADD_BLOG_CONTENT';
 
 export const STOP_BLOG_LOADING = 'STOP_BLOG_LOADING';
 
+export const REMOVE_FOCUS_POST = 'REMOVE_FOCUS_POST';
+
 export function loadBlogs(pathname) {
     return (dispatch) => {
         const url = "/api" + pathname;
@@ -97,6 +99,11 @@ export function loadBlogPostSuccess(post) {
 export function stopBlogLoading() {
     return {
         type: STOP_BLOG_LOADING,
+    }
+}
+export function removeFocusPost() {
+    return {
+        type: REMOVE_FOCUS_POST,
     }
 }
 

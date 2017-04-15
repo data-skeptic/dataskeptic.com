@@ -1,7 +1,6 @@
 import xml2js from 'xml2js'
 import axios  from 'axios'
 
-import moment from 'moment';
 import {convert_items_to_json} from 'daos/episodes'
 import {extractFolders} from '../utils/blog_utils'
 
@@ -13,21 +12,22 @@ function generate_content_map(env, blog, my_cache) {
     }
     var key = blog["rendered"]
     var pn = blog["prettyname"]
-    var check = my_cache.content_map[pn]
+    var check = my_cache.content_map[pn];
     if (!check) {
         var uri = "https://s3.amazonaws.com/" + envv + 'dataskeptic.com/' + key
         console.log("Getting " + uri)
         return axios.get(uri)
             .then(function (result) {
-                var content = result.data
-                my_cache.content_map[pn] = content
+                var content = result.data;
+                my_cache.content_map[pn] = content;
+                return content;
             })
             .catch((err) => {
                 console.log("Content cache error trying to store blog content")
                 console.log(err)
             })
     } else {
-        return Promise.resolve();
+        return Promise.resolve(check);
     }
 }
 
@@ -44,14 +44,6 @@ export function loadProducts(env) {
             console.log("Could not load prodcuts")
         })
 
-}
-
-function compare(dateTimeA, dateTimeB) {
-    const momentA = moment(dateTimeA,"YYYY-MM-DD");
-    const momentB = moment(dateTimeB,"YYYY-MM-DD");
-    if (momentA > momentB) return 1;
-    else if (momentA < momentB) return -1;
-    else return 0;
 }
 
 export function loadBlogs(store, env,) {
@@ -81,11 +73,6 @@ export function loadBlogs(store, env,) {
             store.dispatch({type: "ADD_BLOGS", payload: {blogs}});
 
             let contentMapRequests = [];
-            blogs = blogs.sort((a, b) => {
-                // custom sort by publish data
-                return compare(b['publish_date'], a['publish_date']);
-            });
-
             for (let i = 0; i < blogs.length; i++) {
                 const blog = blogs[i];
                 const pn = blog['prettyname'];
@@ -145,6 +132,7 @@ export function loadEpisodes(env, feed_uri, blogmetadata_map, aws) {
                             data.episodes_map["latest"] = episode
 
                             var blogs = blogmetadata_map;
+                            console.dir(prettyname);
                             var shownotes = blogs[prettyname]
                             if (shownotes == undefined) {
                                 console.log("ERROR: Unlinkable episode: " + episode['guid'] + ' ' + episode['title'])
@@ -171,14 +159,14 @@ export function loadEpisodes(env, feed_uri, blogmetadata_map, aws) {
                                         },
                                         ReturnValues: "UPDATED_NEW"
                                     };
-                                    // docClient.update(params, function (err, data) {
-                                    //     if (err) {
-                                    //         rej(err);
-                                    //         console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
-                                    //     } else {
-                                    //         console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
-                                    //     }
-                                    // });
+                                    docClient.update(params, function (err, data) {
+                                        if (err) {
+                                            rej(err);
+                                            console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
+                                        } else {
+                                            console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
+                                        }
+                                    });
                                 }
                             }
                         }
