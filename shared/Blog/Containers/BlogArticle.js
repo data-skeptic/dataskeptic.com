@@ -35,11 +35,9 @@ class BlogArticle extends Component {
         return ('/blog' + post.prettyname) === props.postUrl;
     }
 
-    componentWillMount() {
-        this.props.stopBlogLoading();
+    componentDidMount() {
         if (!this.isPostFetched(this.props)) {
             this.props.loadBlogPost(this.props.postUrl);
-        } else {
         }
     }
 

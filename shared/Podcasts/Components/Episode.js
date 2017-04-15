@@ -31,7 +31,6 @@ class Episode extends React.Component {
     onEpisodeClick() {
         window.scrollTo(0, 0);
 
-        debugger;
         this.props.dispatch(removeFocusPost());
     }
 
