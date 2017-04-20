@@ -13,25 +13,34 @@ import SideBar from '../../Layout/Components/SideBar/SideBar';
 import { get_podcasts } from '../../utils/redux_loader'
 import { year_from_path } from '../../utils/redux_loader'
 
+import { changePageTitle } from '../../Layout/Actions/LayoutActions';
+
 class Podcast extends Component {
 
     constructor(props) {
         super(props)
     }
 
-    componentWillMount() {
+    componentDidMount() {
         const dispatch = this.props.dispatch;
         const { isLoaded } = this.props;
         const pathname = this.props.location.pathname;
 
-        if (!isLoaded) {
-            get_podcasts(dispatch, pathname)
+        get_podcasts(dispatch, pathname);
+
+        const {title} = Podcast.getPageMeta();
+        dispatch(changePageTitle(title));
+    }
+
+    static getPageMeta() {
+        return {
+            title: 'Podcasts | Data Skeptic'
         }
     }
 
     render() {
         const pathname = this.props.location.pathname;
-        const {list, years, isLoaded} = this.props;
+        const {list = [], years = [], isLoaded = false} = this.props;
 
         let year = year_from_path(pathname);
         if (year === -1) {
@@ -43,12 +52,12 @@ class Podcast extends Component {
                 <Container>
 
                     <Content>
-                    { isLoaded ?
-                        list.map(function (episode) {
-                            return <Episode key={episode.guid} episode={episode}/>
-                        })
-                      : <Loading />
-                    }
+                        { isLoaded ?
+                            list.map(function (episode, index) {
+                                return <Episode key={index} episode={episode}/>
+                            })
+                          : <Loading />
+                        }
                     </Content>
                     <SideBar title="Year">
                         <YearSelector years={years} year={year}/>

@@ -8,10 +8,24 @@ import ThankYouPage from '../ThankYou/ThankYouPage';
 
 import CheckoutFormContainer from '../../Containers/CheckoutFormContainer';
 
+import {changePageTitle} from '../../../Layout/Actions/LayoutActions';
+
 class Checkout extends Component {
 	constructor(props) {
 		super(props)
 	}
+
+    componentDidMount() {
+        const {dispatch} = this.props;
+        const {title} = Checkout.getPageMeta(this.props);
+        dispatch(changePageTitle(title));
+    }
+
+    static getPageMeta() {
+        return {
+            title: 'Checkout | Data Skeptic'
+        }
+    }
 
 	onScriptLoaded() {
 		console.log("onScriptLoaded")

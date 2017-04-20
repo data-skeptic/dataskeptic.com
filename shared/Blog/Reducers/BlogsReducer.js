@@ -8,7 +8,9 @@ import {
     LOAD_BLOG_POST_REQUEST,
     LOAD_BLOG_POST_SUCCESS,
     LOAD_BLOG_POST_FAILED,
-    STOP_BLOG_LOADING
+
+    STOP_BLOG_LOADING,
+    REMOVE_FOCUS_POST
 } from '../Actions/BlogsActions'
 
 const init = {
@@ -29,7 +31,7 @@ const init = {
 
     currentPost: {},
     postLoading: true,
-}
+};
 
 const defaultState = Immutable.fromJS(init);
 
@@ -91,6 +93,7 @@ export default function blogsReducer(state = defaultState, action) {
             var items = action.payload.items
             var uri = action.payload.uri
             var b = nstate.blog_focus.blog
+            // debugger;
             if (b != undefined) {
                 var key = '/blog'
                 if (uri.indexOf(key) == 0) {
@@ -149,7 +152,9 @@ export default function blogsReducer(state = defaultState, action) {
             break;
 
         case STOP_BLOG_LOADING:
-            nstate.postLoading = false;
+        case REMOVE_FOCUS_POST:
+        case LOAD_BLOG_POST_REQUEST:
+            nstate.postLoading = true;
             break;
 
         case LOAD_BLOG_POST_SUCCESS:

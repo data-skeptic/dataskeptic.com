@@ -5,8 +5,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=production NODE_PATH=$NODE_PATH:./shared node --harmony .",
-    "dev": "NODE_PATH=$NODE_PATH:./shared node --harmony .",
+    "start": "NODE_ENV=production NODE_PATH=$NODE_PATH:./shared node --harmony --expose-gc .",
+    "dev": "NODE_PATH=$NODE_PATH:./shared node --harmony --expose-gc .",
     "prod": "webpack --progress --color -p --config webpack.prod.config.js",
     "build": "webpack --progress --color -p --config webpack.prod.config.js"
   },
@@ -32,7 +32,6 @@
     "css-loader": "^0.26.2",
     "exports-loader": "^0.6.2",
     "express": "^4.13.3",
-    "extract-text-webpack-plugin": "^2.0.0",
     "file-stream-rotator": "0.0.7",
     "fs": "0.0.1-security",
     "history": "^1.17.0",

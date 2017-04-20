@@ -5,6 +5,7 @@
 import React from "react"
 import ReactDOM from "react-dom"
 import { connect } from 'react-redux'
+import isUndefined from 'lodash/isUndefined';
 
 import NotFound from '../../NotFound/Components/NotFound'
 import BlogArticle from "../Containers/BlogArticle"
@@ -15,12 +16,37 @@ import Loading from "../../Common/Components/Loading"
 import transform_pathname from "../../utils/transform_pathname"
 import getBlog from "../../daos/getBlog"
 
+import {changePageTitle} from '../../Layout/Actions/LayoutActions';
+
 class BlogRouter extends React.Component {
+
 	constructor(props) {
 		super(props)
 	}
 
-	componentWillMount() {
+    componentDidMount() {
+        const {dispatch} = this.props;
+        const {title} = BlogRouter.getPageMeta(this.props);
+        dispatch(changePageTitle(title));
+    }
+
+    static getPageMeta(state) {
+        const post = state.blogs.getIn(['blog_focus', 'blog']).toJS();
+        const isEpisode = !isUndefined(post.guid);
+
+        let meta = {
+            title: `${post.title} | Data Skeptic`,
+			description: post.desc
+        };
+
+        if (isEpisode) {
+			meta.image = post.preview;
+		}
+
+        return meta;
+    }
+
+	componentDidMount() {
 		var dispatch = this.props.dispatch
 		var pathname = this.props.location.pathname
 		var k = '/blog'
@@ -55,6 +81,7 @@ class BlogRouter extends React.Component {
 		while (i < folders.length) {
 			var folder = "/" + folders[i] + "/"
 			if (folder == prettyname) {
+				return null;
 				return <Blog pathname={pathname} />
 			}
 			i += 1
@@ -65,7 +92,6 @@ class BlogRouter extends React.Component {
 
 		return (
 			<div className="center">
-				<br />
 				<BlogArticle postUrl={pathname} />
 			</div>
 		)

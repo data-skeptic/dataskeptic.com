@@ -9,8 +9,4 @@ export const Sidebar = ({ children, title }) => (
 	</div>
 );
 
-Sidebar.propTypes = {
-	title: PropTypes.string
-};
-
 export default Sidebar;
