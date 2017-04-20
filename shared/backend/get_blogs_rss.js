@@ -39,7 +39,6 @@ module.exports = {
         });
 
         each(blogs, (blog) => {
-            console.dir(blog);
             if (blog.env === 'master') { // don't share dev on master
                 feed.item(BlogItemModel(blog));
             }
