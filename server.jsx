@@ -257,7 +257,7 @@ function api_router(req, res) {
         return res.status(200).end(JSON.stringify(folders))
     }
     else if (req.url.indexOf('/api/blog/rss') === 0) {
-        get_blogs_rss(req, res, Cache.blogmetadata_map);
+        get_blogs_rss(req, res, Cache.blogmetadata_map, env);
         return true
     }
     else if (req.url.indexOf('/api/blog') === 0) {
