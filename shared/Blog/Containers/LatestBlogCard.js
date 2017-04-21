@@ -37,6 +37,7 @@ class LatestBlogCard extends React.Component {
 			}
 			pn = "/blog/" + pn
 			var date = new Date(blog["publish_date"])
+			date = new Date(date.setMinutes(date.getTimezoneOffset()))
             var dstr = monthNames[date.getMonth()].toUpperCase() + " " + date.getDate() + ", " + (date.getYear()+1900)
 		}
 		else {
@@ -46,7 +47,7 @@ class LatestBlogCard extends React.Component {
 				title: "Loading",
 				desc: "..."
 			}
-			dstr = "2016-11-16"
+			dstr = ""
 		}
 		return (
 			<div className="home-latest-blog-card">
