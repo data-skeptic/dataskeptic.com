@@ -16,12 +16,10 @@ import {pay_invoice}             from 'backend/pay_invoice'
 import {related_content, related_cache}         from 'backend/related_content'
 import bodyParser                from 'body-parser'
 import compression               from 'compression';
-import {feed_uri}              from 'daos/episodes'
-import {
-    loadBlogs,
-    loadEpisodes,
-    loadProducts
-}          from 'daos/serverInit'
+import { feed_uri }              from 'daos/episodes'
+import { loadBlogs,
+         loadEpisodes,
+         loadProducts }          from 'daos/serverInit'
 import express                   from 'express';
 import FileStreamRotator         from 'file-stream-rotator'
 import fs                        from 'fs'
@@ -40,11 +38,9 @@ import isFunction from 'lodash/isFunction';
 import extend from 'lodash/extend';
 import routes                    from 'routes';
 import * as reducers             from 'reducers';
-import {
-    createStore,
-    combineReducers,
-    applyMiddleware
-}       from 'redux';
+import { createStore,
+         combineReducers,
+         applyMiddleware }       from 'redux';
 import getContentWrapper         from 'utils/content_wrapper';
 import {
     get_blogs_list,
@@ -53,17 +49,17 @@ import {
 }                         from 'utils/redux_loader';
 import redirects_map             from './redirects';
 
-import {reducer as formReducer} from 'redux-form'
+import { reducer as formReducer } from 'redux-form'
 
 const app = express()
 
 var logDirectory = path.join(__dirname, 'log')
 fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
 var accessLogStream = FileStreamRotator.getStream({
-    date_format: 'YYYYMMDD',
-    filename: path.join(logDirectory, 'access-%DATE%.log'),
-    frequency: 'daily',
-    verbose: false
+  date_format: 'YYYYMMDD',
+  filename: path.join(logDirectory, 'access-%DATE%.log'),
+  frequency: 'daily',
+  verbose: false
 })
 app.use(morgan('combined', {stream: accessLogStream}))
 
@@ -73,9 +69,10 @@ var env = "prod"
 aws.config.loadFromPath('awsconfig.json')
 
 if (process.env.NODE_ENV !== 'production') {
-    require('./webpack.dev').default(app);
-    env = "dev"
+  require('./webpack.dev').default(app);
+  env = "dev"
 }
+console.log(new Date())
 console.log("Environment: ", env)
 
 let Cache = {
@@ -88,11 +85,11 @@ let Cache = {
     , products: {}
 };
 
-const reducer = combineReducers({
+const reducer  = combineReducers({
     ...reducers,
     form: formReducer
 });
-const store = applyMiddleware(thunk, promiseMiddleware)(createStore)(reducer);
+const store    = applyMiddleware(thunk,promiseMiddleware)(createStore)(reducer);
 let initialState = store.getState()
 delete initialState.checkout;
 
@@ -163,52 +160,42 @@ const doRefresh = () => {
         })
 };
 
-setInterval(() => {
-    try {
-        doRefresh()
-    } catch (err) {
-        console.error(err);
-    }
-}, 60 * 60 * 1000);
+//setInterval(doRefresh, 60 * 60 * 1000);
 
 if (process.env.NODE_ENV == 'production') {
-    function shouldCompress(req, res) {
-        if (req.headers['x-no-compression']) {
-            // don't compress responses with this request header
-            return false
-        }
-        // fallback to standard filter function
-        return compression.filter(req, res)
+  function shouldCompress (req, res) {
+    if (req.headers['x-no-compression']) {
+      // don't compress responses with this request header
+      return false
     }
-
-    app.use(compression({filter: shouldCompress}))
+    // fallback to standard filter function
+    return compression.filter(req, res)
+  }
+  app.use(compression({filter: shouldCompress}))
 }
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
-    extended: true
-}));
-
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
-
+  extended: true
+}))
 
 var stripe_key = "sk_test_81PZIV6UfHDlapSAkn18bmQi"
 var sp_key = "test_Z_gOWbE8iwjhXf4y4vqizQ"
 var slack_key = ""
 
-fs.open("config.json", "r", function (error, fd) {
-    var buffer = new Buffer(10000)
-    fs.read(fd, buffer, 0, buffer.length, null, function (error, bytesRead, buffer) {
-        var data = buffer.toString("utf8", 0, bytesRead)
-        var c = JSON.parse(data)
-        var env2 = env
-        stripe_key = c[env2]['stripe']
-        sp_key = c[env2]['sp']
-        slack_key = c[env2]['slack']
-        fs.close(fd)
-    })
+fs.open("config.json", "r", function(error, fd) {
+  var buffer = new Buffer(10000)
+  fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
+    var data = buffer.toString("utf8", 0, bytesRead)
+    var c = JSON.parse(data)
+    var env2 = env
+    stripe_key = c[env2]['stripe']
+    sp_key = c[env2]['sp']
+    slack_key = c[env2]['slack']
+    fs.close(fd)
+  })
 })
 
 function api_router(req, res) {
@@ -289,24 +276,24 @@ function api_router(req, res) {
 }
 
 function inject_folders(store, my_cache) {
-    var folders = my_cache.folders
-    store.dispatch({type: "ADD_FOLDERS", payload: folders})
+  var folders = my_cache.folders
+  store.dispatch({type: "ADD_FOLDERS", payload: folders })
 }
 
 function inject_years(store, my_cache) {
-    var episodes_list = my_cache.episodes_list
-    var episodes_map = my_cache.episodes_map
-    var ymap = {}
-    for (var i = 0; i < episodes_list.length; i++) {
-        var guid = episodes_list[i]
-        var episode = episodes_map[guid]
-        var pd = new Date(episode.pubDate)
-        var year = pd.getYear() + 1900
-        ymap[year] = 1
-    }
-    var years = Object.keys(ymap)
-    years = years.sort().reverse()
-    store.dispatch({type: "SET_YEARS", payload: years})
+  var episodes_list = my_cache.episodes_list
+  var episodes_map = my_cache.episodes_map
+  var ymap = {}
+  for (var i=0; i < episodes_list.length; i++) {
+    var guid = episodes_list[i]
+    var episode = episodes_map[guid]
+    var pd = new Date(episode.pubDate)
+    var year = pd.getYear() + 1900
+    ymap[year] = 1
+  }
+  var years = Object.keys(ymap)
+  years = years.sort().reverse()
+  store.dispatch({type: "SET_YEARS", payload: years })
 }
 
 function inject_homepage(store, my_cache, pathname) {
@@ -323,16 +310,19 @@ function inject_homepage(store, my_cache, pathname) {
         var episode = my_cache.episodes_map["latest"]
         install_episode(store, episode);
     }
+    install_blog(store, blog_metadata, content)
+    var episode = my_cache.episodes_map["latest"]
+    install_episode(store, episode)    
 }
 
 function inject_products(store, my_cache, pathname) {
-    var products = my_cache.products['items']
-    store.dispatch({type: "ADD_PRODUCTS", payload: products})
+  var products = my_cache.products['items']
+  store.dispatch({type: "ADD_PRODUCTS", payload: products})
 }
 
 function inject_podcast(store, my_cache, pathname) {
-    var episodes = get_podcasts_from_cache(my_cache, pathname)
-    store.dispatch({type: "ADD_EPISODES", payload: episodes})
+  var episodes = get_podcasts_from_cache(my_cache, pathname)
+  store.dispatch({type: "ADD_EPISODES", payload: episodes})
 }
 
 function install_blog(store, blog_metadata, content) {
@@ -362,16 +352,25 @@ function install_episode(store, episode) {
 }
 
 function inject_blog(store, my_cache, pathname) {
-    var blog_page = pathname.substring('/blog'.length, pathname.length)
-    var content = my_cache.content_map[blog_page]
-    if (content == undefined) {
-        content = ""
-    }
-    var blog_metadata = my_cache.blogmetadata_map[blog_page]
-    if (blog_metadata == undefined) {
-        blog_metadata = {}
-        var dispatch = store.dispatch
-        var blogs = get_blogs_list(dispatch, pathname)
+  var blog_page = pathname.substring('/blog'.length, pathname.length)
+  var content = my_cache.content_map[blog_page]
+  if (content == undefined) {
+    content = ""
+  }
+  var blog_metadata = my_cache.blogmetadata_map[blog_page]
+  if (blog_metadata == undefined) {
+    blog_metadata = {}
+    var dispatch = store.dispatch
+    var blogs = get_blogs_list(dispatch, pathname)
+  } else {
+    var guid = blog_metadata.guid
+    if (guid != undefined) {
+      var episode = my_cache.episodes_map[guid]
+      if (episode != undefined) {
+        install_episode(store, episode)
+      } else {
+        console.log("Bogus guid found")
+      }
     } else {
         var guid = blog_metadata.guid
         if (guid) {
@@ -388,7 +387,10 @@ function inject_blog(store, my_cache, pathname) {
 
         install_blog(store, blog_metadata, content)
     }
-    console.log("done with blog inject")
+
+    install_blog(store, blog_metadata, content)
+  }
+  console.log("done with blog inject")
 }
 
 function updateState(store, pathname) {

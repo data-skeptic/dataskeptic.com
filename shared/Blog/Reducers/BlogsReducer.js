@@ -86,6 +86,7 @@ export default function blogsReducer(state = defaultState, action) {
             if (nblog['uri'] == cblog['uri']) {
                 nstate.blog_focus.loaded = 1
                 nstate.blog_focus.content = action.payload.content
+                nstate.blog_focus.postLoading = false;
             } else {
                 console.log([nblog['uri'], 'does not match', cblog['uri']])
             }
