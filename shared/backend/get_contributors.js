@@ -46,7 +46,7 @@ module.exports = {
 			"bio": "Kristine is a fledgling science writer based in sunny Los Angeles, CA. Once a researcher in soil microbiology, Kristine is passionate about translating science into thrilling stories for all. She enjoys reading, the great outdoors, playing with logical systems, learning how stuff in the world works, and making things with metal.",
 			"sort-rank": 2
 		},
-		"kristine": {
+		"christine": {
 			"prettyname": "Christine Zhang",
 			"img": "https://s3.amazonaws.com/dataskeptic.com/contributors/christine-zhang.png",
 			"twitter": "christinezhang",
