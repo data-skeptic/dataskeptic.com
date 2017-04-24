@@ -16,12 +16,10 @@ import {pay_invoice}             from 'backend/pay_invoice'
 import {related_content, related_cache}         from 'backend/related_content'
 import bodyParser                from 'body-parser'
 import compression               from 'compression';
-import {feed_uri}              from 'daos/episodes'
-import {
-    loadBlogs,
-    loadEpisodes,
-    loadProducts
-}          from 'daos/serverInit'
+import { feed_uri }              from 'daos/episodes'
+import { loadBlogs,
+         loadEpisodes,
+         loadProducts }          from 'daos/serverInit'
 import express                   from 'express';
 import FileStreamRotator         from 'file-stream-rotator'
 import fs                        from 'fs'
@@ -40,11 +38,9 @@ import isFunction from 'lodash/isFunction';
 import extend from 'lodash/extend';
 import routes                    from 'routes';
 import * as reducers             from 'reducers';
-import {
-    createStore,
-    combineReducers,
-    applyMiddleware
-}       from 'redux';
+import { createStore,
+         combineReducers,
+         applyMiddleware }       from 'redux';
 import getContentWrapper         from 'utils/content_wrapper';
 import {
     get_blogs_list,
@@ -53,17 +49,17 @@ import {
 }                         from 'utils/redux_loader';
 import redirects_map             from './redirects';
 
-import {reducer as formReducer} from 'redux-form'
+import { reducer as formReducer } from 'redux-form'
 
 const app = express()
 
 var logDirectory = path.join(__dirname, 'log')
 fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
 var accessLogStream = FileStreamRotator.getStream({
-    date_format: 'YYYYMMDD',
-    filename: path.join(logDirectory, 'access-%DATE%.log'),
-    frequency: 'daily',
-    verbose: false
+  date_format: 'YYYYMMDD',
+  filename: path.join(logDirectory, 'access-%DATE%.log'),
+  frequency: 'daily',
+  verbose: false
 })
 app.use(morgan('combined', {stream: accessLogStream}))
 
@@ -73,9 +69,10 @@ var env = "prod"
 aws.config.loadFromPath('awsconfig.json')
 
 if (process.env.NODE_ENV !== 'production') {
-    require('./webpack.dev').default(app);
-    env = "dev"
+  require('./webpack.dev').default(app);
+  env = "dev"
 }
+console.log(new Date())
 console.log("Environment: ", env)
 
 let Cache = {
@@ -88,23 +85,20 @@ let Cache = {
     , products: {}
 };
 
-const reducer = combineReducers({
+const reducer  = combineReducers({
     ...reducers,
     form: formReducer
 });
-const store = applyMiddleware(thunk, promiseMiddleware)(createStore)(reducer);
-let initialState = store.getState()
-delete initialState.checkout;
 
 global.env = env;
 
-const doRefresh = () => {
+const doRefresh = (store) => {
     console.log("---[Refreshing cache]------------------");
     console.log(process.memoryUsage());
 
     let env = global.env;
 
-    return loadBlogs(store, env)
+    return loadBlogs(env)
         .then(function ({folders, blogmetadata_map, title_map, content_map}) {
             console.log("-[Refreshing blogs]-");
 
@@ -157,58 +151,48 @@ const doRefresh = () => {
 
             console.log("Refreshing Finished")
         })
-        .then(() => global.gc())
+        // .then(() => global.gc())
         .catch((err) => {
             console.log(err);
         })
 };
 
-setInterval(() => {
-    try {
-        doRefresh()
-    } catch (err) {
-        console.error(err);
-    }
-}, 60 * 60 * 1000);
+setInterval(doRefresh, 60 * 60 * 1000);
 
 if (process.env.NODE_ENV == 'production') {
-    function shouldCompress(req, res) {
-        if (req.headers['x-no-compression']) {
-            // don't compress responses with this request header
-            return false
-        }
-        // fallback to standard filter function
-        return compression.filter(req, res)
+  function shouldCompress (req, res) {
+    if (req.headers['x-no-compression']) {
+      // don't compress responses with this request header
+      return false
     }
-
-    app.use(compression({filter: shouldCompress}))
+    // fallback to standard filter function
+    return compression.filter(req, res)
+  }
+  app.use(compression({filter: shouldCompress}))
 }
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
-    extended: true
-}));
-
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
-
+  extended: true
+}))
 
 var stripe_key = "sk_test_81PZIV6UfHDlapSAkn18bmQi"
 var sp_key = "test_Z_gOWbE8iwjhXf4y4vqizQ"
 var slack_key = ""
 
-fs.open("config.json", "r", function (error, fd) {
-    var buffer = new Buffer(10000)
-    fs.read(fd, buffer, 0, buffer.length, null, function (error, bytesRead, buffer) {
-        var data = buffer.toString("utf8", 0, bytesRead)
-        var c = JSON.parse(data)
-        var env2 = env
-        stripe_key = c[env2]['stripe']
-        sp_key = c[env2]['sp']
-        slack_key = c[env2]['slack']
-        fs.close(fd)
-    })
+fs.open("config.json", "r", function(error, fd) {
+  var buffer = new Buffer(10000)
+  fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
+    var data = buffer.toString("utf8", 0, bytesRead)
+    var c = JSON.parse(data)
+    var env2 = env
+    stripe_key = c[env2]['stripe']
+    sp_key = c[env2]['sp']
+    slack_key = c[env2]['slack']
+    fs.close(fd)
+  })
 })
 
 function api_router(req, res) {
@@ -289,24 +273,24 @@ function api_router(req, res) {
 }
 
 function inject_folders(store, my_cache) {
-    var folders = my_cache.folders
-    store.dispatch({type: "ADD_FOLDERS", payload: folders})
+  var folders = my_cache.folders
+  store.dispatch({type: "ADD_FOLDERS", payload: folders })
 }
 
 function inject_years(store, my_cache) {
-    var episodes_list = my_cache.episodes_list
-    var episodes_map = my_cache.episodes_map
-    var ymap = {}
-    for (var i = 0; i < episodes_list.length; i++) {
-        var guid = episodes_list[i]
-        var episode = episodes_map[guid]
-        var pd = new Date(episode.pubDate)
-        var year = pd.getYear() + 1900
-        ymap[year] = 1
-    }
-    var years = Object.keys(ymap)
-    years = years.sort().reverse()
-    store.dispatch({type: "SET_YEARS", payload: years})
+  var episodes_list = my_cache.episodes_list
+  var episodes_map = my_cache.episodes_map
+  var ymap = {}
+  for (var i=0; i < episodes_list.length; i++) {
+    var guid = episodes_list[i]
+    var episode = episodes_map[guid]
+    var pd = new Date(episode.pubDate)
+    var year = pd.getYear() + 1900
+    ymap[year] = 1
+  }
+  var years = Object.keys(ymap)
+  years = years.sort().reverse()
+  store.dispatch({type: "SET_YEARS", payload: years })
 }
 
 function inject_homepage(store, my_cache, pathname) {
@@ -323,16 +307,19 @@ function inject_homepage(store, my_cache, pathname) {
         var episode = my_cache.episodes_map["latest"]
         install_episode(store, episode);
     }
+    install_blog(store, blog_metadata, content)
+    var episode = my_cache.episodes_map["latest"]
+    install_episode(store, episode)
 }
 
 function inject_products(store, my_cache, pathname) {
-    var products = my_cache.products['items']
-    store.dispatch({type: "ADD_PRODUCTS", payload: products})
+  var products = my_cache.products['items']
+  store.dispatch({type: "ADD_PRODUCTS", payload: products})
 }
 
 function inject_podcast(store, my_cache, pathname) {
-    var episodes = get_podcasts_from_cache(my_cache, pathname)
-    store.dispatch({type: "ADD_EPISODES", payload: episodes})
+  var episodes = get_podcasts_from_cache(my_cache, pathname)
+  store.dispatch({type: "ADD_EPISODES", payload: episodes})
 }
 
 function install_blog(store, blog_metadata, content) {
@@ -362,16 +349,25 @@ function install_episode(store, episode) {
 }
 
 function inject_blog(store, my_cache, pathname) {
-    var blog_page = pathname.substring('/blog'.length, pathname.length)
-    var content = my_cache.content_map[blog_page]
-    if (content == undefined) {
-        content = ""
-    }
-    var blog_metadata = my_cache.blogmetadata_map[blog_page]
-    if (blog_metadata == undefined) {
-        blog_metadata = {}
-        var dispatch = store.dispatch
-        var blogs = get_blogs_list(dispatch, pathname)
+  var blog_page = pathname.substring('/blog'.length, pathname.length)
+  var content = my_cache.content_map[blog_page]
+  if (content == undefined) {
+    content = ""
+  }
+  var blog_metadata = my_cache.blogmetadata_map[blog_page]
+  if (blog_metadata == undefined) {
+    blog_metadata = {}
+    var dispatch = store.dispatch
+    var blogs = get_blogs_list(dispatch, pathname)
+  } else {
+    var guid = blog_metadata.guid
+    if (guid != undefined) {
+      var episode = my_cache.episodes_map[guid]
+      if (episode != undefined) {
+        install_episode(store, episode)
+      } else {
+        console.log("Bogus guid found")
+      }
     } else {
         var guid = blog_metadata.guid
         if (guid) {
@@ -388,7 +384,10 @@ function inject_blog(store, my_cache, pathname) {
 
         install_blog(store, blog_metadata, content)
     }
-    console.log("done with blog inject")
+
+    install_blog(store, blog_metadata, content)
+  }
+  console.log("done with blog inject")
 }
 
 function updateState(store, pathname) {
@@ -410,116 +409,125 @@ function updateState(store, pathname) {
     else if (pathname.indexOf("/podcast") === 0) {
         inject_podcast(store, Cache, pathname)
     }
+
+    store.dispatch({type: "ADD_FOLDERS", payload: Cache.folders});
+    store.dispatch({type: "ADD_BLOGS", payload: {blogs: Cache.blogmetadata_map, total: Cache.blogmetadata_map.length}});
+    store.dispatch({type: "SET_BLOGS_LOADED"});
 }
 
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+/***
+ * DUMP GENERATION
+ */
+// const heapdump = require('heapdump');
+// setInterval(() => {
+//     console.log('writing dump');
+//     heapdump.writeSnapshot('heap/' + Date.now() + '.heapsnapshot');
+// }, 60000);
+
+function renderView(store, renderProps, location) {
+    const InitialView = (
+        <Provider store={store}>
+            <RoutingContext {...renderProps} />
+        </Provider>
+    );
+
+    let meta = {
+        title: 'Data Skeptic',
+        description: 'Data Skeptic is your source for a perseptive of scientific skepticism on topics in statistics, machine learning, big data, artificial intelligence, and data science. Our weekly podcast and blog bring you stories and tutorials to help understand our data-driven world.',
+        author: 'Kyle Polich',
+        keywoards: 'data skeptic, podcast,',
+    };
+
+    const componentHTML = renderToString(InitialView);
+
+    let state = store.getState();
+    let activePageComponent = InitialView.props.children.props.components.filter((comp) => comp && isFunction(comp.getPageMeta));
+    activePageComponent = (activePageComponent.length > 0) ? activePageComponent[0] : null;
+    if (activePageComponent) {
+        meta = extend(meta, activePageComponent.getPageMeta(state));
+    }
+
+    return {
+        state: state,
+        html: componentHTML,
+        meta: meta
+    };
+}
+
+const renderPage = (req, res) => {
+    if (req.url == '/favicon.ico') {
+        return res.redirect(301, 'https://s3.amazonaws.com/dataskeptic.com/favicon.ico')
+    }
+    if (req.url.indexOf('/src-') > 0) {
+        var u = req.url
+        var i = u.indexOf('/blog/') + '/blog'.length
+        if (i > 0) {
+            var hostname = 's3.amazonaws.com/dataskeptic.com'
+            if (env != 'prod') {
+                hostname = 's3.amazonaws.com/' + env + '.dataskeptic.com'
+            }
+            var redir = u.substring(i, u.length)
+            return res.redirect(301, 'https://' + hostname + redir)
+        }
+    }
+    else if (req.url.indexOf('/api') == 0) {
+        var routed = api_router(req, res)
+        if (routed) {
+            return
+        }
+    }
+    var redir = redirects_map['redirects_map'][req.url]
+    var hostname = req.headers.host
+    if (redir != undefined) {
+        console.log("Redirecting to " + hostname + redir)
+        return res.redirect(301, 'http://' + hostname + redir)
+    }
+    if (req.url == '/feed.rss') {
+        return res.redirect(307, 'http://dataskeptic.libsyn.com/rss')
+    }
+
+    const location = createLocation(req.url);
+
+    match({routes, location}, (err, redirectLocation, renderProps) => {
+        console.log('doing response');
+
+        if (err) {
+            console.error(err);
+            return res.status(500).end('Internal server error');
+        }
+
+        if (!renderProps) {
+            res.render('error');
+        }
+
+        let store = applyMiddleware(thunk, promiseMiddleware)(createStore)(reducer);
+        updateState(store, location.pathname);
+
+        fetchComponentData(store.dispatch, renderProps.components, renderProps.params)
+            .then(() => renderView(store, renderProps, location))
+            .then(({html, state, meta}) => {
+                res.render('index', {
+                    staticHTML: html,
+                    initialState: state,
+                    meta,
+                    env
+                });
+            })
+            .catch(err => {
+                console.error('HTML generation error');
+                console.dir(err);
+                return res.end(err)
+            });
+    });
+}
 
 doRefresh().then(() => {
     console.log('CACHE IS READY');
 
-    app.use((req, res) => {
-        if (req.url == '/favicon.ico') {
-            return res.redirect(301, 'https://s3.amazonaws.com/dataskeptic.com/favicon.ico')
-        }
-        if (req.url.indexOf('/src-') > 0) {
-            var u = req.url
-            var i = u.indexOf('/blog/') + '/blog'.length
-            if (i > 0) {
-                var hostname = 's3.amazonaws.com/dataskeptic.com'
-                if (env != 'prod') {
-                    hostname = 's3.amazonaws.com/' + env + '.dataskeptic.com'
-                }
-                var redir = u.substring(i, u.length)
-                return res.redirect(301, 'https://' + hostname + redir)
-            }
-        }
-        else if (req.url.indexOf('/api') == 0) {
-            var routed = api_router(req, res)
-            if (routed) {
-                return
-            }
-        }
-        var redir = redirects_map['redirects_map'][req.url]
-        var hostname = req.headers.host
-        if (redir != undefined) {
-            console.log("Redirecting to " + hostname + redir)
-            return res.redirect(301, 'http://' + hostname + redir)
-        }
-        if (req.url == '/feed.rss') {
-            return res.redirect(307, 'http://dataskeptic.libsyn.com/rss')
-        }
-
-        const location = createLocation(req.url);
-
-        match({routes, location}, (err, redirectLocation, renderProps) => {
-            console.log('doing response');
-
-            if (err) {
-                console.error(err);
-                return res.status(500).end('Internal server error');
-            }
-
-            if (!renderProps) {
-                var title = "Page not found"
-                var componentHTML = "<div><h1>Not Found</h1><p>You've encountered a bogus link, deprecated link, or bug in our site.  Either way, please nagivate to <a href=\"http://dataskeptic.com\">dataskeptic.com</a> to get back on course.</p></div>"
-
-                var injects = {
-                    "react-view": componentHTML
-                }
-
-                var HTML = getContentWrapper(title, initialState, injects, env)
-                var pathname = location.pathname
-                console.log("page not found:" + pathname)
-                return res.status(404).end(componentHTML);
-            }
-
-            function renderView() {
-                const store = applyMiddleware(thunk, promiseMiddleware)(createStore)(reducer)
-                updateState(store, location.pathname)
-
-                const InitialView = (
-                    <Provider store={store}>
-                        <RoutingContext {...renderProps} />
-                    </Provider>
-                );
-
-                let meta = {
-                    title: 'Data Skeptic',
-                    description: 'Data Skeptic is your source for a perseptive of scientific skepticism on topics in statistics, machine learning, big data, artificial intelligence, and data science. Our weekly podcast and blog bring you stories and tutorials to help understand our data-driven world.',
-                    author: 'Kyle Polich',
-                    keywoards: 'data skeptic, podcast,',
-                };
-
-                var pathname = location.pathname.substring('/blog'.length, location.pathname.length)
-
-                console.dir(meta);
-
-                const componentHTML = renderToString(InitialView);
-
-                var injects = {
-                    "react-view": componentHTML
-                };
-
-                const state = store.getState();
-                let activePageComponent = InitialView.props.children.props.components.filter((comp) => comp && isFunction(comp.getPageMeta));
-                activePageComponent = (activePageComponent.length > 0) ? activePageComponent[0] : null;
-                if (activePageComponent) {
-                    meta = extend(meta, activePageComponent.getPageMeta(state));
-                }
-
-                const HTML = getContentWrapper(meta, state, injects, env)
-                return HTML;
-            }
-
-            fetchComponentData(store.dispatch, renderProps.components, renderProps.params)
-                .then(renderView)
-                .then(html => res.status(200).end(html))
-                .catch(err => {
-                    console.error('HTML generation error');
-                    console.dir(err);
-                    return res.end(err)
-                });
-        });
-    });
+    app.use(renderPage);
 });
 
 export default app;

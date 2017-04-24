@@ -23,7 +23,8 @@ module.exports = {
     get_blogs_rss: function (req, res, blogmetadata_map, exclude = ['/episodes', '/transcripts']) {
         let blogs = blogmetadata_map;
 
-        blogs = map(blogmetadata_map, (post) => {
+        blogs = filter(blogs, (post) => !!post);
+        blogs = map(blogs, (post) => {
             return post;
         });
 
