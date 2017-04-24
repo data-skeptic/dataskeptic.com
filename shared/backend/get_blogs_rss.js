@@ -38,6 +38,8 @@ module.exports = {
         });
 
         each(blogs, (blog) => {
+            if (!blog) return;
+
             if (blog.env === 'master') { // don't share dev on master
                 feed.item(BlogItemModel(blog));
             }

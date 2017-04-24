@@ -19,7 +19,7 @@ class Advertising extends Component {
 
 	render() {
 		return (
-			<div className="center">
+			<div className="advertise-page center">
 				<h2>Advertising with Data Skeptic</h2>
 				<ul>
 					<li className="adv-li"><b>Data Skeptic consistently ranks in the top 5% of <u>all</u> podcasts</b> by downloads; but is special because of its devoted following among the data science community.</li>
@@ -46,10 +46,10 @@ class Advertising extends Component {
 				</ul>
 
 				<h3>Interview style ads</h3>
-				<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/311032382&amp;color=ff5500&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false"></iframe>
+				<iframe width="100%" height="166" scrolling="no" frameBorder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/311032382&amp;color=ff5500&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false"/>
 
 				<h3>Feature highlight ads</h3>
-				<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/311032627&amp;color=ff5500&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false"></iframe>
+				<iframe width="100%" height="166" scrolling="no" frameBorder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/311032627&amp;color=ff5500&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false"/>
 				
 				<br/><br/><br/>
 
