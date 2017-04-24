@@ -45,7 +45,7 @@ export function loadProducts(env) {
 
 }
 
-export function loadBlogs(store, env,) {
+export function loadBlogs(env) {
     let data = {
         folders: [],
         content_map: {},
@@ -68,8 +68,6 @@ export function loadBlogs(store, env,) {
             let latest;
             const folders = extractFolders(blogs);
             data.folders = folders;
-            store.dispatch({type: "ADD_FOLDERS", payload: folders});
-            store.dispatch({type: "ADD_BLOGS", payload: {blogs}});
 
             let contentMapRequests = [];
             for (let i = 0; i < blogs.length; i++) {

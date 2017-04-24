@@ -14,6 +14,7 @@ import BlogAuthorTop from '../Components/BlogAuthorTop'
 import BlogAuthorBottom from '../Components/BlogAuthorBottom'
 import Loading from '../../Common/Components/Loading'
 import RelatedContent from '../Components/RelatedContent'
+import ProposeButton from '../Components/ProposeButton'
 import PostBodyContainer from './PostBodyContainer'
 
 import {get_folders} from '../../utils/redux_loader'
@@ -54,6 +55,37 @@ class BlogArticle extends Component {
         return prettyName.indexOf('/transcripts/') === 0;
     }
 
+    isGithubPost(uri) {
+        return uri.indexOf('.md') > -1;
+    }
+
+    isJupyterPost(uri) {
+        return uri.indexOf('.ipynb') > -1;
+    }
+
+    generateEditGithubPageUrl(prettyName, env) {
+        return `https://github.com/data-skeptic/blog/edit/${env}${prettyName}.md`;
+    }
+
+    generateEditJupyterPageUrl(prettyName, env) {
+        return `https://github.com/data-skeptic/blog/blob/${env}${prettyName}.ipynb`;
+    }
+
+    getProposeEditUrl(currentPost) {
+        if (isEmpty(currentPost)) {
+            return null;
+        }
+
+        if (this.isGithubPost(currentPost.uri)) {
+            return this.generateEditGithubPageUrl(currentPost.prettyname, currentPost.env);
+        }
+
+        if (this.isJupyterPost(currentPost.uri)) {
+            return this.generateEditJupyterPageUrl(currentPost.prettyname, currentPost.env);
+        }
+
+        return null;
+    }
 
     render() {
 
@@ -94,6 +126,8 @@ class BlogArticle extends Component {
 
         const related = post.related || [];
 
+        const proposeEditUrl = this.getProposeEditUrl(post);
+
         return (
             <div className="center">
 
@@ -112,12 +146,20 @@ class BlogArticle extends Component {
 
                 <MailingListBlogFooter />
 
+                <hr />
+
+                { proposeEditUrl ? <ProposeButton editUrl={proposeEditUrl}/> : null }
+
+                <hr />
+
                 <ReactDisqusComments
                     shortname={disqusUsername}
                     identifier={uid}
                     title={title}
                     url={uid}
                     onNewComment={this.handleNewComment}/>
+
+
             </div>
         )
     }

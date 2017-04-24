@@ -89,19 +89,16 @@ const reducer  = combineReducers({
     ...reducers,
     form: formReducer
 });
-const store    = applyMiddleware(thunk,promiseMiddleware)(createStore)(reducer);
-let initialState = store.getState()
-delete initialState.checkout;
 
 global.env = env;
 
-const doRefresh = () => {
+const doRefresh = (store) => {
     console.log("---[Refreshing cache]------------------");
     console.log(process.memoryUsage());
 
     let env = global.env;
 
-    return loadBlogs(store, env)
+    return loadBlogs(env)
         .then(function ({folders, blogmetadata_map, title_map, content_map}) {
             console.log("-[Refreshing blogs]-");
 
@@ -154,13 +151,13 @@ const doRefresh = () => {
 
             console.log("Refreshing Finished")
         })
-        .then(() => global.gc())
+        // .then(() => global.gc())
         .catch((err) => {
             console.log(err);
         })
 };
 
-//setInterval(doRefresh, 60 * 60 * 1000);
+setInterval(doRefresh, 60 * 60 * 1000);
 
 if (process.env.NODE_ENV == 'production') {
   function shouldCompress (req, res) {
@@ -312,7 +309,7 @@ function inject_homepage(store, my_cache, pathname) {
     }
     install_blog(store, blog_metadata, content)
     var episode = my_cache.episodes_map["latest"]
-    install_episode(store, episode)    
+    install_episode(store, episode)
 }
 
 function inject_products(store, my_cache, pathname) {
@@ -412,116 +409,125 @@ function updateState(store, pathname) {
     else if (pathname.indexOf("/podcast") === 0) {
         inject_podcast(store, Cache, pathname)
     }
+
+    store.dispatch({type: "ADD_FOLDERS", payload: Cache.folders});
+    store.dispatch({type: "ADD_BLOGS", payload: {blogs: Cache.blogmetadata_map, total: Cache.blogmetadata_map.length}});
+    store.dispatch({type: "SET_BLOGS_LOADED"});
 }
 
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+/***
+ * DUMP GENERATION
+ */
+// const heapdump = require('heapdump');
+// setInterval(() => {
+//     console.log('writing dump');
+//     heapdump.writeSnapshot('heap/' + Date.now() + '.heapsnapshot');
+// }, 60000);
+
+function renderView(store, renderProps, location) {
+    const InitialView = (
+        <Provider store={store}>
+            <RoutingContext {...renderProps} />
+        </Provider>
+    );
+
+    let meta = {
+        title: 'Data Skeptic',
+        description: 'Data Skeptic is your source for a perseptive of scientific skepticism on topics in statistics, machine learning, big data, artificial intelligence, and data science. Our weekly podcast and blog bring you stories and tutorials to help understand our data-driven world.',
+        author: 'Kyle Polich',
+        keywoards: 'data skeptic, podcast,',
+    };
+
+    const componentHTML = renderToString(InitialView);
+
+    let state = store.getState();
+    let activePageComponent = InitialView.props.children.props.components.filter((comp) => comp && isFunction(comp.getPageMeta));
+    activePageComponent = (activePageComponent.length > 0) ? activePageComponent[0] : null;
+    if (activePageComponent) {
+        meta = extend(meta, activePageComponent.getPageMeta(state));
+    }
+
+    return {
+        state: state,
+        html: componentHTML,
+        meta: meta
+    };
+}
+
+const renderPage = (req, res) => {
+    if (req.url == '/favicon.ico') {
+        return res.redirect(301, 'https://s3.amazonaws.com/dataskeptic.com/favicon.ico')
+    }
+    if (req.url.indexOf('/src-') > 0) {
+        var u = req.url
+        var i = u.indexOf('/blog/') + '/blog'.length
+        if (i > 0) {
+            var hostname = 's3.amazonaws.com/dataskeptic.com'
+            if (env != 'prod') {
+                hostname = 's3.amazonaws.com/' + env + '.dataskeptic.com'
+            }
+            var redir = u.substring(i, u.length)
+            return res.redirect(301, 'https://' + hostname + redir)
+        }
+    }
+    else if (req.url.indexOf('/api') == 0) {
+        var routed = api_router(req, res)
+        if (routed) {
+            return
+        }
+    }
+    var redir = redirects_map['redirects_map'][req.url]
+    var hostname = req.headers.host
+    if (redir != undefined) {
+        console.log("Redirecting to " + hostname + redir)
+        return res.redirect(301, 'http://' + hostname + redir)
+    }
+    if (req.url == '/feed.rss') {
+        return res.redirect(307, 'http://dataskeptic.libsyn.com/rss')
+    }
+
+    const location = createLocation(req.url);
+
+    match({routes, location}, (err, redirectLocation, renderProps) => {
+        console.log('doing response');
+
+        if (err) {
+            console.error(err);
+            return res.status(500).end('Internal server error');
+        }
+
+        if (!renderProps) {
+            res.render('error');
+        }
+
+        let store = applyMiddleware(thunk, promiseMiddleware)(createStore)(reducer);
+        updateState(store, location.pathname);
+
+        fetchComponentData(store.dispatch, renderProps.components, renderProps.params)
+            .then(() => renderView(store, renderProps, location))
+            .then(({html, state, meta}) => {
+                res.render('index', {
+                    staticHTML: html,
+                    initialState: state,
+                    meta,
+                    env
+                });
+            })
+            .catch(err => {
+                console.error('HTML generation error');
+                console.dir(err);
+                return res.end(err)
+            });
+    });
+}
 
 doRefresh().then(() => {
     console.log('CACHE IS READY');
 
-    app.use((req, res) => {
-        if (req.url == '/favicon.ico') {
-            return res.redirect(301, 'https://s3.amazonaws.com/dataskeptic.com/favicon.ico')
-        }
-        if (req.url.indexOf('/src-') > 0) {
-            var u = req.url
-            var i = u.indexOf('/blog/') + '/blog'.length
-            if (i > 0) {
-                var hostname = 's3.amazonaws.com/dataskeptic.com'
-                if (env != 'prod') {
-                    hostname = 's3.amazonaws.com/' + env + '.dataskeptic.com'
-                }
-                var redir = u.substring(i, u.length)
-                return res.redirect(301, 'https://' + hostname + redir)
-            }
-        }
-        else if (req.url.indexOf('/api') == 0) {
-            var routed = api_router(req, res)
-            if (routed) {
-                return
-            }
-        }
-        var redir = redirects_map['redirects_map'][req.url]
-        var hostname = req.headers.host
-        if (redir != undefined) {
-            console.log("Redirecting to " + hostname + redir)
-            return res.redirect(301, 'http://' + hostname + redir)
-        }
-        if (req.url == '/feed.rss') {
-            return res.redirect(307, 'http://dataskeptic.libsyn.com/rss')
-        }
-
-        const location = createLocation(req.url);
-
-        match({routes, location}, (err, redirectLocation, renderProps) => {
-            console.log('doing response');
-
-            if (err) {
-                console.error(err);
-                return res.status(500).end('Internal server error');
-            }
-
-            if (!renderProps) {
-                var title = "Page not found"
-                var componentHTML = "<div><h1>Not Found</h1><p>You've encountered a bogus link, deprecated link, or bug in our site.  Either way, please nagivate to <a href=\"http://dataskeptic.com\">dataskeptic.com</a> to get back on course.</p></div>"
-
-                var injects = {
-                    "react-view": componentHTML
-                }
-
-                var HTML = getContentWrapper(title, initialState, injects, env)
-                var pathname = location.pathname
-                console.log("page not found:" + pathname)
-                return res.status(404).end(componentHTML);
-            }
-
-            function renderView() {
-                const store = applyMiddleware(thunk, promiseMiddleware)(createStore)(reducer)
-                updateState(store, location.pathname)
-
-                const InitialView = (
-                    <Provider store={store}>
-                        <RoutingContext {...renderProps} />
-                    </Provider>
-                );
-
-                let meta = {
-                    title: 'Data Skeptic',
-                    description: 'Data Skeptic is your source for a perseptive of scientific skepticism on topics in statistics, machine learning, big data, artificial intelligence, and data science. Our weekly podcast and blog bring you stories and tutorials to help understand our data-driven world.',
-                    author: 'Kyle Polich',
-                    keywoards: 'data skeptic, podcast,',
-                };
-
-                var pathname = location.pathname.substring('/blog'.length, location.pathname.length)
-
-                console.dir(meta);
-
-                const componentHTML = renderToString(InitialView);
-
-                var injects = {
-                    "react-view": componentHTML
-                };
-
-                const state = store.getState();
-                let activePageComponent = InitialView.props.children.props.components.filter((comp) => comp && isFunction(comp.getPageMeta));
-                activePageComponent = (activePageComponent.length > 0) ? activePageComponent[0] : null;
-                if (activePageComponent) {
-                    meta = extend(meta, activePageComponent.getPageMeta(state));
-                }
-
-                const HTML = getContentWrapper(meta, state, injects, env)
-                return HTML;
-            }
-
-            fetchComponentData(store.dispatch, renderProps.components, renderProps.params)
-                .then(renderView)
-                .then(html => res.status(200).end(html))
-                .catch(err => {
-                    console.error('HTML generation error');
-                    console.dir(err);
-                    return res.end(err)
-                });
-        });
-    });
+    app.use(renderPage);
 });
 
 export default app;
