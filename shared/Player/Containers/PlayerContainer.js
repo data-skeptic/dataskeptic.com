@@ -16,7 +16,15 @@ class PlayerContainer extends React.Component {
 
 		this.onPlayToggle = this.onPlayToggle.bind(this)
 		this.update = this.update.bind(this)
-		setInterval(this.update, 1000)
+	}
+
+	componentDidMount() {
+        this.updater = setInterval(this.update, 1000);
+	}
+
+	componentWillUnmount() {
+        this.state.howler = null;
+        clearInterval(this.updater);
 	}
 
 	update() {
@@ -84,9 +92,9 @@ class PlayerContainer extends React.Component {
 			if (howler != undefined) {
 				howler.seek(p)
 				var me = this.props
-				setTimeout(function(){
-					me.dispatch({type: "SEEK_SET", payload: false })
-				}, 10);
+				me.dispatch({type: "SEEK_SET", payload: false })
+				// setTimeout(function(){
+				// }, 10);
 			}
 		}
 		var episode = oplayer.episode
