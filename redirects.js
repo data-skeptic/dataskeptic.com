@@ -1,4 +1,5 @@
 var redirects_map = {'/epnotes/causal-impact.php':'/blog/episodes/2016/causal-impact',
+'/blogundefined': '/blog',
 '/epnotes/the-bootstrap.php':'/blog/episodes/2016/the-bootstrap',
 '/epnotes/gini-coefficient.php':'/blog/episodes/2016/gini-coefficient',
 '/epnotes/unstructured-data-for-finance.php':'/blog/episodes/2016/unstructured-data-for-finance',

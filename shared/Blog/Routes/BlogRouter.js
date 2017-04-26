@@ -31,7 +31,7 @@ class BlogRouter extends React.Component {
     }
 
     static getPageMeta(state) {
-        const post = state.blogs.getIn(['blog_focus', 'blog']).toJS();
+		const post = state.blogs.getIn(['blog_focus', 'blog']).toJS();
         const isEpisode = !isUndefined(post.guid);
 
         let meta = {
