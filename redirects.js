@@ -1,4 +1,5 @@
 var redirects_map = {'/epnotes/causal-impact.php':'/blog/episodes/2016/causal-impact',
+'/blog/episodes/2017/polling': '/blog/episodes/2017/opinion-polling-for-presidential-elections',
 '/blogundefined': '/blog',
 '/epnotes/the-bootstrap.php':'/blog/episodes/2016/the-bootstrap',
 '/epnotes/gini-coefficient.php':'/blog/episodes/2016/gini-coefficient',
