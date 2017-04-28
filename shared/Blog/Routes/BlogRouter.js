@@ -6,6 +6,7 @@ import React from "react"
 import ReactDOM from "react-dom"
 import { connect } from 'react-redux'
 import isUndefined from 'lodash/isUndefined';
+import { redirects_map } from '../../../redirects';
 
 import NotFound from '../../NotFound/Components/NotFound'
 import BlogArticle from "../Containers/BlogArticle"
@@ -89,6 +90,10 @@ class BlogRouter extends React.Component {
 		/*
 			Must be a blog page if we got here
 		*/
+		var redirect = redirects_map[pathname]
+		if (redirect) {
+			pathname = redirect
+		}
 
 		return (
 			<div className="center">
