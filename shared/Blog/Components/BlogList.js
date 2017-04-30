@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router'
+import { connect } from 'react-redux';
 
 import BlogListItem from "./BlogListItem"
+import { removeFocusPost } from '../../Blog/Actions/BlogsActions';
 
-export default class BlogList extends Component {
+class BlogList extends Component {
 
     constructor() {
         super();
@@ -14,6 +15,7 @@ export default class BlogList extends Component {
     onItemClick() {
         if (window) {
             window.scrollTo(0, 0);
+            this.props.dispatch(removeFocusPost());
         }
     }
 
@@ -23,10 +25,11 @@ export default class BlogList extends Component {
         return (
             <div className="row blog-summary-container">
                 {blogs.map((blog, index) => {
-                    const id = index;
-                    return <BlogListItem key={id} blog={blog} onClick={this.onItemClick} isLatest={blog.c_hash===latestId}/>
+                    return <BlogListItem key={index} blog={blog} onClick={this.onItemClick} isLatest={blog.c_hash===latestId}/>
                 })}
             </div>
         )
     }
 }
+
+export default connect(state => ({  }))(BlogList)

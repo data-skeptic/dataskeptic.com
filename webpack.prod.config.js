@@ -1,5 +1,8 @@
 var path = require('path');
 var webpack = require('webpack');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
+
+let extractLESS = new ExtractTextPlugin('[name].css');
 
 module.exports = {
   entry: [
@@ -7,7 +10,7 @@ module.exports = {
   ],
   resolve: {
     modulesDirectories: ['node_modules', 'shared'],
-    extensions:         ['', '.js', '.jsx', '.json']
+    extensions:         ['', '.js', '.jsx']
   },
   output: {
     path:       path.join(__dirname, 'public'),
@@ -23,12 +26,8 @@ module.exports = {
       },
       {
           test: /\.less$/,
-          loader: "style!css!less?strictMath&noIeCompat"
-      },
-      {
-          test: /\.json$/, loader: "json"
+          loader: extractLESS.extract(['css','less'])
       }
-
     ]
   },
   plugins: [
@@ -41,6 +40,7 @@ module.exports = {
       compress: {
         warnings: false
       }
-    })
+    }),
+    extractLESS
   ]
 };

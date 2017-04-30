@@ -13,9 +13,4 @@ export const CartLink = ({onClick, itemCount}) => (
     </div>
 );
 
-CartLink.propTypes = {
-    onClick: React.PropTypes.func,
-    itemCount: React.PropTypes.number
-};
-
 export default CartLink;

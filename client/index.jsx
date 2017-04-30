@@ -57,12 +57,10 @@ const reducer = combineReducers({
     ...reducers
 });
 
-const logger = (store) => (next) => (action) => {
-    console.log("action fired", action)
-    next(action)
-}
-
-const store = applyMiddleware(logger, thunk, promiseMiddleware)(createStore)(reducer, initialState);
+const store = applyMiddleware(thunk, promiseMiddleware)(createStore)(
+    reducer, initialState,
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 var env = "prod"
 

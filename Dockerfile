@@ -1,25 +1,29 @@
-# dataskeptic.com
-
 FROM ubuntu:16.04
-MAINTAINER Kyle Polich "kyle@dataskeptic.com"
-RUN apt-get update -y
+
+RUN apt-get update
 RUN apt-get install -y sudo
 RUN apt-get install -y nano
 RUN apt-get install -y wget
 RUN apt-get install -y curl
 RUN apt-get install -y zip
-RUN apt-get install -y ffmpeg
 
 RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 RUN sudo apt-get install -y nodejs
 
-COPY . /app
-WORKDIR /app
+RUN wget https://github.com/data-skeptic/dataskeptic.com/archive/master.zip
+RUN unzip master.zip
+RUN cd dataskeptic.com-master/; npm install
+#RUN cd dataskeptic.com-master/; npm run dev
 
-RUN cd app; npm install
 
-ENTRYPOINT["npm"]
-CMD["run start"]
-
-#awsconfig.json
-#config.json
+cd
+sudo apt-get update --fix-missing
+sudo apt-get install -y git
+git clone https://github.com/data-skeptic/dataskeptic.com.git
+cd dataskeptic.com/
+npm i
+cp /shared/awsconfig.json .
+cp /shared/config.json .
+cp /shared/go.sh .
+chmod 777 go.sh 
+./go.sh 

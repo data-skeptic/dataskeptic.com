@@ -12,6 +12,7 @@ import EpisodeCard from "./EpisodeCard"
 import LatestBlogCard from "../Blog/Containers/LatestBlogCard"
 import LatestEpisodePlayer from "../Blog/Containers/LatestEpisodePlayer"
 
+import {changePageTitle} from '../Layout/Actions/LayoutActions';
 import {get_homepage_content} from '../utils/redux_loader'
 
 /*
@@ -26,8 +27,17 @@ import {get_homepage_content} from '../utils/redux_loader'
 class Home extends Component {
 
   componentWillMount() {
-      var dispatch = this.props.dispatch
-      get_homepage_content(dispatch)
+      var dispatch = this.props.dispatch;
+      get_homepage_content(dispatch);
+
+      const {title} = Home.getPageMeta();
+      dispatch(changePageTitle(title));
+  }
+
+  static getPageMeta() {
+      return {
+          title: 'Data Skeptic'
+      }
   }
 
   render() {
