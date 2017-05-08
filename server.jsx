@@ -175,6 +175,19 @@ if (process.env.NODE_ENV == 'production') {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+const proxy = require('http-proxy-middleware');
+const wsProxy = proxy('/recording', {
+    target: 'ws://127.0.0.1:9001',
+    // pathRewrite: {
+    //  '^/websocket' : '/socket',          // rewrite path.
+    //  '^/removepath' : ''                 // remove path.
+    // },
+    changeOrigin: true,                     // for vhosted sites, changes host header to match to target's host
+    ws: true,                               // enable websocket proxy
+    logLevel: 'debug'
+});
+app.use(wsProxy);
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
   extended: true

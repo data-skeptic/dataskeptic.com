@@ -47,5 +47,3 @@ if (fs.existsSync('/ssl/cert.pem')) {
 	});
 }
 
-require('./recordingServer.js');
-

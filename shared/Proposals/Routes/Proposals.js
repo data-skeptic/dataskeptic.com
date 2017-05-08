@@ -39,7 +39,8 @@ class Proposals extends Component {
 
         const to = new Date(deadline);
 
-        const isClosed = !active;
+        // const isClosed = !active;
+        const isClosed = false;
         return (
             <div className="proposals-page">
                 <Container>

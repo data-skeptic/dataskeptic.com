@@ -208,7 +208,7 @@ class RecorderFlowContainer extends Component {
 
             const BinaryClient = require('binaryjs-client').BinaryClient;
             const hostname = window.location.hostname;
-            this.client = new BinaryClient(`ws://${hostname}:9001`);
+            this.client = new BinaryClient(`ws://${hostname}:9001/recording`);
 
             this.client.on('open', () => {
                 const meta = {id, chunkId};

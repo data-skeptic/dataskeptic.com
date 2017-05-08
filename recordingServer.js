@@ -150,4 +150,8 @@ const run = () => {
 };
 
 AWS.config.loadFromPath('awsconfig.json');
+
+
+require('babel-core/register')({});
+require('babel-polyfill');
 run();
