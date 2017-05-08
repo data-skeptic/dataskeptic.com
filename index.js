@@ -1,7 +1,7 @@
 'use strict';
 
-require('babel-core/register')({});
-require('babel-polyfill');
+// require('babel-core/register')({});
+// require('babel-polyfill');
 
 const express = require('express')
 const fs = require('fs')
@@ -46,4 +46,6 @@ if (fs.existsSync('/ssl/cert.pem')) {
 		console.log('Server listening on 3000');
 	});
 }
+
+require('./recordingServer.js');
 

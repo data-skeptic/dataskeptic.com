@@ -149,8 +149,5 @@ const run = () => {
     });
 };
 
-
-
-
 AWS.config.loadFromPath('awsconfig.json');
 run();
