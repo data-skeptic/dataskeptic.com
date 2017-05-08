@@ -461,6 +461,9 @@ const renderPage = (req, res) => {
     if (req.url == '/favicon.ico') {
         return res.redirect(301, 'https://s3.amazonaws.com/dataskeptic.com/favicon.ico')
     }
+    if (req.url == '/data-skeptic-bonus.xml') {
+        return res.redirect(307, 'https://s3.amazonaws.com/data-skeptic-bonus-feed/data-skeptic-bonus.xml')
+    }
     if (req.url.indexOf('/src-') > 0) {
         var u = req.url
         var i = u.indexOf('/blog/') + '/blog'.length
