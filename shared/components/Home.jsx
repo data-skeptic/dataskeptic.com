@@ -15,15 +15,6 @@ import LatestEpisodePlayer from "../Blog/Containers/LatestEpisodePlayer"
 import {changePageTitle} from '../Layout/Actions/LayoutActions';
 import {get_homepage_content} from '../utils/redux_loader'
 
-/*
-                <div className="card">
-                  <EpisodeCard id="old_episode" key="old_episode" episode={old_episode} title="From the archives" />
-                </div>
-                <div className="card">
-                  <EpisodeCard id="latest_episode" key="latest_episode" episode={episode} title="Latest episode" />
-                </div>
-*/
-
 class Home extends Component {
 
   componentWillMount() {

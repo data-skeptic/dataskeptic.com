@@ -203,7 +203,8 @@ export default function adminReducer(state = defaultState, action) {
                                 var products = result2['data']['products']
                                 for (var i in products) {
                                     var product = products[i]
-                                    if (product['name'] == 'Gildan Ultra Blend 50/50 T') {
+                                    //if (product['name'] == 'Gildan Ultra Blend 50/50 T') {
+                                    if (product['name'] == 'Fruit of the Loom Cotton T') {
                                         productId = product['id']
                                     }
                                 }
