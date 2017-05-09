@@ -17,9 +17,12 @@ import {related_content, related_cache}         from 'backend/related_content'
 import bodyParser                from 'body-parser'
 import compression               from 'compression';
 import { feed_uri }              from 'daos/episodes'
-import { loadBlogs,
-         loadEpisodes,
-         loadProducts }          from 'daos/serverInit'
+import {
+    loadBlogs,
+    loadEpisodes,
+    loadProducts,
+    loadAdvertiseContent
+}  from 'daos/serverInit'
 import express                   from 'express';
 import FileStreamRotator         from 'file-stream-rotator'
 import fs                        from 'fs'
@@ -75,6 +78,8 @@ if (process.env.NODE_ENV !== 'production') {
 console.log(new Date())
 console.log("Environment: ", env)
 
+const DEFAULT_ADVERTISE_HTML = `<img src="/img/default-advertise.jpg"/>`;
+
 let Cache = {
     title_map: {}         // `uri`             -> <title>
     , content_map: {}       // `uri`             -? {s3 blog content}
@@ -83,6 +88,7 @@ let Cache = {
     , episodes_map: {}      // `guid` | 'latest' -> {episode}
     , episodes_list: []     // guids
     , products: {}
+    , advertise: DEFAULT_ADVERTISE_HTML
 };
 
 const reducer  = combineReducers({
@@ -98,7 +104,12 @@ const doRefresh = (store) => {
 
     let env = global.env;
 
-    return loadBlogs(env)
+    return loadAdvertiseContent(env)
+        .then((advertiseHtml) => {
+            Cache.advertise = advertiseHtml ? advertiseHtml : DEFAULT_ADVERTISE_HTML;
+
+            return loadBlogs(env)
+        })
         .then(function ({folders, blogmetadata_map, title_map, content_map}) {
             console.log("-[Refreshing blogs]-");
 
@@ -148,7 +159,8 @@ const doRefresh = (store) => {
             // fill the data
             Cache.products = {};
             Cache.products.items = products;
-
+        })
+        .then(() => {
             console.log("Refreshing Finished")
         })
         // .then(() => global.gc())
