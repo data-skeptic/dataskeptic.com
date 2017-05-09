@@ -425,6 +425,13 @@ function updateState(store, pathname) {
     store.dispatch({type: "ADD_FOLDERS", payload: Cache.folders});
     store.dispatch({type: "ADD_BLOGS", payload: {blogs: Cache.blogmetadata_map, total: Cache.blogmetadata_map.length}});
     store.dispatch({type: "SET_BLOGS_LOADED"});
+
+    store.dispatch({
+        type: 'SET_ADVERTISE_CARD_CONTENT',
+        payload: {
+            content: Cache.advertise
+        }
+    })
 }
 
 app.set('view engine', 'ejs');
