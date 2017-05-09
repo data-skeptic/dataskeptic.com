@@ -26,7 +26,7 @@ function recordingExist(recordId) {
 
 module.exports = {
     ready: function (req, res) {
-        const recordId = req.query.id;
+        const recordId = req.query.id + '.wav';
         if (!recordId) {
             res.send({
                 error: 'Please specify record id'

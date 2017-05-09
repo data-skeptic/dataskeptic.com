@@ -6,6 +6,8 @@ const fse = require('fs-extra');
 const path = require('path');
 const AWS = require("aws-sdk");
 
+AWS.config.loadFromPath('awsconfig.json');
+
 const recordingConfig = require('./global-config.json');
 
 const LOCKED_FILE_NAME = recordingConfig.locked_file_name;
@@ -85,7 +87,7 @@ const uploadToS3 = (filePath, id, clb) => {
         const s3bucket = new AWS.S3({params: {Bucket: AWS_RECORDS_BUCKET}});
         s3bucket.createBucket(() => {
             const params = {
-                Key: id,
+                Key: id+'.wav',
                 Body: data
             };
 
@@ -148,9 +150,6 @@ const run = () => {
         });
     });
 };
-
-AWS.config.loadFromPath('awsconfig.json');
-
 
 require('babel-core/register')({});
 require('babel-polyfill');
