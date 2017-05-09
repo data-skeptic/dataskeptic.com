@@ -4,7 +4,8 @@ import axios  from 'axios'
 import {convert_items_to_json} from 'daos/episodes'
 import {extractFolders} from '../utils/blog_utils'
 
-const ADVERTISE_CONTENT = 'https://s3.amazonaws.com/dataskeptic.com/dassets/carousel/latest.htm';
+const ADVERTISE_CARD_CONTENT = 'https://s3.amazonaws.com/dataskeptic.com/dassets/carousel/latest.htm';
+const ADVERTISE_BANNER_CONTENT = 'https://s3.amazonaws.com/dataskeptic.com/dassets/banner/latest.htm';
 
 function generate_content_map(env, blog, my_cache) {
     var pn = blog['prettyname']
@@ -189,9 +190,9 @@ export function loadEpisodes(env, feed_uri, blogmetadata_map, aws) {
         })
 }
 
-export function loadAdvertiseContent() {
+export function loadAdvertiseSourceContent(source) {
     return new Promise((res, rej) => {
-        axios.get(ADVERTISE_CONTENT)
+        axios.get(source)
             .then(function (result) {
                 if (result.status = 200) {
                     res(result.data);
@@ -203,4 +204,11 @@ export function loadAdvertiseContent() {
                 res(null);
             })
     })
+}
+
+export function loadAdvertiseContent() {
+    return Promise.all([
+        loadAdvertiseSourceContent(ADVERTISE_CARD_CONTENT),
+        loadAdvertiseSourceContent(ADVERTISE_BANNER_CONTENT)
+    ])
 }

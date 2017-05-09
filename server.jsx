@@ -88,7 +88,10 @@ let Cache = {
     , episodes_map: {}      // `guid` | 'latest' -> {episode}
     , episodes_list: []     // guids
     , products: {}
-    , advertise: DEFAULT_ADVERTISE_HTML
+    , advertise: {
+        card: DEFAULT_ADVERTISE_HTML,
+        banner: null
+    }
 };
 
 const reducer  = combineReducers({
@@ -105,8 +108,9 @@ const doRefresh = (store) => {
     let env = global.env;
 
     return loadAdvertiseContent(env)
-        .then((advertiseHtml) => {
-            Cache.advertise = advertiseHtml ? advertiseHtml : DEFAULT_ADVERTISE_HTML;
+        .then(([cardHtml, bannerHtml]) => {
+            Cache.advertise.card = cardHtml ? cardHtml : DEFAULT_ADVERTISE_HTML;
+            Cache.advertise.banner = bannerHtml;
 
             return loadBlogs(env)
         })
@@ -429,7 +433,14 @@ function updateState(store, pathname) {
     store.dispatch({
         type: 'SET_ADVERTISE_CARD_CONTENT',
         payload: {
-            content: Cache.advertise
+            content: Cache.advertise.card
+        }
+    })
+
+    store.dispatch({
+        type: 'SET_ADVERTISE_BANNER_CONTENT',
+        payload: {
+            content: Cache.advertise.banner
         }
     })
 }
