@@ -32,6 +32,10 @@ class BlogRouter extends React.Component {
     }
 
     static getPageMeta(state) {
+		// TODO: add 404 api method and provide not found page
+		const isExists = !!state.blogs;
+		console.dir(isExists);
+
 		const post = state.blogs.getIn(['blog_focus', 'blog']).toJS();
         const isEpisode = !isUndefined(post.guid);
 

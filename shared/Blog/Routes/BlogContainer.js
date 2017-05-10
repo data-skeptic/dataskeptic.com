@@ -23,6 +23,7 @@ import Content from '../../Layout/Components/Content/Content';
 import SideBar from '../../Layout/Components/SideBar/SideBar';
 
 import {changePageTitle} from '../../Layout/Actions/LayoutActions';
+import isCtrlOrCommandKey from '../../utils/isCtrlOrCommandKey';
 
 const DEFAULT_ACTIVE_FOLDER = 'All';
 import BLOGS_NAV_MAP from '../Constants/navMap';
@@ -83,10 +84,12 @@ class BlogContainer extends Component {
 
     onPaginatorPageClick(pageNum) {
         if (window) {
-            window.scrollTo(0, 0);
+            if (!isCtrlOrCommandKey(e)) {
+                this.fetchPosts(pageNum);
+                window.scrollTo(0, 0);
+            }
         }
 
-        this.fetchPosts(pageNum);
     }
 
     remove_type(typ, arr) {
