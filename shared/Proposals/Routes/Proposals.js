@@ -15,6 +15,9 @@ import CommentBoxFormContainer from '../Containers/CommentBoxContainer/CommentBo
 
 import Countdown from '../../Common/Components/Countdown';
 
+import { changePageTitle } from '../../Layout/Actions/LayoutActions';
+
+
 class Proposals extends Component {
 
     constructor(props) {
@@ -26,6 +29,16 @@ class Proposals extends Component {
     componentWillMount() {
         if (isEmpty(this.props.proposal)) {
             this.props.fetchCurrentProposal();
+        }
+
+        const dispatch = this.props.dispatch;
+        const {title} = Proposals.getPageMeta();
+        this.props.changePageTitle(title);
+    }
+
+    static getPageMeta() {
+        return {
+            title: 'Proposals | Data Skeptic'
         }
     }
 
@@ -84,7 +97,8 @@ export default connect(
     }),
     dispatch => bindActionCreators({
         fetchCurrentProposal,
-        proposalDeadlineReached
+        proposalDeadlineReached,
+        changePageTitle
     }, dispatch)
 )(Proposals)
 

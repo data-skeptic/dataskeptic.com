@@ -283,10 +283,18 @@ class RecorderFlowContainer extends Component {
         }
     }
 
+    getAudioContext() {
+        if (!this.audioContext) {
+            const audioContextSource = window.AudioContext || window.webkitAudioContext;
+            this.audioContext = new audioContextSource();
+        }
+
+        return this.audioContext;
+    }
+
     initRecorderSuccess(stream) {
         this.browserStream = stream;
-        const audioContext = window.AudioContext || window.webkitAudioContext;
-        const context = new audioContext();
+        const context = this.getAudioContext();
 
         // the sample rate is in context.sampleRate
         let audioInput = context.createMediaStreamSource(stream);
@@ -333,6 +341,8 @@ class RecorderFlowContainer extends Component {
     }
 
     stopStreams(stream) {
+
+
         for (let track of stream.getTracks()) {
             track.stop()
         }

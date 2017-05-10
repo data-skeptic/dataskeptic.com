@@ -125,7 +125,7 @@ const run = () => {
             let fileWriter = new wav.FileWriter(filePath, {
                 channels: 1,
                 sampleRate: 44100,
-                bitDepth: 16
+                bitDepth: 8
             });
 
             stream.pipe(fileWriter);
