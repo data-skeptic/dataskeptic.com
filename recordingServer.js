@@ -81,6 +81,7 @@ const mergeFiles = (files, output) => {
 
 const uploadToS3 = (filePath, id, clb) => {
     console.log('Uploading to s3', filePath);
+    console.dir(AWS_RECORDS_BUCKET)
 
     fs.readFile(filePath, (err, data) => {
         if (err) throw err; // Something went wrong!

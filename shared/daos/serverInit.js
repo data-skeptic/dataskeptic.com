@@ -22,7 +22,7 @@ function generate_content_map(env, blog, my_cache) {
                 return content;
             })
             .catch((err) => {
-                console.log("Content cache error trying to store blog content")
+                console.log("Content cache e3rror trying to store blog content")
                 console.log(err)
             })
     } else {
