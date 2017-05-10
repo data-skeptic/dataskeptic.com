@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import BlogListItem from "./BlogListItem"
 import { removeFocusPost } from '../../Blog/Actions/BlogsActions';
 
+import isCtrlOrCommandKey from '../../utils/isCtrlOrCommandKey';
+
 class BlogList extends Component {
 
     constructor() {
@@ -12,10 +14,12 @@ class BlogList extends Component {
         this.onItemClick = this.onItemClick.bind(this);
     }
 
-    onItemClick() {
+    onItemClick(e) {
         if (window) {
-            window.scrollTo(0, 0);
-            this.props.dispatch(removeFocusPost());
+            if (!isCtrlOrCommandKey(e)) {
+                window.scrollTo(0, 0);
+                this.props.dispatch(removeFocusPost());
+            }
         }
     }
 
