@@ -297,23 +297,22 @@ class RecorderFlowContainer extends Component {
         const context = this.getAudioContext();
 
         // the sample rate is in context.sampleRate
-        let audioInput = context.createMediaStreamSource(stream);
+        this.audioInput = context.createMediaStreamSource(stream);
 
         const bufferSize = 2048;
-        let recorder = context.createScriptProcessor(bufferSize, 1, 1);
-        this.recorder = recorder;
+        this.recorder = context.createScriptProcessor(bufferSize, 1, 1);
 
         this.startTimeCounter();
 
-        recorder.onaudioprocess = (e) => {
+        this.recorder.onaudioprocess = (e) => {
             if (!this.isRecording()) return;
 
             const left = e.inputBuffer.getChannelData(0);
             this.uploadChunk(float32ToInt16(left));
         };
 
-        audioInput.connect(recorder);
-        recorder.connect(context.destination);
+        this.audioInput.connect(this.recorder);
+        this.recorder.connect(context.destination);
     }
 
     startTimeCounter() {
@@ -341,11 +340,15 @@ class RecorderFlowContainer extends Component {
     }
 
     stopStreams(stream) {
-
-
         for (let track of stream.getTracks()) {
             track.stop()
         }
+
+        this.recorder.disconnect();
+        this.audioInput.disconnect();
+
+        this.recorder = null;
+        this.audioInput = null;
     }
 
     closeConnection() {
