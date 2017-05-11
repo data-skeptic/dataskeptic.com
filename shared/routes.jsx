@@ -14,6 +14,7 @@ import BlogRouter              from 'Blog/Routes/BlogRouter';
 import Checkout                from 'Checkout/Routes/Checkout/Checkout';
 import Coaching                from 'components/Coaching';
 import Coaching2               from 'components/Coaching2';
+import CoachingBiWeekly        from 'components/CoachingBiWeekly';
 import ContactUs               from 'Contacts/Routes/ContactUs';
 import DontHackMe              from 'components/DontHackMe';
 import Home                    from 'components/Home';
@@ -65,6 +66,12 @@ export default (
         <Route path="/coaching2" name="app" component={App} onEnter={loadData}>
             <IndexRoute component={Coaching2}/>
         </Route>
+        <Route path="/coaching-weekly" name="app" component={App} onEnter={loadData}>
+            <IndexRoute component={Coaching2}/>
+        </Route>
+        <Route path="/coaching-biweekly" name="app" component={App} onEnter={loadData}>
+            <IndexRoute component={CoachingBiWeekly}/>
+        </Route>
         <Route path="/" name="app" component={App} onEnter={loadData}>
             <IndexRoute component={Home}/>
         </Route>
@@ -98,7 +105,6 @@ export default (
         <Route path="/projects" component={App} onEnter={loadData}>
             <IndexRoute component={Projects}/>
         </Route>
-
         <Route path="/rfc" component={App} onEnter={loadData}>
             <IndexRoute component={Proposals}/>
         </Route>

@@ -76,7 +76,7 @@ class Home extends Component {
             <div className="carousel">
               <Slider {...settings}>
                 <div className="card">
-                  <AdvertiserCard />
+                  <AdvertiserCard content={this.props.cardContent}/>
                 </div>
                 <div className="card">
                   <SocialMediaCard />
@@ -98,4 +98,7 @@ class Home extends Component {
   }
 }
 
-export default connect(state => ({ episodes: state.episodes, blogs: state.blogs }))(Home)
+export default connect(state => ({
+    episodes: state.episodes, blogs: state.blogs,
+    cardContent: state.advertise.getIn(['card'])
+}))(Home)
