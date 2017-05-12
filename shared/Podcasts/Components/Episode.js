@@ -5,6 +5,7 @@ import moment from 'moment';
 
 import {redirects_map} from '../../../redirects';
 import {removeFocusPost} from '../../Blog/Actions/BlogsActions';
+import isCtrlOrCommandKey from '../../utils/isCtrlOrCommandKey';
 
 class Episode extends React.Component {
     constructor(props) {
@@ -28,10 +29,12 @@ class Episode extends React.Component {
         return link;
     }
 
-    onEpisodeClick() {
-        window.scrollTo(0, 0);
+    onEpisodeClick(e) {
+        if (!isCtrlOrCommandKey(e)) {
+            window.scrollTo(0, 0);
 
-        this.props.dispatch(removeFocusPost());
+            this.props.dispatch(removeFocusPost());
+        }
     }
 
     render() {

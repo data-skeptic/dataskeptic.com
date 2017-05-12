@@ -214,7 +214,7 @@ class MainView extends React.Component {
             {this.props.children}
             <Sidebar />
           </div>
-          <Footer linkClick={this.onFooterItemClick} />
+          <Footer linkClick={this.onFooterItemClick} banner={this.props.bannerContent}/>
           <Overflow visible={isOverflowMode} onClick={this.onOverflowClick}/>
         </div>
     )
@@ -227,6 +227,7 @@ export default connect(
       isCartVisible: state.cart.getIn(['cart_visible']),
       site: state.site,
       isMobileMenuVisible: state.layout.getIn(['isMobileMenuVisible']),
+      bannerContent: state.advertise.getIn(['banner'])
     }),
     dispatch => bindActionCreators({
       toggleMobileMenu,
