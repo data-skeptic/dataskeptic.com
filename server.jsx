@@ -19,9 +19,12 @@ import {write as writeProposal, upload as uploadProposalFiles}  from 'backend/v1
 import bodyParser                from 'body-parser'
 import compression               from 'compression';
 import { feed_uri }              from 'daos/episodes'
-import { loadBlogs,
-         loadEpisodes,
-         loadProducts }          from 'daos/serverInit'
+import {
+    loadBlogs,
+    loadEpisodes,
+    loadProducts,
+    loadAdvertiseContent
+}  from 'daos/serverInit'
 import express                   from 'express';
 import FileStreamRotator         from 'file-stream-rotator'
 import fs                        from 'fs'
@@ -77,6 +80,8 @@ if (process.env.NODE_ENV !== 'production') {
 console.log(new Date())
 console.log("Environment: ", env)
 
+const DEFAULT_ADVERTISE_HTML = `<img src="/img/default-advertise.jpg"/>`;
+
 let Cache = {
     title_map: {}         // `uri`             -> <title>
     , content_map: {}       // `uri`             -? {s3 blog content}
@@ -85,6 +90,10 @@ let Cache = {
     , episodes_map: {}      // `guid` | 'latest' -> {episode}
     , episodes_list: []     // guids
     , products: {}
+    , advertise: {
+        card: DEFAULT_ADVERTISE_HTML,
+        banner: null
+    }
 };
 
 const reducer  = combineReducers({
@@ -100,7 +109,13 @@ const doRefresh = (store) => {
 
     let env = global.env;
 
-    return loadBlogs(env)
+    return loadAdvertiseContent(env)
+        .then(([cardHtml, bannerHtml]) => {
+            Cache.advertise.card = cardHtml ? cardHtml : DEFAULT_ADVERTISE_HTML;
+            Cache.advertise.banner = bannerHtml;
+
+            return loadBlogs(env)
+        })
         .then(function ({folders, blogmetadata_map, title_map, content_map}) {
             console.log("-[Refreshing blogs]-");
 
@@ -150,7 +165,8 @@ const doRefresh = (store) => {
             // fill the data
             Cache.products = {};
             Cache.products.items = products;
-
+        })
+        .then(() => {
             console.log("Refreshing Finished")
         })
         // .then(() => global.gc())
@@ -438,6 +454,20 @@ function updateState(store, pathname) {
     store.dispatch({type: "ADD_FOLDERS", payload: Cache.folders});
     store.dispatch({type: "ADD_BLOGS", payload: {blogs: Cache.blogmetadata_map, total: Cache.blogmetadata_map.length}});
     store.dispatch({type: "SET_BLOGS_LOADED"});
+
+    store.dispatch({
+        type: 'SET_ADVERTISE_CARD_CONTENT',
+        payload: {
+            content: Cache.advertise.card
+        }
+    })
+
+    store.dispatch({
+        type: 'SET_ADVERTISE_BANNER_CONTENT',
+        payload: {
+            content: Cache.advertise.banner
+        }
+    })
 }
 
 app.set('view engine', 'ejs');
@@ -485,6 +515,9 @@ function renderView(store, renderProps, location) {
 const renderPage = (req, res) => {
     if (req.url == '/favicon.ico') {
         return res.redirect(301, 'https://s3.amazonaws.com/dataskeptic.com/favicon.ico')
+    }
+    if (req.url == '/data-skeptic-bonus.xml') {
+        return res.redirect(307, 'https://s3.amazonaws.com/data-skeptic-bonus-feed/data-skeptic-bonus.xml')
     }
     if (req.url.indexOf('/src-') > 0) {
         var u = req.url
