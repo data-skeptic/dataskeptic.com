@@ -98,7 +98,7 @@ export function initError() {
 export function ready() {
     return (dispatch) => {
         dispatch(readyRequest());
-        setTimeout(() => dispatch(changeStep(steps.READY)), STEP_CHANGIN_DELAY);
+        dispatch(changeStep(steps.READY));
     }
 }
 

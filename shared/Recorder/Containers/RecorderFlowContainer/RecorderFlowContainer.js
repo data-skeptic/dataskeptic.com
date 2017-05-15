@@ -440,7 +440,7 @@ class RecorderFlowContainer extends Component {
                             />
 
                             <div className="buttons">
-                                <button type="button" onClick={this.discardRecord} disabled={!isMetaReady}
+                                <button type="button" onClick={this.discardRecord}
                                         className="btn btn-recording-discard btn-xs">
                                     <i className="fa fa-undo" aria-hidden="true"/> Discard and record again
                                 </button>
