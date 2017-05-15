@@ -124,7 +124,7 @@ const run = () => {
             console.log('writing in:', filePath);
             let fileWriter = new wav.FileWriter(filePath, {
                 channels: 1,
-                sampleRate: 41100,
+                sampleRate: 48000,
                 bitDepth: 16
             });
 
