@@ -295,7 +295,6 @@ class RecorderFlowContainer extends Component {
     initRecorderSuccess(stream) {
         this.browserStream = stream;
         const context = this.getAudioContext();
-        alert('system sample rate is ' + context.sampleRate);
 
         // the sample rate is in context.sampleRate
         this.audioInput = context.createMediaStreamSource(stream);

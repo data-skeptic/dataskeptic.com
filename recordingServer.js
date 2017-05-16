@@ -138,8 +138,12 @@ const run = () => {
             completeRecording(id);
             uploadToS3(filePath, id, (err, data) => {
                 if (err) {
+                    console.log('error')
                     console.error(err);
                 } else {
+                    console.log('success')
+                    console.dir(data);
+
                     console.log('Success upload to S3', id);
                     clearRecordingPath(id);
                 }

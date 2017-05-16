@@ -35,6 +35,10 @@ module.exports = {
             return;
         }
 
+        return res.send({
+            ready: true
+        });
+
         recordingExist(recordId)
             .then((data) => {
                 res.send({
