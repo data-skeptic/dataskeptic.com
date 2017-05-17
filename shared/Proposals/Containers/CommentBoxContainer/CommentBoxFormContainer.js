@@ -41,7 +41,9 @@ import Wizard from '../../../Wizard';
 import Debug from '../../../Debug';
 
 import json from '../../../../global-config.json';
+import awsConf from '../../../../awsconfig.json';
 const AWS_BUCKET = json.aws_proposals_bucket;
+const AWS_REGION = awsConf.region;
 
 class CommentBoxFormContainer extends Component {
 
@@ -88,8 +90,9 @@ class CommentBoxFormContainer extends Component {
         this.props.changeCommentType(type);
     }
 
-    recordingReady() {
-        this.props.ready();
+    recordingReady(noDelay) {
+        debugger;
+        this.props.ready(noDelay);
     }
 
     recorderRecording() {
@@ -99,7 +102,8 @@ class CommentBoxFormContainer extends Component {
     recorderStop(id) {
         this.props.recordingFinish(id);
 
-        const recordingUrl = `https://s3.amazonaws.com/${AWS_BUCKET}/${id}`;
+        debugger;
+        const recordingUrl = `https://s3-${AWS_REGION}.amazonaws.com/${AWS_BUCKET}/${id}`;
         this.props.reviewRecording(recordingUrl);
     }
 

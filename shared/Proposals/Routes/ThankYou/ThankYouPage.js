@@ -12,7 +12,7 @@ class ProposalsThankYouPage extends Component {
 
     componentWillMount() {
         const dispatch = this.props.dispatch;
-        const {title} = Proposals.getPageMeta();
+        const {title} = ProposalsThankYouPage.getPageMeta();
         this.props.changePageTitle(title);
     }
 

@@ -88,6 +88,7 @@ class RecorderFlowContainer extends Component {
 
     componentWillMount() {
         this.controlFlow(this.props);
+        this.props.getNextId();
     }
 
     componentDidMount() {
@@ -121,7 +122,6 @@ class RecorderFlowContainer extends Component {
         console.log('onInit()');
 
         if (this.isBrowserSupportRecording()) {
-            this.props.getNextId();
             this.props.ready();
         } else {
             this.props.error({
@@ -169,6 +169,8 @@ class RecorderFlowContainer extends Component {
         console.log('onReview()');
 
         this.audioController.src = this.props.submittedUrl + '.wav';
+
+        debugger;
 
         this.audioController.onloadedmetadata = () => {
             this.setState({metaReady: true});
@@ -229,6 +231,7 @@ class RecorderFlowContainer extends Component {
 
         if (!this.isRecording()) {
             this.props.recording();
+            this.props.updateRecordingDuration('00:00:00');
             this.props.startRecording(id, chunkId);
         } else {
             this.props.stop(id);
@@ -254,7 +257,8 @@ class RecorderFlowContainer extends Component {
     }
 
     discardRecord() {
-        this.props.ready();
+        this.pauseAudio();
+        this.props.ready(true);
         this.props.resetRecording();
         this.props.getNextId();
 
@@ -357,8 +361,6 @@ class RecorderFlowContainer extends Component {
     }
 
     togglePlaying() {
-        const audioUrl = 'https://s3.amazonaws.com/proposals-recordings/06ce324f-047b-4ce9-a406-5a7f2bf47a13';
-
         if (this.isPlaying()) {
             this.pauseAudio();
         } else {

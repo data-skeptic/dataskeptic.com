@@ -95,10 +95,11 @@ export function initError() {
 /**
  * READY
  */
-export function ready() {
+export function ready(noDelay) {
     return (dispatch) => {
         dispatch(readyRequest());
-        dispatch(changeStep(steps.READY));
+        const delay = noDelay ? 300 : STEP_CHANGIN_DELAY;
+        setTimeout(() => dispatch(changeStep(steps.READY)), 300);
     }
 }
 

@@ -16,7 +16,7 @@ const getRandomId = () => v4();
 // const getRandomId = () => 'test';
 
 const defaultState = {
-    id: getRandomId(),
+    id: 'Undefined Record ID // error',
     chunkId: INITIAL_CHUNK_ID_VAL,
     startedAt: null,
     isRecording: false,
