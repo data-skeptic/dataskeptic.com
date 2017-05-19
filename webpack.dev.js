@@ -7,7 +7,7 @@ import prodCfg              from './webpack.prod.config.js';
 Object.assign = assign;
 
 const BABEL_QUERY = {
-  presets: ['react', 'es2015'],
+  presets: ['react', 'es2015', 'stage-0'],
   plugins: [
     ['transform-object-rest-spread'],
     ['transform-class-properties'],
