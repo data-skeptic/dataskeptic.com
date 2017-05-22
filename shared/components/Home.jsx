@@ -12,6 +12,7 @@ import EpisodeCard from "./EpisodeCard"
 import LatestBlogCard from "../Blog/Containers/LatestBlogCard"
 import LatestEpisodePlayer from "../Blog/Containers/LatestEpisodePlayer"
 
+import {changePageTitle} from '../Layout/Actions/LayoutActions';
 import {get_homepage_content} from '../utils/redux_loader'
 
 /*
@@ -25,10 +26,18 @@ import {get_homepage_content} from '../utils/redux_loader'
 
 class Home extends Component {
 
-  componentDidMount() {
-      var dispatch = this.props.dispatch
-      // this will be not work
-      get_homepage_content(dispatch)
+  componentWillMount() {
+      var dispatch = this.props.dispatch;
+      get_homepage_content(dispatch);
+
+      const {title} = Home.getPageMeta();
+      dispatch(changePageTitle(title));
+  }
+
+  static getPageMeta() {
+      return {
+          title: 'Data Skeptic'
+      }
   }
 
   render() {
@@ -67,7 +76,7 @@ class Home extends Component {
             <div className="carousel">
               <Slider {...settings}>
                 <div className="card">
-                  <AdvertiserCard />
+                  <AdvertiserCard content={this.props.cardContent}/>
                 </div>
                 <div className="card">
                   <SocialMediaCard />
@@ -89,4 +98,7 @@ class Home extends Component {
   }
 }
 
-export default connect(state => ({ episodes: state.episodes, blogs: state.blogs }))(Home)
+export default connect(state => ({
+    episodes: state.episodes, blogs: state.blogs,
+    cardContent: state.advertise.getIn(['card'])
+}))(Home)

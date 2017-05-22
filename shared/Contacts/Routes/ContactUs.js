@@ -7,10 +7,25 @@ import axios from 'axios';
 
 import ContactFormContainer from '../Containers/ContactFormContainer/ContactFormContainer';
 
+import {changePageTitle} from '../../Layout/Actions/LayoutActions';
+
 class ContactUs extends React.Component {
 	constructor(props) {
 		super(props)
 	}
+
+    componentDidMount() {
+        const {dispatch} = this.props;
+        const {title} = ContactUs.getPageMeta(this.props);
+        dispatch(changePageTitle(title));
+    }
+
+    static getPageMeta() {
+        return {
+            title: 'Contact Us | Data Skeptic',
+			description: 'We hope to respond to all inquiries, but sometimes the volume of incoming questions can cause our queue to explode. We prioritize responses to Data Skeptic members first, and to those who ask questions in a public forum like Twitter, our Facebook wall (not Facebook direct message), or Slack. Many people can benefit from responses in public places.'
+        }
+    }
 
 	onChangeEmail(event) {
 		console.log(event)

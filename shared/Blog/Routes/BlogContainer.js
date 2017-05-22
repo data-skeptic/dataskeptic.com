@@ -22,6 +22,9 @@ import Container from '../../Layout/Components/Container/Container';
 import Content from '../../Layout/Components/Content/Content';
 import SideBar from '../../Layout/Components/SideBar/SideBar';
 
+import {changePageTitle} from '../../Layout/Actions/LayoutActions';
+import isCtrlOrCommandKey from '../../utils/isCtrlOrCommandKey';
+
 const DEFAULT_ACTIVE_FOLDER = 'All';
 import BLOGS_NAV_MAP from '../Constants/navMap';
 
@@ -33,6 +36,12 @@ class BlogContainer extends Component {
         this.fetchPosts = this.fetchPosts.bind(this);
         this.onPaginatorPageClick = this.onPaginatorPageClick.bind(this);
         this.onNavClick = this.onNavClick.bind(this);
+    }
+
+    static getPageMeta() {
+        return {
+            title: 'Blogs | Data Skeptic'
+        }
     }
 
     fetchPosts(pageNum = 1) {
@@ -68,14 +77,19 @@ class BlogContainer extends Component {
         } else {
             this.fetchPosts(this.props.pageNum);
         }
+
+        const {title} = BlogContainer.getPageMeta();
+        this.props.changePageTitle(title);
     }
 
     onPaginatorPageClick(pageNum) {
         if (window) {
-            window.scrollTo(0, 0);
+            if (!isCtrlOrCommandKey(e)) {
+                this.fetchPosts(pageNum);
+                window.scrollTo(0, 0);
+            }
         }
 
-        this.fetchPosts(pageNum);
     }
 
     remove_type(typ, arr) {
@@ -116,8 +130,8 @@ class BlogContainer extends Component {
         this.fetchAllPosts();
     }
 
-    getPageTitle(activeFolder) {
-        const {pageNum} = this.props;
+    static getPageTitle(props, activeFolder) {
+        const {pageNum} = props;
         const activeFolderIsDefault = (activeFolder === DEFAULT_ACTIVE_FOLDER);
         const folderTranscription = BLOGS_NAV_MAP[activeFolder];
 
@@ -167,7 +181,7 @@ class BlogContainer extends Component {
         }
 
 
-        const contentTitle = this.getPageTitle(activeFolder);
+        const contentTitle = BlogContainer.getPageTitle(this.props, activeFolder);
         const latestBlogId = oblogs.latestId;
 
         return (
@@ -214,7 +228,8 @@ export default connect(
         blogs: state.blogs,
     }),
     (dispatch) => (bindActionCreators({
-        loadBlogs
+        loadBlogs,
+        changePageTitle
     }, dispatch))
 )(BlogContainer)
 

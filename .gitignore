@@ -3,6 +3,8 @@ logs
 *.log
 npm-debug.log*
 
+.ipynb_checkpoints/
+
 public/bundle.js
 
 .DS_Store

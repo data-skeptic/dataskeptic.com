@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=production NODE_PATH=$NODE_PATH:./shared node --harmony --expose-gc .",
-    "dev": "NODE_PATH=$NODE_PATH:./shared node --harmony --expose-gc .",
+    "dev": "NODE_PATH=$NODE_PATH:./shared node --harmony --expose-gc --debug .",
     "prod": "webpack --progress --color -p --config webpack.prod.config.js",
     "build": "webpack --progress --color -p --config webpack.prod.config.js"
   },
@@ -30,6 +30,7 @@
     "classnames": "^2.2.5",
     "compression": "^1.6.2",
     "css-loader": "^0.26.2",
+    "ejs": "^2.5.6",
     "exports-loader": "^0.6.2",
     "express": "^4.13.3",
     "file-stream-rotator": "0.0.7",
@@ -65,6 +66,7 @@
     "redux-react-router": "^1.0.0-beta3",
     "redux-thunk": "^2.1.0",
     "rss": "^1.2.2",
+    "sha1": "^1.1.1",
     "showdown": "^1.6.0",
     "source-map-loader": "^0.1.5",
     "stripe": "^4.14.0",

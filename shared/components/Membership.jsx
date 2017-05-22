@@ -8,6 +8,8 @@ import LightsOut from './LightsOut'
 
 import {get_products} from '../utils/redux_loader'
 
+import {changePageTitle} from '../Layout/Actions/LayoutActions';
+
 class Membership extends Component {
 	constructor(props, context) {
 		super(props, context)
@@ -19,7 +21,18 @@ class Membership extends Component {
 		if (oproducts.products.length == 0) {
 			get_products(this.props.dispatch)			
 		}
-	}
+
+        const {dispatch} = this.props;
+        const {title} = Membership.getPageMeta();
+
+        dispatch(changePageTitle(title));
+    }
+
+    static getPageMeta() {
+        return {
+            title: 'Membership | Data Skeptic'
+        }
+    }
 
 	addToCart(product) {
 		console.log("addToCart")

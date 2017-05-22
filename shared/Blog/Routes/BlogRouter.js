@@ -5,6 +5,8 @@
 import React from "react"
 import ReactDOM from "react-dom"
 import { connect } from 'react-redux'
+import isUndefined from 'lodash/isUndefined';
+import { redirects_map } from '../../../redirects';
 
 import NotFound from '../../NotFound/Components/NotFound'
 import BlogArticle from "../Containers/BlogArticle"
@@ -15,10 +17,44 @@ import Loading from "../../Common/Components/Loading"
 import transform_pathname from "../../utils/transform_pathname"
 import getBlog from "../../daos/getBlog"
 
+import {changePageTitle} from '../../Layout/Actions/LayoutActions';
+
 class BlogRouter extends React.Component {
+
 	constructor(props) {
 		super(props)
 	}
+
+    componentDidMount() {
+        const {dispatch} = this.props;
+        const {title} = BlogRouter.getPageMeta(this.props);
+        dispatch(changePageTitle(title));
+    }
+
+    static getPageMeta(state) {
+		// TODO: add 404 api method and provide not found page
+		const isExists = state.blogs.getIn(['blog_focus', 'blog']);
+		if (!isExists) {
+			return {
+				title: 'Data Skeptic',
+				description: ''
+			}
+		}
+
+		const post = state.blogs.getIn(['blog_focus', 'blog']).toJS();
+        const isEpisode = !isUndefined(post.guid);
+
+        let meta = {
+            title: `${post.title} | Data Skeptic`,
+			description: post.desc
+        };
+
+        if (isEpisode) {
+			meta.image = post.preview;
+		}
+
+        return meta;
+    }
 
 	componentDidMount() {
 		var dispatch = this.props.dispatch
@@ -63,6 +99,10 @@ class BlogRouter extends React.Component {
 		/*
 			Must be a blog page if we got here
 		*/
+		var redirect = redirects_map[pathname]
+		if (redirect) {
+			pathname = redirect
+		}
 
 		return (
 			<div className="center">

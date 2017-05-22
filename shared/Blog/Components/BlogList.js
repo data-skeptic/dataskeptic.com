@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router'
+import { connect } from 'react-redux';
 
 import BlogListItem from "./BlogListItem"
+import { removeFocusPost } from '../../Blog/Actions/BlogsActions';
 
-export default class BlogList extends Component {
+import isCtrlOrCommandKey from '../../utils/isCtrlOrCommandKey';
+
+class BlogList extends Component {
 
     constructor() {
         super();
@@ -11,9 +14,12 @@ export default class BlogList extends Component {
         this.onItemClick = this.onItemClick.bind(this);
     }
 
-    onItemClick() {
+    onItemClick(e) {
         if (window) {
-            window.scrollTo(0, 0);
+            if (!isCtrlOrCommandKey(e)) {
+                window.scrollTo(0, 0);
+                this.props.dispatch(removeFocusPost());
+            }
         }
     }
 
@@ -29,3 +35,5 @@ export default class BlogList extends Component {
         )
     }
 }
+
+export default connect(state => ({  }))(BlogList)
