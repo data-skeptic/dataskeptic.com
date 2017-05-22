@@ -1,40 +1,52 @@
 const express = require('express');
-const router = express.Router();
+const BlogServices = require('../../modules/blog/services/BlogServices');
 
-const BlogServices = require('../../modules/blog/services/BlogService');
 
 const generatePrettyName = (category, year, name) => `/${category}/${year}/${name}`;
 
-router.get('/', (req, res) => {
-    BlogServices.getAll()
-        .then((posts) => {
-            res.send(posts);
-        })
-        .catch((err) => {
-            res.send(err);
-        })
-});
+module.exports = (cache) => {
+    const router = express.Router();
 
-router.get('/:category/:year/:name', (req, res) => {
-    const prettyName = generatePrettyName(req.params.category, req.params.year, req.params.name);
+    router.get('/', (req, res) => {
+        const params = req['params'];
+        const query = req.query;
 
-    BlogServices.getPost(prettyName)
-        .then((data) => {
-            res.send(data);
-        })
-        .catch((err) => {
-            res.send(err);
-        })
-});
+        let url = req.url;
+        const x = req.url.indexOf('?');
+        if (x > 0) {
+            url = url.substring(0, x)
+        }
 
-router.get('/categories', (req, res) => {
-    BlogServices.getCategories()
-        .then((categories) => {
-            res.send(categories);
-        })
-        .catch((err) => {
-            res.send(err);
-        })
-});
+        const offset = query['offset'] || 0;
+        const limit = query['limit'] || 10;
 
-module.exports = router;
+        const pre = '/api/v1/blogs';
+        url = url.substring(pre.length, url.length);
+
+
+        BlogServices.getAll(url, cache.blogmetadata_map, offset, limit, "DEV")
+            .then((data) => {
+                res.send(data);
+            })
+            .catch((err) => {
+                res.send(err);
+            })
+    });
+
+
+
+    router.get('/:category/:year/:name', (req, res) => {
+        const prettyName = generatePrettyName(req.params.category, req.params.year, req.params.name);
+
+        BlogServices.getPost(cache.blogmetadata_map, prettyName, cache.content_map)
+            .then((data) => {
+                res.send(data);
+            })
+            .catch((err) => {
+                res.send(err);
+            })
+    });
+
+    return router;
+}
+

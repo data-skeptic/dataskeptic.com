@@ -1,11 +1,6 @@
-const list = require('../constants/list');
+import list from "../constants/list"
 
-const EMPTY_CONTRIBUTOR = {};
-
-export const getByAuthor = (author='') => {
-    return list[author.toLowerCase()] || EMPTY_CONTRIBUTOR;
+ export const getContributorByName = (name) => {
+    return  Promise.resolve(list[name]);
 };
 
-export const getAll = () => {
-    return Promise.resolve(list);
-};
