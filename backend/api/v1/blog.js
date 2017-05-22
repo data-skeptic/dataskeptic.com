@@ -24,7 +24,7 @@ module.exports = (cache) => {
         url = url.substring(pre.length, url.length);
 
 
-        BlogServices.getAll(url, cache.blogmetadata_map, offset, limit, "DEV")
+        BlogServices.getAll(url, cache.blogmetadata_map, offset, limit, global.env)
             .then((data) => {
                 res.send(data);
             })

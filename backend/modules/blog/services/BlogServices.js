@@ -3,6 +3,7 @@ import filter from 'lodash/filter';
 import moment from 'moment';
 import Post from "../models/Post";
 const ContributorsService = require( "../../contributors/services/ContributorsService")
+const RelatedServices = require( "../../related/services/RelatedServices")
 import axios  from 'axios'
 
 const NOT_FOND_ERROR = {
@@ -37,8 +38,6 @@ function isMatchingQuery(blog, {url = '', exclude = [], env}) {
         }
     }
 
-
-
     if (match) {
         match = blog.env === env;
     }
@@ -56,11 +55,13 @@ function compare(dateTimeA, dateTimeB) {
 
 export const getAll = (url, blogmetadata_map, offset, limit, env, exclude = ['/episodes', '/transcripts']) => {
 
+    console.dir("blogs = " + blogmetadata_map);
     // remove unnecessary keys
     let blogs = filter(blogmetadata_map, (blog, id) => !isIgnoredKey(id));
     // filter only relative blogs
+    console.dir("blogs2 = " + blogs);
     blogs = filter(blogs, (blog, id) => isMatchingQuery(blog, {url, exclude, env}));
-
+    console.dir("blogs3 = " + blogs);
     // calculate total matched blogs count
     const total = blogs.length;
 
@@ -68,12 +69,12 @@ export const getAll = (url, blogmetadata_map, offset, limit, env, exclude = ['/e
         // custom sort by publish data
         return compare(b['publish_date'], a['publish_date']);
     });
-
+    console.dir("blogs4 = " + blogs);
     // slice over limits
     blogs = blogs
         .filter((blog, index) => matchingOffset(blog, index, offset))
         .filter((blog, index) => matchingLimit(blog, index, limit));
-
+    console.dir("blogs5 = " + blogs);
     var latestId = "";
     if (Object.keys(blogmetadata_map).length > 0) {
         latestId = blogmetadata_map['latest']['c_hash'];
@@ -93,13 +94,18 @@ export const getAll = (url, blogmetadata_map, offset, limit, env, exclude = ['/e
 const isExist = (blogmetadata_map, prettyName) => !!blogmetadata_map[prettyName];
 
 export const getPost = (blogmetadata_map, prettyName, content_map) => {
+
     let postData = null;
     let author = null;
+    let relative = null;
     if (isExist(blogmetadata_map, prettyName)) {
         const post = blogmetadata_map[prettyName];
         author = post["author"];
+        console.dir("pretty = " + prettyName)
+        relative = prettyName;
         postData = new Post({
-            url: post['prettyname'],
+            prettyname: prettyName,
+
             title: post['title'],
             content: content_map[prettyName] || '',
 
@@ -122,14 +128,16 @@ export const getPost = (blogmetadata_map, prettyName, content_map) => {
 
         });
     }
-
+    console.dir("final = " + "/blog" + relative.toLowerCase());
     return Promise.all([
-        ContributorsService.getContributorByName(author.toLowerCase())
-    ]).then(([contributor]) => {
+        ContributorsService.getContributorByName(author.toLowerCase()),
+        RelatedServices.getRelatedByURI("/blog" + relative.toLowerCase())
+    ]).then(([contributor, relative]) => {
         return postData ?
             {
                 ...postData,
-                contributor
+                contributor,
+                relative
             }
         : NOT_FOND_ERROR
     })
