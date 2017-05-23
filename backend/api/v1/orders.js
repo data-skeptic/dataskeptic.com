@@ -19,7 +19,7 @@ module.exports = (cache) => {
         const offset = query['offset'] || 0;
         const limit = query['limit'] || 10;
 
-        const pre = '/api/v1/blogs';
+        const pre = '/api/v1/orders';
         url = url.substring(pre.length, url.length);
 
         OrdersServices.getAll(url, stripe_key, offset, limit, global.env)
@@ -31,7 +31,7 @@ module.exports = (cache) => {
             })
     });
 
-    router.get('/create', function (req, res) {
+    router.post('/create', function (req, res) {
         OrdersServices.createOrder(req.body, sp_key)
             .then((data) => {
                 res.send(data);

@@ -90,7 +90,7 @@ export const fulFillOrder = (stripe_key, obj) => {
             if (err == null) {
                 console.log("---")
                 console.log(resp)
-               return resolve(JSON.stringify(resp))
+                return resolve(JSON.stringify(resp))
             } else {
                 console.log("===")
                 console.log(err)
@@ -107,42 +107,62 @@ export const createOrder = (obj, key) => {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
         'Authorization': t
     };
-    var instance = axios.create()
-    instance.request({
-        url: 'https://api.scalablepress.com/v2/quote',
-        method: 'POST',
-        headers: {},
-        data: obj,
-        withCredentials: true,
-        auth: {
-            username: '',
-            password: key
-        }
-    }).then(function (resp) {
-        var data = resp['data']
-        var status = resp['status']
-        if (status == 200) {
-            var orderIssues = data['orderIssues']
-            if (orderIssues != undefined && orderIssues.length > 0) {
-                var resp = {status: "Order Issues", "response": resp}
-                return resp
-            } else {
-                var orderToken = data['orderToken']
-                console.log("orderToken=" + orderToken)
-                var i2 = axios.create()
-                var obj2 = {orderToken}
-                i2.request({
-                    url: 'https://api.scalablepress.com/v2/order',
-                    method: 'POST',
-                    headers: {},
-                    data: obj2,
-                    withCredentials: true,
-                    auth: {
-                        username: '',
-                        password: key
-                    }
-                })
+
+    return new Promise((resolve, reject) => {
+
+        var instance = axios.create()
+        instance.request({
+            url: 'https://api.scalablepress.com/v2/quote',
+            method: 'POST',
+            headers: {},
+            data: obj,
+            withCredentials: true,
+            auth: {
+                username: '',
+                password: key
             }
-        }
+        }).then(function (resp) {
+            var data = resp['data']
+            var status = resp['status']
+            if (status === 200) {
+                var orderIssues = data['orderIssues']
+                if (orderIssues !== undefined && orderIssues.length > 0) {
+                    var resp = {status: "Order Issues", "response": resp}
+                    return reject(JSON.stringify(resp))
+                } else {
+                    var orderToken = data['orderToken']
+                    console.log("orderToken=" + orderToken)
+                    var i2 = axios.create()
+                    var obj2 = {orderToken}
+                    i2.request({
+                        url: 'https://api.scalablepress.com/v2/order',
+                        method: 'POST',
+                        headers: {},
+                        data: obj2,
+                        withCredentials: true,
+                        auth: {
+                            username: '',
+                            password: key
+                        }
+                    }).then(function (resp) {
+                        console.log("order complete")
+                        return resolve(JSON.stringify(resp))
+                    })
+                        .catch((err) => {
+                            console.log(err)
+                            var resp = {status: "Last Step Error", "response": err}
+                            return reject(JSON.stringify(resp))
+                        })
+                }
+            } else {
+                var resp = {status: "Status Not OK", "response": resp}
+                return reject(JSON.stringify(resp))
+            }
+        })
+            .catch((err) => {
+                console.log(err)
+                var resp = {status: "Error", "response": err}
+                return reject(JSON.stringify(resp))
+            })
     })
 };
