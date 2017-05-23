@@ -191,7 +191,10 @@ class BlogContainer extends Component {
                 <Container>
                     <Content title={contentTitle}>
                         { isLoading
-                            ? <ListPreloader />
+                            ? <div>
+                               <ListPreloader />
+                               <ListPreloader />
+                               <ListPreloader /></div>                                                                                                                     
                             : <BlogList blogs={blogs} latestId={latestBlogId}/>
                         }
                     </Content>
