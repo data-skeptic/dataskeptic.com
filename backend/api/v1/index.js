@@ -9,6 +9,7 @@ module.exports = (cache) => {
     router.use('/related', require('./related')(cache));
     router.use('/orders', require('./orders')(cache));
     router.use('/invoice', require('./invoice')(cache));
+    router.use('/mail', require('./mail')(cache));
 
    return router;
 }
