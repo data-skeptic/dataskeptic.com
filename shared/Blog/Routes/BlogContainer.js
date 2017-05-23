@@ -8,13 +8,13 @@ import BlogList from "../Components/BlogList"
 import BlogNav from "../Components/BlogNav"
 import BlogItem from "../Components/BlogItem"
 import Error from "../../Common/Components/Error"
-import Loading from "../../Common/Components/Loading"
 
 import PaginationContainer from '../../Pagination/Containers/PaginationContainer';
 
 import transform_pathname from "../../utils/transform_pathname"
 
 import {loadBlogs} from '../Actions/BlogsActions';
+import ListPreloader from "../Components/ListPreloader"
 
 import isNaN from 'lodash/isNaN';
 
@@ -183,13 +183,15 @@ class BlogContainer extends Component {
 
         const contentTitle = BlogContainer.getPageTitle(this.props, activeFolder);
         const latestBlogId = oblogs.latestId;
+        // const isLoading = blogs.length === 0;
+        const isLoading = true;
 
         return (
             <div className="blog-page">
                 <Container>
                     <Content title={contentTitle}>
-                        { blogs.length === 0
-                            ? <Loading />
+                        { isLoading
+                            ? <ListPreloader />
                             : <BlogList blogs={blogs} latestId={latestBlogId}/>
                         }
                     </Content>
