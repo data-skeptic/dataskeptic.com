@@ -1,12 +1,15 @@
 const express = require('express');
 import filter from 'lodash/filter';
+const each = require('lodash/each');
 import moment from 'moment';
+const RSS = require('rss');
 import Post from "../models/Post";
+import BlogItem from "../models/BlogItem";
 const map = require('lodash/map');
 const ContributorsService = require("../../contributors/services/ContributorsService")
 const RelatedServices = require("../../related/services/RelatedServices")
 
-
+const BASE_URL = 'https://dataskeptic.com/';
 const NOT_FOUND_ERROR = {
     error: true,
     message: "Not Found"
@@ -67,6 +70,48 @@ const extendBlogsWithContributors = (blogs) => {
 
 
     return Promise.all(extendedBlogs)
+};
+
+export const getCategories = (cache_folders) => {
+
+    return new Promise((resolve ,reject) => {
+        resolve(cache_folders);
+    })
+
+};
+
+export const getBlogRss = (blogmetadata_map, prettyname) => {
+
+    let blogs = blogmetadata_map;
+
+    blogs = filter(blogs, (post) => !!post);
+    blogs = map(blogs, (post) => {
+        return post;
+    });
+
+    let feed = new RSS({
+        title: 'Data Skeptic',
+        description: 'Data Skeptic is your source for a perseptive of scientific skepticism on topics in statistics, machine learning, big data, artificial intelligence, and data science. Our weekly podcast and blog bring you stories and tutorials to help understand our data-driven world.',
+        feed_url: `${BASE_URL}/api/blog/rss`,
+        site_url: BASE_URL,
+        managingEditor: 'Kyle',
+        language: 'en'
+    });
+
+    each(blogs, (blog) => {
+        if (!blog) return;
+
+        if (blog.env === 'master') { // don't share dev on master
+            feed.item(new BlogItem(blog,prettyname));
+        }
+    });
+
+    const xml = feed.xml();
+    return new Promise((resolve, reject) => {
+        resolve(xml);
+    })
+
+
 };
 
 export const getAll = (url, blogmetadata_map, offset, limit, env, exclude = ['/episodes', '/transcripts']) => {

@@ -47,6 +47,28 @@ module.exports = (cache) => {
             })
     });
 
+    router.get('/rss', (req, res) => {
+        const prettyName = generatePrettyName(req.params.category, req.params.year, req.params.name);
+
+        BlogServices.getBlogRss(cache.blogmetadata_map, prettyName)
+            .then((data) => {
+                res.send(data);
+            })
+            .catch((err) => {
+                res.send(err);
+            })
+    });
+
+    router.get('/categories', (req,res) => {
+        BlogServices.getCategories(cache.folders)
+            .then((data) => {
+                res.send(data);
+            })
+            .catch((err) => {
+                res.send(err);
+            })
+    })
+
     return router;
 }
 
