@@ -7,6 +7,8 @@ module.exports = (cache) => {
     router.use('/contributors', require('./contributors')(cache));
     router.use('/episodes', require('./episodes')(cache));
     router.use('/related', require('./related')(cache));
+    router.use('/orders', require('./orders')(cache));
+    router.use('/invoice', require('./invoice')(cache));
 
    return router;
 }
