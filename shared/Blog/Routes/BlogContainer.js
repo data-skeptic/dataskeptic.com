@@ -184,7 +184,6 @@ class BlogContainer extends Component {
         const contentTitle = BlogContainer.getPageTitle(this.props, activeFolder);
         const latestBlogId = oblogs.latestId;
         const isLoading = blogs.length === 0;
-        // const isLoading = true;
 
         return (
             <div className="blog-page">
