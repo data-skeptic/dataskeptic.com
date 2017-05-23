@@ -14,7 +14,7 @@ import PaginationContainer from '../../Pagination/Containers/PaginationContainer
 import transform_pathname from "../../utils/transform_pathname"
 
 import {loadBlogs} from '../Actions/BlogsActions';
-import ListPreloader from "../Components/ListPreloader"
+import LoadingBlogList from "../Components/LoadingBlogList"
 
 import isNaN from 'lodash/isNaN';
 
@@ -183,18 +183,15 @@ class BlogContainer extends Component {
 
         const contentTitle = BlogContainer.getPageTitle(this.props, activeFolder);
         const latestBlogId = oblogs.latestId;
-        // const isLoading = blogs.length === 0;
-        const isLoading = true;
+        const isLoading = blogs.length === 0;
+        // const isLoading = true;
 
         return (
             <div className="blog-page">
                 <Container>
                     <Content title={contentTitle}>
                         { isLoading
-                            ? <div>
-                               <ListPreloader />
-                               <ListPreloader />
-                               <ListPreloader /></div>                                                                                                                     
+                            ? <LoadingBlogList length={5}/>
                             : <BlogList blogs={blogs} latestId={latestBlogId}/>
                         }
                     </Content>

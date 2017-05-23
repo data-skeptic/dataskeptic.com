@@ -33,7 +33,9 @@ class BlogListItem extends Component {
         return (
             <div className="col-xs-12">
 	            <div className="blog-summary" key={blog.uri}>
-                    <div className="blog-date">{date}</div>
+                    <div>
+                        <span className="blog-date">{date}</span>
+                    </div>
 	                <Link className="blog-title" to={link} onClick={ onClick }>{blog.title}</Link>
 	                <p className="blog-desc">
                         {blog.desc}
