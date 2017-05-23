@@ -1,9 +1,11 @@
 const express = require('express');
-const router = express.Router();
-
+const map = require('lodash/map');
 const EpisodesServices = require('../../modules/episodes/services/EpisodesServices');
+
 module.exports = (cache) => {
+
     const router = express.Router();
+
     router.get('/list', function (req, res) {
 
         const params = req['params'];
@@ -30,8 +32,18 @@ module.exports = (cache) => {
             })
     });
 
-    router.get('/latest', function (req, res) {
-        res.send('Latest episodes');
+    router.get('/:guid', function (req, res) {
+
+
+        EpisodesServices.getEpisode(cache.episodes_map, req.params.guid)
+            .then((episodes) => {
+                res.send(episodes);
+            })
+            .catch((err) => {
+                res.send(err);
+            })
     });
+
     return router
+
 };

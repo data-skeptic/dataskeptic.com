@@ -1,6 +1,10 @@
 const ignoredKeys = ['latest', 'guid'];
 import filter from 'lodash/filter';
 import moment from 'moment';
+const NOT_FOUND_ERROR = {
+    error: true,
+    message: "Not Found"
+};
 function isIgnoredKey(key) {
     return ignoredKeys.includes(key);
 }
@@ -19,7 +23,7 @@ function compare(dateTimeA, dateTimeB) {
     else if (momentA < momentB) return -1;
     else return 0;
 }
-const isExist = (episodes_list, prettyName) => !!episodes_list[prettyName];
+const isExist = (episodes_list, guid) => !!episodes_list[guid];
 import Episode from "../models/Episode";
 
 /*function isMatchingQuery(blog, {url = '', exclude = [], env}) {
@@ -80,6 +84,38 @@ export const getAll = (url, episodes_list, offset, limit, env, exclude = ['/epis
 
 };
 
-export const getEpisode = () => {
+export const getEpisode = (episode_map,guid) => {
+    let episodeData;
+    if (isExist(episode_map, guid)) {
+        const episode = episode_map[guid];
 
+        episodeData = new Episode({
+
+            title: episode['title'],
+            desc: episode['desc'],
+
+            pubDate: episode['pubDate'],
+
+            mp3: episode['mp3'],
+            duration: episode['duration'],
+
+            img: episode['img'],
+
+            guid: episode['guid'],
+            link: episode['link'],
+            num: episode['num']
+
+
+
+        });
+
+
+
+    }
+    let data = episodeData ? episodeData : NOT_FOUND_ERROR;
+    return new Promise((resolve, reject) => {
+        resolve({
+            data
+        })
+    })
 };

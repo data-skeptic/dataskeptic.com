@@ -1,16 +1,19 @@
 const express = require('express');
-const router = express.Router();
 
-const RelatedService = require('../../modules/related/services/RelatedService');
+const RelatedService = require('../../modules/related/services/RelatedServices');
 
-router.get('/', function(req, res) {
-    RelatedService.getAll()
-        .then((contributors) => {
-            res.send(contributors);
-        })
-        .catch((err) => {
-            res.send(err);
-        })
-});
+module.exports = (cache) => {
 
-module.exports = router;
+    const router = express.Router();
+
+    router.get('/', function (req, res) {
+        RelatedService.getAll()
+            .then((contributors) => {
+                res.send(contributors);
+            })
+            .catch((err) => {
+                res.send(err);
+            })
+    });
+    return router;
+}

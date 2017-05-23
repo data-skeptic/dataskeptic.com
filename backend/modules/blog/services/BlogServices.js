@@ -7,7 +7,7 @@ const ContributorsService = require("../../contributors/services/ContributorsSer
 const RelatedServices = require("../../related/services/RelatedServices")
 
 
-const NOT_FOND_ERROR = {
+const NOT_FOUND_ERROR = {
     error: true,
     message: "Not Found"
 };
@@ -157,7 +157,7 @@ export const getAll = (url, blogmetadata_map, offset, limit, env, exclude = ['/e
                     contributor,
                     relative
                 }
-                : NOT_FOND_ERROR
+                : NOT_FOUND_ERROR
         })
     }
 
