@@ -2,9 +2,10 @@ const express = require('express');
 import filter from 'lodash/filter';
 import moment from 'moment';
 import Post from "../models/Post";
-const ContributorsService = require( "../../contributors/services/ContributorsService")
-const RelatedServices = require( "../../related/services/RelatedServices")
-import axios  from 'axios'
+const map = require('lodash/map');
+const ContributorsService = require("../../contributors/services/ContributorsService")
+const RelatedServices = require("../../related/services/RelatedServices")
+
 
 const NOT_FOND_ERROR = {
     error: true,
@@ -46,12 +47,27 @@ function isMatchingQuery(blog, {url = '', exclude = [], env}) {
 }
 
 function compare(dateTimeA, dateTimeB) {
-    const momentA = moment(dateTimeA,"YYYY-MM-DD");
-    const momentB = moment(dateTimeB,"YYYY-MM-DD");
+    const momentA = moment(dateTimeA, "YYYY-MM-DD");
+    const momentB = moment(dateTimeB, "YYYY-MM-DD");
     if (momentA > momentB) return 1;
     else if (momentA < momentB) return -1;
     else return 0;
 }
+
+const extendBlogsWithContributors = (blogs) => {
+    const extendedBlogs = blogs.map((blog) => {
+        const author = blog.author;
+
+        return ContributorsService.getContributorByName(author)
+            .then((contributor) => {
+                blog.contributor = contributor;
+                return blog;
+            })
+    });
+
+
+    return Promise.all(extendedBlogs)
+};
 
 export const getAll = (url, blogmetadata_map, offset, limit, env, exclude = ['/episodes', '/transcripts']) => {
 
@@ -80,67 +96,70 @@ export const getAll = (url, blogmetadata_map, offset, limit, env, exclude = ['/e
         latestId = blogmetadata_map['latest']['c_hash'];
     }
 
-
-    return new Promise((resolve, reject) => {
-        resolve({
-            env,
-            blogs,
-            total,
-            latestId
-        })
-    })
-};
-
-const isExist = (blogmetadata_map, prettyName) => !!blogmetadata_map[prettyName];
-
-export const getPost = (blogmetadata_map, prettyName, content_map) => {
-
-    let postData = null;
-    let author = null;
-    let relative = null;
-    if (isExist(blogmetadata_map, prettyName)) {
-        const post = blogmetadata_map[prettyName];
-        author = post["author"];
-        console.dir("pretty = " + prettyName)
-        relative = prettyName;
-        postData = new Post({
-            prettyname: prettyName,
-
-            title: post['title'],
-            content: content_map[prettyName] || '',
-
-            isEpisode: post['isEpisode'] || false,
-
-            contributor: post['contributor'],
-            related: post['related'],
-
-            rendered: post['rendered'],
-
-            discoveredAt: post['date_discovered'],
-            renderedAt: post['last_rendered'],
-            publishedAt: post['publish_date'],
-
-            author: post['author'],
-
-            env: post['env'],
-            desc : post['desc'],
-
-
-        });
-    }
-    console.dir("final = " + "/blog" + relative.toLowerCase());
     return Promise.all([
-        ContributorsService.getContributorByName(author.toLowerCase()),
-        RelatedServices.getRelatedByURI("/blog" + relative.toLowerCase())
-    ]).then(([contributor, relative]) => {
-        return postData ?
-            {
-                ...postData,
-                contributor,
-                relative
-            }
-        : NOT_FOND_ERROR
-    })
+        extendBlogsWithContributors(blogs)
+    ]).then(([posts]) => {
+        return new Promise((resolve, reject) => {
+            resolve({
+                env,
+                posts,
+                total,
+                latestId
+            })
+        })
+    });
 };
+    const isExist = (blogmetadata_map, prettyName) => !!blogmetadata_map[prettyName];
+
+    export const getPost = (blogmetadata_map, prettyName, content_map) => {
+
+        let postData = null;
+        let author = null;
+        let relative = null;
+        if (isExist(blogmetadata_map, prettyName)) {
+            const post = blogmetadata_map[prettyName];
+            author = post["author"];
+            console.dir("pretty = " + prettyName)
+            relative = prettyName;
+            postData = new Post({
+                prettyname: prettyName,
+
+                title: post['title'],
+                content: content_map[prettyName] || '',
+
+                isEpisode: post['isEpisode'] || false,
+
+                contributor: post['contributor'],
+                related: post['related'],
+
+                rendered: post['rendered'],
+
+                discoveredAt: post['date_discovered'],
+                renderedAt: post['last_rendered'],
+                publishedAt: post['publish_date'],
+
+                author: post['author'],
+
+                env: post['env'],
+                desc: post['desc'],
+
+
+            });
+        }
+        console.dir("final = " + "/blog" + relative.toLowerCase());
+        return Promise.all([
+            ContributorsService.getContributorByName(author.toLowerCase()),
+            RelatedServices.getRelatedByURI("/blog" + relative.toLowerCase())
+        ]).then(([contributor, relative]) => {
+            return postData ?
+                {
+                    ...postData,
+                    contributor,
+                    relative
+                }
+                : NOT_FOND_ERROR
+        })
+    }
+
 
 
