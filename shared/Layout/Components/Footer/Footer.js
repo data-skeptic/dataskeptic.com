@@ -2,6 +2,7 @@ import React from "react"
 import AdSense from 'react-adsense'
 import { Link } from 'react-router'
 import ReactDOM from "react-dom"
+import sha1 from 'sha1';
 
 import NavLink from '../../../components/NavLink'
 
@@ -16,10 +17,13 @@ const LINKS = {
 	YOUTUBE: 'https://youtube.com/dataskeptic'
 };
 
-export const Footer = ({ foo, pathname, linkClick }) => (
+export const Footer = ({ foo, pathname, linkClick, banner=null }) => (
 	<div>
 		<div className="advert center">
-			<AdSense.Google client='ca-pub-4495792015968395' slot='2320193863' />
+			{banner
+				? <div key={sha1(banner)} dangerouslySetInnerHTML={{__html: banner}}/>
+				: <AdSense.Google client='ca-pub-4495792015968395' slot='2320193863' />
+			}
 		</div>
 		<div className="footer">
 			<div className="container">
