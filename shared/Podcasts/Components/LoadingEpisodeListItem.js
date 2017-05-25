@@ -10,7 +10,7 @@ class LoadingEpisodeListItem extends Component {
         const {id, link, title, date, desc} = this.props;
 
         return (
-            <div className="row episode">
+            <div className="row episode loading">
                 <div className="col-xs-12 col-sm-3 episode-left preloader">
                     <img className="episode-img" src="/img/blank.gif"/>
                 </div>

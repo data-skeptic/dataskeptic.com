@@ -11,7 +11,7 @@ class LoadingBlogListItem extends Component {
 
         return (
             <div className="col-xs-12">
-                <div className="blog-summary">
+                <div className="blog-summary loading">
                     <div>
                         <span className="blog-date preloader">{date}</span>
                     </div>
