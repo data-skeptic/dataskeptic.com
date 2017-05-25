@@ -12,6 +12,8 @@ module.exports = (cache) => {
     router.use('/mail', require('./mail')(cache));
     router.use('/store', require('./store')(cache));
     router.use('/slack', require('./slack')(cache));
+    router.use('/rfc', require('./rfc')(cache));
+    router.use('/refresh', require('./refresh')(cache));
 
    return router;
 }

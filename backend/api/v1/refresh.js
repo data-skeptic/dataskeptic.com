@@ -1,15 +1,15 @@
 const express = require('express');
 
-const rfcService = require('../../modules/rfc/services/rfcService');
+const RefreshService = require('../../modules/refresh/services/RefreshService');
 
 module.exports = (cache) => {
 
     const router = express.Router();
 
-    router.get('/list', function (req, res) {
-        rfcService.getRFC()
-            .then((contributors) => {
-                res.send(contributors);
+    router.get('/', function (req, res) {
+        RefreshService.doRefresh()
+            .then((status) => {
+                res.send(status);
             })
             .catch((err) => {
                 res.send(err);
@@ -17,4 +17,3 @@ module.exports = (cache) => {
     });
     return router;
 }
-
