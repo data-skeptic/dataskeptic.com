@@ -4,6 +4,7 @@ import moment from 'moment'
 import { connect } from 'react-redux'
 
 import MiniPlayer from '../Components/MiniPlayer'
+import VolumeBarContainer from './VolumeBarContainer'
 
 class PlayerContainer extends React.Component {
 	constructor(props) {
@@ -145,6 +146,8 @@ class PlayerContainer extends React.Component {
 			pubDate = moment(pubDate).format('MMMM D, YYYY');
 		}
 
+		const volumeController = <VolumeBarContainer/>
+
 		return (
 			<MiniPlayer
 				preview={preview}
@@ -157,6 +160,7 @@ class PlayerContainer extends React.Component {
 				realPos={realPos}
 				onPlayToggle={this.onPlayToggle}
 				howler={howler}
+				volumeSlider={volumeController}
 			/>
 		)
 	}
