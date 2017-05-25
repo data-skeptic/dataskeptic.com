@@ -21,6 +21,7 @@ import {get_folders} from '../../utils/redux_loader'
 
 import isEmpty from 'lodash/isEmpty';
 import {loadBlogPost, stopBlogLoading} from '../Actions/BlogsActions';
+import LoadingBlogArticle from "../Components/LoadingBlogArticle";
 
 class BlogArticle extends Component {
     constructor(props) {
@@ -92,7 +93,7 @@ class BlogArticle extends Component {
         const {currentPost, isLoading, contributors, disqusUsername, postUrl} = this.props;
 
         if (isLoading) {
-            return <Loading />
+            return <LoadingBlogArticle />
         }
 
         const post = currentPost.toJS();
