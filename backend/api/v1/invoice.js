@@ -21,7 +21,7 @@ module.exports = (cache) => {
 
 
     router.get('/:id/pay', function (req, res) {
-        InvoiceServices.payInvoice(stripe_key)
+        InvoiceServices.payInvoice(req.params.id,stripe_key, req)
             .then((data) => {
                 res.send(data);
             })

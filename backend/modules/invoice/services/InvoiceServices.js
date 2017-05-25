@@ -41,7 +41,6 @@ export const payInvoice = (id, stripe_key, req) => {
 
 
         var stripe = require("stripe")(stripe_key)
-        var params = req['params'];
         var amount = req.query.amount * 100 // Stripe wants it in pennies
         var token = req.query.token;
         var charge = stripe.charges.create({

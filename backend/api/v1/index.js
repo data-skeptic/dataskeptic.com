@@ -11,6 +11,7 @@ module.exports = (cache) => {
     router.use('/invoice', require('./invoice')(cache));
     router.use('/mail', require('./mail')(cache));
     router.use('/store', require('./store')(cache));
+    router.use('/slack', require('./slack')(cache));
 
    return router;
 }

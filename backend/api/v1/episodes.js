@@ -32,7 +32,7 @@ module.exports = (cache) => {
             })
     });
 
-    router.get('/:guid', function (req, res) {
+    router.get('/get/:guid', function (req, res) {
 
 
         EpisodesServices.getEpisode(cache.episodes_map, req.params.guid)

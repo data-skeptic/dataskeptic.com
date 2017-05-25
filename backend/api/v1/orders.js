@@ -41,7 +41,7 @@ module.exports = (cache) => {
             })
     });
 
-    router.get('/fulfill', function (req, res) {
+    router.put('/fulfill', function (req, res) {
         OrdersServices.fulFillOrder(sp_key, req.body)
             .then((data) => {
                 res.send(data);
