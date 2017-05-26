@@ -8,9 +8,10 @@ const fs = require('fs')
 const http = require('http');
 const https = require('https')
 const path = require('path')
+const passport = require('passport')
 
 var app = require('./server').default;
-
+require("../dataskeptic.com/backend/modules/auth/passport/Passport")(app);
 const onError = (err) => {
 	fs.writeFile('./error.err', err, function(e) {
 		if (e) {

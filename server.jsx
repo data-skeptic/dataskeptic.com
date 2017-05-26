@@ -1,5 +1,9 @@
 import aws                       from 'aws-sdk'
 import axios                     from 'axios';
+
+const LinkedinService = require("./backend/modules/auth/passport/Strategy/LinkedinStrategy")
+const passport = require('passport');
+const session = require('express-session');
 import {get_blogs}               from 'backend/get_blogs'
 import {get_blogs_rss}           from 'backend/get_blogs_rss'
 import {get_contributors}        from 'backend/get_contributors'
@@ -186,7 +190,9 @@ if (process.env.NODE_ENV == 'production') {
   }
   app.use(compression({filter: shouldCompress}))
 }
-
+app.use(passport.initialize())
+    .use(session({secret : "data_skeptic"}))
+    .use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.json())
@@ -283,6 +289,21 @@ function api_router(req, res) {
         return true
     } else if (req.url == '/api/test') {
         return res.status(200).end(JSON.stringify(Cache.blogmetadata_map));
+    }
+    else if (req.url === '/api/auth/linkedin'){
+        console.dir("qwe")
+        passport.authenticate('linkedin'), function (req, res){
+
+        };
+        return true;
+    }
+    else if (req.url === '/api/auth/linkedin/callback') {
+        passport.authenticate('linkedin', {
+            successRedirect: '/',
+            failureRedirect: '/login'
+
+        })
+        return true
     }
 
     return false
