@@ -19,6 +19,8 @@ class PlayerContainer extends React.Component {
 		this.onPlayToggle = this.onPlayToggle.bind(this)
 		this.update = this.update.bind(this)
 		this.setVolume = this.setVolume.bind(this)
+        this.mute = this.mute.bind(this)
+        this.unmute = this.unmute.bind(this)
 	}
 
 	componentDidMount() {
@@ -49,6 +51,7 @@ class PlayerContainer extends React.Component {
 
 	setVolume(volume) {
         this.state.howler.volume(volume);
+        this.state.volume = volume;
 	}
 
 	pad(n, width) {
@@ -83,6 +86,14 @@ class PlayerContainer extends React.Component {
 		this.props.dispatch({type: "PLAY_EPISODE", payload: episode.toJS() })
 	}
 
+    mute() {
+        this.state.muted = true;
+	}
+
+    unmute() {
+        this.state.muted = false;
+	}
+
 	render() {
 		var oplayer = this.props.player.toJS();
 
@@ -90,7 +101,7 @@ class PlayerContainer extends React.Component {
 			return null
 		}
 
-		const volume = this.state.volume;
+		const volume = this.state.muted ? 0 : this.state.volume
 
 		var position_updated = oplayer.position_updated
 		var position = oplayer.position
@@ -158,6 +169,8 @@ class PlayerContainer extends React.Component {
 			<VolumeBarContainer
 				volume={volume}
 				onChange={this.setVolume}
+				onMute={this.mute}
+				onUnmute={this.unmute}
 			/>
 		)
 

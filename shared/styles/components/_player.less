@@ -275,22 +275,17 @@
     border: 0px;
 
     .volume-icon {
-      background-image: url('/img/svg/volume-off.svg');
       position: relative;
       height: 18px;
       width: 18px;
       background-size: 18px 18px;
       background-repeat: no-repeat;
-    }
 
-    &.on {
-      .volume-icon {
+      &.on {
         background-image: url('/img/svg/volume-on.svg');
       }
-    }
 
-    &.off {
-      .volume-icon {
+      &.off {
         background-image: url('/img/svg/volume-off.svg');
       }
     }
@@ -304,6 +299,7 @@
     .volume-slider-bar {
       height: 2px;
       background: #D7D9D9;
+      cursor: pointer;
     }
 
     .handle {
