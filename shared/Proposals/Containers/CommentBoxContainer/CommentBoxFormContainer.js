@@ -103,7 +103,8 @@ class CommentBoxFormContainer extends Component {
         this.props.recordingFinish(id);
 
         debugger;
-        const recordingUrl = `https://s3-${AWS_REGION}.amazonaws.com/${AWS_BUCKET}/${id}`;
+        // const recordingUrl = `https://s3-${AWS_REGION}.amazonaws.com/${AWS_BUCKET}/${id}`;
+        const recordingUrl = `https://s3.amazonaws.com/${AWS_BUCKET}/${id}`;
         this.props.reviewRecording(recordingUrl);
     }
 
