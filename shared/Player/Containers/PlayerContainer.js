@@ -154,7 +154,12 @@ class PlayerContainer extends React.Component {
 			pubDate = moment(pubDate).format('MMMM D, YYYY');
 		}
 
-		const volumeController = <VolumeBarContainer onChange={this.setVolume}/>
+		const volumeController = (
+			<VolumeBarContainer
+				volume={volume}
+				onChange={this.setVolume}
+			/>
+		)
 
 		return (
 			<MiniPlayer

@@ -18,12 +18,12 @@ class VolumeBarContainer extends Component {
     }
 
     render() {
-        const {onChange} = this.props;
+        const {onChange, value} = this.props;
 
         return (
             <div className="volume-bar-container">
                 <VolumeButton silent={false}/>
-                <VolumeBar onChange={this.onVolumeBarChange}/>
+                <VolumeBar onChange={this.onVolumeBarChange} value={value}/>
             </div>
         )
     }

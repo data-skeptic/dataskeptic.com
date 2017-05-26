@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactSlider from 'react-slider'
 
-const VolumeBar = ({volume = 90, onChange}) => (
+const VolumeBar = ({value = 90, onChange}) => (
     <ReactSlider
         withBars
         className={'volume-slider-container'}
@@ -9,7 +9,7 @@ const VolumeBar = ({volume = 90, onChange}) => (
         min={1}
         step={1}
         max={100}
-        defaultValue={volume}
+        defaultValue={value}
         onChange={onChange}
     >
         <div className="volume-slider-howler"/>
