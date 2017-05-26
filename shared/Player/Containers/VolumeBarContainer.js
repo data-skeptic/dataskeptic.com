@@ -7,13 +7,23 @@ class VolumeBarContainer extends Component {
 
     constructor() {
         super()
+
+        this.onVolumeBarChange = this.onVolumeBarChange.bind(this);
+    }
+
+    onVolumeBarChange(value) {
+        const volume = value / 100;
+
+        this.props.onChange(volume)
     }
 
     render() {
+        const {onChange} = this.props;
+
         return (
             <div className="volume-bar-container">
                 <VolumeButton silent={false}/>
-                <VolumeBar/>
+                <VolumeBar onChange={this.onVolumeBarChange}/>
             </div>
         )
     }

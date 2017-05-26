@@ -11,12 +11,14 @@ class PlayerContainer extends React.Component {
 		super(props)
 		this.state = {
 			position: 0,
+			volume: 1.0,
 			loaded: false,
 			howler: undefined
 		}
 
 		this.onPlayToggle = this.onPlayToggle.bind(this)
 		this.update = this.update.bind(this)
+		this.setVolume = this.setVolume.bind(this)
 	}
 
 	componentDidMount() {
@@ -43,6 +45,10 @@ class PlayerContainer extends React.Component {
 				}				
 			}
 		}
+	}
+
+	setVolume(volume) {
+        this.state.howler.volume(volume);
 	}
 
 	pad(n, width) {
@@ -84,6 +90,8 @@ class PlayerContainer extends React.Component {
 			return null
 		}
 
+		const volume = this.state.volume;
+
 		var position_updated = oplayer.position_updated
 		var position = oplayer.position
 		if (position_updated) {
@@ -114,7 +122,7 @@ class PlayerContainer extends React.Component {
 			preview = episode.img
 			pubDate = episode.pubDate
 			var mp3 = episode.mp3
-			howler = <ReactHowler src={mp3} playing={is_playing} ref={(ref) => this.state.howler = ref} onEnd={this.onEnd.bind(this)} />
+			howler = <ReactHowler src={mp3} playing={is_playing} ref={(ref) => this.state.howler = ref} onEnd={this.onEnd.bind(this)} volume={volume} />
 			duration = episode.duration
 			realDur = duration
 
@@ -146,7 +154,7 @@ class PlayerContainer extends React.Component {
 			pubDate = moment(pubDate).format('MMMM D, YYYY');
 		}
 
-		const volumeController = <VolumeBarContainer/>
+		const volumeController = <VolumeBarContainer onChange={this.setVolume}/>
 
 		return (
 			<MiniPlayer
