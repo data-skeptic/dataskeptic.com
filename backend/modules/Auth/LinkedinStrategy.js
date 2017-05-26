@@ -5,7 +5,7 @@ export default function () {
         {
             clientID: '7867taol26djfu',
             clientSecret: '9PjTFcqOEvCuLlQK',
-            callbackURL: "http://localhost:3000/api/Auth/linkedin/callback",
+            callbackURL: "http://localhost:3000/auth/linkedin/callback",
             scope: ['r_emailaddress', 'r_basicprofile'],
             state: true
         },
