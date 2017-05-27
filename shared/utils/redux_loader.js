@@ -200,7 +200,6 @@ export function get_blogs_list(dispatch, pathname) {
 	const bpathname = pathname.substring(prefix.length, pathname.length)
 	const my_cache = global.my_cache
 
-	console.dir('get_blogs_list')
 	if (my_cache != undefined) {
 		const blogmetadata_map = my_cache.blogmetadata_map
 		const keys = Object.keys(blogmetadata_map)
@@ -222,12 +221,10 @@ export function get_blogs_list(dispatch, pathname) {
                 if (blog.author) {
                     blog.contributor = my_cache.contributors[blog.author.toLowerCase()]
                 }
-
                 blogs.push(blog)
 			}
 		}
 		const total = keys.length;
-		console.dir(total)
 		dispatch({type: "ADD_BLOGS", payload: {blogs, total}})
 	} else {
 		console.log("Getting blogs")
