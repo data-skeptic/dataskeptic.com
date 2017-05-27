@@ -4,18 +4,23 @@ import moment from 'moment'
 import { connect } from 'react-redux'
 
 import MiniPlayer from '../Components/MiniPlayer'
+import VolumeBarContainer from './VolumeBarContainer'
 
 class PlayerContainer extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
 			position: 0,
+			volume: 1.0,
 			loaded: false,
 			howler: undefined
 		}
 
 		this.onPlayToggle = this.onPlayToggle.bind(this)
 		this.update = this.update.bind(this)
+		this.setVolume = this.setVolume.bind(this)
+        this.mute = this.mute.bind(this)
+        this.unmute = this.unmute.bind(this)
 	}
 
 	componentDidMount() {
@@ -42,6 +47,11 @@ class PlayerContainer extends React.Component {
 				}				
 			}
 		}
+	}
+
+	setVolume(volume) {
+        this.state.howler.volume(volume);
+        this.state.volume = volume;
 	}
 
 	pad(n, width) {
@@ -76,12 +86,22 @@ class PlayerContainer extends React.Component {
 		this.props.dispatch({type: "PLAY_EPISODE", payload: episode.toJS() })
 	}
 
+    mute() {
+        this.state.muted = true;
+	}
+
+    unmute() {
+        this.state.muted = false;
+	}
+
 	render() {
 		var oplayer = this.props.player.toJS();
 
 		if (!oplayer.has_shown) {
 			return null
 		}
+
+		const volume = this.state.muted ? 0 : this.state.volume
 
 		var position_updated = oplayer.position_updated
 		var position = oplayer.position
@@ -113,7 +133,7 @@ class PlayerContainer extends React.Component {
 			preview = episode.img
 			pubDate = episode.pubDate
 			var mp3 = episode.mp3
-			howler = <ReactHowler src={mp3} playing={is_playing} ref={(ref) => this.state.howler = ref} onEnd={this.onEnd.bind(this)} />
+			howler = <ReactHowler src={mp3} playing={is_playing} ref={(ref) => this.state.howler = ref} onEnd={this.onEnd.bind(this)} volume={volume} />
 			duration = episode.duration
 			realDur = duration
 
@@ -145,6 +165,15 @@ class PlayerContainer extends React.Component {
 			pubDate = moment(pubDate).format('MMMM D, YYYY');
 		}
 
+		const volumeController = (
+			<VolumeBarContainer
+				volume={volume}
+				onChange={this.setVolume}
+				onMute={this.mute}
+				onUnmute={this.unmute}
+			/>
+		)
+
 		return (
 			<MiniPlayer
 				preview={preview}
@@ -157,6 +186,7 @@ class PlayerContainer extends React.Component {
 				realPos={realPos}
 				onPlayToggle={this.onPlayToggle}
 				howler={howler}
+				volumeSlider={volumeController}
 			/>
 		)
 	}
