@@ -22,7 +22,8 @@ class PostBodyContainer extends Component {
         const {content=''} = this.props;
         // return <div></div>;
         return <div key={Date()} dangerouslySetInnerHTML={{__html: content}}/>
-    }
+                 
+}
 }
 
 export default PostBodyContainer;
