@@ -3,6 +3,7 @@ import ReactDOM from "react-dom"
 import {Link} from 'react-router'
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux'
+import moment from 'moment'
 
 import isUndefined from 'lodash/isUndefined';
 
@@ -128,16 +129,18 @@ class BlogArticle extends Component {
 
         const proposeEditUrl = this.getProposeEditUrl(post);
 
+        const date = moment(post.publish_date).startOf('day').fromNow()
+
         return (
-            <div className="center">
+            <div className="blog-article center">
 
                 { isEpisode ? <LatestEpisodePlayer guid={guid} /> : null }
 
                 {contributor ? <BlogAuthorTop contributor={contributor}/> : <div></div> }
+                <div className="published-date">{date}</div>
 
                 <div id='blog-content'>
                     <PostBodyContainer content={content}/>
-
                 </div>
 
                 <RelatedContent items={related} />
