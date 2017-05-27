@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import React, {Component} from "react";
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 
 import Episode from "../Components/Episode";
 import Loading from "../../Common/Components/Loading"
@@ -10,10 +10,12 @@ import Container from '../../Layout/Components/Container/Container';
 import Content from '../../Layout/Components/Content/Content';
 import SideBar from '../../Layout/Components/SideBar/SideBar';
 
-import { get_podcasts } from '../../utils/redux_loader'
-import { year_from_path } from '../../utils/redux_loader'
+import {get_podcasts} from '../../utils/redux_loader'
+import {year_from_path} from '../../utils/redux_loader'
 
-import { changePageTitle } from '../../Layout/Actions/LayoutActions';
+import {changePageTitle} from '../../Layout/Actions/LayoutActions';
+
+import LoadingEpisodeList from '../Components/LoadingEpisodeList'
 
 class Podcast extends Component {
 
@@ -23,7 +25,7 @@ class Podcast extends Component {
 
     componentDidMount() {
         const dispatch = this.props.dispatch;
-        const { isLoaded } = this.props;
+        const {isLoaded} = this.props;
         const pathname = this.props.location.pathname;
 
         get_podcasts(dispatch, pathname);
@@ -52,11 +54,12 @@ class Podcast extends Component {
                 <Container>
 
                     <Content>
-                        { isLoaded ?
+                        { !isLoaded ?
+                            <LoadingEpisodeList length={5}/>
+                            :
                             list.map(function (episode, index) {
                                 return <Episode key={index} episode={episode}/>
                             })
-                          : <Loading />
                         }
                     </Content>
                     <SideBar title="Year">
