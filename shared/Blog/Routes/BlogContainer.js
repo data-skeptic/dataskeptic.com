@@ -59,6 +59,16 @@ class BlogContainer extends Component {
         }
     }
 
+    componentWillReceiveProps(props) {
+        const pageHasChanged = props.location.pathname !== this.props.location.pathname;
+
+        if (pageHasChanged) {
+            this.fetchPosts(props.pageNum);
+            const {title} = BlogContainer.getPageMeta();
+            this.props.changePageTitle(title);
+        }
+    }
+
     fetchAllPosts() {
         const location = this.props.location;
 
@@ -71,6 +81,8 @@ class BlogContainer extends Component {
     }
 
     componentDidMount() {
+        const isEmpty = this.props.blogs.toJS().blogs.length === 0;
+
         const folderName = this.props.folderName || '';
         if (isNaN(+folderName)) {
             this.fetchAllPosts();
