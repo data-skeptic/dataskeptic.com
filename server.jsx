@@ -448,6 +448,10 @@ function updateState(store, pathname) {
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+
+const api = require('./backend/api/v1');
+app.use('/api/v1/', api(Cache));
+
 /***
  * DUMP GENERATION
  */

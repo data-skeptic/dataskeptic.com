@@ -52,6 +52,7 @@ module.exports = {
     get_blogs: function (req, res, blogmetadata_map, env, exclude = ['/episodes', '/transcripts']) {
         env = (env === 'prod') ? 'master' : 'dev';
 
+
         const params = req['params'];
         const query = req.query;
 

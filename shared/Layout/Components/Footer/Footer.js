@@ -28,7 +28,7 @@ export const Footer = ({ foo, pathname, linkClick, banner=null }) => (
 		<div className="footer">
 			<div className="container">
 				<div className="col-xs-12 col-sm-12 col-md-3">
-					<Link to="/"><img src="/img/svg/logo.svg" alt="Data Skeptic logo" /></Link>
+					<Link to="/" className="logo_footer"><img src="/img/svg/logo.svg" alt="Data Skeptic logo" /></Link>
 					<p className="philosophy">
 						Data science, statistics, machine learning, artificial intelligence, and scientific skepticism.
 					</p>
