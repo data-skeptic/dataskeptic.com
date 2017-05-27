@@ -91,6 +91,18 @@ module.exports = {
             latestId = blogmetadata_map['latest']['c_hash'];
         }
 
+        blogs = blogs.map((blog) => ({
+            ...blog,
+            contributor: {
+                "prettyname": "Kyle Polich",
+                "img": "https://s3.amazonaws.com/dataskeptic.com/contributors/kyle-polich.png",
+                "twitter": "@dataskeptic",
+                "linkedin": "https://www.linkedin.com/in/kyle-polich-5047193",
+                "bio": "Kyle studied computer science and focused on artificial intelligence in grad school.  His general interests range from obvious areas like statistics, machine learning, data viz, and optimization to data provenance, data governance, econometrics, and metrology.",
+                "sort-rank": 1
+            },
+        }))
+
         return res.status(200).end(JSON.stringify({
             env,
             blogs,
