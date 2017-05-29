@@ -9,7 +9,7 @@ class PlayerProgressBar extends React.Component {
 	}
 	
 	onUpdate(pos) {
-		this.props.dispatch({type: "PLAYER_SEEK", payload: pos })			
+		this.props.dispatch({type: "PLAYER_SEEK", payload: pos })
 	}
 
 	render() {
