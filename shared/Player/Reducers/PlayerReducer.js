@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
 import { fromJS } from 'immutable';
+import isEmpty from 'lodash/isEmpty'
 
 const init = {
   is_playing: false,
@@ -7,7 +8,7 @@ const init = {
   playback_loaded: false,
   position: 0,
   position_updated: false,
-  episode: undefined
+  episode: {}
 }
 
 const defaultState = Immutable.fromJS(init);
@@ -17,7 +18,10 @@ export default function PlayerReducer(state = defaultState, action) {
   switch(action.type) {
   	case 'PLAY_EPISODE':
       var episode = action.payload
-      if (episode == undefined) {
+      nstate.playback_loaded = false
+      nstate.position = init.position;
+
+      if (isEmpty(episode)) {
         nstate.is_playing = false
       } else {
         nstate.has_shown = true
@@ -43,6 +47,16 @@ export default function PlayerReducer(state = defaultState, action) {
     case 'STOP_PLAYBACK':
       nstate.is_player = false
       break;
+
+    case 'STOP_PLAYING':
+      nstate.is_playing = false
+      break;
+
+    case 'RESUME_PLAYING':
+      nstate.is_playing = true
+      break;
+
+
     case 'PLAYBACK_LOADED':
       nstate.playback_loaded = action.payload
       break;
