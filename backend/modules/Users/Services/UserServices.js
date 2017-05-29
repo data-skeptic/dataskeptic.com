@@ -3,11 +3,19 @@ const docClient = new AWS.DynamoDB.DocumentClient();
 let User = require("../Models/User");
 
 export const insertIntoDatabase = (data) => {
-    User = new User(data);
+    let userData = new User({
+        firstName: data.firstName,
+        fullName: data.fullName,
+        type: data.type || "q",
+        linkedinId: data.linkedinId,
+        profilePic: data.profilePic || "q",
+        membership: data.membership || "q",
+        active: data.active || "q"
+    });
     const params = {
         TableName : "dataskeptic_users",
         Item : {
-            User
+            userData
         }
     };
     console.log("Adding a new item...");
