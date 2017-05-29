@@ -19,13 +19,18 @@ export default function ({env}) {
                     console.dir("here");
                     UserServices
                         .insertIntoDatabase(user)
-                        .then(user =>{
-                            console.dir("here2");
+                        .then(id =>{
+                            UserServices
+                                .getUserById(id)
+                                .then(data =>{
+                                    console.dir("new");
+                                    return done(null, data);
+                                })
 
                         });
 
                     console.dir("here3");
-                    return done(null, user);
+
                 });
 
 
