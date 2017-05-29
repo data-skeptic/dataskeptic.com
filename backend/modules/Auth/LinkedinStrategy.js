@@ -1,24 +1,18 @@
 import {Strategy as LinkedInStrategy} from 'passport-linkedin-oauth2'
-const  config = require('../../../config.json');
+const config = require('../../../config.json');
 
-export default function () {
+export default function ({env}) {
     return new LinkedInStrategy(
-        {
-            clientID: `${config.dev.linkedin.clientID}`,
-            clientSecret: `${config.dev.linkedin.clientSecret}`,
-            callbackURL: `${config.dev.linkedin.callbackURL}`,
-            scope: `${config.dev.linkedin.scope}`,
-            state: `${config.dev.linkedin.state}`
-        },
-        function (accessToken, refreshToken, {_json: {id}}, done) {
-            console.dir({
-                accessToken,
-                refreshToken
-            })
-
+        config[env].linkedin,
+        function (accessToken, refreshToken, {_json: {id, emailAddress, firstName, formattedName}}, done) {
             try {
                 // fetch user data
-                const user = {}
+                const user = {
+                    linkedinId: id,
+                    firstName: firstName,
+                    fullName: formattedName,
+                    email: emailAddress
+                }
 
                 return done(null, user)
             } catch (error) {

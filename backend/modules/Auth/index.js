@@ -4,7 +4,7 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const LinkedinStrategy = require('./LinkedinStrategy').default
 
-export default function () {
+export default function ({env}) {
     const router = express.Router()
 
     passport.serializeUser(function (user, done) {
@@ -19,7 +19,7 @@ export default function () {
         done(user)
     })
 
-    passport.use(LinkedinStrategy())
+    passport.use(LinkedinStrategy({env}))
     router.use(passport.initialize())
     router.use(passport.session())
 

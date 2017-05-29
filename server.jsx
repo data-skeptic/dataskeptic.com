@@ -456,7 +456,9 @@ app.set('views', path.join(__dirname, 'views'));
 
 // authorization module
 app.use(session({secret : "DATAS"}))
-app.use(AuthService())
+app.use(AuthService({
+    env
+}))
 
 /***
  * DUMP GENERATION
