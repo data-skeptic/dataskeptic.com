@@ -1,14 +1,14 @@
 import {Strategy as LinkedInStrategy} from 'passport-linkedin-oauth2'
+const  config = require('../../../config.json');
 
 export default function () {
     return new LinkedInStrategy(
         {
-            clientID: '7867taol26djfu',
-            clientSecret: '9PjTFcqOEvCuLlQK',
-            callbackURL: "http://localhost:3000/auth/linkedin/callback",
-            scope: ['r_emailaddress', 'r_basicprofile'],
-            state: true
-            // passReqToCallback: true
+            clientID: `${config.dev.linkedin.clientID}`,
+            clientSecret: `${config.dev.linkedin.clientSecret}`,
+            callbackURL: `${config.dev.linkedin.callbackURL}`,
+            scope: `${config.dev.linkedin.scope}`,
+            state: `${config.dev.linkedin.state}`
         },
         function (accessToken, refreshToken, {_json: {id}}, done) {
             console.dir({
