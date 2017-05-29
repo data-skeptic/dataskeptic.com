@@ -37,12 +37,12 @@ class BlogListItem extends Component {
                         <span className="blog-date">{date}</span>
                     </div>
                     <div className="media">
-                        <div className="media-left contributor-preview">
+                        {blog.contributor && <div className="media-left contributor-preview">
                             <img src={blog.contributor.img}/>
-                        </div>
+                        </div>}
                         <div className="media-body">
                             <Link className="blog-title media-heading" to={link} onClick={ onClick }>{blog.title}</Link>
-                            <p className="by">by <b>{blog.contributor.prettyname}</b></p>
+                            {blog.contributor && <p className="by">by <b>{blog.contributor.prettyname}</b></p>}
                         </div>
                     </div>
 	                <p className="blog-desc">

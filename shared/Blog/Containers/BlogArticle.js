@@ -130,7 +130,8 @@ class BlogArticle extends Component {
 
         const proposeEditUrl = this.getProposeEditUrl(post);
 
-        const date = moment(post.publish_date).startOf('day').fromNow()
+        const publishedDate=  post.publish_date ||post.publishedAt
+        const date = moment(publishedDate).format('MMMM D, YYYY')
 
         return (
             <div className="blog-article center">
@@ -138,6 +139,7 @@ class BlogArticle extends Component {
                 { isEpisode ? <LatestEpisodePlayer guid={guid} /> : null }
 
                 {contributor ? <BlogAuthorTop contributor={contributor}/> : <div></div> }
+
                 <div className="published-date">{date}</div>
 
                 <div id='blog-content'>
