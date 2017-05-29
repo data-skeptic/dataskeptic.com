@@ -34,6 +34,23 @@
 .thin-player-container .slider:hover .rc-slider-handle {
   transform: scale(1.4);
 }
+
+.thin-player-container {
+  position: relative;
+  z-index: 1;
+
+  .playback-loading {
+    position: absolute;
+    top: -1px;
+    bottom: -1px;
+    left: -1px;
+    right: -1px;
+
+    opacity: 0.8;
+    z-index: 2;
+  }
+}
+
 .player-progress-bar .rc-slider-handle:hover {
   transform: scale(1.8) !important;
 }

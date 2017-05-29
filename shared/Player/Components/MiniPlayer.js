@@ -1,10 +1,15 @@
 import React from 'react'
-
 import PlayerProgressBar from '../Components/PlayerProgressBar'
 import TogglePlayButton from '../Components/TogglePlayButton'
 
-export const MiniPlayer = ({ realPos=0, playing = false, preview, title='[No episode loaded yet]', date='', duration='--:--', position='--:--', onPositionChange, onPlayToggle, howler, volumeSlider}) => (
+export const MiniPlayer = ({ realPos=0, playing = false, preview, title='[No episode loaded yet]', date='', duration='--:--', position='--:--', onPlayToggle, howler, onSeek, loaded }) => (
     <div className="thin-player-container">
+        { !loaded  && (
+            <div className="loading">
+                <div className="playback-loading preloader" />
+            </div>
+        )}
+
         <div className="">
             <div className="col-xs-9 col-sm-4 col-md-3 preview">
                 <img src={preview} alt={title}/>
@@ -13,8 +18,12 @@ export const MiniPlayer = ({ realPos=0, playing = false, preview, title='[No epi
                     <p className="title">{title}</p>
                 </div>
             </div>
-            <div className="col-xs-4 col-sm-5 col-md-6 slider">
-                <PlayerProgressBar playing={playing} progress={position} onChange={onPositionChange}/>
+            <div className="col-sm-7 col-md-offset-1 col-md-6 slider">
+                <PlayerProgressBar
+                    playing={playing}
+                    progress={position}
+                    onChange={onSeek}
+                />
                 <div className="player-position-container"><span className="player-position">{realPos}</span></div>
                 <div className="player-duration-container"><span className="player-duration">{duration}</span></div>
                 {howler}
