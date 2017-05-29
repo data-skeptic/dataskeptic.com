@@ -4,6 +4,7 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const LinkedinStrategy = require('./LinkedinStrategy').default
 
+
 export default function ({env}) {
     const router = express.Router()
 
@@ -73,15 +74,11 @@ export default function ({env}) {
             failWithError: true,
             failureFlash: true
         }, function (err, user, info) {
-            return res.send({
-                err,
-                user,
-                info
-            })
-            if (err) {
+            return res.send(user);
+          /*  if (err) {
                 console.dir("check 1 ");
                 return res.status(403).send({message: err})
-            }
+            }*/
 
             if (!user) {
                 console.dir("check 2 ");
@@ -94,7 +91,8 @@ export default function ({env}) {
                     return res.status(403).send({message: err.message})
                 }
                 console.dir("check 4 ");
-                return res.redirect('/')
+
+
             })
         })(req, res, next)
     })
