@@ -93,6 +93,7 @@ let Cache = {
     , episodes_map: {}      // `guid` | 'latest' -> {episode}
     , episodes_list: []     // guids
     , products: {}
+    , contributors: {}
     , advertise: {
         card: DEFAULT_ADVERTISE_HTML,
         banner: null
@@ -104,6 +105,7 @@ const reducer  = combineReducers({
     form: formReducer
 });
 
+global.my_cache = Cache;
 global.env = env;
 
 const doRefresh = (store) => {
@@ -170,6 +172,7 @@ const doRefresh = (store) => {
             Cache.products.items = products;
         })
         .then(() => {
+            Cache.contributors = get_contributors()
             console.log("Refreshing Finished")
         })
         // .then(() => global.gc())
@@ -369,7 +372,7 @@ function install_episode(store, episode) {
     store.dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
 }
 
-function inject_blog(store, my_cache, pathname) {
+function inject_blog(store, my_cache, pathname, req) {
   var blog_page = pathname.substring('/blog'.length, pathname.length)
   var content = my_cache.content_map[blog_page]
   if (content == undefined) {
@@ -377,9 +380,9 @@ function inject_blog(store, my_cache, pathname) {
   }
   var blog_metadata = my_cache.blogmetadata_map[blog_page]
   if (blog_metadata == undefined) {
-    blog_metadata = {}
-    var dispatch = store.dispatch
-    var blogs = get_blogs_list(dispatch, pathname)
+      blog_metadata = {}
+      var dispatch = store.dispatch
+      var blogs = get_blogs_list(dispatch, pathname)
   } else {
     var guid = blog_metadata.guid
     if (guid != undefined) {
@@ -411,7 +414,7 @@ function inject_blog(store, my_cache, pathname) {
   console.log("done with blog inject")
 }
 
-function updateState(store, pathname) {
+function updateState(store, pathname, req) {
     inject_folders(store, Cache)
     inject_years(store, Cache)
 
@@ -422,7 +425,7 @@ function updateState(store, pathname) {
         inject_homepage(store, Cache, pathname)
     }
     if (pathname.indexOf('/blog') === 0) {
-        inject_blog(store, Cache, pathname)
+        inject_blog(store, Cache, pathname, req)
     }
     else if (pathname === "/members" || pathname === "/store") {
         inject_products(store, Cache, pathname)
@@ -432,8 +435,6 @@ function updateState(store, pathname) {
     }
 
     store.dispatch({type: "ADD_FOLDERS", payload: Cache.folders});
-    store.dispatch({type: "ADD_BLOGS", payload: {blogs: Cache.blogmetadata_map, total: Cache.blogmetadata_map.length}});
-    store.dispatch({type: "SET_BLOGS_LOADED"});
 
     store.dispatch({
         type: 'SET_ADVERTISE_CARD_CONTENT',
@@ -538,6 +539,10 @@ const renderPage = (req, res) => {
         return res.redirect(307, 'http://dataskeptic.libsyn.com/rss')
     }
 
+    if (req.url.indexOf('.svg') > -1) {
+        return res.status(404).end('File Not Found');
+    }
+
     const location = createLocation(req.url);
 
     match({routes, location}, (err, redirectLocation, renderProps) => {
@@ -553,7 +558,7 @@ const renderPage = (req, res) => {
         }
 
         let store = applyMiddleware(thunk, promiseMiddleware)(createStore)(reducer);
-        updateState(store, location.pathname);
+        updateState(store, location.pathname, req);
 
         fetchComponentData(store.dispatch, renderProps.components, renderProps.params)
             .then(() => renderView(store, renderProps, location))

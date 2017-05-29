@@ -1,6 +1,7 @@
 const express = require('express');
 import filter from 'lodash/filter';
 const each = require('lodash/each');
+const isEmpty = require('lodash/isEmpty');
 import moment from 'moment';
 const RSS = require('rss');
 import Post from "../models/Post";
@@ -74,7 +75,7 @@ const extendBlogsWithContributors = (blogs) => {
 
 export const getCategories = (cache_folders) => {
 
-    return new Promise((resolve ,reject) => {
+    return new Promise((resolve, reject) => {
         resolve(cache_folders);
     })
 
@@ -102,7 +103,7 @@ export const getBlogRss = (blogmetadata_map, prettyname) => {
         if (!blog) return;
 
         if (blog.env === 'master') { // don't share dev on master
-            feed.item(new BlogItem(blog,prettyname));
+            feed.item(new BlogItem(blog, prettyname));
         }
     });
 
@@ -110,19 +111,16 @@ export const getBlogRss = (blogmetadata_map, prettyname) => {
     return new Promise((resolve, reject) => {
         resolve(xml);
     })
-
-
 };
 
 export const getAll = (url, blogmetadata_map, offset, limit, env, exclude = ['/episodes', '/transcripts']) => {
 
-    console.dir("blogs = " + blogmetadata_map);
+
     // remove unnecessary keys
     let blogs = filter(blogmetadata_map, (blog, id) => !isIgnoredKey(id));
     // filter only relative blogs
-    console.dir("blogs2 = " + blogs);
     blogs = filter(blogs, (blog, id) => isMatchingQuery(blog, {url, exclude, env}));
-    console.dir("blogs3 = " + blogs);
+
     // calculate total matched blogs count
     const total = blogs.length;
 
@@ -130,12 +128,12 @@ export const getAll = (url, blogmetadata_map, offset, limit, env, exclude = ['/e
         // custom sort by publish data
         return compare(b['publish_date'], a['publish_date']);
     });
-    console.dir("blogs4 = " + blogs);
+
     // slice over limits
     blogs = blogs
         .filter((blog, index) => matchingOffset(blog, index, offset))
         .filter((blog, index) => matchingLimit(blog, index, limit));
-    console.dir("blogs5 = " + blogs);
+
     var latestId = "";
     if (Object.keys(blogmetadata_map).length > 0) {
         latestId = blogmetadata_map['latest']['c_hash'];
@@ -147,64 +145,63 @@ export const getAll = (url, blogmetadata_map, offset, limit, env, exclude = ['/e
         return new Promise((resolve, reject) => {
             resolve({
                 env,
-                posts,
+                blogs: posts,
                 total,
                 latestId
             })
         })
     });
 };
-    const isExist = (blogmetadata_map, prettyName) => !!blogmetadata_map[prettyName];
 
-    export const getPost = (blogmetadata_map, prettyName, content_map) => {
+const isExist = (blogmetadata_map, prettyName) => !!blogmetadata_map[prettyName];
 
-        let postData = null;
-        let author = null;
-        let relative = null;
-        if (isExist(blogmetadata_map, prettyName)) {
-            const post = blogmetadata_map[prettyName];
-            author = post["author"];
-            console.dir("pretty = " + prettyName)
-            relative = prettyName;
-            postData = new Post({
-                prettyname: prettyName,
+export const getPost = (blogmetadata_map, prettyName, content_map) => {
 
-                title: post['title'],
-                content: content_map[prettyName] || '',
+    let postData = {};
+    let author = '';
+    let relative = '';
+    if (isExist(blogmetadata_map, prettyName)) {
+        const post = blogmetadata_map[prettyName];
+        author = post["author"];
 
-                isEpisode: post['isEpisode'] || false,
+        relative = prettyName;
+        postData = new Post({
+            prettyname: prettyName,
 
-                contributor: post['contributor'],
-                related: post['related'],
+            title: post['title'],
+            content: content_map[prettyName] || '',
 
-                rendered: post['rendered'],
+            isEpisode: post['isEpisode'] || false,
 
-                discoveredAt: post['date_discovered'],
-                renderedAt: post['last_rendered'],
-                publishedAt: post['publish_date'],
+            contributor: post['contributor'],
+            related: post['related'],
 
-                author: post['author'],
+            rendered: post['rendered'],
 
-                env: post['env'],
-                desc: post['desc'],
+            discoveredAt: post['date_discovered'],
+            renderedAt: post['last_rendered'],
+            publishedAt: post['publish_date'],
 
+            author: post['author'],
 
-            });
-        }
-        console.dir("final = " + "/blog" + relative.toLowerCase());
-        return Promise.all([
-            ContributorsService.getContributorByName(author.toLowerCase()),
-            RelatedServices.getRelatedByURI("/blog" + relative.toLowerCase())
-        ]).then(([contributor, relative]) => {
-            return postData ?
-                {
-                    ...postData,
-                    contributor,
-                    relative
-                }
-                : NOT_FOUND_ERROR
-        })
+            env: post['env'],
+            desc: post['desc'],
+            ...post
+        });
     }
+    return Promise.all([
+        ContributorsService.getContributorByName(author.toLowerCase()),
+        RelatedServices.getRelatedByURI("/blog" + relative.toLowerCase())
+    ]).then(([contributor, relative]) => {
+        return !isEmpty(postData) ?
+            {
+                ...postData,
+                contributor,
+                relative
+            }
+            : NOT_FOUND_ERROR
+    })
+}
 
 
 
