@@ -81,6 +81,10 @@ class BlogRouter extends React.Component {
 			prettyname = pathname.substring(k.length, pathname.length)
 		}
 		var oblogs = this.props.blogs.toJS()
+		if (oblogs.error) {
+			return <div>not found!</div>
+		}
+
 		var folders = oblogs.folders || []
 		var blog_focus = oblogs.blog_focus
 		
