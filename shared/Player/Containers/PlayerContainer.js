@@ -28,11 +28,16 @@ class PlayerContainer extends Component {
         this.capture = this.capture.bind(this)
         this.positionUpdate = this.positionUpdate.bind(this)
         this.getFormattedPosition = this.getFormattedPosition.bind(this)
+        this.setVolume = this.setVolume.bind(this)
+        this.mute = this.mute.bind(this)
+        this.unmute = this.unmute.bind(this)
 
         this.state = {
             position: 0,
             loaded: false,
-            howler: undefined
+            howler: undefined,
+            volume: 0.8,
+            muted: false
         }
 
         this.player = null;
@@ -282,8 +287,30 @@ class PlayerContainer extends Component {
         return this.formatPosition(left)
     }
 
+
+    /**
+     * Set howler audio level
+     *
+     * @param {Number} volume Volume Level
+     */
+    setVolume(volume) {
+        const howler = this.getHowler();
+
+        howler.volume(volume);
+        this.state.volume = volume;
+    }
+
+    mute() {
+        this.state.muted = true;
+    }
+
+    unmute() {
+        this.state.muted = false;
+    }
+
     render() {
         const {player, oepisode} = this.props;
+        const volume = this.state.muted ? 0 : this.state.volume
 
         const {
             is_playing,
@@ -324,6 +351,15 @@ class PlayerContainer extends Component {
         	/>
         )
 
+        const volumeController = (
+            <VolumeBarContainer
+                volume={volume}
+                onChange={this.setVolume}
+                onMute={this.mute}
+                onUnmute={this.unmute}
+            />
+        )
+
         const realDur = this.getFormattedDuration();
         const realPos = this.getFormattedPosition();
 
@@ -342,6 +378,7 @@ class PlayerContainer extends Component {
 
                 onPlayToggle={this.onPlayToggle}
                 loaded={playback_loaded}
+                volumeSlider={volumeController}
             />
         )
     }
