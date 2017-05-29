@@ -24,10 +24,12 @@ export const MiniPlayer = ({ realPos=0, playing = false, preview, title='[No epi
                     progress={position}
                     onChange={onSeek}
                 />
-
                 <div className="player-position-container"><span className="player-position">{realPos}</span></div>
                 <div className="player-duration-container"><span className="player-duration">{duration}</span></div>
                 {howler}
+            </div>
+            <div className="hidden-xs col-sm-2 col-md-2 volume">
+                {volumeSlider}
             </div>
             <div className="col-xs-3 col-sm-1 col-md-1 pull-right button">
                 <TogglePlayButton playing={playing} onClick={onPlayToggle} />

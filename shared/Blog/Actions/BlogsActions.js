@@ -20,7 +20,7 @@ export const REMOVE_FOCUS_POST = 'REMOVE_FOCUS_POST';
 
 export function loadBlogs(pathname) {
     return (dispatch) => {
-        const url = "/api" + pathname;
+        const url = "/api/v1" + pathname;
 
         dispatch(loadBlogsRequest());
         return axios.get(url)
@@ -51,24 +51,17 @@ export function loadBlogsSuccess(data) {
 
 export function loadBlogPost(pathname) {
     return (dispatch, getState) => {
-        const url = "/api" + pathname;
+        const url = "/api/v1" + pathname;
         const env = getState().blogs.getIn(['env']);
 
         dispatch(loadBlogPostRequest());
         return axios.get(url)
             .then(({data}) => {
-                const post = data.blogs[0] || {};
-                dispatch(dispatch(changePageTitle(`${post.title} | ${DEFAULT_APP_TITLE}`)));
+                const post = data || {};
+                dispatch(changePageTitle(`${post.title} | ${DEFAULT_APP_TITLE}`));
+                dispatch(loadBlogPostSuccess(post));
 
-                return getPostContent(post, env)
-                    .then((result) => {
-                        const content = result.data;
-                        post.content = content;
-                        dispatch(loadBlogPostSuccess(post));
-                    })
-                    .then((post) => {
-                        get_related_content(dispatch, pathname);
-                    })
+                get_related_content(dispatch, pathname);
             })
             .catch((err) => { dispatch(loadBlogPostFailed(err)) })
     }

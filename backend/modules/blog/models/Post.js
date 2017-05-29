@@ -2,6 +2,7 @@ const Post = (data) => ({
     id: data.hash,
     apiUrl: `/api/v1/blog${data['prettyname']}`,
 
+    prettyname: data['prettyname'],
     url: data['prettyname'],
     title: data['title'],
     content: data['content'] || '',
@@ -20,6 +21,7 @@ const Post = (data) => ({
     author: data['author'],
 
     env: data['env'],
+    uri: data['uri']
 
 });
 

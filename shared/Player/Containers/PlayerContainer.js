@@ -4,6 +4,7 @@ import moment from 'moment'
 import {connect} from 'react-redux'
 
 import MiniPlayer from '../Components/MiniPlayer'
+import VolumeBarContainer from './VolumeBarContainer'
 
 const ZERO_POS_STR = '0:00';
 
@@ -23,7 +24,6 @@ class PlayerContainer extends Component {
         this.onPlayToggle = this.onPlayToggle.bind(this)
         this.onEnd = this.onEnd.bind(this)
         this.onReady = this.onReady.bind(this)
-
         this.update = this.update.bind(this)
         this.capture = this.capture.bind(this)
         this.positionUpdate = this.positionUpdate.bind(this)
