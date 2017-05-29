@@ -8,14 +8,21 @@ export default function () {
             callbackURL: "http://localhost:3000/auth/linkedin/callback",
             scope: ['r_emailaddress', 'r_basicprofile'],
             state: true
+            // passReqToCallback: true
         },
-        (accessToken, refreshToken, {_json: {id}}, done) => {
+        function (accessToken, refreshToken, {_json: {id}}, done) {
+            console.dir({
+                accessToken,
+                refreshToken
+            })
+
             try {
                 // fetch user data
                 const user = {}
 
                 return done(null, user)
             } catch (error) {
+
                 return done(error, null)
             }
         }

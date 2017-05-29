@@ -15,6 +15,7 @@ export default function () {
         const user = {
             id
         }
+
         done(user)
     })
 
@@ -65,21 +66,34 @@ export default function () {
 
     // LINKEDIN
     router.all('/auth/login/linkedin', passport.authenticate('linkedin'))
+
     router.get('/auth/linkedin/callback', function (req, res, next) {
-        passport.authenticate('linkedin', {failWithError: true, failureFlash: true}, function (err, user, info) {
+        console.dir('linkedin callback')
+        passport.authenticate('linkedin', {
+            failWithError: true,
+            failureFlash: true
+        }, function (err, user, info) {
+            return res.send({
+                err,
+                user,
+                info
+            })
             if (err) {
-                return res.status(403).send({message: err.message})
+                console.dir("check 1 ");
+                return res.status(403).send({message: err})
             }
 
             if (!user) {
+                console.dir("check 2 ");
                 return res.status(403).send({message: 'System Error'})
             }
 
             req.logIn(user, err => {
                 if (err) {
+                    console.dir("check 3 ");
                     return res.status(403).send({message: err.message})
                 }
-
+                console.dir("check 4 ");
                 return res.redirect('/')
             })
         })(req, res, next)
