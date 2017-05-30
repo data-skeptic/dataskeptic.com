@@ -2,7 +2,7 @@ import React from 'react'
 import PlayerProgressBar from '../Components/PlayerProgressBar'
 import TogglePlayButton from '../Components/TogglePlayButton'
 
-export const MiniPlayer = ({ realPos=0, playing = false, preview, title='[No episode loaded yet]', date='', duration='--:--', position='--:--', onPlayToggle, howler, onSeek, loaded }) => (
+export const MiniPlayer = ({ realPos=0, playing = false, preview, title='[No episode loaded yet]', date='', duration='--:--', position='--:--', onPlayToggle, howler, onSeek, loaded, volumeSlider }) => (
     <div className="thin-player-container">
         { !loaded  && (
             <div className="loading">
@@ -18,7 +18,7 @@ export const MiniPlayer = ({ realPos=0, playing = false, preview, title='[No epi
                     <p className="title">{title}</p>
                 </div>
             </div>
-            <div className="col-sm-7 col-md-offset-1 col-md-6 slider">
+            <div className="col-xs-4 col-sm-5 col-md-6 slider">
                 <PlayerProgressBar
                     playing={playing}
                     progress={position}
