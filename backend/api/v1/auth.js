@@ -1,8 +1,9 @@
 const express = require('express');
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
-const LinkedinStrategy = require('../../modules/Auth/LinkedinStrategy').default
+const LinkedinStrategy = require('../../modules/Auth/Strategies/LinkedinStrategy').default
 const UserServices = require('../../modules/Users/Services/UserServices');
+const AuthServices = require('../../modules/Auth/AuthServices');
 
 module.exports = (env) => {
     const router = express.Router();
@@ -63,6 +64,21 @@ module.exports = (env) => {
         })(req, res, next)
     })
 
+
+    router.post('/', (req,res) => {
+        AuthServices
+            .singIn(req.body.email, req.body.password)
+            .then(row => {
+                if (row.Count !== 0){
+                    res.send({status: "ok"});
+                } else {
+                    res.send({error: "true", message: "wrong email or password"})
+                }
+            })
+            .catch(err => {
+                res.send(err);
+            })
+    })
     // LINKEDIN
     router.all('/login/linkedin', passport.authenticate('linkedin'))
 

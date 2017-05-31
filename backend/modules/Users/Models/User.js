@@ -3,6 +3,7 @@ const User = (data) => ({
         fullName: data.fullName,
         type: data.type || "q",
         email: data.email,
+        password : data.password,
         linkedinId: data.linkedinId,
         profilePic: data.profilePic || "q",
         membership: data.membership || "q",

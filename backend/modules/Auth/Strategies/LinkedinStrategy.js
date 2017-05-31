@@ -1,6 +1,6 @@
 import {Strategy as LinkedInStrategy} from 'passport-linkedin-oauth2'
-const config = require('../../../config.json');
-const UserServices = require('../Users/Services/UserServices');
+const config = require('../../../../config.json');
+const UserServices = require('../../Users/Services/UserServices');
 
 export default function (env) {
     console.dir("strategy env = " + env)
@@ -20,7 +20,7 @@ export default function (env) {
                     UserServices
                         .getUserByLinkedinId(id)
                         .then(row => {
-                            if (row===undefined){
+                            if (row.Count === 0){
                                 UserServices
                                     .insertIntoDatabase(user)
                                     .then(id =>{
