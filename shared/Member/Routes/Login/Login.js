@@ -7,6 +7,9 @@ import Content from '../../../Layout/Components/Content/Content';
 
 import {changePageTitle} from '../../../Layout/Actions/LayoutActions';
 
+const LOGIN_URL = ''
+const LINKEDIN_LOGIN_URL = '/auth/login/linkedin';
+
 class Login extends Component {
 
     constructor(props) {
@@ -29,6 +32,8 @@ class Login extends Component {
             <div className="members-login-page">
                 <Container>
                     <h1>Login</h1>
+
+                    <button onClick={() => window.location = LINKEDIN_LOGIN_URL}>LinkedIn Login</button>
                 </Container>
             </div>
         )
