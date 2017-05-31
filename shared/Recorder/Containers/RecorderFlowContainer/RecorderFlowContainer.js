@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 
 import moment from 'moment';
 
+
 import RecorderContainer from '../../Containers/RecorderContainer/RecorderContainer';
 import {
     INIT,
@@ -34,6 +35,7 @@ import Recorder from '../../Components/Recorder/Recorder';
 import RecordingTimeTracker from '../../Components/RecordingTimeTracker/RecordingTimeTracker';
 
 import {float32ToInt16} from '../../Helpers/Converter';
+import Resampler from '../../Helpers/Resampler'
 
 /**
  * Recording flow
@@ -306,13 +308,20 @@ class RecorderFlowContainer extends Component {
         const bufferSize = 4096;
         this.recorder = context.createScriptProcessor(bufferSize, 1, 1);
 
+        const {sampleRate} = this.recorder.context;
+        debugger;
+        this.resampler = new Resampler(sampleRate, 48000, 1, bufferSize);
+        debugger;
+
+
         this.startTimeCounter();
 
         this.recorder.onaudioprocess = (e) => {
             if (!this.isRecording()) return;
 
             const left = e.inputBuffer.getChannelData(0);
-            this.uploadChunk(float32ToInt16(left));
+            const resampled = this.resampler.resampler(left);
+            this.uploadChunk(float32ToInt16(resampled));
         };
 
         this.audioInput.connect(this.recorder);
