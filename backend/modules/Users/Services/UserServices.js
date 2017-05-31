@@ -8,12 +8,12 @@ export const insertIntoDatabase = (data) => {
     let userData = new User({
         firstName: data.firstName,
         fullName: data.fullName,
-        type: data.type || "q",
+        type: data.type || "false",
         email: data.email,
         linkedinId: data.linkedinId,
-        profilePic: data.profilePic || "q",
-        membership: data.membership || "q",
-        active: data.active || "q"
+        profilePic: data.profilePic || "false",
+        membership: data.membership || "false",
+        active: data.active || "false"
     });
     const params = {
         TableName : "dataskeptic_users",
@@ -86,18 +86,18 @@ export const getUserByLinkedinId = (id) => {
     });
 };
 
-export const changeActiveStatus = (id) => {
+export const changeActiveStatus = (id, status) => {
     let params = {
         TableName: "dataskeptic_users",
         Key: {
             "id": id
         },
-        UpdateExpression: "set info.en.#txt = :status",
+        UpdateExpression: "set #act = :status",
         ExpressionAttributeNames: {
             "#act": "active"
         },
         ExpressionAttributeValues: {
-            ":status": true
+            ":status": status
 
         },
         ReturnValues: "UPDATED_NEW"
@@ -114,4 +114,46 @@ export const changeActiveStatus = (id) => {
             }
         });
     });
-}
+};
+
+export const updateById = (id, data) => {
+    let params = {
+        TableName: "dataskeptic_users",
+        Key: {
+            "id": id
+        },
+        UpdateExpression: "set #act = :status, #pic = :pic, #fullN = :full, #firstN = :name, #tp = :type, #mail = :email, #membership = :memb",
+        ExpressionAttributeNames: {
+            "#act": "active",
+            "#pic": "profilePic",
+            "#fullN": "fullName",
+            "#firstN": "firstName",
+            "#tp": "type",
+            "#mail": "email",
+            "#membership" : "membership"
+        },
+        ExpressionAttributeValues: {
+            ":status": data.active,
+            ":pic" : data.profilePic,
+            ":full" : data.fullName,
+            ":name" : data.firstName,
+            ":type" : data.type,
+            ":email" : data.email,
+            ":memb" : data.membership
+
+        },
+        ReturnValues: "UPDATED_NEW"
+    };
+    return new Promise((resolve, reject) => {
+        console.log("Updating the item...");
+        docClient.update(params, function (err, data) {
+            if (err) {
+                console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
+                return reject(err);
+            } else {
+                console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
+                return resolve(data);
+            }
+        });
+    });
+};

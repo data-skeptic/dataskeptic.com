@@ -65,13 +65,8 @@ module.exports = (env) => {
 
     // LINKEDIN
     router.all('/login/linkedin', passport.authenticate('linkedin'))
-    router.all('/linkedin/activate', function (req, res){
-        UserServices
-            .changeActiveStatus(req.body)
-            .then(status =>{
-                res.redirect('/');
-            })
-    });
+
+
     router.get('/linkedin/callback', function (req, res, next) {
         console.dir('linkedin callback')
         passport.authenticate('linkedin', {

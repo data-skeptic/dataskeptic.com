@@ -16,5 +16,6 @@ module.exports = (cache, env) => {
     router.use('/rfc', require('./rfc')(cache));
     router.use('/refresh', require('./refresh')(cache));
     router.use('/auth', require('./auth')(env));
+    router.use('/users', require('./users')());
    return router;
 }
