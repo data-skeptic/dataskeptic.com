@@ -9,6 +9,8 @@ import Menu from './Menu'
 import CartMenu from '../Cart/Components/CartMenu'
 import CartLink from '../Cart/Components/CartLink'
 
+import HeaderLoginButton from '../Member/Components/HeaderLoginButton'
+
 import { toggleCart } from '../Cart/Actions/CartActions';
 
 import { getItemsCount as getCartItemsCount } from '../Cart/Helpers/getItemsCount';
@@ -61,14 +63,14 @@ class Header extends React.Component {
 		return (
 			<div className={classList}>
 				<div className="hidden-xs desktop">
+					<div className="members-portal pull-right">
+						<HeaderLoginButton />
+					</div>
 					<div className="cart-menu pull-right">
 						<CartMenu pathname={pathname}
 								  cartItemsCount={itemsCount}
 								  cartClick={this.onCartClick}
 						/>
-					</div>
-					<div className="cart-menu pull-right">
-						<button onClick={() => window.location = '/auth/login/linkedin'}>Login</button>
 					</div>
 					<div className="logo pull-left">
 						<Link to="/" id="logo_desktop"><img src="/img/svg/logo.svg" alt="Data Skeptic logo" /></Link>

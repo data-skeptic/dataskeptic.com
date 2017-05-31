@@ -29,6 +29,9 @@ import Services                from 'components/Services';
 import Store                   from 'components/Store';
 import ThankYouPage            from 'Checkout/Routes/ThankYou/ThankYouPage';
 
+import MemberHome              from 'Member/Routes/MemberHome/MemberHome';
+import Login                   from 'Member/Routes/Login/Login';
+
 import Admin                   from 'components/admin/Admin';
 import Invoice                 from 'Checkout/Routes/Invoices/Invoice';
 
@@ -102,6 +105,14 @@ export default (
 		</Route>
 		<Route path="/thank-you" component={App} onEnter={loadData}>
 			<IndexRoute component={ThankYouPage} />
+		</Route>
+
+		<Route path="/member" component={App} onEnter={loadData}>
+			<IndexRoute component={MemberHome} />
+		</Route>
+
+		<Route path="/login" component={App} onEnter={loadData}>
+			<IndexRoute component={Login} />
 		</Route>
 
 		<Route path="/admin" component={App}>
