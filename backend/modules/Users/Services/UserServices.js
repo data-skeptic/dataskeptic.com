@@ -1,9 +1,5 @@
 const AWS = require('aws-sdk');
-AWS.config.update({
-    accessKeyId: 'AKIAIMSEXWARBOVSATFQ',
-    secretAccessKey: '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',
-    region: "us-west-1"
-});
+
 const uuidV4 = require('uuid/v4');
 const docClient = new AWS.DynamoDB.DocumentClient();
 import User from "../Models/User";
@@ -44,7 +40,7 @@ export const insertIntoDatabase = (data) => {
 
 export const getUserById = (id) => {
     let params = {
-        TableName : "dataskeptic_users",
+        TableName: "dataskeptic_users",
         KeyConditionExpression: "#idd = :idd",
         ExpressionAttributeNames: {
             "#idd": "id"
@@ -79,7 +75,7 @@ export const getUserByLinkedinId = (id) => {
         }
     };
     return new Promise((resolve, reject) => {
-        docClient.query(params, function (err, data) {
+        docClient.scan(params, function (err, data) {
             if (err) {
                 console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
                 return reject(err);
@@ -90,3 +86,33 @@ export const getUserByLinkedinId = (id) => {
         });
     });
 };
+
+export const changeActiveStatus = (id) => {
+    let params = {
+        TableName: "dataskeptic_users",
+        Key: {
+            "id": id
+        },
+        UpdateExpression: "set info.en.#txt = :status",
+        ExpressionAttributeNames: {
+            "#act": "active"
+        },
+        ExpressionAttributeValues: {
+            ":status": true
+
+        },
+        ReturnValues: "UPDATED_NEW"
+    };
+    return new Promise((resolve, reject) => {
+        console.log("Updating the item...");
+        docClient.update(params, function (err, data) {
+            if (err) {
+                console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
+                return reject(err);
+            } else {
+                console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
+                return resolve(data);
+            }
+        });
+    });
+}

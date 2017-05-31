@@ -1,6 +1,6 @@
 import {Strategy as LinkedInStrategy} from 'passport-linkedin-oauth2'
 const config = require('../../../config.json');
-const UserServices = require('../Users/Services/UserServices')
+const UserServices = require('../Users/Services/UserServices');
 
 export default function ({env}) {
     return new LinkedInStrategy(
@@ -16,20 +16,26 @@ export default function ({env}) {
                     email: emailAddress
                 };
                 process.nextTick(function () {
-                    console.dir("here");
                     UserServices
-                        .insertIntoDatabase(user)
-                        .then(id =>{
-                            UserServices
-                                .getUserById(id)
-                                .then(data =>{
-                                    console.dir("new");
-                                    return done(null, data);
-                                })
+                        .getUserByLinkedinId(id)
+                        .then(row => {
+                            if (row===undefined){
+                                UserServices
+                                    .insertIntoDatabase(user)
+                                    .then(id =>{
+                                        UserServices
+                                            .getUserById(id)
+                                            .then(data =>{
+                                                return done(null, data);
+                                            })
 
-                        });
+                                    });
+                            } else {
+                                return done(null, row);
+                            }
 
-                    console.dir("here3");
+                        })
+
 
                 });
 

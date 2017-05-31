@@ -3,7 +3,7 @@ import express from 'express'
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const LinkedinStrategy = require('./LinkedinStrategy').default
-
+const UserServices = require('../Users/Services/UserServices');
 
 export default function ({env}) {
     const router = express.Router()
@@ -67,7 +67,13 @@ export default function ({env}) {
 
     // LINKEDIN
     router.all('/auth/login/linkedin', passport.authenticate('linkedin'))
-
+    router.all('/auth/linkedin/activate', function (req, res){
+        UserServices
+            .changeActiveStatus(req.body)
+            .then(status =>{
+                res.redirect('/');
+            })
+    });
     router.get('/auth/linkedin/callback', function (req, res, next) {
         console.dir('linkedin callback')
         passport.authenticate('linkedin', {
