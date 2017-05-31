@@ -1,8 +1,9 @@
 const express = require('express');
 
-module.exports = (cache) => {
-    const router = express.Router();
 
+module.exports = (cache, env) => {
+    const router = express.Router();
+    console.dir("env = " + env);
     router.use('/blog', require('./blog')(cache));
     router.use('/contributors', require('./contributors')(cache));
     router.use('/episodes', require('./episodes')(cache));
@@ -14,6 +15,6 @@ module.exports = (cache) => {
     router.use('/slack', require('./slack')(cache));
     router.use('/rfc', require('./rfc')(cache));
     router.use('/refresh', require('./refresh')(cache));
-
+    router.use('/auth', require('./auth')(env));
    return router;
 }

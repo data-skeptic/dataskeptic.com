@@ -27,7 +27,6 @@ import {
 }  from 'daos/serverInit'
 import express                   from 'express';
 
-import AuthService               from './backend/modules/Auth'
 
 import FileStreamRotator         from 'file-stream-rotator'
 import fs                        from 'fs'
@@ -457,13 +456,11 @@ app.set('views', path.join(__dirname, 'views'));
 
 
 const api = require('./backend/api/v1');
-app.use('/api/v1/', api(Cache));
+app.use(session({secret : "DATAS"}));
+app.use('/api/v1/', api(Cache, env));
 
 // authorization module
-app.use(session({secret : "DATAS"}))
-app.use(AuthService({
-    env
-}))
+
 
 /***
  * DUMP GENERATION

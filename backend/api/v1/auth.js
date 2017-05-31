@@ -1,13 +1,11 @@
-import express from 'express'
-
+const express = require('express');
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
-const LinkedinStrategy = require('./LinkedinStrategy').default
-const UserServices = require('../Users/Services/UserServices');
+const LinkedinStrategy = require('../../modules/Auth/LinkedinStrategy').default
+const UserServices = require('../../modules/Users/Services/UserServices');
 
-export default function ({env}) {
-    const router = express.Router()
-
+module.exports = (env) => {
+    const router = express.Router();
     passport.serializeUser(function (user, done) {
         done(null, user.id)
     })
@@ -19,8 +17,8 @@ export default function ({env}) {
 
         done(user)
     })
-
-    passport.use(LinkedinStrategy({env}))
+    console.dir("ENV 2 = " + env)
+    passport.use(LinkedinStrategy(env))
     router.use(passport.initialize())
     router.use(passport.session())
 
@@ -45,7 +43,7 @@ export default function ({env}) {
     )
 
     // REGULAR
-    router.post('/auth/login', (req, res, next) => {
+    router.post('/login', (req, res, next) => {
         passport.authenticate('local', {failWithError: true}, function (err, user, info) {
             if (err) {
                 return res.status(403).send({message: err.message})
@@ -66,25 +64,25 @@ export default function ({env}) {
     })
 
     // LINKEDIN
-    router.all('/auth/login/linkedin', passport.authenticate('linkedin'))
-    router.all('/auth/linkedin/activate', function (req, res){
+    router.all('/login/linkedin', passport.authenticate('linkedin'))
+    router.all('/linkedin/activate', function (req, res){
         UserServices
             .changeActiveStatus(req.body)
             .then(status =>{
                 res.redirect('/');
             })
     });
-    router.get('/auth/linkedin/callback', function (req, res, next) {
+    router.get('/linkedin/callback', function (req, res, next) {
         console.dir('linkedin callback')
         passport.authenticate('linkedin', {
             failWithError: true,
             failureFlash: true
         }, function (err, user, info) {
             return res.send(user);
-          /*  if (err) {
-                console.dir("check 1 ");
-                return res.status(403).send({message: err})
-            }*/
+            /*  if (err) {
+             console.dir("check 1 ");
+             return res.status(403).send({message: err})
+             }*/
 
             if (!user) {
                 console.dir("check 2 ");
@@ -103,10 +101,9 @@ export default function ({env}) {
         })(req, res, next)
     })
 
-    router.all('/auth/logout', function (req, res, next) {
+    router.all('/logout', function (req, res, next) {
         req.logout()
         res.send({})
     })
-
-    return router
+    return router;
 }

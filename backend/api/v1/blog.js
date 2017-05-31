@@ -20,7 +20,7 @@ module.exports = (cache) => {
         const offset = query['offset'] || 0;
         const limit = query['limit'] || 10;
 
-        const pre = '/api/v1/blogs';
+        const pre = '/api/v1/blog';
         url = url.substring(pre.length, url.length);
 
 

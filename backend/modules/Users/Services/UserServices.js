@@ -1,5 +1,4 @@
 const AWS = require('aws-sdk');
-
 const uuidV4 = require('uuid/v4');
 const docClient = new AWS.DynamoDB.DocumentClient();
 import User from "../Models/User";
