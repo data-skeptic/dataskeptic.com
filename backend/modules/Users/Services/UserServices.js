@@ -5,7 +5,6 @@ import User from "../Models/User";
 const nodemailer = require('nodemailer');
 const randomstring = require('randomstring');
 const map = require('lodash/map');
-const unmarshalItem = require('dynamodb-marshaler').unmarshalItem;
 
 export const insertIntoDatabase = (data) => {
     let idOfNewElement = uuidV4();

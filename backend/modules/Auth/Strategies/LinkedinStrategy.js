@@ -3,12 +3,10 @@ const config = require('../../../../config.json');
 const UserServices = require('../../Users/Services/UserServices');
 
 export default function (env) {
-    console.dir("strategy env = " + env)
     return new LinkedInStrategy(
         config[env].linkedin,
         function (accessToken, refreshToken, {_json: {id, emailAddress, firstName, formattedName}}, done) {
             try {
-
                 // fetch user data
                 const user = {
                     linkedinId: id,
@@ -29,17 +27,14 @@ export default function (env) {
                                             .then(data =>{
                                                 return done(null, data);
                                             })
-
-                                    });
+                                        });
                             } else {
                                 return done(null, row);
                             }
 
                         })
 
-
                 });
-
 
             } catch (error) {
 

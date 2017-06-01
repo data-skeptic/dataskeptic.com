@@ -3,7 +3,6 @@ const AWS = require('aws-sdk');
 const docClient = new AWS.DynamoDB.DocumentClient();
 
 export const singIn = (mail, password) => {
-    console.dir(mail + " " + password)
     let params = {
         TableName: "dataskeptic_users",
         FilterExpression: "#mail = :mail and #pswd = :password",

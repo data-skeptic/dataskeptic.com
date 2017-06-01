@@ -18,12 +18,10 @@ module.exports = (env) => {
 
         done(user)
     })
-    console.dir("ENV 2 = " + env)
     passport.use(LinkedinStrategy(env))
     router.use(passport.initialize())
     router.use(passport.session())
 
-    // REGULAR
     passport.use(
         new LocalStrategy({
                 usernameField: 'email',
@@ -43,7 +41,6 @@ module.exports = (env) => {
         )
     )
 
-    // REGULAR
     router.post('/login', (req, res, next) => {
         passport.authenticate('local', {failWithError: true}, function (err, user, info) {
             if (err) {
@@ -84,28 +81,27 @@ module.exports = (env) => {
 
 
     router.get('/linkedin/callback', function (req, res, next) {
-        console.dir('linkedin callback')
         passport.authenticate('linkedin', {
             failWithError: true,
             failureFlash: true
         }, function (err, user, info) {
             return res.send(user);
             /*  if (err) {
-             console.dir("check 1 ");
+
              return res.status(403).send({message: err})
              }*/
 
             if (!user) {
-                console.dir("check 2 ");
+
                 return res.status(403).send({message: 'System Error'})
             }
 
             req.logIn(user, err => {
                 if (err) {
-                    console.dir("check 3 ");
+
                     return res.status(403).send({message: err.message})
                 }
-                console.dir("check 4 ");
+
 
 
             })
