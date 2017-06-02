@@ -27,6 +27,7 @@ export default function CheckoutReducer(state=initialState, action) {
             nstate.success = '';
             nstate.error = action.payload.error;
             nstate.processing = false;
+            debugger;
             break;
 
         default:
