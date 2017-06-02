@@ -113,18 +113,20 @@ const run = () => {
             console.log('stream');
             console.log('meta', meta);
 
-            const {id, chunkId} = meta;
+            const {id, chunkId, sampleRate} = meta;
             client.meta = {
                 id,
                 chunkId
             };
             startRecording(id);
 
+
             const filePath = generateChunkPath(id, chunkId);
+            console.log('client sample rate:', sampleRate);
             console.log('writing in:', filePath);
             let fileWriter = new wav.FileWriter(filePath, {
                 channels: 1,
-                sampleRate: 48000,
+                sampleRate: sampleRate,
                 bitDepth: 16
             });
 

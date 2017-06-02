@@ -214,8 +214,11 @@ class RecorderFlowContainer extends Component {
             const hostname = window.location.hostname;
             this.client = new BinaryClient(`ws://${hostname}:9001/recording`);
 
+            const audioCtx = new AudioContext();
+            const sampleRate = audioCtx.sampleRate;
+
             this.client.on('open', () => {
-                const meta = {id, chunkId};
+                const meta = {id, chunkId, sampleRate};
                 this.Stream = this.client.createStream(meta);
                 res();
             });
@@ -306,13 +309,7 @@ class RecorderFlowContainer extends Component {
         this.audioInput = context.createMediaStreamSource(stream);
 
         const bufferSize = 4096;
-        this.recorder = context.createScriptProcessor(bufferSize, 1, 1);
-
-        const {sampleRate} = this.recorder.context;
-        debugger;
-        this.resampler = new Resampler(sampleRate, 48000, 1, bufferSize);
-        debugger;
-
+        this.recorder = context.createScriptProcessor(bufferSize, 2, 2);
 
         this.startTimeCounter();
 
@@ -320,8 +317,7 @@ class RecorderFlowContainer extends Component {
             if (!this.isRecording()) return;
 
             const left = e.inputBuffer.getChannelData(0);
-            const resampled = this.resampler.resampler(left);
-            this.uploadChunk(float32ToInt16(resampled));
+            this.uploadChunk(float32ToInt16(left));
         };
 
         this.audioInput.connect(this.recorder);
