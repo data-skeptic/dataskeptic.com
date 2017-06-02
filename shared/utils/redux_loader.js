@@ -83,7 +83,7 @@ export function get_invoice(dispatch, id) {
 }
 
 export function get_related_content(dispatch, pathname) {
-    const uri = "/api/related?uri=" + pathname;
+    const uri = "/api/Related?uri=" + pathname;
 
     return axios.get(uri)
         .then(function(resp) {
