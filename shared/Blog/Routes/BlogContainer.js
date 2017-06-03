@@ -8,13 +8,13 @@ import BlogList from "../Components/BlogList"
 import BlogNav from "../Components/BlogNav"
 import BlogItem from "../Components/BlogItem"
 import Error from "../../Common/Components/Error"
-import Loading from "../../Common/Components/Loading"
 
 import PaginationContainer from '../../Pagination/Containers/PaginationContainer';
 
 import transform_pathname from "../../utils/transform_pathname"
 
 import {loadBlogs} from '../Actions/BlogsActions';
+import LoadingBlogList from "../Components/LoadingBlogList"
 
 import isNaN from 'lodash/isNaN';
 
@@ -59,6 +59,16 @@ class BlogContainer extends Component {
         }
     }
 
+    componentWillReceiveProps(props) {
+        const pageHasChanged = props.location.pathname !== this.props.location.pathname;
+
+        if (pageHasChanged) {
+            this.fetchPosts(props.pageNum);
+            const {title} = BlogContainer.getPageMeta();
+            this.props.changePageTitle(title);
+        }
+    }
+
     fetchAllPosts() {
         const location = this.props.location;
 
@@ -71,6 +81,8 @@ class BlogContainer extends Component {
     }
 
     componentDidMount() {
+        const isEmpty = this.props.blogs.toJS().blogs.length === 0;
+
         const folderName = this.props.folderName || '';
         if (isNaN(+folderName)) {
             this.fetchAllPosts();
@@ -183,13 +195,14 @@ class BlogContainer extends Component {
 
         const contentTitle = BlogContainer.getPageTitle(this.props, activeFolder);
         const latestBlogId = oblogs.latestId;
+        const isLoading = blogs.length === 0;
 
         return (
             <div className="blog-page">
                 <Container>
                     <Content title={contentTitle}>
-                        { blogs.length === 0
-                            ? <Loading />
+                        { isLoading
+                            ? <LoadingBlogList length={5}/>
                             : <BlogList blogs={blogs} latestId={latestBlogId}/>
                         }
                     </Content>

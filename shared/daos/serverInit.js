@@ -171,6 +171,10 @@ export function loadEpisodes(env, feed_uri, blogmetadata_map, aws) {
                             }
                         }
 
+                        if (episode.img) {
+                            episode.img = episode.img.replace("http://", "https://");
+                        }
+
                         list.push(episode.guid)
                     }
 

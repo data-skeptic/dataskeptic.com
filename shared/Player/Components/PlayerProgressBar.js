@@ -9,21 +9,21 @@ class PlayerProgressBar extends React.Component {
 	}
 	
 	onUpdate(pos) {
-		this.props.dispatch({type: "PLAYER_SEEK", payload: pos })
+		this.props.onChange(pos);
 	}
 
 	render() {
 		return (
 			<div className="player-progress-bar">
-			<Rcslider
-				min={0}
-				max={100}
-				range={false}
-				defaultValue={this.props.progress}
-				value={this.props.progress}
-				disabled={false}
-				onChange={this.onUpdate.bind(this)}
-			/>
+				<Rcslider
+					min={0}
+					max={100}
+					range={false}
+					defaultValue={this.props.progress}
+					value={this.props.progress}
+					disabled={false}
+					onChange={this.onUpdate.bind(this)}
+				/>
 			</div>
 		)
 	}
