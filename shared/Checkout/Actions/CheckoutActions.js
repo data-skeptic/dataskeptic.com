@@ -96,7 +96,7 @@ export function checkoutRequestFailed(error, data) {
             User details:
             ${JSON.stringify(data)}    
         `,
-        to: 'kyle@datasketptic.com',
+        to: 'kyle@dataskeptic.com',
         subject: 'Error in Order Processing'
     };
 
