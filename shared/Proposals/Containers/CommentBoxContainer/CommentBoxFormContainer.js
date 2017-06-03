@@ -186,6 +186,18 @@ class CommentBoxFormContainer extends Component {
         const showInfoBox = this.shouldShowInfoBox();
         const successMessage = this.getSuccessMessage();
 
+/*
+    Disabling these for now.  Leave them here in case I easily want to add them back.
+    
+                        <CommentTypeBox key={TEXT}/>
+
+                        <UploadFileTypeBox
+                            key={UPLOAD}
+                            onDrop={this.fileDrop}
+                            onRemove={this.fileRemove}
+                            files={files}
+                        />
+*/
         return (
             <div className="comment-box-form-container">
                 <Debug data={values}/>
@@ -197,14 +209,6 @@ class CommentBoxFormContainer extends Component {
                 <CommentBoxForm onSubmit={this.handleSubmit} showSubmit={showSubmit} customSubmitting={customSubmitting}
                                 customSuccess={successMessage}>
                     <Wizard activeKey={messageType}>
-                        <CommentTypeBox key={TEXT}/>
-
-                        <UploadFileTypeBox
-                            key={UPLOAD}
-                            onDrop={this.fileDrop}
-                            onRemove={this.fileRemove}
-                            files={files}
-                        />
 
                         <Recorder
                             key={RECORDING}
