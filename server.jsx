@@ -375,9 +375,10 @@ function inject_blog(store, my_cache, pathname, req) {
   }
   var blog_metadata = my_cache.blogmetadata_map[blog_page]
   if (blog_metadata == undefined) {
-      blog_metadata = {}
-      var dispatch = store.dispatch
-      var blogs = get_blogs_list(dispatch, pathname)
+    blog_metadata = {}
+    var dispatch = store.dispatch
+    var blogs = get_blogs_list(dispatch, pathname)
+    console.log("Could not find blog_metadata for " + blog_page)
   } else {
     var guid = blog_metadata.guid
     if (guid != undefined) {
