@@ -91,7 +91,6 @@ class CommentBoxFormContainer extends Component {
     }
 
     recordingReady(noDelay) {
-        debugger;
         this.props.ready(noDelay);
     }
 
@@ -146,6 +145,7 @@ class CommentBoxFormContainer extends Component {
 
     shouldShowInfoBox() {
         const {messageType} = this.props;
+        return true;
 
         if (messageType === TEXT || messageType === UPLOAD) {
             return true;
@@ -208,6 +208,10 @@ class CommentBoxFormContainer extends Component {
 
                 <CommentBoxForm onSubmit={this.handleSubmit} showSubmit={showSubmit} customSubmitting={customSubmitting}
                                 customSuccess={successMessage}>
+                    { showInfoBox ?
+                        <UserInfoBox />
+                        : null }
+
                     <Wizard activeKey={messageType}>
 
                         <Recorder
@@ -226,11 +230,16 @@ class CommentBoxFormContainer extends Component {
                             submittedUrl={submittedUrl}
                         />
 
-                    </Wizard>
+                        <CommentTypeBox key={TEXT}/>
 
-                    { showInfoBox ?
-                        <UserInfoBox />
-                        : null }
+                        <UploadFileTypeBox
+                            key={UPLOAD}
+                            onDrop={this.fileDrop}
+                            onRemove={this.fileRemove}
+                            files={files}
+                        />
+
+                    </Wizard>
 
                 </CommentBoxForm>
             </div>

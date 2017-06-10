@@ -29,6 +29,7 @@ import {
 
 import Wizard from '../../../Wizard';
 import Debug from '../../../Debug';
+import Loading from '../../../Common/Components/Loading';
 
 import TogglePlayButton from '../../../Player/Components/TogglePlayButton';
 import Recorder from '../../Components/Recorder/Recorder';
@@ -198,6 +199,8 @@ class RecorderFlowContainer extends Component {
     }
 
     isBrowserSupportRecording() {
+        if (typeof window === "undefined") retunr
+
         if (!navigator.getUserMedia) {
             navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
                 navigator.mozGetUserMedia || navigator.msGetUserMedia;
@@ -430,12 +433,7 @@ class RecorderFlowContainer extends Component {
                         </div>
 
                         <div key={UPLOADING} className="uploading-step">
-                            Uploading...
-                            <div className="progress">
-                                <div className="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style={{'width': '35%'}}>
-                                    <span className="sr-only">45% Complete</span>
-                                </div>
-                            </div>
+                            <Loading/>
                         </div>
 
                         <div key={[REVIEW, SUBMITTING]} className="review-step">

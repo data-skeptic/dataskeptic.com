@@ -21,8 +21,7 @@ class Menu extends Component {
             { to: '/podcast', name: 'Podcasts' },
             { to: '/blog', name: 'Blog' },
             { to: '/projects', name: 'Projects' },
-            { to: '/services', name: 'Services' },
-            { to: '/rfc', name: 'Proposals' }
+            { to: '/services', name: 'Services' }
         ];
 
         return (

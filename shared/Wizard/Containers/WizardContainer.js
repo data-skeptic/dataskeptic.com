@@ -1,9 +1,9 @@
 import React, {Component, PropTypes} from 'react';
+import isArray from 'lodash.isArray'
 
 class WizardContainer extends Component {
 
     static propTypes = {
-        children: PropTypes.node,
         activeKey: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
     };
 
@@ -37,9 +37,13 @@ class WizardContainer extends Component {
     }
 
     render() {
-        const {children} = this.props;
+        const {children = []} = this.props;
+        let visibleChildren = children;
 
-        const visibleChildren = children.filter((step) => this.isStepVisible(step.key));
+        // single wizard page
+        if (isArray(children)) {
+            visibleChildren = children.filter((step) => this.isStepVisible(step.key));
+        }
 
         return (
             <div className="wizard-container">
