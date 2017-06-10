@@ -59,7 +59,9 @@ import {
 const defaultState = {
     loading: false,
     error: false,
-    proposal: {},
+    proposal: {
+        active: false
+    },
     form: {
         step: INIT,
         error: {},

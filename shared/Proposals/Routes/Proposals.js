@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import moment from 'moment';
 
 import isEmpty from 'lodash/isEmpty';
 import {fetchCurrentProposal, proposalDeadlineReached} from '../Actions/ProposalsActions';
@@ -50,24 +51,29 @@ class Proposals extends Component {
         const {proposal} = this.props;
         const {topic, long_description, deadline, active} = proposal;
 
-        const to = new Date(deadline);
+        const to = moment(deadline);
 
-        // const isClosed = !active;
-        const isClosed = false;
+        const isClosed = !active;
         return (
             <div className="proposals-page">
+
                 <Container>
                     <Content>
-                        <h2>Request for Comment</h2>
-                        <p>Thanks for considering contributing your thoughts for an upcoming episode. Please review the
-                            topic below and share any thoughts you have on it. We aren't always able to use every
-                            comment submitted, but we will do our best and appreciate your input.</p>
-                        <h3><b>Current topic:</b> {topic}</h3>
-                        <p>{long_description}</p>
+                        {!isClosed && (
+                            <div>
+                            <h2>Request for Comment</h2>
+                            <p>Thanks for considering contributing your thoughts for an upcoming episode. Please review the
+                                topic below and share any thoughts you have on it. We aren't always able to use every
+                                comment submitted, but we will do our best and appreciate your input.</p>
+                            <h3><b>Current topic:</b> {topic }</h3>
+                            <p>{long_description}</p>
 
-                        {deadline ?
-                            <p className="deadline">Time to comment: <kbd><i className="glyphicon glyphicon-time"/> <Countdown to={to} onDeadlineReached={this.deadline}/></kbd></p>
-                        : null}
+                            {deadline ?
+                                <p className="deadline"><b>Time to comment:</b><Countdown to={to.toString()} onDeadlineReached={this.deadline}/></p>
+                            : null}
+                            </div>
+                        )}
+
 
                         {isClosed
                             ?
@@ -76,8 +82,7 @@ class Proposals extends Component {
                                     <h3 className="panel-title">This RFC has closed.</h3>
                                 </div>
                                 <div className="panel-body">
-                                    Please check back later, as we open new topics
-                                    regularly.
+                                    We don't have any active topics.  Please check back soon when we launch the next!
                                 </div>
                             </div>
                             :

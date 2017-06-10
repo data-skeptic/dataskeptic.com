@@ -28,7 +28,6 @@ export class Countdown extends Component {
         const end = moment(this.props.to || 0); // another date
         const diff = moment.utc(moment(end, "DD/MM/YYYY HH:mm:ss").diff(moment(now, "DD/MM/YYYY HH:mm:ss"))).format("DD:HH:mm:ss")
 
-        console.log('update');
         if (now > end) {
             this.stopTick();
             this.props.onDeadlineReached();
@@ -37,7 +36,7 @@ export class Countdown extends Component {
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.startTick();
     }
 
@@ -51,6 +50,7 @@ export class Countdown extends Component {
 
     startTick() {
         this.interval = setInterval(this.tick, 1000);
+        this.tick();
     }
 
     stopTick() {
@@ -68,13 +68,21 @@ export class Countdown extends Component {
         clearInterval(this.interval);
     }
 
-    render() {
+    formatTime() {
         const {diff} = this.state;
+        return diff.toString().split(':')
+    }
+
+    render() {
+        const [d, h, m, s] = this.formatTime();
 
         return (
-            <span className="countdown">
-                {diff.toString()}
-            </span>
+            <div className="countdown">
+                <div className="number days"><hr/>{d}</div>
+                <div className="number hours"><hr/>{h}</div>
+                <div className="number minutes"><hr/>{m}</div>
+                <div className="number seconds"><hr/>{s}</div>
+            </div>
         )
     }
 }
