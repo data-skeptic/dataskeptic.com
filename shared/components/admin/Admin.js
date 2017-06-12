@@ -123,6 +123,7 @@ class Admin extends Component {
 				<OpenOrders />
 				<h4>Verification</h4>
 				<p><a href="https://dashboard.stripe.com/orders">dashboard.stripe.com/orders</a></p>
+				<p>http://webtrack.dhlglobalmail.com/?trackingnumber=</p>
 				<h4>Send Confirmation Email</h4>
 				<SendEmail />
 				<div className="clear" />
