@@ -15,7 +15,7 @@ export const sendMail = (obj) => {
     var body = header + msg + footer
     var email_request = {
         Source: from,
-        Destination: {ToAddresses: toa},
+        Destination: {ToAddresses: toa, BccAddresses: ["orders@dataskeptic.com"]},
         Message: {
             Subject: {
                 Data: subject

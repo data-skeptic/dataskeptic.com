@@ -29,6 +29,9 @@ class Proposals extends Component {
 
     componentWillMount() {
         this.props.fetchCurrentProposal();
+        if (isEmpty(this.props.proposal)) {
+            this.props.fetchCurrentProposal();
+        }
 
         const dispatch = this.props.dispatch;
         const {title} = Proposals.getPageMeta();
