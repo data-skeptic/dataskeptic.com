@@ -30,25 +30,20 @@ export function checkout(data) {
             exp_month: data.card_month,
             exp_year: data.card_year
         };
-        console.log("test")
 
         Stripe.createToken(cardData, (status, response) => {
+
             if (response.error) {
-                console.log("response")
-                console.log(response)
-                dispatch(checkoutRequestFailed(response.error.message));
+                dispatch(checkoutRequestFailed(response.error.message, data));
             } else {
-                console.log("data")
-                console.log(data)
                 if (data['street_2'] == undefined) {
-                    console.log("adding empty street 2")
                     data['street_2'] = ""
                 }
                 const token = response.id;
 
                 checkoutMakeOrder(data, token, prod)
-                    .then((data) => {
-                        dispatch(checkoutRequestSuccess(data));
+                    .then((successData) => {
+                        dispatch(checkoutRequestSuccess(successData, data));
                         setTimeout(() => {
                             dispatch(clearCart());
                             // react-redux-router push doesn't work
@@ -70,7 +65,22 @@ export function checkoutRequestStart(data) {
     }
 }
 
-export function checkoutRequestSuccess(message) {
+export function checkoutRequestSuccess(message, data) {
+    const emailData = {
+        msg: `
+            Hi ${data.first_name}.
+            
+            Thank you for order!
+        `,
+        to: data.email,
+        subject: 'Your order is completed!'
+    };
+
+    axios.post('/api/v1/mail', emailData)
+        .then(() => console.info('Email delivered '))
+        .catch((err) => console.error(err))
+
+
     return {
         type: CHECKOUT_REQUEST_SUCCESS,
         payload: {
@@ -79,7 +89,21 @@ export function checkoutRequestSuccess(message) {
     }
 }
 
-export function checkoutRequestFailed(error) {
+export function checkoutRequestFailed(error, data) {
+    const emailData = {
+        msg: `
+            Error message: ${error},
+            User details:
+            ${JSON.stringify(data)}    
+        `,
+        to: 'kyle@dataskeptic.com',
+        subject: 'Error in Order Processing'
+    };
+
+    axios.post('/api/v1/mail', emailData)
+        .then(() => console.info('Email delivered '))
+        .catch((err) => console.error(err))
+
     return {
         type: CHECKOUT_REQUEST_FAILED,
         payload: {
