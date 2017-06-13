@@ -10,7 +10,7 @@ export function fetchCurrentProposal() {
     return (dispatch) => {
         dispatch(fetchCurrentProposalRequest());
 
-        axios.get('/api/rfc/list')
+        axios.get('/api/v1/rfc/list')
             .then((res) => dispatch(fetchCurrentProposalSuccess(res.data)))
             .catch((err) => dispatch(fetchCurrentProposalFail(err)))
     }
