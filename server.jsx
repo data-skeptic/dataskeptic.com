@@ -14,6 +14,8 @@ import {order_fulfill}           from 'backend/order_fulfill'
 import {order_list}              from 'backend/order_list'
 import {pay_invoice}             from 'backend/pay_invoice'
 import {related_content, related_cache}         from 'backend/related_content'
+import {ready}                   from 'backend/v1/recording';
+import {write as writeProposal, upload as uploadProposalFiles}  from 'backend/v1/proposals'
 import bodyParser                from 'body-parser'
 import compression               from 'compression';
 import { feed_uri }              from 'daos/episodes'
@@ -88,6 +90,7 @@ let Cache = {
     , episodes_map: {}      // `guid` | 'latest' -> {episode}
     , episodes_list: []     // guids
     , products: {}
+    , contributors: {}
     , advertise: {
         card: DEFAULT_ADVERTISE_HTML,
         banner: null
@@ -99,6 +102,7 @@ const reducer  = combineReducers({
     form: formReducer
 });
 
+global.my_cache = Cache;
 global.env = env;
 
 const doRefresh = (store) => {
@@ -165,6 +169,7 @@ const doRefresh = (store) => {
             Cache.products.items = products;
         })
         .then(() => {
+            Cache.contributors = get_contributors()
             console.log("Refreshing Finished")
         })
         // .then(() => global.gc())
@@ -188,6 +193,19 @@ if (process.env.NODE_ENV == 'production') {
 }
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+const proxy = require('http-proxy-middleware');
+const wsProxy = proxy('/recording', {
+    target: 'ws://127.0.0.1:9001',
+    // pathRewrite: {
+    //  '^/websocket' : '/socket',          // rewrite path.
+    //  '^/removepath' : ''                 // remove path.
+    // },
+    changeOrigin: true,                     // for vhosted sites, changes host header to match to target's host
+    ws: true,                               // enable websocket proxy
+    logLevel: 'debug'
+});
+app.use(wsProxy);
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
@@ -217,7 +235,17 @@ function api_router(req, res) {
         join_slack(req, res, slack_key)
         return true
     }
-    if (req.url.indexOf('/api/refresh') == 0) {
+
+    if (req.url.indexOf('/api/v1/proposals/files') == 0) {
+        uploadProposalFiles(req, res);
+        return true;
+    } if (req.url.indexOf('/api/v1/proposals') == 0) {
+        writeProposal(req, res);
+        return true;
+    } else if (req.url.indexOf('/api/v1/recording/ready') == 0) {
+        ready(req, res);
+        return true;
+    } if (req.url.indexOf('/api/refresh') == 0) {
         doRefresh()
         return res.status(200).end(JSON.stringify({'status': 'ok'}))
     }
@@ -364,7 +392,7 @@ function install_episode(store, episode) {
     store.dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
 }
 
-function inject_blog(store, my_cache, pathname) {
+function inject_blog(store, my_cache, pathname, req) {
   var blog_page = pathname.substring('/blog'.length, pathname.length)
   var content = my_cache.content_map[blog_page]
   if (content == undefined) {
@@ -407,7 +435,7 @@ function inject_blog(store, my_cache, pathname) {
   console.log("done with blog inject")
 }
 
-function updateState(store, pathname) {
+function updateState(store, pathname, req) {
     inject_folders(store, Cache)
     inject_years(store, Cache)
 
@@ -418,7 +446,7 @@ function updateState(store, pathname) {
         inject_homepage(store, Cache, pathname)
     }
     if (pathname.indexOf('/blog') === 0) {
-        inject_blog(store, Cache, pathname)
+        inject_blog(store, Cache, pathname, req)
     }
     else if (pathname === "/members" || pathname === "/store") {
         inject_products(store, Cache, pathname)
@@ -428,8 +456,6 @@ function updateState(store, pathname) {
     }
 
     store.dispatch({type: "ADD_FOLDERS", payload: Cache.folders});
-    store.dispatch({type: "ADD_BLOGS", payload: {blogs: Cache.blogmetadata_map, total: Cache.blogmetadata_map.length}});
-    store.dispatch({type: "SET_BLOGS_LOADED"});
 
     store.dispatch({
         type: 'SET_ADVERTISE_CARD_CONTENT',
@@ -448,6 +474,10 @@ function updateState(store, pathname) {
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+
+const api = require('./backend/api/v1');
+app.use('/api/v1/', api(Cache));
 
 /***
  * DUMP GENERATION
@@ -523,6 +553,10 @@ const renderPage = (req, res) => {
         return res.redirect(307, 'http://dataskeptic.libsyn.com/rss')
     }
 
+    if (req.url.indexOf('.svg') > -1) {
+        return res.status(404).end('File Not Found');
+    }
+
     const location = createLocation(req.url);
 
     match({routes, location}, (err, redirectLocation, renderProps) => {
@@ -538,7 +572,7 @@ const renderPage = (req, res) => {
         }
 
         let store = applyMiddleware(thunk, promiseMiddleware)(createStore)(reducer);
-        updateState(store, location.pathname);
+        updateState(store, location.pathname, req);
 
         fetchComponentData(store.dispatch, renderProps.components, renderProps.params)
             .then(() => renderView(store, renderProps, location))

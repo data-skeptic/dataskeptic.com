@@ -1,0 +1,10 @@
+{
+  "source": "recordings",
+  "aws_proposals_bucket": "dataskeptic-records",
+  "aws_files_bucket": "dataskeptic-files",
+  "locked_file_name": ".locked",
+  "temp_files": "temp_files",
+  "emails": {
+    "admin": "kyle@dataskeptic.com"
+  }
+}

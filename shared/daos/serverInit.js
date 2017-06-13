@@ -25,7 +25,7 @@ function generate_content_map(env, blog, my_cache) {
                 return content;
             })
             .catch((err) => {
-                console.log("Content cache error trying to store blog content")
+                console.log("Content cache e3rror trying to store blog content")
                 console.log(err)
             })
     } else {
@@ -169,6 +169,10 @@ export function loadEpisodes(env, feed_uri, blogmetadata_map, aws) {
                                     });
                                 }
                             }
+                        }
+
+                        if (episode.img) {
+                            episode.img = episode.img.replace("http://", "https://");
                         }
 
                         list.push(episode.guid)

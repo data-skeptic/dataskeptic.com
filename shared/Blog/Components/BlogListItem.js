@@ -33,8 +33,18 @@ class BlogListItem extends Component {
         return (
             <div className="col-xs-12">
 	            <div className="blog-summary" key={blog.uri}>
-                    <div className="blog-date">{date}</div>
-	                <Link className="blog-title" to={link} onClick={ onClick }>{blog.title}</Link>
+                    <div>
+                        <span className="blog-date">{date}</span>
+                    </div>
+                    <div className="media">
+                        {blog.contributor && <div className="media-left contributor-preview">
+                            <img src={blog.contributor.img}/>
+                        </div>}
+                        <div className="media-body">
+                            <Link className="blog-title media-heading" to={link} onClick={ onClick }>{blog.title}</Link>
+                            {blog.contributor && <p className="by">by <b>{blog.contributor.prettyname}</b></p>}
+                        </div>
+                    </div>
 	                <p className="blog-desc">
                         {blog.desc}
                         ... <Link className="blog-view-more" to={link}>View More &gt;</Link>

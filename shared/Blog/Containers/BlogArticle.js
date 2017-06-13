@@ -3,6 +3,7 @@ import ReactDOM from "react-dom"
 import {Link} from 'react-router'
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux'
+import moment from 'moment'
 
 import isUndefined from 'lodash/isUndefined';
 
@@ -21,6 +22,7 @@ import {get_folders} from '../../utils/redux_loader'
 
 import isEmpty from 'lodash/isEmpty';
 import {loadBlogPost, stopBlogLoading} from '../Actions/BlogsActions';
+import LoadingBlogArticle from "../Components/LoadingBlogArticle";
 
 class BlogArticle extends Component {
     constructor(props) {
@@ -92,7 +94,7 @@ class BlogArticle extends Component {
         const {currentPost, isLoading, contributors, disqusUsername, postUrl} = this.props;
 
         if (isLoading) {
-            return <Loading />
+            return <LoadingBlogArticle />
         }
 
         const post = currentPost.toJS();
@@ -128,16 +130,20 @@ class BlogArticle extends Component {
 
         const proposeEditUrl = this.getProposeEditUrl(post);
 
+        const publishedDate=  post.publish_date ||post.publishedAt
+        const date = moment(publishedDate).format('MMMM D, YYYY')
+
         return (
-            <div className="center">
+            <div className="blog-article center">
 
                 { isEpisode ? <LatestEpisodePlayer guid={guid} /> : null }
 
                 {contributor ? <BlogAuthorTop contributor={contributor}/> : <div></div> }
 
+                <div className="published-date">{date}</div>
+
                 <div id='blog-content'>
                     <PostBodyContainer content={content}/>
-
                 </div>
 
                 <RelatedContent items={related} />

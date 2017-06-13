@@ -7,7 +7,7 @@ import prodCfg              from './webpack.prod.config.js';
 Object.assign = assign;
 
 const BABEL_QUERY = {
-  presets: ['react', 'es2015'],
+  presets: ['react', 'es2015', 'stage-0'],
   plugins: [
     ['transform-object-rest-spread'],
     ['transform-class-properties'],
@@ -25,7 +25,7 @@ const BABEL_QUERY = {
       }
     ]
   ]
-}
+};
 
 export default function(app) {
   const config = Object.assign(prodCfg, {
@@ -46,6 +46,9 @@ export default function(app) {
             test: /\.less$/,
             loader: "style!css!less?strictMath&noIeCompat"
         },
+        {
+          test: /\.json$/, loader: "json"
+        }
       ]
     },
     plugins: [
