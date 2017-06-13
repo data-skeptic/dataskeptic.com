@@ -114,7 +114,7 @@ export const getBlogRss = (blogmetadata_map, prettyname) => {
 };
 
 export const getAll = (url, blogmetadata_map, offset, limit, env, exclude = ['/episodes', '/transcripts']) => {
-
+    env = (env === 'prod') ? 'master' : 'dev';
 
     // remove unnecessary keys
     let blogs = filter(blogmetadata_map, (blog, id) => !isIgnoredKey(id));
