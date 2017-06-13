@@ -31,11 +31,11 @@ export const sendMail = (obj) => {
 
         ses.sendEmail(email_request, function (err, data) {
             if (err !== null) {
-                console.log("---[ERROR]-------------------")
+
                 console.log(err)
                 return reject(JSON.stringify(err))
             } else {
-                console.log("Email sent")
+
                 resp = {status: 200, msg: err}
                 return resolve(JSON.stringify(resp))
             }

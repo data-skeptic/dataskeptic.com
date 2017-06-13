@@ -1,5 +1,7 @@
 import aws                       from 'aws-sdk'
 import axios                     from 'axios';
+import session from 'express-session';
+
 import {get_blogs}               from 'backend/get_blogs'
 import {get_blogs_rss}           from 'backend/get_blogs_rss'
 import {get_contributors}        from 'backend/get_contributors'
@@ -24,6 +26,9 @@ import {
     loadAdvertiseContent
 }  from 'daos/serverInit'
 import express                   from 'express';
+
+import AuthService               from './backend/modules/Auth'
+
 import FileStreamRotator         from 'file-stream-rotator'
 import fs                        from 'fs'
 import createLocation            from 'history/lib/createLocation';
@@ -451,8 +456,15 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 
+
 const api = require('./backend/api/v1');
 app.use('/api/v1/', api(Cache));
+
+// authorization module
+app.use(session({secret : "DATAS"}))
+app.use(AuthService({
+    env
+}))
 
 /***
  * DUMP GENERATION

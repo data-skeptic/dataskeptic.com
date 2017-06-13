@@ -1,10 +1,13 @@
 import React, {Component} from "react"
 import ReactHowler from 'react-howler'
 import moment from 'moment'
+import axios from 'axios'
 import {connect} from 'react-redux'
+
 
 import MiniPlayer from '../Components/MiniPlayer'
 import VolumeBarContainer from './VolumeBarContainer'
+const URL = '/api/v1/player'
 
 const ZERO_POS_STR = '0:00';
 
@@ -15,8 +18,14 @@ const CAPTURE_TYPES = {
     SEEK: 'SEEK',
     POS: 'POS'
 }
-
 class PlayerContainer extends Component {
+
+    /**
+     * Record player action
+     *
+     * @param {String} type Action Type
+     * @param {Object} meta Action meta
+     */
 
     constructor(props) {
         super(props)
@@ -186,18 +195,10 @@ class PlayerContainer extends Component {
             pos: this.getSeek()
         })
     }
-
-    /**
-     * Record player action
-     *
-     * @param {String} type Action Type
-     * @param {Object} meta Action meta
-     */
     capture(type, meta = {}) {
-        console.info('Capture player metadata');
-
-        console.log(type)
-        console.dir(meta)
+        axios.post(URL, {type, meta})
+            .then((data) => {})
+            .catch((err) => console.error(err))
     }
 
     /**

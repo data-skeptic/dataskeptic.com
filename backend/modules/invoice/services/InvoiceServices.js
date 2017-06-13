@@ -25,11 +25,11 @@ export const getInvoice = (id) => {
                 var items = data['Items']
                 if (items.length < 1) {
                     var e = {"error": true, "msg": "not found"}
-                    console.log("invoice not found: " + id)
+
                     return reject(JSON.stringify(e))
                 }
                 var invoice = items[0]
-                console.log("invoice found")
+
                 return resolve(JSON.stringify(invoice))
             }
         });
