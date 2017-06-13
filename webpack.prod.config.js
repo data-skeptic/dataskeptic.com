@@ -21,7 +21,8 @@ module.exports = {
         loaders: [
             {test: /\.jsx?$/, exclude: /node_modules/, loaders: ['babel']},
             {test: /\.css$/, exclude: /node_modules/, loader: 'style-loader!css-loader'},
-            {test: /\.less$/i, loader: extractLESS.extract(['css','less'])}
+            {test: /\.less$/i, loader: extractLESS.extract(['css', 'less'])},
+            {test: /\.json$/, loader: "json"}
         ]
     },
     plugins: [

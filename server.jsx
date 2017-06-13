@@ -14,6 +14,8 @@ import {order_fulfill}           from 'backend/order_fulfill'
 import {order_list}              from 'backend/order_list'
 import {pay_invoice}             from 'backend/pay_invoice'
 import {related_content, related_cache}         from 'backend/related_content'
+import {ready}                   from 'backend/v1/recording';
+import {write as writeProposal, upload as uploadProposalFiles}  from 'backend/v1/proposals'
 import bodyParser                from 'body-parser'
 import compression               from 'compression';
 import { feed_uri }              from 'daos/episodes'
@@ -192,6 +194,19 @@ if (process.env.NODE_ENV == 'production') {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+const proxy = require('http-proxy-middleware');
+const wsProxy = proxy('/recording', {
+    target: 'ws://127.0.0.1:9001',
+    // pathRewrite: {
+    //  '^/websocket' : '/socket',          // rewrite path.
+    //  '^/removepath' : ''                 // remove path.
+    // },
+    changeOrigin: true,                     // for vhosted sites, changes host header to match to target's host
+    ws: true,                               // enable websocket proxy
+    logLevel: 'debug'
+});
+app.use(wsProxy);
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
   extended: true
@@ -220,7 +235,17 @@ function api_router(req, res) {
         join_slack(req, res, slack_key)
         return true
     }
-    if (req.url.indexOf('/api/refresh') == 0) {
+
+    if (req.url.indexOf('/api/v1/proposals/files') == 0) {
+        uploadProposalFiles(req, res);
+        return true;
+    } if (req.url.indexOf('/api/v1/proposals') == 0) {
+        writeProposal(req, res);
+        return true;
+    } else if (req.url.indexOf('/api/v1/recording/ready') == 0) {
+        ready(req, res);
+        return true;
+    } if (req.url.indexOf('/api/refresh') == 0) {
         doRefresh()
         return res.status(200).end(JSON.stringify({'status': 'ok'}))
     }

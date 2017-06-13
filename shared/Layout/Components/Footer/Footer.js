@@ -8,7 +8,7 @@ import NavLink from '../../../components/NavLink'
 
 const LINKS = {
 	ITUNES: 'https://itunes.apple.com/us/podcast/the-data-skeptic-podcast/id890348705',
-	GOOGLE: 'https://goo.gl/app/playmusic?ibi=com.google.PlayMusic&amp;isi=691797987&amp;ius=googleplaymusic&amp;link=https://play.google.com/music/m/Ibr6e2jb7ot6m6gupwdjgsfmoqa?t%3DData_Skeptic',
+	GOOGLE: 'https://play.google.com/music/m/Ibr6e2jb7ot6m6gupwdjgsfmoqa?t=Data_Skeptic',
 	STITCHER: 'http://www.stitcher.com/s?fid=50561&amp;refid=stpr',
 	RSS: '/api/blog/rss',
 
