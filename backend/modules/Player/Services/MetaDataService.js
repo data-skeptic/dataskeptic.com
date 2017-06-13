@@ -51,9 +51,9 @@ export const insertMeta = (data) => {
         TableName: tablename,
         Item: {
             "id": idOfNewElement,
-            "duration": data.duration,
-            "position" : data.position,
-            "seek" : data.seek
+            "meta": data.meta,
+            "type" : data.type
+
         }
     };
     return new Promise((resolve, reject) => {
@@ -62,7 +62,7 @@ export const insertMeta = (data) => {
                 console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
                 return reject(err);
             } else {
-                console.log("Added item:", JSON.stringify(data));
+
                 return resolve(idOfNewElement);
             }
         });
@@ -82,7 +82,7 @@ export const deleteMeta = (id) => {
                 console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
                 return reject(err);
             } else {
-                console.log("GetItem succeeded:", JSON.stringify(data, null, 2));
+
                 return resolve(data);
             }
         });
@@ -111,13 +111,13 @@ export const updateMeta = (id, data) => {
         ReturnValues: "UPDATED_NEW"
     };
     return new Promise((resolve, reject) => {
-        console.log("Updating the item...");
+
         docClient.update(params, function (err, data) {
             if (err) {
                 console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
                 return reject(err);
             } else {
-                console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
+
                 return resolve(data);
             }
         });

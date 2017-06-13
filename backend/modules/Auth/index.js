@@ -75,28 +75,28 @@ export default function ({env}) {
             })
     });
     router.get('/auth/linkedin/callback', function (req, res, next) {
-        console.dir('linkedin callback')
+
         passport.authenticate('linkedin', {
             failWithError: true,
             failureFlash: true
         }, function (err, user, info) {
             return res.send(user);
           /*  if (err) {
-                console.dir("check 1 ");
+
                 return res.status(403).send({message: err})
             }*/
 
             if (!user) {
-                console.dir("check 2 ");
+
                 return res.status(403).send({message: 'System Error'})
             }
 
             req.logIn(user, err => {
                 if (err) {
-                    console.dir("check 3 ");
+
                     return res.status(403).send({message: err.message})
                 }
-                console.dir("check 4 ");
+
 
 
             })
