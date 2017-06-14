@@ -50,6 +50,7 @@ const init = {
 const defaultState = Immutable.fromJS(init);
 
 var sizeMap = {
+    "XS": "xsl",
     "S": "sml", 
     "M": "med", 
     "L": "lrg", 
