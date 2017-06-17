@@ -80,7 +80,7 @@ if (process.env.NODE_ENV !== 'production') {
 console.log(new Date())
 console.log("Environment: ", env)
 
-const DEFAULT_ADVERTISE_HTML = `<img src="/img/default-advertise.jpg"/>`;
+const DEFAULT_ADVERTISE_HTML = `<img src="/img/advertise.png" width="100%"/>`;
 
 let Cache = {
     title_map: {}         // `uri`             -> <title>
@@ -114,8 +114,7 @@ const doRefresh = (store) => {
     return loadAdvertiseContent(env)
         .then(([cardHtml, bannerHtml]) => {
             Cache.advertise.card = cardHtml ? cardHtml : DEFAULT_ADVERTISE_HTML;
-            Cache.advertise.card = DEFAULT_ADVERTISE_HTML;
-            // Cache.advertise.banner = bannerHtml;
+            Cache.advertise.banner = bannerHtml;
 
             return loadBlogs(env)
         })
