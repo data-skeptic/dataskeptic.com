@@ -5,7 +5,7 @@ import CartQuantity from './CartQuantity'
 export const CartItem = ({ title, product, quantity, size = <br/>, subtype, subtotal, onRemoveClick }) => (
     <div className="cart-row cart-item">
         <div className="remove">
-            <button onClick={ (e)=>{onRemoveClick(product)} }><img src="/img/svg/x.svg" alt=""/></button>
+            <button onClick={ (e)=>{onRemoveClick(product, size)} }><img src="/img/svg/x.svg" alt=""/></button>
         </div>
         <div className="product">
             <div className="product-preview">
