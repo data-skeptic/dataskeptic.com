@@ -15,8 +15,6 @@ import {year_from_path} from '../../utils/redux_loader'
 
 import {changePageTitle} from '../../Layout/Actions/LayoutActions';
 
-import LoadingEpisodeList from '../Components/LoadingEpisodeList'
-
 class Podcast extends Component {
 
     constructor(props) {
@@ -55,7 +53,7 @@ class Podcast extends Component {
 
                     <Content>
                         { !isLoaded ?
-                            <LoadingEpisodeList length={5}/>
+                            <div className="loading-area"><Loading/></div>
                             :
                             list.map(function (episode, index) {
                                 return <Episode key={index} episode={episode}/>
