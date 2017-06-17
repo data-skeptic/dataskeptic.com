@@ -114,7 +114,8 @@ const doRefresh = (store) => {
     return loadAdvertiseContent(env)
         .then(([cardHtml, bannerHtml]) => {
             Cache.advertise.card = cardHtml ? cardHtml : DEFAULT_ADVERTISE_HTML;
-            Cache.advertise.banner = bannerHtml;
+            Cache.advertise.card = DEFAULT_ADVERTISE_HTML;
+            // Cache.advertise.banner = bannerHtml;
 
             return loadBlogs(env)
         })
