@@ -58,10 +58,16 @@ export function loadBlogPost(pathname) {
         return axios.get(url)
             .then(({data}) => {
                 const post = data || {};
-                dispatch(changePageTitle(`${post.title} | ${DEFAULT_APP_TITLE}`));
-                dispatch(loadBlogPostSuccess(post));
+                const {error} = post;
+                if (error) {
+                    dispatch(loadBlogPostFailed(post.message))
+                    dispatch(changePageTitle(`${post.message} | ${DEFAULT_APP_TITLE}`));
+                } else {
+                    dispatch(changePageTitle(`${post.title} | ${DEFAULT_APP_TITLE}`));
+                    dispatch(loadBlogPostSuccess(post));
 
-                get_related_content(dispatch, pathname);
+                    get_related_content(dispatch, pathname);
+                }
             })
             .catch((err) => { dispatch(loadBlogPostFailed(err)) })
     }
@@ -76,7 +82,9 @@ export function loadBlogPostRequest() {
 export function loadBlogPostFailed(error) {
     return {
         type: LOAD_BLOG_POST_FAILED,
-        error
+        payload: {
+            error
+        }
     }
 }
 
