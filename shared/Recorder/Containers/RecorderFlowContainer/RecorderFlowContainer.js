@@ -29,7 +29,7 @@ import {
 
 import Wizard from '../../../Wizard';
 import Debug from '../../../Debug';
-import Loading from '../../../Common/Components/Loading';
+import ProposalLoading from '../../../Proposals/Components/ProposalLoading/ProposalLoading';
 
 import TogglePlayButton from '../../../Player/Components/TogglePlayButton';
 import Recorder from '../../Components/Recorder/Recorder';
@@ -433,7 +433,7 @@ class RecorderFlowContainer extends Component {
                         </div>
 
                         <div key={UPLOADING} className="uploading-step">
-                            <Loading/>
+                            <ProposalLoading />
                         </div>
 
                         <div key={[REVIEW, SUBMITTING]} className="review-step">
