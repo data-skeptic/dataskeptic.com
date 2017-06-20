@@ -6,6 +6,9 @@ const fse = require('fs-extra');
 const path = require('path');
 const AWS = require("aws-sdk");
 
+const sys = require('sys')
+const exec = require('child_process').exec;
+
 AWS.config.loadFromPath('awsconfig.json');
 
 const recordingConfig = require('./global-config.json');
@@ -103,6 +106,29 @@ const clearRecordingPath = (recordId) => {
 
 };
 
+const convertFileToMp3 = (id, chunkId = 0) => {
+    const filePath = generateChunkPath(id, chunkId);
+    const recordPath = generateRecordPath(id)
+
+    const mp3File = `${recordPath}/${chunkId}.mp3`;
+    const command = `ffmpeg -i ${filePath} -f mp3 ${mp3File}`;
+
+    return new Promise((res, rej) => {
+        exec(command, function (error, stdout, stderr) {
+
+            if (error) {
+                return rej(error)
+            }
+
+            if (stderr) {
+                return res(mp3File)
+            }
+
+            return res(mp3File)
+        });
+    })
+}
+
 const run = () => {
     console.log(`Wait for new user connections`);
     bs.on('connection', (client) => {
@@ -135,21 +161,23 @@ const run = () => {
 
         client.on('close', () => {
             const {id, chunkId} = client.meta;
-            const filePath = generateChunkPath(id, chunkId);
-            console.log('Connection closed', id);
-            completeRecording(id);
-            uploadToS3(filePath, id, (err, data) => {
-                if (err) {
-                    console.log('error')
-                    console.error(err);
-                } else {
-                    console.log('success')
-                    console.dir(data);
 
-                    console.log('Success upload to S3', id);
-                    clearRecordingPath(id);
-                }
-            });
+            completeRecording(id);
+            convertFileToMp3(id)
+                .then((filePath) => {
+                    uploadToS3(filePath, id, (err, data) => {
+                        if (err) {
+                            console.log('error')
+                            console.error(err);
+                        } else {
+                            console.log('success')
+                            console.dir(data);
+
+                            console.log('Success upload to S3', id);
+                            clearRecordingPath(id);
+                        }
+                    });
+                })
 
             if (fileWriter !== null) {
                 fileWriter.end();
