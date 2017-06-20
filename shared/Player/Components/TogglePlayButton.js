@@ -4,11 +4,11 @@ import classNames from 'classnames';
 import PlayButton from './PlayButton'
 import PauseButton from './PauseButton'
 
-import Loading from '../../Common/Components/Loading'
+import ProposalLoading from '../../Proposals/Components/ProposalLoading/ProposalLoading'
 
 export const TogglePlayButton = ({playing = false, disabled = false, onClick}) => {
     if (disabled) {
-        return <Loading/>
+        return <ProposalLoading/>
     }
 
     return (

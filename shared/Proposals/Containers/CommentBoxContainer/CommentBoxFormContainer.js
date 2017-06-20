@@ -80,8 +80,12 @@ class CommentBoxFormContainer extends Component {
     }
 
     handleSubmit(data) {
-        const type = this.props.messageType;
+        const {messageType, activeStep} = this.props;
+        if (messageType === RECORDING) {
+            data.recording = this.props.submittedUrl;
+        }
 
+        const type = this.props.messageType;
         data.type = type;
         this.props.submitCommentForm(data);
     }
@@ -102,8 +106,8 @@ class CommentBoxFormContainer extends Component {
         this.props.recordingFinish(id);
 
         debugger;
-        // const recordingUrl = `https://s3-${AWS_REGION}.amazonaws.com/${AWS_BUCKET}/${id}`;
-        const recordingUrl = `https://s3.amazonaws.com/${AWS_BUCKET}/${id}`;
+        const recordingUrl = `https://s3-${AWS_REGION}.amazonaws.com/${AWS_BUCKET}/${id}`;
+        // const recordingUrl = `https://s3.amazonaws.com/${AWS_BUCKET}/${id}`;
         this.props.reviewRecording(recordingUrl);
     }
 
@@ -134,10 +138,10 @@ class CommentBoxFormContainer extends Component {
     }
 
     shouldShowSubmitButton() {
-        const {messageType} = this.props;
+        const {messageType, activeStep} = this.props;
 
-        if (this.isRecordingComplete()) {
-            return true;
+        if (messageType === RECORDING) {
+            return activeStep === 'REVIEW';
         }
 
         return [TEXT, UPLOAD, SUBMIT].indexOf(messageType) > -1;
@@ -177,6 +181,12 @@ class CommentBoxFormContainer extends Component {
         }
     }
 
+    getSubmitText() {
+        const {messageType} = this.props;
+
+        return (messageType === RECORDING) ? 'Ready to submit' : 'Submit proposal';
+    }
+
     render() {
         const {values, messageType, errorMessage, activeStep, submittedUrl = ''} = this.props;
         const {customSubmitting} = this.props;
@@ -206,8 +216,12 @@ class CommentBoxFormContainer extends Component {
 
                 <b>{customSubmitting}</b>
 
-                <CommentBoxForm onSubmit={this.handleSubmit} showSubmit={showSubmit} customSubmitting={customSubmitting}
-                                customSuccess={successMessage}>
+                <CommentBoxForm
+                    onSubmit={this.handleSubmit}
+                    submitText={this.getSubmitText()}
+                    showSubmit={showSubmit}
+                    customSubmitting={customSubmitting}
+                    customSuccess={successMessage}>
                     { showInfoBox ?
                         <UserInfoBox />
                         : null }
