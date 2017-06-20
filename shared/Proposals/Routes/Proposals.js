@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import moment from 'moment';
+import classNames from 'classnames'
 
 import isEmpty from 'lodash/isEmpty';
 import {fetchCurrentProposal, proposalDeadlineReached} from '../Actions/ProposalsActions';
@@ -53,9 +54,10 @@ class Proposals extends Component {
         const to = moment(deadline);
 
         const isClosed = !active;
+        // const isClosed = true;
 
         return (
-            <div className="proposals-page">
+            <div className={classNames('proposals-page', {'closed': isClosed, 'open': !isClosed})}>
 
                 <Container>
                     <Content>
