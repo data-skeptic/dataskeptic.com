@@ -39,7 +39,7 @@ export const ProposalFormValidator = (values) => {
     }
 
     if (!values.email) {
-        errors.email = 'Required';
+        errors.email = 'Please provide your email address.';
     } else {
         if (!email(values.email)) {
             errors.email = 'Please provide a valid email address.';
