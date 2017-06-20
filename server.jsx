@@ -23,7 +23,9 @@ import {
     loadBlogs,
     loadEpisodes,
     loadProducts,
-    loadAdvertiseContent
+    loadAdvertiseContent,
+    load,
+    loadCurrentRFC
 }  from 'daos/serverInit'
 import express                   from 'express';
 import FileStreamRotator         from 'file-stream-rotator'
@@ -95,6 +97,7 @@ let Cache = {
         card: DEFAULT_ADVERTISE_HTML,
         banner: null
     }
+    , rfc: {}
 };
 
 const reducer  = combineReducers({
@@ -170,6 +173,13 @@ const doRefresh = (store) => {
         })
         .then(() => {
             Cache.contributors = get_contributors()
+            return loadCurrentRFC()
+        })
+        .then((rfc) => {
+            Cache.rfc = rfc
+            console.dir(rfc)
+
+
             console.log("Refreshing Finished")
         })
         // .then(() => global.gc())
@@ -468,6 +478,13 @@ function updateState(store, pathname, req) {
         type: 'SET_ADVERTISE_BANNER_CONTENT',
         payload: {
             content: Cache.advertise.banner
+        }
+    })
+
+    store.dispatch({
+        type: 'FETCH_CURRENT_PROPOSAL_SUCCESS',
+        payload: {
+            data: Cache.rfc
         }
     })
 }

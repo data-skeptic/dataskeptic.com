@@ -163,6 +163,7 @@ const run = () => {
             const {id, chunkId} = client.meta;
 
             completeRecording(id);
+
             convertFileToMp3(id)
                 .then((filePath) => {
                     uploadToS3(filePath, id, (err, data) => {

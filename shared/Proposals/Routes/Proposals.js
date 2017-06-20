@@ -18,7 +18,6 @@ import Countdown from '../../Common/Components/Countdown';
 
 import { changePageTitle } from '../../Layout/Actions/LayoutActions';
 
-
 class Proposals extends Component {
 
     constructor(props) {
@@ -28,7 +27,6 @@ class Proposals extends Component {
     }
 
     componentWillMount() {
-        this.props.fetchCurrentProposal();
         if (isEmpty(this.props.proposal)) {
             this.props.fetchCurrentProposal();
         }
@@ -54,7 +52,8 @@ class Proposals extends Component {
 
         const to = moment(deadline);
 
-        const isClosed = false;
+        const isClosed = !active;
+
         return (
             <div className="proposals-page">
 

@@ -36,7 +36,7 @@ export class Countdown extends Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.startTick();
     }
 
