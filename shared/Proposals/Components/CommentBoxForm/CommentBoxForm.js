@@ -13,10 +13,10 @@ import * as types from '../../Constants/CommentTypes';
 
 import ProposalFormValidator from '../../Helpers/CommentFormValidator/CommentFormValidator';
 
-const Form = ({ children, handleSubmit, pristine, reset, submitting, invalid, submitSucceeded, submitFailed, showSubmit=true, customSubmitting, customSuccess }) => (
+const Form = ({ children, handleSubmit, pristine, reset, submitting, invalid, submitSucceeded, submitFailed, showSubmit=true, customSubmitting, customSuccess, submitText }) => (
     <FormController name="commentBox"
                     handleSubmit={handleSubmit}
-                    submitValue={'Submit proposal'}
+                    submitValue={submitText}
                     showSubmit={showSubmit}
                     submitSucceeded={submitSucceeded}
                     customSubmitting={customSubmitting}

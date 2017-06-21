@@ -29,7 +29,7 @@ import {
 
 import Wizard from '../../../Wizard';
 import Debug from '../../../Debug';
-import Loading from '../../../Common/Components/Loading';
+import ProposalLoading from '../../../Proposals/Components/ProposalLoading/ProposalLoading';
 
 import TogglePlayButton from '../../../Player/Components/TogglePlayButton';
 import Recorder from '../../Components/Recorder/Recorder';
@@ -173,8 +173,6 @@ class RecorderFlowContainer extends Component {
 
         this.audioController.src = this.props.submittedUrl + '.wav';
 
-        debugger;
-
         this.audioController.onloadedmetadata = () => {
             this.setState({metaReady: true});
         };
@@ -199,7 +197,7 @@ class RecorderFlowContainer extends Component {
     }
 
     isBrowserSupportRecording() {
-        if (typeof window === "undefined") retunr
+        if (typeof window === "undefined") return;
 
         if (!navigator.getUserMedia) {
             navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
@@ -404,7 +402,7 @@ class RecorderFlowContainer extends Component {
 
         return (
             <div>
-                <Debug data={{...recorder, activeStep}} />
+                <Debug data={{...recorder, activeStep}}/>
 
                 <div className={`recording-flow-container step-${activeStep}`}>
 
@@ -433,7 +431,7 @@ class RecorderFlowContainer extends Component {
                         </div>
 
                         <div key={UPLOADING} className="uploading-step">
-                            <Loading/>
+                            <ProposalLoading/>
                         </div>
 
                         <div key={[REVIEW, SUBMITTING]} className="review-step">
@@ -443,16 +441,14 @@ class RecorderFlowContainer extends Component {
                                 disabled={!isMetaReady}
                             />
 
-                            <div className="buttons">
-                                <button type="button" onClick={this.discardRecord}
-                                        className="btn btn-recording-discard btn-xs">
-                                    <i className="fa fa-undo" aria-hidden="true"/> Discard and record again
-                                </button>
-                                <button type="button" onClick={this.submitRecord} disabled={!isMetaReady}
-                                        className="btn btn-recording-submit btn-xs">
-                                    <i className="fa fa-check" aria-hidden="true"/> Ready to submit
-                                </button>
-                            </div>
+                            {isMetaReady &&
+                                <div className="buttons">
+                                    <button type="button" onClick={this.discardRecord}
+                                            className="btn btn-recording-discard btn-xs">
+                                        <i className="fa fa-undo" aria-hidden="true"/> Discard and record again
+                                    </button>
+                                </div>
+                            }
                         </div>
 
                         <div key={COMPLETE} className="complete-step">
