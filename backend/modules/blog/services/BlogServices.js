@@ -13,7 +13,7 @@ const RelatedServices = require("../../related/services/RelatedServices")
 const BASE_URL = 'https://dataskeptic.com/';
 const NOT_FOUND_ERROR = {
     error: true,
-    message: "Not Found"
+    message: "Sorry, we could not find that blog post"
 };
 
 const ignoredKeys = ['latest', 'guid'];
