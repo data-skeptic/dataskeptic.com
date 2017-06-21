@@ -165,6 +165,14 @@ export default function blogsReducer(state = defaultState, action) {
             nstate.postLoading = false;
             break;
 
+        case LOAD_BLOG_POST_FAILED:
+            nstate.currentPost = {
+                error: action.payload.error
+            };
+
+            nstate.postLoading = false;
+            break;
+
     }
 
     return Immutable.fromJS(nstate)

@@ -98,6 +98,16 @@ class BlogArticle extends Component {
         }
 
         const post = currentPost.toJS();
+
+        if (post.error) {
+            return (
+                <div className="blog-article center">
+                    <h4>{post.error}</h4>
+                </div>
+            )
+        }
+
+
         const guid = post.guid;
         const isEpisode = !isUndefined(guid);
 
