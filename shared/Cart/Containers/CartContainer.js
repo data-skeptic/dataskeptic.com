@@ -16,8 +16,8 @@ class CartContainer extends React.Component {
         this.onRemoveClick = this.onRemoveClick.bind(this);
     }
 
-    onRemoveClick(product) {
-        this.props.dispatch({type: "REMOVE_CART_PRODUCT", payload: {product} })
+    onRemoveClick(product, size) {
+        this.props.dispatch({type: "REMOVE_CART_PRODUCT", payload: {product, size} })
     }
 
     renderCartItems(items = []) {
