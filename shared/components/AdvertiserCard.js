@@ -16,11 +16,7 @@ export default class AdvertiserCard extends React.Component {
 
 		return (
 			<div className="advertiser-card">
-				<div className="row">
-					<div className="col-xs-12">
-						<div key={hash} dangerouslySetInnerHTML={{__html: this.props.content}}/>
-					</div>
-				</div>
+				<div key={hash} dangerouslySetInnerHTML={{__html: this.props.content}}/>
 			</div>
 		)
 	}

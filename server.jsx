@@ -82,7 +82,7 @@ if (process.env.NODE_ENV !== 'production') {
 console.log(new Date())
 console.log("Environment: ", env)
 
-const DEFAULT_ADVERTISE_HTML = `<img src="/img/default-advertise.jpg"/>`;
+const DEFAULT_ADVERTISE_HTML = `<img src="/img/advertise.png" width="100%"/>`;
 
 let Cache = {
     title_map: {}         // `uri`             -> <title>
