@@ -1,6 +1,8 @@
 const path = require('path');
 const AWS = require("aws-sdk");
 
+const config = require('../../global-config.json');
+
 AWS.config.loadFromPath(path.resolve(__dirname, '../../awsconfig.json'));
 const proposalsDocs = new AWS.DynamoDB.DocumentClient();
 

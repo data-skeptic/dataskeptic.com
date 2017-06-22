@@ -22,17 +22,28 @@ import axios from 'axios';
 import '../shared/styles/main.less';
 
 import {reducer as formReducer} from 'redux-form'
+import {SCHEMA_VER} from '../shared/reducers/SiteReducer';
 
 import initCart from '../shared/Cart/Helpers/initCart';
 import persistCart from '../shared/Cart/Helpers/persistCart';
 
+/**
+ * Validate cached store schema version
+ *
+ */
+const validateVersion = (state) => {
+    const valid = (state.site && state.site.schemaVersion === SCHEMA_VER);
+
+    return (valid) ? state : {};
+};
+
 const getInitialState = (state) => {
     state = initCart(state);
 
-    return state
+    return validateVersion(state);
 };
 
-var initialState = immutifyState(getInitialState(window.__INITIAL_STATE__));
+const initialState = immutifyState(getInitialState(window.__INITIAL_STATE__));
 
 console.log("Initialize GA")
 ReactGA.initialize("UA-51062432-1", {
@@ -102,6 +113,8 @@ store.subscribe(() => {
     }
 
     delete nstate.checkout;
+    delete nstate.recording;
+
     const s = JSON.stringify(nstate);
     localStorage.setItem('reduxState', s);
 

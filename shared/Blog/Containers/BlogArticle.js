@@ -22,7 +22,6 @@ import {get_folders} from '../../utils/redux_loader'
 
 import isEmpty from 'lodash/isEmpty';
 import {loadBlogPost, stopBlogLoading} from '../Actions/BlogsActions';
-import LoadingBlogArticle from "../Components/LoadingBlogArticle";
 
 class BlogArticle extends Component {
     constructor(props) {
@@ -90,14 +89,23 @@ class BlogArticle extends Component {
     }
 
     render() {
-
         const {currentPost, isLoading, contributors, disqusUsername, postUrl} = this.props;
 
         if (isLoading) {
-            return <LoadingBlogArticle />
+            return <div className="loading-area"><Loading/></div>
         }
 
         const post = currentPost.toJS();
+
+        if (post.error) {
+            return (
+                <div className="blog-article center">
+                    <h4>{post.error}</h4>
+                </div>
+            )
+        }
+
+
         const guid = post.guid;
         const isEpisode = !isUndefined(guid);
 

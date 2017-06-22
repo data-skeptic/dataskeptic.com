@@ -7,20 +7,19 @@ import NotFound from '../../NotFound/Components/NotFound'
 import BlogList from "../Components/BlogList"
 import BlogNav from "../Components/BlogNav"
 import BlogItem from "../Components/BlogItem"
-import Error from "../../Common/Components/Error"
 
 import PaginationContainer from '../../Pagination/Containers/PaginationContainer';
 
 import transform_pathname from "../../utils/transform_pathname"
 
 import {loadBlogs} from '../Actions/BlogsActions';
-import LoadingBlogList from "../Components/LoadingBlogList"
 
 import isNaN from 'lodash/isNaN';
 
 import Container from '../../Layout/Components/Container/Container';
 import Content from '../../Layout/Components/Content/Content';
 import SideBar from '../../Layout/Components/SideBar/SideBar';
+import Loading from '../../Common/Components/Loading';
 
 import {changePageTitle} from '../../Layout/Actions/LayoutActions';
 import isCtrlOrCommandKey from '../../utils/isCtrlOrCommandKey';
@@ -202,7 +201,7 @@ class BlogContainer extends Component {
                 <Container>
                     <Content title={contentTitle}>
                         { isLoading
-                            ? <LoadingBlogList length={5}/>
+                            ? <div className="loading-area"><Loading/></div>
                             : <BlogList blogs={blogs} latestId={latestBlogId}/>
                         }
                     </Content>

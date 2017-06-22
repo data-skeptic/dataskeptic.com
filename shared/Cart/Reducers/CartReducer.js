@@ -313,15 +313,25 @@ export default function CartReducer(state = defaultState, action) {
       break;
     case REMOVE_CART_PRODUCT:
       var product = action.payload.product
+      var size = action.payload.size
+
       var found_index = -1
-      for (var i=0; i < nstate.cart_items.length; i++) {
+
+      for (var i=0; i < nstate.cart_items.length && found_index === -1; i++) {
         var citem = nstate.cart_items[i]
-        if (citem.product.id == product.id && citem.size == size) {
+        if (citem.product.id == product.id) {
           found_index = i
-          i = nstate.cart_items.length
+
+          // t-shirt?
+          if (!!citem.size) {
+            found_index = (citem.size == size) ? i : -1;
+          }
         }
       }
-      nstate.cart_items.splice(found_index,1)
+
+      if (found_index > -1) {
+          nstate.cart_items.splice(found_index, 1)
+      }
       break;
     case SET_STORE_ENVIRONMENT:
       var env = action.payload

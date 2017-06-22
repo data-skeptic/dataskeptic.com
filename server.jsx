@@ -16,6 +16,8 @@ import {order_fulfill}           from 'backend/order_fulfill'
 import {order_list}              from 'backend/order_list'
 import {pay_invoice}             from 'backend/pay_invoice'
 import {related_content, related_cache}         from 'backend/related_content'
+import {ready}                   from 'backend/v1/recording';
+import {write as writeProposal, upload as uploadProposalFiles}  from 'backend/v1/proposals'
 import bodyParser                from 'body-parser'
 import compression               from 'compression';
 import { feed_uri }              from 'daos/episodes'
@@ -23,7 +25,9 @@ import {
     loadBlogs,
     loadEpisodes,
     loadProducts,
-    loadAdvertiseContent
+    loadAdvertiseContent,
+    load,
+    loadCurrentRFC
 }  from 'daos/serverInit'
 import express                   from 'express';
 
@@ -83,7 +87,7 @@ if (process.env.NODE_ENV !== 'production') {
 console.log(new Date())
 console.log("Environment: ", env)
 
-const DEFAULT_ADVERTISE_HTML = `<img src="/img/default-advertise.jpg"/>`;
+const DEFAULT_ADVERTISE_HTML = `<img src="/img/advertise.png" width="100%"/>`;
 
 let Cache = {
     title_map: {}         // `uri`             -> <title>
@@ -98,6 +102,7 @@ let Cache = {
         card: DEFAULT_ADVERTISE_HTML,
         banner: null
     }
+    , rfc: {}
 };
 
 const reducer  = combineReducers({
@@ -173,6 +178,13 @@ const doRefresh = (store) => {
         })
         .then(() => {
             Cache.contributors = get_contributors()
+            return loadCurrentRFC()
+        })
+        .then((rfc) => {
+            Cache.rfc = rfc
+            console.dir(rfc)
+
+
             console.log("Refreshing Finished")
         })
         // .then(() => global.gc())
@@ -196,6 +208,19 @@ if (process.env.NODE_ENV == 'production') {
 }
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+const proxy = require('http-proxy-middleware');
+const wsProxy = proxy('/recording', {
+    target: 'ws://127.0.0.1:9001',
+    // pathRewrite: {
+    //  '^/websocket' : '/socket',          // rewrite path.
+    //  '^/removepath' : ''                 // remove path.
+    // },
+    changeOrigin: true,                     // for vhosted sites, changes host header to match to target's host
+    ws: true,                               // enable websocket proxy
+    logLevel: 'debug'
+});
+app.use(wsProxy);
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
@@ -225,7 +250,17 @@ function api_router(req, res) {
         join_slack(req, res, slack_key)
         return true
     }
-    if (req.url.indexOf('/api/refresh') == 0) {
+
+    if (req.url.indexOf('/api/v1/proposals/files') == 0) {
+        uploadProposalFiles(req, res);
+        return true;
+    } if (req.url.indexOf('/api/v1/proposals') == 0) {
+        writeProposal(req, res);
+        return true;
+    } else if (req.url.indexOf('/api/v1/recording/ready') == 0) {
+        ready(req, res);
+        return true;
+    } if (req.url.indexOf('/api/refresh') == 0) {
         doRefresh()
         return res.status(200).end(JSON.stringify({'status': 'ok'}))
     }
@@ -448,6 +483,13 @@ function updateState(store, pathname, req) {
         type: 'SET_ADVERTISE_BANNER_CONTENT',
         payload: {
             content: Cache.advertise.banner
+        }
+    })
+
+    store.dispatch({
+        type: 'FETCH_CURRENT_PROPOSAL_SUCCESS',
+        payload: {
+            data: Cache.rfc
         }
     })
 }
