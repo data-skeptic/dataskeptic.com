@@ -51,22 +51,22 @@ import Episode from "../models/Episode";
 
 export const getAll = (url, episodes_list, offset, limit, env, exclude = ['/episodes', '/transcripts']) => {
 
-    console.dir("episodes = " + episodes_list);
+
     // remove unnecessary keys
     let episodes = filter(episodes_list, (episode, id) => !isIgnoredKey(id));
     // filter only relative episodes
-    console.dir("episodes2 = " + episodes);
+
    // episodes = filter(episodes, (episode, id) => isMatchingQuery(episode, {url, exclude, env}));
-    console.dir("episodes3 = " + episodes);
+
     // calculate total matched episodes count
     const total = episodes.length;
 
-    console.dir("episodes4 = " + episodes);
+
     // slice over limits
     episodes = episodes
         .filter((episode, index) => matchingOffset(episode, index, offset))
         .filter((episode, index) => matchingLimit(episode, index, limit));
-    console.dir("episodes5 = " + episodes);
+
     // var latestId = "";
     // if (Object.keys(episodes_list).length > 0) {
     //     latestId = episodes_list['latest']['guid'];

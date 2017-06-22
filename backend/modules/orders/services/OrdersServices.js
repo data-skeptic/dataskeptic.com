@@ -46,22 +46,22 @@ export const getAll = (url, stripe_key, offset, limit, env, exclude = ['/orders'
         .then((orders_list) => {
 
 
-            console.dir("orders = " + orders_list);
+
             // remove unnecessary keys
             let orders = filter(orders_list, (order, id) => !isIgnoredKey(id));
             // filter only relative orders
-            console.dir("orders2 = " + orders);
+
             // orders = filter(orders, (order, id) => isMatchingQuery(order, {url, exclude, env}));
-            console.dir("orders3 = " + orders);
+
             // calculate total matched orders count
             const total = orders.length;
 
-            console.dir("orders4 = " + orders);
+
             // slice over limits
             orders = orders
                 .filter((order, index) => matchingOffset(order, index, offset))
                 .filter((order, index) => matchingLimit(order, index, limit));
-            console.dir("orders5 = " + orders);
+
             // var latestId = "";
             // if (Object.keys(orders_list).length > 0) {
             //     latestId = orders_list['latest']['guid'];
@@ -83,16 +83,16 @@ export const fulFillOrder = (stripe_key, obj) => {
 
         var stripe = require("stripe")(stripe_key)
         var oid = obj['oid']
-        console.log("oid=" + oid)
+
         stripe.orders.update(oid, {
             status: "fulfilled"
         }, function (err, resp) {
             if (err == null) {
-                console.log("---")
-                console.log(resp)
+
+
                 return resolve(JSON.stringify(resp))
             } else {
-                console.log("===")
+
                 console.log(err)
                 return reject(JSON.stringify(err))
             }
@@ -131,7 +131,7 @@ export const createOrder = (obj, key) => {
                     return reject(JSON.stringify(resp))
                 } else {
                     var orderToken = data['orderToken']
-                    console.log("orderToken=" + orderToken)
+
                     var i2 = axios.create()
                     var obj2 = {orderToken}
                     i2.request({
@@ -145,7 +145,7 @@ export const createOrder = (obj, key) => {
                             password: key
                         }
                     }).then(function (resp) {
-                        console.log("order complete")
+
                         return resolve(JSON.stringify(resp))
                     })
                         .catch((err) => {

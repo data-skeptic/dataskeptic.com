@@ -14,6 +14,7 @@ module.exports = (cache) => {
     router.use('/slack', require('./slack')(cache));
     router.use('/rfc', require('./rfc')(cache));
     router.use('/refresh', require('./refresh')(cache));
+    router.use('/player', require('./player')(cache));
 
    return router;
 }
