@@ -526,7 +526,7 @@ function renderView(store, renderProps, location) {
 
     let meta = {
         title: 'Data Skeptic',
-        description: 'Data Skeptic is your source for a perseptive of scientific skepticism on topics in statistics, machine learning, big data, artificial intelligence, and data science. Our weekly podcast and blog bring you stories and tutorials to help understand our data-driven world.',
+        description: 'Data Skeptic is your source for a perspective of scientific skepticism on topics in statistics, machine learning, big data, artificial intelligence, and data science. Our weekly podcast and blog bring you stories and tutorials to help understand our data-driven world.',
         author: 'Kyle Polich',
         keywoards: 'data skeptic, podcast,',
     };

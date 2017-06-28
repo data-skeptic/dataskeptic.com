@@ -92,7 +92,7 @@ export const getBlogRss = (blogmetadata_map, prettyname) => {
 
     let feed = new RSS({
         title: 'Data Skeptic',
-        description: 'Data Skeptic is your source for a perseptive of scientific skepticism on topics in statistics, machine learning, big data, artificial intelligence, and data science. Our weekly podcast and blog bring you stories and tutorials to help understand our data-driven world.',
+        description: 'Data Skeptic is your source for a perspective of scientific skepticism on topics in statistics, machine learning, big data, artificial intelligence, and data science. Our weekly podcast and blog bring you stories and tutorials to help understand our data-driven world.',
         feed_url: `${BASE_URL}/api/blog/rss`,
         site_url: BASE_URL,
         managingEditor: 'Kyle',
