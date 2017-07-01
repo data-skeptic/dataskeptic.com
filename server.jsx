@@ -1,6 +1,6 @@
 import aws                       from 'aws-sdk'
 import axios                     from 'axios';
-const AdminRelatedServices = require('../dataskeptic.com/backend/modules/Admin/Related/Services/AdminRelatedServices');
+import {getRelatedContent, deleteRelatedContentByUri} from 'backend/admin/admin_related_services'
 import {get_blogs}               from 'backend/get_blogs'
 import {get_blogs_rss}           from 'backend/get_blogs_rss'
 import {get_contributors}        from 'backend/get_contributors'
@@ -72,7 +72,7 @@ app.use(morgan('combined', {stream: accessLogStream}))
 
 var env = "prod"
 
-aws.config.loadFromPath('awsconfig.json')
+aws.config.loadFromPath('config/awsconfig.json')
 
 if (process.env.NODE_ENV !== 'production') {
     require('./webpack.dev').default(app);
@@ -202,7 +202,7 @@ var stripe_key = "sk_test_81PZIV6UfHDlapSAkn18bmQi"
 var sp_key = "test_Z_gOWbE8iwjhXf4y4vqizQ"
 var slack_key = ""
 
-fs.open("config.json", "r", function (error, fd) {
+fs.open("config/config.json", "r", function (error, fd) {
     var buffer = new Buffer(10000)
     fs.read(fd, buffer, 0, buffer.length, null, function (error, bytesRead, buffer) {
         var data = buffer.toString("utf8", 0, bytesRead)
