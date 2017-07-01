@@ -69,7 +69,6 @@ var accessLogStream = FileStreamRotator.getStream({
 })
 app.use(morgan('combined', {stream: accessLogStream}))
 
-
 var env = "prod"
 
 var aws_accessKeyId = ""
@@ -103,6 +102,7 @@ aws.config.update(
     }
 );
 
+const docClient = new aws.DynamoDB.DocumentClient();
 
 if (process.env.NODE_ENV !== 'production') {
     require('./webpack.dev').default(app);
@@ -301,19 +301,19 @@ function api_router(req, res) {
     } else if (req.url == '/api/test') {
         return res.status(200).end(JSON.stringify(Cache.blogmetadata_map));
     } else if (req.url === '/api/admin/related') {
-        AdminRelatedServices.getRelatedContent(req.body.uri)
+        getRelatedContent(req.body.uri, docClient)
             .then(related => {
                 res.send(related);
             })
         return true;
     } else if (req.url === '/api/admin/related/delete') {
-        AdminRelatedServices.deleteRelatedContentByUri(req.body.uri, req.body.related_uri)
+        deleteRelatedContentByUri(req.body.uri, req.body.related_uri, docClient)
             .then(related => {
                 res.send(related);
             })
         return true;
     } else if (req.url === '/api/admin/related/create') {
-        AdminRelatedServices.createRelatedContent(req.body.uri, req.body.data)
+        createRelatedContent(req.body.uri, req.body.data, docClient)
             .then(related => {
                 res.send(related);
             })
