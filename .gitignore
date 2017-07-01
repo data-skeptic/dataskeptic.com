@@ -5,6 +5,8 @@ npm-debug.log*
 
 .ipynb_checkpoints/
 
+config/
+
 public/bundle.js
 
 .DS_Store
