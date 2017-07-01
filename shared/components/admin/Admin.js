@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 
 import SendEmail from './SendEmail'
 import OpenOrders from './OpenOrders'
+import Loading from '../../Common/Components/Loading'
 
 class Admin extends Component {
 	constructor(props) {
@@ -38,7 +39,12 @@ class Admin extends Component {
 
 	render() {
 		var oadmin = this.props.admin.toJS()
+		console.log("oadmin")
+		console.log(oadmin)
 		var order = oadmin.order
+		if (order == undefined) {
+			return <Loading />
+		}
 		var step = order.step
 		var errorMsg = order.errorMsg
 		return (
@@ -117,6 +123,7 @@ class Admin extends Component {
 				<OpenOrders />
 				<h4>Verification</h4>
 				<p><a href="https://dashboard.stripe.com/orders">dashboard.stripe.com/orders</a></p>
+				<p>http://webtrack.dhlglobalmail.com/?trackingnumber=</p>
 				<h4>Send Confirmation Email</h4>
 				<SendEmail />
 				<div className="clear" />

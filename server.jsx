@@ -1,7 +1,7 @@
 import aws                       from 'aws-sdk'
 import axios                     from 'axios';
 import session from 'express-session';
-
+import {getRelatedContent, deleteRelatedContentByUri} from 'backend/admin/admin_related_services'
 import {get_blogs}               from 'backend/get_blogs'
 import {get_blogs_rss}           from 'backend/get_blogs_rss'
 import {get_contributors}        from 'backend/get_contributors'
@@ -20,7 +20,7 @@ import {ready}                   from 'backend/v1/recording';
 import {write as writeProposal, upload as uploadProposalFiles}  from 'backend/v1/proposals'
 import bodyParser                from 'body-parser'
 import compression               from 'compression';
-import { feed_uri }              from 'daos/episodes'
+import {feed_uri}              from 'daos/episodes'
 import {
     loadBlogs,
     loadEpisodes,
@@ -50,9 +50,11 @@ import isFunction from 'lodash/isFunction';
 import extend from 'lodash/extend';
 import routes                    from 'routes';
 import * as reducers             from 'reducers';
-import { createStore,
-         combineReducers,
-         applyMiddleware }       from 'redux';
+import {
+    createStore,
+    combineReducers,
+    applyMiddleware
+}       from 'redux';
 import getContentWrapper         from 'utils/content_wrapper';
 import {
     get_blogs_list,
@@ -61,28 +63,58 @@ import {
 }                         from 'utils/redux_loader';
 import redirects_map             from './redirects';
 
-import { reducer as formReducer } from 'redux-form'
+import {reducer as formReducer} from 'redux-form'
 
 const app = express()
 
 var logDirectory = path.join(__dirname, 'log')
 fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
 var accessLogStream = FileStreamRotator.getStream({
-  date_format: 'YYYYMMDD',
-  filename: path.join(logDirectory, 'access-%DATE%.log'),
-  frequency: 'daily',
-  verbose: false
+    date_format: 'YYYYMMDD',
+    filename: path.join(logDirectory, 'access-%DATE%.log'),
+    frequency: 'daily',
+    verbose: false
 })
 app.use(morgan('combined', {stream: accessLogStream}))
 
-
 var env = "prod"
 
-aws.config.loadFromPath('awsconfig.json')
+var aws_accessKeyId = ""
+var aws_secretAccessKey = ""
+var aws_region = ""
+var stripe_key = "sk_test_81PZIV6UfHDlapSAkn18bmQi"
+var sp_key = "test_Z_gOWbE8iwjhXf4y4vqizQ"
+var slack_key = ""
+
+fs.open("config/config.json", "r", function (error, fd) {
+    var buffer = new Buffer(10000)
+    fs.read(fd, buffer, 0, buffer.length, null, function (error, bytesRead, buffer) {
+        var data = buffer.toString("utf8", 0, bytesRead)
+        var c = JSON.parse(data)
+        var env2 = env
+        stripe_key = c[env2]['stripe']
+        sp_key = c[env2]['sp']
+        slack_key = c[env2]['slack']
+        aws_accessKeyId = c[env2]['aws']['accessKeyId']
+        aws_secretAccessKey = c[env2]['aws']['secretAccessKey']
+        aws_region = c[env2]['aws']['region']
+        fs.close(fd)
+    })
+})
+
+aws.config.update(
+    {
+        "accessKeyId": aws_accessKeyId,
+        "secretAccessKey": aws_secretAccessKey,
+        "region": aws_region
+    }
+);
+
+const docClient = new aws.DynamoDB.DocumentClient();
 
 if (process.env.NODE_ENV !== 'production') {
-  require('./webpack.dev').default(app);
-  env = "dev"
+    require('./webpack.dev').default(app);
+    env = "dev"
 }
 console.log("Environment: ", env)
 
@@ -104,7 +136,7 @@ let Cache = {
     , rfc: {}
 };
 
-const reducer  = combineReducers({
+const reducer = combineReducers({
     ...reducers,
     form: formReducer
 });
@@ -195,15 +227,16 @@ const doRefresh = (store) => {
 setInterval(doRefresh, 60 * 60 * 1000);
 
 if (process.env.NODE_ENV == 'production') {
-  function shouldCompress (req, res) {
-    if (req.headers['x-no-compression']) {
-      // don't compress responses with this request header
-      return false
+    function shouldCompress(req, res) {
+        if (req.headers['x-no-compression']) {
+            // don't compress responses with this request header
+            return false
+        }
+        // fallback to standard filter function
+        return compression.filter(req, res)
     }
-    // fallback to standard filter function
-    return compression.filter(req, res)
-  }
-  app.use(compression({filter: shouldCompress}))
+
+    app.use(compression({filter: shouldCompress}))
 }
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -223,25 +256,8 @@ app.use(wsProxy);
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
-  extended: true
+    extended: true
 }))
-
-var stripe_key = "sk_test_81PZIV6UfHDlapSAkn18bmQi"
-var sp_key = "test_Z_gOWbE8iwjhXf4y4vqizQ"
-var slack_key = ""
-
-fs.open("config.json", "r", function(error, fd) {
-  var buffer = new Buffer(10000)
-  fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
-    var data = buffer.toString("utf8", 0, bytesRead)
-    var c = JSON.parse(data)
-    var env2 = env
-    stripe_key = c[env2]['stripe']
-    sp_key = c[env2]['sp']
-    slack_key = c[env2]['slack']
-    fs.close(fd)
-  })
-})
 
 function api_router(req, res) {
     if (req.url.indexOf('/api/slack/join') == 0) {
@@ -292,7 +308,7 @@ function api_router(req, res) {
         var resp = get_contributors()
         return res.status(200).end(JSON.stringify(resp))
     }
-    else if (req.url.indexOf('/api/related') == 0) {
+    else if (req.url.indexOf('/api/Related') == 0) {
         related_content(req, res)
         return true
     }
@@ -325,30 +341,48 @@ function api_router(req, res) {
         return true
     } else if (req.url == '/api/test') {
         return res.status(200).end(JSON.stringify(Cache.blogmetadata_map));
+    } else if (req.url === '/api/admin/related') {
+        getRelatedContent(req.body.uri, docClient)
+            .then(related => {
+                res.send(related);
+            })
+        return true;
+    } else if (req.url === '/api/admin/related/delete') {
+        deleteRelatedContentByUri(req.body.uri, req.body.related_uri, docClient)
+            .then(related => {
+                res.send(related);
+            })
+        return true;
+    } else if (req.url === '/api/admin/related/create') {
+        createRelatedContent(req.body.uri, req.body.data, docClient)
+            .then(related => {
+                res.send(related);
+            })
+        return true;
     }
 
     return false
 }
 
 function inject_folders(store, my_cache) {
-  var folders = my_cache.folders
-  store.dispatch({type: "ADD_FOLDERS", payload: folders })
+    var folders = my_cache.folders
+    store.dispatch({type: "ADD_FOLDERS", payload: folders})
 }
 
 function inject_years(store, my_cache) {
-  var episodes_list = my_cache.episodes_list
-  var episodes_map = my_cache.episodes_map
-  var ymap = {}
-  for (var i=0; i < episodes_list.length; i++) {
-    var guid = episodes_list[i]
-    var episode = episodes_map[guid]
-    var pd = new Date(episode.pubDate)
-    var year = pd.getYear() + 1900
-    ymap[year] = 1
-  }
-  var years = Object.keys(ymap)
-  years = years.sort().reverse()
-  store.dispatch({type: "SET_YEARS", payload: years })
+    var episodes_list = my_cache.episodes_list
+    var episodes_map = my_cache.episodes_map
+    var ymap = {}
+    for (var i = 0; i < episodes_list.length; i++) {
+        var guid = episodes_list[i]
+        var episode = episodes_map[guid]
+        var pd = new Date(episode.pubDate)
+        var year = pd.getYear() + 1900
+        ymap[year] = 1
+    }
+    var years = Object.keys(ymap)
+    years = years.sort().reverse()
+    store.dispatch({type: "SET_YEARS", payload: years})
 }
 
 function inject_homepage(store, my_cache, pathname) {
@@ -371,13 +405,13 @@ function inject_homepage(store, my_cache, pathname) {
 }
 
 function inject_products(store, my_cache, pathname) {
-  var products = my_cache.products['items']
-  store.dispatch({type: "ADD_PRODUCTS", payload: products})
+    var products = my_cache.products['items']
+    store.dispatch({type: "ADD_PRODUCTS", payload: products})
 }
 
 function inject_podcast(store, my_cache, pathname) {
-  var episodes = get_podcasts_from_cache(my_cache, pathname)
-  store.dispatch({type: "ADD_EPISODES", payload: episodes})
+    var episodes = get_podcasts_from_cache(my_cache, pathname)
+    store.dispatch({type: "ADD_EPISODES", payload: episodes})
 }
 
 function install_blog(store, blog_metadata, content) {
@@ -406,47 +440,47 @@ function install_episode(store, episode) {
     store.dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
 }
 
-function inject_blog(store, my_cache, pathname, req) {
-  var blog_page = pathname.substring('/blog'.length, pathname.length)
-  var content = my_cache.content_map[blog_page]
-  if (content == undefined) {
-    content = ""
-  }
-  var blog_metadata = my_cache.blogmetadata_map[blog_page]
-  if (blog_metadata == undefined) {
-    blog_metadata = {}
-    var dispatch = store.dispatch
-    var blogs = get_blogs_list(dispatch, pathname)
-    console.log("Could not find blog_metadata for " + blog_page)
-  } else {
-    var guid = blog_metadata.guid
-    if (guid != undefined) {
-      var episode = my_cache.episodes_map[guid]
-      if (episode != undefined) {
-        install_episode(store, episode)
-      } else {
-        console.log("Bogus guid found")
-      }
+function inject_blog(store, my_cache, pathname) {
+    var blog_page = pathname.substring('/blog'.length, pathname.length)
+    var content = my_cache.content_map[blog_page]
+    if (content == undefined) {
+        content = ""
+    }
+    var blog_metadata = my_cache.blogmetadata_map[blog_page]
+    if (blog_metadata == undefined) {
+        blog_metadata = {}
+        var dispatch = store.dispatch
+        var blogs = get_blogs_list(dispatch, pathname)
+        console.log("Could not find blog_metadata for " + blog_page)
     } else {
         var guid = blog_metadata.guid
-        if (guid) {
+        if (guid != undefined) {
             var episode = my_cache.episodes_map[guid]
-            if (episode) {
-                blog_metadata['preview'] = episode.img;
+            if (episode != undefined) {
                 install_episode(store, episode)
             } else {
                 console.log("Bogus guid found")
             }
         } else {
-            console.log("No episode guid found")
+            var guid = blog_metadata.guid
+            if (guid) {
+                var episode = my_cache.episodes_map[guid]
+                if (episode) {
+                    blog_metadata['preview'] = episode.img;
+                    install_episode(store, episode)
+                } else {
+                    console.log("Bogus guid found")
+                }
+            } else {
+                console.log("No episode guid found")
+            }
+
+            install_blog(store, blog_metadata, content)
         }
 
         install_blog(store, blog_metadata, content)
     }
-
-    install_blog(store, blog_metadata, content)
-  }
-  console.log("done with blog inject")
+    console.log("done with blog inject")
 }
 
 function updateState(store, pathname, req) {
@@ -460,7 +494,7 @@ function updateState(store, pathname, req) {
         inject_homepage(store, Cache, pathname)
     }
     if (pathname.indexOf('/blog') === 0) {
-        inject_blog(store, Cache, pathname, req)
+        inject_blog(store, Cache, pathname)
     }
     else if (pathname === "/members" || pathname === "/store") {
         inject_products(store, Cache, pathname)
