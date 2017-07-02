@@ -1,7 +1,5 @@
 import aws from 'aws-sdk';
-import config from '../../../../global-config.json';
 
-const ADMIN_EMAIL = config.emails.admin;
 const ses = new aws.SES({apiVersion: '2010-12-01'});
 
 const header = '<div><img src="https://s3.amazonaws.com/dataskeptic.com/img/png/email-header.png" /></div><br/>';
@@ -13,7 +11,7 @@ export const send = (destination, message, subject, source) => {
     const body = generateBody(message);
 
     const emailRequestData = {
-        Source: source ? source : ADMIN_EMAIL,
+        Source: source ? source : "kyle@dataskeptic.com",
         Destination: { ToAddresses: [destination], BccAddresses: []},
         Message: {
             Subject: {

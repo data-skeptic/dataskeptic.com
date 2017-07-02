@@ -49,7 +49,7 @@ class Proposals extends Component {
 
     render() {
         const {proposal} = this.props;
-        const {topic, long_description, deadline, active} = proposal;
+        const {topic, long_description, deadline, active, aws_proposals_bucket} = proposal;
 
         const to = moment(deadline);
 
@@ -88,7 +88,7 @@ class Proposals extends Component {
                                 </div>
                             </div>
                             :
-                            <CommentBoxFormContainer />
+                            <CommentBoxFormContainer aws_proposals_bucket={aws_proposals_bucket} />
                         }
                     </Content>
                 </Container>
@@ -100,7 +100,7 @@ class Proposals extends Component {
 
 export default connect(
     state => ({
-        proposal: state.proposals.get('proposal').toJS()
+        proposal: state.proposals.get('proposal').toJS(),
     }),
     dispatch => bindActionCreators({
         fetchCurrentProposal,

@@ -5,8 +5,8 @@ import {
     FETCH_CURRENT_PROPOSAL_REQUEST,
     FETCH_CURRENT_PROPOSAL_SUCCESS,
     FETCH_CURRENT_PROPOSAL_FAIL,
-
-    PROPOSAL_DEADLINE_REACHED
+    PROPOSAL_DEADLINE_REACHED,
+    PROPOSAL_SET_BUCKET
 } from '../Actions/ProposalsActions';
 
 import {
@@ -58,6 +58,7 @@ import {
 
 const defaultState = {
     loading: false,
+    aws_bucket: "",
     error: false,
     proposal: {
         active: false
@@ -152,6 +153,10 @@ export default function ProposalsReducer(state = initialState, action) {
             if (nstate.proposal) {
                 nstate.proposal.active = false;
             }
+            break;
+
+        case PROPOSAL_SET_BUCKET:
+            nstate.aws_proposals_bucket = action.payload.aws_proposals_bucket
             break;
 
         default:

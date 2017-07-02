@@ -20,7 +20,7 @@ export default function ({env}) {
         done(user)
     })
 
-    passport.use(LinkedinStrategy({env}))
+    //passport.use(LinkedinStrategy({env}))
     router.use(passport.initialize())
     router.use(passport.session())
 

@@ -20,6 +20,7 @@ COPY . /usr/src/app
 
 EXPOSE 443
 
-CMD ["/bin/bash", "startup.sh"]
+CMD ["npm", "run", "recording-server", "&"]
+CMD ["npm", "run", "start"]
 
 # docker run -i -t -p 443:443 -p 80:80 -p 3000:3000 -v /Users/kylepolich/git/dataskeptic.com/config/:/usr/src/app/config/ kylepolich/dataskeptic.com

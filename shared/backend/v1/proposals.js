@@ -5,19 +5,10 @@ const multer = require('multer');
 const mime = require('mime');
 
 const uuid = require('uuid').v4;
-const AWS = require("aws-sdk");
-const config = require('../../../global-config.json');
-
+const aws = require("aws-sdk");
 const send = require('../modules/emails').send;
 
-const AWS_RECORDS_BUCKET = config.aws_proposals_bucket;
-const AWS_FILES_BUCKET = config.aws_files_bucket;
-
-AWS.config.loadFromPath(path.resolve(__dirname, '../../../awsconfig.json'));
-const filesBucket = new AWS.S3({params: {Bucket: AWS_FILES_BUCKET}});
-const proposalsDocs = new AWS.DynamoDB.DocumentClient();
-
-const PROPOSALS_TABLE_NAME = 'proposals';
+const proposalsDocs = new aws.DynamoDB.DocumentClient();
 
 function saveProposal(proposal) {
     proposal.id = uuid();
@@ -38,8 +29,9 @@ function saveProposal(proposal) {
     });
 }
 
-function uploadProposalFile(file) {
+function uploadProposalFile(file, aws_files_bucket) {
     console.log('[PROPOSALS] upload proposal file');
+    const filesBucket = new aws.S3({params: {Bucket: aws_files_bucket}});
     console.dir(file);
 
     return new Promise((res, rej) => {
@@ -66,8 +58,8 @@ function uploadProposalFile(file) {
     });
 }
 
-function uploadFilesS3Async(files) {
-    return Promise.all(files.map(file => uploadProposalFile(file)));
+function uploadFilesS3Async(files, aws_files_bucket) {
+    return Promise.all(files.map(file => uploadProposalFile(file, aws_files_bucket)));
 }
 
 const storage = multer.diskStorage({
@@ -113,7 +105,7 @@ const generateProposalBody = (type, proposal) => {
     } else if (type === 'RECORDING') {
         heading += 'audio proposal.';
 
-        body += `<a href="${awsRecordLink(proposal.recording)}">Listen it now ></a>`;
+        body += `<a href="${awsRecordLink(proposal.recording)}">Listen now</a>`;
     } else {
         heading += 'proposal.';
 
@@ -179,7 +171,7 @@ module.exports = {
             })
 
     },
-    upload: (req, res) => {
+    upload: (req, res, aws_files_bucket) => {
         const upload = multer({
             storage: storage
         }).array('files');
@@ -192,7 +184,7 @@ module.exports = {
                     error: err.message
                 });
             } else {
-                uploadFilesS3Async(req.files);
+                uploadFilesS3Async(req.files, aws_files_bucket);
 
                 res.send({
                     success: true,

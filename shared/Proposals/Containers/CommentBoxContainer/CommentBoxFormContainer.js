@@ -40,11 +40,6 @@ import {
 import Wizard from '../../../Wizard';
 import Debug from '../../../Debug';
 
-import json from '../../../../global-config.json';
-import awsConf from '../../../../awsconfig.json';
-const AWS_BUCKET = json.aws_proposals_bucket;
-const AWS_REGION = awsConf.region;
-
 class CommentBoxFormContainer extends Component {
 
     static propTypes = {
@@ -104,9 +99,8 @@ class CommentBoxFormContainer extends Component {
 
     recorderStop(id) {
         this.props.recordingFinish(id);
-
-        // const recordingUrl = `https://s3-${AWS_REGION}.amazonaws.com/${AWS_BUCKET}/${id}`;
-        const recordingUrl = `https://s3.amazonaws.com/${AWS_BUCKET}/${id}`;
+        var bucket = this.props.aws_proposals_bucket
+        const recordingUrl = `https://s3.amazonaws.com/${bucket}/${id}`;
         this.props.reviewRecording(recordingUrl);
     }
 

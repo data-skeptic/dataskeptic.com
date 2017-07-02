@@ -1,19 +1,16 @@
 const path = require('path');
+const fs = require('fs');
 
-const AWS = require("aws-sdk");
-const config = require('../../../global-config.json');
-const AWS_RECORDS_BUCKET = config.aws_proposals_bucket;
+const aws = require("aws-sdk");
 
-AWS.config.loadFromPath(path.resolve(__dirname, '../../../awsconfig.json'));
-const s3bucket = new AWS.S3({params: {Bucket: AWS_RECORDS_BUCKET}});
-
-function recordingExist(recordId) {
+function recordingExist(recordId, bucket) {
     return new Promise((res, rej) => {
         const params = {
-            Bucket: AWS_RECORDS_BUCKET,
+            Bucket: bucket,
             Key: recordId
         };
 
+        const s3bucket = new aws.S3({params: {Bucket: bucket}});
         s3bucket.headObject(params, function(err, data) {
             if (err) {
                 rej(err)
@@ -25,7 +22,7 @@ function recordingExist(recordId) {
 }
 
 module.exports = {
-    ready: function (req, res) {
+    ready: function (req, res, bucket) {
         const recordId = req.query.id + '.wav';
         if (!recordId) {
             res.send({
@@ -35,7 +32,7 @@ module.exports = {
             return;
         }
 
-        recordingExist(recordId)
+        recordingExist(recordId, bucket)
             .then((data) => {
                 res.send({
                     ready: true,

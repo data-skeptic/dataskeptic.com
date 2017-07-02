@@ -1,5 +1,5 @@
 import {Strategy as LinkedInStrategy} from 'passport-linkedin-oauth2'
-const config = require('../../../config.json');
+const config = require('../../../config/config.json');
 const UserServices = require('../Users/Services/UserServices');
 
 export default function ({env}) {

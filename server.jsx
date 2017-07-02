@@ -85,19 +85,22 @@ var aws_region = ""
 var stripe_key = "sk_test_81PZIV6UfHDlapSAkn18bmQi"
 var sp_key = "test_Z_gOWbE8iwjhXf4y4vqizQ"
 var slack_key = ""
+var aws_proposals_bucket = ""
+var rfc_table_name = "rtc"
+var latest_rfc_id = "test-request"
 
 fs.open("config/config.json", "r", function (error, fd) {
     var buffer = new Buffer(10000)
     fs.read(fd, buffer, 0, buffer.length, null, function (error, bytesRead, buffer) {
         var data = buffer.toString("utf8", 0, bytesRead)
         var c = JSON.parse(data)
-        var env2 = env
-        stripe_key = c[env2]['stripe']
-        sp_key = c[env2]['sp']
-        slack_key = c[env2]['slack']
-        aws_accessKeyId = c[env2]['aws']['accessKeyId']
-        aws_secretAccessKey = c[env2]['aws']['secretAccessKey']
-        aws_region = c[env2]['aws']['region']
+        stripe_key = c[env]['stripe']
+        sp_key = c[env]['sp']
+        slack_key = c[env]['slack']
+        aws_accessKeyId = c[env]['aws']['accessKeyId']
+        aws_secretAccessKey = c[env]['aws']['secretAccessKey']
+        aws_region = c[env]['aws']['region']
+        aws_proposals_bucket = c[env]['recording']['aws_proposals_bucket']
         fs.close(fd)
     })
 })
@@ -267,13 +270,13 @@ function api_router(req, res) {
     }
 
     if (req.url.indexOf('/api/v1/proposals/files') == 0) {
-        uploadProposalFiles(req, res);
+        uploadProposalFiles(req, res, aws_proposals_bucket);
         return true;
     } if (req.url.indexOf('/api/v1/proposals') == 0) {
         writeProposal(req, res);
         return true;
     } else if (req.url.indexOf('/api/v1/recording/ready') == 0) {
-        ready(req, res);
+        ready(req, res, aws_proposals_bucket);
         return true;
     } if (req.url.indexOf('/api/refresh') == 0) {
         doRefresh()
@@ -337,7 +340,7 @@ function api_router(req, res) {
         return true
     }
     else if (req.url == '/api/rfc/list') {
-        get_rfc_metadata(req, res, Cache)
+        get_rfc_metadata(req, res, Cache, docClient, rfc_table_name, latest_rfc_id)
         return true
     } else if (req.url == '/api/test') {
         return res.status(200).end(JSON.stringify(Cache.blogmetadata_map));
@@ -486,6 +489,8 @@ function inject_blog(store, my_cache, pathname) {
 function updateState(store, pathname, req) {
     inject_folders(store, Cache)
     inject_years(store, Cache)
+
+    store.dispatch({type: "PROPOSAL_SET_BUCKET", payload: {aws_proposals_bucket} })
 
     var contributors = get_contributors();
     store.dispatch({type: "LOAD_CONTRIBUTORS_LIST_SUCCESS", payload: {contributors}});

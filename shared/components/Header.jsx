@@ -68,7 +68,6 @@ class Header extends React.Component {
 						/>
 					</div>
 					<div className="cart-menu pull-right">
-						<button onClick={() => window.location = '/auth/login/linkedin'}>Login</button>
 					</div>
 					<div className="logo pull-left">
 						<Link to="/" id="logo_desktop"><img src="/img/svg/logo.svg" alt="Data Skeptic logo" /></Link>

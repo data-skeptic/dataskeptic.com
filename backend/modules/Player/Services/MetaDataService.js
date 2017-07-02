@@ -1,8 +1,13 @@
+import fs from 'fs'
+
 const AWS = require('aws-sdk');
 const uuidV4 = require('uuid/v4');
 const docClient = new AWS.DynamoDB.DocumentClient();
-const table_config = require('../../../../dynamoDB_tables.json');
-const tablename = `${table_config.dev.player_metadata}`;
+
+var env = "prod"
+// TODO: ge this from the config: c[env]['player_metadata']['play_metadata']
+var tablename = "play_metadata"
+
 export const getMeta = () => {
     const params = {
         TableName : tablename
