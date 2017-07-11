@@ -17,6 +17,7 @@ module.exports = {
 	    console.log(obj)
 	    console.log(send_headers)
 	    var toa = [to]
+	    aws.config.update({region: 'us-east-1'});
 	    var ses = new aws.SES({apiVersion: '2010-12-01'});
 	    var from = 'orders@dataskeptic.com'
 	    var subject = obj['subject']
