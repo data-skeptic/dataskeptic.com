@@ -78,8 +78,10 @@ class ContactUs extends React.Component {
 		var slackstatus = (
 			<div className="slack-status">{osite.slackstatus}</div>
 		)
-		/* Had to comment this out because there was a breaking change introduced that removes the submit button */
-		return <div></div>
+		/* Had to comment this out because there was a breaking change introduced that removes the submit button 
+					<ContactFormContainer />
+
+		*/
 
 		return (
 	    	<div className="center">
@@ -136,7 +138,6 @@ class ContactUs extends React.Component {
 					&nbsp;
 					<br/>
 
-					<ContactFormContainer />
 				</div>
 			</div>
 		)
