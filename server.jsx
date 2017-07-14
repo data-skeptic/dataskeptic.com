@@ -102,16 +102,15 @@ fs.open("config/config.json", "r", function (error, fd) {
         aws_region = c[env]['aws']['region']
         aws_proposals_bucket = c[env]['recording']['aws_proposals_bucket']
         fs.close(fd)
+        aws.config.update(
+            {
+                "accessKeyId": aws_accessKeyId,
+                "secretAccessKey": aws_secretAccessKey,
+                "region": aws_region
+            }
+        );
     })
 })
-
-aws.config.update(
-    {
-        "accessKeyId": aws_accessKeyId,
-        "secretAccessKey": aws_secretAccessKey,
-        "region": aws_region
-    }
-);
 
 const docClient = new aws.DynamoDB.DocumentClient();
 
