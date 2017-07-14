@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import isArray from 'lodash.isArray'
+//import isArray from 'lodash.isArray'
 
 class WizardContainer extends Component {
 
