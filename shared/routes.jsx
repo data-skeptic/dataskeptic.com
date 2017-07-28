@@ -19,6 +19,7 @@ import ContactUs               from 'Contacts/Routes/ContactUs';
 import DontHackMe              from 'components/DontHackMe';
 import Home                    from 'components/Home';
 import LightsOut               from 'components/LightsOut';
+import Login                   from 'components/Login';
 import Menu                    from 'components/Menu';
 import Membership              from 'components/Membership';
 import NotFound                from 'NotFound/Components/NotFound';
@@ -117,6 +118,9 @@ export default (
 
         <Route path="/admin" component={App}>
             <IndexRoute component={Admin}/>
+        </Route>
+        <Route path="/login" component={App}>
+            <IndexRoute component={Login}/>
         </Route>
         <Route path="/invoice" component={App}>
             <IndexRoute component={Invoice}/>
