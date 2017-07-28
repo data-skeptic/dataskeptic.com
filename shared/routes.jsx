@@ -49,6 +49,9 @@ function onUpdate() {
     console.log("onUpdate")
 }
 
+function requireAuth(nextState, replaceState) {
+    replaceState({nextPathname: nextState.location.pathname}, '/login')
+};
 
 export default (
     <Router onUpdate={onUpdate}>
@@ -117,7 +120,7 @@ export default (
         </Route>
 
         <Route path="/admin" component={App}>
-            <IndexRoute component={Admin}/>
+            <IndexRoute component={Admin} onEnter={requireAuth} />
         </Route>
         <Route path="/login" component={App}>
             <IndexRoute component={Login}/>
