@@ -12,6 +12,7 @@ import FormController from '../../Forms/Components/FormController/FormController
 const Form = ({ handleSubmit, pristine, reset, submitting, customSubmitting, invalid, submitSucceeded, submitFailed, customSuccess, customError }) => (
     <FormController
         name="address-credit"
+        showSubmit={true}
         handleSubmit={handleSubmit}
         btnWrapperClasses='col-xs-12 col-md-6 complete-btn'
         submitValue={ customSubmitting ? <span><img src="/img/spinner.gif" width="15"/> Processing order...</span> :  <span><i className="glyphicon glyphicon-lock"> </i>&nbsp;Complete Order</span> }

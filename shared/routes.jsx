@@ -78,6 +78,9 @@ export default (
         <Route path="/checkout" name="app" component={App} onEnter={loadData}>
             <IndexRoute component={Checkout}/>
         </Route>
+        <Route path="/thank-you" component={App} onEnter={loadData}>
+            <IndexRoute component={CheckoutThankYouPage}/>
+        </Route>
         <Route path="/checkout/thank-you" component={App} onEnter={loadData}>
             <IndexRoute component={CheckoutThankYouPage}/>
         </Route>
