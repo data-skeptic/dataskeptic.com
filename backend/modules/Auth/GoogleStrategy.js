@@ -13,7 +13,7 @@ module.exports = function() {
         let user ={};
 
         user.id = profile.id;
-        user.displayName = profile.displayName;http://localhost:3000/auth/google/callback
+        user.displayName = profile.displayName;
 
         user.google ={};
         user.google.id = profile.id;
