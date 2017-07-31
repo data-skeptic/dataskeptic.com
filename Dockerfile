@@ -1,6 +1,6 @@
 FROM mhart/alpine-node:latest
 
-MAINTAINER Kyle Polich
+LABEL maintainer="Kyle Polich"
 
 #RUN apt-get update
 #RUN apt-get install -y sudo
@@ -20,7 +20,6 @@ COPY . /usr/src/app
 
 EXPOSE 443
 
-CMD ["npm", "run", "recording-server", "&"]
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "docker_start"]
 
 # docker run -i -t -p 443:443 -p 80:80 -p 3000:3000 -v /Users/kylepolich/git/dataskeptic.com/config/:/usr/src/app/config/ kylepolich/dataskeptic.com
