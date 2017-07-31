@@ -120,7 +120,7 @@ export default (
         </Route>
 
         <Route path="/admin" component={App}>
-            <IndexRoute component={Admin} onEnter={requireAuth} />
+            <IndexRoute component={Admin}  />
         </Route>
         <Route path="/login" component={App}>
             <IndexRoute component={Login}/>
