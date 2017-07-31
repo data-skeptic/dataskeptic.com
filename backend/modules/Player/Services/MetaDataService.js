@@ -1,12 +1,12 @@
 import fs from 'fs'
-
+const config = require('../../../../config/config.json');
 const AWS = require('aws-sdk');
 const uuidV4 = require('uuid/v4');
 const docClient = new AWS.DynamoDB.DocumentClient();
 
-var env = "prod"
-// TODO: ge this from the config: c[env]['player_metadata']['play_metadata']
-var tablename = "play_metadata"
+var env = process.NODE_ENV === "production" ? "prod" : "dev"
+
+var tablename = `${config[env].player_metadata.play_metadata}`
 
 export const getMeta = () => {
     const params = {
