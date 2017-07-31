@@ -18,6 +18,7 @@ import CommentBoxFormContainer from '../Containers/CommentBoxContainer/CommentBo
 import Countdown from '../../Common/Components/Countdown';
 
 import { changePageTitle } from '../../Layout/Actions/LayoutActions';
+import {Link} from "react-router";
 
 class Proposals extends Component {
 
@@ -90,6 +91,7 @@ class Proposals extends Component {
                             :
                             <CommentBoxFormContainer aws_proposals_bucket={aws_proposals_bucket} />
                         }
+                        <Link to='auth/login/google' className="btn btn-primary">Login</Link>
                     </Content>
                 </Container>
             </div>
