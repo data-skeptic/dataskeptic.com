@@ -18,7 +18,7 @@ RUN npm install
 
 COPY . /usr/src/app
 
-EXPOSE 443
+EXPOSE 443 80 3000
 
 CMD ["npm", "run", "docker_start"]
 
