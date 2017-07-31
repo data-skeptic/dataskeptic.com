@@ -100,7 +100,7 @@ class Proposals extends Component {
 
 export default connect(
     state => ({
-        proposal: state.proposals.get('proposal').toJS(),
+        proposal: state.proposals.getIn(['proposal']).toJS(),
     }),
     dispatch => bindActionCreators({
         fetchCurrentProposal,

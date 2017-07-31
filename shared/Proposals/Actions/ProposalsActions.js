@@ -17,9 +17,12 @@ export function fetchCurrentProposal() {
     }
 }
 
-export function fetchCurrentProposalRequest() {
+export function fetchCurrentProposalRequest(meta) {
     return {
-        type: FETCH_CURRENT_PROPOSAL_REQUEST
+        type: FETCH_CURRENT_PROPOSAL_REQUEST,
+        payload: {
+            meta
+        }
     }
 }
 

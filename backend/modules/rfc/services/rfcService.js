@@ -7,6 +7,7 @@ const RFC_TABLE_NAME = 'rfc';
 const LATEST_RFC_ID = 'test-request';
 
 function fetchCurrentRFC() {
+
     const params = {
         TableName: RFC_TABLE_NAME,
         Key: {
@@ -15,11 +16,12 @@ function fetchCurrentRFC() {
     };
 
     return new Promise((res, rej) => {
-        proposalsDocs.get(params, function(err, data) {
+
+        proposalsDocs.scan(params, function(err, data) {
             if (err) {
                 rej(err);
             } else {
-                res(data['Item']);
+                return res(data.Items);
             }
         });
     });
