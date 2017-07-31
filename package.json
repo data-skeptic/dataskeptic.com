@@ -11,7 +11,7 @@
     "prod": "webpack --progress --color -p --config webpack.prod.config.js",
     "build": "webpack --progress --color -p --config webpack.prod.config.js",
     "postinstall": ". build/fixes.sh",
-    "docker_start": "\"npm run start\" \"npm run recording-server\""
+    "docker_start": "concurrently --kill-others \"npm run start\" \"npm run recording-server\""
   },
   "author": "kyle@dataskeptic.com",
   "license": "MIT",
