@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import PlayerProgressBar from '../Components/PlayerProgressBar'
 import TogglePlayButton from '../Components/TogglePlayButton'
 

@@ -1,11 +1,14 @@
 import Immutable from 'immutable'
 import { fromJS } from 'immutable'
+import {v4} from 'uuid';
 
 /**
  * Whenever some reducer initial state have been changed update current schema version
  * Unique version number is total count of commits in `master`
  */
 export const SCHEMA_VER = 'v571';
+
+const randomSessionId = () => v4();
 
 const init = {
   title: "Data Skeptic - The intersection of data science, artificial intelligence, machine learning, statistics, and scientific skepticism",
@@ -21,7 +24,9 @@ const init = {
   slackstatus: "",
 
   schemaVersion: SCHEMA_VER,
+  sessionId: randomSessionId()
 };
+
 
 const defaultState = Immutable.fromJS(init);
 
