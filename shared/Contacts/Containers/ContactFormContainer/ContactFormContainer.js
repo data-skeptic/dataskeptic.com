@@ -27,7 +27,9 @@ class ContactFormContainer extends Component {
 
     render() {
         return (
+            <div>
             <ContactForm onSubmit={this.handleSubmit}/>
+            </div>
         );
     }
 }
