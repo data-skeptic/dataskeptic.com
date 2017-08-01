@@ -129,10 +129,8 @@ router.get('/auth/linkedin/callback', function (req, res, next) {
 
                 return res.status(403).send({message: err.message})
             } else {
-                res.send({
-                    success: true,
-                    message: user
-                })
+                redirectURL = redirectURL + 'token?user=' + JSON.stringify(user)
+                return res.redirect(redirectURL)
             }
 
 
