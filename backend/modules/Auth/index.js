@@ -97,6 +97,11 @@ export default function ({env}) {
                         success: false,
                         message: err
                     })
+                } else {
+                    res.send({
+                        success: true,
+                        message: user
+                    })
                 }
 
             })
