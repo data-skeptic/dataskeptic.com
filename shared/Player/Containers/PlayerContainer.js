@@ -2,12 +2,14 @@ import React, {Component} from "react"
 import ReactHowler from 'react-howler'
 import moment from 'moment'
 import axios from 'axios'
+import {v4} from 'uuid'
 import {connect} from 'react-redux'
 
 
 import MiniPlayer from '../Components/MiniPlayer'
 import VolumeBarContainer from './VolumeBarContainer'
-const URL = '/api/v1/player'
+
+const URL = '/api/v1/player';
 
 const ZERO_POS_STR = '0:00';
 
@@ -18,6 +20,9 @@ const CAPTURE_TYPES = {
     SEEK: 'SEEK',
     POS: 'POS'
 }
+
+
+
 class PlayerContainer extends Component {
 
     /**
@@ -47,7 +52,7 @@ class PlayerContainer extends Component {
             howler: undefined,
             volume: 0.8,
             muted: false
-        }
+        };
 
         this.player = null;
     }
@@ -86,6 +91,15 @@ class PlayerContainer extends Component {
         return howler ? howler.seek() : 0;
     }
 
+    getGuid() {
+        const {guid = ''} = this.props.oepisode.toJS();
+        return guid;
+    }
+
+    getSessionId() {
+        return this.props.isAuthorized;
+    }
+
     /**
      * Update slider position
      */
@@ -95,17 +109,19 @@ class PlayerContainer extends Component {
         if (!this.getHowler()) return;
         if (!this.props.player.is_playing) return;
         if (!this.props.player.playback_loaded) return;
-
+        const listenerId = this.getSessionId();
         const seek = this.getSeek();
         const duration = this.getDuration();
-        const position = 100.0 * seek / duration
+        const guid = this.getGuid();
+        const position = 100.0 * seek / duration;
 
-        this.props.dispatch({type: "PROGRESS_UPDATE", payload: position })
-
+        this.props.dispatch({type: "PROGRESS_UPDATE", payload: position})
         this.capture(CAPTURE_TYPES.POS, {
             seek,
             duration,
-            position
+            position,
+            guid,
+            listenerId
         });
     }
 
@@ -139,9 +155,8 @@ class PlayerContainer extends Component {
     onEnd() {
         const howler = this.getHowler();
         howler.stop()
-
         this.stopPlay();
-        this.props.dispatch({type: "STOP_PLAYBACK", payload: {} })
+        this.props.dispatch({type: "STOP_PLAYBACK", payload: {}})
 
         this.capture(CAPTURE_TYPES.END);
     }
@@ -151,7 +166,7 @@ class PlayerContainer extends Component {
      *
      */
     onReady() {
-        this.props.dispatch({type: "PLAYBACK_LOADED", payload: true })
+        this.props.dispatch({type: "PLAYBACK_LOADED", payload: true})
         this.update();
     }
 
@@ -195,22 +210,30 @@ class PlayerContainer extends Component {
             pos: this.getSeek()
         })
     }
+
     capture(type, meta = {}) {
-        axios.post(URL, {type, meta})
-            .then((data) => {})
-            .catch((err) => console.error(err))
+        const {isAuthorized} = this.props;
+        const uid = v4();
+
+        if (isAuthorized) {
+            const metaId = `${uid}_playerMeta`;
+            localStorage.setItem(metaId, JSON.stringify(meta));
+            axios.post(URL, {type, meta}).then((data) => {}).catch((err) => console.error(err))
+        }
     }
+
 
     /**
      * Playing position change handler
      */
     positionUpdate(position) {
         const duration = this.getDuration()
-        const realPosition = 1.0 * position / 100 * duration
+        const realPosition = 1.0 * position / 100 * duration;
 
-        this.props.dispatch({type: "PLAYER_SEEK", payload: position })
 
-        this.player.seek(realPosition)
+        this.props.dispatch({type: "PLAYER_SEEK", payload: position})
+
+        this.player.seek(realPosition);
 
         this.capture(CAPTURE_TYPES.SEEK, {
             position: position,
@@ -240,13 +263,13 @@ class PlayerContainer extends Component {
             min = +(arr[0])
             sec = +(arr[1])
         } else {
-            hr  = +(arr[0])
+            hr = +(arr[0])
             min = +(arr[1]) + 60 * hr
             sec = +(arr[2])
         }
 
         const d = min * 60 + sec
-        const p = 1.0 * d * position/100
+        const p = 1.0 * d * position / 100
 
         return this.formatPosition(p)
     }
@@ -274,13 +297,13 @@ class PlayerContainer extends Component {
             min = +(arr[0])
             sec = +(arr[1])
         } else {
-            hr  = +(arr[0])
+            hr = +(arr[0])
             min = +(arr[1]) + 60 * hr
             sec = +(arr[2])
         }
 
         const d = min * 60 + sec
-        const p = 1.0 * d * position/100
+        const p = 1.0 * d * position / 100
 
         let left = d - p;
         if (left <= 1) left = 0;
@@ -338,18 +361,18 @@ class PlayerContainer extends Component {
         } = episode;
 
         if (pubDate) {
-        	pubDate = moment(pubDate).format('MMMM D, YYYY');
+            pubDate = moment(pubDate).format('MMMM D, YYYY');
         }
 
         const howler = (
-        	<ReactHowler
-        		src={mp3}
+            <ReactHowler
+                src={mp3}
                 html5={true}
-        		playing={is_playing}
-        		ref={(ref) => (this.player = ref)}
-        		onEnd={this.onEnd}
+                playing={is_playing}
+                ref={(ref) => (this.player = ref)}
+                onEnd={this.onEnd}
                 onLoad={this.onReady}
-        	/>
+            />
         )
 
         const volumeController = (
@@ -363,7 +386,6 @@ class PlayerContainer extends Component {
 
         const realDur = this.getFormattedDuration();
         const realPos = this.getFormattedPosition();
-
         return (
             <MiniPlayer
                 preview={img}
@@ -376,7 +398,6 @@ class PlayerContainer extends Component {
                 realPos={realPos}
                 howler={howler}
                 onSeek={this.positionUpdate}
-
                 onPlayToggle={this.onPlayToggle}
                 loaded={playback_loaded}
                 volumeSlider={volumeController}
@@ -387,6 +408,7 @@ class PlayerContainer extends Component {
 
 export default connect(
     state => ({
+        isAuthorized: state.site.getIn(['sessionId']),
         player: state.player.toJS(),
         oepisode: state.player.getIn(['episode'])
     })
