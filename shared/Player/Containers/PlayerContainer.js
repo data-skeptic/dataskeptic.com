@@ -218,8 +218,6 @@ class PlayerContainer extends Component {
         if (isAuthorized) {
             const metaId = `${uid}_playerMeta`;
             localStorage.setItem(metaId, JSON.stringify(meta));
-            console.dir(storage);
-        } else {
             axios.post(URL, {type, meta}).then((data) => {}).catch((err) => console.error(err))
         }
     }
