@@ -5,7 +5,7 @@ const LocalStrategy = require('passport-local').Strategy
 const LinkedinStrategy = require('./LinkedinStrategy').default
 const GoogleStrategy = require('./GoogleStrategy')();
 const UserServices = require('../Users/Services/UserServices');
-
+let redirectURL;
 export default function ({env}) {
     const router = express.Router()
 
@@ -68,6 +68,7 @@ export default function ({env}) {
     })
     // GOOGLE
     router.all('/auth/login/google', (req, res, next) => {
+        redirectURL = req.headers.referer;
         passport.authenticate('google', {
             scope: ['https://www.googleapis.com/auth/userinfo.profile',
                 'https://www.googleapis.com/auth/userinfo.email']
@@ -98,10 +99,8 @@ export default function ({env}) {
                         message: err
                     })
                 } else {
-                    res.send({
-                        success: true,
-                        message: user
-                    })
+                    redirectURL = redirectURL + 'token?user=' + JSON.stringify(user);
+                    return res.redirect(redirectURL)
                 }
 
             })
