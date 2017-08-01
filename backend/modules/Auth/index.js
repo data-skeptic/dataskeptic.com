@@ -99,7 +99,7 @@ export default function ({env}) {
                         message: err
                     })
                 } else {
-                    redirectURL = redirectURL + 'token?user=' + JSON.stringify(user);
+                    redirectURL = redirectURL + '/auth?user=' + JSON.stringify(user);
                     return res.redirect(redirectURL)
                 }
 
