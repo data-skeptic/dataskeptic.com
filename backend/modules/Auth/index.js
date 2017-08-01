@@ -129,6 +129,11 @@ router.get('/auth/linkedin/callback', function (req, res, next) {
             if (err) {
 
                 return res.status(403).send({message: err.message})
+            } else {
+                res.send({
+                    success: true,
+                    message: user
+                })
             }
 
 
