@@ -2,11 +2,12 @@ import fs from 'fs'
 
 const AWS = require('aws-sdk');
 const uuidV4 = require('uuid/v4');
+const moment = require('moment');
 const docClient = new AWS.DynamoDB.DocumentClient();
 
 var env = "prod"
 // TODO: ge this from the config: c[env]['player_metadata']['play_metadata']
-var tablename = "play_metadata"
+var tablename = "dataskeptic_player_metadata"
 
 export const getMeta = () => {
     const params = {
@@ -51,6 +52,7 @@ export const getMetaById = (id) => {
 };
 
 export const insertMeta = (data) => {
+    data.meta.timestamp = moment().unix();
     const idOfNewElement = uuidV4();
     const params = {
         TableName: tablename,
