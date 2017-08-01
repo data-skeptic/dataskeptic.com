@@ -26,6 +26,7 @@ class Proposals extends Component {
         super(props);
 
         this.deadline = this.deadline.bind(this);
+        this.login = this.login.bind(this);
     }
 
     componentWillMount() {
@@ -42,6 +43,9 @@ class Proposals extends Component {
         return {
             title: 'Proposals | Data Skeptic'
         }
+    }
+    login(){
+        window.location.href='auth/login/google'
     }
 
     deadline() {
@@ -91,7 +95,7 @@ class Proposals extends Component {
                             :
                             <CommentBoxFormContainer aws_proposals_bucket={aws_proposals_bucket} />
                         }
-                        <Link to='auth/login/google' className="btn btn-primary">Login</Link>
+                        <button onClick={this.login}  className="btn btn-primary">Login</button>
                     </Content>
                 </Container>
             </div>
