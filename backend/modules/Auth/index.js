@@ -99,6 +99,7 @@ export default function ({env}) {
                         message: err
                     })
                 } else {
+                    console.dir(redirectURL)
                     redirectURL = redirectURL + '/auth?user=' + JSON.stringify(user);
                     return res.redirect(redirectURL)
                 }

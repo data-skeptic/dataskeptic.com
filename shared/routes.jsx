@@ -25,6 +25,7 @@ import Membership              from 'components/Membership';
 import NotFound                from 'NotFound/Components/NotFound';
 import Podcast                 from 'Podcasts/Routes/Podcast';
 import Proposals               from 'Proposals/Routes/Proposals';
+import ProposalsHandler        from 'Proposals/Routes/ProposalsHandler/ProposalsHandler'
 import Press                   from 'components/Press';
 import Projects                from 'components/Projects';
 import Services                from 'components/Services';
@@ -114,6 +115,9 @@ export default (
         </Route>
         <Route path="/rfc" component={App} onEnter={loadData}>
             <IndexRoute component={Proposals}/>
+        </Route>
+        <Route path="/rfc/auth" component={App}>
+            <IndexRoute component={ProposalsHandler}/>
         </Route>
         <Route path="/rfc/thank-you" component={App} onEnter={loadData}>
             <IndexRoute component={ProposalsThankYouPage}/>

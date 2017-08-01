@@ -44,6 +44,7 @@ class Proposals extends Component {
             title: 'Proposals | Data Skeptic'
         }
     }
+
     login(){
         window.location.href='auth/login/google'
     }
@@ -53,7 +54,7 @@ class Proposals extends Component {
     }
 
     render() {
-        const {proposal} = this.props;
+        const {proposal, hasAccess} = this.props;
         const {topic, long_description, deadline, active, aws_proposals_bucket} = proposal;
 
         const to = moment(deadline);
@@ -95,7 +96,11 @@ class Proposals extends Component {
                             :
                             <CommentBoxFormContainer aws_proposals_bucket={aws_proposals_bucket} />
                         }
-                        <button onClick={this.login}  className="btn btn-primary">Login</button>
+                        { hasAccess
+                            ? <span>You are logged in</span>
+                            : <button onClick={this.login}  className="btn btn-primary">Login</button>
+                        }
+
                     </Content>
                 </Container>
             </div>
@@ -107,6 +112,7 @@ class Proposals extends Component {
 export default connect(
     state => ({
         proposal: state.proposals.getIn(['proposal']).toJS(),
+        hasAccess: state.proposals.getIn(['hasAccess'])
     }),
     dispatch => bindActionCreators({
         fetchCurrentProposal,

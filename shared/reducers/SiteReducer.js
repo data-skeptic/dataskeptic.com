@@ -19,7 +19,6 @@ const init = {
     },
   contributors: {},
   slackstatus: "",
-
   schemaVersion: SCHEMA_VER,
 };
 
