@@ -18,6 +18,7 @@ import CommentBoxFormContainer from '../Containers/CommentBoxContainer/CommentBo
 import Countdown from '../../Common/Components/Countdown';
 
 import { changePageTitle } from '../../Layout/Actions/LayoutActions';
+import {Link} from "react-router";
 
 class Proposals extends Component {
 
@@ -25,6 +26,7 @@ class Proposals extends Component {
         super(props);
 
         this.deadline = this.deadline.bind(this);
+        this.login = this.login.bind(this);
     }
 
     componentWillMount() {
@@ -43,12 +45,16 @@ class Proposals extends Component {
         }
     }
 
+    login(){
+        window.location.href='api/v1/auth/login/google'
+    }
+
     deadline() {
         this.props.proposalDeadlineReached();
     }
 
     render() {
-        const {proposal} = this.props;
+        const {proposal, hasAccess} = this.props;
         const {topic, long_description, deadline, active, aws_proposals_bucket} = proposal;
 
         const to = moment(deadline);
@@ -90,6 +96,11 @@ class Proposals extends Component {
                             :
                             <CommentBoxFormContainer aws_proposals_bucket={aws_proposals_bucket} />
                         }
+                        { hasAccess
+                            ? <span>You are logged in</span>
+                            : <button onClick={this.login}  className="btn btn-primary">Login</button>
+                        }
+
                     </Content>
                 </Container>
             </div>
@@ -100,7 +111,8 @@ class Proposals extends Component {
 
 export default connect(
     state => ({
-        proposal: state.proposals.get('proposal').toJS(),
+        proposal: state.proposals.getIn(['proposal']).toJS(),
+        hasAccess: state.proposals.getIn(['hasAccess'])
     }),
     dispatch => bindActionCreators({
         fetchCurrentProposal,

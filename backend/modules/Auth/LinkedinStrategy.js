@@ -2,7 +2,7 @@ import {Strategy as LinkedInStrategy} from 'passport-linkedin-oauth2'
 const config = require('../../../config/config.json');
 const UserServices = require('../Users/Services/UserServices');
 
-export default function ({env}) {
+export default function (env) {
     return new LinkedInStrategy(
         config[env].linkedin,
         function (accessToken, refreshToken, {_json: {id, emailAddress, firstName, formattedName}}, done) {

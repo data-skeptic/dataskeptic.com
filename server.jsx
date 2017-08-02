@@ -31,8 +31,6 @@ import {
 }  from 'daos/serverInit'
 import express                   from 'express';
 
-import AuthService               from './backend/modules/Auth'
-
 import FileStreamRotator         from 'file-stream-rotator'
 import fs                        from 'fs'
 import createLocation            from 'history/lib/createLocation';
@@ -541,9 +539,6 @@ app.use('/api/v1/', api(Cache));
 
 // authorization module
 app.use(session({secret : "DATAS"}))
-app.use(AuthService({
-    env
-}))
 
 /***
  * DUMP GENERATION
