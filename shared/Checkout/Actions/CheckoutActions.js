@@ -68,12 +68,16 @@ export function checkoutRequestStart(data) {
 export function checkoutRequestSuccess(message, data) {
     const emailData = {
         msg: `
-            Hi ${data.first_name}.
+            Hi ${data.first_name},
             
-            Thank you for order!
+            Thank you for supporting Data Skeptic.  Your order has been recieved and will be processed on our end right away.  Please allow a few weeks for shipping.  If you have any questions or issues with your order, don't hesitate to reach out to me directly.
+
+            All the best,
+
+            Kyle
         `,
         to: data.email,
-        subject: 'Your order is completed!'
+        subject: 'Your dataskeptic.com order confirmation'
     };
 
     axios.post('/api/v1/mail', emailData)
