@@ -1,0 +1,10 @@
+{
+  "name": "lambdaForSlack",
+  "version": "0.0.1",
+  "dependencies": {
+    "request": "^2.81.0"
+  },
+  "scripts": {
+    "lambda_export": "claudia create --region us-west-1 --handler index.handler --policies policies/lambda_execute_policy.json --set-env BUCKET=dataskeptic-recordings-dev-gleb,SLACK_WEBHOOK_URL=https://hooks.slack.com/services/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"
+  }
+}
