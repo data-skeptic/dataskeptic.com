@@ -15,7 +15,8 @@ class ProposalsHandler extends Component {
 
     componentWillMount() {
         const {id, hasAccess, location} = this.props;
-        const userData = JSON.parse(location.query.user);
+        const user = location.search.split("&")[0].replace("?","").split("=")[1]
+        const userData = user;
         return this.props.authorize(!!user);
     }
 

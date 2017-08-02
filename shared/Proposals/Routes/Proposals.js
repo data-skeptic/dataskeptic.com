@@ -46,7 +46,7 @@ class Proposals extends Component {
     }
 
     login(){
-        window.location.href='auth/login/google'
+        window.location.href='api/v1/auth/login/google'
     }
 
     deadline() {

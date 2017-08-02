@@ -2,11 +2,11 @@ import express from 'express'
 
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
-const LinkedinStrategy = require('./LinkedinStrategy').default
-const GoogleStrategy = require('./GoogleStrategy')();
-const UserServices = require('../Users/Services/UserServices');
+const LinkedinStrategy = require('../../modules/Auth/LinkedinStrategy').default
+const GoogleStrategy = require('../../modules/Auth/GoogleStrategy')();
+const UserServices = require('../../modules/Users/Services/UserServices');
 let redirectURL;
-export default function ({env}) {
+module.exports = () => {
     const router = express.Router()
 
     passport.serializeUser(function (user, done) {
@@ -20,9 +20,8 @@ export default function ({env}) {
 
         done(user)
     })
-
     //passport.use(GoogleStrategy({env}))
-    passport.use(LinkedinStrategy({env}))
+    passport.use(LinkedinStrategy(global.env))
     router.use(passport.initialize())
     router.use(passport.session())
 
@@ -47,7 +46,7 @@ export default function ({env}) {
     )
 
     // REGULAR
-    router.post('/auth/login', (req, res, next) => {
+    router.post('/login', (req, res, next) => {
         passport.authenticate('local', {failWithError: true}, function (err, user, info) {
             if (err) {
                 return res.status(403).send({message: err.message})
@@ -67,7 +66,7 @@ export default function ({env}) {
         })(req, res, next)
     })
     // GOOGLE
-    router.all('/auth/login/google', (req, res, next) => {
+    router.all('/login/google', (req, res, next) => {
         redirectURL = req.headers.referer;
         passport.authenticate('google', {
             scope: ['https://www.googleapis.com/auth/userinfo.profile',
@@ -75,8 +74,8 @@ export default function ({env}) {
         })(req, res, next)
     });
     // LINKEDIN
-    router.all('/auth/login/linkedin', passport.authenticate('linkedin'))
-    router.all('/auth/linkedin/activate', function (req, res) {
+    router.all('/login/linkedin', passport.authenticate('linkedin'))
+    router.all('/linkedin/activate', function (req, res) {
         UserServices
             .changeActiveStatus(req.body)
             .then(status => {
@@ -84,7 +83,7 @@ export default function ({env}) {
             })
     });
 
-    router.get('/auth/google/callback', (req, res, next) => {
+    router.get('/google/callback', (req, res, next) => {
         passport.authenticate('google', {failWithError: true}, function (err, user, info) {
             if (err) {
                 return res.status(403).send({message: err.message})
@@ -108,7 +107,7 @@ export default function ({env}) {
         })(req, res, next);
     })
 
-router.get('/auth/linkedin/callback', function (req, res, next) {
+router.get('/linkedin/callback', function (req, res, next) {
 
     passport.authenticate('linkedin', {
         failWithError: true,
@@ -139,7 +138,7 @@ router.get('/auth/linkedin/callback', function (req, res, next) {
     })(req, res, next)
 })
 
-router.all('/auth/logout', function (req, res, next) {
+router.all('/logout', function (req, res, next) {
     req.logout()
     res.send({})
 })
