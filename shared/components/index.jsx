@@ -21,6 +21,7 @@ import { toggleMobileMenu } from '../Layout/Actions/LayoutActions';
 import MobileMenu from '../MobileMenu/Components/MobileMenu'
 import { getItemsCount as getCartItemsCount } from '../Cart/Helpers/getItemsCount';
 import { toggleCart } from '../Cart/Actions/CartActions'
+import ChatBotContainer from "../ChatBot/Containers/ChatBotContainer";
 
 class MainView extends React.Component {
   constructor(props) {
@@ -214,6 +215,7 @@ class MainView extends React.Component {
             {this.props.children}
             <Sidebar />
           </div>
+          <ChatBotContainer/>
           <Footer linkClick={this.onFooterItemClick} banner={this.props.bannerContent}/>
           <Overflow visible={isOverflowMode} onClick={this.onOverflowClick}/>
         </div>
