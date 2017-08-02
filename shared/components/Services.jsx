@@ -22,9 +22,7 @@ class Services extends React.Component {
             title: 'Services | Data Skeptic'
         }
     }
-/*
-                <ContactFormContainer />
-*/
+    
     render() {
         return (
             <div className="center services-outer">
@@ -69,6 +67,7 @@ class Services extends React.Component {
                     </div>
                 </div>
                 <div className="clear"></div>
+                <ContactFormContainer />
             </div>
         )
     }

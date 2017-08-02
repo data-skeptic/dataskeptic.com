@@ -7,7 +7,7 @@ const docClient = new AWS.DynamoDB.DocumentClient();
 
 var env = "prod"
 // TODO: ge this from the config: c[env]['player_metadata']['play_metadata']
-var tablename = "dataskeptic_player_metadata"
+var tablename = "play_metadata"
 
 export const getMeta = () => {
     const params = {
