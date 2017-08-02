@@ -92,6 +92,7 @@ fs.open("config/config.json", "r", function (error, fd) {
     fs.read(fd, buffer, 0, buffer.length, null, function (error, bytesRead, buffer) {
         var data = buffer.toString("utf8", 0, bytesRead)
         var c = JSON.parse(data)
+        console.dir('env = ' + env)
         stripe_key = c[env]['stripe']
         sp_key = c[env]['sp']
         slack_key = c[env]['slack']
