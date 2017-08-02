@@ -87,7 +87,7 @@ var aws_proposals_bucket = ""
 var rfc_table_name = "rtc"
 var latest_rfc_id = "test-request"
 
-fs.open("config/config.json", "r", function (error, fd) {
+fs.open("config.json", "r", function (error, fd) {
     var buffer = new Buffer(10000)
     fs.read(fd, buffer, 0, buffer.length, null, function (error, bytesRead, buffer) {
         var data = buffer.toString("utf8", 0, bytesRead)
