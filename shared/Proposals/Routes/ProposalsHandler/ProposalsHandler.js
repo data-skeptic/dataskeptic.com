@@ -11,7 +11,7 @@ class ProposalsHandler extends Component {
         super(props);
     }
 
-    componentWillMount() {
+    componentDidMount() {
         const {id, hasAccess, location} = this.props;
         const user = location.query.user
         this.props.authorize(!!user);
