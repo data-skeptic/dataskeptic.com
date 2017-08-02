@@ -21,7 +21,7 @@ export function fetchCurrentProposal() {
 export function authorize(hasAccess) {
     return (dispatch) => {
         dispatch({ type: AUTHORIZE, payload: {hasAccess} })
-        dispatch(push('/rfc'))
+        // dispatch(push('/rfc'))
     }
 }
 

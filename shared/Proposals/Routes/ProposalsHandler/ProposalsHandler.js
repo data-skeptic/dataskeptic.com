@@ -3,9 +3,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import {authorize} from '../../Actions/ProposalsActions';
-
-
-
+import {push} from 'redux-react-router'
 
 class ProposalsHandler extends Component {
 
@@ -15,14 +13,15 @@ class ProposalsHandler extends Component {
 
     componentWillMount() {
         const {id, hasAccess, location} = this.props;
-        const user = location.search.split("&")[0].replace("?","").split("=")[1]
-        const userData = user;
-        return this.props.authorize(!!user);
+        const user = location.query.user
+        this.props.authorize(!!user);
+        if (!!user) {
+            this.props.history.push('/rfc')
+        }
     }
 
     render() {
         const {proposal, hasAccess} = this.props;
-
 
         return (
             <div>Loading...</div>
