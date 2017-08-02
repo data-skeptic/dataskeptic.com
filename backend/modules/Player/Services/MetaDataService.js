@@ -1,5 +1,5 @@
 import fs from 'fs'
-const config = require('../../../../config.json');
+const config = require('../../../../config/config.json');
 const AWS = require('aws-sdk');
 const uuidV4 = require('uuid/v4');
 const moment = require('moment');
