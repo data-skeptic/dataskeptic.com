@@ -119,9 +119,6 @@ export default (
             <IndexRoute component={ProposalsThankYouPage}/>
         </Route>
 
-        <Route path="/admin" component={App}>
-            <IndexRoute component={Admin}  />
-        </Route>
         <Route path="/login" component={App}>
             <IndexRoute component={Login}/>
         </Route>
@@ -142,3 +139,8 @@ export default (
 
     </Router>
 );
+/*
+        <Route path="/admin" component={App}>
+            <IndexRoute component={Admin}  />
+        </Route>
+*/
