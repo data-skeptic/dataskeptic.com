@@ -534,12 +534,13 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 
+// authorization module
+app.use(session({secret : "DATAS"}))
 
 const api = require('./backend/api/v1');
 app.use('/api/v1/', api(Cache));
 
-// authorization module
-app.use(session({secret : "DATAS"}))
+
 
 /***
  * DUMP GENERATION
