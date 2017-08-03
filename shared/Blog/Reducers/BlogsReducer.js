@@ -91,6 +91,9 @@ export default function blogsReducer(state = defaultState, action) {
                 console.log([nblog['uri'], 'does not match', cblog['uri']])
             }
             nstate.postLoading = false;
+            nstate.currentPost = nblog;
+            nstate.currentPost.content = content
+
             break
         case 'ADD_RELATED':
             var items = action.payload.items
@@ -158,11 +161,12 @@ export default function blogsReducer(state = defaultState, action) {
         case REMOVE_FOCUS_POST:
         case LOAD_BLOG_POST_REQUEST:
             nstate.postLoading = true;
+            nstate.currentPost = {}
             break;
 
         case LOAD_BLOG_POST_SUCCESS:
-            nstate.currentPost = action.payload.post;
             nstate.postLoading = false;
+            // nstate.currentPost = action.payload.post;
             break;
 
         case LOAD_BLOG_POST_FAILED:
