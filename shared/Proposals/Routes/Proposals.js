@@ -31,6 +31,7 @@ class Proposals extends Component {
 
     componentWillMount() {
         if (isEmpty(this.props.proposal)) {
+            debugger
             this.props.fetchCurrentProposal();
         }
 
@@ -54,7 +55,7 @@ class Proposals extends Component {
     }
 
     render() {
-        const {proposal, hasAccess} = this.props;
+        const {proposal =[], hasAccess} = this.props;
         const {topic, long_description, deadline, active, aws_proposals_bucket} = proposal;
 
         const to = moment(deadline);
