@@ -88,12 +88,11 @@ export default function ProposalsReducer(state = initialState, action) {
             nstate.error = true;
             break;
 
-        // case FETCH_CURRENT_PROPOSAL_SUCCESS:
-        //     nstate.loading = false;
-        //     nstate.error = true;
-        //     console.dir(action.payload.data);
-        //     nstate.proposal = action.payload.data;
-        //     break;
+        case FETCH_CURRENT_PROPOSAL_SUCCESS:
+            nstate.loading = false;
+            nstate.error = true;
+            nstate.proposal = action.payload.data;
+            break;
 
         case FETCH_CURRENT_PROPOSAL_FAIL:
             nstate.loading = false;
