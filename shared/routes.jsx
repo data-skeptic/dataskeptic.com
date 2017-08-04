@@ -32,6 +32,7 @@ import Services                from 'components/Services';
 import Store                   from 'components/Store';
 import CheckoutThankYouPage    from 'Checkout/Routes/ThankYouRoute/ThankYouRoute';
 import ProposalsThankYouPage   from 'Proposals/Routes/ThankYou/ThankYouPage';
+import PrivacyPageContainer    from 'Privacy/Containers/PrivacyPageContainer'
 
 import Admin                   from 'components/admin/Admin';
 import Invoice                 from 'Checkout/Routes/Invoices/Invoice';
@@ -135,6 +136,9 @@ export default (
         </Route>
         <Route path="/l/snl-impact" component={App} onEnter={loadData}>
             <IndexRoute component={SnlImpact}/>
+        </Route>
+        <Route path="/privacy-policy" component={App} onEnter={loadData}>
+            <IndexRoute component={PrivacyPageContainer}/>
         </Route>
 
         <Route path="/*" component={App} onEnter={loadData}>
