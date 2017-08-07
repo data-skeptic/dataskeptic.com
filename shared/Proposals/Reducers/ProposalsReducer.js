@@ -85,15 +85,14 @@ export default function ProposalsReducer(state = initialState, action) {
     switch (action.type) {
         case FETCH_CURRENT_PROPOSAL_REQUEST:
             nstate.loading = true;
-            nstate.error = true;
+            nstate.error = false;
             break;
 
-        // case FETCH_CURRENT_PROPOSAL_SUCCESS:
-        //     nstate.loading = false;
-        //     nstate.error = true;
-        //     console.dir(action.payload.data);
-        //     nstate.proposal = action.payload.data;
-        //     break;
+        case FETCH_CURRENT_PROPOSAL_SUCCESS:
+            nstate.loading = false;
+            nstate.error = false;
+            nstate.proposal = action.payload.data;
+            break;
 
         case FETCH_CURRENT_PROPOSAL_FAIL:
             nstate.loading = false;
