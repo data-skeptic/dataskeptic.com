@@ -7,7 +7,7 @@ export const sendMail = (obj) => {
     var to = obj['to']
     var toa = [to]
     var ses = new AWS.SES({apiVersion: '2010-12-01'});
-    var from = 'lozhkovoygleb@icloud.com'
+    var from = 'orders@dataskeptic.com'
     var subject = obj['subject']
     var resp = {status: 200, msg: "ok"}
     var body =
@@ -115,7 +115,7 @@ export const sendMail = (obj) => {
     </html>`
     var email_request = {
         Source: from,
-        Destination: {ToAddresses: toa, BccAddresses: ["lozhkovoygleb@icloud.com"]},
+        Destination: {ToAddresses: toa, BccAddresses: ["orders@dataskeptic.com"]},
         Message: {
             Subject: {
                 Data: subject
