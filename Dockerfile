@@ -1,6 +1,6 @@
 FROM mhart/alpine-node:latest
 
-MAINTAINER Kyle Polich
+LABEL maintainer="Kyle Polich"
 
 #RUN apt-get update
 #RUN apt-get install -y sudo
@@ -18,8 +18,9 @@ RUN npm install
 
 COPY . /usr/src/app
 
-EXPOSE 443
+EXPOSE 443 80 3000
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "docker_start"]
 
-# docker run -i -t -p 443:443 -p 80:80 -p 3000:3000 -v /Users/kylepolich/git/dataskeptic.com/config/:/usr/src/app/config/ kylepolich/dataskeptic.com
+# docker build -t dataskeptic .
+# docker run -i -t -d -p 443:443 -p 80:80 -p 3000:3000 dataskeptic

@@ -1,5 +1,6 @@
 import aws                       from 'aws-sdk'
 import axios                     from 'axios';
+import session from 'express-session';
 import {getRelatedContent, deleteRelatedContentByUri} from 'backend/admin/admin_related_services'
 import {get_blogs}               from 'backend/get_blogs'
 import {get_blogs_rss}           from 'backend/get_blogs_rss'
@@ -15,6 +16,8 @@ import {order_fulfill}           from 'backend/order_fulfill'
 import {order_list}              from 'backend/order_list'
 import {pay_invoice}             from 'backend/pay_invoice'
 import {related_content, related_cache}         from 'backend/related_content'
+import {ready}                   from 'backend/v1/recording';
+import {write as writeProposal, upload as uploadProposalFiles}  from 'backend/v1/proposals'
 import bodyParser                from 'body-parser'
 import compression               from 'compression';
 import {feed_uri}              from 'daos/episodes'
@@ -22,9 +25,12 @@ import {
     loadBlogs,
     loadEpisodes,
     loadProducts,
-    loadAdvertiseContent
+    loadAdvertiseContent,
+    load,
+    loadCurrentRFC
 }  from 'daos/serverInit'
 import express                   from 'express';
+
 import FileStreamRotator         from 'file-stream-rotator'
 import fs                        from 'fs'
 import createLocation            from 'history/lib/createLocation';
@@ -77,30 +83,33 @@ var aws_region = ""
 var stripe_key = "sk_test_81PZIV6UfHDlapSAkn18bmQi"
 var sp_key = "test_Z_gOWbE8iwjhXf4y4vqizQ"
 var slack_key = ""
+var aws_proposals_bucket = ""
+var rfc_table_name = "rtc"
+var latest_rfc_id = "test-request"
 
-fs.open("config/config.json", "r", function (error, fd) {
+fs.open("./config/config.json", "r", function (error, fd) {
     var buffer = new Buffer(10000)
     fs.read(fd, buffer, 0, buffer.length, null, function (error, bytesRead, buffer) {
         var data = buffer.toString("utf8", 0, bytesRead)
         var c = JSON.parse(data)
-        var env2 = env
-        stripe_key = c[env2]['stripe']
-        sp_key = c[env2]['sp']
-        slack_key = c[env2]['slack']
-        aws_accessKeyId = c[env2]['aws']['accessKeyId']
-        aws_secretAccessKey = c[env2]['aws']['secretAccessKey']
-        aws_region = c[env2]['aws']['region']
+        console.dir('env = ' + env)
+        stripe_key = c[env]['stripe']
+        sp_key = c[env]['sp']
+        slack_key = c[env]['slack']
+        aws_accessKeyId = c[env]['aws']['accessKeyId']
+        aws_secretAccessKey = c[env]['aws']['secretAccessKey']
+        aws_region = c[env]['aws']['region']
+        aws_proposals_bucket = c[env]['recording']['aws_proposals_bucket']
         fs.close(fd)
+        aws.config.update(
+            {
+                "accessKeyId": aws_accessKeyId,
+                "secretAccessKey": aws_secretAccessKey,
+                "region": aws_region
+            }
+        );
     })
 })
-
-aws.config.update(
-    {
-        "accessKeyId": aws_accessKeyId,
-        "secretAccessKey": aws_secretAccessKey,
-        "region": aws_region
-    }
-);
 
 const docClient = new aws.DynamoDB.DocumentClient();
 
@@ -108,10 +117,9 @@ if (process.env.NODE_ENV !== 'production') {
     require('./webpack.dev').default(app);
     env = "dev"
 }
-console.log(new Date())
 console.log("Environment: ", env)
 
-const DEFAULT_ADVERTISE_HTML = `<img src="/img/default-advertise.jpg"/>`;
+const DEFAULT_ADVERTISE_HTML = `<img src="/img/advertise.png" width="100%"/>`;
 
 let Cache = {
     title_map: {}         // `uri`             -> <title>
@@ -121,10 +129,12 @@ let Cache = {
     , episodes_map: {}      // `guid` | 'latest' -> {episode}
     , episodes_list: []     // guids
     , products: {}
+    , contributors: {}
     , advertise: {
         card: DEFAULT_ADVERTISE_HTML,
         banner: null
     }
+    , rfc: {}
 };
 
 const reducer = combineReducers({
@@ -132,6 +142,7 @@ const reducer = combineReducers({
     form: formReducer
 });
 
+global.my_cache = Cache;
 global.env = env;
 
 const doRefresh = (store) => {
@@ -198,6 +209,14 @@ const doRefresh = (store) => {
             Cache.products.items = products;
         })
         .then(() => {
+            Cache.contributors = get_contributors()
+            return loadCurrentRFC()
+        })
+        .then((rfc) => {
+            Cache.rfc = rfc
+            console.dir(rfc)
+
+
             console.log("Refreshing Finished")
         })
         // .then(() => global.gc())
@@ -223,6 +242,19 @@ if (process.env.NODE_ENV == 'production') {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+const proxy = require('http-proxy-middleware');
+const wsProxy = proxy('/recording', {
+    target: 'ws://127.0.0.1:9001',
+    // pathRewrite: {
+    //  '^/websocket' : '/socket',          // rewrite path.
+    //  '^/removepath' : ''                 // remove path.
+    // },
+    changeOrigin: true,                     // for vhosted sites, changes host header to match to target's host
+    ws: true,                               // enable websocket proxy
+    logLevel: 'debug'
+});
+app.use(wsProxy);
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
     extended: true
@@ -234,7 +266,17 @@ function api_router(req, res) {
         join_slack(req, res, slack_key)
         return true
     }
-    if (req.url.indexOf('/api/refresh') == 0) {
+
+    if (req.url.indexOf('/api/v1/proposals/files') == 0) {
+        uploadProposalFiles(req, res, aws_proposals_bucket);
+        return true;
+    } if (req.url.indexOf('/api/v1/proposals') == 0) {
+        writeProposal(req, res);
+        return true;
+    } else if (req.url.indexOf('/api/v1/recording/ready') == 0) {
+        ready(req, res, aws_proposals_bucket);
+        return true;
+    } if (req.url.indexOf('/api/refresh') == 0) {
         doRefresh()
         return res.status(200).end(JSON.stringify({'status': 'ok'}))
     }
@@ -296,7 +338,7 @@ function api_router(req, res) {
         return true
     }
     else if (req.url == '/api/rfc/list') {
-        get_rfc_metadata(req, res, Cache)
+        get_rfc_metadata(req, res, Cache, docClient, rfc_table_name, latest_rfc_id)
         return true
     } else if (req.url == '/api/test') {
         return res.status(200).end(JSON.stringify(Cache.blogmetadata_map));
@@ -410,6 +452,7 @@ function inject_blog(store, my_cache, pathname) {
         blog_metadata = {}
         var dispatch = store.dispatch
         var blogs = get_blogs_list(dispatch, pathname)
+        console.log("Could not find blog_metadata for " + blog_page)
     } else {
         var guid = blog_metadata.guid
         if (guid != undefined) {
@@ -441,9 +484,11 @@ function inject_blog(store, my_cache, pathname) {
     console.log("done with blog inject")
 }
 
-function updateState(store, pathname) {
+function updateState(store, pathname, req) {
     inject_folders(store, Cache)
     inject_years(store, Cache)
+
+    store.dispatch({type: "PROPOSAL_SET_BUCKET", payload: {aws_proposals_bucket} })
 
     var contributors = get_contributors();
     store.dispatch({type: "LOAD_CONTRIBUTORS_LIST_SUCCESS", payload: {contributors}});
@@ -462,8 +507,6 @@ function updateState(store, pathname) {
     }
 
     store.dispatch({type: "ADD_FOLDERS", payload: Cache.folders});
-    store.dispatch({type: "ADD_BLOGS", payload: {blogs: Cache.blogmetadata_map, total: Cache.blogmetadata_map.length}});
-    store.dispatch({type: "SET_BLOGS_LOADED"});
 
     store.dispatch({
         type: 'SET_ADVERTISE_CARD_CONTENT',
@@ -478,10 +521,26 @@ function updateState(store, pathname) {
             content: Cache.advertise.banner
         }
     })
+
+    store.dispatch({
+        type: 'FETCH_CURRENT_PROPOSAL_SUCCESS',
+        payload: {
+            data: Cache.rfc
+        }
+    })
 }
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+
+// authorization module
+app.use(session({secret : "DATAS"}))
+
+const api = require('./backend/api/v1');
+app.use('/api/v1/', api(Cache));
+
+
 
 /***
  * DUMP GENERATION
@@ -501,7 +560,7 @@ function renderView(store, renderProps, location) {
 
     let meta = {
         title: 'Data Skeptic',
-        description: 'Data Skeptic is your source for a perseptive of scientific skepticism on topics in statistics, machine learning, big data, artificial intelligence, and data science. Our weekly podcast and blog bring you stories and tutorials to help understand our data-driven world.',
+        description: 'Data Skeptic is your source for a perspective of scientific skepticism on topics in statistics, machine learning, big data, artificial intelligence, and data science. Our weekly podcast and blog bring you stories and tutorials to help understand our data-driven world.',
         author: 'Kyle Polich',
         keywoards: 'data skeptic, podcast,',
     };
@@ -557,6 +616,10 @@ const renderPage = (req, res) => {
         return res.redirect(307, 'http://dataskeptic.libsyn.com/rss')
     }
 
+    if (req.url.indexOf('.svg') > -1) {
+        return res.status(404).end('File Not Found');
+    }
+
     const location = createLocation(req.url);
 
     match({routes, location}, (err, redirectLocation, renderProps) => {
@@ -572,7 +635,7 @@ const renderPage = (req, res) => {
         }
 
         let store = applyMiddleware(thunk, promiseMiddleware)(createStore)(reducer);
-        updateState(store, location.pathname);
+        updateState(store, location.pathname, req);
 
         fetchComponentData(store.dispatch, renderProps.components, renderProps.params)
             .then(() => renderView(store, renderProps, location))

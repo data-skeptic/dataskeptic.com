@@ -67,6 +67,8 @@ class Header extends React.Component {
 								  cartClick={this.onCartClick}
 						/>
 					</div>
+					<div className="cart-menu pull-right">
+					</div>
 					<div className="logo pull-left">
 						<Link to="/" id="logo_desktop"><img src="/img/svg/logo.svg" alt="Data Skeptic logo" /></Link>
 					</div>

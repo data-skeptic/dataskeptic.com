@@ -42,7 +42,7 @@ module.exports = {
 	          }
 	        }
 	      }
-	    }
+	    };
 	    ses.sendEmail(email_request, function(err, data) {
 	      if (err != null) {
 	        console.log("---[ERROR]-------------------")

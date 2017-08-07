@@ -1,0 +1,48 @@
+.chat-bot-modal {
+  position: fixed;
+  bottom: 5%;
+  right: 1%;
+  background: white;
+  z-index: 99999;
+
+}
+
+.bot-wrapper {
+  position: relative;
+}
+
+.close-modal {
+  position: absolute;
+  top: 0;
+  right: 3px;
+  display: block;
+  font-size: 24px;
+  cursor: pointer;
+  color: white;
+}
+
+.chat-bot {
+  width: 300px;
+  height: 300px;
+  border:1px solid #333;
+}
+
+@media screen and (max-width: 992px) {
+  .chat-bot-modal {
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+  }
+
+  .bot-wrapper {
+    margin: 0 auto;
+    margin-top: 140px;
+    background: white;
+    width: 300px;
+  }
+
+  .chat-bot {
+
+  }
+
+}

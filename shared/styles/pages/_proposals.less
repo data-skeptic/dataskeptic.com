@@ -1,0 +1,201 @@
+.comment-box-form-container {
+
+  .recording-flow-container {
+    //margin-top: 32px;
+    //margin-bottom: 37px;
+  }
+
+  .upload-file-type-box {
+    margin-top: 32px;
+    margin-bottom: 37px;
+
+    .dropzone {
+      min-height: 105px;
+    }
+
+    .upload-files-preview {
+      margin-top: 20px;
+
+      .upload-file-item-box {
+
+        .thumbnail {
+          position: relative;
+
+          button.close {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            opacity: 1;
+
+            background: #FAFAFA;
+            border: 0;
+            box-shadow: 0px 0px 4px #D7D9D9;
+            border-radius: 50%;
+
+            width: 24px;
+            height: 24px;
+
+            &:hover {
+              background-color: #FFFFFF;
+            }
+
+            > span {
+              font-size: 1em;
+              color: #000;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .comment-type-selector {
+    .btn-type {
+      text-align: center;
+      padding: 20px 10px;
+      border-radius: 5px;
+      background: #FAFAFA;
+      border: 1px solid #D7D9D9;
+
+      color: #000000;
+
+      &.active {
+
+      }
+
+      .description {
+        width: 100%;
+        word-wrap: break-word;
+        color: #3a3b3b;
+
+        .title {
+          font-weight: bolder;
+        }
+
+        .subtitle {
+          font-size: 98%;
+          font-weight: normal;
+        }
+      }
+
+      .icon {
+        height: 128px;
+        width: 128px;
+        margin: 0px auto;
+
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: 100%;
+
+        &.icon-keyboard {
+          background-image: url('/img/proposals/keyboard1x.png');
+        }
+        &.icon-upload {
+          background-image: url('/img/proposals/upload1x.png');
+        }
+        &.icon-record {
+          background-image: url('/img/proposals/micro1x.png');
+        }
+      }
+    }
+  }
+}
+
+.countdown {
+
+  display: inline-block;
+
+  .number {
+    background: #141212;
+    background: -moz-linear-gradient(top, #141212 0%, #232323 50%, #0a0e0a 50%, #0a0809 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #141212), color-stop(50%, #232323), color-stop(50%, #0a0e0a), color-stop(100%, #0a0809));
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    height: 40px;
+    width: 40px;
+    display: block;
+    position: relative;
+
+    border-left: solid 1px #000;
+    border-right: solid 1px #000;
+    border-bottom: solid 1px #262626;
+    float: left;
+    margin: 0 5px;
+    text-align: center;
+
+    box-shadow: 0px 5px 7px #000000;
+
+    > span {
+      line-height: 40px;
+      color: #fff;
+      font-size: 32px;
+      font-weight: bold;
+    }
+  }
+
+  /*.number:after {
+    content: "";
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    height: 2px;
+    width: 40px;
+    margin: 0px auto;
+    display: block;
+    position: relative;
+
+    -webkit-box-shadow: 0px 4px 0px #121212;
+    -moz-box-shadow: 0px 4px 0px #121212;
+    box-shadow: 0px 4px 0px #121212;
+    border-bottom: solid 1px #262626;
+  } */
+
+  .number:before {
+    content: "";
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    height: 10px;
+    width: 40px;
+    margin: 0px auto;
+    display: block;
+    position: absolute;
+    top: 2px;
+    right: -1px;
+    -webkit-box-shadow: 0px -2px 0px #080808;
+    -moz-box-shadow: 0px -2px 0px #080808;
+    box-shadow: 0px -2px 0px #080808;
+    border-top: solid 1px #262626;
+  }
+
+  .number hr {
+    border-top: solid 1px RGBA(0, 0, 0, 0.9);
+    border-bottom: solid 1px RGBA(87, 87, 87, 0.9);
+    border-left: none;
+    border-right: none;
+    position: absolute;
+    top: -1px;
+    z-index: 9999;
+    width: 100%;
+  }
+
+}
+
+.proposals-page {
+  &.open {
+    .page-container {
+      margin-top: -20px;
+    }
+  }
+}
+
+.proposal {
+  text-align: center;
+  img {
+    width: 30%;
+    height: auto;
+  }
+}
+
+.proposal-loading-title {
+  font-weight: bold;
+  font-size: 20px;
+}

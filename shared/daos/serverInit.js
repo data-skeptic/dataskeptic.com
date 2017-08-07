@@ -1,6 +1,10 @@
 import xml2js from 'xml2js'
 import axios  from 'axios'
 
+const AWS = require("aws-sdk");
+
+const proposalsDocs = new AWS.DynamoDB.DocumentClient();
+
 import {convert_items_to_json} from 'daos/episodes'
 import {extractFolders} from '../utils/blog_utils'
 
@@ -25,7 +29,7 @@ function generate_content_map(env, blog, my_cache) {
                 return content;
             })
             .catch((err) => {
-                console.log("Content cache error trying to store blog content")
+                console.log("Content cache e3rror trying to store blog content")
                 console.log(err)
             })
     } else {
@@ -171,6 +175,10 @@ export function loadEpisodes(env, feed_uri, blogmetadata_map, aws) {
                             }
                         }
 
+                        if (episode.img) {
+                            episode.img = episode.img.replace("http://", "https://");
+                        }
+
                         list.push(episode.guid)
                     }
 
@@ -211,4 +219,26 @@ export function loadAdvertiseContent() {
         loadAdvertiseSourceContent(ADVERTISE_CARD_CONTENT),
         loadAdvertiseSourceContent(ADVERTISE_BANNER_CONTENT)
     ])
+}
+
+const RFC_TABLE_NAME = 'rfc';
+const LATEST_RFC_ID = 'test-request';
+
+export function loadCurrentRFC() {
+    const params = {
+        TableName: RFC_TABLE_NAME,
+        Key: {
+            id: LATEST_RFC_ID
+        }
+    };
+
+    return new Promise((res, rej) => {
+        proposalsDocs.get(params, function(err, data) {
+            if (err) {
+                rej(err);
+            } else {
+                res(data['Item']);
+            }
+        });
+    });
 }

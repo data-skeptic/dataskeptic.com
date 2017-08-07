@@ -3,6 +3,8 @@ logs
 *.log
 npm-debug.log*
 
+*.Rhistory
+
 .ipynb_checkpoints/
 
 config/
@@ -50,3 +52,6 @@ api/place_tshirt_order.py
 *.json
 *.csv
 .idea
+
+recordings/*
+temp_files/*

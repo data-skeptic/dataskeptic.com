@@ -8,7 +8,7 @@ import NavLink from '../../../components/NavLink'
 
 const LINKS = {
 	ITUNES: 'https://itunes.apple.com/us/podcast/the-data-skeptic-podcast/id890348705',
-	GOOGLE: 'https://goo.gl/app/playmusic?ibi=com.google.PlayMusic&amp;isi=691797987&amp;ius=googleplaymusic&amp;link=https://play.google.com/music/m/Ibr6e2jb7ot6m6gupwdjgsfmoqa?t%3DData_Skeptic',
+	GOOGLE: 'https://play.google.com/music/m/Ibr6e2jb7ot6m6gupwdjgsfmoqa?t=Data_Skeptic',
 	STITCHER: 'http://www.stitcher.com/s?fid=50561&amp;refid=stpr',
 	RSS: '/api/blog/rss',
 
@@ -28,7 +28,7 @@ export const Footer = ({ foo, pathname, linkClick, banner=null }) => (
 		<div className="footer">
 			<div className="container">
 				<div className="col-xs-12 col-sm-12 col-md-3">
-					<Link to="/"><img src="/img/svg/logo.svg" alt="Data Skeptic logo" /></Link>
+					<Link to="/" className="logo_footer"><img src="/img/svg/logo.svg" alt="Data Skeptic logo" /></Link>
 					<p className="philosophy">
 						Data science, statistics, machine learning, artificial intelligence, and scientific skepticism.
 					</p>

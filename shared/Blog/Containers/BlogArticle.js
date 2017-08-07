@@ -3,6 +3,7 @@ import ReactDOM from "react-dom"
 import {Link} from 'react-router'
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux'
+import moment from 'moment'
 
 import isUndefined from 'lodash/isUndefined';
 
@@ -88,14 +89,27 @@ class BlogArticle extends Component {
     }
 
     render() {
-
         const {currentPost, isLoading, contributors, disqusUsername, postUrl} = this.props;
 
         if (isLoading) {
-            return <Loading />
+            return <div className="loading-area"><Loading/></div>
         }
 
         const post = currentPost.toJS();
+        const {content, title} = post;
+        if (!post || !content || !title) {
+            return <div className="loading-area"><Loading/></div>
+        }
+
+        if (post.error) {
+            return (
+                <div className="blog-article center">
+                    <h4>{post.error}</h4>
+                </div>
+            )
+        }
+
+
         const guid = post.guid;
         const isEpisode = !isUndefined(guid);
 
@@ -105,7 +119,6 @@ class BlogArticle extends Component {
 
         const uid = 'http://dataskeptic.com/blog' + prettyName;
 
-        const {content, title} = post;
 
         let contributor = null;
 
@@ -116,11 +129,11 @@ class BlogArticle extends Component {
         }
 
         // Don't show author box for episodes and transcripts
-        if (prettyName.indexOf("/episodes/") === 0) {
+        if (prettyName && prettyName.indexOf("/episodes/") === 0) {
             contributor = null;
         }
 
-        if (prettyName.indexOf("/transcripts/") === 0) {
+        if (prettyName && prettyName.indexOf("/transcripts/") === 0) {
             contributor = null;
         }
 
@@ -128,16 +141,20 @@ class BlogArticle extends Component {
 
         const proposeEditUrl = this.getProposeEditUrl(post);
 
+        const publishedDate=  post.publish_date ||post.publishedAt
+        const date = moment(publishedDate).format('MMMM D, YYYY')
+
         return (
-            <div className="center">
+            <div className="blog-article center">
 
                 { isEpisode ? <LatestEpisodePlayer guid={guid} /> : null }
 
                 {contributor ? <BlogAuthorTop contributor={contributor}/> : <div></div> }
 
+                <div className="published-date">{date}</div>
+
                 <div id='blog-content'>
                     <PostBodyContainer content={content}/>
-
                 </div>
 
                 <RelatedContent items={related} />

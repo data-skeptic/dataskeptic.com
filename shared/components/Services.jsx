@@ -22,7 +22,7 @@ class Services extends React.Component {
             title: 'Services | Data Skeptic'
         }
     }
-
+    
     render() {
         return (
             <div className="center services-outer">

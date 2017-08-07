@@ -199,6 +199,7 @@ export function get_blogs_list(dispatch, pathname) {
 	const prefix = "/blog"
 	const bpathname = pathname.substring(prefix.length, pathname.length)
 	const my_cache = global.my_cache
+
 	if (my_cache != undefined) {
 		const blogmetadata_map = my_cache.blogmetadata_map
 		const keys = Object.keys(blogmetadata_map)
@@ -213,13 +214,17 @@ export function get_blogs_list(dispatch, pathname) {
             }
 
 			const blog = blogmetadata_map[key]
+
 			if (!blog) continue;
 			const pn = blog.prettyname
-			if (pn.indexOf(bpathname) == 0) {
-				blogs.push(blog)
+			if (pn.indexOf(bpathname) === 0) {
+                if (blog.author) {
+                    blog.contributor = my_cache.contributors[blog.author.toLowerCase()]
+                }
+                blogs.push(blog)
 			}
 		}
-		const total = blogs.length;
+		const total = keys.length;
 		dispatch({type: "ADD_BLOGS", payload: {blogs, total}})
 	} else {
 		console.log("Getting blogs")
