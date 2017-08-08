@@ -62,7 +62,7 @@ const defaultState = {
     loading: false,
     aws_bucket: "",
     error: false,
-    proposal: [],
+    proposal: {},
     hasAccess:false,
     form: {
         step: INIT,

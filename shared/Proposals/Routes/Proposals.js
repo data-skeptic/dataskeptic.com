@@ -4,21 +4,15 @@ import {connect} from 'react-redux';
 import moment from 'moment';
 import classNames from 'classnames'
 
-import isEmpty from 'lodash/isEmpty';
 import {fetchCurrentProposal, proposalDeadlineReached} from '../Actions/ProposalsActions';
 
-import Debug from '../../Debug'
 
 import Container from '../../Layout/Components/Container/Container';
 import Content from '../../Layout/Components/Content/Content';
-import SideBar from '../../Layout/Components/SideBar/SideBar';
-
 import CommentBoxFormContainer from '../Containers/CommentBoxContainer/CommentBoxFormContainer';
-
 import Countdown from '../../Common/Components/Countdown';
-
 import {changePageTitle} from '../../Layout/Actions/LayoutActions';
-import {Link} from "react-router";
+
 
 class Proposals extends Component {
 
@@ -30,10 +24,7 @@ class Proposals extends Component {
     }
 
     componentWillMount() {
-        if (isEmpty(this.props.proposal)) {
-            this.props.fetchCurrentProposal();
-        }
-
+        this.props.fetchCurrentProposal();
         const dispatch = this.props.dispatch;
         const {title} = Proposals.getPageMeta();
         this.props.changePageTitle(title);
@@ -54,7 +45,7 @@ class Proposals extends Component {
     }
 
     render() {
-        const {proposal = [], hasAccess} = this.props;
+        const {proposal = {}, hasAccess} = this.props;
         const {topic, long_description, deadline, active, aws_proposals_bucket} = proposal;
 
         const to = moment(deadline);
