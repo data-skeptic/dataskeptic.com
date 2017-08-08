@@ -17,7 +17,7 @@ import CommentBoxFormContainer from '../Containers/CommentBoxContainer/CommentBo
 
 import Countdown from '../../Common/Components/Countdown';
 
-import { changePageTitle } from '../../Layout/Actions/LayoutActions';
+import {changePageTitle} from '../../Layout/Actions/LayoutActions';
 import {Link} from "react-router";
 
 class Proposals extends Component {
@@ -31,7 +31,6 @@ class Proposals extends Component {
 
     componentWillMount() {
         if (isEmpty(this.props.proposal)) {
-            debugger
             this.props.fetchCurrentProposal();
         }
 
@@ -46,8 +45,8 @@ class Proposals extends Component {
         }
     }
 
-    login(){
-        window.location.href='api/v1/auth/login/google'
+    login() {
+        window.location.href = 'api/v1/auth/login/google'
     }
 
     deadline() {
@@ -55,7 +54,7 @@ class Proposals extends Component {
     }
 
     render() {
-        const {proposal =[], hasAccess} = this.props;
+        const {proposal = [], hasAccess} = this.props;
         const {topic, long_description, deadline, active, aws_proposals_bucket} = proposal;
 
         const to = moment(deadline);
@@ -63,7 +62,7 @@ class Proposals extends Component {
         const isClosed = !active;
         // const isClosed = true;
 
-        if(hasAccess) {
+        if (hasAccess) {
             return (
                 <div className={classNames('proposals-page', {'closed': isClosed, 'open': !isClosed})}>
 
@@ -73,14 +72,18 @@ class Proposals extends Component {
                             {!isClosed && (
                                 <div>
                                     <h2>Request for Comment</h2>
-                                    <p>Thanks for considering contributing your thoughts for an upcoming episode. Please review the
-                                        topic below and share any thoughts you have on it. We aren't always able to use every
+                                    <p>Thanks for considering contributing your thoughts for an upcoming episode. Please
+                                        review the
+                                        topic below and share any thoughts you have on it. We aren't always able to use
+                                        every
                                         comment submitted, but we will do our best and appreciate your input.</p>
-                                    <h3><b>Current topic:</b> {topic }</h3>
+                                    <h3><b>Current topic:</b> {topic}</h3>
                                     <p>{long_description}</p>
 
                                     {deadline ?
-                                        <p className="deadline"><b>Time to comment:</b><Countdown to={to.toString()} onDeadlineReached={this.deadline}/></p>
+                                        <p className="deadline"><b>Time to comment:</b><Countdown to={to.toString()}
+                                                                                                  onDeadlineReached={this.deadline}/>
+                                        </p>
                                         : null}
                                 </div>
                             )}
@@ -93,15 +96,15 @@ class Proposals extends Component {
                                         <h3 className="panel-title">This RFC has closed.</h3>
                                     </div>
                                     <div className="panel-body">
-                                        We don't have any active topics.  Please check back soon when we launch the next!
+                                        We don't have any active topics. Please check back soon when we launch the next!
                                     </div>
                                 </div>
                                 :
-                                <CommentBoxFormContainer aws_proposals_bucket={aws_proposals_bucket} />
+                                <CommentBoxFormContainer aws_proposals_bucket={aws_proposals_bucket}/>
                             }
-                            { hasAccess
+                            {hasAccess
                                 ? <span>You are logged in</span>
-                                : <button onClick={this.login}  className="btn btn-primary">Login</button>
+                                : <button onClick={this.login} className="btn btn-primary">Login</button>
                             }
 
                         </Content>
@@ -109,13 +112,16 @@ class Proposals extends Component {
                 </div>
             )
         }
-    else {
-            return(
+        else {
+            return (
                 <div className={classNames('proposals-page', {'closed': isClosed, 'open': !isClosed})}>
                     <Container>
-                        <Content>
-                            <button onClick={this.login}  className="btn btn-primary">Login</button>
-                        </Content>
+                        <div className="login-container">
+                            <h2>Welcome to the Data Skeptic</h2>
+                            <h3>Request For Comment</h3>
+                            <button onClick={this.login} className="btn btn-primary">Login</button>
+                        </div>
+
                     </Container>
                 </div>
             );
