@@ -94,6 +94,7 @@ export default function ProposalsReducer(state = initialState, action) {
             nstate.proposal = action.payload.data;
             break;
 
+
         case FETCH_CURRENT_PROPOSAL_FAIL:
             nstate.loading = false;
             nstate.error = action.payload.error;
