@@ -114,13 +114,13 @@ export default (
         <Route path="/projects" component={App} onEnter={loadData}>
             <IndexRoute component={Projects}/>
         </Route>
-        <Route path="/rfc" component={App} onEnter={loadData}>
+        <Route path="/rfc" showAds={false} component={App} onEnter={loadData}>
             <IndexRoute component={Proposals}/>
         </Route>
-        <Route path="/rfc/auth" component={App}>
+        <Route path="/rfc/auth" showAds={false} component={App}>
             <IndexRoute component={ProposalsHandler}/>
         </Route>
-        <Route path="/rfc/thank-you" component={App} onEnter={loadData}>
+        <Route path="/rfc/thank-you" showAds={false} component={App} onEnter={loadData}>
             <IndexRoute component={ProposalsThankYouPage}/>
         </Route>
 
