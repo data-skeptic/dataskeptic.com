@@ -15,6 +15,7 @@ class ProposalsHandler extends Component {
         const {id, hasAccess, location} = this.props;
         const user = location.query.user
         this.props.authorize(!!user);
+        localStorage.setItem('authorizedUser', user);
         if (!!user) {
             this.props.history.push('/rfc')
         }

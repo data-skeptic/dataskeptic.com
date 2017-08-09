@@ -18,9 +18,12 @@ class Proposals extends Component {
 
     constructor(props) {
         super(props);
-
         this.deadline = this.deadline.bind(this);
         this.login = this.login.bind(this);
+        this.getAuthorizedUser = this.getAuthorizedUser.bind(this);
+        this.state = {
+            authorizedUser: null
+        }
     }
 
     componentWillMount() {
@@ -28,6 +31,7 @@ class Proposals extends Component {
         const dispatch = this.props.dispatch;
         const {title} = Proposals.getPageMeta();
         this.props.changePageTitle(title);
+        this.getAuthorizedUser();
     }
 
     static getPageMeta() {
@@ -39,6 +43,17 @@ class Proposals extends Component {
     login() {
         window.location.href = 'api/v1/auth/login/google'
     }
+    getAuthorizedUser(){
+        const user = localStorage.getItem('authorizedUser');
+        debugger
+        if (user){
+            this.setState({
+                authorizedUser : user
+            })
+
+            console.dir(this.state)
+        }
+    }
 
     deadline() {
         this.props.proposalDeadlineReached();
@@ -47,13 +62,13 @@ class Proposals extends Component {
     render() {
         const {proposal = {}, hasAccess} = this.props;
         const {topic, long_description, deadline, active, aws_proposals_bucket} = proposal;
-
+        const {authorizedUser} = this.state;
         const to = moment(deadline);
 
         const isClosed = !active;
         // const isClosed = true;
 
-        if (hasAccess) {
+        if (hasAccess || authorizedUser) {
             return (
                 <div className={classNames('proposals-page', {'closed': isClosed, 'open': !isClosed})}>
 
@@ -93,7 +108,7 @@ class Proposals extends Component {
                                 :
                                 <CommentBoxFormContainer aws_proposals_bucket={aws_proposals_bucket}/>
                             }
-                            {hasAccess
+                            {hasAccess || authorizedUser
                                 ? <span>You are logged in</span>
                                 : <button onClick={this.login} className="btn btn-primary">Login</button>
                             }
