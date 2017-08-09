@@ -45,7 +45,6 @@ class Proposals extends Component {
     }
     getAuthorizedUser(){
         const user = localStorage.getItem('authorizedUser');
-        debugger
         if (user){
             this.setState({
                 authorizedUser : user
