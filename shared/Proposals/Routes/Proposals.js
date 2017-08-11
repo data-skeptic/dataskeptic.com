@@ -13,7 +13,6 @@ import CommentBoxFormContainer from '../Containers/CommentBoxContainer/CommentBo
 import Countdown from '../../Common/Components/Countdown';
 import {changePageTitle} from '../../Layout/Actions/LayoutActions';
 
-
 class Proposals extends Component {
 
     constructor(props) {
@@ -28,9 +27,11 @@ class Proposals extends Component {
 
     componentWillMount() {
         this.props.fetchCurrentProposal();
-        const dispatch = this.props.dispatch;
         const {title} = Proposals.getPageMeta();
         this.props.changePageTitle(title);
+    }
+
+    componentDidMount() {
         this.getAuthorizedUser();
     }
 
@@ -43,8 +44,10 @@ class Proposals extends Component {
     login() {
         window.location.href = 'api/v1/auth/login/google'
     }
+
     getAuthorizedUser(){
         const user = localStorage.getItem('authorizedUser');
+
         if (user){
             this.setState({
                 authorizedUser : user
@@ -65,7 +68,6 @@ class Proposals extends Component {
         const to = moment(deadline);
 
         const isClosed = !active;
-        // const isClosed = true;
 
         if (hasAccess || authorizedUser) {
             return (
