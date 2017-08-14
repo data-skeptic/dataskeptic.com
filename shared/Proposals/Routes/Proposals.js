@@ -26,7 +26,6 @@ class Proposals extends Component {
     }
 
     componentWillMount() {
-        this.props.fetchCurrentProposal();
         const {title} = Proposals.getPageMeta();
         this.props.changePageTitle(title);
     }
@@ -47,7 +46,6 @@ class Proposals extends Component {
 
     getAuthorizedUser(){
         const user = localStorage.getItem('authorizedUser');
-
         if (user){
             this.setState({
                 authorizedUser : user
@@ -62,20 +60,19 @@ class Proposals extends Component {
     }
 
     render() {
-        const {proposal = {}, hasAccess} = this.props;
-        const {topic, long_description, deadline, active, aws_proposals_bucket} = proposal;
         const {authorizedUser} = this.state;
-        const to = moment(deadline);
-
-        const isClosed = !active;
+        const {hasAccess} = this.props;
 
         if (hasAccess || authorizedUser) {
+            const {proposal = {}} = this.props;
+            const {topic, long_description, deadline, active, aws_proposals_bucket} = proposal;
+            const to = moment(deadline);
+            const isClosed = !active;
             return (
                 <div className={classNames('proposals-page', {'closed': isClosed, 'open': !isClosed})}>
 
                     <Container>
                         <Content>
-
                             {!isClosed && (
                                 <div>
                                     <h2>Request for Comment</h2>
@@ -121,7 +118,7 @@ class Proposals extends Component {
         }
         else {
             return (
-                <div className={classNames('proposals-page', {'closed': isClosed, 'open': !isClosed})}>
+                <div className='proposals-page'>
                     <Container>
                         <div className="login-container">
                             <h2>Welcome to the Data Skeptic</h2>
