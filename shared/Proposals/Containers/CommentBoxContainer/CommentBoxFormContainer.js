@@ -99,7 +99,7 @@ class CommentBoxFormContainer extends Component {
 
     recorderStop(id) {
         this.props.recordingFinish(id);
-        var bucket = this.props.aws_proposals_bucket
+        const bucket = this.props.aws_proposals_bucket
         const recordingUrl = `https://s3.amazonaws.com/${bucket}/${id}`;
         this.props.reviewRecording(recordingUrl);
     }
@@ -201,6 +201,7 @@ class CommentBoxFormContainer extends Component {
                             files={files}
                         />
 */
+
         return (
             <div className="comment-box-form-container">
                 <Debug data={values}/>

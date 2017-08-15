@@ -113,8 +113,6 @@ fs.open("./config/config.json", "r", function (error, fd) {
     })
 })
 
-console.log(aws_accessKeyId, aws_secretAccessKey);
-
 const docClient = new aws.DynamoDB.DocumentClient();
 
 if (process.env.NODE_ENV !== 'production') {

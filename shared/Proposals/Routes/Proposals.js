@@ -79,8 +79,8 @@ class Proposals extends Component {
         const {ready, authorizedUser} = this.state;
 
         if (ready) {
-            const {proposal = {}} = this.props;
-            const {topic, long_description, deadline, active, aws_proposals_bucket} = proposal;
+            const {proposal = {}, aws_proposals_bucket} = this.props;
+            const {topic, long_description, deadline, active} = proposal;
             const to = moment(deadline);
             const isClosed = !active;
 
@@ -158,6 +158,7 @@ class Proposals extends Component {
 
 export default connect(
     state => ({
+        aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket']),
         proposal: state.proposals.getIn(['proposal']).toJS(),
         hasAccess: state.proposals.getIn(['hasAccess'])
     }),
