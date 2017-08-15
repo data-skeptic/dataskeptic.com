@@ -3,7 +3,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import moment from 'moment';
 import classNames from 'classnames'
-
+import marked from 'marked'
 import {fetchCurrentProposal, proposalDeadlineReached} from '../Actions/ProposalsActions';
 
 
@@ -12,6 +12,7 @@ import Content from '../../Layout/Components/Content/Content';
 import CommentBoxFormContainer from '../Containers/CommentBoxContainer/CommentBoxFormContainer';
 import Countdown from '../../Common/Components/Countdown';
 import {changePageTitle} from '../../Layout/Actions/LayoutActions';
+
 
 class Proposals extends Component {
 
@@ -44,15 +45,20 @@ class Proposals extends Component {
         window.location.href = 'api/v1/auth/login/google'
     }
 
-    getAuthorizedUser(){
+    getAuthorizedUser() {
         const user = localStorage.getItem('authorizedUser');
-        if (user){
+        if (user) {
             this.setState({
-                authorizedUser : user
+                authorizedUser: user
             })
 
             console.dir(this.state)
         }
+    }
+
+    getMarkdown(text) {
+        const rawMarkup = marked(text, {sanitize: true});
+        return {__html: rawMarkup};
     }
 
     deadline() {
@@ -82,7 +88,9 @@ class Proposals extends Component {
                                         every
                                         comment submitted, but we will do our best and appreciate your input.</p>
                                     <h3><b>Current topic:</b> {topic}</h3>
-                                    <p>{long_description}</p>
+                                    <p dangerouslySetInnerHTML={this.getMarkdown(`${long_description}`)}>
+
+                                    </p>
 
                                     {deadline ?
                                         <p className="deadline"><b>Time to comment:</b><Countdown to={to.toString()}
