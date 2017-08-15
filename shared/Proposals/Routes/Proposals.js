@@ -4,8 +4,7 @@ import {connect} from 'react-redux';
 import moment from 'moment';
 import classNames from 'classnames'
 import marked from 'marked'
-import {fetchCurrentProposal, proposalDeadlineReached} from '../Actions/ProposalsActions';
-
+import {fetchCurrentProposal, proposalDeadlineReached, authorize} from '../Actions/ProposalsActions';
 
 import Container from '../../Layout/Components/Container/Container';
 import Content from '../../Layout/Components/Content/Content';
@@ -20,15 +19,24 @@ class Proposals extends Component {
         super(props);
         this.deadline = this.deadline.bind(this);
         this.login = this.login.bind(this);
+        this.logout = this.logout.bind(this);
         this.getAuthorizedUser = this.getAuthorizedUser.bind(this);
+
         this.state = {
-            authorizedUser: null
+            authorizedUser: null,
+            ready: false
         }
     }
 
     componentWillMount() {
         const {title} = Proposals.getPageMeta();
         this.props.changePageTitle(title);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.hasAccess && this.state.authorizedUser) {
+            this.setState({ready: true})
+        }
     }
 
     componentDidMount() {
@@ -42,17 +50,19 @@ class Proposals extends Component {
     }
 
     login() {
-        window.location.href = 'api/v1/auth/login/google'
+        window.location.href = '/api/v1/auth/login/google/'
+    }
+    logout(){
+        window.location.href =  '/api/v1/auth/logout/'
     }
 
     getAuthorizedUser() {
         const user = localStorage.getItem('authorizedUser');
         if (user) {
-            this.setState({
-                authorizedUser: user
-            })
-
-            console.dir(this.state)
+            try {
+                this.setState({ authorizedUser: JSON.parse(user) })
+                this.props.authorize(!!user)
+            } catch (e) {}
         }
     }
 
@@ -66,19 +76,27 @@ class Proposals extends Component {
     }
 
     render() {
-        const {authorizedUser} = this.state;
-        const {hasAccess} = this.props;
+        const {ready, authorizedUser} = this.state;
 
-        if (hasAccess || authorizedUser) {
+        if (ready) {
             const {proposal = {}} = this.props;
             const {topic, long_description, deadline, active, aws_proposals_bucket} = proposal;
             const to = moment(deadline);
             const isClosed = !active;
+
+            const user = {
+                email: authorizedUser.email,
+                name: authorizedUser.displayName
+            }
+
             return (
                 <div className={classNames('proposals-page', {'closed': isClosed, 'open': !isClosed})}>
 
                     <Container>
                         <Content>
+                            <div className="log-out-wrapper">
+                                <button className="btn" onClick={this.logout}><i className="glyphicon glyphicon-arrow-left"></i>Log out</button>
+                            </div>
                             {!isClosed && (
                                 <div>
                                     <h2>Request for Comment</h2>
@@ -112,11 +130,7 @@ class Proposals extends Component {
                                     </div>
                                 </div>
                                 :
-                                <CommentBoxFormContainer aws_proposals_bucket={aws_proposals_bucket}/>
-                            }
-                            {hasAccess || authorizedUser
-                                ? <span>You are logged in</span>
-                                : <button onClick={this.login} className="btn btn-primary">Login</button>
+                                <CommentBoxFormContainer user={user} aws_proposals_bucket={aws_proposals_bucket}/>
                             }
 
                         </Content>
@@ -133,7 +147,6 @@ class Proposals extends Component {
                             <h3>Request For Comment</h3>
                             <button onClick={this.login} className="btn btn-primary">Login</button>
                         </div>
-
                     </Container>
                 </div>
             );
@@ -151,7 +164,8 @@ export default connect(
     dispatch => bindActionCreators({
         fetchCurrentProposal,
         proposalDeadlineReached,
-        changePageTitle
+        changePageTitle,
+        authorize
     }, dispatch)
 )(Proposals)
 

@@ -8,6 +8,7 @@ export const FETCH_CURRENT_PROPOSAL_FAIL = 'FETCH_CURRENT_PROPOSAL_FAIL';
 export const PROPOSAL_DEADLINE_REACHED = 'PROPOSAL_DEADLINE_REACHED';
 export const PROPOSAL_SET_BUCKET = 'PROPOSAL_SET_BUCKET';
 export const AUTHORIZE = 'AUTHORIZE';
+export const LOG_OUT = 'LOG_OUT';
 
 export function fetchCurrentProposal() {
     return (dispatch) => {
@@ -22,6 +23,12 @@ export function authorize(hasAccess) {
     return (dispatch) => {
         dispatch({ type: AUTHORIZE, payload: {hasAccess} })
         // dispatch(push('/rfc'))
+    }
+}
+
+export function logOut() {
+    return  {
+         type: LOG_OUT
     }
 }
 

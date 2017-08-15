@@ -28,12 +28,7 @@ const Form = ({ children, handleSubmit, pristine, reset, submitting, invalid, su
 
 const CommentBoxForm = reduxForm({
     form: 'commentBox',
-    validate: ProposalFormValidator,
-    initialValues: {
-        type: '',
-        files: [],
-        recording: {}
-    }
+    validate: ProposalFormValidator
 })(Form);
 
 export default CommentBoxForm;
