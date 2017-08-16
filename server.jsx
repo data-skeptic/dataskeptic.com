@@ -1,4 +1,4 @@
-import aws                       from 'aws-sdk'
+var aws = require('aws-sdk');
 import axios                     from 'axios';
 import session from 'express-session';
 import {getRelatedContent, deleteRelatedContentByUri} from 'backend/admin/admin_related_services'
@@ -64,7 +64,6 @@ import redirects_map             from './redirects';
 import {reducer as formReducer} from 'redux-form'
 
 const app = express()
-
 var logDirectory = path.join(__dirname, 'log')
 fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
 var accessLogStream = FileStreamRotator.getStream({
@@ -97,9 +96,12 @@ fs.open("./config/config.json", "r", function (error, fd) {
         sp_key = c[env]['sp']
         slack_key = c[env]['slack']
         aws_accessKeyId = c[env]['aws']['accessKeyId']
+        console.log(aws_accessKeyId)
         aws_secretAccessKey = c[env]['aws']['secretAccessKey']
+        console.log(aws_secretAccessKey)
         aws_region = c[env]['aws']['region']
         aws_proposals_bucket = c[env]['recording']['aws_proposals_bucket']
+        console.log(aws_secretAccessKey, aws_accessKeyId)
         fs.close(fd)
         aws.config.update(
             {
@@ -174,6 +176,7 @@ const doRefresh = (store) => {
             Cache.content_map = null;
             delete Cache.content_map;
 
+
             // fill the data again
             Cache.folders = folders;
             Cache.blogmetadata_map = blogmetadata_map;
@@ -213,6 +216,8 @@ const doRefresh = (store) => {
             return loadCurrentRFC()
         })
         .then((rfc) => {
+            Cache.rfc = null;
+            delete Cache.rfc;
             Cache.rfc = rfc
             console.dir(rfc)
 
@@ -270,13 +275,15 @@ function api_router(req, res) {
     if (req.url.indexOf('/api/v1/proposals/files') == 0) {
         uploadProposalFiles(req, res, aws_proposals_bucket);
         return true;
-    } if (req.url.indexOf('/api/v1/proposals') == 0) {
+    }
+    if (req.url.indexOf('/api/v1/proposals') == 0) {
         writeProposal(req, res);
         return true;
     } else if (req.url.indexOf('/api/v1/recording/ready') == 0) {
         ready(req, res, aws_proposals_bucket);
         return true;
-    } if (req.url.indexOf('/api/refresh') == 0) {
+    }
+    if (req.url.indexOf('/api/refresh') == 0) {
         doRefresh()
         return res.status(200).end(JSON.stringify({'status': 'ok'}))
     }
@@ -488,7 +495,7 @@ function updateState(store, pathname, req) {
     inject_folders(store, Cache)
     inject_years(store, Cache)
 
-    store.dispatch({type: "PROPOSAL_SET_BUCKET", payload: {aws_proposals_bucket} })
+    store.dispatch({type: "PROPOSAL_SET_BUCKET", payload: {aws_proposals_bucket}})
 
     var contributors = get_contributors();
     store.dispatch({type: "LOAD_CONTRIBUTORS_LIST_SUCCESS", payload: {contributors}});
@@ -535,11 +542,10 @@ app.set('views', path.join(__dirname, 'views'));
 
 
 // authorization module
-app.use(session({secret : "DATAS"}))
+app.use(session({secret: "DATAS"}))
 
 const api = require('./backend/api/v1');
 app.use('/api/v1/', api(Cache));
-
 
 
 /***

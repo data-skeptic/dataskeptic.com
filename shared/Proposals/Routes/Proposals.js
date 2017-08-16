@@ -3,9 +3,8 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import moment from 'moment';
 import classNames from 'classnames'
-
-import {fetchCurrentProposal, proposalDeadlineReached} from '../Actions/ProposalsActions';
-
+import marked from 'marked'
+import {fetchCurrentProposal, proposalDeadlineReached, authorize} from '../Actions/ProposalsActions';
 
 import Container from '../../Layout/Components/Container/Container';
 import Content from '../../Layout/Components/Content/Content';
@@ -13,22 +12,31 @@ import CommentBoxFormContainer from '../Containers/CommentBoxContainer/CommentBo
 import Countdown from '../../Common/Components/Countdown';
 import {changePageTitle} from '../../Layout/Actions/LayoutActions';
 
+
 class Proposals extends Component {
 
     constructor(props) {
         super(props);
         this.deadline = this.deadline.bind(this);
         this.login = this.login.bind(this);
+        this.logout = this.logout.bind(this);
         this.getAuthorizedUser = this.getAuthorizedUser.bind(this);
+
         this.state = {
-            authorizedUser: null
+            authorizedUser: null,
+            ready: false
         }
     }
 
     componentWillMount() {
-        this.props.fetchCurrentProposal();
         const {title} = Proposals.getPageMeta();
         this.props.changePageTitle(title);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.hasAccess && this.state.authorizedUser) {
+            this.setState({ready: true})
+        }
     }
 
     componentDidMount() {
@@ -42,19 +50,25 @@ class Proposals extends Component {
     }
 
     login() {
-        window.location.href = 'api/v1/auth/login/google'
+        window.location.href = '/api/v1/auth/login/google/'
+    }
+    logout(){
+        window.location.href =  '/api/v1/auth/logout/'
     }
 
-    getAuthorizedUser(){
+    getAuthorizedUser() {
         const user = localStorage.getItem('authorizedUser');
-
-        if (user){
-            this.setState({
-                authorizedUser : user
-            })
-
-            console.dir(this.state)
+        if (user) {
+            try {
+                this.setState({ authorizedUser: JSON.parse(user) })
+                this.props.authorize(!!user)
+            } catch (e) {}
         }
+    }
+
+    getMarkdown(text) {
+        const rawMarkup = marked(text, {sanitize: true});
+        return {__html: rawMarkup};
     }
 
     deadline() {
@@ -62,20 +76,27 @@ class Proposals extends Component {
     }
 
     render() {
-        const {proposal = {}, hasAccess} = this.props;
-        const {topic, long_description, deadline, active, aws_proposals_bucket} = proposal;
-        const {authorizedUser} = this.state;
-        const to = moment(deadline);
+        const {ready, authorizedUser} = this.state;
 
-        const isClosed = !active;
+        if (ready) {
+            const {proposal = {}, aws_proposals_bucket} = this.props;
+            const {topic, long_description, deadline, active} = proposal;
+            const to = moment(deadline);
+            const isClosed = !active;
 
-        if (hasAccess || authorizedUser) {
+            const user = {
+                email: authorizedUser.email,
+                name: authorizedUser.displayName
+            }
+
             return (
                 <div className={classNames('proposals-page', {'closed': isClosed, 'open': !isClosed})}>
 
                     <Container>
                         <Content>
-
+                            <div className="log-out-wrapper">
+                                <button className="btn" onClick={this.logout}><i className="glyphicon glyphicon-arrow-left"></i>Log out</button>
+                            </div>
                             {!isClosed && (
                                 <div>
                                     <h2>Request for Comment</h2>
@@ -85,7 +106,9 @@ class Proposals extends Component {
                                         every
                                         comment submitted, but we will do our best and appreciate your input.</p>
                                     <h3><b>Current topic:</b> {topic}</h3>
-                                    <p>{long_description}</p>
+                                    <p dangerouslySetInnerHTML={this.getMarkdown(`${long_description}`)}>
+
+                                    </p>
 
                                     {deadline ?
                                         <p className="deadline"><b>Time to comment:</b><Countdown to={to.toString()}
@@ -107,11 +130,7 @@ class Proposals extends Component {
                                     </div>
                                 </div>
                                 :
-                                <CommentBoxFormContainer aws_proposals_bucket={aws_proposals_bucket}/>
-                            }
-                            {hasAccess || authorizedUser
-                                ? <span>You are logged in</span>
-                                : <button onClick={this.login} className="btn btn-primary">Login</button>
+                                <CommentBoxFormContainer user={user} aws_proposals_bucket={aws_proposals_bucket}/>
                             }
 
                         </Content>
@@ -121,14 +140,13 @@ class Proposals extends Component {
         }
         else {
             return (
-                <div className={classNames('proposals-page', {'closed': isClosed, 'open': !isClosed})}>
+                <div className='proposals-page'>
                     <Container>
                         <div className="login-container">
                             <h2>Welcome to the Data Skeptic</h2>
                             <h3>Request For Comment</h3>
                             <button onClick={this.login} className="btn btn-primary">Login</button>
                         </div>
-
                     </Container>
                 </div>
             );
@@ -140,13 +158,15 @@ class Proposals extends Component {
 
 export default connect(
     state => ({
+        aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket']),
         proposal: state.proposals.getIn(['proposal']).toJS(),
         hasAccess: state.proposals.getIn(['hasAccess'])
     }),
     dispatch => bindActionCreators({
         fetchCurrentProposal,
         proposalDeadlineReached,
-        changePageTitle
+        changePageTitle,
+        authorize
     }, dispatch)
 )(Proposals)
 

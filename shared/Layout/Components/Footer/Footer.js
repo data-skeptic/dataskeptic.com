@@ -24,7 +24,7 @@ export const Footer = ({showAds, foo, pathname, linkClick, banner=null }) =>  (
                 ? <div key={sha1(banner)} dangerouslySetInnerHTML={{__html: banner}}/>
                 : <AdSense.Google client='ca-pub-4495792015968395' slot='2320193863'/>
 			)}
-		</div>)
+		</div>
 
 		<div className="footer">
 			<div className="container">

@@ -3,6 +3,7 @@ const AWS = require("aws-sdk");
 
 const proposalsDocs = new AWS.DynamoDB.DocumentClient();
 
+
 const RFC_TABLE_NAME = 'rfc';
 const LATEST_RFC_ID = 'test-request';
 
@@ -21,6 +22,7 @@ function fetchCurrentRFC() {
             if (err) {
                 rej(err);
             } else {
+                console.log(data.Items);
                 return res(data.Items);
             }
         });
