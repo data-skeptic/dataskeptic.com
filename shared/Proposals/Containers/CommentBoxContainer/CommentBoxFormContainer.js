@@ -182,7 +182,7 @@ class CommentBoxFormContainer extends Component {
 
     render() {
         const {values, messageType, errorMessage, activeStep, submittedUrl = ''} = this.props;
-        const {customSubmitting, user} = this.props;
+        const {customSubmitting, user,customError} = this.props;
 
         const {files} = values;
         const showSubmit = this.shouldShowSubmitButton();
@@ -206,15 +206,14 @@ class CommentBoxFormContainer extends Component {
             <div className="comment-box-form-container">
                 <Debug data={values}/>
                 <CommentTypeSelectorContainer onChangeCommentType={this.onChangeCommentType} messageType={messageType}/>
-
                 <b>{customSubmitting}</b>
-
                 <CommentBoxForm
                     onSubmit={this.handleSubmit}
                     submitText={this.getSubmitText()}
                     showSubmit={showSubmit}
                     customSubmitting={customSubmitting}
                     customSuccess={successMessage}
+                    customError = {customError}
                     initialValues={{
                         name: user.name,
                         email: user.email,
@@ -267,6 +266,7 @@ export default connect(
         values: state.proposals.getIn(['form']).toJS(),
 
         customSubmitting: state.proposals.getIn(['form', 'submitted']),
+        customError: state.proposals.getIn(['form', 'error']).toJS(),
 
         activeStep: state.proposals.getIn(['form', 'step']),
         messageType: state.proposals.getIn(['form', 'type']),
