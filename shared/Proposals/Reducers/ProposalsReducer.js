@@ -7,7 +7,8 @@ import {
     FETCH_CURRENT_PROPOSAL_FAIL,
     PROPOSAL_DEADLINE_REACHED,
     PROPOSAL_SET_BUCKET,
-    AUTHORIZE
+    AUTHORIZE,
+    LOG_OUT
 } from '../Actions/ProposalsActions';
 
 import {
@@ -164,7 +165,9 @@ export default function ProposalsReducer(state = initialState, action) {
         case AUTHORIZE:
             nstate.hasAccess = action.payload.hasAccess;
             break;
-
+        case LOG_OUT:
+            nstate.hasAccess = false;
+            break;
         default:
             break;
     }

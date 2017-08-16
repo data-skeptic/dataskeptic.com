@@ -18,7 +18,7 @@ module.exports = () => {
             id
         }
 
-        done(user)
+        done(null, user)
     })
     //passport.use(GoogleStrategy({env}))
     passport.use(LinkedinStrategy(global.env))
@@ -65,6 +65,7 @@ module.exports = () => {
             })
         })(req, res, next)
     })
+
     // GOOGLE
     router.all('/login/google', (req, res, next) => {
         redirectURL = req.headers.referer;
@@ -107,41 +108,42 @@ module.exports = () => {
         })(req, res, next);
     })
 
-router.get('/linkedin/callback', function (req, res, next) {
+    router.get('/linkedin/callback', function (req, res, next) {
 
-    passport.authenticate('linkedin', {
-        failWithError: true,
-        failureFlash: true
-    }, function (err, user, info) {
-        return res.send(user);
-        /*  if (err) {
+        passport.authenticate('linkedin', {
+            failWithError: true,
+            failureFlash: true
+        }, function (err, user, info) {
+            return res.send(user);
+            /*  if (err) {
 
-         return res.status(403).send({message: err})
-         }*/
+             return res.status(403).send({message: err})
+             }*/
 
-        if (!user) {
+            if (!user) {
 
-            return res.status(403).send({message: 'System Error'})
-        }
-
-        req.logIn(user, err => {
-            if (err) {
-
-                return res.status(403).send({message: err.message})
-            } else {
-                redirectURL = redirectURL + 'token?user=' + JSON.stringify(user)
-                return res.redirect(redirectURL)
+                return res.status(403).send({message: 'System Error'})
             }
 
+            req.logIn(user, err => {
+                if (err) {
 
-        })
-    })(req, res, next)
-})
+                    return res.status(403).send({message: err.message})
+                } else {
+                    redirectURL = redirectURL + 'token?user=' + JSON.stringify(user)
+                    return res.redirect(redirectURL)
+                }
 
-router.all('/logout', function (req, res, next) {
-    req.logout()
-    res.send({})
-})
 
-return router
+            })
+        })(req, res, next)
+    })
+
+    router.all('/logout', function (req, res, next) {
+        req.logout();
+        req.session.destroy();
+        res.redirect('/rfc/logout');
+    })
+
+    return router
 }

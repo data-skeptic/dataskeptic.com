@@ -1,4 +1,4 @@
-import aws                       from 'aws-sdk'
+var aws = require('aws-sdk');
 import axios                     from 'axios';
 import session from 'express-session';
 import {getRelatedContent, deleteRelatedContentByUri} from 'backend/admin/admin_related_services'
@@ -64,7 +64,6 @@ import redirects_map             from './redirects';
 import {reducer as formReducer} from 'redux-form'
 
 const app = express()
-
 var logDirectory = path.join(__dirname, 'log')
 fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
 var accessLogStream = FileStreamRotator.getStream({
@@ -97,7 +96,9 @@ fs.open("./config/config.json", "r", function (error, fd) {
         sp_key = c[env]['sp']
         slack_key = c[env]['slack']
         aws_accessKeyId = c[env]['aws']['accessKeyId']
+        console.log(aws_accessKeyId)
         aws_secretAccessKey = c[env]['aws']['secretAccessKey']
+        console.log(aws_secretAccessKey)
         aws_region = c[env]['aws']['region']
         aws_proposals_bucket = c[env]['recording']['aws_proposals_bucket']
         console.log(aws_secretAccessKey, aws_accessKeyId)
@@ -111,8 +112,6 @@ fs.open("./config/config.json", "r", function (error, fd) {
         );
     })
 })
-
-console.log(aws_accessKeyId, aws_secretAccessKey);
 
 const docClient = new aws.DynamoDB.DocumentClient();
 

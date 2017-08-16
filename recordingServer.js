@@ -9,9 +9,13 @@ const AWS = require("aws-sdk");
 const sys = require('sys')
 const exec = require('child_process').exec;
 
+let BASE_RECORDS_PATH = "";
+let LOCKED_FILE_NAME = "";
+let AWS_RECORDS_BUCKET = "";
+
 var env = "prod"
 
-fs.open("config/config.json", "r", function (error, fd) {
+fs.open("./config/config.json", "r", function (error, fd) {
     var buffer = new Buffer(10000)
     fs.read(fd, buffer, 0, buffer.length, null, function (error, bytesRead, buffer) {
         var data = buffer.toString("utf8", 0, bytesRead)
@@ -21,9 +25,15 @@ fs.open("config/config.json", "r", function (error, fd) {
         var aws_region = c[env]['aws']['region']
         var recordingConfig = c[env]['recording']
         fs.close(fd)
-        const LOCKED_FILE_NAME = recordingConfig.locked_file_name;
-        const AWS_RECORDS_BUCKET = recordingConfig.aws_proposals_bucket;
-        const BASE_RECORDS_PATH = path.join(__dirname, recordingConfig.source);
+        LOCKED_FILE_NAME = recordingConfig.locked_file_name;
+        AWS_RECORDS_BUCKET = recordingConfig.aws_proposals_bucket;
+        BASE_RECORDS_PATH = path.join(__dirname, recordingConfig.source);
+
+        console.dir(`Recording server config ========`)
+        console.log(`LOCKED_FILE_NAME, ${LOCKED_FILE_NAME}`)
+        console.log(`AWS_RECORDS_BUCKET, ${AWS_RECORDS_BUCKET}`)
+        console.log(`BASE_RECORDS_PATH, ${BASE_RECORDS_PATH}`)
+
         AWS.config.update(
             {
                 "accessKeyId": aws_accessKeyId,

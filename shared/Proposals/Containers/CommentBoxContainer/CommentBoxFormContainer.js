@@ -99,7 +99,7 @@ class CommentBoxFormContainer extends Component {
 
     recorderStop(id) {
         this.props.recordingFinish(id);
-        var bucket = this.props.aws_proposals_bucket
+        const bucket = this.props.aws_proposals_bucket
         const recordingUrl = `https://s3.amazonaws.com/${bucket}/${id}`;
         this.props.reviewRecording(recordingUrl);
     }
@@ -182,7 +182,7 @@ class CommentBoxFormContainer extends Component {
 
     render() {
         const {values, messageType, errorMessage, activeStep, submittedUrl = ''} = this.props;
-        const {customSubmitting} = this.props;
+        const {customSubmitting, user} = this.props;
 
         const {files} = values;
         const showSubmit = this.shouldShowSubmitButton();
@@ -201,10 +201,10 @@ class CommentBoxFormContainer extends Component {
                             files={files}
                         />
 */
+
         return (
             <div className="comment-box-form-container">
                 <Debug data={values}/>
-
                 <CommentTypeSelectorContainer onChangeCommentType={this.onChangeCommentType} messageType={messageType}/>
 
                 <b>{customSubmitting}</b>
@@ -214,7 +214,15 @@ class CommentBoxFormContainer extends Component {
                     submitText={this.getSubmitText()}
                     showSubmit={showSubmit}
                     customSubmitting={customSubmitting}
-                    customSuccess={successMessage}>
+                    customSuccess={successMessage}
+                    initialValues={{
+                        name: user.name,
+                        email: user.email,
+                        type: '',
+                        files: [],
+                        recording: {}
+                    }}
+                >
                     { showInfoBox ?
                         <UserInfoBox />
                         : null }
