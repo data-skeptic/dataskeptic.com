@@ -6,7 +6,8 @@ import {
     FETCH_CURRENT_PROPOSAL_SUCCESS,
     FETCH_CURRENT_PROPOSAL_FAIL,
     PROPOSAL_DEADLINE_REACHED,
-    PROPOSAL_SET_BUCKET
+    PROPOSAL_SET_BUCKET,
+    AUTHORIZE
 } from '../Actions/ProposalsActions';
 
 import {
@@ -56,13 +57,13 @@ import {
     RECORDING_FLOW_FAIL
 } from '../Actions/RecordingFlowActions';
 
+
 const defaultState = {
     loading: false,
     aws_bucket: "",
     error: false,
-    proposal: {
-        active: false
-    },
+    proposal: {},
+    hasAccess:false,
     form: {
         step: INIT,
         error: {},
@@ -84,14 +85,15 @@ export default function ProposalsReducer(state = initialState, action) {
     switch (action.type) {
         case FETCH_CURRENT_PROPOSAL_REQUEST:
             nstate.loading = true;
-            nstate.error = true;
+            nstate.error = false;
             break;
 
         case FETCH_CURRENT_PROPOSAL_SUCCESS:
             nstate.loading = false;
-            nstate.error = true;
+            nstate.error = false;
             nstate.proposal = action.payload.data;
             break;
+
 
         case FETCH_CURRENT_PROPOSAL_FAIL:
             nstate.loading = false;
@@ -157,6 +159,10 @@ export default function ProposalsReducer(state = initialState, action) {
 
         case PROPOSAL_SET_BUCKET:
             nstate.aws_proposals_bucket = action.payload.aws_proposals_bucket
+            break;
+
+        case AUTHORIZE:
+            nstate.hasAccess = action.payload.hasAccess;
             break;
 
         default:

@@ -31,8 +31,6 @@ import {
 }  from 'daos/serverInit'
 import express                   from 'express';
 
-import AuthService               from './backend/modules/Auth'
-
 import FileStreamRotator         from 'file-stream-rotator'
 import fs                        from 'fs'
 import createLocation            from 'history/lib/createLocation';
@@ -89,11 +87,12 @@ var aws_proposals_bucket = ""
 var rfc_table_name = "rtc"
 var latest_rfc_id = "test-request"
 
-fs.open("config/config.json", "r", function (error, fd) {
+fs.open("./config/config.json", "r", function (error, fd) {
     var buffer = new Buffer(10000)
     fs.read(fd, buffer, 0, buffer.length, null, function (error, bytesRead, buffer) {
         var data = buffer.toString("utf8", 0, bytesRead)
         var c = JSON.parse(data)
+        console.dir('env = ' + env)
         stripe_key = c[env]['stripe']
         sp_key = c[env]['sp']
         slack_key = c[env]['slack']
@@ -535,15 +534,13 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 
+// authorization module
+app.use(session({secret : "DATAS"}))
 
 const api = require('./backend/api/v1');
 app.use('/api/v1/', api(Cache));
 
-// authorization module
-app.use(session({secret : "DATAS"}))
-app.use(AuthService({
-    env
-}))
+
 
 /***
  * DUMP GENERATION

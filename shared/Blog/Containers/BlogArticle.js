@@ -96,6 +96,10 @@ class BlogArticle extends Component {
         }
 
         const post = currentPost.toJS();
+        const {content, title} = post;
+        if (!post || !content || !title) {
+            return <div className="loading-area"><Loading/></div>
+        }
 
         if (post.error) {
             return (
@@ -115,7 +119,6 @@ class BlogArticle extends Component {
 
         const uid = 'http://dataskeptic.com/blog' + prettyName;
 
-        const {content, title} = post;
 
         let contributor = null;
 
@@ -126,11 +129,11 @@ class BlogArticle extends Component {
         }
 
         // Don't show author box for episodes and transcripts
-        if (prettyName.indexOf("/episodes/") === 0) {
+        if (prettyName && prettyName.indexOf("/episodes/") === 0) {
             contributor = null;
         }
 
-        if (prettyName.indexOf("/transcripts/") === 0) {
+        if (prettyName && prettyName.indexOf("/transcripts/") === 0) {
             contributor = null;
         }
 

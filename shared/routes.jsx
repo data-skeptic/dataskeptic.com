@@ -25,12 +25,14 @@ import Membership              from 'components/Membership';
 import NotFound                from 'NotFound/Components/NotFound';
 import Podcast                 from 'Podcasts/Routes/Podcast';
 import Proposals               from 'Proposals/Routes/Proposals';
+import ProposalsHandler        from 'Proposals/Routes/ProposalsHandler/ProposalsHandler'
 import Press                   from 'components/Press';
 import Projects                from 'components/Projects';
 import Services                from 'components/Services';
 import Store                   from 'components/Store';
 import CheckoutThankYouPage    from 'Checkout/Routes/ThankYouRoute/ThankYouRoute';
 import ProposalsThankYouPage   from 'Proposals/Routes/ThankYou/ThankYouPage';
+import PrivacyPageContainer    from 'Privacy/Containers/PrivacyPageContainer'
 
 import Admin                   from 'components/admin/Admin';
 import Invoice                 from 'Checkout/Routes/Invoices/Invoice';
@@ -112,10 +114,13 @@ export default (
         <Route path="/projects" component={App} onEnter={loadData}>
             <IndexRoute component={Projects}/>
         </Route>
-        <Route path="/rfc" component={App} onEnter={loadData}>
+        <Route path="/rfc" showAds={false} component={App} onEnter={loadData}>
             <IndexRoute component={Proposals}/>
         </Route>
-        <Route path="/rfc/thank-you" component={App} onEnter={loadData}>
+        <Route path="/rfc/auth" showAds={false} component={App}>
+            <IndexRoute component={ProposalsHandler}/>
+        </Route>
+        <Route path="/rfc/thank-you" showAds={false} component={App} onEnter={loadData}>
             <IndexRoute component={ProposalsThankYouPage}/>
         </Route>
 
@@ -131,6 +136,9 @@ export default (
         </Route>
         <Route path="/l/snl-impact" component={App} onEnter={loadData}>
             <IndexRoute component={SnlImpact}/>
+        </Route>
+        <Route path="/privacy-policy" component={App} onEnter={loadData}>
+            <IndexRoute component={PrivacyPageContainer}/>
         </Route>
 
         <Route path="/*" component={App} onEnter={loadData}>
