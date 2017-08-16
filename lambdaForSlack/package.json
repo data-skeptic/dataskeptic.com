@@ -5,6 +5,6 @@
     "request": "^2.81.0"
   },
   "scripts": {
-    "lambda_export": "claudia create --region us-east-1 --handler index.handler --policies policies/lambda_execute_policy.json --set-env BUCKET=dataskeptic-recordings,SLACK_WEBHOOK_URL=https://hooks.slack.com/services/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"
+    "lambda_export": "claudia create --region us-east-1 --handler index.handler --policies policies/lambda_execute_policy.json --set-env-from-json dev.json"
   }
 }
