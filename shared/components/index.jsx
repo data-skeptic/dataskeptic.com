@@ -24,8 +24,6 @@ import {toggleCart} from '../Cart/Actions/CartActions'
 import ChatBotContainer from "../ChatBot/Containers/ChatBotContainer";
 
 //insert here trusted origins for chat bot
-const validOrigins = [
-]
 
 class MainView extends React.Component {
     constructor(props) {
@@ -165,22 +163,6 @@ class MainView extends React.Component {
         this.props.toggleMobileMenu()
     }
 
-    componentWillMount() {
-        window.addEventListener("message", this.listenMessage);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('message');
-    }
-
-    listenMessage(e) {
-        if (this.validateOrigin(e))
-            alert(`Status: ${e.data.status} \nMessage: ${e.data.message}`)
-    }
-
-    validateOrigin(e) {
-        return validOrigins.indexOf(e.origin) > -1;
-    }
 
     /**
      * Determinate current class list

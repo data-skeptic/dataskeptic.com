@@ -1,5 +1,18 @@
 <html><body>
-top
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        parent.postMessage({
+            status: true,
+        }, '*');
+        window.addEventListener("message", function(e) {
+            var message = document.querySelector('#message');
+            message.innerHTML = e.data;
+        });
+
+
+    });
+</script>
+<div id="message"></div>
 <iframe src='https://webchat.botframework.com/embed/dataskeptic-bot?s=Sb3ZVnvH-KE.cwA.9cQ.YtBXA1S8J_1jFukakBxyO_zBaY7DXUdDG7DCLj5ean8'></iframe>
 bot
 </body>
