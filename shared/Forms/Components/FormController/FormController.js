@@ -14,7 +14,7 @@ export const FormController = ({ name, children, handleSubmit, showSubmit, submi
         : null}
 
         <div className="col-md-12 error">
-            { isEmpty(customError) ?  null : <p><i className="glyphicon glyphicon-warning-sign"> </i> Sorry something goes wrong</p>  }
+            { isEmpty(customError) ?  null : <p><i className="glyphicon glyphicon-warning-sign"> </i> Server error, please contact kyle@dataskeptic.com for support</p>  }
         </div>
 
         <div className="col-md-12 success">
@@ -32,8 +32,8 @@ FormController.propTypes = {
     customSubmitting: PropTypes.bool,
     pristine: PropTypes.bool,
     invalid: PropTypes.bool,
-    customSuccess: PropTypes.string,
-    customError: PropTypes.string,
+    // customSuccess: PropTypes.string,
+    // customError: PropTypes.string,
     submitValue: PropTypes.node,
     showSubmit: PropTypes.bool
 };

@@ -21,7 +21,7 @@ export const ProposalFormValidator = (values) => {
 
         case UPLOAD:
             if (values.files.length === 0) {
-                errors.files = 'Please some upload files';
+                errors.files = 'Please upload some files';
             }
             break;
 
