@@ -83,35 +83,27 @@ var stripe_key = "sk_test_81PZIV6UfHDlapSAkn18bmQi"
 var sp_key = "test_Z_gOWbE8iwjhXf4y4vqizQ"
 var slack_key = ""
 var aws_proposals_bucket = ""
-var rfc_table_name = "rtc"
+var rfc_table_name = "rfc"
 var latest_rfc_id = "test-request"
 
-fs.open("./config/config.json", "r", function (error, fd) {
-    var buffer = new Buffer(10000)
-    fs.read(fd, buffer, 0, buffer.length, null, function (error, bytesRead, buffer) {
-        var data = buffer.toString("utf8", 0, bytesRead)
-        var c = JSON.parse(data)
-        console.dir('env = ' + env)
-        stripe_key = c[env]['stripe']
-        sp_key = c[env]['sp']
-        slack_key = c[env]['slack']
-        aws_accessKeyId = c[env]['aws']['accessKeyId']
-        console.log(aws_accessKeyId)
-        aws_secretAccessKey = c[env]['aws']['secretAccessKey']
-        console.log(aws_secretAccessKey)
-        aws_region = c[env]['aws']['region']
-        aws_proposals_bucket = c[env]['recording']['aws_proposals_bucket']
-        console.log(aws_secretAccessKey, aws_accessKeyId)
-        fs.close(fd)
-        aws.config.update(
-            {
-                "accessKeyId": aws_accessKeyId,
-                "secretAccessKey": aws_secretAccessKey,
-                "region": aws_region
-            }
-        );
-    })
-})
+//=========== CONFIG
+const c = require('./config/config.json')
+console.dir('env = ' + env)
+stripe_key = c[env]['stripe']
+sp_key = c[env]['sp']
+slack_key = c[env]['slack']
+aws_accessKeyId = c[env]['aws']['accessKeyId']
+aws_secretAccessKey = c[env]['aws']['secretAccessKey']
+aws_region = c[env]['aws']['region']
+aws_proposals_bucket = c[env]['recording']['aws_proposals_bucket']
+aws.config.update(
+    {
+        "accessKeyId": aws_accessKeyId,
+        "secretAccessKey": aws_secretAccessKey,
+        "region": aws_region
+    }
+);
+//=========== CONFIG
 
 const docClient = new aws.DynamoDB.DocumentClient();
 
@@ -220,7 +212,6 @@ const doRefresh = (store) => {
             delete Cache.rfc;
             Cache.rfc = rfc
             console.dir(rfc)
-
 
             console.log("Refreshing Finished")
         })

@@ -11,37 +11,28 @@ const proposalsDocs = new aws.DynamoDB.DocumentClient();
 
 const PROPOSALS_TABLE_NAME = 'proposals';
 
-let AWS_FILES_BUCKET = ''
-let AWS_RECORDS_BUCKET = ''
-let EMAIL_ADDRESS = ''
-let temp_files = ""
 
 const env="prod";
 
-fs.open("./config/config.json", "r", function (error, fd) {
-    const buffer = new Buffer(10000)
-    fs.read(fd, buffer, 0, buffer.length, null, function (error, bytesRead, buffer) {
-        const data = buffer.toString("utf8", 0, bytesRead)
-        const c = JSON.parse(data)
-        const aws_accessKeyId = c[env]['aws']['accessKeyId']
-        const aws_secretAccessKey = c[env]['aws']['secretAccessKey']
-        const aws_region = c[env]['aws']['region']
-        AWS_FILES_BUCKET = c[env]['recording']['aws_files_bucket']
-        AWS_RECORDS_BUCKET = c[env]['recording']['aws_proposals_bucket']
+//=========== CONFIG
+const c = require('../../../config/config.json')
+const aws_accessKeyId = c[env]['aws']['accessKeyId']
+const aws_secretAccessKey = c[env]['aws']['secretAccessKey']
+const aws_region = c[env]['aws']['region']
+const AWS_FILES_BUCKET = c[env]['recording']['aws_files_bucket']
+const AWS_RECORDS_BUCKET = c[env]['recording']['aws_proposals_bucket']
 
-        temp_files = c[env]['recording']['temp_files']
-        EMAIL_ADDRESS = c[env]['recording']['emails']['admin']
-        fs.close(fd)
-        aws.config.update(
-            {
-                "accessKeyId": aws_accessKeyId,
-                "secretAccessKey": aws_secretAccessKey,
-                "region": aws_region
-            }
-        );
-    })
-})
+const temp_files = c[env]['recording']['temp_files']
+const EMAIL_ADDRESS = c[env]['recording']['emails']['admin']
 
+aws.config.update(
+    {
+        "accessKeyId": aws_accessKeyId,
+        "secretAccessKey": aws_secretAccessKey,
+        "region": aws_region
+    }
+);
+//=========== CONFIG
 
 function saveProposal(proposal) {
     proposal.id = uuid();
@@ -54,9 +45,6 @@ function saveProposal(proposal) {
     return new Promise((res, rej) => {
         proposalsDocs.put(params, function(err, data) {
             if (err) {
-                console.dir('AWwaDSDASDSAD')
-                console.dir(err)
-
                 rej(err);
             } else {
                 res(data);
