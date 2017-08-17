@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import {isEmpty} from 'lodash'
 
 export const FormController = ({ name, children, handleSubmit, showSubmit, submitSucceeded, submitting, customSubmitting, pristine, invalid, submitValue, btnWrapperClasses='', customSuccess, customError }) => (
     <form className={`form ${name}-form`} onSubmit={handleSubmit} autoComplete="false">
@@ -13,7 +14,7 @@ export const FormController = ({ name, children, handleSubmit, showSubmit, submi
         : null}
 
         <div className="col-md-12 error">
-            { customError ? <p><i className="glyphicon glyphicon-warning-sign"> </i> {customError}</p> : null }
+            { isEmpty(customError) ?  null : <p><i className="glyphicon glyphicon-warning-sign"> </i> Server error, please contact kyle@dataskeptic.com for support</p>  }
         </div>
 
         <div className="col-md-12 success">
@@ -31,8 +32,8 @@ FormController.propTypes = {
     customSubmitting: PropTypes.bool,
     pristine: PropTypes.bool,
     invalid: PropTypes.bool,
-    customSuccess: PropTypes.string,
-    customError: PropTypes.string,
+    // customSuccess: PropTypes.string,
+    // customError: PropTypes.string,
     submitValue: PropTypes.node,
     showSubmit: PropTypes.bool
 };

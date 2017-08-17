@@ -24,7 +24,8 @@ import {
     RESET_COMPLETED_RECORDING,
 
     SUBMIT_COMMENT_FORM_REQUEST,
-    SUBMIT_COMMENT_FORM_SUCCESS
+    SUBMIT_COMMENT_FORM_SUCCESS,
+    SUBMIT_COMMENT_FORM_FAIL
 } from '../Actions/CommentBoxFormActions';
 
 import {
@@ -150,6 +151,9 @@ export default function ProposalsReducer(state = initialState, action) {
 
         case SUBMIT_COMMENT_FORM_SUCCESS:
             nstate.form.submitted = true;
+            break;
+        case SUBMIT_COMMENT_FORM_FAIL:
+            nstate.form.error = action.payload.error
             break;
 
         case PROPOSAL_DEADLINE_REACHED:
