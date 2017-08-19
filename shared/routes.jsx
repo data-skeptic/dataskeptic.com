@@ -26,6 +26,7 @@ import NotFound                from 'NotFound/Components/NotFound';
 import Podcast                 from 'Podcasts/Routes/Podcast';
 import Proposals               from 'Proposals/Routes/Proposals';
 import ProposalsHandler        from 'Proposals/Routes/ProposalsHandler/ProposalsHandler'
+import ProposalsLogOut         from 'Proposals/Routes/ProposalsLogOut/ProposalsLogOut'
 import Press                   from 'components/Press';
 import Projects                from 'components/Projects';
 import Services                from 'components/Services';
@@ -114,13 +115,16 @@ export default (
         <Route path="/projects" component={App} onEnter={loadData}>
             <IndexRoute component={Projects}/>
         </Route>
-        <Route path="/rfc" component={App} onEnter={loadData}>
+        <Route path="/rfc" showAds={false} component={App} onEnter={loadData}>
             <IndexRoute component={Proposals}/>
         </Route>
-        <Route path="/rfc/auth" component={App}>
+        <Route path="/rfc/auth" showAds={false} component={App}>
             <IndexRoute component={ProposalsHandler}/>
         </Route>
-        <Route path="/rfc/thank-you" component={App} onEnter={loadData}>
+        <Route path="/rfc/logout" showAds={false} component={App}>
+            <IndexRoute component={ProposalsLogOut}/>
+        </Route>
+        <Route path="/rfc/thank-you" showAds={false} component={App} onEnter={loadData}>
             <IndexRoute component={ProposalsThankYouPage}/>
         </Route>
 

@@ -170,7 +170,6 @@ class RecorderFlowContainer extends Component {
 
     onReview() {
         console.log('onReview()');
-
         this.audioController.src = this.props.submittedUrl + '.wav';
 
         this.audioController.onloadedmetadata = () => {
@@ -255,10 +254,10 @@ class RecorderFlowContainer extends Component {
         }
 
         return (
-            <div className="text-muted">
-                Recording will start when you hit the button below. <i>You will have a chance to review your recording
-                before submitting.</i>
-            </div>
+            <p className="text-muted">
+                Recording will start when you hit the button below.<br/>You will have a chance to review your recording
+                before submitting.
+            </p>
         );
     }
 
@@ -402,7 +401,6 @@ class RecorderFlowContainer extends Component {
 
         return (
             <div>
-                <Debug data={{...recorder, activeStep}}/>
 
                 <div className={`recording-flow-container step-${activeStep}`}>
 

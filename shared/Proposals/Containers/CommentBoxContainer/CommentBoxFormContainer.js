@@ -5,6 +5,8 @@ import {connect} from 'react-redux';
 import CommentBoxForm from '../../Components/CommentBoxForm/CommentBoxForm';
 import CommentTypeSelectorContainer from '../../Containers/CommentTypeSelectorContainer/CommentTypeSelectorContainer';
 
+import {getFormSyncErrors} from 'redux-form'
+
 import {
     changeCommentType,
     uploadFiles,
@@ -99,7 +101,7 @@ class CommentBoxFormContainer extends Component {
 
     recorderStop(id) {
         this.props.recordingFinish(id);
-        var bucket = this.props.aws_proposals_bucket
+        const bucket = this.props.aws_proposals_bucket
         const recordingUrl = `https://s3.amazonaws.com/${bucket}/${id}`;
         this.props.reviewRecording(recordingUrl);
     }
@@ -132,9 +134,14 @@ class CommentBoxFormContainer extends Component {
 
     shouldShowSubmitButton() {
         const {messageType, activeStep} = this.props;
+        const {values:{files}} = this.props
 
         if (messageType === RECORDING) {
             return activeStep === 'REVIEW';
+        }
+
+        if (messageType === UPLOAD) {
+            return files.length > 0
         }
 
         return [TEXT, UPLOAD, SUBMIT].indexOf(messageType) > -1;
@@ -182,7 +189,7 @@ class CommentBoxFormContainer extends Component {
 
     render() {
         const {values, messageType, errorMessage, activeStep, submittedUrl = ''} = this.props;
-        const {customSubmitting} = this.props;
+        const {customSubmitting, user,customError, syncErrors} = this.props;
 
         const {files} = values;
         const showSubmit = this.shouldShowSubmitButton();
@@ -201,31 +208,37 @@ class CommentBoxFormContainer extends Component {
                             files={files}
                         />
 */
+
         return (
             <div className="comment-box-form-container">
                 <Debug data={values}/>
-
+                <Debug data={syncErrors}/>
                 <CommentTypeSelectorContainer onChangeCommentType={this.onChangeCommentType} messageType={messageType}/>
-
                 <b>{customSubmitting}</b>
-
                 <CommentBoxForm
                     onSubmit={this.handleSubmit}
                     submitText={this.getSubmitText()}
                     showSubmit={showSubmit}
                     customSubmitting={customSubmitting}
-                    customSuccess={successMessage}>
+                    customSuccess={successMessage}
+                    customError = {customError}
+                    initialValues={{
+                        name: user.name,
+                        email: user.email,
+                        type: 'TEXT',
+                        files: [],
+                        recording: {}
+                    }}
+                >
                     { showInfoBox ?
                         <UserInfoBox />
                         : null }
 
                     <Wizard activeKey={messageType}>
-
                         <Recorder
                             key={RECORDING}
                             activeStep={activeStep}
                             errorMessage={errorMessage}
-
                             ready={this.recordingReady}
                             recording={this.recorderRecording}
                             stop={this.recorderStop}
@@ -233,7 +246,6 @@ class CommentBoxFormContainer extends Component {
                             submit={this.recorderSubmit}
                             complete={this.recorderComplete}
                             error={this.recorderError}
-
                             submittedUrl={submittedUrl}
                         />
 
@@ -259,12 +271,15 @@ export default connect(
         values: state.proposals.getIn(['form']).toJS(),
 
         customSubmitting: state.proposals.getIn(['form', 'submitted']),
+        customError: state.proposals.getIn(['form', 'error']).toJS(),
 
         activeStep: state.proposals.getIn(['form', 'step']),
         messageType: state.proposals.getIn(['form', 'type']),
 
         errorMessage: state.proposals.getIn(['form', 'error']).toJS(),
-        submittedUrl: state.proposals.getIn(['review', 'url'])
+        submittedUrl: state.proposals.getIn(['review', 'url']),
+
+        syncErrors: getFormSyncErrors('commentBox')(state),
     }),
     (dispatch) => bindActionCreators({
         changeCommentType,

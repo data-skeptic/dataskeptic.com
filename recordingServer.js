@@ -9,30 +9,26 @@ const AWS = require("aws-sdk");
 const sys = require('sys')
 const exec = require('child_process').exec;
 
-var env = "prod"
+//=========== CONFIG
+const env = "prod"
 
-fs.open("config.json", "r", function (error, fd) {
-    var buffer = new Buffer(10000)
-    fs.read(fd, buffer, 0, buffer.length, null, function (error, bytesRead, buffer) {
-        var data = buffer.toString("utf8", 0, bytesRead)
-        var c = JSON.parse(data)
-        var aws_accessKeyId = c[env]['aws']['accessKeyId']
-        var aws_secretAccessKey = c[env]['aws']['secretAccessKey']
-        var aws_region = c[env]['aws']['region']
-        var recordingConfig = c[env]['recording']
-        fs.close(fd)
-        const LOCKED_FILE_NAME = recordingConfig.locked_file_name;
-        const AWS_RECORDS_BUCKET = recordingConfig.aws_proposals_bucket;
-        const BASE_RECORDS_PATH = path.join(__dirname, recordingConfig.source);
-        AWS.config.update(
-            {
-                "accessKeyId": aws_accessKeyId,
-                "secretAccessKey": aws_secretAccessKey,
-                "region": aws_region
-            }
-        );
-    })
-})
+const c = require('./config/config.json')
+const aws_accessKeyId = c[env]['aws']['accessKeyId']
+const aws_secretAccessKey = c[env]['aws']['secretAccessKey']
+const aws_region = c[env]['aws']['region']
+const recordingConfig = c[env]['recording']
+const LOCKED_FILE_NAME = recordingConfig.locked_file_name;
+const AWS_RECORDS_BUCKET = recordingConfig.aws_proposals_bucket;
+const BASE_RECORDS_PATH = path.join(__dirname, recordingConfig.source);
+
+AWS.config.update(
+    {
+        "accessKeyId": aws_accessKeyId,
+        "secretAccessKey": aws_secretAccessKey,
+        "region": aws_region
+    }
+);
+//=========== CONFIG
 
 const actions = require('./shared/Recorder/Constants/actions');
 
@@ -108,7 +104,7 @@ const uploadToS3 = (filePath, id, clb) => {
         const s3bucket = new AWS.S3({params: {Bucket: AWS_RECORDS_BUCKET}});
         s3bucket.createBucket(() => {
             const params = {
-                Key: id+'.wav',
+                Key: id + '.wav',
                 Body: data
             };
 

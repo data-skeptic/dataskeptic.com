@@ -13,7 +13,7 @@ import * as types from '../../Constants/CommentTypes';
 
 import ProposalFormValidator from '../../Helpers/CommentFormValidator/CommentFormValidator';
 
-const Form = ({ children, handleSubmit, pristine, reset, submitting, invalid, submitSucceeded, submitFailed, showSubmit=true, customSubmitting, customSuccess, submitText }) => (
+const Form = ({ children, handleSubmit, pristine, reset, submitting, invalid, submitSucceeded, submitFailed, showSubmit=true, customSubmitting, customSuccess,customError, submitText }) => (
     <FormController name="commentBox"
                     handleSubmit={handleSubmit}
                     submitValue={submitText}
@@ -21,6 +21,7 @@ const Form = ({ children, handleSubmit, pristine, reset, submitting, invalid, su
                     submitSucceeded={submitSucceeded}
                     customSubmitting={customSubmitting}
                     customSuccess={customSuccess}
+                    customError = {customError}
     >
         {children}
     </FormController>
@@ -28,12 +29,7 @@ const Form = ({ children, handleSubmit, pristine, reset, submitting, invalid, su
 
 const CommentBoxForm = reduxForm({
     form: 'commentBox',
-    validate: ProposalFormValidator,
-    initialValues: {
-        type: '',
-        files: [],
-        recording: {}
-    }
+    validate: ProposalFormValidator
 })(Form);
 
 export default CommentBoxForm;

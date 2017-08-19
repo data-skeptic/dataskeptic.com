@@ -192,6 +192,7 @@ class MainView extends React.Component {
   render() {
     this.logPageView()
     const {isMobileMenuVisible, cart, isCartVisible} = this.props;
+    const {showAds = true} = this.props.route;
     const {pathname} = this.props.location
     const itemsCount = getCartItemsCount(cart.toJS().cart_items);
     const isOverflowMode = isCartVisible
@@ -216,7 +217,7 @@ class MainView extends React.Component {
             <Sidebar />
           </div>
           <ChatBotContainer/>
-          <Footer linkClick={this.onFooterItemClick} banner={this.props.bannerContent}/>
+          <Footer showAds={showAds} linkClick={this.onFooterItemClick} banner={this.props.bannerContent}/>
           <Overflow visible={isOverflowMode} onClick={this.onOverflowClick}/>
         </div>
     )

@@ -140,8 +140,12 @@ const submitFlow = (data, dispatch) => {
     return axios.post('/api/v1/proposals', data)
         .then((res) => res.data)
         .then((res) => {
-            dispatch(submitCommentFormSuccess(res));
-            redirectToThankYouPage();
+           if(res.success){
+               dispatch(submitCommentFormSuccess(res));
+               //redirectToThankYouPage();
+           } else {
+               dispatch(submitCommentFormFail(res.error))
+           }
         })
         .catch((err) => dispatch(submitCommentFormFail(err)));
 };

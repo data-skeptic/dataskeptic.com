@@ -1,6 +1,5 @@
 const path = require('path');
 const fs = require('fs');
-
 const multer = require('multer');
 const mime = require('mime');
 
@@ -9,6 +8,31 @@ const aws = require("aws-sdk");
 const send = require('../modules/emails').send;
 
 const proposalsDocs = new aws.DynamoDB.DocumentClient();
+
+const PROPOSALS_TABLE_NAME = 'proposals';
+
+
+const env="prod";
+
+//=========== CONFIG
+const c = require('../../../config/config.json')
+const aws_accessKeyId = c[env]['aws']['accessKeyId']
+const aws_secretAccessKey = c[env]['aws']['secretAccessKey']
+const aws_region = c[env]['aws']['region']
+const AWS_FILES_BUCKET = c[env]['recording']['aws_files_bucket']
+const AWS_RECORDS_BUCKET = c[env]['recording']['aws_proposals_bucket']
+
+const temp_files = c[env]['recording']['temp_files']
+const EMAIL_ADDRESS = c[env]['recording']['emails']['admin']
+
+aws.config.update(
+    {
+        "accessKeyId": aws_accessKeyId,
+        "secretAccessKey": aws_secretAccessKey,
+        "region": aws_region
+    }
+);
+//=========== CONFIG
 
 function saveProposal(proposal) {
     proposal.id = uuid();
@@ -31,7 +55,7 @@ function saveProposal(proposal) {
 
 function uploadProposalFile(file, aws_files_bucket) {
     console.log('[PROPOSALS] upload proposal file');
-    const filesBucket = new aws.S3({params: {Bucket: aws_files_bucket}});
+    const filesBucket = new aws.S3({params: {Bucket: AWS_FILES_BUCKET}});
     console.dir(file);
 
     return new Promise((res, rej) => {
@@ -59,12 +83,15 @@ function uploadProposalFile(file, aws_files_bucket) {
 }
 
 function uploadFilesS3Async(files, aws_files_bucket) {
-    return Promise.all(files.map(file => uploadProposalFile(file, aws_files_bucket)));
+    return Promise.all(files.map(file => uploadProposalFile(file, aws_files_bucket)))
+        .catch((e) => {
+            console.error(e)
+        })
 }
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, path.resolve(__dirname, '../../../', config.temp_files))
+        cb(null, path.resolve(__dirname, '../../../', temp_files))
     },
     filename: function (req, file, cb) {
         cb(null, file.fieldname + '-' + Date.now() + '.' + mime.extension(file.mimetype))
@@ -146,7 +173,7 @@ module.exports = {
 
         saveProposal(userData)
             .then((proposal) => {
-                const destination = config.emails.admin;
+                const destination = EMAIL_ADDRESS;
                 const subject = '[Notification] New proposal';
 
                 let message = generateProposalBody(req.body.type, userData);

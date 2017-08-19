@@ -15,13 +15,17 @@ class ProposalsHandler extends Component {
         const {id, hasAccess, location} = this.props;
         const user = location.query.user
         this.props.authorize(!!user);
-        if (!!user) {
-            this.props.history.push('/rfc')
-        }
+        localStorage.setItem('authorizedUser', user);
+        this.props.history.push('/rfc');
     }
 
+    // componentWillReceiveProps(nextProps) {
+    //     if (nextProps.hasAccess) {
+    //         this.props.history.push('/rfc')
+    //     }
+    // }
+
     render() {
-        const {proposal, hasAccess} = this.props;
 
         return (
             <div>Loading...</div>

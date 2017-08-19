@@ -7,8 +7,6 @@ import Debug from '../../../Debug';
 
 const UploadFileTypeBox = ({onDrop, onRemove, files}) => (
     <div className="upload-file-type-box">
-        <Debug data={files}/>
-
         <Dropzone onDrop={onDrop} className="dropzone" activeClassName="active">
             <div>Try dropping some files here, or click to select files to upload.</div>
         </Dropzone>

@@ -7,7 +7,8 @@ import {
     FETCH_CURRENT_PROPOSAL_FAIL,
     PROPOSAL_DEADLINE_REACHED,
     PROPOSAL_SET_BUCKET,
-    AUTHORIZE
+    AUTHORIZE,
+    LOG_OUT
 } from '../Actions/ProposalsActions';
 
 import {
@@ -23,7 +24,8 @@ import {
     RESET_COMPLETED_RECORDING,
 
     SUBMIT_COMMENT_FORM_REQUEST,
-    SUBMIT_COMMENT_FORM_SUCCESS
+    SUBMIT_COMMENT_FORM_SUCCESS,
+    SUBMIT_COMMENT_FORM_FAIL
 } from '../Actions/CommentBoxFormActions';
 
 import {
@@ -62,7 +64,7 @@ const defaultState = {
     loading: false,
     aws_bucket: "",
     error: false,
-    proposal: [],
+    proposal: {},
     hasAccess:false,
     form: {
         step: INIT,
@@ -85,15 +87,15 @@ export default function ProposalsReducer(state = initialState, action) {
     switch (action.type) {
         case FETCH_CURRENT_PROPOSAL_REQUEST:
             nstate.loading = true;
-            nstate.error = true;
+            nstate.error = false;
             break;
 
-        // case FETCH_CURRENT_PROPOSAL_SUCCESS:
-        //     nstate.loading = false;
-        //     nstate.error = true;
-        //     console.dir(action.payload.data);
-        //     nstate.proposal = action.payload.data;
-        //     break;
+        case FETCH_CURRENT_PROPOSAL_SUCCESS:
+            nstate.loading = false;
+            nstate.error = false;
+            nstate.proposal = action.payload.data;
+            break;
+
 
         case FETCH_CURRENT_PROPOSAL_FAIL:
             nstate.loading = false;
@@ -150,6 +152,9 @@ export default function ProposalsReducer(state = initialState, action) {
         case SUBMIT_COMMENT_FORM_SUCCESS:
             nstate.form.submitted = true;
             break;
+        case SUBMIT_COMMENT_FORM_FAIL:
+            nstate.form.error = action.payload.error
+            break;
 
         case PROPOSAL_DEADLINE_REACHED:
             if (nstate.proposal) {
@@ -164,7 +169,9 @@ export default function ProposalsReducer(state = initialState, action) {
         case AUTHORIZE:
             nstate.hasAccess = action.payload.hasAccess;
             break;
-
+        case LOG_OUT:
+            nstate.hasAccess = false;
+            break;
         default:
             break;
     }

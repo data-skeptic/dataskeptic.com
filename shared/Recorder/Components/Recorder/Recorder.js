@@ -1,18 +1,20 @@
-import React, {PropTypes}  from 'react';
+import React, {PropTypes} from 'react';
 import classNames from 'classnames';
 
 export const Recorder = ({recording = false, error, info, onClick, startComponent = 'Start', stopComponent = 'Stop'}) => (
     <div className="recorder">
-        <button className={classNames('btn btn-default btn-recorder', {'recording': recording})}
-                type="button" onClick={onClick}
-        >
-            {recording ? stopComponent : startComponent }
-        </button>
+        <div className="row">
+            <button className={classNames('btn btn-default btn-recorder', {'recording': recording})}
+                    type="button" onClick={onClick}
+            >
+                {recording ? stopComponent : startComponent}
+            </button>
 
-        <div className="messages">
-            { info ? <div className="info">{info}</div> : null }
+            <div className="messages">
+                {info ? <div className="info">{info}</div> : null}
 
-            { error ? <div className="text-danger">{error}</div> : null }
+                {error ? <div className="text-danger">{error}</div> : null}
+            </div>
         </div>
     </div>
 );
