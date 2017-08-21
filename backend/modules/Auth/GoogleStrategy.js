@@ -6,7 +6,7 @@ module.exports = function() {
   passport.use(new googleStrategy({
     clientID: `${config.dev.googlePassport.clientId}`,
     clientSecret: `${config.dev.googlePassport.clientSecret}`,
-    callbackURL: 'http://localhost:3000/api/v1/auth/google/callback',
+    callbackURL: '/api/v1/auth/google/callback',
     passReqToCallback:true
   },
     function (req, accessToken, refreshToken, profile, done){
