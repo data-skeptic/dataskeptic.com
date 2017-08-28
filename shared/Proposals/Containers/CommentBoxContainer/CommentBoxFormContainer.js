@@ -109,6 +109,7 @@ class CommentBoxFormContainer extends Component {
     }
 
     recorderSubmit(id) {
+        debugger;
         this.props.submit();
     }
 
