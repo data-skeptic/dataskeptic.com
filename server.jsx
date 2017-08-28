@@ -16,7 +16,7 @@ import {order_fulfill}           from 'backend/order_fulfill'
 import {order_list}              from 'backend/order_list'
 import {pay_invoice}             from 'backend/pay_invoice'
 import {related_content, related_cache}         from 'backend/related_content'
-import {ready}                   from 'backend/v1/recording';
+import {ready, getFile}          from 'backend/v1/recording';
 import {write as writeProposal, upload as uploadProposalFiles}  from 'backend/v1/proposals'
 import bodyParser                from 'body-parser'
 import compression               from 'compression';
@@ -272,6 +272,9 @@ function api_router(req, res) {
         return true;
     } else if (req.url.indexOf('/api/v1/recording/ready') == 0) {
         ready(req, res, aws_proposals_bucket);
+        return true;
+    } else if (req.url.indexOf('/api/v1/recording/get') == 0) {
+        getFile(req, res, aws_proposals_bucket);
         return true;
     }
     if (req.url.indexOf('/api/refresh') == 0) {

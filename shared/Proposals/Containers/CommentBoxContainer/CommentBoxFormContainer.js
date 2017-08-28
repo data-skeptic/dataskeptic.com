@@ -101,9 +101,7 @@ class CommentBoxFormContainer extends Component {
 
     recorderStop(id) {
         this.props.recordingFinish(id);
-        const bucket = this.props.aws_proposals_bucket
-        const recordingUrl = `https://s3.amazonaws.com/${bucket}/${id}`;
-        this.props.reviewRecording(recordingUrl);
+        this.props.reviewRecording(id);
     }
 
     recorderReview(id) {
