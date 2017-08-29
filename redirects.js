@@ -1,4 +1,5 @@
 var redirects_map = {'/epnotes/causal-impact.php':'/blog/episodes/2016/causal-impact',
+'/blog/episodes/2017/recurrent-neural-networks': '/blog/episodes/2017/recurrent-neural-network',
 '/blog/episodes/2017/polling': '/blog/episodes/2017/opinion-polling-for-presidential-elections',
 '/blogundefined': '/blog',
 '/blog/opinions/2017/is-humor-truly-ai-complete': '/blog/ai/2017/is-humor-truly-ai-complete',

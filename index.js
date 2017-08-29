@@ -10,16 +10,16 @@ const https = require('https')
 const path = require('path')
 const passport = require('passport')
 
-var app = require('./server').default;
 const onError = (err) => {
-	fs.writeFile('./error.err', err, function(e) {
-		if (e) {
-			return console.log(err)
-		}
-	})
+    fs.writeFile('./error.err', err, function(e) {
+        if (e) {
+            return console.log(err)
+        }
+    })
 }
 
-onError("test writing files")
+const recordingServer = require('./recordingServer').default
+const app = require('./server').default
 
 if (fs.existsSync('/ssl/cert.pem')) {
 	const httpsOptions = {
@@ -40,7 +40,9 @@ if (fs.existsSync('/ssl/cert.pem')) {
 	http.createServer(function (req, res) {
 	    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
 	    res.end();
-	}).listen(80);	
+	}).listen(80);
+
+	recordingServer(server)
 } else {
 	app.listen(3000, function () {
 		console.log('Server listening on 3000');
