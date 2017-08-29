@@ -38,6 +38,10 @@ import RecordingTimeTracker from '../../Components/RecordingTimeTracker/Recordin
 import {float32ToInt16} from '../../Helpers/Converter';
 import Resampler from '../../Helpers/Resampler'
 
+
+const env = process.env.NODE_ENV
+const IS_PROD = (env === 'production')
+
 /**
  * Recording flow
  *
@@ -211,8 +215,15 @@ class RecorderFlowContainer extends Component {
             const {id, chunkId} = this.props.recorder;
 
             const BinaryClient = require('binaryjs-client').BinaryClient;
-            const hostname = window.location.hostname;
-            this.client = new BinaryClient(`ws://${hostname}:9001/recording`);
+
+            let hostname;
+            if (IS_PROD) {
+                hostname = `wss://${window.location.hostname}${window.location.port && `:${window.location.port}`}/recording`;
+            } else {
+                hostname = `ws://${window.location.hostname}:9001/recording`;
+            }
+
+            this.client = new BinaryClient(hostname);
 
             const audioCtx = new AudioContext();
             const sampleRate = audioCtx.sampleRate;
