@@ -170,7 +170,7 @@ class RecorderFlowContainer extends Component {
 
     onReview() {
         console.log('onReview()');
-        this.audioController.src = this.props.submittedUrl + '.wav';
+        this.audioController.src = `/api/v1/recording/get?id=${this.props.submittedUrl}`
 
         this.audioController.onloadedmetadata = () => {
             this.setState({metaReady: true});
