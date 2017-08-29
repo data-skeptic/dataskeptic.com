@@ -1,5 +1,4 @@
 const BinaryServer = require('binaryjs').BinaryServer;
-const bs = BinaryServer({port: 9001});
 const wav = require('wav');
 
 const AWS = require("aws-sdk");
@@ -11,9 +10,11 @@ import {
     convertFileToMp3
 } from './recordingUtils'
 
-const actions = require('./shared/Recorder/Constants/actions');
+const run = (server) => {
+    const bs = server
+        ? BinaryServer({server: server, path: '/recording'})
+        : BinaryServer({port: 9001});
 
-const run = () => {
     console.log(`Wait for new user connections`);
     bs.on('connection', (client) => {
         console.dir('connection');
@@ -73,6 +74,8 @@ const run = () => {
     });
 };
 
-require('babel-core/register')({});
-require('babel-polyfill');
-run();
+if (!module.parent) {
+    run()
+}
+
+export default run;
