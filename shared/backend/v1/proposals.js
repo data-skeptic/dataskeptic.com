@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
 const mime = require('mime');
+const moment = require('moment');
 
 const uuid = require('uuid').v4;
 const aws = require("aws-sdk");
@@ -10,7 +11,6 @@ const send = require('../modules/emails').send;
 const proposalsDocs = new aws.DynamoDB.DocumentClient();
 
 const PROPOSALS_TABLE_NAME = 'proposals';
-
 
 const env="prod";
 
@@ -32,10 +32,17 @@ aws.config.update(
         "region": aws_region
     }
 );
+
+import {
+    uploadToS3,
+    generateChunkPath,
+    clearRecordingPath
+} from '../../../recordingUtils'
+
 //=========== CONFIG
 
-function saveProposal(proposal) {
-    proposal.id = uuid();
+function saveProposal(proposal, id) {
+    proposal.id = id;
 
     const params = {
         TableName: PROPOSALS_TABLE_NAME,
@@ -143,6 +150,24 @@ const generateProposalBody = (type, proposal) => {
     return heading + body + generateUrserDataBlock(proposal);
 };
 
+const randomDigit = () => Math.floor((Math.random() * 10) + 1)
+
+const random4Digits = () => {
+    return randomDigit() * 1000
+         + randomDigit() * 100
+         + randomDigit() * 10
+         + randomDigit()
+}
+
+const generateFileName = ({email}) => {
+    const date = moment().format('YYYYMMDD')
+    const rand = random4Digits();
+
+    email = email.replace('@', '_')
+
+    return `${date}-${rand}-${email}`
+}
+
 module.exports = {
     write: function (req, res) {
         const ip = req.headers['x-forwarded-for'] ||
@@ -171,7 +196,34 @@ module.exports = {
                 userData.comment = req.body.comment;
         }
 
-        saveProposal(userData)
+        const fileName = generateFileName({ email: userData.email })
+        const filePath = generateChunkPath(req.body.recording, 0)
+
+        let flow;
+
+        if (req.body.type === 'RECORDING') {
+            console.dir(`RECORD UPLOAD`)
+            flow = new Promise((res, rej) => {
+                uploadToS3(filePath, fileName, (err, data) => {
+                    if (err) {
+                        console.log('error')
+                        console.error(err);
+                        rej(err)
+                    } else {
+                        console.log('success')
+                        console.dir(data);
+
+                        console.log('Success upload to S3', req.body.recording);
+                        clearRecordingPath(req.body.recording);
+                        res()
+                    }
+                });
+            })
+        } else {
+            flow = Promise.resolve()
+        }
+
+        flow.then(() => saveProposal(userData, fileName))
             .then((proposal) => {
                 const destination = EMAIL_ADDRESS;
                 const subject = '[Notification] New proposal';
@@ -196,7 +248,6 @@ module.exports = {
                     error: err
                 })
             })
-
     },
     upload: (req, res, aws_files_bucket) => {
         const upload = multer({

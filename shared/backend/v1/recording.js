@@ -11,7 +11,7 @@ function recordingExist(recordId, bucket) {
         };
 
         const s3bucket = new aws.S3({params: {Bucket: bucket}});
-        s3bucket.headObject(params, function(err, data) {
+        s3bucket.headObject(params, function (err, data) {
             if (err) {
                 rej(err)
             } else {
@@ -21,18 +21,23 @@ function recordingExist(recordId, bucket) {
     })
 }
 
+
+import {
+    recordingExists,
+    generateChunkPath
+} from '../../../recordingUtils'
+
 module.exports = {
     ready: function (req, res, bucket) {
-        const recordId = req.query.id + '.wav';
-        if (!recordId) {
-            res.send({
-                error: 'Please specify record id'
-            });
+        const recordId = req.query.id;
 
-            return;
+        if (!recordId) {
+            return res.send({
+                error: 'Please specify record id'
+            })
         }
 
-        recordingExist(recordId, bucket)
+        recordingExists(recordId)
             .then((data) => {
                 res.send({
                     ready: true,
@@ -45,5 +50,16 @@ module.exports = {
                     err
                 })
             })
+    },
+    getFile: function (req, res) {
+        const filePath = generateChunkPath(req.query.id, 0);
+
+        try {
+            return res.sendFile(filePath);
+        } catch (e) {
+            res.send({
+                error: true
+            })
+        }
     }
 };
