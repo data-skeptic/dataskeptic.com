@@ -145,6 +145,10 @@ export default (
             <IndexRoute component={PrivacyPageContainer}/>
         </Route>
 
+        <Route path="/admin" component={App}>
+            <IndexRoute component={Admin}  />
+        </Route>
+
         <Route path="/*" component={App} onEnter={loadData}>
             <IndexRoute component={NotFound}/>
         </Route>
@@ -152,7 +156,4 @@ export default (
     </Router>
 );
 /*
-        <Route path="/admin" component={App}>
-            <IndexRoute component={Admin}  />
-        </Route>
 */
