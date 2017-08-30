@@ -107,8 +107,8 @@ aws.config.update(
 
 const docClient = new aws.DynamoDB.DocumentClient();
 
-const IS_PROD = process.env.NODE_ENV !== 'production';
-if (IS_PROD) {
+const IS_PROD = process.env.NODE_ENV !== 'dev';
+if (process.env.NODE_ENV === 'dev') {
     require('./webpack.dev').default(app);
     env = "dev"
 }
