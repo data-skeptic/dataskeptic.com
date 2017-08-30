@@ -48,6 +48,15 @@ function loadData() {
 	}
 }
 
+function checkLogin(nextState, replace) {
+    const login = true;
+    if(!login){
+        replace({
+            pathname: '/*'
+        })
+    }
+}
+
 function onUpdate() {
     console.log("onUpdate")
 }
@@ -145,7 +154,7 @@ export default (
             <IndexRoute component={PrivacyPageContainer}/>
         </Route>
 
-        <Route path="/admin" component={App}>
+        <Route path="/admin" component={App} onEnter={checkLogin}>
             <IndexRoute component={Admin}  />
         </Route>
 
