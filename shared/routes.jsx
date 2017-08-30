@@ -1,6 +1,6 @@
 import React                                                 from 'react';
 import {Provider}                                          from 'react-redux';
-import {Router, Route, IndexRoute}                         from 'react-router';
+import {Router, Route, IndexRoute, History}                         from 'react-router';
 import ReactGA from 'react-ga'
 import {reduxReactRouter, routerStateReducer, ReduxRouter} from 'redux-react-router';
 import createBrowserHistory                                  from 'history/lib/createBrowserHistory';
@@ -48,21 +48,22 @@ function loadData() {
 	}
 }
 
-function checkLogin(nextState, replace) {
-    const login = true;
-    if(!login){
-        replace({
-            pathname: '/*'
-        })
-    }
-}
+// function checkLogin(nextState) {
+//     const login = false;
+//     if(login){
+//         History.replace('/admin')
+//     }
+//     else {
+//         History.replace('/*')
+//     }
+// }
 
 function onUpdate() {
     console.log("onUpdate")
 }
 
 function requireAuth(nextState, replaceState) {
-    replaceState({nextPathname: nextState.location.pathname}, '/login')
+   replaceState({nextPathname: nextState.location.pathname}, '/login')
 };
 
 export default (
@@ -154,7 +155,7 @@ export default (
             <IndexRoute component={PrivacyPageContainer}/>
         </Route>
 
-        <Route path="/admin" component={App} onEnter={checkLogin}>
+        <Route path="/admin" component={App}>
             <IndexRoute component={Admin}  />
         </Route>
 

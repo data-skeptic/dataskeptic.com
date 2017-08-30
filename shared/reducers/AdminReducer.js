@@ -2,6 +2,7 @@ import Immutable from 'immutable';
 import { fromJS } from 'immutable';
 import querystring from 'querystring'
 import axios from "axios"
+import {LOGIN_SUCCESS} from '../Admin/Actions/AdminActions'
 
 const init = {
     "email_send_msg": "",
@@ -44,7 +45,8 @@ const init = {
         country: 'US',
         spError: ''
     },
-	invoice: undefined
+	invoice: undefined,
+    isAdmin : false,
 }
 
 const defaultState = Immutable.fromJS(init);
@@ -232,6 +234,9 @@ export default function adminReducer(state = defaultState, action) {
     case 'ADD_INVOICE':
       nstate.invoice = action.payload
       break
+    case LOGIN_SUCCESS :
+          nstate.isAdmin = true
+          break
   }
   return Immutable.fromJS(nstate)
 }
