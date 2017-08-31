@@ -138,7 +138,7 @@ export default (
             <IndexRoute component={ProposalsThankYouPage}/>
         </Route>
 
-        <Route path="/login" component={App}>
+        <Route path="/admin/login" component={App}>
             <IndexRoute component={Login}/>
         </Route>
         <Route path="/invoice" component={App}>

@@ -34,16 +34,17 @@ class Login extends Component {
         }
     }
 
-    submit(data) {
-        this.props.login(data)
+    submit() {
+
     }
 
     render() {
         return (
             <div className="center">
-                <LoginForm
-                    onSubmit={this.submit}
-                />
+                <div className="admin-auth-container">
+                    <h3>Please log in</h3>
+                    <button className="btn btn-primary">Log in</button>
+                </div>
             </div>
         )
     }

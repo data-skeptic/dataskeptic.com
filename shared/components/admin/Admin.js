@@ -17,18 +17,14 @@ class Admin extends Component {
 
 	componentDidMount() {
 		var dispatch = this.props.dispatch
-	    dispatch({type: "INIT_ORDERS", payload: {dispatch} })		
-	}
-
-    componentWillMount() {
+	    dispatch({type: "INIT_ORDERS", payload: {dispatch} })
         if (!this.hasAccess()) {
-            this.props.history.push('/login')
+            this.props.history.push('/admin/login')
             return
         } else {
             this.setState({ ready: true })
         }
-    }
-
+	}
     hasAccess() {
        const { isAdmin } = this.props;
        if (isAdmin || sessionStorage.getItem('isAdmin')){
