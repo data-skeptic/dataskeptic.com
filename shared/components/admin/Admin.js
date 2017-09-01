@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import axios from "axios"
 import { connect } from 'react-redux'
-
+import {isAdministratorUser} from '../../Auth/Helpers/UserTypes'
 import SendEmail from './SendEmail'
 import OpenOrders from './OpenOrders'
 import Loading from '../../Common/Components/Loading'
@@ -26,9 +26,9 @@ class Admin extends Component {
         }
 	}
     hasAccess() {
-       const { isAdmin } = this.props;
-       if (isAdmin || sessionStorage.getItem('isAdmin')){
-       	return true
+       const { user } = this.props;
+          if(isAdministratorUser(user.type)){
+       	     return true
 	   }
 	   else {
        	return false
@@ -156,4 +156,7 @@ class Admin extends Component {
 export default connect(state => ({
 	admin: state.admin,
 	isAdmin : state.admin.isAdmin,
-	products: state.products }))(Admin)
+	products: state.products,
+    user: state.auth.getIn(['user']).toJS()
+
+}))(Admin)

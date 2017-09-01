@@ -25,8 +25,6 @@ import Membership              from 'components/Membership';
 import NotFound                from 'NotFound/Components/NotFound';
 import Podcast                 from 'Podcasts/Routes/Podcast';
 import Proposals               from 'Proposals/Routes/Proposals';
-import ProposalsHandler        from 'Proposals/Routes/ProposalsHandler/ProposalsHandler'
-import ProposalsLogOut         from 'Proposals/Routes/ProposalsLogOut/ProposalsLogOut'
 import Press                   from 'components/Press';
 import Projects                from 'components/Projects';
 import Services                from 'components/Services';
@@ -39,7 +37,7 @@ import Admin                   from 'components/admin/Admin';
 import Invoice                 from 'Checkout/Routes/Invoices/Invoice';
 
 import SnlImpact               from 'components/l/SnlImpact';
-import AdminLoginHandler from "./Admin/Containers/AdminLoginHandler";
+
 
 function loadData() {
 	if (typeof window !== 'undefined') {
@@ -129,21 +127,12 @@ export default (
         <Route path="/rfc" showAds={false} component={App} onEnter={loadData}>
             <IndexRoute component={Proposals}/>
         </Route>
-        <Route path="/rfc/auth" showAds={false} component={App}>
-            <IndexRoute component={ProposalsHandler}/>
-        </Route>
-        <Route path="/rfc/logout" showAds={false} component={App}>
-            <IndexRoute component={ProposalsLogOut}/>
-        </Route>
         <Route path="/rfc/thank-you" showAds={false} component={App} onEnter={loadData}>
             <IndexRoute component={ProposalsThankYouPage}/>
         </Route>
 
         <Route path="/admin/login" component={App}>
             <IndexRoute component={Login}/>
-        </Route>
-        <Route path="/admin/login/handler" component={App}>
-            <IndexRoute component={AdminLoginHandler}/>
         </Route>
         <Route path="/invoice" component={App}>
             <IndexRoute component={Invoice}/>

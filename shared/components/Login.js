@@ -1,7 +1,5 @@
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
-import LoginForm from './LoginForm'
-import {login} from "../Admin/Actions/AdminActions"
 import {bindActionCreators} from 'redux'
 
 import {changePageTitle} from '../Layout/Actions/LayoutActions';
@@ -27,13 +25,6 @@ class Login extends Component {
         }
     }
 
-    checkUser() {
-        let isAdmin = sessionStorage.getItem('isAdmin');
-        if (isAdmin) {
-            this.props.history.push('/admin')
-        }
-    }
-
     login() {
         window.location.href = '/api/v1/auth/login/google/'
     }
@@ -52,10 +43,9 @@ class Login extends Component {
 
 export default connect(
     (state) => ({
-        isAdmin: state.admin.isAdmin
+        user: state.auth.getIn(['user']).toJS()
     }),
     (dispatch) => bindActionCreators({
-        login,
         changePageTitle
     }, dispatch)
 )(Login);
