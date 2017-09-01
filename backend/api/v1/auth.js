@@ -6,6 +6,17 @@ const LinkedinStrategy = require('../../modules/Auth/LinkedinStrategy').default
 const GoogleStrategy = require('../../modules/Auth/GoogleStrategy')();
 const UserServices = require('../../modules/Users/Services/UserServices');
 let redirectURL;
+
+const checkIfAdmin = (email) => {
+    const email_reg_exp = /^.*@dataskeptic\.com/i;
+    return email_reg_exp.test(email);
+};
+
+const checkRoute = (route) => {
+    const admin_rexp = new RegExp('.*\/admin\/login')
+    return admin_rexp.test(route)
+}
+
 module.exports = () => {
     const router = express.Router()
 
@@ -85,7 +96,6 @@ module.exports = () => {
     });
 
     router.get('/google/callback', (req, res, next) => {
-        const admin_rexp = new RegExp('.*\/admin\/login')
         passport.authenticate('google', {failWithError: true}, function (err, user, info) {
             if (err) {
                 return res.status(403).send({message: err.message})
@@ -101,11 +111,9 @@ module.exports = () => {
                         message: err
                     })
                 } else {
-                    console.dir(redirectURL)
-                    if(admin_rexp.test(redirectURL)){
-                        const email_reg_exp = /^.*@dataskeptic\.com/i;
-                        user.hasAccess = email_reg_exp.test(user.email);
-                        if(user.hasAccess){
+                    if(checkRoute(redirectURL)){
+                        user.hasAccess = checkIfAdmin(user.email);
+                        if(user.hasAccess) {
                             redirectURL = redirectURL + '/handler?user=' + JSON.stringify(user);
                         }
                     }

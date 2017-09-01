@@ -2,7 +2,6 @@ var aws = require('aws-sdk');
 import axios                     from 'axios';
 import session from 'express-session';
 import {getRelatedContent, deleteRelatedContentByUri} from 'backend/admin/admin_related_services'
-import {checkLogin}              from 'backend/admin/check_login';
 import {get_blogs}               from 'backend/get_blogs'
 import {get_blogs_rss}           from 'backend/get_blogs_rss'
 import {get_contributors}        from 'backend/get_contributors'
@@ -366,8 +365,6 @@ function api_router(req, res) {
                 res.send(related);
             })
         return true;
-    } else if(req.url === '/api/admin/isAdmin'){
-        return res.send(checkLogin(req.body.email))
     }
 
     return false
