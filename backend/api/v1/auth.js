@@ -163,7 +163,7 @@ module.exports = () => {
     router.all('/logout', function (req, res, next) {
         req.logout();
         req.session.destroy();
-        res.redirect('/rfc/logout');
+        res.redirect('/logout');
     })
 
     return router
