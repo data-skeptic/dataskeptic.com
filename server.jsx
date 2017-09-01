@@ -536,7 +536,7 @@ function updateState(store, pathname, req) {
 
     if (req.user) {
         store.dispatch({
-            type: 'LOGIN_SUCCESS',
+            type: 'AUTH_USER_SUCCESS',
             payload: {
                 data: req.user
             }
