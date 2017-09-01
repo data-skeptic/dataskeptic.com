@@ -21,13 +21,10 @@ module.exports = () => {
     const router = express.Router()
 
     passport.serializeUser(function (user, done) {
-        done(null, user.id)
+        done(null, user)
     })
 
-    passport.deserializeUser(function (id, done) {
-        const user = {
-            id
-        }
+    passport.deserializeUser(function (user, done) {
 
         done(null, user)
     })
@@ -57,6 +54,11 @@ module.exports = () => {
     )
 
     // REGULAR
+
+    router.get('/usertest', (req, res) => {
+        res.send(req.user);
+    });
+
     router.post('/login', (req, res, next) => {
         passport.authenticate('local', {failWithError: true}, function (err, user, info) {
             if (err) {

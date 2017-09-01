@@ -533,6 +533,15 @@ function updateState(store, pathname, req) {
             data: Cache.rfc
         }
     })
+
+    if (req.user) {
+        store.dispatch({
+            type: 'LOGIN_SUCCESS',
+            payload: {
+                data: req.user
+            }
+        })
+    }
 }
 
 app.set('view engine', 'ejs');
