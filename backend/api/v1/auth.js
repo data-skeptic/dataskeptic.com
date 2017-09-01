@@ -103,8 +103,11 @@ module.exports = () => {
                 } else {
                     console.dir(redirectURL)
                     if(admin_rexp.test(redirectURL)){
-                        user.hasAccess = true;
-                        redirectURL = redirectURL + '/handler?user=' + JSON.stringify(user);
+                        const email_reg_exp = /^.*@dataskeptic\.com/i;
+                        user.hasAccess = email_reg_exp.test(user.email);
+                        if(user.hasAccess){
+                            redirectURL = redirectURL + '/handler?user=' + JSON.stringify(user);
+                        }
                     }
                     else{
                         redirectURL = redirectURL + '/auth?user=' + JSON.stringify(user);
