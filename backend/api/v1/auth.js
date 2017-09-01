@@ -85,6 +85,7 @@ module.exports = () => {
     });
 
     router.get('/google/callback', (req, res, next) => {
+        const admin_rexp = new RegExp('.*\/admin\/login')
         passport.authenticate('google', {failWithError: true}, function (err, user, info) {
             if (err) {
                 return res.status(403).send({message: err.message})
@@ -92,6 +93,7 @@ module.exports = () => {
             if (!user) {
                 return res.status(403).send({message: 'System Error'})
             }
+
             req.logIn(user, err => {
                 if (err) {
                     return res.send({
@@ -100,7 +102,13 @@ module.exports = () => {
                     })
                 } else {
                     console.dir(redirectURL)
-                    redirectURL = redirectURL + '/auth?user=' + JSON.stringify(user);
+                    if(admin_rexp.test(redirectURL)){
+                        user.hasAccess = true;
+                        redirectURL = redirectURL + '/handler?user=' + JSON.stringify(user);
+                    }
+                    else{
+                        redirectURL = redirectURL + '/auth?user=' + JSON.stringify(user);
+                    }
                     return res.redirect(redirectURL)
                 }
 
@@ -109,7 +117,6 @@ module.exports = () => {
     })
 
     router.get('/linkedin/callback', function (req, res, next) {
-
         passport.authenticate('linkedin', {
             failWithError: true,
             failureFlash: true
