@@ -9,7 +9,7 @@ import {changePageTitle} from '../Layout/Actions/LayoutActions';
 class Login extends Component {
     constructor() {
         super();
-        this.submit = this.submit.bind(this)
+        this.login = this.login.bind(this)
     }
 
     componentWillMount() {
@@ -34,8 +34,8 @@ class Login extends Component {
         }
     }
 
-    submit() {
-
+    login() {
+        window.location.href = '/api/v1/auth/login/google/'
     }
 
     render() {
@@ -43,7 +43,7 @@ class Login extends Component {
             <div className="center">
                 <div className="admin-auth-container">
                     <h3>Please log in</h3>
-                    <button className="btn btn-primary">Log in</button>
+                    <button className="btn btn-primary" onClick={this.login}>Log in</button>
                 </div>
             </div>
         )
