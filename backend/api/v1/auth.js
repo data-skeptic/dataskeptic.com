@@ -114,8 +114,9 @@ module.exports = () => {
                     })
                 } else {
                     user.type = checkIfAdmin(user.email) ? 'admin' : 'user';
+                    user.hasAccess = true
                     if(checkRoute(redirectURL)){
-                        if(user.hasAccess) {
+                        if(checkIfAdmin(user.email)) {
                             redirectURL = redirectURL + '/handler?user=' + JSON.stringify(user);
                         }
                     }
