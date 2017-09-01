@@ -117,7 +117,7 @@ module.exports = () => {
                     user.hasAccess = true
                     if(checkRoute(redirectURL)){
                         if(checkIfAdmin(user.email)) {
-                           // redirectURL = redirectURL + '/handler?user=' + JSON.stringify(user);
+                            redirectURL = redirectURL.replace('/login', '');
                         }
                     }
                     else{
