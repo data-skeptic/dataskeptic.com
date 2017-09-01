@@ -39,6 +39,7 @@ import Admin                   from 'components/admin/Admin';
 import Invoice                 from 'Checkout/Routes/Invoices/Invoice';
 
 import SnlImpact               from 'components/l/SnlImpact';
+import AdminLoginHandler from "./Admin/Containers/AdminLoginHandler";
 
 function loadData() {
 	if (typeof window !== 'undefined') {
@@ -140,6 +141,9 @@ export default (
 
         <Route path="/admin/login" component={App}>
             <IndexRoute component={Login}/>
+        </Route>
+        <Route path="/admin/login/handler" component={App}>
+            <IndexRoute component={AdminLoginHandler}/>
         </Route>
         <Route path="/invoice" component={App}>
             <IndexRoute component={Invoice}/>

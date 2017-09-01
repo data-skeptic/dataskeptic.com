@@ -1,27 +1,29 @@
 import React, {Component} from "react";
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-
-import {authorize} from '../../Actions/ProposalsActions';
+import {login} from '../Actions/AdminActions'
 import {push} from 'redux-react-router'
 
 class AdminLoginHandler extends Component {
 
     constructor(props) {
         super(props);
+        this.checkUser = this.checkUser.bind(this);
     }
 
     componentDidMount() {
-        const {id, hasAccess, location} = this.props;
-        const user = location.query.user
-        this.props.history.push('/admin');
+        this.checkUser()
+    }
+    checkUser(){
+        const {location} = this.props;
+        const user = JSON.parse(location.query.user)
+        if(user.hasAccess){
+            this.props.login(user);
+            this.props.history.push('/admin');
+        }
+
     }
 
-    // componentWillReceiveProps(nextProps) {
-    //     if (nextProps.hasAccess) {
-    //         this.props.history.push('/rfc')
-    //     }
-    // }
 
     render() {
 
@@ -37,7 +39,7 @@ export default connect(
         isAdmin : state.admin.isAdmin
     }),
     dispatch => bindActionCreators({
-
+      login
     }, dispatch)
 )(AdminLoginHandler)
 

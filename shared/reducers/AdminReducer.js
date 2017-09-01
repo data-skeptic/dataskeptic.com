@@ -47,6 +47,7 @@ const init = {
     },
 	invoice: undefined,
     isAdmin : false,
+    loggedInAdmin:{}
 }
 
 const defaultState = Immutable.fromJS(init);
@@ -236,6 +237,7 @@ export default function adminReducer(state = defaultState, action) {
       break
     case LOGIN_SUCCESS :
           nstate.isAdmin = true
+          nstate.loggedInAdmin = action.payload.user
           break
   }
   return Immutable.fromJS(nstate)
