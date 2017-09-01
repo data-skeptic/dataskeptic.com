@@ -163,7 +163,8 @@ module.exports = () => {
     router.all('/logout', function (req, res, next) {
         req.logout();
         req.session.destroy();
-        res.redirect(redirectURL);
+        const redirectTo = req.headers.referer
+        res.redirect(redirectTo);
     })
 
     return router
