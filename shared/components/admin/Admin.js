@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import axios from "axios"
 import { connect } from 'react-redux'
-
+import {isAdministratorUser} from '../../Auth/Helpers/UserTypes'
 import SendEmail from './SendEmail'
 import OpenOrders from './OpenOrders'
 import Loading from '../../Common/Components/Loading'
@@ -9,12 +9,31 @@ import Loading from '../../Common/Components/Loading'
 class Admin extends Component {
 	constructor(props) {
 		super(props)
+
+		this.state = {
+			ready: false
+		}
 	}
 
 	componentDidMount() {
 		var dispatch = this.props.dispatch
-	    dispatch({type: "INIT_ORDERS", payload: {dispatch} })		
+	    dispatch({type: "INIT_ORDERS", payload: {dispatch} })
+        if (!this.hasAccess()) {
+            this.props.history.push('/admin/login')
+            return
+        } else {
+            this.setState({ ready: true })
+        }
 	}
+    hasAccess() {
+       const { user } = this.props;
+          if(isAdministratorUser(user.type)){
+       	     return true
+	   }
+	   else {
+       	return false
+	   }
+    }
 
 	orderTshirt() {
 		var dispatch = this.props.dispatch
@@ -47,7 +66,10 @@ class Admin extends Component {
 		}
 		var step = order.step
 		var errorMsg = order.errorMsg
-		return (
+
+		const { ready } = this.state
+
+		return ready && (
 			<div className="center">
 				{step}
 				{errorMsg}
@@ -131,4 +153,10 @@ class Admin extends Component {
 		)
 	}
 }
-export default connect(state => ({ admin: state.admin, products: state.products }))(Admin)
+export default connect(state => ({
+	admin: state.admin,
+	isAdmin : state.admin.isAdmin,
+	products: state.products,
+    user: state.auth.getIn(['user']).toJS()
+
+}))(Admin)

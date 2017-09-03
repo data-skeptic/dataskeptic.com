@@ -533,6 +533,22 @@ function updateState(store, pathname, req) {
             data: Cache.rfc
         }
     })
+
+    const user = req.session &&
+        req.session.passport &&
+        req.session.passport.user;
+
+    if (user) {
+        console.log('dispatch sessioned user')
+        console.dir(`AUTH_USER_SUCCESS`)
+
+        store.dispatch({
+            type: 'AUTH_USER_SUCCESS',
+            payload: {
+                data: user
+            }
+        })
+    }
 }
 
 app.set('view engine', 'ejs');
@@ -549,7 +565,7 @@ app.use('/api/v1/', api(Cache));
 /***
  * DUMP GENERATION
  */
-// const heapdump = require('heapdump');
+// const heapdump =  require('heapdump');
 // setInterval(() => {
 //     console.log('writing dump');
 //     heapdump.writeSnapshot('heap/' + Date.now() + '.heapsnapshot');

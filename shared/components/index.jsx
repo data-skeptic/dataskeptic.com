@@ -33,6 +33,10 @@ class MainView extends React.Component {
     this.onNavigationItemClick = this.onNavigationItemClick.bind(this)
     this.onOverflowClick = this.onOverflowClick.bind(this)
     this.onFooterItemClick = this.onFooterItemClick.bind(this)
+
+    this.state = {
+      ready: false
+    }
   }
 
   loadState() {
@@ -196,6 +200,8 @@ class MainView extends React.Component {
     const {pathname} = this.props.location
     const itemsCount = getCartItemsCount(cart.toJS().cart_items);
     const isOverflowMode = isCartVisible
+
+    const { ready } = this.state
 
     return (
         <div className={ classNames('site', {'no-scroll' : isMobileMenuVisible}) }>

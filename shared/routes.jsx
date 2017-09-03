@@ -1,6 +1,6 @@
 import React                                                 from 'react';
 import {Provider}                                          from 'react-redux';
-import {Router, Route, IndexRoute}                         from 'react-router';
+import {Router, Route, IndexRoute, History}                         from 'react-router';
 import ReactGA from 'react-ga'
 import {reduxReactRouter, routerStateReducer, ReduxRouter} from 'redux-react-router';
 import createBrowserHistory                                  from 'history/lib/createBrowserHistory';
@@ -25,8 +25,6 @@ import Membership              from 'components/Membership';
 import NotFound                from 'NotFound/Components/NotFound';
 import Podcast                 from 'Podcasts/Routes/Podcast';
 import Proposals               from 'Proposals/Routes/Proposals';
-import ProposalsHandler        from 'Proposals/Routes/ProposalsHandler/ProposalsHandler'
-import ProposalsLogOut         from 'Proposals/Routes/ProposalsLogOut/ProposalsLogOut'
 import Press                   from 'components/Press';
 import Projects                from 'components/Projects';
 import Services                from 'components/Services';
@@ -40,6 +38,7 @@ import Invoice                 from 'Checkout/Routes/Invoices/Invoice';
 
 import SnlImpact               from 'components/l/SnlImpact';
 
+
 function loadData() {
 	if (typeof window !== 'undefined') {
 		const p = window.location.pathname;
@@ -48,12 +47,22 @@ function loadData() {
 	}
 }
 
+// function checkLogin(nextState) {
+//     const login = false;
+//     if(login){
+//         History.replace('/admin')
+//     }
+//     else {
+//         History.replace('/*')
+//     }
+// }
+
 function onUpdate() {
     console.log("onUpdate")
 }
 
 function requireAuth(nextState, replaceState) {
-    replaceState({nextPathname: nextState.location.pathname}, '/login')
+   replaceState({nextPathname: nextState.location.pathname}, '/login')
 };
 
 export default (
@@ -118,17 +127,11 @@ export default (
         <Route path="/rfc" showAds={false} component={App} onEnter={loadData}>
             <IndexRoute component={Proposals}/>
         </Route>
-        <Route path="/rfc/auth" showAds={false} component={App}>
-            <IndexRoute component={ProposalsHandler}/>
-        </Route>
-        <Route path="/rfc/logout" showAds={false} component={App}>
-            <IndexRoute component={ProposalsLogOut}/>
-        </Route>
         <Route path="/rfc/thank-you" showAds={false} component={App} onEnter={loadData}>
             <IndexRoute component={ProposalsThankYouPage}/>
         </Route>
 
-        <Route path="/login" component={App}>
+        <Route path="/admin/login" component={App}>
             <IndexRoute component={Login}/>
         </Route>
         <Route path="/invoice" component={App}>
@@ -145,6 +148,10 @@ export default (
             <IndexRoute component={PrivacyPageContainer}/>
         </Route>
 
+        <Route path="/admin" component={App}>
+            <IndexRoute component={Admin}  />
+        </Route>
+
         <Route path="/*" component={App} onEnter={loadData}>
             <IndexRoute component={NotFound}/>
         </Route>
@@ -152,7 +159,4 @@ export default (
     </Router>
 );
 /*
-        <Route path="/admin" component={App}>
-            <IndexRoute component={Admin}  />
-        </Route>
 */

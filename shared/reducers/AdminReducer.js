@@ -44,7 +44,9 @@ const init = {
         country: 'US',
         spError: ''
     },
-	invoice: undefined
+	invoice: undefined,
+    isAdmin : false,
+    loggedInAdmin:{}
 }
 
 const defaultState = Immutable.fromJS(init);

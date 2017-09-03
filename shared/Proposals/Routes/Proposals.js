@@ -34,7 +34,7 @@ class Proposals extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.hasAccess && this.state.authorizedUser) {
+        if (nextProps.user && this.state.authorizedUser) {
             this.setState({ready: true})
         }
     }
@@ -57,11 +57,10 @@ class Proposals extends Component {
     }
 
     getAuthorizedUser() {
-        const user = localStorage.getItem('authorizedUser');
-        if (user) {
+        const {user} = this.props;
+        if (user && user.hasAccess) {
             try {
-                this.setState({ authorizedUser: JSON.parse(user) })
-                this.props.authorize(!!user)
+                this.setState({ authorizedUser: user })
             } catch (e) {}
         }
     }
@@ -160,7 +159,7 @@ export default connect(
     state => ({
         aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket']),
         proposal: state.proposals.getIn(['proposal']).toJS(),
-        hasAccess: state.proposals.getIn(['hasAccess'])
+        user: state.auth.getIn(['user']).toJS()
     }),
     dispatch => bindActionCreators({
         fetchCurrentProposal,
