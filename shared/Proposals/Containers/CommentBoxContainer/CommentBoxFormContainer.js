@@ -171,10 +171,14 @@ class CommentBoxFormContainer extends Component {
     }
 
     getSuccessMessage() {
-        const {customSubmitting} = this.props;
+        const {customSubmitting, messageType} = this.props;
 
         if (customSubmitting) {
-            return 'Thank you for proposal!'
+            if (messageType === RECORDING) {
+                return `Your recording has been successfully uploaded. Thanks for sharing your thoughts!`
+            }
+
+            return `Thank you for proposal!`
         } else {
             return false;
         }
