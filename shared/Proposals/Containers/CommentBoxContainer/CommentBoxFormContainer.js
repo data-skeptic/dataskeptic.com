@@ -13,7 +13,8 @@ import {
     updateFiles,
     reviewRecording,
     completeRecording,
-    submitCommentForm
+    submitCommentForm,
+    resetForm
 } from '../../Actions/CommentBoxFormActions';
 
 import {
@@ -68,12 +69,13 @@ class CommentBoxFormContainer extends Component {
         this.recorderRecording = this.recorderRecording.bind(this);
         this.recorderStop = this.recorderStop.bind(this);
         this.recorderReview = this.recorderReview.bind(this);
-        this.recorderSubmit = this.recorderSubmit.bind(this);
         this.recorderComplete = this.recorderComplete.bind(this);
         this.recorderError = this.recorderError.bind(this);
 
         this.fileDrop = this.fileDrop.bind(this);
         this.fileRemove = this.fileRemove.bind(this);
+
+        this.reset = this.reset.bind(this);
     }
 
     handleSubmit(data) {
@@ -106,11 +108,6 @@ class CommentBoxFormContainer extends Component {
 
     recorderReview(id) {
         this.props.review()
-    }
-
-    recorderSubmit(id) {
-        debugger;
-        this.props.submit();
     }
 
     recorderComplete(id) {
@@ -171,10 +168,14 @@ class CommentBoxFormContainer extends Component {
     }
 
     getSuccessMessage() {
-        const {customSubmitting} = this.props;
+        const {customSubmitting, messageType} = this.props;
 
         if (customSubmitting) {
-            return 'Thank you for proposal!'
+            if (messageType === RECORDING) {
+                return `Your recording has been successfully uploaded. Thanks for sharing your thoughts!`
+            }
+
+            return `Thank you for proposal!`
         } else {
             return false;
         }
@@ -184,6 +185,10 @@ class CommentBoxFormContainer extends Component {
         const {messageType} = this.props;
 
         return (messageType === RECORDING) ? 'Ready to submit' : 'Submit proposal';
+    }
+
+    reset() {
+        this.props.resetForm()
     }
 
     render() {
@@ -246,6 +251,7 @@ class CommentBoxFormContainer extends Component {
                             complete={this.recorderComplete}
                             error={this.recorderError}
                             submittedUrl={submittedUrl}
+                            reset={this.reset}
                         />
 
                         <CommentTypeBox key={TEXT}/>
@@ -297,6 +303,8 @@ export default connect(
         submit,
         review,
         complete,
-        fail
+        fail,
+
+        resetForm
     }, dispatch)
 )(CommentBoxFormContainer);
