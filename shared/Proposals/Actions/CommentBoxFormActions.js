@@ -26,6 +26,10 @@ export const SUBMIT_COMMENT_FORM_REQUEST = 'SUBMIT_COMMENT_FORM_REQUEST';
 export const SUBMIT_COMMENT_FORM_SUCCESS = 'SUBMIT_COMMENT_FORM_SUCCESS';
 export const SUBMIT_COMMENT_FORM_FAIL = 'SUBMIT_COMMENT_FORM_FAIL';
 
+export const RESET_SUBMIT = 'RESET_SUBMIT';
+
+const FORM_KEY = 'commentBox'
+
 function redirectToThankYouPage() {
     setInterval(() => {
         window.location.href = '/rfc/thank-you';
@@ -202,3 +206,13 @@ export const submitCommentFormFail = (error) => {
         }
     }
 };
+
+export const resetForm = () => {
+    return (dispatch) => {
+        dispatch({type: RESET_SUBMIT})
+        dispatch(reset(FORM_KEY))
+        dispatch(resetRecording());
+        dispatch(resetCompletedUpload());
+        dispatch(resetCompletedRecording());
+    }
+}

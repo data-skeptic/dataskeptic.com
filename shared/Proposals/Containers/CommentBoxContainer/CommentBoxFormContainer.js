@@ -13,7 +13,8 @@ import {
     updateFiles,
     reviewRecording,
     completeRecording,
-    submitCommentForm
+    submitCommentForm,
+    resetForm
 } from '../../Actions/CommentBoxFormActions';
 
 import {
@@ -73,6 +74,8 @@ class CommentBoxFormContainer extends Component {
 
         this.fileDrop = this.fileDrop.bind(this);
         this.fileRemove = this.fileRemove.bind(this);
+
+        this.reset = this.reset.bind(this);
     }
 
     handleSubmit(data) {
@@ -184,6 +187,10 @@ class CommentBoxFormContainer extends Component {
         return (messageType === RECORDING) ? 'Ready to submit' : 'Submit proposal';
     }
 
+    reset() {
+        this.props.resetForm()
+    }
+
     render() {
         const {values, messageType, errorMessage, activeStep, submittedUrl = ''} = this.props;
         const {customSubmitting, user,customError, syncErrors} = this.props;
@@ -244,6 +251,7 @@ class CommentBoxFormContainer extends Component {
                             complete={this.recorderComplete}
                             error={this.recorderError}
                             submittedUrl={submittedUrl}
+                            reset={this.reset}
                         />
 
                         <CommentTypeBox key={TEXT}/>
@@ -295,6 +303,8 @@ export default connect(
         submit,
         review,
         complete,
-        fail
+        fail,
+
+        resetForm
     }, dispatch)
 )(CommentBoxFormContainer);

@@ -86,6 +86,8 @@ class RecorderFlowContainer extends Component {
         this.uploadChunk = this.uploadChunk.bind(this);
         this.updateDuration = this.updateDuration.bind(this);
 
+        this.resetProcess = this.resetProcess.bind(this);
+
         this.state = {
             uploading: false,
             metaReady: false,
@@ -402,6 +404,11 @@ class RecorderFlowContainer extends Component {
         this.audioController.play();
     }
 
+    resetProcess() {
+        this.discardRecord()
+        this.props.reset()
+    }
+
     render() {
         const {activeStep, recorder, errorMessage = {}, submittedUrl} = this.props;
         const {isRecording, isUploading, duration, recordingId, chunkId} = recorder;
@@ -466,9 +473,10 @@ class RecorderFlowContainer extends Component {
                         </div>
 
                         <div key={COMPLETE} className="complete-step">
-                            <div className="text-success">
-                                <i className="fa fa-check-circle" aria-hidden="true"/> Audio recording submitted
-                            </div>
+                            <button type="button" onClick={this.resetProcess}
+                                    className="btn btn-recording-discard btn-xs">
+                                <i className="fa fa-undo" aria-hidden="true"/> Record another submission
+                            </button>
                         </div>
 
                         <div key={ERROR} className="error-step">
