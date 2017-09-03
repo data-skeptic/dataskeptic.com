@@ -155,7 +155,7 @@ const submitFlow = (data, dispatch) => {
                dispatch(submitCommentFormSuccess(res));
                dispatch(recordingComplete())
            } else {
-               dispatch(recordingFail())
+               dispatch(recordingFail(res.error))
                dispatch(submitCommentFormFail(res.error))
            }
         })

@@ -476,15 +476,7 @@ class RecorderFlowContainer extends Component {
                     </div>
 
                     <div key={ERROR} className="error-step">
-                        <div className="media error-box">
-                            <div className="media-left">
-                                <i className="glyphicon glyphicon-warning-sign icon"/>
-                            </div>
-                            <div className="media-body">
-                                <h4 className="media-heading">{errorMessage.title}</h4>
-                                <p className="text">{errorMessage.body}</p>
-                            </div>
-                        </div>
+                        Something went wrong.
                     </div>
                 </Wizard>
 
