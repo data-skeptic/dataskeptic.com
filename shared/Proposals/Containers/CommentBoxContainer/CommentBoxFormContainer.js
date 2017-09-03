@@ -68,7 +68,6 @@ class CommentBoxFormContainer extends Component {
         this.recorderRecording = this.recorderRecording.bind(this);
         this.recorderStop = this.recorderStop.bind(this);
         this.recorderReview = this.recorderReview.bind(this);
-        this.recorderSubmit = this.recorderSubmit.bind(this);
         this.recorderComplete = this.recorderComplete.bind(this);
         this.recorderError = this.recorderError.bind(this);
 
@@ -106,11 +105,6 @@ class CommentBoxFormContainer extends Component {
 
     recorderReview(id) {
         this.props.review()
-    }
-
-    recorderSubmit(id) {
-        debugger;
-        this.props.submit();
     }
 
     recorderComplete(id) {

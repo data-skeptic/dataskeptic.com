@@ -187,7 +187,6 @@ class RecorderFlowContainer extends Component {
 
     onSubmitting() {
         console.log('onSubmitting()');
-        this.props.submit();
     }
 
     onComplete() {
@@ -413,6 +412,8 @@ class RecorderFlowContainer extends Component {
         return (
             <div>
 
+                <code><b>{JSON.stringify({ activeStep })}</b></code>
+
                 <div className={`recording-flow-container step-${activeStep}`}>
 
                     <Wizard activeKey={activeStep}>
@@ -443,7 +444,7 @@ class RecorderFlowContainer extends Component {
                             <ProposalLoading/>
                         </div>
 
-                        <div key={[REVIEW, SUBMITTING]} className="review-step">
+                        <div key={[REVIEW]} className="review-step">
                             <TogglePlayButton
                                 onClick={this.togglePlaying}
                                 playing={isPlaying}
@@ -458,6 +459,10 @@ class RecorderFlowContainer extends Component {
                                     </button>
                                 </div>
                             }
+                        </div>
+
+                        <div key={SUBMITTING} className="complete-step">
+                            Processing recording...
                         </div>
 
                         <div key={COMPLETE} className="complete-step">

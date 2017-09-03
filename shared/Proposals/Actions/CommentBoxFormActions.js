@@ -1,7 +1,12 @@
 import axios from 'axios';
 
 import {TEXT, UPLOAD, RECORDING, SUBMIT} from '../Constants/CommentTypes';
-import {reset as resetRecording} from './RecordingFlowActions';
+import {
+    reset as resetRecording,
+    submitting as recordingSubmitting,
+    complete as recordingComplete,
+    fail as recordingFail
+} from './RecordingFlowActions';
 import {reduxForm, reset, change as changeFieldValue, formValueSelector} from 'redux-form';
 
 import Request from '../../Request';
@@ -137,13 +142,16 @@ export const reviewRecording = (url) => {
 };
 
 const submitFlow = (data, dispatch) => {
+    dispatch(recordingSubmitting())
+
     return axios.post('/api/v1/proposals', data)
         .then((res) => res.data)
         .then((res) => {
            if(res.success){
                dispatch(submitCommentFormSuccess(res));
-               //redirectToThankYouPage();
+               dispatch(recordingComplete())
            } else {
+               dispatch(recordingFail())
                dispatch(submitCommentFormFail(res.error))
            }
         })
