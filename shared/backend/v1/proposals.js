@@ -96,6 +96,32 @@ function uploadFilesS3Async(files, aws_files_bucket) {
         })
 }
 
+function getProposalById(recordingId){
+  const params = {
+      TableName: PROPOSALS_TABLE_NAME,
+      Key: {
+          recording: recordingId
+      }
+  };
+
+  return new Promise((res, rej) => {
+      proposalsDocs.scan(params, function(err, data) {
+        console.dir(`scan by id`)
+          if (err) {
+            rej(err);
+          } else {
+            console.log(`have data`)
+            console.log(data.Items)
+            if (data.Items.length > 0) {
+              res(data.Items[0])
+            } else {
+              rej(null)
+            }
+          }
+      });
+  });
+}
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, path.resolve(__dirname, '../../../', temp_files))
@@ -107,8 +133,8 @@ const storage = multer.diskStorage({
 
 const generateUrserDataBlock = (userData) => {
     return `
-        <p><b>Name:</b> ${userData.name}</p>  
-        <p><b>Email:</b> ${userData.email}</p>  
+        <p><b>Name:</b> ${userData.name}</p>
+        <p><b>Email:</b> ${userData.email}</p>
     `;
 };
 
@@ -270,5 +296,24 @@ module.exports = {
                 })
             }
         })
+    },
+    getRecording: (req, res, aws_files_bucket) => {
+        const recordingId = req.query.id;
+
+        getProposalById(recordingId)
+          .then((item) => {
+            const fileKey = `${item.id}.mp3`
+
+            var options = {
+                Bucket: aws_files_bucket,
+                Key: fileKey,
+            };
+
+            res.send(options)
+          })
+          .catch((err) => res.send({
+            ok: false,
+            err
+          }))
     }
 };

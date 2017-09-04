@@ -87,7 +87,7 @@ class BlogRouter extends React.Component {
 
 		var folders = oblogs.folders || []
 		var blog_focus = oblogs.blog_focus
-		
+
 		/*
 			Check against folders
 		*/
@@ -124,4 +124,3 @@ export default connect(
 		site: state.site
 	}))
 (BlogRouter)
-
