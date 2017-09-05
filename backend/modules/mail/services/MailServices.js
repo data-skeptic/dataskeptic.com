@@ -68,7 +68,7 @@ export const sendMail = (obj) => {
                                 <table  border="0" cellpadding="0" cellspacing="0" width="100%">
                                     <tr>
                                         <td style="padding:20px 0 23px 0px;" align="center"  valign="top" >
-                                            <a title="dataskeptic" href="https://dataskeptic.com/"><img style="display:block;" width="180" align="center" src="https://dataskeptic.com/img/svg/logo.svg" border="0" alt="" /></a>
+                                            <a title="dataskeptic" href="https://dataskeptic.com/"><img style="display:block;" width="180" align="center" src="https://dataskeptic.com/img/png/logo.png" border="0" alt="" /></a>
                                         </td>
                                     </tr>
                                 </table>
