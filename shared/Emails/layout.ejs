@@ -159,85 +159,13 @@
                                         align="left" valign="top">
                                         <% if(type)  {
                                             switch(type) {
-                                                case 'ORDER': %>
-                                                <table style="font-size:14px; text-align: left" border="0" cellpadding="0" cellspacing="0" width="100%">
-                                                    <tr>
-                                                        <td><strong>Type</strong></td>
-                                                        <td><%= type_order %></td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td><strong>Product ID</strong></td>
-                                                        <td><%= productId %></td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td><strong>Customer Name</strong></td>
-                                                        <td><%= customerName %></td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td><strong>Color</strong></td>
-                                                        <td><%= color %></td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td><strong>Quanity</strong></td>
-                                                        <td><%= quantity %></td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td><strong>Size</strong></td>
-                                                        <td><%= size %></td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td><strong>Address 1</strong></td>
-                                                        <td><%= address1 %></td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td><strong>Address 2</strong></td>
-                                                        <td><%= address2 %></td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td><strong>City</strong></td>
-                                                        <td><%= city %></td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td><strong>State</strong></td>
-                                                        <td><%= state %></td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td><strong>Zip</strong></td>
-                                                        <td><%= zip %></td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td><strong>Country</strong></td>
-                                                        <td><%= country %></td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td><strong>Design ID</strong></td>
-                                                        <td><%= designId %></td>
-                                                    </tr>
-
-                                                </table>
-                                                <% break;
                                                 case 'CONTACT': %>
-                                                <div style="font-size: 14px !important">From <%= name %> (<a href="mailto: <%= email %>" > <%= email %> </a>) </div>
-                                                <div><%= msg %></div>
+                                                    <div style="font-size: 14px !important">From <%= name %> (<a href="mailto: <%= email %>" > <%= email %> </a>) </div>
+                                                    <div><%= msg %></div>
                                                 <% break;
                                                 default: %>
-
-                                        <div><%= msg %></div>
-                                                <% break;
-                                            }
-                                        } %>
+                                                    <div><%- msg %></div>
+                                                <% break; }} %>
                                     </td>
                                 </tr>
                             </table>

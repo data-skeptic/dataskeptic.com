@@ -5,8 +5,7 @@ const ses = new aws.SES({apiVersion: '2010-12-01'});
 
 
 export const send = (destination, message, subject, source) => {
-    const body = getEmail(message);
-
+    const body = getEmail({msg: message});
     const emailRequestData = {
         Source: source ? source : "kyle@dataskeptic.com",
         Destination: { ToAddresses: [destination], BccAddresses: []},
