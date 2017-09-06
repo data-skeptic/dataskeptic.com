@@ -24,7 +24,8 @@ build:
     # npm mirrors can sometimes be flacky, better to use shippable_retry
     # http://docs.shippable.com/ci/advancedOptions/retry/
     - shippable_retry npm install
-    - docker build -t dataskeptic .
+    - shippable_retry npm run build
+    - docker build -t dataskeptic-rep .
     - docker tag dataskeptic-rep:latest 189353835613.dkr.ecr.us-west-1.amazonaws.com/dataskeptic-rep:latest
   post_ci:
     - docker push 189353835613.dkr.ecr.us-west-1.amazonaws.com/dataskeptic-rep:latest
