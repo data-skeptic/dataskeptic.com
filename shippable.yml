@@ -31,12 +31,11 @@ build:
     - echo "versionName=latest" >> $JOB_STATE/shipdemo-img.env
     - echo "buildNumber=$BUILD_NUMBER" >> $JOB_STATE/shipdemo-img.env
 
-
 # Integrations are used to connect external resources to CI
 # http://docs.shippable.com/integrations/overview/
 integrations:
   hub:
-    - integrationName: ECR_INTEGRATION
+    - integrationName: ECR_INT
       region: us-west-1
       type: ecr
   notifications:
