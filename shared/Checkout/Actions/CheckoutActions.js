@@ -70,7 +70,7 @@ export function checkoutRequestSuccess(message, data) {
         msg: `
             Hi ${data.first_name},
             
-            Thank you for supporting Data Skeptic.  Your order has been recieved and will be processed on our end right away.  Please allow a few weeks for shipping.  If you have any questions or issues with your order, don't hesitate to reach out to me directly.
+            Thank you for supporting Data Skeptic.  Your order has been received.  If you ordered physical goods, please allow a few weeks for shipping.  If you have any questions or issues with your order, don't hesitate to reach out to me directly.
 
             All the best,
 
