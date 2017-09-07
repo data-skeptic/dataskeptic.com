@@ -16,7 +16,7 @@ module.exports = {
 	    var send_headers = obj['send_headers']
 	    var toa = [to]
 	    var ses = new aws.SES({apiVersion: '2010-12-01'});
-	    var from = 'iliya.lysenko@thespoon.co'
+	    var from = 'orders@dataskeptic.com'
 	    var subject = obj['subject']
 	    var resp = {status: 200, msg: "ok"}
 	    var header = ''
@@ -24,7 +24,7 @@ module.exports = {
 	    var body = send_headers == "1" ? getEmail({msg: msg}) : msg
 	    var email_request = {
 	      Source: from, 
-	      Destination: { ToAddresses: toa, BccAddresses: ["iliya.lysenko@thespoon.co"]},
+	      Destination: { ToAddresses: toa, BccAddresses: ["orders@dataskeptic.com"]},
 	      Message: {
 	        Subject: {
 	          Data: subject
