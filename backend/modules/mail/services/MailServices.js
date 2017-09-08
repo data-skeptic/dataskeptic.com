@@ -1,19 +1,21 @@
 const AWS = require("aws-sdk");
 const {getEmail} = require('../../../../shared/Emails/template')
+const config = require('../../../../config/config.json');
+const env = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
 export const sendMail = (obj) => {
-
-
+    var email = config[env].emails.orders;
     var msg = obj['msg']
     var to = obj['to']
     var toa = [to]
     var ses = new AWS.SES({apiVersion: '2010-12-01'});
-    var from = 'orders@dataskeptic.com'
+    var from = email;
+    var type = obj['type'] || 'default';
     var subject = obj['subject']
     var resp = {status: 200, msg: "ok"}
-    var body = getEmail({msg: msg});
+    var body = getEmail(obj, type);
     var email_request = {
         Source: from,
-        Destination: {ToAddresses: toa, BccAddresses: ["orders@dataskeptic.com"]},
+        Destination: {ToAddresses: toa, BccAddresses: [email]},
         Message: {
             Subject: {
                 Data: subject
