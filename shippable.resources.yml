@@ -13,6 +13,8 @@ resources:
     version:
       portMappings:
         - 3000:3000
+        - 443:443
+        - 80:80
 
   - name: ecs-test-cluster
     type: cluster
