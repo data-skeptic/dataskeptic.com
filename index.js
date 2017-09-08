@@ -37,10 +37,11 @@ if (fs.existsSync('/ssl/cert.pem')) {
 		onError(err)
 	})
 
-	http.createServer(function (req, res) {
-	    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
-	    res.end();
-	}).listen(80);
+    http.createServer(function (req, res) {
+        var host = req.headers['host'].replace(/:[0-9]+$/g, "");
+        res.writeHead(301, { "Location": "https://" + host + req.url });
+        res.end();
+    }).listen(80, '0.0.0.0');
 
 	recordingServer(server)
 } else {
