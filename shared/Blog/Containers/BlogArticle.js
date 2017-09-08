@@ -30,6 +30,7 @@ class BlogArticle extends Component {
 
     isPostFetched(props) {
         const post = props.currentPost.toJS();
+
         if (!post || !post.prettyname) {
             return false;
         }
@@ -37,7 +38,7 @@ class BlogArticle extends Component {
         return ('/blog' + post.prettyname) === props.postUrl;
     }
 
-    componentDidMount() {
+    componentWillMount() {
         if (!this.isPostFetched(this.props)) {
             this.props.loadBlogPost(this.props.postUrl);
         }
@@ -96,11 +97,6 @@ class BlogArticle extends Component {
         }
 
         const post = currentPost.toJS();
-        const {content, title} = post;
-        if (!post || !content || !title) {
-            return <div className="loading-area"><Loading/></div>
-        }
-
         if (post.error) {
             return (
                 <div className="blog-article center">
@@ -109,6 +105,10 @@ class BlogArticle extends Component {
             )
         }
 
+        const {content, title} = post;
+        if (!post || !content || !title) {
+            return <div className="loading-area"><Loading/></div>
+        }
 
         const guid = post.guid;
         const isEpisode = !isUndefined(guid);
