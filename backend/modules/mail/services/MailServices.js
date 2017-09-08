@@ -9,9 +9,10 @@ export const sendMail = (obj) => {
     var toa = [to]
     var ses = new AWS.SES({apiVersion: '2010-12-01'});
     var from = email;
+    var type = obj['type'] || 'default';
     var subject = obj['subject']
     var resp = {status: 200, msg: "ok"}
-    var body = getEmail({msg: msg});
+    var body = getEmail(obj, type);
     var email_request = {
         Source: from,
         Destination: {ToAddresses: toa, BccAddresses: [email]},

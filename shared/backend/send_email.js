@@ -13,17 +13,17 @@ module.exports = {
 	send_email: function(req, res) {
 		var email = config[env].emails.orders;
 		var obj = req.body
+		console.log(obj);
 	    var msg = obj['msg']
 	    var to = obj['to']
+		var type = obj['type'] || 'default';
 	    var send_headers = obj['send_headers']
 	    var toa = [to]
 	    var ses = new aws.SES({apiVersion: '2010-12-01'});
 	    var from = email
 	    var subject = obj['subject']
 	    var resp = {status: 200, msg: "ok"}
-	    var header = ''
-	    var footer = ''
-	    var body = send_headers == "1" ? getEmail({msg: msg}) : msg
+	    var body = getEmail(obj, type)
 	    var email_request = {
 	      Source: from, 
 	      Destination: { ToAddresses: toa, BccAddresses: [email]},
