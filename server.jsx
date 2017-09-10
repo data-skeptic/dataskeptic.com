@@ -85,10 +85,12 @@ var slack_key = ""
 var aws_proposals_bucket = ""
 var rfc_table_name = "rfc"
 var latest_rfc_id = "test-request"
+var itunesId = "xxxx"
 
 //=========== CONFIG
 const c = require('./config/config.json')
 console.dir('env = ' + env)
+itunesId = c[env]['itunes']
 stripe_key = c[env]['stripe']
 sp_key = c[env]['sp']
 slack_key = c[env]['slack']
@@ -668,7 +670,8 @@ const renderPage = (req, res) => {
                     staticHTML: html,
                     initialState: state,
                     meta,
-                    env
+                    env,
+                    itunesId
                 });
             })
             .catch(err => {
