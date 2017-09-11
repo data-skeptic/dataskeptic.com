@@ -1,0 +1,11 @@
+{
+  "name": "lambdaForSlack",
+  "version": "0.0.1",
+  "dependencies": {
+    "request": "^2.81.0"
+  },
+  "scripts": {
+    "create": "claudia create --region us-east-1 --handler index.handler --policies policies/lambda_execute_policy.json",
+    "update": "claudia update --set-env-from-json env.json"
+  }
+}
