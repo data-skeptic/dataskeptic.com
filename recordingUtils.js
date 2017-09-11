@@ -2,7 +2,7 @@ const fs = require('fs');
 const fse = require('fs-extra');
 const path = require('path');
 
-const sys = require('sys')
+const sys = require('util')
 const exec = require('child_process').exec;
 
 const AWS = require("aws-sdk");
