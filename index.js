@@ -38,9 +38,8 @@ if (fs.existsSync('/ssl/cert.pem')) {
 	})
 
     http.createServer(function (req, res) {
-    	const host = 'dataskeptic.com';
-
-        res.writeHead(301, { "Location": "https://" + host + req.url });
+        res.writeHead(200, {'Content-Type': 'text/plain'});
+        res.write('DataSkeptic');
         res.end();
     }).listen(80, '0.0.0.0');
 
