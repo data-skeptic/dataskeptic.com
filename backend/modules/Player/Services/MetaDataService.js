@@ -5,7 +5,7 @@ const uuidV4 = require('uuid/v4');
 const moment = require('moment');
 const docClient = new AWS.DynamoDB.DocumentClient();
 
-var env = process.NODE_ENV === "production" ? "prod" : "dev"
+var env = process.env.NODE_ENV === "production" ? "prod" : "dev"
 
 var tablename = `${config[env].player_metadata.play_metadata}`
 
