@@ -15,9 +15,10 @@ Then save it, and now, you are able to work with claudia.js
 3. Then, in left menu you need to choose Incoming Webhooks. Then, on the bottom of page create one you need.
 On next step you should paste is as SLACK_WEBHOOK_URL env variable.
 4. Before deploying lambda function you have to look in package.json and find there lambda_export script.
-You need to fine --set-env part, and set environment variables BUCKET and SLACK_WEBHOOK_URL;
+You need to edit env.json, and set environment variables BUCKET and SLACK_WEBHOOK_URL;
 5. `npm run i`
-6. `npm run lambda_export`
-7. After previous step done, go to AWS lambda menu on your account, choose new created lambda
-8. Go to trigger menu, select add trigger. YOu need to choose S3 trigger, set bucket you need, event type => Object create(all), suffix => wav
-9. Now lambda will check for new wav files on bucket and post link on it into slack.
+6. `npm run create`
+7. `npm run update`
+8. After previous step done, go to AWS lambda menu on your account, choose new created lambda
+9. Go to trigger menu, select add trigger. YOu need to choose S3 trigger, set bucket you need, event type => Object create(all), suffix => wav
+10. Now lambda will check for new wav files on bucket and post link on it into slack.
