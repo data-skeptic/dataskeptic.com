@@ -44,12 +44,3 @@ export const sendMail = (obj) => {
         });
     })
 };
-
-export const sendMailLambda = (data) => {
-    var msg = getEmail(data, 'contact');
-
-    msg = msg.replace(new RegExp('\n', 'g'), '<br/>');
-    let dataToSend = {...data, msg: msg};
-    const MAIL_URL = "https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/contact";
-    return axios.post(MAIL_URL, dataToSend)
-}

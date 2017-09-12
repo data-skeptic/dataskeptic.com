@@ -16,9 +16,9 @@ class ContactFormContainer extends Component {
     }
 
     handleSubmit({name, email, message}) {
-        const MAIL_SERVICE_URL = "api/v1/mail/lambda";
+        const MAIL_SERVICE_URL = "api/v1/mail";
         const error = '';
-        const data = {name, email, msg: message, error};
+        const data = {name, email, msg: message, error, type: "contact"};
         return axios.post(MAIL_SERVICE_URL, data);
     }
 

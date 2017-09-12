@@ -17,18 +17,5 @@ module.exports = (cache) => {
             })
     });
 
-    router.post('/lambda', function (req, res) {
-        console.dir({
-            b: req.body
-        })
-
-        MailServices.sendMailLambda(req.body)
-            .then((data) => {
-                res.send(data);
-            }).catch((err) => {
-                res.send(err);
-            })
-    });
-
     return router;
 }
