@@ -43,7 +43,7 @@ if (fs.existsSync('/ssl/cert.pem')) {
 	  	res.end();
     }).listen(80, '0.0.0.0');
 
-	recordingServer(server)
+	// recordingServer(server)
 } else {
 	app.listen(3000, function () {
 		console.log('Server listening on 3000');
