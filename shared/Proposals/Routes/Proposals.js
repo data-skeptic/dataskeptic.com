@@ -137,7 +137,7 @@ class Proposals extends Component {
                     <Container>
                         <div className="login-container">
                             <h2>Welcome to the Data Skeptic</h2>
-                            <h3>Request For Comment</h3>
+                            <h3>Request For Comment System</h3>
                             <p>
                             This is the login to an invite-only browser based recording system<br/>
                             where you can share your thoughts on a chosen topic.  Your comments<br/>
