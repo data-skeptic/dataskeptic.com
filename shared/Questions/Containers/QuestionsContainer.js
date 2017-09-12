@@ -56,16 +56,6 @@ class QuestionsContainer extends Component {
                 <div>
                     <QuestionForm
                         allowSubmit={!!confirmPolicy}
-                        activeStep ={activeStep}
-                        errorMessage = {errorMessage}
-                        ready={this.recordingReady}
-                        recording={this.recorderRecording}
-                        stop={this.recorderStop}
-                        review={this.recorderReview}
-                        submit={this.recorderSubmit}
-                        complete={this.recorderComplete}
-                        error={this.recorderError}
-                        submittedUrl={submittedUrl}
                         initialValues={{
                             confirmPolicy:true
                         }}

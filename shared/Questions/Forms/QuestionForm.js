@@ -4,8 +4,11 @@ import {UserInfoBox} from "../../Proposals/Components/UserInfoBox/UserInfoBox";
 import FormController from '../../Forms/Components/FormController/FormController'
 import {renderField} from "../../Forms/Components/Field/Field";
 import Recorder, {steps} from '../../Recorder';
+import RecorderContainer from '../Recorder/Containers/RecorderContainer'
 
-const QuestionForm = ({handleSubmit,
+
+const QuestionForm = ({
+                          handleSubmit,
                           pristine,
                           reset,
                           submitting,
@@ -14,12 +17,12 @@ const QuestionForm = ({handleSubmit,
                           errorMessage,
                           ready,
                           recording,
-                          stop,review,
+                          stop, review,
                           submit,
                           complete,
                           submittedUrl,
                           error
-}) => (
+                      }) => (
 
     <FormController
         name={`question`}
@@ -28,30 +31,23 @@ const QuestionForm = ({handleSubmit,
         submitValue={`Submit`}
     >
         <UserInfoBox/>
-        <Field
-            name={`confirmPolicy`}
-            component={renderField}
-            type={`checkbox`}
-            label={`I authorize Data Skeptic to use my recording in a future episode.
-                   I acknowledge my recording will be associated with whatever I type in the 'Name' blank above.
-                   Feel free to type anonymous if you wish.`}
-        />
+        <div className="policy-confirm-container">
+                <Field
+                    id='confirmPolicy'
+                    name={`confirmPolicy`}
+                    component={`input`}
+                    type={`checkbox`}
+                />
+                <label htmlFor='confirmPolicy'>I authorize Data Skeptic to use my recording in a future episode.
+                    I acknowledge my recording will be associated with whatever I type in the 'Name' blank above.
+                    Feel free to type anonymous if you wish.
+                </label>
+        </div>
         {!allowSubmit
             ? <p className={`error`}>Sorry, we require this consent before submitting audio feedback.
                 If this is a concern for you, we recommend sending an email instead.</p>
-            : <div></div>}
-        <Recorder
-            activeStep={activeStep}
-            errorMessage={errorMessage}
-            ready={ready}
-            recording={recording}
-            stop={stop}
-            review={review}
-            submit={submit}
-            complete={complete}
-            error={error}
-            submittedUrl={submittedUrl}
-        />
+            :   <RecorderContainer/>}
+
 
     </FormController>
 )
