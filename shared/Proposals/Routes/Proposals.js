@@ -98,13 +98,7 @@ class Proposals extends Component {
                             </div>
                             {!isClosed && (
                                 <div>
-                                    <h2>Request for Comment</h2>
-                                    <p>Thanks for considering contributing your thoughts for an upcoming episode. Please
-                                        review the
-                                        topic below and share any thoughts you have on it. We aren't always able to use
-                                        every
-                                        comment submitted, but we will do our best and appreciate your input.</p>
-                                    <h3><b>Current topic:</b> {topic}</h3>
+                                    <h3>Current topic: {topic}</h3>
                                     <p dangerouslySetInnerHTML={this.getMarkdown(`${long_description}`)}>
 
                                     </p>
@@ -144,6 +138,8 @@ class Proposals extends Component {
                         <div className="login-container">
                             <h2>Welcome to the Data Skeptic</h2>
                             <h3>Request For Comment</h3>
+                            <p>
+                            This is the login to an invite-only browser based recording system where you can share your thoughts on a chosen topic.  Your comments are likely to be included in a future episode of Data Skeptic.
                             <button onClick={this.login} className="btn btn-primary">Login</button>
                         </div>
                     </Container>
