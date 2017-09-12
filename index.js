@@ -38,9 +38,8 @@ if (fs.existsSync('/ssl/cert.pem')) {
 	})
 
     http.createServer(function (req, res) {
-		res.writeHead(200, {'Content-Type': 'text/plain'});
-	  	res.write('DataSkeptic');
-	  	res.end();
+        res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+        res.end();
     }).listen(80, '0.0.0.0');
 
 	// recordingServer(server)
