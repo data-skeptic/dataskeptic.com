@@ -5,6 +5,7 @@ var sp_key = "test_Z_gOWbE8iwjhXf4y4vqizQ";
 
 module.exports = (cache) => {
     const router = express.Router();
+
     router.post('/', function (req, res) {
         MailServices
             .sendMail(req.body)
@@ -12,6 +13,19 @@ module.exports = (cache) => {
                 res.send(data);
             })
             .catch((err) => {
+                res.send(err);
+            })
+    });
+
+    router.post('/lambda', function (req, res) {
+        console.dir({
+            b: req.body
+        })
+
+        MailServices.sendMailLambda(req.body)
+            .then((data) => {
+                res.send(data);
+            }).catch((err) => {
                 res.send(err);
             })
     });

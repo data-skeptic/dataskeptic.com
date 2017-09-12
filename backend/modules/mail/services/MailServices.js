@@ -1,7 +1,9 @@
 const AWS = require("aws-sdk");
 const {getEmail} = require('../../../../shared/Emails/template')
 const config = require('../../../../config/config.json');
+import axios from 'axios';
 const env = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
+
 export const sendMail = (obj) => {
     var email = config[env].emails.orders;
     var msg = obj['msg']
@@ -42,3 +44,12 @@ export const sendMail = (obj) => {
         });
     })
 };
+
+export const sendMailLambda = (data) => {
+    var msg = getEmail(data, 'contact');
+
+    msg = msg.replace(new RegExp('\n', 'g'), '<br/>');
+    let dataToSend = {...data, msg: msg};
+    const MAIL_URL = "https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/contact";
+    return axios.post(MAIL_URL, dataToSend)
+}
