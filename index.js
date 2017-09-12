@@ -38,12 +38,13 @@ if (fs.existsSync('/ssl/cert.pem')) {
 	})
 
     http.createServer(function (req, res) {
-        var host = req.headers['host'].replace(/:[0-9]+$/g, "");
+        const host = 'dataskeptic.com';
+
         res.writeHead(301, { "Location": "https://" + host + req.url });
         res.end();
     }).listen(80, '0.0.0.0');
 
-	recordingServer(server)
+	// recordingServer(server)
 } else {
 	app.listen(3000, function () {
 		console.log('Server listening on 3000');
