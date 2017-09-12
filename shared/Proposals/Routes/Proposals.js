@@ -139,8 +139,16 @@ class Proposals extends Component {
                             <h2>Welcome to the Data Skeptic</h2>
                             <h3>Request For Comment</h3>
                             <p>
-                            This is the login to an invite-only browser based recording system where you can share your thoughts on a chosen topic.  Your comments are likely to be included in a future episode of Data Skeptic.
+                            This is the login to an invite-only browser based recording system<br/>
+                            where you can share your thoughts on a chosen topic.  Your comments<br/>
+                            are likely to be included in a future episode of Data Skeptic.
+                            </p>
                             <button onClick={this.login} className="btn btn-primary">Login</button>
+                            <p> </p>
+                            <p> </p>
+                            <p> </p>
+                            <p> </p>
+                            <p> </p>
                         </div>
                     </Container>
                 </div>
