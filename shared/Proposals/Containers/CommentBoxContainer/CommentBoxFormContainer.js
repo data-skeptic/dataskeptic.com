@@ -175,7 +175,7 @@ class CommentBoxFormContainer extends Component {
                 return `Your recording has been successfully uploaded. Thanks for sharing your thoughts!`
             }
 
-            return `Thank you for proposal!`
+            return `Thank you for your feedback!`
         } else {
             return false;
         }
@@ -184,7 +184,7 @@ class CommentBoxFormContainer extends Component {
     getSubmitText() {
         const {messageType} = this.props;
 
-        return (messageType === RECORDING) ? 'Ready to submit' : 'Submit proposal';
+        return (messageType === RECORDING) ? 'Ready to submit' : 'Submit comment';
     }
 
     reset() {
@@ -203,6 +203,8 @@ class CommentBoxFormContainer extends Component {
 /*
     Disabling these for now.  Leave them here in case I easily want to add them back.
     
+                <Debug data={values}/>
+                <Debug data={syncErrors}/>
                         <CommentTypeBox key={TEXT}/>
 
                         <UploadFileTypeBox
@@ -215,8 +217,6 @@ class CommentBoxFormContainer extends Component {
 
         return (
             <div className="comment-box-form-container">
-                <Debug data={values}/>
-                <Debug data={syncErrors}/>
                 <CommentTypeSelectorContainer onChangeCommentType={this.onChangeCommentType} messageType={messageType}/>
                 <b>{customSubmitting}</b>
                 <CommentBoxForm
@@ -229,7 +229,7 @@ class CommentBoxFormContainer extends Component {
                     initialValues={{
                         name: user.name,
                         email: user.email,
-                        type: 'TEXT',
+                        type: 'RECORDING',
                         files: [],
                         recording: {}
                     }}

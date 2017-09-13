@@ -45,7 +45,7 @@ class Proposals extends Component {
 
     static getPageMeta() {
         return {
-            title: 'Proposals | Data Skeptic'
+            title: 'Request for Comment | Data Skeptic'
         }
     }
 
@@ -93,30 +93,33 @@ class Proposals extends Component {
 
                     <Container>
                         <Content>
-                            <div className="log-out-wrapper">
-                                <button className="btn" onClick={this.logout}><i className="glyphicon glyphicon-arrow-left"></i>Log out</button>
-                            </div>
-                            {!isClosed && (
-                                <div>
-                                    <h3>Current topic: {topic}</h3>
-                                    <p dangerouslySetInnerHTML={this.getMarkdown(`${long_description}`)}>
-
-                                    </p>
-
+                            <div class="row">
+                                <div className="col-xs-12 col-md-8 countdown-wrapper">
                                     {deadline ?
-                                        <p className="deadline"><b>Time to comment:</b><Countdown to={to.toString()}
-                                                                                                  onDeadlineReached={this.deadline}/>
-                                        </p>
-                                        : null}
+                                            <p className="deadline"><b>Time to comment:</b><Countdown to={to.toString()}
+                                                                                                      onDeadlineReached={this.deadline}/>
+                                            </p>
+                                            : null}
+                                </div>
+                                <div className="col-xs-12 col-md-4 log-out-wrapper">
+                                    <button className="btn" onClick={this.logout}><i className="glyphicon glyphicon-arrow-left"></i>Log out</button>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                            {!isClosed && (
+                                <div className="col-xs-12">
+                                    <span className="rfc-title"><b>Topic:</b> {topic}</span>
+                                    <p dangerouslySetInnerHTML={this.getMarkdown(`${long_description}`)}>
+                                    </p>
                                 </div>
                             )}
 
-
                             {isClosed
                                 ?
-                                <div className="panel panel-default">
+                                <div className="col-xs-12 panel panel-default">
                                     <div className="panel-heading">
-                                        <h3 className="panel-title">This RFC has closed.</h3>
+                                        <h3 className="panel-title">The last Request For Comment has closed</h3>
                                     </div>
                                     <div className="panel-body">
                                         We don't have any active topics. Please check back soon when we launch the next!
@@ -125,6 +128,7 @@ class Proposals extends Component {
                                 :
                                 <CommentBoxFormContainer user={user} aws_proposals_bucket={aws_proposals_bucket}/>
                             }
+                            </div>
 
                         </Content>
                     </Container>
@@ -144,11 +148,13 @@ class Proposals extends Component {
                             are likely to be included in a future episode of Data Skeptic.
                             </p>
                             <button onClick={this.login} className="btn btn-primary">Login</button>
-                            <p> </p>
-                            <p> </p>
-                            <p> </p>
-                            <p> </p>
-                            <p> </p>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
                         </div>
                     </Container>
                 </div>
