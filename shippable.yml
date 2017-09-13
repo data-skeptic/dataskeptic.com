@@ -40,7 +40,7 @@ integrations:
     - integrationName: ECR_INT
       region: us-west-1
       type: ecr
-    - integrationName: crep-deploy2
+    - integrationName: ds-deploy
       region: us-east-1
       type: ecr
   notifications:
