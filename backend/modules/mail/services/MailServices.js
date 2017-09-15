@@ -1,7 +1,9 @@
 const AWS = require("aws-sdk");
 const {getEmail} = require('../../../../shared/Emails/template')
 const config = require('../../../../config/config.json');
+import axios from 'axios';
 const env = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
+
 export const sendMail = (obj) => {
     var email = config[env].emails.orders;
     var msg = obj['msg']
