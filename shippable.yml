@@ -25,7 +25,7 @@ build:
     # http://docs.shippable.com/ci/advancedOptions/retry/
     - shippable_retry npm install
     - shippable_retry npm run build
-    #- aws s3 cp s3://config-dataskeptic.com/config.json config.json
+    - aws s3 cp s3://thespoon/config/config.json config.json
     - docker build -t dataskeptic-rep .
     - docker tag dataskeptic-rep:latest 189353835613.dkr.ecr.us-west-1.amazonaws.com/dataskeptic-rep:latest
   post_ci:
@@ -40,9 +40,6 @@ integrations:
     - integrationName: ECR_INT
       region: us-west-1
       type: ecr
-    # - integrationName: ds-deploy
-      # region: us-east-1
-      # type: ecr
   notifications:
     - integrationName: email
       type: email
