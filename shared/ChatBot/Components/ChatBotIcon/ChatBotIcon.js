@@ -4,5 +4,6 @@ import React from 'react';
 
 
 const ChatBotIcon = ({showModal}) =>(
+  <div></div>
 )
 export default ChatBotIcon;
