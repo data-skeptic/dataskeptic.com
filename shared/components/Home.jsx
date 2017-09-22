@@ -63,22 +63,7 @@ class Home extends Component {
           </div>
         </div>
         <div className="row">
-          <div className="col-xs-12 col-sm-8">
-            <div className="carousel">
-              <Slider {...settings}>
-                <div className="card">
-                  <AdvertiserCard content={this.props.cardContent}/>
-                </div>
-                <div className="card">
-                  <SocialMediaCard />
-                </div>
-                <div className="card">
-                  <LatestBlogCard blog={blog_focus.blog} contributor={blog_focus.contributor} />
-                </div>
-              </Slider>
-            </div>          
-          </div>
-          <div className="col-xs-12 col-sm-4">
+          <div className="col-xs-12 col-sm-12">
             <LatestEpisodePlayer guid={guid} />
             <MailingList />
           </div>
