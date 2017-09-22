@@ -1,6 +1,8 @@
 import React from 'react';
 
+//    <div className="chat-bot-icon" onClick={showModal}></div>
+
+
 const ChatBotIcon = ({showModal}) =>(
-    <div className="chat-bot-icon" onClick={showModal}></div>
 )
 export default ChatBotIcon;
