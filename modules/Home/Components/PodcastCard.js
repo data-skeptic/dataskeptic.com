@@ -10,11 +10,11 @@ export default ({name, media, title, description, author, avatar, date}) => (
                 <Title>{title}</Title>
                 <Description>{description}</Description>
                 <Author>
-                    <Avatar src={avatar} />
-                    <Author>
+                    <Avatar src={avatar}/>
+                    <Info>
                         <Name>{author}</Name>
                         <Date>{date}</Date>
-                    </Author>
+                    </Info>
                 </Author>
             </Inner>
         </Card>
@@ -45,7 +45,7 @@ export const Card = styled.div`
 	border: solid 1px rgba(0, 0, 0, 0.1);
 `
 
-export const  Description = styled.p`
+export const Description = styled.p`
     font-size: 16px;
 	line-height: 1.12;
 	text-align: left;
@@ -64,6 +64,7 @@ export const Media = styled.div`
     > * {
       width:100%;
       height:auto;
+      max-height:180px;
     }
 `
 
@@ -72,19 +73,24 @@ export const Line = styled.p`
     padding: 0px;
 `
 
-export  const Name = Line.extend`
+export const Name = Line.extend`
     font-size: 14px;
 	color: rgba(0, 0, 0, 0.7);
 `
 
-export  const Date = Line.extend`
+export const Date = Line.extend`
     font-size: 12px;
 	font-weight: 300;
 	color: #c1c1c1;
 `
 
-export  const Author = styled.div`
+export const Author = styled.div`
+  display: flex;
+  align-items: center;
   padding-left:15px;
 `
 
+export const Info = styled.div`
+   padding-left:15px;
 
+`
