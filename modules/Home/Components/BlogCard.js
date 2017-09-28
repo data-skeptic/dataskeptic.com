@@ -1,8 +1,35 @@
 import React from "react";
-import styled from 'styled-components'
+import {
+    Wrapper,
+    Label,
+    Card,
+    Media,
+    Inner,
+    Title,
+    Description,
+    Author,
+    Avatar,
+    Info,
+    Name,
+    Date
+} from "../../../shared/styles";
 
-export default () => (
-    <Wrapper>The Latest on the Blog</Wrapper>
-);
-
-const Wrapper = styled.section``
+export default ({name, media, title, description, author, avatar, date}) => (
+    <Wrapper>
+        <Label>{name}</Label>
+        <Card>
+            <Media>{media}</Media>
+            <Inner>
+                <Title>{title}</Title>
+                <Description>{description}</Description>
+                <Author>
+                    <Avatar src={avatar}/>
+                    <Info>
+                        <Name>{author}</Name>
+                        <Date>{date}</Date>
+                    </Info>
+                </Author>
+            </Inner>
+        </Card>
+    </Wrapper>
+)

@@ -1,8 +1,28 @@
 import React from "react";
-import styled from 'styled-components'
+import {
+    Wrapper,
+    Label,
+    Card,
+    SponsorTitle,
+    SponsorMedia,
+    SponsorPromo
 
-export default () => (
-    <Wrapper>Daily sponsor</Wrapper>
+} from "../../../shared/styles";
+
+export default ({name, media, title, promo}) => (
+    <Wrapper>
+        <Label>{name}</Label>
+        <Card>
+            <SponsorTitle>{title}</SponsorTitle>
+            <SponsorMedia>
+                <img src={media} alt="sponsor"/>
+            </SponsorMedia>
+            <SponsorPromo>
+                {promo}
+            </SponsorPromo>
+        </Card>
+    </Wrapper>
+
 );
 
-const Wrapper = styled.section``
+

@@ -7,11 +7,12 @@ import styled from 'styled-components'
 export default ({ latestPost, latestEpisode, sponsor}) => (
     <Cards>
         <PodcastCard
-            {...latestEpisode}
+            {...latestPost}
         />
 
         <BlogCard
-            {...latestPost}
+
+            {...latestEpisode}
         />
 
         <SponsorCard

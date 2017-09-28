@@ -28,13 +28,20 @@ export default class Dashboard extends Component {
         }
 
         latestEpisode = {
-            name: 'The Latest on the Podcast',
+            name: 'The Latest on the Blog',
             media: <img src="http://via.placeholder.com/45x45" alt="avatar"/>,
-            title: 'Interview with Rohan Kumar, GM for the Database Systems Group at Microsoft',
-            description: 'This episode features discussion of database as a service, database migration, threat detection, R/python in SQL Server, and use cases',
-            author: 'Kyle Polish',
+            title: 'Everything I`ve learned about the USC/L.A. Times poll',
+            description: 'In statistics, two random variables might depend on one another. We call this conditional dependence... ',
+            author: 'Christine Zhang',
             avatar: 'http://via.placeholder.com/45x45',
-            date: 'June 12, 2017'
+            date: 'June 9,  2017'
+        }
+        sponsor={
+            name: 'Daily sponsor',
+            media:'http://via.placeholder.com/45x45',
+            title:'Thanks to Brilliant for sponsoring this week`s episode of Data Skeptic',
+            promo:'Please visit http://brilliant.org/dataskeptics but only if you`re clever'
+
         }
 
         return (
