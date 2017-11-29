@@ -4,12 +4,12 @@ import Link from './Link'
 
 export default (props) => (
     <HeaderWrapper>
-        <Logo>
+        <Logo href="/">
             <img src="/static/logo.svg" alt="DataSkeptic"/>
         </Logo>
         <Navs>
-            <Link href="">Podcast</Link>
-            <Link href="">Blog</Link>
+            <Link href="/podcasts">Podcast</Link>
+            <Link href="/blog">Blog</Link>
             <Link href="">Projects</Link>
             <Link href="">Services</Link>
             <Link href="">About</Link>
@@ -51,7 +51,8 @@ const Icon = styled.div`
 `
 const Number = styled.div`
 `
-const Logo = styled.div`
+const Logo = styled(Link)`
+    display: block;
     margin-left:40px;
 `
 

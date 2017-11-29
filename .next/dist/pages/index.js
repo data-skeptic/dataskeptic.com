@@ -5,40 +5,40 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = undefined;
 
-var _regenerator = require('next/node_modules/babel-runtime/regenerator');
+var _regenerator = require('babel-runtime/regenerator');
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _promise = require('next/node_modules/babel-runtime/core-js/promise');
+var _promise = require('babel-runtime/core-js/promise');
 
 var _promise2 = _interopRequireDefault(_promise);
 
-var _asyncToGenerator2 = require('next/node_modules/babel-runtime/helpers/asyncToGenerator');
+var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
-var _getPrototypeOf = require('next/node_modules/babel-runtime/core-js/object/get-prototype-of');
+var _getPrototypeOf = require('babel-runtime/core-js/object/get-prototype-of');
 
 var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 
-var _classCallCheck2 = require('next/node_modules/babel-runtime/helpers/classCallCheck');
+var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
 
 var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-var _createClass2 = require('next/node_modules/babel-runtime/helpers/createClass');
+var _createClass2 = require('babel-runtime/helpers/createClass');
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _possibleConstructorReturn2 = require('next/node_modules/babel-runtime/helpers/possibleConstructorReturn');
+var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstructorReturn');
 
 var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-var _inherits2 = require('next/node_modules/babel-runtime/helpers/inherits');
+var _inherits2 = require('babel-runtime/helpers/inherits');
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
 var _class,
-    _jsxFileName = '/Users/glozhkovoy/Work/dataskeptic.com/pages/index.js?entry';
+    _jsxFileName = '/Users/andrew_workstation/Documents/Work/dataskeptic.com/pages/index.js?entry';
 
 var _react = require('react');
 
@@ -64,6 +64,12 @@ var _styledComponents = require('styled-components');
 
 var _styledComponents2 = _interopRequireDefault(_styledComponents);
 
+var _SubscribeForm = require('../modules/Home/Components/SubscribeForm');
+
+var _SubscribeForm2 = _interopRequireDefault(_SubscribeForm);
+
+var _reactFinalForm = require('react-final-form');
+
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
@@ -88,7 +94,7 @@ var Dashboard = (0, _Page2.default)(_class = function (_Component) {
                 name: 'The Latest on the Podcast',
                 media: _react2.default.createElement('img', { src: 'http://via.placeholder.com/45x45', alt: 'avatar', __source: {
                         fileName: _jsxFileName,
-                        lineNumber: 22
+                        lineNumber: 24
                     }
                 }),
                 title: 'Interview with Rohan Kumar, GM for the Database Systems Group at Microsoft',
@@ -99,41 +105,56 @@ var Dashboard = (0, _Page2.default)(_class = function (_Component) {
             };
 
             latestEpisode = {
-                name: 'The Latest on the Podcast',
+                name: 'The Latest on the Blog',
                 media: _react2.default.createElement('img', { src: 'http://via.placeholder.com/45x45', alt: 'avatar', __source: {
                         fileName: _jsxFileName,
-                        lineNumber: 32
+                        lineNumber: 34
                     }
                 }),
-                title: 'Interview with Rohan Kumar, GM for the Database Systems Group at Microsoft',
-                description: 'This episode features discussion of database as a service, database migration, threat detection, R/python in SQL Server, and use cases',
-                author: 'Kyle Polish',
+                title: 'Everything I`ve learned about the USC/L.A. Times poll',
+                description: 'In statistics, two random variables might depend on one another. We call this conditional dependence... ',
+                author: 'Christine Zhang',
                 avatar: 'http://via.placeholder.com/45x45',
-                date: 'June 12, 2017'
+                date: 'June 9,  2017'
+            };
+            sponsor = {
+                name: 'Daily sponsor',
+                media: 'http://via.placeholder.com/45x45',
+                title: 'Thanks to Brilliant for sponsoring this week`s episode of Data Skeptic',
+                promo: 'Please visit http://brilliant.org/dataskeptics but only if you`re clever'
+
             };
 
             return _react2.default.createElement(_Container2.default, {
                 __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 41
+                    lineNumber: 50
                 }
             }, _react2.default.createElement(Intro, {
                 __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 42
+                    lineNumber: 51
                 }
             }, _react2.default.createElement(_Marker2.default, {
                 __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 43
+                    lineNumber: 52
                 }
-            }, 'Data Skeptic'), 'is your source for a perspective of scientific skepticism'), _react2.default.createElement(_Cards2.default, {
+            }, 'Data Skeptic'), ' is your source for a perspective of scientific skepticism'), _react2.default.createElement(_Cards2.default, {
                 latestPost: latestPost,
                 latestEpisode: latestEpisode,
                 sponsor: sponsor,
                 __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 46
+                    lineNumber: 55
+                }
+            }), _react2.default.createElement(_reactFinalForm.Form, {
+                onSubmit: function onSubmit(data) {
+                    return alert(data);
+                },
+                render: _SubscribeForm2.default, __source: {
+                    fileName: _jsxFileName,
+                    lineNumber: 60
                 }
             }));
         }
@@ -182,4 +203,4 @@ var Intro = _styledComponents2.default.h1.withConfig({
 }, function (props) {
     return props.theme.colors.dark;
 });
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInBhZ2VzL2luZGV4LmpzIl0sIm5hbWVzIjpbIkRhc2hib2FyZCIsInByb3BzIiwibGF0ZXN0UG9zdCIsImxhdGVzdEVwaXNvZGUiLCJzcG9uc29yIiwibmFtZSIsIm1lZGlhIiwidGl0bGUiLCJkZXNjcmlwdGlvbiIsImF1dGhvciIsImF2YXRhciIsImRhdGUiLCJzdG9yZSIsImRpc3BhdGNoIiwiZ2V0U3RhdGUiLCJxdWVyeSIsInN0YXRlIiwicHJvbWlzZXMiLCJhbGwiLCJJbnRybyIsImgxIiwidGhlbWUiLCJjb2xvcnMiLCJkYXJrIl0sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQTs7OztBQUNBOzs7O0FBQ0E7Ozs7QUFDQTs7OztBQUNBOzs7O0FBQ0E7Ozs7Ozs7O0ksQUFHcUI7Ozs7Ozs7Ozs7aUNBUVI7eUJBQ3NDLEtBRHRDLEFBQzJDO2dCQUQzQyxBQUNBLG9CQURBLEFBQ0E7Z0JBREEsQUFDWSx1QkFEWixBQUNZO2dCQURaLEFBQzJCLGlCQUQzQixBQUMyQixBQUVoQzs7O3NCQUFhLEFBQ0gsQUFDTjs4REFBWSxLQUFMLEFBQVMsb0NBQW1DLEtBQTVDLEFBQWdEO2tDQUFoRDtvQ0FGRSxBQUVGLEFBQ1A7QUFETztpQkFBQTt1QkFGRSxBQUdGLEFBQ1A7NkJBSlMsQUFJSSxBQUNiO3dCQUxTLEFBS0QsQUFDUjt3QkFOUyxBQU1ELEFBQ1I7c0JBUEosQUFBYSxBQU9ILEFBR1Y7QUFWYSxBQUNUOzs7c0JBU1ksQUFDTixBQUNOOzhEQUFZLEtBQUwsQUFBUyxvQ0FBbUMsS0FBNUMsQUFBZ0Q7a0NBQWhEO29DQUZLLEFBRUwsQUFDUDtBQURPO2lCQUFBO3VCQUZLLEFBR0wsQUFDUDs2QkFKWSxBQUlDLEFBQ2I7d0JBTFksQUFLSixBQUNSO3dCQU5ZLEFBTUosQUFDUjtzQkFQSixBQUFnQixBQU9OLEFBR1Y7QUFWZ0IsQUFDWjs7bUNBVUEsMEJBQUE7OzhCQUFBO2dDQUFBLEFBQ0k7QUFESjtBQUFBLGFBQUEsa0JBQ0ssY0FBRDs7OEJBQUE7Z0NBQUEsQUFDSTtBQURKO0FBQUEsK0JBQ0ksdUJBQUE7OzhCQUFBO2dDQUFBO0FBQUE7QUFBQSxlQURKLEFBQ0ksaUJBRlIsQUFDSSxBQUlBOzRCQUFBLEFBQ2dCLEFBQ1o7K0JBRkosQUFFbUIsQUFDZjt5QkFISixBQUdhOzs4QkFIYjtnQ0FOUixBQUNJLEFBS0ksQUFPWDtBQVBXO0FBQ0k7Ozs7Ozt3QyxBQXBDYztvQkFBUSxBLHVCQUFBLEE7b0JBQVUsQSx1QixBQUFBO29CQUFXLEEsYyxBQUFBOzs7OztpQ0FDakQ7QSx3QyxBQUFRLEFBQ1I7QSwyQ0FBVyxBOzt1Q0FDWCxrQkFBQSxBQUFRLEksQUFBUixBQUFZOzs7Ozs7Ozs7Ozs7Ozs7Ozs7OztrQixBQUxMOztBQThDckIsSUFBTSxtQ0FBQSxBQUFlO2lCQUFmO0FBQUEsQ0FBUSxpSUFNZSxpQkFBQTtXQUFTLE1BQUEsQUFBTSxNQUFOLEFBQVksT0FBckIsQUFBNEI7QUFObkQsR0FPTyxpQkFBQTtXQUFTLE1BQUEsQUFBTSxNQUFOLEFBQVksT0FBckIsQUFBNEI7QUFQekMsQUFBTSIsImZpbGUiOiJpbmRleC5qcz9lbnRyeSIsInNvdXJjZVJvb3QiOiIvVXNlcnMvZ2xvemhrb3ZveS9Xb3JrL2RhdGFza2VwdGljLmNvbSJ9
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInBhZ2VzL2luZGV4LmpzIl0sIm5hbWVzIjpbIkRhc2hib2FyZCIsInByb3BzIiwibGF0ZXN0UG9zdCIsImxhdGVzdEVwaXNvZGUiLCJzcG9uc29yIiwibmFtZSIsIm1lZGlhIiwidGl0bGUiLCJkZXNjcmlwdGlvbiIsImF1dGhvciIsImF2YXRhciIsImRhdGUiLCJwcm9tbyIsImRhdGEiLCJhbGVydCIsInN0b3JlIiwiZGlzcGF0Y2giLCJnZXRTdGF0ZSIsInF1ZXJ5Iiwic3RhdGUiLCJwcm9taXNlcyIsImFsbCIsIkludHJvIiwiaDEiLCJ0aGVtZSIsImNvbG9ycyIsImRhcmsiXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBOzs7O0FBQ0E7Ozs7QUFDQTs7OztBQUNBOzs7O0FBQ0E7Ozs7QUFDQTs7OztBQUNBOzs7O0FBRUE7Ozs7OztJLEFBRXFCOzs7Ozs7Ozs7O2lDQVFSO3lCQUNzQyxLQUR0QyxBQUMyQztnQkFEM0MsQUFDQSxvQkFEQSxBQUNBO2dCQURBLEFBQ1ksdUJBRFosQUFDWTtnQkFEWixBQUMyQixpQkFEM0IsQUFDMkIsQUFFaEM7OztzQkFBYSxBQUNILEFBQ047OERBQVksS0FBTCxBQUFTLG9DQUFtQyxLQUE1QyxBQUFnRDtrQ0FBaEQ7b0NBRkUsQUFFRixBQUNQO0FBRE87aUJBQUE7dUJBRkUsQUFHRixBQUNQOzZCQUpTLEFBSUksQUFDYjt3QkFMUyxBQUtELEFBQ1I7d0JBTlMsQUFNRCxBQUNSO3NCQVBKLEFBQWEsQUFPSCxBQUdWO0FBVmEsQUFDVDs7O3NCQVNZLEFBQ04sQUFDTjs4REFBWSxLQUFMLEFBQVMsb0NBQW1DLEtBQTVDLEFBQWdEO2tDQUFoRDtvQ0FGSyxBQUVMLEFBQ1A7QUFETztpQkFBQTt1QkFGSyxBQUdMLEFBQ1A7NkJBSlksQUFJQyxBQUNiO3dCQUxZLEFBS0osQUFDUjt3QkFOWSxBQU1KLEFBQ1I7c0JBUEosQUFBZ0IsQUFPTixBQUVWO0FBVGdCLEFBQ1o7O3NCQVFJLEFBQ0UsQUFDTjt1QkFGSSxBQUVFLEFBQ047dUJBSEksQUFHRSxBQUNOO3VCQUpKLEFBQVEsQUFJRSxBQUlWOztBQVJRLEFBQ0o7O21DQVFBLDBCQUFBOzs4QkFBQTtnQ0FBQSxBQUNJO0FBREo7QUFBQSxhQUFBLGtCQUNLLGNBQUQ7OzhCQUFBO2dDQUFBLEFBQ0k7QUFESjtBQUFBLCtCQUNJLHVCQUFBOzs4QkFBQTtnQ0FBQTtBQUFBO0FBQUEsZUFESixBQUNJLGlCQUZSLEFBQ0ksQUFJQTs0QkFBQSxBQUNnQixBQUNaOytCQUZKLEFBRW1CLEFBQ2Y7eUJBSEosQUFHYTs7OEJBSGI7Z0NBTEosQUFLSSxBQUtBO0FBTEE7QUFDSTswQkFLVSxrQkFBQSxBQUFDLE1BQUQ7MkJBQVUsTUFBVixBQUFVLEFBQU07QUFEOUIsQUFFSTt3Q0FGSjs4QkFBQTtnQ0FYUixBQUNJLEFBVUksQUFLWDtBQUxXO0FBQ0k7Ozs7Ozt3Q0FoRGMsQTtvQkFBUSxBLHVCQUFBLEE7b0JBQVUsQSx1QkFBQSxBO29CQUFXLEEsYyxBQUFBOzs7OztpQ0FDakQ7QSx3Q0FBUSxBQUNSLEE7QSwyQyxBQUFXOzt1Q0FDWCxrQkFBQSxBQUFRLElBQVIsQUFBWSxBOzs7Ozs7Ozs7Ozs7Ozs7Ozs7OztrQkFMTCxBOztBQXdEckIsSUFBTSxtQ0FBQSxBQUFlO2lCQUFmO0FBQUEsQ0FBUSxpSUFNZSxpQkFBQTtXQUFTLE1BQUEsQUFBTSxNQUFOLEFBQVksT0FBckIsQUFBNEI7QUFObkQsR0FPTyxpQkFBQTtXQUFTLE1BQUEsQUFBTSxNQUFOLEFBQVksT0FBckIsQUFBNEI7QUFQekMsQUFBTSIsImZpbGUiOiJpbmRleC5qcz9lbnRyeSIsInNvdXJjZVJvb3QiOiIvVXNlcnMvYW5kcmV3X3dvcmtzdGF0aW9uL0RvY3VtZW50cy9Xb3JrL2RhdGFza2VwdGljLmNvbSJ9

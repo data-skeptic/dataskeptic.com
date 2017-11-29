@@ -4,7 +4,9 @@ import Marker from '../components/Marker';
 import Page from '../hoc/Page'
 import Cards from '../modules/Home/Components/Cards';
 import styled from 'styled-components'
+import SubscribeForm from "../modules/Home/Components/SubscribeForm";
 
+import { Form } from "react-final-form"
 @Page
 export default class Dashboard extends Component {
 
@@ -47,7 +49,7 @@ export default class Dashboard extends Component {
         return (
             <Container>
                 <Intro>
-                    <Marker>Data Skeptic</Marker>is your source for a perspective of scientific skepticism
+                    <Marker>Data Skeptic</Marker> is your source for a perspective of scientific skepticism
                 </Intro>
 
                 <Cards
@@ -55,6 +57,9 @@ export default class Dashboard extends Component {
                     latestEpisode={latestEpisode}
                     sponsor={sponsor}
                 />
+                <Form
+                    onSubmit={(data) => alert(data)}
+                    render={SubscribeForm} />
             </Container>
         )
     }

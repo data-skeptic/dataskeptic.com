@@ -4,7 +4,25 @@ import Header from "./Header";
 import Container from "./Container";
 
 import theme from '../shared/styles'
-import {ThemeProvider} from 'styled-components'
+import {ThemeProvider, injectGlobal} from 'styled-components'
+
+injectGlobal`
+  @font-face {
+    font-family: 'SF Light';
+    src: url('/static/fonts/SFUIDisplay-Light.otf');
+  }
+  @font-face {
+    font-family: 'SF Regular';
+    src: url('/static/fonts/SFUIDisplay-Regular.otf');
+  }
+  @font-face {
+    font-family: 'SF Medium';
+    src: url('/static/fonts/SFUIDisplay-Medium.otf');
+  }
+  * {
+    font-family: 'SF Regular';
+  }
+`;
 
 const Layout = (props) => (
     <ThemeProvider theme={theme}>
