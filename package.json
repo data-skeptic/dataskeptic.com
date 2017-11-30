@@ -25,7 +25,6 @@
     "http-proxy": "^1.16.2",
     "mandrill-api": "^1.0.45",
     "mdn-polyfills": "^5.0.0",
-    "mongodb": "^2.2.31",
     "morgan": "^1.8.1",
     "next": "4.1.4",
     "numeral": "^2.0.6",

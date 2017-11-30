@@ -1,18 +1,18 @@
 import styled from 'styled-components'
 import React from 'react'
+import ActiveLink from './ActiveLink'
 import Link from './Link'
-
 export default (props) => (
     <HeaderWrapper>
         <Logo href="/">
             <img src="/static/logo.svg" alt="DataSkeptic"/>
         </Logo>
         <Navs>
-            <Link href="/podcasts">Podcast</Link>
-            <Link href="/blog">Blog</Link>
-            <Link href="">Projects</Link>
-            <Link href="">Services</Link>
-            <Link href="">About</Link>
+            <ActiveLink href="/podcasts">Podcast</ActiveLink>
+            <ActiveLink href="/blog">Blog</ActiveLink>
+            <ActiveLink href="">Projects</ActiveLink>
+            <ActiveLink href="">Services</ActiveLink>
+            <ActiveLink href="">About</ActiveLink>
         </Navs>
         <Navs>
             <Link href="/members"> Sponsor </Link>
@@ -29,14 +29,7 @@ export default (props) => (
 const Navs = styled.div`
     height: 100%;
     display: flex;
-    & > a {
-        text-decoration:none;
-        color: ${props => props.theme.colors.link};
-        padding: 30px 0px;
-        border-bottom: 2px solid ${props => props.theme.colors.primary};
-        box-sizing: content-box;
-        margin-right: 40px;
-    }
+  
 `
 const Cart = styled.div`
     width: 80px;
