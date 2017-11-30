@@ -58,6 +58,7 @@ temp_files/*
 
 # NEXT
 .next/
+.dist
 .vscode/
 *.log
 *.map
