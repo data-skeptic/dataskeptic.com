@@ -488,6 +488,15 @@ router.get('/', (req, res) => {
     res.send(list)
 })
 
+router.get('/years', (req, res) => {
+    const years = {
+        "minYear": list["2014"],
+        "maxYear": "2017"
+    }
+
+    res.send(years)
+})
+
 router.get('/:id', (req, res) => {
     const episode = {
         "rendered": "episodes/2017/azure-databricks.htm",
