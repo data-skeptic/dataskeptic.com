@@ -28,7 +28,6 @@ export default class HomeContainer extends Component {
                 <Intro>
                     <Marker>Data Skeptic</Marker> is your source for a perspective of scientific skepticism
                 </Intro>
-                {JSON.stringify(this.props)}
                 <Cards
                     setEpisodeDescription={this.setEpisodeDescription}
                     latestPost={latestPost}
