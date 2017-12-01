@@ -13,8 +13,9 @@ async function run() {
     next();
   });
   app.get('/', (req,res) => {res.send({status: 'OK'})})
-  app.use("/blogs", require("./blogs"));
-  app.use("/episodes", require("./episodes"));
+
+  app.use("/blogs", require("./routes/blogs"));
+  app.use("/episodes", require("./routes/episodes"));
 
   if (config.apiPort) {
     app.listen(config.apiPort, err => {
