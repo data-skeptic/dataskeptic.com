@@ -14,19 +14,19 @@ import {
     Date
     } from "../../../shared/styles";
 
-export default ({name, media, title, description, author, avatar, date}) => (
+export default ({ desc,setEpisodeDescription}) => (
     <Wrapper>
-        <Label>{name}</Label>
+        <Label>{}</Label>
         <Card>
-            <Media>{media}</Media>
+            <Media>{}</Media>
             <Inner>
-                <Title>{title}</Title>
-                <Description>{description}</Description>
+                <Title>{}</Title>
+                <Description dangerouslySetInnerHTML={setEpisodeDescription(desc)}/>
                 <Author>
-                    <Avatar src={avatar}/>
+                    {/*<Avatar src={}/>*/}
                     <Info>
-                        <Name>{author}</Name>
-                        <Date>{date}</Date>
+                        <Name>{}</Name>
+                        <Date>{}</Date>
                     </Info>
                 </Author>
             </Inner>

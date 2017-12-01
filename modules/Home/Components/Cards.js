@@ -4,10 +4,12 @@ import BlogCard from './BlogCard'
 import SponsorCard from './SponsorCard'
 import styled from 'styled-components'
 
-export default ({ latestPost, latestEpisode, sponsor}) => (
+export default ({ latestPost, latestEpisode, sponsor,setEpisodeDescription}) => (
     <Cards>
         <PodcastCard
             {...latestPost}
+            setEpisodeDescription={setEpisodeDescription}
+
         />
 
         <BlogCard
