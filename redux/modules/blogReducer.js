@@ -78,3 +78,5 @@ export const loadCategories = () =>({
 export const getBlogList = state => state.blogs && state.blogs.list
 
 export const getSingle = state => state.blogs && state.blogs.single
+
+export const getCategories = state => state.blogs && state.blogs.categories
