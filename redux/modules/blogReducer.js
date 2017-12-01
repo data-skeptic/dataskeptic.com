@@ -7,11 +7,16 @@ const LOAD_BLOG = 'LOAD_BLOG'
 const LOAD_BLOG_SUCCESS = 'LOAD_BLOG_SUCCESS'
 const LOAD_BLOG_FAIL = 'LOAD_BLOG_FAIL'
 
+const LOAD_CATEGORIES = 'LOAD_CATEGORIES'
+const LOAD_CATEGORIES_SUCCESS = 'LOAD_CATEGORIES_SUCCESS'
+const LOAD_CATEGORIES_FAIL = 'LOAD_CATEGORIES_FAIL'
+
 const initialState = {
     loading: false,
     error:false,
     list: null,
-    single:null
+    single:null,
+    categories:null
 };
 
 export default function reducer(state = initialState,
@@ -39,6 +44,16 @@ export default function reducer(state = initialState,
                 loading:false,
                   single:action.return
             }
+        case LOAD_CATEGORIES:
+            return{
+                ...state,
+                loading:true
+            }
+        case LOAD_CATEGORIES_SUCCESS:
+            return{
+                ...state,
+                categories:action.result
+            }
         default:
             return state
     }
@@ -52,6 +67,10 @@ export const loadBlogList = () => ({
 export const loadSilgleBlog = id =>({
     types: [LOAD_BLOG, LOAD_BLOG_SUCCESS, LOAD_BLOG_FAIL],
     promise: client => client.get(`/blogs/${id}`)
+})
+export const loadCategories = () =>({
+    types: [LOAD_CATEGORIES, LOAD_CATEGORIES_SUCCESS, LOAD_CATEGORIES_FAIL],
+    promise: client => client.get(`/categories`)
 })
 
 //Selectors
