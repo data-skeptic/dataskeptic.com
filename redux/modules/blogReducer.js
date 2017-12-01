@@ -42,7 +42,7 @@ export default function reducer(state = initialState,
             return{
                 ...state,
                 loading:false,
-                  single:action.return
+                  single:action.result
             }
         case LOAD_CATEGORIES:
             return{
@@ -64,7 +64,7 @@ export const loadBlogList = () => ({
     types: [LOAD_BLOGS, LOAD_BLOGS_SUCCESS, LOAD_BLOGS_FAIL],
     promise: client => client.get('/blogs')
 })
-export const loadSilgleBlog = id =>({
+export const loadSingleBlog = id =>({
     types: [LOAD_BLOG, LOAD_BLOG_SUCCESS, LOAD_BLOG_FAIL],
     promise: client => client.get(`/blogs/${id}`)
 })
