@@ -6,7 +6,7 @@ import Ionicon from 'react-ionicons'
 const Post = ({post}) => (
   <Wrapper>
     <Header>
-      <Author>Author: Запускаю Гуся</Author>
+      <Author>Author: {post.contributor.prettyname}</Author>
       <Social href={`http://twitter.com/${post.contributor.twitter}`}><Ionicon icon="logo-twitter" /> {post.contributor.twitter}</Social>
       <Social href={`${post.contributor.linkedin}`}><Ionicon icon="logo-linkedin"/> LinkedIn</Social>
     </Header>
