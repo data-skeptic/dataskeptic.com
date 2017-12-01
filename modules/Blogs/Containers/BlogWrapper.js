@@ -21,7 +21,7 @@ export default class BlogList extends Component {
     const {posts} = this.props;
     return (
       <Wrapper>
-        {posts.map(post => <BlogListItem post={post}/>)}
+        {posts.map(post => <BlogListItem key={post.c_hash} post={post}/>)}
       </Wrapper>
     )
   }
