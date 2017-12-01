@@ -4,8 +4,18 @@ import Marker from '../components/Marker';
 import Page from '../hoc/Page'
 import Cards from '../modules/Home/Components/Cards';
 import styled from 'styled-components'
+import {
+    hasDailySponsor,
+    hasLatestBlogPost,
+    hasLatestEpisode,
+    getDailySponsor,
+    getLatestBlogPost,
+    getLatestEpisode,
+    loadDailySponsor,
+    loadLatestBlogPost,
+    loadLatestEpisode
+} from "../redux/modules/homeReducer";
 import SubscribeForm from "../modules/Home/Components/SubscribeForm";
-
 import { Form } from "react-final-form"
 @Page
 export default class Dashboard extends Component {
@@ -13,6 +23,15 @@ export default class Dashboard extends Component {
     static async getInitialProps({store: {dispatch, getState}, query}) {
         const state = getState()
         const promises = []
+        if(!hasLatestEpisode(state)){
+            promises.push(dispatch(loadLatestEpisode()))
+        }
+        if(!hasLatestBlogPost(state)){
+            promises.push(dispatch(loadLatestBlogPost()))
+        }
+        if(!hasDailySponsor(state)){
+            promises.push(dispatch(loadDailySponsor()))
+        }
         await Promise.all(promises)
     }
 
