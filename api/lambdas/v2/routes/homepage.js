@@ -6,7 +6,7 @@ const router = express.Router()
 router.get('/', (req, res) => {
     const homeData =
         {
-            "latestBlog": {
+            "latestEpisode": {
                 "title": "Azure Databricks",
                 "desc": "<p>I sat down with <a href= \"https://people.eecs.berkeley.edu/~alig/\">Ali Ghodsi</a>, CEO and found of Databricks, and <a href= \"https://twitter.com/originaljgc\">John Chirapurath</a>, GM for Data Platform Marketing at Microsoft related to the recent announcement of Azure Databricks.</p> <p>When I heard about the announcement, my first thoughts were two-fold.В  First, the possibility of optimized integrations with existing Azure services.В  This would be a big benefit to heavy Azure users who also want to use Spark.В  Second, the benefits of active directory to control Databricks access for large enterprise.</p> <p>Hear Ali and JG's thoughts and comments on what makes Azure Databricks a novel offering.</p> <p>В </p>",
                 "pubDate": "2017-11-28T16:00:00.000Z",
@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
                 "link": "https://dataskeptic.com/blog/episodes/2017/azure-databricks",
                 "num": 188
             },
-            "latestEpisode": {
+            "latestBlog": {
                 "rendered": "episodes/2017/quantum-computing.htm",
                 "c_hash": "acc4dfa5fd87e60b25a4b2de9ee84d35",
                 "date_discovered": "2017-11-25",
