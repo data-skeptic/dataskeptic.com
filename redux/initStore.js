@@ -3,7 +3,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import clientMiddleware from './middleware/clientMiddleware'
 import routerMiddleware from './middleware/routerMiddleware'
 import { routingInit } from './modules/router'
-import reducer from './modules/reducer'
+import rootReducer from './modules/rootReducer'
 
 const initStore = (initialState = {}, client) => {
   if (process.browser && window.__store) {
@@ -13,7 +13,7 @@ const initStore = (initialState = {}, client) => {
   const middleware = [routerMiddleware(), clientMiddleware(client)]
 
   const store = createStore(
-    reducer,
+    rootReducer,
     initialState,
     composeWithDevTools(applyMiddleware(...middleware))
   )

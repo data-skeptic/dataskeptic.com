@@ -9,7 +9,7 @@ export default (props) => (
         </Logo>
         <Navs>
             <ActiveLink href="/podcasts">Podcast</ActiveLink>
-            <ActiveLink href="/blog">Blog</ActiveLink>
+            <ActiveLink href="/blogs">Blogs</ActiveLink>
             <ActiveLink href="">Projects</ActiveLink>
             <ActiveLink href="">Services</ActiveLink>
             <ActiveLink href="">About</ActiveLink>
