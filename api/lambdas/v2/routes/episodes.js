@@ -490,8 +490,8 @@ router.get('/', (req, res) => {
 
 router.get('/years', (req, res) => {
     const years = {
-        "minYear": list["2014"],
-        "maxYear": "2017"
+        "minYear": 2014,
+        "maxYear": 2017
     }
 
     res.send(years)
