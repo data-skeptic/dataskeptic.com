@@ -5,15 +5,11 @@ import Page from '../hoc/Page'
 import Cards from '../modules/Home/Components/Cards';
 import styled from 'styled-components'
 import {
-    hasDailySponsor,
-    hasLatestBlogPost,
-    hasLatestEpisode,
     getDailySponsor,
     getLatestBlogPost,
     getLatestEpisode,
-    loadDailySponsor,
-    loadLatestBlogPost,
-    loadLatestEpisode
+    loadAll,
+    hasHomeData
 } from "../redux/modules/homeReducer";
 import SubscribeForm from "../modules/Home/Components/SubscribeForm";
 import { Form } from "react-final-form"
@@ -23,14 +19,8 @@ export default class Dashboard extends Component {
     static async getInitialProps({store: {dispatch, getState}, query}) {
         const state = getState()
         const promises = []
-        if(!hasLatestEpisode(state)){
-            promises.push(dispatch(loadLatestEpisode()))
-        }
-        if(!hasLatestBlogPost(state)){
-            promises.push(dispatch(loadLatestBlogPost()))
-        }
-        if(!hasDailySponsor(state)){
-            promises.push(dispatch(loadDailySponsor()))
+        if(!hasHomeData(state)){
+            promises.push(dispatch(loadAll()))
         }
         await Promise.all(promises)
     }
