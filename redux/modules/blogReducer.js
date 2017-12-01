@@ -54,3 +54,7 @@ export const loadSilgleBlog = id =>({
     types: [LOAD_BLOG, LOAD_BLOG_SUCCESS, LOAD_BLOG_FAIL],
     promise: client => client.get(`/blogs/${id}`)
 })
+
+//Selectors
+
+export const getBlogList = state => state.blogs && state.blogs.list
