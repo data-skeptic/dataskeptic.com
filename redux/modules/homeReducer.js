@@ -1,26 +1,14 @@
-const LOAD_ALL = 'LOAD_ALL';
-const LOAD_ALL_SUCCESS = 'LOAD_ALL_SUCCESS';
-const LOAD_ALL_FAIL = 'LOAD_ALL_FAIL';
-
 const initialState = {
-    loaded: false,
+    latestEpisode: null,
+    latestBlogPost: null,
+    dailySponsor: null,
     loading: false,
-    success: null,
-    request: false,
-    list: null
+    error: null
 };
 
 const mockData = {
     last: {
-       blog:{
-            title: "Interview with Rohan Kumar, GM for the Database Systems Group at Microsoft",
-            description: "This episode features discussion of database as a service, " +
-            "database migration, threat detection, R/python in SQL Server, and use cases",
-            media: "https://pbs.twimg.com/profile_images/621906932434010112/QmrnzlMf.jpg",
-            author: "Kyle Polich",
-            date: "June 12, 2017"
-       },
-        podcast:{
+        blog: {
             title: "Interview with Rohan Kumar, GM for the Database Systems Group at Microsoft",
             description: "This episode features discussion of database as a service, " +
             "database migration, threat detection, R/python in SQL Server, and use cases",
@@ -28,7 +16,15 @@ const mockData = {
             author: "Kyle Polich",
             date: "June 12, 2017"
         },
-        sponsor:{
+        podcast: {
+            title: "Interview with Rohan Kumar, GM for the Database Systems Group at Microsoft",
+            description: "This episode features discussion of database as a service, " +
+            "database migration, threat detection, R/python in SQL Server, and use cases",
+            media: "https://pbs.twimg.com/profile_images/621906932434010112/QmrnzlMf.jpg",
+            author: "Kyle Polich",
+            date: "June 12, 2017"
+        },
+        sponsor: {
             name: "Briliant",
             url: "http://brilliant.org/dataskeptics",
             date: "June 12, 2017"
@@ -41,36 +37,32 @@ const mockData = {
 export default function reducer(state = initialState,
                                 action = {}) {
     switch (action.type) {
-        case LOAD_ALL_SUCCESS:
-            return {
-                ...state,
-                list: action.result
-            };
+
         default:
             return state
     }
 }
 
 // Action Creators
-export const loadCards = () => {
-    return {
-        type: LOAD_ALL_SUCCESS,
-        result:
-    }
-};
 
-
+export const loadLatestBlogPost = () => ({})
+export const loadLatestEpisode = () => ({})
+export const loadDailySponsor = () => ({})
 
 // Selectors
-export const getCards = (state) =>
-    state.homeReducer && state.homeReducer.list;
+export const getLatestBlogPost = state => state.home && state.home.latestBlogPost;
+
+export const getLatestEpisode = state => state.home && state.home.latestEpisode;
+
+export const getDailySponsor = state => state.home && state.home.dailySponsor;
 
 
-// Helpers
-export const hasCards = (state) =>
-    state.homeReducer && !!state.homeReducer.list;
+//Helpers
+export const hasLatestBlogPost = state => state.home && !!state.home.latestBlogPost;
 
+export const hasLatestEpisode = state => state.home && !!state.home.latestEpisode;
 
+export const hasDailySponsor = state => state.home && !!state.home.dailySponsor;
 
 
 

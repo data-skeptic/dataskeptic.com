@@ -37,9 +37,4 @@ export const loadEpisodesList = () => ({
 
 
 //Selectors
-
-export const getBlogList = state => state.blogs && state.blogs.list
-
-export const getSingle = state => state.blogs && state.blogs.single
-
-export const getCategories = state => state.blogs && state.blogs.categories
+export const getEpisodes = state => state.podcasts && state.podcasts.episodes
