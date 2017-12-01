@@ -3,11 +3,8 @@ const LOAD_ALL_SUCCESS = 'LOAD_ALL_SUCCESS';
 const LOAD_ALL_FAIL = 'LOAD_ALL_FAIL';
 
 const initialState = {
-    loaded: false,
-    loading: false,
-    success: null,
-    request: false,
-    list: null
+  latestEpisode:null,
+
 };
 
 const mockData = {

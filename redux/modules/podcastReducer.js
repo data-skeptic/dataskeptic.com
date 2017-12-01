@@ -37,3 +37,4 @@ export const loadEpisodesList = () => ({
 
 
 //Selectors
+export const getEpisodes = state => state.podcasts && state.podcasts.episodes
