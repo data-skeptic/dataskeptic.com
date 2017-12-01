@@ -7,18 +7,22 @@ const LOAD_BLOG = 'LOAD_BLOG'
 const LOAD_BLOG_SUCCESS = 'LOAD_BLOG_SUCCESS'
 const LOAD_BLOG_FAIL = 'LOAD_BLOG_FAIL'
 
+const LOAD_CATEGORIES = 'LOAD_CATEGORIES'
+const LOAD_CATEGORIES_SUCCESS = 'LOAD_CATEGORIES_SUCCESS'
+const LOAD_CATEGORIES_FAIL = 'LOAD_CATEGORIES_FAIL'
+
 const initialState = {
     loading: false,
     error:false,
     list: null,
-    single:null
+    single:null,
+    categories:null
 };
 
 export default function reducer(state = initialState,
                                 action = {}) {
     switch (action.type) {
         case LOAD_BLOGS:
-            console.log('blogs ')
             return {
                 ...state,
                 loading:true
@@ -40,6 +44,16 @@ export default function reducer(state = initialState,
                 loading:false,
                   single:action.return
             }
+        case LOAD_CATEGORIES:
+            return{
+                ...state,
+                loading:true
+            }
+        case LOAD_CATEGORIES_SUCCESS:
+            return{
+                ...state,
+                categories:action.result
+            }
         default:
             return state
     }
@@ -47,14 +61,20 @@ export default function reducer(state = initialState,
 
 
 export const loadBlogList = () => ({
-    types: [LOAD_BLOGS, LOAD_BLOGS_SUCCESSS, LOAD_BLOGS_FAIL],
+    types: [LOAD_BLOGS, LOAD_BLOGS_SUCCESS, LOAD_BLOGS_FAIL],
     promise: client => client.get('/blogs')
 })
 export const loadSilgleBlog = id =>({
     types: [LOAD_BLOG, LOAD_BLOG_SUCCESS, LOAD_BLOG_FAIL],
     promise: client => client.get(`/blogs/${id}`)
 })
+export const loadCategories = () =>({
+    types: [LOAD_CATEGORIES, LOAD_CATEGORIES_SUCCESS, LOAD_CATEGORIES_FAIL],
+    promise: client => client.get(`/categories`)
+})
 
 //Selectors
 
 export const getBlogList = state => state.blogs && state.blogs.list
+
+export const getSingle = state => state.blogs && state.blogs.single
