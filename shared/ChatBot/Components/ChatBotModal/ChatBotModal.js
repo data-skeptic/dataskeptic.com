@@ -1,8 +1,8 @@
 import React from 'react';
 
-const c = require('./config/config.json')
-console.dir('env = ' + env)
-bot_embed_code = c[env]['bot']['embed_code']
+var env = "prod"
+const c = require('../../../../config/config.json')
+var bot_embed_code = c[env]['bot']['embed_code']
 
 const ChatBotModal = ({closeModal}) => (
     <div className="chat-bot-modal">

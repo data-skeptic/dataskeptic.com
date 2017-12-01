@@ -62,8 +62,11 @@ import {
 import redirects_map             from './redirects';
 
 import {reducer as formReducer} from 'redux-form'
+import * as winston from 'winston';
+import S3StreamLogger from 's3-streamlogger';
 
 const app = express()
+/*
 var logDirectory = path.join(__dirname, 'log')
 fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
 var accessLogStream = FileStreamRotator.getStream({
@@ -73,6 +76,7 @@ var accessLogStream = FileStreamRotator.getStream({
     verbose: false
 })
 app.use(morgan('combined', {stream: accessLogStream}))
+*/
 
 var env = "prod"
 
@@ -106,6 +110,34 @@ aws.config.update(
     }
 );
 //=========== CONFIG
+
+
+
+var ops = {
+             bucket: "dataskeptic.com",
+             folder: "logs/",
+      access_key_id: aws_accessKeyId,
+  secret_access_key: aws_secretAccessKey
+}
+
+var s3_stream = new S3StreamLogger.S3StreamLogger(ops);
+
+var transport = new (winston.transports.File)({
+  stream: s3_stream
+});
+// see error handling section below
+transport.on('error', function(err){/* ... */});
+
+var logger = new (winston.Logger)({
+  transports: [
+    transport
+  ]
+});
+
+logger.info('Hello Winston!');
+
+
+
 
 const docClient = new aws.DynamoDB.DocumentClient();
 
