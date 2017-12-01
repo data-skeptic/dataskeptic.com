@@ -79,11 +79,13 @@ class LatestEpisodePlayer extends Component {
 
         const date = moment(episode.pubDate).fromNow();
 
+        var title = episode.title
+        
         return (
             <div className="home-player">
                 <div className="home-player-card">
                     <div className="home-player-title"><Link className="home-player-link"
-                                                             to={episode.link}>{episode.title}</Link></div>
+                                                             to={episode.link}>{title}</Link></div>
                     <p>{date}</p>
                     <button className="episode-button" onClick={this.onClick.bind(this, episode)}>{play_symb}</button>
                 </div>
