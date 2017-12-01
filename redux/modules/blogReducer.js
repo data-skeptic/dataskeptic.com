@@ -58,3 +58,5 @@ export const loadSilgleBlog = id =>({
 //Selectors
 
 export const getBlogList = state => state.blogs && state.blogs.list
+
+export const getSingle = state => state.blogs && state.blogs.single
