@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import {getSingle} from '../../../redux/modules/blogReducer'
 import Post from '../Components/Post'
 import AuthorBlock from '../Components/AuthorBlock'
+import { Form } from "react-final-form"
+import SubscriptionForm from '../../Forms/SubscriptionForm'
 
 @connect(
   state => ({
@@ -17,20 +19,22 @@ export default class BlogSingle extends Component {
 
   }
 
-
   render() {
     const {post} = this.props;
     return (
       <Wrapper>
         <Post post={post}/>
         <AuthorBlock author={post.contributor}/>
+        <Form onSubmit={(data) => alert(data)}
+            render={SubscriptionForm} />
       </Wrapper>
     )
   }
 }
 
 const Wrapper = styled.div`
-    margin: 0px 150px;
+    max-width:800px;
+    margin: 0px auto;
     margin-top:20px;
     flex-grow: 1;
     
