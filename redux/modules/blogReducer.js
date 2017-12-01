@@ -31,5 +31,5 @@ export default function reducer(state = initialState,
 
 export const loadBlogList = () => ({
     types: [LOAD_BLOGS, LOAD_BLOGS_SUCCESSS, LOAD_BLOGS_FAIL],
-    promise: client => client.get('/api/blogs')
+    promise: client => client.get('/blogs')
 })
