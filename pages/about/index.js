@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import Page from '../../hoc/Page'
 
 @Page
-export default class Episodes extends Component {
+export default class About extends Component {
     static async getInitialProps({ store: { dispatch, getState }, query }) {
         const state = getState()
         const promises = []
@@ -16,7 +16,7 @@ export default class Episodes extends Component {
     render() {
         return (
             <Container>
-                <Title>Blogs Page</Title>
+                <Title>About Page</Title>
 
                 <Link href="/">Home</Link>
             </Container>
