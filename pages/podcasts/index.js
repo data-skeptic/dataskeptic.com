@@ -1,12 +1,24 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import Link from '../../components/Link'
 import Icon from 'react-fontawesome'
 import styled from 'styled-components'
+import {
+    hasDailySponsor,
+    hasLatestBlogPost,
+    hasLatestEpisode,
+    getDailySponsor,
+    getLatestBlogPost,
+    getLatestEpisode,
+    loadDailySponsor,
+    loadLatestBlogPost,
+    loadLatestEpisode
+} from "../../redux/modules/homeReducer";
 import Page from '../../hoc/Page'
+
 
 @Page
 export default class Podcasts extends Component {
-    static async getInitialProps({ store: { dispatch, getState }, query }) {
+    static async getInitialProps({store: {dispatch, getState}, query}) {
         const state = getState()
         const promises = []
 
