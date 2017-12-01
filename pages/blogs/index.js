@@ -18,8 +18,7 @@ export default class Dashboard extends Component {
         return (
             <Container>
                 <Title>Blogs Page</Title>
-
-                <Link href="/">Home</Link>
+              <Link href='/blogs/1'> Test </Link>
             </Container>
         )
     }

@@ -4,11 +4,12 @@ import next from 'next'
 import path from 'path'
 import favicon from 'serve-favicon'
 import config from './config'
+import routes from './routes'
 
 // set up next
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
-const handle = app.getRequestHandler()
+const handle = routes.getRequestHandler(app)
 const targetUrl = `http://${config.apiHost}:${config.apiPort}`
 
 // set up proxy
@@ -29,9 +30,8 @@ app.prepare().then(() => {
 
   server.use(express.static(path.join(__dirname, 'static')))
 
-  server.get('*', (req, res) => {
-    return handle(req, res)
-  })
+  server.use(handle)
+
 
   if (config.port) {
     server.listen(config.port, err => {
