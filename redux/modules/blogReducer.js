@@ -18,7 +18,6 @@ export default function reducer(state = initialState,
                                 action = {}) {
     switch (action.type) {
         case LOAD_BLOGS:
-            console.log('blogs ')
             return {
                 ...state,
                 loading:true
@@ -47,7 +46,7 @@ export default function reducer(state = initialState,
 
 
 export const loadBlogList = () => ({
-    types: [LOAD_BLOGS, LOAD_BLOGS_SUCCESSS, LOAD_BLOGS_FAIL],
+    types: [LOAD_BLOGS, LOAD_BLOGS_SUCCESS, LOAD_BLOGS_FAIL],
     promise: client => client.get('/blogs')
 })
 export const loadSilgleBlog = id =>({
