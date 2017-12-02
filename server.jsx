@@ -66,9 +66,9 @@ import * as winston from 'winston';
 import S3StreamLogger from 's3-streamlogger';
 
 const app = express()
-/*
 var logDirectory = path.join(__dirname, 'log')
 fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
+/*
 var accessLogStream = FileStreamRotator.getStream({
     date_format: 'YYYYMMDD',
     filename: path.join(logDirectory, 'access-%DATE%.log'),
@@ -147,7 +147,7 @@ if (process.env.NODE_ENV === 'dev') {
     env = "dev"
 }
 
-console.log("Environment: ", env)
+logger.info("Environment: ", env)
 
 const DEFAULT_ADVERTISE_HTML = `<img src="/img/advertise.png" width="100%"/>`;
 
@@ -176,8 +176,8 @@ global.my_cache = Cache;
 global.env = env;
 
 const doRefresh = (store) => {
-    console.log("---[Refreshing cache]------------------");
-    console.log(process.memoryUsage());
+    logger.info("---[Refreshing cache]------------------");
+    logger.info(process.memoryUsage());
 
     let env = global.env;
 
@@ -189,7 +189,7 @@ const doRefresh = (store) => {
             return loadBlogs(env)
         })
         .then(function ({folders, blogmetadata_map, title_map, content_map}) {
-            console.log("-[Refreshing blogs]-");
+            logger.info("-[Refreshing blogs]-");
 
             // clear references
             Cache.folders = null;
@@ -214,7 +214,7 @@ const doRefresh = (store) => {
             return loadEpisodes(env, feed_uri, blogmetadata_map, aws);
         })
         .then(function ({episodes_map, episodes_list}, guid) {
-            console.log("-[Refreshing blogs]-");
+            logger.info("-[Refreshing blogs]-");
             // clear references
             Cache.episodes_map = null;
             delete Cache.episodes_map;
@@ -230,7 +230,7 @@ const doRefresh = (store) => {
             return loadProducts(env, Cache);
         })
         .then((products) => {
-            console.log("-[Refreshing products]-");
+            logger.info("-[Refreshing products]-");
             // clear references
             Cache.products = null;
             delete Cache.products;
@@ -249,11 +249,11 @@ const doRefresh = (store) => {
             Cache.rfc = rfc
             console.dir(rfc)
 
-            console.log("Refreshing Finished")
+            logger.info("Refreshing Finished")
         })
         // .then(() => global.gc())
         .catch((err) => {
-            console.log(err);
+            logger.info(err);
         })
 };
 
@@ -480,7 +480,7 @@ function install_blog(store, blog_metadata, content) {
 }
 
 function install_episode(store, episode) {
-    console.log('install_episode')
+    logger.info('install_episode')
     store.dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
 }
 
@@ -495,7 +495,7 @@ function inject_blog(store, my_cache, pathname) {
         blog_metadata = {}
         var dispatch = store.dispatch
         var blogs = get_blogs_list(dispatch, pathname)
-        console.log("Could not find blog_metadata for " + blog_page)
+        logger.info("Could not find blog_metadata for " + blog_page)
     } else {
         var guid = blog_metadata.guid
         if (guid != undefined) {
@@ -503,7 +503,7 @@ function inject_blog(store, my_cache, pathname) {
             if (episode != undefined) {
                 install_episode(store, episode)
             } else {
-                console.log("Bogus guid found")
+                logger.info("Bogus guid found")
             }
         } else {
             var guid = blog_metadata.guid
@@ -513,10 +513,10 @@ function inject_blog(store, my_cache, pathname) {
                     blog_metadata['preview'] = episode.img;
                     install_episode(store, episode)
                 } else {
-                    console.log("Bogus guid found")
+                    logger.info("Bogus guid found")
                 }
             } else {
-                console.log("No episode guid found")
+                logger.info("No episode guid found")
             }
 
             install_blog(store, blog_metadata, content)
@@ -524,7 +524,7 @@ function inject_blog(store, my_cache, pathname) {
 
         install_blog(store, blog_metadata, content)
     }
-    console.log("done with blog inject")
+    logger.info("done with blog inject")
 }
 
 function updateState(store, pathname, req) {
@@ -577,7 +577,7 @@ function updateState(store, pathname, req) {
         req.session.passport.user;
 
     if (user) {
-        console.log('dispatch sessioned user')
+        logger.info('dispatch sessioned user')
         console.dir(`AUTH_USER_SUCCESS`)
 
         store.dispatch({
@@ -605,7 +605,7 @@ app.use('/api/v1/', api(Cache));
  */
 // const heapdump =  require('heapdump');
 // setInterval(() => {
-//     console.log('writing dump');
+//     logger.info('writing dump');
 //     heapdump.writeSnapshot('heap/' + Date.now() + '.heapsnapshot');
 // }, 60000);
 
@@ -667,7 +667,7 @@ const renderPage = (req, res) => {
     var redir = redirects_map['redirects_map'][req.url]
     var hostname = req.headers.host
     if (redir != undefined) {
-        console.log("Redirecting to " + hostname + redir)
+        logger.info("Redirecting to " + hostname + redir)
         return res.redirect(301, 'http://' + hostname + redir)
     }
     if (req.url == '/feed.rss') {
@@ -681,7 +681,7 @@ const renderPage = (req, res) => {
     const location = createLocation(req.url);
 
     match({routes, location}, (err, redirectLocation, renderProps) => {
-        console.log('doing response');
+        logger.info('doing response');
 
         if (err) {
             console.error(err);
@@ -715,7 +715,7 @@ const renderPage = (req, res) => {
 }
 
 doRefresh().then(() => {
-    console.log('CACHE IS READY');
+    logger.info('CACHE IS READY');
 
     app.use(renderPage);
 });
