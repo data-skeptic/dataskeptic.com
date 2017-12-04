@@ -11,11 +11,6 @@ import BlogListItem from '../Components/BlogListItem'
   {}
 )
 export default class BlogList extends Component {
-  constructor() {
-    super()
-
-  }
-
 
   render() {
     const {posts} = this.props;
@@ -30,6 +25,5 @@ export default class BlogList extends Component {
 const Wrapper = styled.div`
     margin-top:20px;
     flex-grow: 1;
-    
     flex-basis: 70%;
 `

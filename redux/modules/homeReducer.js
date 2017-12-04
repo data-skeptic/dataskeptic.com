@@ -47,9 +47,7 @@ export const getDailySponsor = state => state.home && state.home.dailySponsor;
 
 
 //Helpers
-export const hasHomeData = state =>{
-
-    return console.log(state.home && !!state.home.latestBlogPost && !!state.home.latestEpisode && !!state.home.dailySponsor)}
+export const hasHomeData = state => state.home && !!state.home.latestBlogPost && !!state.home.latestEpisode && !!state.home.dailySponsor
 
 
 

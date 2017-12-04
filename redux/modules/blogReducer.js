@@ -80,3 +80,7 @@ export const getBlogList = state => state.blogs && state.blogs.list
 export const getSingle = state => state.blogs && state.blogs.single
 
 export const getCategories = state => state.blogs && state.blogs.categories
+
+export const hasBlogs = state => state.blogs && !!state.blogs.list
+
+export const hasCategories = state => state.blogs && !!state.blogs.categories
