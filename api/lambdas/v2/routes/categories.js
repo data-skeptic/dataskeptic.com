@@ -7,63 +7,63 @@ router.get('/', (req, res) => {
     const list = [{
         "id":1,
         "label":"All",
-        "prettyname":"all"
+        "prettyName":"all"
     }, {
         "id":2,
         "label":"Book Reviews",
-        "prettyname":"book-reviews"
+        "prettyName":"book-reviews"
     }, {
         "id":3,
         "label":"Data Collection",
-        "prettyname":"data-collection"
+        "prettyName":"data-collection"
     }, {
         "id":4,
         "label":"Episodes",
-        "prettyname":"episodes"
+        "prettyName":"episodes"
     }, {
         "id":5,
         "label":"Infrastructure",
-        "prettyname":"infrastructure"
+        "prettyName":"infrastructure"
     }, {
         "id":6,
         "label":"Meta",
-        "prettyname":"meta"
+        "prettyName":"meta"
     }, {
         "id":7,
         "label":"Methods",
-        "prettyname":"methods"
+        "prettyName":"methods"
     }, {
         "id":8,
         "label":"News",
-        "prettyname":"news"
+        "prettyName":"news"
     }, {
         "id":9,
         "label":"Open House",
-        "prettyname":"open-house"
+        "prettyName":"open-house"
     }, {
         "id":10,
         "label":"Opinions",
-        "prettyname":"opinions"
+        "prettyName":"opinions"
     }, {
         "id":11,
         "label":"Podcasting",
-        "prettyname":"podcasting"
+        "prettyName":"podcasting"
     }, {
         "id":12,
         "label":"Projects",
-        "prettyname":"projects"
+        "prettyName":"projects"
     }, {
         "id":13,
         "label":"Skeptical Analysis",
-        "prettyname":"skeptical-analysis"
+        "prettyName":"skeptical-analysis"
     }, {
         "id":14,
         "label":"Tools-and-techniques",
-        "prettyname":"tools-and-techniques"
+        "prettyName":"tools-and-techniques"
     }, {
         "id":15,
         "label":"Transcripts",
-        "prettyname":"transcripts"
+        "prettyName":"transcripts"
     }]
 
     res.send(list)
@@ -73,7 +73,7 @@ router.get('/:id', (req, res) => {
     const post = {
         "id":1,
         "label":"All",
-        "prettyname":"all"
+        "prettyName":"all"
     }
 
     res.send(post)
