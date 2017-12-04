@@ -6,20 +6,24 @@ import BlogList from "../../modules/Blogs/Containers/BlogWrapper";
 import CategoryList from "../../modules/Blogs/Containers/CategoryList";
 import Container from "../../components/Container";
 import Page from "../../hoc/Page";
-import {loadBlogList, loadCategories, hasBlogs, hasCategories} from "../../redux/modules/blogReducer";
+import {loadBlogList, loadCategories, hasBlogs, hasCategories,setActiveCategory} from "../../redux/modules/blogReducer";
 
 @Page
 export default class Dashboard extends Component {
     static async getInitialProps({store: {dispatch, getState}, query}) {
         const state = getState();
+        const {category} = query
         const promises = [];
+        if(category){
+         promises.push(dispatch(setActiveCategory(category)))
+        }
+
         if (!hasBlogs(state)) {
             promises.push(dispatch(loadBlogList()));
         }
         if (!hasCategories(state)) {
             promises.push(dispatch(loadCategories()));
         }
-
         await Promise.all(promises);
     }
 

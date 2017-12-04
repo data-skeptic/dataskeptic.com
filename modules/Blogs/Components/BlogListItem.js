@@ -15,7 +15,7 @@ export default class BlogListItem extends Component {
             <Avatar>
               <img src={post.contributor.img} />
             </Avatar>
-            <PostLink href={`/blogs/${post.c_hash}`}>
+            <PostLink href={`/blogs/details/${post.c_hash}`}>
               <Title>
                 {post.title}
               </Title>

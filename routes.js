@@ -7,8 +7,13 @@ const router = module.exports = require('next-routes')({
 const routes = [
   {
     name: 'Blog',
-    pattern: '/blogs/:id',
+    pattern: '/blogs/details/:id',
     page:'/blogs/details'
+  },
+  {
+      name: 'Category',
+      pattern: '/blogs/:category',
+      page:'/blogs'
   }
 ]
 
