@@ -13,7 +13,6 @@ const routes = [
 ]
 
 routes.map(route => {
-  console.log('Mapped shortcut for '+ route.pattern)
   router.add(route);
 })
 

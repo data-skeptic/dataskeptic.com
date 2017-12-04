@@ -2,9 +2,6 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import Link from "../../../components/Link";
 export default class BlogListItem extends Component {
-  constructor() {
-    super();
-  }
 
   render() {
     const { post } = this.props;

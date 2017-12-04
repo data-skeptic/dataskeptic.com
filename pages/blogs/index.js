@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import Link from "../../components/Link";
 import Icon from "react-fontawesome";
 import styled from "styled-components";
@@ -6,28 +6,33 @@ import BlogList from "../../modules/Blogs/Containers/BlogWrapper";
 import CategoryList from "../../modules/Blogs/Containers/CategoryList";
 import Container from "../../components/Container";
 import Page from "../../hoc/Page";
-import { loadBlogList, loadCategories } from "../../redux/modules/blogReducer";
+import {loadBlogList, loadCategories, hasBlogs, hasCategories} from "../../redux/modules/blogReducer";
 
 @Page
 export default class Dashboard extends Component {
-  static async getInitialProps({ store: { dispatch, getState }, query }) {
-    const state = getState();
-    const promises = [];
-    promises.push(dispatch(loadBlogList()));
-    promises.push(dispatch(loadCategories()));
-    await Promise.all(promises);
-  }
+    static async getInitialProps({store: {dispatch, getState}, query}) {
+        const state = getState();
+        const promises = [];
+        if (!hasBlogs(state)) {
+            promises.push(dispatch(loadBlogList()));
+        }
+        if (!hasCategories(state)) {
+            promises.push(dispatch(loadCategories()));
+        }
 
-  render() {
-    return (
-      <Container>
-        <Wrapper>
-          <BlogList />
-          <CategoryList />
-        </Wrapper>
-      </Container>
-    );
-  }
+        await Promise.all(promises);
+    }
+
+    render() {
+        return (
+            <Container>
+                <Wrapper>
+                    <BlogList/>
+                    <CategoryList/>
+                </Wrapper>
+            </Container>
+        );
+    }
 }
 
 const Wrapper = styled.div`
