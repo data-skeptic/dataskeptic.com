@@ -18,8 +18,12 @@ injectGlobal`
   @font-face {
     font-family: 'SF Medium';
     src: url('/static/fonts/SFUIDisplay-Medium.otf');
+  } 
+  @font-face {
+    font-family: 'SF Bold';
+    src: url('/static/fonts/SFUIDisplay-Bold.otf');
   }
-  * {
+  body {
     font-family: 'SF Regular';
   }
 `;

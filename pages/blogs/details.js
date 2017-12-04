@@ -3,14 +3,15 @@ import Link from '../../components/Link'
 import Icon from 'react-fontawesome'
 import styled from 'styled-components'
 import Page from '../../hoc/Page'
-import {loadBlogList} from "../../redux/modules/blogReducer";
-
+import Container from "../../components/Container";
+import {loadSingleBlog} from "../../redux/modules/blogReducer";
+import BlogPost from '../../modules/Blogs/Containers/BlogSingle'
 @Page
 export default class BlogDetails extends Component {
     static async getInitialProps({ store: { dispatch, getState }, query }) {
-        const {slug} = query;
+        const {id} = query;
         const promises = []
-         promises.push(dispatch(loadBlogList()))
+         promises.push(dispatch(loadSingleBlog(id)))
          await Promise.all(promises)
     }
 
@@ -18,18 +19,13 @@ export default class BlogDetails extends Component {
         const { url: { query: { id } } } = this.props
         return (
             <Container>
-              {id ? <Title>Blog {id} Page</Title> : <h1>No such page</h1>}
+              {id ? <BlogPost/> : <h1>No such page</h1>}
 
-
-                <Link href="/">Home</Link>
             </Container>
         )
     }
 }
 
-const Container = styled.div`
-
-`
 
 const Title = styled.h1`
   color: red;

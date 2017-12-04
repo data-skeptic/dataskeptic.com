@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'
 import {
     Wrapper,
     Label,
@@ -14,19 +15,19 @@ import {
     Date
     } from "../../../shared/styles";
 
-export default ({name, media, title, description, author, avatar, date}) => (
+export default ({ pubDate,title,desc,setEpisodeDescription}) => (
     <Wrapper>
-        <Label>{name}</Label>
+        <Label>{}</Label>
         <Card>
-            <Media>{media}</Media>
+            <Media>{}</Media>
             <Inner>
                 <Title>{title}</Title>
-                <Description>{description}</Description>
+                <Description dangerouslySetInnerHTML={setEpisodeDescription(desc)}/>
                 <Author>
-                    <Avatar src={avatar}/>
+                    {/*<Avatar src={}/>*/}
                     <Info>
-                        <Name>{author}</Name>
-                        <Date>{date}</Date>
+                        <Name>{}</Name>
+                        <Date>{moment(pubDate).format("MM-DD-YYYY")}</Date>
                     </Info>
                 </Author>
             </Inner>
