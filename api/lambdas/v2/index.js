@@ -17,6 +17,8 @@ async function run() {
   app.use("/blogs", require("./routes/blogs"));
   app.use("/episodes", require("./routes/episodes"));
   app.use("/homepage", require("./routes/homepage"));
+  app.use("/categories", require("./routes/categories"));
+  app.use("/dailysponsor", require("./routes/dailysponsor"));
 
   if (config.apiPort) {
     app.listen(config.apiPort, err => {
