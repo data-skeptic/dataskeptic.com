@@ -46,7 +46,7 @@ export default function reducer(state = initialState,
     case SET_ACTIVE_YEAR:
       return {
         ...state,
-        activeYear: action.payload.year
+        activeYear: action.payload.selectedYear
       }
     default:
       return state
@@ -63,14 +63,14 @@ export const loadSingleEpisode = id => ({
   promise: client => client.get(`/episodes/${id}`)
 })
 export const loadYears = () => ({
-  types: [LOAD_YEARS, LOAD_EPISODES_SUCCESS, LOAD_YEARS_FAIL],
-  promise: client => client.get(`/years`)
+  types: [LOAD_YEARS, LOAD_YEARS_SUCCESS, LOAD_YEARS_FAIL],
+  promise: client => client.get(`/episodes/years`)
 })
 
-export const setActiveYear = year => ({
+export const setActiveYear = selectedYear => ({
   type: SET_ACTIVE_YEAR,
   payload: {
-    year
+    selectedYear
   }
 })
 
@@ -80,11 +80,11 @@ export const getEpisodes = state => state.podcasts && state.podcasts.episodes
 
 export const getSingle = state => state.podcasts && state.podcasts.single
 
-export const getCategories = state => state.blogs && state.blogs.years
+export const getActiveYear = state => state.podcasts && state.podcasts.activeYear
 
-export const getActiveYear = state => state.blogs && state.blogs.activeYear
+export const getYears = state => state.blogs && state.blogs.years
 
 //Helpers
-export const hasEpisode = state => state.podcasts && !!state.podcasts.episodes
+export const hasEpisodes = state => state.podcasts && !!state.podcasts.episodes
 
 export const hasYears = state => state.podcasts && !!state.podcasts.years

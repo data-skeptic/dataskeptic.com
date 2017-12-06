@@ -1,32 +1,32 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import Link from "../../../components/Link";
-export default class BlogListItem extends Component {
-
+import { Markup } from 'interweave';
+import moment from 'moment'
+export default class EpisodeListItem extends Component {
   render() {
     const { post } = this.props;
     return (
       <Wrapper>
+        <Date>
+          {moment(post.pubDate).format('MMMM D, YYYY')}{" "}
+        </Date>
         <Post>
-          <Date>
-            {post.publish_date}{" "}
-          </Date>
           <Header>
             <Avatar>
-              <img src={post.contributor.img} />
+              <img src={post.img} />
             </Avatar>
-            <PostLink href={`/blogs/details/${post.c_hash}`}>
-              <Title>
-                {post.title}
-              </Title>
-              <Author>
-                by <strong>{post.contributor.prettyname}</strong>
-              </Author>
-            </PostLink>
+
           </Header>
 
           <Body>
-          {" "}{post.desc}... <More href="/blogs/1">View More</More>{" "}
+          <PostLink href={`/blogs/details/${post.c_hash}`}>
+            <Title>
+              {post.title}
+            </Title>
+
+          </PostLink>
+          {" "} <div dangerouslySetInnerHTML={{__html: post.desc.replace(/Â/g, '')}}/>   <More href="/blogs/1">View More</More>{" "}
           </Body>
         </Post>
       </Wrapper>
@@ -47,6 +47,7 @@ const Post = styled.div`
   border-color: #979797;
   border-style: solid;
   margin-right: 100px;
+  display: flex;
 `;
 const Date = styled.div`
   font-weight: 700;
@@ -57,7 +58,6 @@ const Date = styled.div`
   margin-bottom: 15px;
 `;
 const Body = styled.div`
-  margin: 10px 0px;
   text-align: justify;
   & > a {
     border-bottom: 1px dotted;
@@ -74,10 +74,11 @@ const Body = styled.div`
 `;
 const Avatar = styled.div`
   & > img {
-    width: 60px;
+    width: 200px;
+    margin-right: 20px;
   }
 `;
-const PostLink = styled(Link)`margin-left: 10px;text-decoration: none;`;
+const PostLink = styled(Link)`text-decoration: none;`;
 const Author = styled.div`
   padding-top: 6px;
   & > strong {

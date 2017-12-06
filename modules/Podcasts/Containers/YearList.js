@@ -1,33 +1,36 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import styled from 'styled-components'
-import {getActiveCategory, getCategories,setActiveCategory} from '../../../redux/modules/blogReducer'
+import {getActiveYear, getYears,setActiveYear} from '../../../redux/modules/podcastReducer'
 import BlogListItem from '../Components/BlogListItem'
 import CategoriesListItem from "../Components/CategoriesListItem";
 import Router from '../../../components/Router'
 
+
+
 @connect(
     state => ({
-        categories: getCategories(state),
-        activeCategory:getActiveCategory(state)
+        years: getYears(state),
+        activeYear:getActiveYear(state)
     }),
-    {setActiveCategory}
+    {setActiveYear}
 )
-export default class CategoryList extends Component {
-    setActiveCategory = label => {
-        Router.pushRoute(`/blogs/${label}`)
+export default class YearList extends Component {
+    setActiveYear = label => {
+        Router.pushRoute(`/podcasts/${label}`)
     }
     render() {
-        const {categories} = this.props;
+        const {activeYear} = this.props;
+        const yearMock = ['2014','2015','2016','2017']
         return (
             <Wrapper>
-                <Title>Categories</Title>
+                <Title>Years</Title>
                 <List>
-                    {categories && categories.map(category => <CategoriesListItem
-                        key={category.id}
-                        setActiveCategory={this.setActiveCategory}
-                        activeCategory={this.props.activeCategory}
-                        {...category}/>)}
+                    {yearMock.map(year => <CategoriesListItem
+                        key={year}
+                        setActiveYear={this.setActiveYear}
+                        activeYear={activeYear}
+                        value={year}/>)}
                 </List>
             </Wrapper>
         )

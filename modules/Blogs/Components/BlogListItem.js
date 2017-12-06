@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import Link from "../../../components/Link";
+import moment from 'moment'
 export default class BlogListItem extends Component {
 
   render() {
@@ -9,7 +10,7 @@ export default class BlogListItem extends Component {
       <Wrapper>
         <Post>
           <Date>
-            {post.publish_date}{" "}
+            {moment(post.publish_date).format('MMMM D, YYYY')}{" "}
           </Date>
           <Header>
             <Avatar>
