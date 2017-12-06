@@ -6,11 +6,13 @@ import Page from '../../hoc/Page'
 import {
   loadEpisodesList,
   loadYears,
-  hasEpisode,
+  hasEpisodes,
   hasYears,
   setActiveYear
 } from "../../redux/modules/podcastReducer";
-
+import PodcastWrapper from '../../modules/Podcasts/Containers/PodcastWrapper'
+import YearList from '../../modules/Podcasts/Containers/YearList'
+import Container from "../../components/Container";
 @Page
 export default class Podcasts extends Component {
   static async getInitialProps({store: {dispatch, getState}, query}) {
@@ -21,7 +23,7 @@ export default class Podcasts extends Component {
       promises.push(dispatch(setActiveYear(year)))
     }
 
-    if (!hasEpisode(state)) {
+    if (!hasEpisodes(state)) {
       promises.push(dispatch(loadEpisodesList()));
     }
     if (!hasYears(state)) {
@@ -33,18 +35,18 @@ export default class Podcasts extends Component {
   render() {
     return (
       <Container>
-        <Title>Podcasts Page</Title>
-
-        <Link href="/">Home</Link>
+        <Wrapper>
+          <PodcastWrapper/>
+          <YearList/>
+        </Wrapper>
       </Container>
     )
   }
 }
 
-const Container = styled.div`
-
+const Wrapper = styled.div`
+  display: flex;
 `
-
 const Title = styled.h1`
   color: red;
   text-align: center;

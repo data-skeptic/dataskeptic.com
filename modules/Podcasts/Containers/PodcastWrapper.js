@@ -1,24 +1,23 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import {getBlogList, getActiveCategory} from '../../../redux/modules/blogReducer'
+import {getEpisodes, getActiveYear} from '../../../redux/modules/podcastReducer'
 import BlogListItem from '../Components/BlogListItem'
 
 @connect(
   state => ({
-    posts: getBlogList(state),
-    category: getActiveCategory(state)
+      episodes: getEpisodes(state),
+      year: getActiveYear(state)
   }),
   {}
 )
 export default class PodcastWrapper extends Component {
 
   render() {
-    const {posts, category} = this.props;
+    const {episodes} = this.props;
     return (
       <Wrapper>
-        {category && <CategoryTitle>{category}</CategoryTitle>}
-        {posts.map(post => <BlogListItem key={post.c_hash} post={post}/>)}
+        {episodes.length && episodes.map(post => <BlogListItem key={post.c_hash} post={post}/>)}
       </Wrapper>
     )
   }
@@ -36,4 +35,6 @@ const Wrapper = styled.div`
     margin-top:20px;
     flex-grow: 1;
     flex-basis: 70%;
+    width: 70%;
+    overflow: hidden;
 `

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import {getSingle} from '../../../redux/modules/blogReducer'
+import {getSingle} from '../../../redux/modules/podcastReducer'
 import Post from '../Components/Post'
 import AuthorBlock from '../Components/AuthorBlock'
 import { Form } from "react-final-form"
