@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import Link from "../../../components/Link";
-import { Markup } from 'interweave';
 import moment from 'moment'
 export default class EpisodeListItem extends Component {
   render() {
