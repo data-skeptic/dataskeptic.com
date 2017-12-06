@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import {getBlogList, getActiveCategory} from '../../../redux/modules/blogReducer'
 import BlogListItem from '../Components/BlogListItem'
+import PodcastPlayer from "../../Podcasts/Containers/PodcastPlayer";
 
 @connect(
   state => ({
@@ -17,6 +18,9 @@ export default class BlogList extends Component {
     const {posts, category} = this.props;
     return (
       <Wrapper>
+          <PodcastPlayer
+            src={`http://goldfirestudios.com/proj/howlerjs/sound.ogg`}
+          />
         {category && <CategoryTitle>{category}</CategoryTitle>}
         {posts.map(post => <BlogListItem key={post.c_hash} post={post}/>)}
       </Wrapper>
