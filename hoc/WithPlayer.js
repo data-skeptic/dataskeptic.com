@@ -1,9 +1,18 @@
 import React, {Component} from 'react'
+import { connect } from 'react-redux'
+
 
 const withPlayer = WrappedComponent => {
-    return class WithPlayer extends Component {
+    return(
+        @connect(
+            state => ({
+
+            }),
+            {}
+        )
+    class WithPlayer extends Component {
         render() {
-         const {...rest} = this.props
+            const {...rest} = this.props
             return (
                 <div>
                     {JSON.stringify(this.props)}
@@ -11,6 +20,6 @@ const withPlayer = WrappedComponent => {
                 </div>
             )
         }
-    }
+    })
 }
 export default withPlayer
