@@ -41,6 +41,7 @@
     "react-input-range": "^1.2.1",
     "react-ionicons": "^2.1.3",
     "react-native-listener": "^1.0.2",
+    "react-portal-universal": "^0.1.2",
     "react-redux": "^5.0.6",
     "react-rte": "^0.14.1",
     "redux": "^3.7.2",

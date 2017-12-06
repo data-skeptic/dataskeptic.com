@@ -37,6 +37,7 @@ const Layout = (props) => (
                 <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" rel="stylesheet" />
             </Head>
             <Header/>
+            <div id="player-root"></div>
                 {props.children}
         </div>
     </ThemeProvider>)
