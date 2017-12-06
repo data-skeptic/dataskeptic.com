@@ -14,6 +14,11 @@ const routes = [
       name: 'Category',
       pattern: '/blogs/:category',
       page:'/blogs'
+  },
+  {
+    name: 'Podcast',
+    pattern: '/podcasts/:year',
+    page:'/podcasts'
   }
 ]
 

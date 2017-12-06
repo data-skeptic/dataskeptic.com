@@ -11,7 +11,7 @@ import BlogListItem from '../Components/BlogListItem'
   }),
   {}
 )
-export default class BlogList extends Component {
+export default class PodcastWrapper extends Component {
 
   render() {
     const {posts, category} = this.props;

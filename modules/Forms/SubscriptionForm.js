@@ -36,7 +36,7 @@ const Form = styled.form`
   flex-direction: column;
   background-color: #3a3b3b;
   padding: 0 10px 10px;
-  margin: 80px 10px 10px;
+  margin: 80px 0px;
 `;
 
 const FormWrap = styled.div`
