@@ -1,31 +1,41 @@
-import React, { Component } from "react";
-import styled from "styled-components";
+import React, {Component} from "react";
+import styled, {withTheme} from "styled-components";
 import Link from "../../../components/Link";
 import moment from 'moment'
+import Ionicon from 'react-ionicons'
+
 export default class EpisodeListItem extends Component {
   render() {
-    const { post } = this.props;
+    const {post} = this.props;
     return (
       <Wrapper>
         <Date>
           {moment(post.pubDate).format('MMMM D, YYYY')}{" "}
         </Date>
         <Post>
-          <Header>
-            <Avatar>
-              <img src={post.img} />
-            </Avatar>
-
-          </Header>
-
+          <Avatar>
+            <img src={post.img}/>
+          </Avatar>
           <Body>
-          <PostLink href={`/blogs/details/${post.c_hash}`}>
-            <Title>
-              {post.title}
-            </Title>
+          <TitleWrap>
+            <PostLink href={`/podcasts/details/${post.guid}`}>
+              <Title>
+                {post.title}
+              </Title>
 
-          </PostLink>
-          {" "} <div dangerouslySetInnerHTML={{__html: post.desc.replace(/Â/g, '')}}/>   <More href="/blogs/1">View More</More>{" "}
+            </PostLink>
+            <ButtonsWrapper>
+              <Button>
+                <Ionicon icon = {'md-play'}/>  Play  {post.duration}
+              </Button>
+              <Button>
+                <Ionicon icon = {'md-download'}/>  Download
+              </Button>
+            </ButtonsWrapper>
+          </TitleWrap>
+          {" "}
+          <div dangerouslySetInnerHTML={{__html: post.desc.replace(/Â/g, '')}}/>
+          <More href="/blogs/1">View More</More>{" "}
           </Body>
         </Post>
       </Wrapper>
@@ -84,7 +94,8 @@ const Author = styled.div`
     font-family: 'SF Medium';
   }
 `;
-const Header = styled.div`display: flex;`;
+const TitleWrap = styled.div`  display: flex;
+  flex-direction: column;`;
 
 const Wrapper = styled.div`margin-bottom: 20px;`;
 
@@ -98,3 +109,37 @@ const Title = styled.span`
   font-family: 'SF Light';
   border-bottom: 1px dotted;
 `;
+
+const ButtonsWrapper = styled.div`
+
+    margin-top: 10px;
+`
+
+const Button = styled.button`
+    background: #fff;
+    display: flex;
+    align-items: center;
+    height: 35px;
+        padding: 0;
+        color: ${({theme}) => theme.colors.dark};
+    padding-left: 14px;
+    padding-right: 14px;
+    float: left;
+    border: 1px solid ${props => props.theme.colors.primary};
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+     svg {
+       fill:  ${({theme}) => theme.colors.dark};
+      }
+    &:hover {
+      color: #fff;
+      background-color:${props => props.theme.colors.primary}; 
+      svg {
+       fill:  #fff;
+      }
+    }
+    
+    min-width: 120px;
+    margin-right: 10px;
+`

@@ -33,6 +33,16 @@ export default function reducer(state = initialState,
         ...state,
         episodes: action.result
       }
+    case LOAD_EPISODE:
+      return {
+        ...state,
+        loading: true
+      }
+    case LOAD_EPISODE_SUCCESS:
+      return {
+        ...state,
+        single: action.result
+      }
     case LOAD_YEARS:
       return {
         ...state,

@@ -2,10 +2,11 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import {getSingle} from '../../../redux/modules/podcastReducer'
-import Post from '../Components/Post'
+import Podcast from '../Components/Podcast'
 import AuthorBlock from '../Components/AuthorBlock'
 import { Form } from "react-final-form"
 import SubscriptionForm from '../../Forms/SubscriptionForm'
+
 
 @connect(
   state => ({
@@ -16,15 +17,22 @@ import SubscriptionForm from '../../Forms/SubscriptionForm'
 export default class BlogSingle extends Component {
   constructor() {
     super()
-
+    this.state = {
+      playing: false
+    }
+  }
+  togglePlay = () => {
+    const {playing} = this.state;
+    this.setState({playing: !playing})
   }
 
   render() {
     const {post} = this.props;
+    const {playing} = this.state;
     return (
       <Wrapper>
-        <Post post={post}/>
-        <AuthorBlock author={post.contributor}/>
+        <Podcast post={post} playing={playing} togglePlay={this.togglePlay}/>
+        {/*<AuthorBlock author={post.contributor}/>*/}
         <Form onSubmit={(data) => alert(data)}
             render={SubscriptionForm} />
       </Wrapper>
