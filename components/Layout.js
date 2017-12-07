@@ -3,6 +3,7 @@ import React from 'react';
 import Header from "./Header";
 import Container from "./Container";
 
+import Player from './Player'
 import theme from '../shared/styles'
 import {ThemeProvider, injectGlobal} from 'styled-components'
 
@@ -37,6 +38,7 @@ const Layout = (props) => (
                 <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" rel="stylesheet" />
             </Head>
             <Header/>
+            <Player/>
             <div id="player-root"></div>
                 {props.children}
         </div>

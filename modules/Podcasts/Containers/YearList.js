@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import styled from 'styled-components'
 import {getActiveYear, getYears,setActiveYear} from '../../../redux/modules/podcastReducer'
-import BlogListItem from '../Components/BlogListItem'
 import CategoriesListItem from "../Components/CategoriesListItem";
 import Router from '../../../components/Router'
 
@@ -46,7 +45,7 @@ const Wrapper = styled.div`
     flex-basis: 30%;
     height: 100%;
     position: sticky;
-    top: 0px;
+    top: 64px;
     padding-bottom: 30px;
 `
 const Title = styled.h2`

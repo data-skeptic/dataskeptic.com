@@ -5,6 +5,11 @@ import moment from 'moment'
 import Ionicon from 'react-ionicons'
 
 export default class EpisodeListItem extends Component {
+  handlePlay = () => {
+    const {post} = this.props;
+    this.props.play(post)
+  }
+
   render() {
     const {post} = this.props;
     return (
@@ -25,7 +30,7 @@ export default class EpisodeListItem extends Component {
 
             </PostLink>
             <ButtonsWrapper>
-              <Button>
+              <Button onClick={this.handlePlay}>
                 <Ionicon icon = {'md-play'}/>  Play  {post.duration}
               </Button>
               <Button>

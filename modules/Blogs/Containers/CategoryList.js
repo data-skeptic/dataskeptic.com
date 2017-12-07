@@ -43,7 +43,7 @@ const Wrapper = styled.div`
     flex-basis: 30%;
     height: 100%;
     position: sticky;
-    top: 0px;
+    top: 64px;
     padding-bottom: 30px;
 `
 const Title = styled.h2`

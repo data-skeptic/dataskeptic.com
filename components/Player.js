@@ -1,0 +1,147 @@
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import {
+  getCurrentPlaying,
+  getIsPlaying,
+  resetPlayer,
+  getIsVisible,
+  play,
+  pause
+} from "../redux/modules/playerReducer";
+import styled from "styled-components";
+import moment from "moment";
+import ReactHowler from 'react-howler'
+import Progress from './Progress';
+
+@connect(
+  state => ({
+    currentPlaying: getCurrentPlaying(state),
+    isPlaying: getIsPlaying(state),
+    isVisible: getIsVisible(state)
+  }),
+  { resetPlayer, play, pause }
+)
+export default class Player extends Component {
+  constructor() {
+    super();
+    this.state = {
+      progress: 0,
+      volume: 0.8
+    }
+  }
+  reset = () => {
+    this.props.resetPlayer();
+  };
+
+  play = () => {
+    this.props.play();
+  };
+
+  pause = () => {
+    this.props.pause();
+  };
+
+  render() {
+    const { currentPlaying, isPlaying, isVisible } = this.props;
+    const {volume, position} = this.state;
+    console.log(currentPlaying, isPlaying);
+    return (
+      isVisible &&
+      <PlayerWrapper show={isVisible}>
+        <PodcastBlock>
+          <PodcastCover>
+            <img src={currentPlaying.img} alt="" />
+          </PodcastCover>
+          <PodcastInfo>
+            <Date>
+              {moment(currentPlaying.pubDate).format("MMMM D, YYYY")}{" "}
+            </Date>
+            <PodcastTitle>
+              {currentPlaying.title}
+            </PodcastTitle>
+          </PodcastInfo>
+        </PodcastBlock>
+        <PlayerBlock>
+          <ReactHowler
+            src={currentPlaying.mp3}
+            html5={true}
+            playing={isPlaying}
+          />
+          <Progress progress={0}/>
+        </PlayerBlock>
+        <VolumeBlock>volume</VolumeBlock>
+
+        <MediaBlock>
+          {isPlaying
+            ? <MediaButton onClick={this.pause}>
+                <img src="/static/stop.svg" alt="" />
+              </MediaButton>
+            : <MediaButton onClick={this.play}>
+                <img src="/static/play.svg" alt="" />
+              </MediaButton>}
+        </MediaBlock>
+      </PlayerWrapper>
+    );
+  }
+}
+
+const PlayerWrapper = styled.div`
+    width: 100%;
+    height: 64px;
+    display: ${props => (props.show ? "flex" : "none")}
+    background-color: #fff;
+    border-bottom: 1px solid #f1f1f1;
+    box-shadow: 0 1px 15px hsla(0,0%,57%,.1);
+    position: sticky; 
+    top: 0px;
+    align-items: center;
+`;
+
+const MediaButton = styled.div`
+  height: 60px;
+  margin-right: 5px;
+`;
+
+const Date = styled.div`
+  color: #a2a6a6;
+  margin-bottom: 2px;
+  font-size: 12px;
+`;
+
+const PodcastCover = styled.div`
+  img {
+    height: 64px;
+  }
+`;
+
+const PodcastBlock = styled.div`
+  flex-basis: 25%;
+  display: flex;
+  align-items: center;
+`;
+
+const PlayerBlock = styled.div`
+  flex-basis: 50%;
+  audio {
+    width: 100%;
+  }
+`;
+const VolumeBlock = styled.div`flex-basis: 16%;`;
+const MediaBlock = styled.div`
+  flex-basis: 9%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  img {
+    height: 60px;
+  }
+`;
+
+const PodcastTitle = styled.div`
+  font-family: "SF Regular";
+  font-size: 15px;
+`;
+const PodcastInfo = styled.div`
+  margin-left: 24px;
+  font-family: "SF Light";
+`;
