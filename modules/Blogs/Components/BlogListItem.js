@@ -16,7 +16,7 @@ export default class BlogListItem extends Component {
             <Avatar>
               <img src={post.author.img} />
             </Avatar>
-            <PostLink href={`/blogs/details/${post.c_hash}`}>
+            <PostLink href={`/blogs/details${post.prettyname}`}>
               <Title>
                 {post.title}
               </Title>
@@ -27,7 +27,7 @@ export default class BlogListItem extends Component {
           </Header>
 
           <Body>
-          {" "}{post.desc}... <More href="/blogs/1">View More</More>{" "}
+          {" "}{post.desc}... <More href={`/blogs/details${post.prettyname}`}>View More</More>{" "}
           </Body>
         </Post>
       </Wrapper>

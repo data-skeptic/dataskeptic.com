@@ -2,15 +2,15 @@ import React,{Component} from 'react'
 import {Item} from "../Containers/CategoryList";
 
 export default class CategoriesListItem extends Component{
-    isActive = (activeCategory,prettyName) => activeCategory === prettyName
+    isActive = (activeCategory,category) => activeCategory === category
     handleClick = () =>{
-        this.props.setActiveCategory(this.props.prettyName)
+        this.props.setActiveCategory(this.props.category)
     }
 
     render(){
-        const {id,label,prettyName,activeCategory} = this.props
+        const {category,activeCategory} = this.props
         return(
-            <Item active={this.isActive(activeCategory,prettyName)} onClick={this.handleClick}>{label}</Item>
+            <Item active={this.isActive(activeCategory,category)} onClick={this.handleClick}>{category}</Item>
         )
     }
 }

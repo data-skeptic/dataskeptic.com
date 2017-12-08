@@ -24,10 +24,10 @@ export default class CategoryList extends Component {
                 <Title>Categories</Title>
                 <List>
                     {categories && categories.map(category => <CategoriesListItem
-                        key={category.id}
+                        key={category}
                         setActiveCategory={this.setActiveCategory}
                         activeCategory={this.props.activeCategory}
-                        {...category}/>)}
+                        category={category}/>)}
                 </List>
             </Wrapper>
         )
