@@ -9,9 +9,10 @@ import Podcast from '../../modules/Podcasts/Containers/PodcastSingle'
 @Page
 export default class PodcastDetails extends Component {
   static async getInitialProps({ store: { dispatch, getState }, query }) {
-    const {id} = query;
+    const {year, name} = query;
+    const prettyName = `${year}/${name}`
     const promises = []
-    promises.push(dispatch(loadSingleEpisode(id)))
+    promises.push(dispatch(loadSingleEpisode(prettyName)))
     await Promise.all(promises)
   }
 
@@ -19,8 +20,7 @@ export default class PodcastDetails extends Component {
     const { url: { query: { id } } } = this.props
     return (
       <Container>
-        {id ? <Podcast/> : <h1>No such page</h1>}
-
+        <Podcast />
       </Container>
     )
   }

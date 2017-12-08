@@ -1,25 +1,26 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import styled from "styled-components";
-import { Field } from "react-final-form";
+import {Field} from "react-final-form";
+
 const SubscriptionForm = ({
-  handleSubmit,
-  reset,
-  submitting,
-  pristine,
-  values
-}) =>
-  <Form onSubmit={handleSubmit}>
-    <Title>
-      Enjoy this post? Sign up for our mailing list and don't miss any updates.
-    </Title>
-    <SubTitle>Subscribe to our mailing list</SubTitle>
-    <FormWrap>
-      <Field name="email" component="input" type="text" placeholder="Email" />
-      <Submit type="submit" disabled={submitting || pristine}>
-        Submit
-      </Submit>
-    </FormWrap>
-  </Form>;
+                              handleSubmit,
+                              reset,
+                              submitting,
+                              pristine,
+                              values
+                          }) =>
+    <Form onSubmit={handleSubmit}>
+        <Title>
+            Enjoy this post? Sign up for our mailing list and don't miss any updates.
+        </Title>
+        <SubTitle>Subscribe to our mailing list</SubTitle>
+        <FormWrap>
+            <Field name="email" component="input" type="text" placeholder="Email"/>
+            <Submit type="submit" disabled={submitting || pristine}>
+                Submit
+            </Submit>
+        </FormWrap>
+    </Form>;
 
 export default SubscriptionForm;
 

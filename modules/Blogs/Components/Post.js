@@ -6,14 +6,14 @@ import Ionicon from 'react-ionicons'
 const Post = ({post}) => (
   <Wrapper>
     <Header>
-      <Author>Author: {post.contributor.prettyname}</Author>
-      <Social href={`http://twitter.com/${post.contributor.twitter}`}><Ionicon icon="logo-twitter" /> {post.contributor.twitter}</Social>
-      <Social href={`${post.contributor.linkedin}`}><Ionicon icon="logo-linkedin"/> LinkedIn</Social>
+      <Author>Author: {post.author.prettyname}</Author>
+      <Social href={`http://twitter.com/${post.author.twitter}`}><Ionicon icon="logo-twitter" /> {post.author.twitter}</Social>
+      <Social href={`${post.author.linkedin}`}><Ionicon icon="logo-linkedin"/> LinkedIn</Social>
     </Header>
       <Date>{post.publish_date}</Date>
       <Title>{post.title}</Title>
     <Body>
-    {post.desc}
+    <Content dangerouslySetInnerHTML={{__html:post.content}} />
     </Body>
   </Wrapper>
 )
@@ -96,4 +96,4 @@ const Author = styled.div`
 
 const Wrapper = styled.div`margin-bottom: 20px;`;
 
-
+const Content = styled.div``
