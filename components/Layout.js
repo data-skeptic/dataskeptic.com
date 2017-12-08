@@ -3,7 +3,7 @@ import React from 'react';
 import Header from "./Header";
 import Container from "./Container";
 
-import Player from './Player'
+import Player from './Player/Player'
 import theme from '../shared/styles'
 import {ThemeProvider, injectGlobal} from 'styled-components'
 

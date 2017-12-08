@@ -5,21 +5,23 @@ import {
   getIsPlaying,
   resetPlayer,
   getIsVisible,
+  getPosition,
+  setPosition,
   play,
   pause
-} from "../redux/modules/playerReducer";
+} from "../../redux/modules/playerReducer";
 import styled from "styled-components";
 import moment from "moment";
-import ReactHowler from 'react-howler'
 import Progress from './Progress';
-
+import Howler from './Howler';
 @connect(
   state => ({
     currentPlaying: getCurrentPlaying(state),
     isPlaying: getIsPlaying(state),
-    isVisible: getIsVisible(state)
+    isVisible: getIsVisible(state),
+    position: getPosition(state)
   }),
-  { resetPlayer, play, pause }
+  { resetPlayer, play, pause, setPosition}
 )
 export default class Player extends Component {
   constructor() {
@@ -29,10 +31,13 @@ export default class Player extends Component {
       volume: 0.8
     }
   }
+  setPosition = (progress) => {
+    this.props.setPosition(progress)
+  }
   reset = () => {
     this.props.resetPlayer();
   };
-
+  
   play = () => {
     this.props.play();
   };
@@ -42,9 +47,8 @@ export default class Player extends Component {
   };
 
   render() {
-    const { currentPlaying, isPlaying, isVisible } = this.props;
-    const {volume, position} = this.state;
-    console.log(currentPlaying, isPlaying);
+    const { currentPlaying, isPlaying, isVisible, position} = this.props;
+    const {volume} = this.state;
     return (
       isVisible &&
       <PlayerWrapper show={isVisible}>
@@ -62,12 +66,12 @@ export default class Player extends Component {
           </PodcastInfo>
         </PodcastBlock>
         <PlayerBlock>
-          <ReactHowler
-            src={currentPlaying.mp3}
-            html5={true}
-            playing={isPlaying}
+          <Howler
+            mp3={currentPlaying.mp3}
+            isPlaying={isPlaying}
+            position={position}
+            setPosition={this.setPosition}
           />
-          <Progress progress={0}/>
         </PlayerBlock>
         <VolumeBlock>volume</VolumeBlock>
 
