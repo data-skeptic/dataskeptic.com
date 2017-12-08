@@ -63,14 +63,13 @@ export default function reducer(state = initialState,
   }
 }
 
-
 export const loadEpisodesList = () => ({
   types: [LOAD_EPISODES, LOAD_EPISODES_SUCCESS, LOAD_EPISODES_FAIL],
   promise: client => client.get('/episodes/')
 })
-export const loadSingleEpisode = id => ({
+export const loadSingleEpisode = pn => ({
   types: [LOAD_EPISODE, LOAD_EPISODE_SUCCESS, LOAD_EPISODE_FAIL],
-  promise: client => client.get(`/episodes/${id}`)
+  promise: client => client.get(`/episodes/${pn}`)
 })
 export const loadYears = () => ({
   types: [LOAD_YEARS, LOAD_YEARS_SUCCESS, LOAD_YEARS_FAIL],

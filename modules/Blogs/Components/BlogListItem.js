@@ -5,29 +5,29 @@ import moment from 'moment'
 export default class BlogListItem extends Component {
 
   render() {
-    const { post } = this.props;
+    const { key, publish_date, prettyname, title, author, desc} = this.props;
     return (
-      <Wrapper>
+      <Wrapper key={key}>
         <Post>
           <Date>
-            {moment(post.publish_date).format('MMMM D, YYYY')}{" "}
+            {moment(publish_date).format('MMMM D, YYYY')}{" "}
           </Date>
           <Header>
             <Avatar>
-              <img src={post.author.img} />
+              <img src={author.img} />
             </Avatar>
-            <PostLink href={`/blogs/details${post.prettyname}`}>
+            <PostLink href={`/blogs${prettyname}`}>
               <Title>
-                {post.title}
+                {title}
               </Title>
               <Author>
-                by <strong>{post.author.prettyname}</strong>
+                by <strong>{author.prettyname}</strong>
               </Author>
             </PostLink>
           </Header>
 
           <Body>
-          {" "}{post.desc}... <More href={`/blogs/details${post.prettyname}`}>View More</More>{" "}
+          {" "}{desc}... <More href={`/blogs${prettyname}`}>View More</More>{" "}
           </Body>
         </Post>
       </Wrapper>

@@ -1,43 +1,48 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
 import styled from 'styled-components'
 import {getSingle} from '../../../redux/modules/podcastReducer'
 import Podcast from '../Components/Podcast'
-import AuthorBlock from '../Components/AuthorBlock'
-import { Form } from "react-final-form"
+import {Form} from "react-final-form"
 import SubscriptionForm from '../../Forms/SubscriptionForm'
 
-
 @connect(
-  state => ({
-    post: getSingle(state)
-  }),
-  {}
+    state => ({
+        episode: getSingle(state)
+    }),
+    {}
 )
 export default class BlogSingle extends Component {
-  constructor() {
-    super()
-    this.state = {
-      playing: false
+    constructor() {
+        super()
+        this.state = {
+            playing: false
+        }
     }
-  }
-  togglePlay = () => {
-    const {playing} = this.state;
-    this.setState({playing: !playing})
-  }
 
-  render() {
-    const {post} = this.props;
-    const {playing} = this.state;
-    return (
-      <Wrapper>
-        <Podcast post={post} playing={playing} togglePlay={this.togglePlay}/>
-        {/*<AuthorBlock author={post.contributor}/>*/}
-        <Form onSubmit={(data) => alert(data)}
-            render={SubscriptionForm} />
-      </Wrapper>
-    )
-  }
+    togglePlay = () => {
+        const {playing} = this.state;
+        this.setState({playing: !playing})
+    }
+
+    render() {
+        const {episode} = this.props;
+        const {playing} = this.state;
+        if (!episode) {
+            return <div>Not found.</div>
+        }
+
+        return (
+            <Wrapper>
+                <Podcast post={episode} playing={playing} togglePlay={this.togglePlay}/>
+                {/*<AuthorBlock author={post.contributor}/>*/}
+                <Form
+                    onSubmit={(data) => alert(data)}
+                    render={SubscriptionForm}
+                />
+            </Wrapper>
+        )
+    }
 }
 
 const Wrapper = styled.div`

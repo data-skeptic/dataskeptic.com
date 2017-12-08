@@ -70,9 +70,9 @@ export const loadBlogList = () => ({
     types: [LOAD_BLOGS, LOAD_BLOGS_SUCCESS, LOAD_BLOGS_FAIL],
     promise: client => client.get('/blogs')
 })
-export const loadSingleBlog = id =>({
+export const loadSingleBlog = pn =>({
     types: [LOAD_BLOG, LOAD_BLOG_SUCCESS, LOAD_BLOG_FAIL],
-    promise: client => client.get(`/blogs/${id}`)
+    promise: client => client.get(`/blogs/${pn}`)
 })
 export const loadCategories = () =>({
     types: [LOAD_CATEGORIES, LOAD_CATEGORIES_SUCCESS, LOAD_CATEGORIES_FAIL],

@@ -22,7 +22,7 @@ export default class Podcast extends Component {
         <Date>{moment(post.publish_date).format('MMMM D, YYYY')}</Date>
         <Title>{post.title}</Title>
         <Body>
-        {post.desc}
+        <Content dangerouslySetInnerHTML={{__html:post.content}} />
         </Body>
       </Wrapper>
     )
@@ -97,5 +97,7 @@ const Body = styled.div`
 
 
 const Wrapper = styled.div`margin-bottom: 20px;`;
+const Content = styled.div``
+
 
 

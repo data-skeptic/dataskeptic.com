@@ -5,47 +5,46 @@ import moment from 'moment'
 import Ionicon from 'react-ionicons'
 
 export default class EpisodeListItem extends Component {
-  handlePlay = () => {
-    const {post} = this.props;
-    this.props.play(post)
-  }
+    handlePlay = () => {
+        const {post} = this.props;
+        this.props.play(post)
+    }
 
-  render() {
-    const {post} = this.props;
-    return (
-      <Wrapper>
-        <Date>
-          {moment(post.pubDate).format('MMMM D, YYYY')}{" "}
-        </Date>
-        <Post>
-          <Avatar>
-            <img src={post.img}/>
-          </Avatar>
-          <Body>
-          <TitleWrap>
-            <PostLink href={`/podcasts/details/${post.guid}`}>
-              <Title>
-                {post.title}
-              </Title>
-
-            </PostLink>
-            <ButtonsWrapper>
-              <Button onClick={this.handlePlay}>
-                <Ionicon icon ={'md-play'}/>  Play  {post.duration}
-              </Button>
-              <Button>
-                <Ionicon icon = {'md-download'}/>  Download
-              </Button>
-            </ButtonsWrapper>
-          </TitleWrap>
-          {" "}
-          <div dangerouslySetInnerHTML={{__html: post.desc.replace(/Â/g, '')}}/>
-          <More href={`/podcasts/details${post.link}`}>View More</More>{" "}
-          </Body>
-        </Post>
-      </Wrapper>
-    );
-  }
+    render() {
+        const {post, key} = this.props;
+        return (
+            <Wrapper key={key}>
+                <Date>
+                    {moment(post.pubDate).format('MMMM D, YYYY')}{" "}
+                </Date>
+                <Post>
+                    <Avatar>
+                        <img src={post.img}/>
+                    </Avatar>
+                    <Body>
+                    <TitleWrap>
+                        <PostLink href={`/podcasts/${post.link}`}>
+                            <Title>
+                                {post.title}
+                            </Title>
+                        </PostLink>
+                        <ButtonsWrapper>
+                            <Button onClick={this.handlePlay}>
+                                <Ionicon icon={'md-play'}/> Play {post.duration}
+                            </Button>
+                            <Button>
+                                <Ionicon icon={'md-download'}/> Download
+                            </Button>
+                        </ButtonsWrapper>
+                    </TitleWrap>
+                    {" "}
+                    <div dangerouslySetInnerHTML={{__html: post.desc.replace(/Â/g, '')}}/>
+                    <More href={`/podcasts/${post.link}`}>View More</More>{" "}
+                    </Body>
+                </Post>
+            </Wrapper>
+        );
+    }
 }
 
 const More = styled(Link)`
@@ -87,8 +86,8 @@ const Body = styled.div`
   padding: 0;
 `;
 const Avatar = styled.div`
-  & > img {
-    width: 200px;
+  > img {
+    max-width: 200px;
     margin-right: 20px;
   }
 `;

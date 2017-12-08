@@ -8,7 +8,7 @@ const ADVERTISE_CARD_CONTENT = 'https://s3.amazonaws.com/dataskeptic.com/dassets
 const ADVERTISE_BANNER_CONTENT = 'https://s3.amazonaws.com/dataskeptic.com/dassets/banner/latest.htm'
 
 const domain = "dataskeptic.com"
-const formatLink = (link) => link.replace("http://" + domain, "").replace("https://" + domain, '').replace('.php', '').replace('/blog/', '/')
+const formatLink = (link) => link.replace("http://" + domain, "").replace("https://" + domain, '').replace('.php', '').replace('/blog/', '/').replace('/episodes/', '')
 
 const convertEpidodes = (items) => {
     let episodes = []
