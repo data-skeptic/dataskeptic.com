@@ -5,8 +5,6 @@ const router = express.Router()
 
 const PER_PAGE = 10;
 
-const offset = (page) => (page - 1) * PER_PAGE + 1
-
 const generatePrettyName = (category, year, name) => `/${category}/${year}/${name}`;
 
 const paginationMeta = (total, itemsPerPage, currentPage) => ({
@@ -32,6 +30,7 @@ export default function (cache) {
     })
 
     router.get('/blogs/', (req, res) => {
+        return res.send(cache.blogs)
         const page = 1;
 
         const total = Object.keys(cache.blogs).length
@@ -64,12 +63,39 @@ export default function (cache) {
     })
 
     router.get('/episodes', (req, res) => {
-        res.send(cache.episodes)
+        const page = 1
+
+        const total = Object.keys(cache.episodes).length
+        const pagination = paginationMeta(total, PER_PAGE, page)
+        const episodes = paginate(cache.episodes, pagination.from, pagination.to)
+
+        res.send({
+            episodes,
+            ...pagination
+        })
+    })
+
+    router.get('/episodes/:page', (req, res) => {
+        const { page=1 } = req.params
+
+        const total = Object.keys(cache.episodes).length
+        const pagination = paginationMeta(total, PER_PAGE, page)
+        const episodes = paginate(cache.episodes, pagination.from, pagination.to)
+
+        res.send({
+            episodes,
+            ...pagination
+        })
     })
 
     router.get('/episodes/:year/:name', (req, res) => {
         const prettyName = generatePrettyName(`episodes`, req.params.year, req.params.name);
-        res.send(`${prettyName}`)
+        const post = cache.blogs[prettyName]
+        const episode = cache.episodes[post.guid]
+        res.send({
+            ...post,
+            ...episode
+        })
     })
 
     router.get('/latestEpisode', (req, res) => {

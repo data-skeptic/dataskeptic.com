@@ -68,10 +68,11 @@ const loadBlogsContent = (env, blogs) => {
     return Promise.all(blogs.map((blog) => {
         return getBlogContent(env, blog.rendered)
             .then((content) => {
+                const author = blog.author.toLowerCase()
                 return {
                     ...blog,
                     content,
-                    author: getAuthor(blog.author)
+                    author: getAuthor(author)
                 }
             })
     }))
