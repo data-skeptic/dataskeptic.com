@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import React from 'react';
 import Header from "./Header";
+import Footer from "./Footer"
 import Container from "./Container";
 
 import Player from './Player/Player'
@@ -35,12 +36,12 @@ const Layout = (props) => (
             <Head>
                 <title>DataSkeptic</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-                <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" rel="stylesheet" />
+                <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" rel="stylesheet"/>
             </Head>
             <Header/>
             <Player/>
-            <div id="player-root"></div>
-                {props.children}
+            {props.children}
+            <Footer/>
         </div>
     </ThemeProvider>)
 export default Layout

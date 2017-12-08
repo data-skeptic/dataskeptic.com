@@ -58,4 +58,5 @@ export const Item = styled.li`
   padding:5px 0;
   cursor: pointer;
   color:${props => props.active ? "yellow" : "white"}
+  text-transform: capitalize;
 `
