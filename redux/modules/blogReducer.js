@@ -13,11 +13,17 @@ const SET_ACTIVE_CATEGORY = 'SET_ACTIVE_CATEGORY'
 
 const initialState = {
     loading: false,
-    error:false,
+    error: false,
     list: null,
-    single:null,
-    categories:null,
-    activeCategory:'all'
+    single: null,
+    categories: null,
+    activeCategory: 'all',
+    total: null,
+    perPage: 10,
+    currentPage: null,
+    lastPage: null,
+    from: null,
+    to: null
 };
 
 export default function reducer(state = initialState,
@@ -26,39 +32,44 @@ export default function reducer(state = initialState,
         case LOAD_BLOGS:
             return {
                 ...state,
-                loading:true
+                loading: true
             };
         case LOAD_BLOGS_SUCCESS:
-            return{
+            return {
                 ...state,
-                loading:false,
-                list:action.result.posts
+                loading: false,
+                list: action.result.posts,
+                total:action.result.total,
+                currentPage:action.result.currentPage,
+                lastPage:action.result.lastPage,
+                from:action.result.from,
+                to:action.result.to
             }
         case LOAD_BLOG:
-            return{
+            return {
                 ...state,
-                loading:true
+                loading: true
             }
         case LOAD_BLOG_SUCCESS:
-            return{
+            return {
                 ...state,
-                loading:false,
-                  single:action.result
+                loading: false,
+                single: action.result
             }
         case LOAD_CATEGORIES:
-            return{
+            return {
                 ...state,
-                loading:true
+                loading: true
             }
         case LOAD_CATEGORIES_SUCCESS:
-            return{
+            return {
                 ...state,
-                categories:action.result
+                categories: action.result
             }
         case SET_ACTIVE_CATEGORY:
-            return{
+            return {
                 ...state,
-                activeCategory:action.payload.prettyName
+                activeCategory: action.payload.prettyName
             }
         default:
             return state
@@ -66,21 +77,21 @@ export default function reducer(state = initialState,
 }
 
 
-export const loadBlogList = () => ({
+export const loadBlogList = currentPage => ({
     types: [LOAD_BLOGS, LOAD_BLOGS_SUCCESS, LOAD_BLOGS_FAIL],
-    promise: client => client.get('/blogs')
+    promise: client => client.get(`/blogs/${currentPage && currentPage}`)
 })
-export const loadSingleBlog = pn =>({
+export const loadSingleBlog = pn => ({
     types: [LOAD_BLOG, LOAD_BLOG_SUCCESS, LOAD_BLOG_FAIL],
     promise: client => client.get(`/blogs/${pn}`)
 })
-export const loadCategories = () =>({
+export const loadCategories = () => ({
     types: [LOAD_CATEGORIES, LOAD_CATEGORIES_SUCCESS, LOAD_CATEGORIES_FAIL],
     promise: client => client.get(`/categories`)
 })
 export const setActiveCategory = prettyName => ({
-    type:SET_ACTIVE_CATEGORY,
-    payload:{
+    type: SET_ACTIVE_CATEGORY,
+    payload: {
         prettyName
     }
 })
@@ -94,6 +105,8 @@ export const getSingle = state => state.blogs && state.blogs.single
 export const getCategories = state => state.blogs && state.blogs.categories
 
 export const getActiveCategory = state => state.blogs && state.blogs.activeCategory
+
+export const getPageCount = state => state.blogs && state.blogs.total && Math.ceil(state.blogs.total/10)
 
 //Helpers
 

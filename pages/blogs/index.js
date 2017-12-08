@@ -25,7 +25,7 @@ export default class Dashboard extends Component {
         }
 
         if (!hasBlogs(state)) {
-            promises.push(dispatch(loadBlogList()));
+            promises.push(dispatch(loadBlogList(1)));
         }
         if (!hasCategories(state)) {
             promises.push(dispatch(loadCategories()));
