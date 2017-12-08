@@ -2,14 +2,15 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import {getEpisodes, getActiveYear} from '../../../redux/modules/podcastReducer'
-import BlogListItem from '../Components/BlogListItem'
+import {setCurrentPlaying} from '../../../redux/modules/playerReducer'
+import PodcastListItem from '../Components/PodcastListItem'
 
 @connect(
   state => ({
       episodes: getEpisodes(state),
       year: getActiveYear(state)
   }),
-  {}
+  {setCurrentPlaying}
 )
 export default class PodcastWrapper extends Component {
 
@@ -17,7 +18,7 @@ export default class PodcastWrapper extends Component {
     const {episodes} = this.props;
     return (
       <Wrapper>
-        {episodes.length && episodes.map(post => <BlogListItem key={post.c_hash} post={post}/>)}
+        {episodes.length && episodes.map(episode => <PodcastListItem play={this.props.setCurrentPlaying} key={episode.guid} post={episode}/>)}
       </Wrapper>
     )
   }

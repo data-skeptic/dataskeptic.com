@@ -18,7 +18,6 @@ export default class BlogList extends Component {
         const {posts, category} = this.props;
         return (
             <Wrapper>
-                <PodcastPlayer test={`test`} />
                 {category && <CategoryTitle>{category}</CategoryTitle>}
                 {posts.map(post => <BlogListItem key={post.c_hash} post={post}/>)}
             </Wrapper>
