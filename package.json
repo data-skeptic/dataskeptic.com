@@ -24,6 +24,7 @@
     "express-session": "^1.15.5",
     "final-form": "^1.0.0",
     "http-proxy": "^1.16.2",
+    "lodash.filter": "^4.6.0",
     "mandrill-api": "^1.0.45",
     "mdn-polyfills": "^5.0.0",
     "moment": "^2.19.3",

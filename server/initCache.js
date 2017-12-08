@@ -7,6 +7,8 @@ const FEED_URL = `http://dataskeptic.libsyn.com/rss`
 const ADVERTISE_CARD_CONTENT = 'https://s3.amazonaws.com/dataskeptic.com/dassets/carousel/latest.htm'
 const ADVERTISE_BANNER_CONTENT = 'https://s3.amazonaws.com/dataskeptic.com/dassets/banner/latest.htm'
 
+const domain = "dataskeptic.com"
+const formatLink = (link) => link.replace("http://" + domain, "").replace("https://" + domain, '').replace('.php', '').replace('/blog/', '/')
 
 const convertEpidodes = (items) => {
     let episodes = []
@@ -114,6 +116,10 @@ const getEpisodes = () => {
                 })
             })
         })
+        .then((episodes) => episodes.map((episode) => ({
+            ...episode,
+            link: formatLink(episode.link)
+        })))
 }
 
 
@@ -136,8 +142,9 @@ const loadAdvertiseSourceContent = (source) => {
 const formatByKey = (items, key) => {
     let formattedItems = {}
 
-    items.forEach((item) => {
+    items.forEach((item, index) => {
         const value = item[key]
+        item.order = index+1
         formattedItems[value] = item
     })
 
@@ -147,7 +154,7 @@ const formatByKey = (items, key) => {
 const init = async (isProduction) => {
     const env = isProduction ? 'prod' : 'dev'
 
-    const [blogs, episodes, card, banner] = await Promise.all([
+    const [blogs, episodes, card, sponsor] = await Promise.all([
         getBlogs(env),
         getEpisodes(),
         loadAdvertiseSourceContent(ADVERTISE_CARD_CONTENT),
@@ -155,6 +162,7 @@ const init = async (isProduction) => {
     ])
 
     const latestEpisode = episodes[0]
+    const latestPost = blogs[0]
 
     const categories = extractCategories(blogs)
 
@@ -162,9 +170,10 @@ const init = async (isProduction) => {
         blogs: formatByKey(blogs, `prettyname`),
         episodes: formatByKey(episodes, `guid`),
         latestEpisode,
+        latestPost,
         categories,
         card,
-        banner
+        sponsor
     }
 
     return cache
