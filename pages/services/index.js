@@ -5,6 +5,9 @@ import {SERVICES} from "../../modules/Helpers/Contants";
 import ServiceList from '../../modules/Services/Components/ServiceList'
 import styled from 'styled-components'
 import Page from '../../hoc/Page'
+import { Form } from "react-final-form"
+import {contactFormValidator} from "../../modules/Forms/Validators";
+import ContactForm from '../../modules/Forms/ContactForm'
 
 @Page
 export default class Services extends Component {
@@ -22,6 +25,10 @@ export default class Services extends Component {
                     <ServiceList
                         list={SERVICES}
                     />
+                    <Form onSubmit={(data) => alert(data)}
+                          render={ContactForm}
+                          validate={values => contactFormValidator(values)}
+                    />
                 </ServiceWrapper>
             </Container>
         )
@@ -29,7 +36,7 @@ export default class Services extends Component {
 }
 
 const Container = styled.div`
-
+ 
 `
 
 const Title = styled.h1`
