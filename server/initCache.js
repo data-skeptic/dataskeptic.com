@@ -133,6 +133,17 @@ const loadAdvertiseSourceContent = (source) => {
     })
 }
 
+const formatByKey = (items, key) => {
+    let formattedItems = {}
+
+    items.forEach((item) => {
+        const value = item[key]
+        formattedItems[value] = item
+    })
+
+    return formattedItems
+}
+
 const init = async (isProduction) => {
     const env = isProduction ? 'prod' : 'dev'
 
@@ -148,8 +159,8 @@ const init = async (isProduction) => {
     const categories = extractCategories(blogs)
 
     const cache = {
-        blogs,
-        episodes,
+        blogs: formatByKey(blogs, `prettyname`),
+        episodes: formatByKey(episodes, `guid`),
         latestEpisode,
         categories,
         card,
