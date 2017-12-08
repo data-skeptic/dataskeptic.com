@@ -2,7 +2,7 @@ const SET_CURRENT_PLAYING = "PLAYER//SET_CURRENT_PLAYING";
 const RESET_PLAYER = "PLAYER//RESET_PLAYER";
 const PLAY = "PLAYER//PLAY";
 const PAUSE = "PLAYER//PAUSE";
-const SET_POSITION = "PLAYER//PAUSE"
+const SET_POSITION = "PLAYER//SET_POSITION"
 const initialState = {
   isPlaying: false,
   isVisible: false,
@@ -16,8 +16,9 @@ export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case SET_CURRENT_PLAYING:
       return {
-        ...initialState,
+        ...state,
         currentPlaying: action.payload.data,
+        position: 0,
         isPlaying: true,
         isVisible: true
       };

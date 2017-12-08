@@ -61,7 +61,6 @@ export default class Howler extends Component {
     console.log(loaded)
     return (
       <PlayerWrapper>
-     
             <ReactHowler
               src={mp3}
               html5={true}
