@@ -146,7 +146,7 @@ const init = async (isProduction) => {
     const latestEpisode = episodes[0]
 
     const categories = extractCategories(blogs)
-k
+
     const cache = {
         blogs,
         episodes,
