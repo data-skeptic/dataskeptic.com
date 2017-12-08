@@ -27,9 +27,11 @@ export default class BlogList extends Component {
                 <ReactPaginate
                     previousLabel={"previous"}
                     nextLabel={"next"}
-                    breakLabel={<a href="">...</a>}
+                    initialPage={1}
+                    breakLabel={<span>...</span>}
                     pageCount={pageCount}
                     onPageChange={this.handlePageClick}
+                    disableInitialCallback
                 />
             </Wrapper>
         )

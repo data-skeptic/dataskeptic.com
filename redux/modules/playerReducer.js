@@ -12,7 +12,6 @@ const initialState = {
 };
 
 export default function reducer(state = initialState, action = {}) {
-  console.log(initialState);
   switch (action.type) {
     case SET_CURRENT_PLAYING:
       return {
