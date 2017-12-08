@@ -23,9 +23,9 @@ export default ({name, media, title, description, author, avatar, date}) => (
                 <Title>{title}</Title>
                 <Description>{description}</Description>
                 <Author>
-                    <Avatar src={avatar}/>
+                    <Avatar src={author && author.img}/>
                     <Info>
-                        <Name>{author}</Name>
+                        <Name>{author && author.prettyname}</Name>
                         <Date>{date}</Date>
                     </Info>
                 </Author>

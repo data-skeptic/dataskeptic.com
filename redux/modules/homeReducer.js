@@ -35,7 +35,7 @@ export default function reducer(state = initialState,
 
 export const loadAll = () => ({
     types: [LOAD_ALL, LOAD_ALL_SUCCESS, LOAD_ALL_FAIL],
-    promise: client => client.get('/homepage')
+    promise: client => client.get('/home')
 })
 
 // Selectors

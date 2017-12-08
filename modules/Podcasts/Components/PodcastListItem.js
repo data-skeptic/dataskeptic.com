@@ -31,7 +31,7 @@ export default class EpisodeListItem extends Component {
             </PostLink>
             <ButtonsWrapper>
               <Button onClick={this.handlePlay}>
-                <Ionicon icon = {'md-play'}/>  Play  {post.duration}
+                <Ionicon icon ={'md-play'}/>  Play  {post.duration}
               </Button>
               <Button>
                 <Ionicon icon = {'md-download'}/>  Download
@@ -40,7 +40,7 @@ export default class EpisodeListItem extends Component {
           </TitleWrap>
           {" "}
           <div dangerouslySetInnerHTML={{__html: post.desc.replace(/Â/g, '')}}/>
-          <More href="/blogs/1">View More</More>{" "}
+          <More href={`/podcasts/details${post.link}`}>View More</More>{" "}
           </Body>
         </Post>
       </Wrapper>

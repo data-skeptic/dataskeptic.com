@@ -31,7 +31,7 @@ export default function reducer(state = initialState,
     case LOAD_EPISODES_SUCCESS:
       return {
         ...state,
-        episodes: action.result
+        episodes: action.result.episodes
       }
     case LOAD_EPISODE:
       return {
@@ -66,7 +66,7 @@ export default function reducer(state = initialState,
 
 export const loadEpisodesList = () => ({
   types: [LOAD_EPISODES, LOAD_EPISODES_SUCCESS, LOAD_EPISODES_FAIL],
-  promise: client => client.get('/episodes')
+  promise: client => client.get('/episodes/')
 })
 export const loadSingleEpisode = id => ({
   types: [LOAD_EPISODE, LOAD_EPISODE_SUCCESS, LOAD_EPISODE_FAIL],
