@@ -1,13 +1,15 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
 import Rcslider from "rc-slider"
+
+import styles from './styles'
 export default class Progress extends React.Component {
   constructor(props) {
     super(props)
   }
 
   onUpdate = (position) => {
-    this.props.onChange(position);
+    console.log(position)
   }
 
   render() {
@@ -16,6 +18,7 @@ export default class Progress extends React.Component {
         <Rcslider
           min={0}
           max={100}
+          step={0.01}
           range={false}
           defaultValue={this.props.progress}
           value={this.props.progress}
@@ -29,8 +32,8 @@ export default class Progress extends React.Component {
 
 
 const ProgressWrapper = styled.div`
-      margin-left: 50px;
-    margin-right: 50px;
+${styles};
+   flex-grow:1;
     padding: 9px;
   & > .rc-slider {
   height: 2px;
