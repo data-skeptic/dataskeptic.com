@@ -14,14 +14,14 @@ export default class BlogListItem extends Component {
           </Date>
           <Header>
             <Avatar>
-              <img src={post.contributor.img} />
+              <img src={post.author.img} />
             </Avatar>
             <PostLink href={`/blogs/details/${post.c_hash}`}>
               <Title>
                 {post.title}
               </Title>
               <Author>
-                by <strong>{post.contributor.prettyname}</strong>
+                by <strong>{post.author.prettyname}</strong>
               </Author>
             </PostLink>
           </Header>

@@ -32,7 +32,7 @@ export default function reducer(state = initialState,
             return{
                 ...state,
                 loading:false,
-                list:action.result
+                list:action.result.posts
             }
         case LOAD_BLOG:
             return{
