@@ -27,6 +27,7 @@ export default class Services extends Component {
                     />
                     <Form onSubmit={(data) => alert(data)}
                           render={ContactForm}
+                          subscription={{ submitting: true, pristine: true }}
                           validate={values => contactFormValidator(values)}
                     />
                 </ServiceWrapper>

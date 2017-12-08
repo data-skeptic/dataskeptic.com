@@ -1,35 +1,46 @@
 import React from 'react'
 import styled from 'styled-components'
 import {Field} from 'react-final-form'
-import {Input} from "./Input";
+import {ContactInput} from "./Input";
 import Link from '../../components/Link'
 
 const ContactForm = ({handleSubmit, reset, submitting, pristine, values}) => (
     <form onSubmit={handleSubmit}>
-
+        <Title>Contact Us</Title>
         <Field name="fullName"
-               component={Input}
+               component={ContactInput}
                type="text"
                label="Name"
                placeholder="Name"
         />
 
         <Field name="email"
-               component={Input}
+               component={ContactInput}
                type="email"
                label="Email"
                placeholder="Email"
         />
-
         <Field
             name="message"
-            component={Input}
+            component={ContactInput}
             textarea
             label="Message"
         />
-        <button type="submit">Submit</button>
+        <Submit type="submit">Submit</Submit>
     </form>
 )
 export default ContactForm
+const Submit = styled.button`
+    padding:10px 20px;
+    background-color: #f0d943;
+    border:none;
+    border-radius: 5px;
+    color:white;
+    cursor: pointer;
+`
+const Title = styled.h1`
+    font-family: "SF Medium";
+`
+
 
 
