@@ -30,7 +30,6 @@ export default function (cache) {
     })
 
     router.get('/blogs/', (req, res) => {
-        return res.send(cache.blogs)
         const page = 1;
 
         const total = Object.keys(cache.blogs).length
