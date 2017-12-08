@@ -39,7 +39,7 @@ const Submit = styled.button`
     cursor: pointer;
 `
 const Title = styled.h1`
-    font-family: "SF Medium";
+    font-family: 'SF Light';
 `
 
 
