@@ -11,7 +11,7 @@ function run() {
     }
   }
   require('./node.babel') // babel registration (runtime transpilation for node)
-  require('../api/lambdas/v2/index')
+  require('../server/api')
 }
 
 run()
