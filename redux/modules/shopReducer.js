@@ -17,12 +17,13 @@ export default function reducer(state = initialState,
             }
         case ADD_TO_CART:
 
-            const isInside = state.cart.find((item) => item.id === action.payload.id);
-            const cart = state.cart.filter((item) => item.id !== action.payload.id);
-            const {quantity} = action.payload
+            const {quantity,id} = action.payload
+            const isInside = state.cart.find(item => item.id === id);
+            const cart = state.cart.filter((item) => item.id !== id);
+
             return{
                 ...state,
-                cart:!isInside ? [...cart, action.payload] : [...cart,{...action.payload,quantity:quantity+1}]
+                cart:!isInside ? [...cart, action.payload] : [...cart,{...action.payload,quantity:isInside.quantity+1}]
             }
         default:
             return state

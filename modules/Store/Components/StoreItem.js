@@ -3,8 +3,8 @@ import React,{Component} from 'react'
 
 export default class StoreItem extends Component{
     handleAdd = () =>{
-        const {title,description,price} = this.props
-        this.props.addToCart({title,description,price})
+        const {title,description,price,id} = this.props
+        this.props.addToCart({title,description,price,id})
     }
     render(){
         const {title,description,price} = this.props
