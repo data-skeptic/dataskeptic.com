@@ -1,13 +1,11 @@
-import styled from 'styled-components'
-import React from 'react';
+import styled from "styled-components";
+import React from "react";
 
-export default (props) => (
-    <Container>
-        {props.children}
-    </Container>
-);
+export default props =>
+  <Container>
+    {props.children}
+  </Container>;
 
 const Container = styled.div`
-    min-height: 88vh;
-`
-
+  ${props => (props.global ? `min-height: 88vh` : ` margin: 0px ${props.theme.container.margin}`)};
+`;

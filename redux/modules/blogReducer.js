@@ -10,6 +10,7 @@ const LOAD_CATEGORIES = 'LOAD_CATEGORIES'
 const LOAD_CATEGORIES_SUCCESS = 'LOAD_CATEGORIES_SUCCESS'
 const LOAD_CATEGORIES_FAIL = 'LOAD_CATEGORIES_FAIL'
 const SET_ACTIVE_CATEGORY = 'SET_ACTIVE_CATEGORY'
+const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE'
 
 const initialState = {
     loading: false,
@@ -71,6 +72,11 @@ export default function reducer(state = initialState,
                 ...state,
                 activeCategory: action.payload.prettyName
             }
+      case SET_CURRENT_PAGE:
+          return {
+            ...state,
+            currentPage: action.payload.page
+          }
         default:
             return state
     }
@@ -94,6 +100,13 @@ export const setActiveCategory = prettyName => ({
     payload: {
         prettyName
     }
+})
+
+export const setCurrentPage = page => ({
+  type: SET_CURRENT_PAGE,
+  payload: {
+      page
+  }
 })
 
 //Selectors

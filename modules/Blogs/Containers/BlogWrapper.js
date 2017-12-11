@@ -18,7 +18,8 @@ import ParamRouter from '../../../components/Router'
 )
 export default class BlogList extends Component {
     handlePageClick = data =>{
-      this.props.loadBlogs(data.selected+1)
+      console.log(data);
+      this.props.loadBlogList(data.selected+1)
       ParamRouter.pushRoute('Page', {page: data.selected+1})
     }
     render() {
@@ -28,7 +29,7 @@ export default class BlogList extends Component {
           <Wrapper>
                 {categoryExist && category && <CategoryTitle>{category}</CategoryTitle>}
                 {categoryExist && posts && posts.map(post => <BlogListItem key={post.c_hash} {...post}/>)}
-              {categoryExist && <PaginationContainer>
+              {category === 'all' && <PaginationContainer>
                 <ReactPaginate
                   marginPagesDisplayed={1}
                   pageRangeDisplayed={2}
