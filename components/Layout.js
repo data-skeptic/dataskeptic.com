@@ -40,9 +40,7 @@ const Layout = (props) => (
             </Head>
             <Header/>
             <Player/>
-
             {props.children}
-
             <Footer/>
         </div>
     </ThemeProvider>)
