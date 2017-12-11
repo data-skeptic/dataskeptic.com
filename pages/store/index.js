@@ -1,29 +1,27 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
 import Page from '../../hoc/Page'
-
+import {loadProducts} from "../../redux/modules/shopReducer";
+import {productList} from "../../modules/Store/mokedData";
+import StoreContainer from "../../modules/Store/Containers/StoreContainer";
 
 @Page
 export default class Services extends Component {
     static async getInitialProps({store: {dispatch, getState}, query}) {
         const state = getState()
         const promises = []
+        promises.push(dispatch(loadProducts(productList)))
 
         await Promise.all(promises)
     }
 
     render() {
         return (
-            <Container>
-                store page
-            </Container>
+           <StoreContainer/>
         )
     }
 }
 
-const Container = styled.div`
- 
-`
 
 const Title = styled.h1`
   color: red;
