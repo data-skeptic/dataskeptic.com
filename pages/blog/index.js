@@ -14,24 +14,49 @@ import {
     setActiveCategory
 } from "../../redux/modules/blogReducer";
 
+const getActualQuery = (category, page, isPage = false) => {
+
+  if(!isNaN(category)) {
+    console.log('ok')
+    page = category;
+    category = 'all'
+  }
+
+  if(!page) {
+      page = 1;
+  }
+  if(!category) {
+      category = 'all'
+  }
+
+  if(isPage) {
+    return page
+  }
+  else {
+    return category;
+  }
+}
+
 @Page
 export default class Dashboard extends Component {
     static async getInitialProps({store: {dispatch, getState}, query}) {
         const state = getState();
-        const {category} = query
+        let {category, page} = query
         const promises = [];
+
         if (category) {
-            promises.push(dispatch(setActiveCategory(category)))
+            promises.push(dispatch(setActiveCategory(getActualQuery(category,page))))
         }
 
         if (!hasBlogs(state)) {
-            promises.push(dispatch(loadBlogList(1)));
+            promises.push(dispatch(loadBlogList(getActualQuery(category,page,true))));
         }
         if (!hasCategories(state)) {
             promises.push(dispatch(loadCategories()));
         }
         await Promise.all(promises);
     }
+
 
     render() {
         return (

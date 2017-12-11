@@ -4,7 +4,8 @@ import styled from 'styled-components'
 import {getActiveCategory, getCategories,setActiveCategory} from '../../../redux/modules/blogReducer'
 import BlogListItem from '../Components/BlogListItem'
 import CategoriesListItem from "../Components/CategoriesListItem";
-import Router from '../../../components/Router'
+import ParamRouter from '../../../components/Router'
+import Router from 'next/router'
 
 @connect(
     state => ({
@@ -15,10 +16,14 @@ import Router from '../../../components/Router'
 )
 export default class CategoryList extends Component {
     setActiveCategory = label => {
-        Router.pushRoute(`/blogs/${label}`)
+      ParamRouter.pushRoute(`Category`, {category: label})
     }
+
+
+
     render() {
-        const {categories} = this.props;
+        const {categories,activeCategory} = this.props;
+
         return (
             <Wrapper>
                 <Title>Categories</Title>
