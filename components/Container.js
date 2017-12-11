@@ -8,6 +8,6 @@ export default (props) => (
 );
 
 const Container = styled.div`
-    margin: 0px ${props => props.theme.container.margin};
+    min-height: 88vh;
 `
 
