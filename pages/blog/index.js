@@ -11,7 +11,8 @@ import {
     loadCategories,
     hasBlogs,
     hasCategories,
-    setActiveCategory
+    setActiveCategory,
+    setCurrentPage
 } from "../../redux/modules/blogReducer";
 
 const getActualQuery = (category, page, isPage = false) => {
@@ -43,13 +44,18 @@ export default class Dashboard extends Component {
         const state = getState();
         let {category, page} = query
         const promises = [];
+        const pageActual = getActualQuery(category,page,true);
+        const categoryActual = getActualQuery(category, page);
 
         if (category) {
-            promises.push(dispatch(setActiveCategory(getActualQuery(category,page))))
+            promises.push(dispatch(setActiveCategory(categoryActual)))
+        }
+        else {
+            promises.push(dispatch(setActiveCategory(categoryActual)))
         }
 
         if (!hasBlogs(state)) {
-            promises.push(dispatch(loadBlogList(getActualQuery(category,page,true))));
+            promises.push(dispatch(loadBlogList(pageActual)));
         }
         if (!hasCategories(state)) {
             promises.push(dispatch(loadCategories()));

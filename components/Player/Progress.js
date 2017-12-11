@@ -10,6 +10,7 @@ export default class Progress extends React.Component {
 
   onUpdate = (position) => {
     console.log(position)
+    this.props.setPosition(position)
   }
 
   render() {
