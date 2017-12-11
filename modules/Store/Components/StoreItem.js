@@ -2,7 +2,10 @@ import React,{Component} from 'react'
 
 
 export default class StoreItem extends Component{
-
+    handleAdd = () =>{
+        const {title,description,price} = this.props
+        this.props.addToCart({title,description,price})
+    }
     render(){
         const {title,description,price} = this.props
         return(
@@ -10,7 +13,7 @@ export default class StoreItem extends Component{
                 <h3>{title}</h3>
                 <p>{description}</p>
                 <span>{price}</span>
-                <button>Add cart</button>
+                <button onClick={this.handleAdd}>Add cart</button>
             </div>
         )
     }
