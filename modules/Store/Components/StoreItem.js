@@ -16,8 +16,10 @@ export default class StoreItem extends Component {
                 <Description>
                     <h3>{title}</h3>
                     <p>{description}</p>
-                    <span>${price}</span>
-                    <AddButton onClick={this.handleAdd}><Icon icon="md-add" color="#fff"/></AddButton>
+                    <PriceWrapper>
+                        <Price>${price}</Price>
+                        <AddButton onClick={this.handleAdd}><Icon icon="md-add" color="#fff"/></AddButton>
+                    </PriceWrapper>
                 </Description>
             </ProductWrapper>
         )
@@ -36,4 +38,10 @@ const ProductWrapper = styled.div`
 `
 const Description = styled.div`
   flex: 0 0 70%;
+`
+const Price = styled.span`
+   margin-right:10px;
+`
+const PriceWrapper = styled.div`
+   text-align: right;
 `

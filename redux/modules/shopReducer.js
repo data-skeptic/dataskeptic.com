@@ -19,9 +19,12 @@ export default function reducer(state = initialState,
             const {id} = action.payload
             const existingItem = state.cart.find(item => item.id === id);
             const cart = state.cart.filter((item) => item.id !== id);
-            return{
+            return {
                 ...state,
-                cart:!existingItem ? [...cart, action.payload] : [...cart,{...action.payload,quantity:existingItem.quantity+1}]
+                cart: !existingItem ? [...cart, action.payload] : [...cart, {
+                    ...action.payload,
+                    quantity: existingItem.quantity + 1
+                }]
             }
         default:
             return state
@@ -41,6 +44,9 @@ export const addToCart = item => ({
         ...item,
         quantity: 1
     }
-
 })
 export const getProducts = state => state.shop && state.shop.products
+
+export const getCartAmount = state => state.shop && state.shop.cart && state.shop.cart.reduce((prev, curr) => (curr.quantity && (prev + curr.quantity)),0)
+
+export const getCart = state => state.shop && state.shop.cart
