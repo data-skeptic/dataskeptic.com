@@ -16,7 +16,7 @@ export default class BlogListItem extends Component {
             <Avatar>
               <img src={author.img} />
             </Avatar>
-            <PostLink href={`/blogs${prettyname}`}>
+            <PostLink href={`/blog${prettyname}`}>
               <Title>
                 {title}
               </Title>
