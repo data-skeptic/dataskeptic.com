@@ -1,3 +1,5 @@
+import {updateQuantity} from "./helpers/helpers";
+
 const LOAD_PRODUCTS = 'LOAD_PRODUCTS'
 const ADD_TO_CART = 'ADD_TO_CART'
 const CHANGE_QUANTITY = 'CHANGE_QUANTITY'
@@ -34,19 +36,7 @@ export default function reducer(state = initialState,
             const {id, quantity} = action.payload
             return {
                 ...state,
-                cart: state.cart.map(item => {
-                    if (item.id === id) {
-                        return ({
-                            ...item,
-                            quantity: quantity
-                        })
-                    }
-                    else {
-                        return ({
-                            ...item
-                        })
-                    }
-                })
+                cart:updateQuantity(id,state.cart,quantity)
             }
         }
         case REMOVE_ITEM:{
