@@ -47,6 +47,8 @@ export const addToCart = item => ({
 })
 export const getProducts = state => state.shop && state.shop.products
 
-export const getCartAmount = state => state.shop && state.shop.cart && state.shop.cart.reduce((prev, curr) => (curr.quantity && (prev + curr.quantity)),0)
+export const getCartAmount = state => state.shop && state.shop.cart && state.shop.cart.reduce((prev, curr) => (curr.quantity && (prev + curr.quantity)), 0)
 
 export const getCart = state => state.shop && state.shop.cart
+
+export const getSubTotal = state => state.shop && state.shop.cart.map(item => item.price * item.quantity).reduce((prev, curr) => (curr && (prev + curr)), 0)
