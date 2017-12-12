@@ -1,8 +1,9 @@
 import React from 'react'
 import CartItem from "./CartItem";
 
-const CartList = ({amount, cartList, changeQuantity, removeItem}) => (
+const CartList = ({amount, cartList, changeQuantity, removeItem,clearCart}) => (
     <div>
+        <button onClick={clearCart}>Clear</button>
         {!amount
             ? <p>
                 Your cart is empty.

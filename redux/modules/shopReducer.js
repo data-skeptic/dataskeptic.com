@@ -4,6 +4,7 @@ const LOAD_PRODUCTS = 'LOAD_PRODUCTS'
 const ADD_TO_CART = 'ADD_TO_CART'
 const CHANGE_QUANTITY = 'CHANGE_QUANTITY'
 const REMOVE_ITEM = 'REMOVE_ITEM'
+const CLEAR_CART = 'CLEAR_CART'
 
 const initialState = {
     loading: false,
@@ -15,11 +16,12 @@ const initialState = {
 export default function reducer(state = initialState,
                                 action = {}) {
     switch (action.type) {
-        case LOAD_PRODUCTS:
+        case LOAD_PRODUCTS:{
             return {
                 ...state,
                 products: action.payload.productsList
             }
+        }
         case ADD_TO_CART: {
             const {id} = action.payload
             const existingItem = state.cart.find(item => item.id === id);
@@ -45,6 +47,12 @@ export default function reducer(state = initialState,
             return{
                 ...state,
                 cart:[...cart]
+            }
+        }
+        case CLEAR_CART: {
+            return {
+                ...state,
+                cart:[]
             }
         }
         default:
@@ -79,6 +87,9 @@ export const removeItem = id =>({
     payload:{
         id
     }
+})
+export const clearCart = ()=>({
+    type:CLEAR_CART
 })
 
 
