@@ -1,25 +1,32 @@
-import React,{Component} from 'react'
+import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {getProducts,addToCart} from "../../../redux/modules/shopReducer";
-import StoreItem from "../Components/StoreItem";
-
+import {getProducts, addToCart} from "../../../redux/modules/shopReducer";
+import ProductList from '../Components/ProductList'
+import styled from 'styled-components'
 
 @connect(
     state => ({
-        products:getProducts(state)
+        products: getProducts(state)
     }),
     {addToCart}
 )
 
- export default class StoreContainer extends Component{
+export default class StoreContainer extends Component {
     addToCart = item => this.props.addToCart(item)
 
-    render(){
+    render() {
         const {products} = this.props
-        return(
-            <div>
-                {products.map(item => <StoreItem {...item} addToCart={this.addToCart}/>)}
-            </div>
+        return (
+            <StoreWrapper>
+                <ProductList
+                    products={products}
+                    addToCart={this.addToCart}
+                />
+            </StoreWrapper>
         )
     }
- }
+}
+const StoreWrapper = styled.div`
+  max-width: 800px;
+  margin: 0 auto;
+`

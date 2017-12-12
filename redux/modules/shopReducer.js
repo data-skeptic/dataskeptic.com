@@ -16,7 +16,6 @@ export default function reducer(state = initialState,
                 products: action.payload.productsList
             }
         case ADD_TO_CART:
-
             const {id} = action.payload
             const existingItem = state.cart.find(item => item.id === id);
             const cart = state.cart.filter((item) => item.id !== id);

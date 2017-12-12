@@ -4,6 +4,7 @@ import Page from '../../hoc/Page'
 import {loadProducts} from "../../redux/modules/shopReducer";
 import {productList} from "../../modules/Store/mokedData";
 import StoreContainer from "../../modules/Store/Containers/StoreContainer";
+import Container from '../../components/Container'
 
 @Page
 export default class Services extends Component {
@@ -17,7 +18,9 @@ export default class Services extends Component {
 
     render() {
         return (
-           <StoreContainer/>
+            <Container global>
+                <StoreContainer/>
+            </Container>
         )
     }
 }
