@@ -88,7 +88,7 @@ export const removeItem = id =>({
         id
     }
 })
-export const clearCart = ()=>({
+export const clearCart = ()=> ({
     type:CLEAR_CART
 })
 
