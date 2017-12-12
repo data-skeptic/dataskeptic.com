@@ -14,11 +14,11 @@ import {
     Date
 } from "../../../shared/styles";
 
-export default ({name, media, title, description, author, avatar, date}) => (
+export default ({name, img, title, description, author, avatar, date}) => (
     <Wrapper>
         <Label>{name}</Label>
         <Card>
-            <Media>{media}</Media>
+            <Media><img src={img} alt=""/></Media>
             <Inner>
                 <Title>{title}</Title>
                 <Description>{description}</Description>

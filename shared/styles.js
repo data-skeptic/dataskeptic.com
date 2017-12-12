@@ -39,18 +39,23 @@ export const Title = styled.h3`
 	color: #373737;
 `
 export const Inner = styled.div`
-  padding:0 32px;
+   padding: 0px 16px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
  `
 
 export const Card = styled.div`
-    min-height:91%;
+  flex-direction: column;
+    display: flex;
     border-radius: 2px;
-	border: solid 1px rgba(0, 0, 0, 0.1);
+    border: solid 1px rgba(0,0,0,0.1);
+    height: 100%;
 `
 
 export const Description = styled.p`
     font-size: 16px;
-    height:72px;
+    height:90px;
     overflow:hidden;
 	line-height: 1.12;
 	color: rgba(0, 0, 0, 0.5);
@@ -68,7 +73,7 @@ export const Avatar = styled.img`
 `
 
 export const Media = styled.div`
-    height: 180px;
+    min-height: 180px;
     
     > * {
       width:100%;
@@ -104,7 +109,10 @@ export const Date = Line.extend`
 export const Author = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom:40px;
+  flex-grow: 1;
+    
+   max-height: 50px;
+   height: 50px;
 `
 
 export const Info = styled.div`

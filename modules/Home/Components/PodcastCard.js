@@ -1,11 +1,11 @@
 import React from 'react'
 import moment from 'moment'
+import styled from 'styled-components'
 import {
     Wrapper,
     Label,
     Card,
     Media,
-    Inner,
     Title,
     Description,
     Author,
@@ -15,14 +15,14 @@ import {
     Date
     } from "../../../shared/styles";
 
-export default ({ pubDate,title,desc,setEpisodeDescription}) => (
+export default ({ pubDate,title,desc,setEpisodeDescription, img}) => (
     <Wrapper>
         <Label>{}</Label>
         <Card>
-            <Media>{}</Media>
+            <Media><img src={img} alt=""/></Media>
             <Inner>
                 <Title>{title}</Title>
-                <Description dangerouslySetInnerHTML={setEpisodeDescription(desc)}/>
+                <Description>{desc}</Description>
                 <Author>
                     {/*<Avatar src={}/>*/}
                     <Info>
@@ -36,3 +36,8 @@ export default ({ pubDate,title,desc,setEpisodeDescription}) => (
 );
 
 
+const Inner = styled.div`
+    padding: 0px 16px;
+    display: flex;
+    flex-direction: column;
+`
