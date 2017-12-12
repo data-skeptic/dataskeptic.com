@@ -5,7 +5,9 @@ import {
     addToCart,
     getCartAmount,
     getCart,
-    getSubTotal
+    getSubTotal,
+    changeQuantity,
+    removeItem
 } from "../../../redux/modules/shopReducer";
 import ProductList from '../Components/ProductList'
 import CartLit from '../Components/CartList'
@@ -18,11 +20,13 @@ import styled from 'styled-components'
         cartList: getCart(state),
         subTotal: getSubTotal(state)
     }),
-    {addToCart}
+    {addToCart,changeQuantity,removeItem}
 )
 
 export default class StoreContainer extends Component {
     addToCart = item => this.props.addToCart(item)
+    changeQuantity = (id,quantity) => this.props.changeQuantity(id,quantity)
+    removeItem = id => this.props.removeItem(id)
 
     render() {
         const {products, amount, cartList,subTotal} = this.props
@@ -36,6 +40,8 @@ export default class StoreContainer extends Component {
                 <CartLit
                     amount={amount}
                     cartList={cartList}
+                    changeQuantity={this.changeQuantity}
+                    removeItem={this.removeItem}
                 />
 
             </StoreWrapper>
