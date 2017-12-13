@@ -23,7 +23,6 @@ export default class HomeContainer extends Component {
 
     render() {
         const {latestPost,latestEpisode,dailySponsor} = this.props
-      console.log(latestPost, latestEpisode, dailySponsor)
         return (
             <Container>
                 <Intro>

@@ -11,9 +11,9 @@ export default class EpisodeListItem extends Component {
     }
 
     render() {
-        const {post, key} = this.props;
+        const {post} = this.props;
         return (
-            <Wrapper key={key}>
+            <Wrapper>
                 <Date>
                     {moment(post.pubDate).format('MMMM D, YYYY')}{" "}
                 </Date>
