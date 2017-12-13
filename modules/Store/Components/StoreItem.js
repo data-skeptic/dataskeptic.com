@@ -14,7 +14,7 @@ export default class StoreItem extends Component {
             <ProductWrapper>
                 <img src={img}/>
                 <Description>
-                    <h3>{title}</h3>
+                    <Title>{title}</Title>
                     <p>{description}</p>
                     <PriceWrapper>
                         <Price>${price}</Price>
@@ -25,6 +25,11 @@ export default class StoreItem extends Component {
         )
     }
 }
+const Title = styled.h3`
+   font-family: "SF Bold";
+   margin-top: 0px;
+`
+
 const AddButton = styled.button`
   padding:0;
   margin:0;
@@ -35,9 +40,14 @@ const AddButton = styled.button`
 const ProductWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+  margin: 10px 0px;
+  & > img {
+      height: 150px;
+  }
 `
 const Description = styled.div`
   flex: 0 0 70%;
+  font-family: "SF Light";
 `
 const Price = styled.span`
    margin-right:10px;

@@ -24,13 +24,3 @@ export default class Services extends Component {
         )
     }
 }
-
-
-const Title = styled.h1`
-  color: red;
-  text-align: center;
-`
-const ServiceWrapper = styled.div`
-  max-width:800px;
-  margin:0 auto;
-`

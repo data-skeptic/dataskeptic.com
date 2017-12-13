@@ -7,6 +7,7 @@ theme.colors = {
     dark: "#3a3b3b",
     darker: "#323333",
     gray: "#a2a6a6",
+    light: "#d7d9d9",
     danger: "rgba(255, 0, 0, 0.87)",
     link: "#fff"
 }

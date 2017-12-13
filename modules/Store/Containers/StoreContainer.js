@@ -11,7 +11,7 @@ import {
     clearCart
 } from "../../../redux/modules/shopReducer";
 import ProductList from '../Components/ProductList'
-import CartLit from '../Components/CartList'
+import CartList from '../Components/CartList'
 import styled from 'styled-components'
 
 @connect(
@@ -39,7 +39,7 @@ export default class StoreContainer extends Component {
                     products={products}
                     addToCart={this.addToCart}
                 />
-                <CartLit
+                <CartList
                     amount={amount}
                     cartList={cartList}
                     changeQuantity={this.changeQuantity}
