@@ -26,7 +26,8 @@ const FooterWrapper = styled.footer`
     display: flex;
     background: #3a3b3b;
     color: #a2a6a6;
-    padding:60px 100px;
+    padding:60px 100px;    
+    margin-top: 20px;
 `
 const Logo = styled(Link)`
     display: block;   
