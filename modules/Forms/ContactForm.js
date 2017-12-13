@@ -6,7 +6,7 @@ import Link from '../../components/Link'
 
 const ContactForm = ({handleSubmit, reset, submitting, pristine, values}) => (
     <form onSubmit={handleSubmit}>
-        <Title>Contact Us</Title>
+
         <Field name="fullName"
                component={ContactInput}
                type="text"

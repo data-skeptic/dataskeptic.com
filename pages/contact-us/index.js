@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
-
+import Container from '../../components/Container'
 import Page from '../../hoc/Page'
+import ContactUsContainer from "../../modules/ContactUs/Containers/ContactUsContainer";
 
 
 @Page
@@ -13,7 +14,9 @@ export default class ContactUs extends Component {
     }
 
     render() {
-        return <div>CONTACT US</div>
+        return <Container global>
+            <ContactUsContainer/>
+        </Container>
 
     }
 }

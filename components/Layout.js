@@ -7,8 +7,10 @@ import Container from "./Container";
 import Player from './Player/Player'
 import theme from '../shared/styles'
 import {ThemeProvider, injectGlobal} from 'styled-components'
+import styledNormalize from 'styled-normalize'
 
 injectGlobal`
+  ${styledNormalize}
   @font-face {
     font-family: 'SF Light';
     src: url('/static/fonts/SFUIDisplay-Light.otf');
@@ -27,6 +29,7 @@ injectGlobal`
   }
   body {
     font-family: 'SF Regular';
+     box-sizing: border-box;
   }
 `;
 
