@@ -34,7 +34,6 @@ export default class StoreContainer extends Component {
         const {products, amount, cartList,subTotal} = this.props
         return (
             <StoreWrapper>
-                {JSON.stringify(amount)}
                 <ProductList
                     products={products}
                     addToCart={this.addToCart}
