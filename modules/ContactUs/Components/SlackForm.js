@@ -38,4 +38,5 @@ const Submit = styled.button`
   background-image:url("static/Slack_Mark.svg");
   background-size: 400%;
   background-position: -205px 52%;
+  cursor: pointer;
 `

@@ -22,8 +22,8 @@ export default class ContactUsContainer extends Component {
                         <div>
                             <Title>Purchase</Title>
                             <EmailWrapper>
-                                <Icon style={{marginRight:"15px"}} icon="ios-mail-outline" fontSize="35px"/>
-                                <Email href={`mailto:orders@dataskeptic.com`} >
+                                <Icon style={{marginRight: "15px"}} icon="ios-mail-outline" fontSize="35px"/>
+                                <Email href={`mailto:orders@dataskeptic.com`}>
                                     orders@dataskeptic.com
                                 </Email>
                             </EmailWrapper>
@@ -31,7 +31,7 @@ export default class ContactUsContainer extends Component {
                         <div>
                             <Title>Advertising</Title>
                             <EmailWrapper>
-                                <Icon style={{marginRight:"15px"}} icon="ios-mail-outline" fontSize="35px"/>
+                                <Icon style={{marginRight: "15px"}} icon="ios-mail-outline" fontSize="35px"/>
                                 <Email href={`mailto:advertising@dataskeptic.com`}>
                                     advertising@dataskeptic.com
                                 </Email>
@@ -40,7 +40,7 @@ export default class ContactUsContainer extends Component {
                         <div>
                             <Title> Review</Title>
                             <EmailWrapper>
-                                <Icon style={{marginRight:"15px"}} icon="ios-mail-outline" fontSize="35px"/>
+                                <Icon style={{marginRight: "15px"}} icon="ios-mail-outline" fontSize="35px"/>
                                 <Email href={`mailto:kyle@dataskeptic.com`}>
                                     kyle@dataskeptic.com
                                 </Email>
@@ -66,6 +66,15 @@ export default class ContactUsContainer extends Component {
                           subscription={{submitting: true, pristine: true}}
                     />
                 </Slack>
+                <Social>
+                    <a href="https://www.facebook.com/dataskeptic">
+                        <Icon color='#3a559f' icon="logo-facebook" fontSize="50px"/>
+                    </a>
+                    <a href="https://twitter.com/dataskeptic">
+                        <Icon color="#50abf1" style={{margin: "0 60px"}} icon="logo-twitter" fontSize="50px"/>
+                    </a>
+                    <Icon color='#0084b1' icon="logo-linkedin" fontSize="50px"/>
+                </Social>
             </div>
         )
     }
@@ -103,10 +112,16 @@ const PromoText = styled.p`
   color: rgba(0, 0, 0, 0.8);
 `
 const Slack = styled.div`
+    margin-top:100px;
     text-align: center;
 `
 const SlackTitle = styled.h3`
+  margin-bottom: 36px;
   text-align: center;
   font-size: 16px;
   color: rgba(0, 0, 0, 0.87);
+`
+const Social = styled.div`
+  margin-top:65px;
+  text-align: center;
 `
