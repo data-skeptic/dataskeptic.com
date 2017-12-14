@@ -20,26 +20,30 @@ export default class ContactUsContainer extends Component {
                         <h2>Contact Us via Email</h2>
                         <div>
                             <Title>Purchase</Title>
-                            <Icon icon="ios-mail-outline" fontSize="35px"/>
-                            <Email>
-                                orders@dataskeptic.com
-                            </Email>
+                            <EmailWrapper>
+                                <Icon style={{marginRight:"30px"}} icon="ios-mail-outline" fontSize="35px"/>
+                                <Email>
+                                    orders@dataskeptic.com
+                                </Email>
+                            </EmailWrapper>
                         </div>
                         <div>
                             <Title>Advertising</Title>
-                            <Icon icon="ios-mail-outline" fontSize="35px"/>
-                            <Email>
-                                advertising@dataskeptic.com
-                            </Email>
+                            <EmailWrapper>
+                                <Icon style={{marginRight:"30px"}} icon="ios-mail-outline" fontSize="35px"/>
+                                <Email>
+                                    advertising@dataskeptic.com
+                                </Email>
+                            </EmailWrapper>
                         </div>
                         <div>
                             <Title> Review</Title>
-                            <div>
-                                <Icon icon="ios-mail-outline" fontSize="35px"/>
+                            <EmailWrapper>
+                                <Icon style={{marginRight:"30px"}} icon="ios-mail-outline" fontSize="35px"/>
                                 <Email>
                                     kyle@dataskeptic.com
                                 </Email>
-                            </div>
+                            </EmailWrapper>
                         </div>
 
                     </EmailsList>
@@ -77,4 +81,8 @@ const Email = styled.span`
 `
 const Title = styled.h3`
     font-size: 20px;
+`
+const EmailWrapper = styled.div`
+     display:flex;
+     align-items: center;
 `

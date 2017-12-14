@@ -15,8 +15,8 @@ export default class ContactUs extends Component {
 
     render() {
         return <Container global>
-            <ContactUsContainer/>
-        </Container>
+                  <ContactUsContainer/>
+               </Container>
 
     }
 }
