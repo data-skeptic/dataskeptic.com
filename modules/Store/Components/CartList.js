@@ -59,6 +59,7 @@ const CheckOutBtn = styled(Link)`
     text-align: center;
     text-decoration: none;
     width: 100%;
+    font-family: 'SF Light'
     border: 0;
 `
 
