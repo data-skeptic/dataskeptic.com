@@ -4,25 +4,26 @@ import styled from 'styled-components'
 import {Form} from 'react-final-form'
 import {contactFormValidator} from "../../Forms/Validators";
 import ContactForm from '../../Forms/ContactForm'
+import SlackForm from "../Components/SlackForm";
 
 export default class ContactUsContainer extends Component {
     render() {
         return (
             <div>
-                <p>
+                <PromoText>
                     We hope to respond to all inquiries, but sometimes the volume of incoming questions can cause our
                     queue to explode. We prioritize responses to Data Skeptic members first, and to those who ask
                     questions in a public forum like Twitter, our Facebook wall (not Facebook direct message), or Slack.
                     Many people can benefit from responses in public places.
-                </p>
+                </PromoText>
                 <Wrapper>
                     <EmailsList>
                         <h2>Contact Us via Email</h2>
                         <div>
                             <Title>Purchase</Title>
                             <EmailWrapper>
-                                <Icon style={{marginRight:"30px"}} icon="ios-mail-outline" fontSize="35px"/>
-                                <Email>
+                                <Icon style={{marginRight:"15px"}} icon="ios-mail-outline" fontSize="35px"/>
+                                <Email href={`mailto:orders@dataskeptic.com`} >
                                     orders@dataskeptic.com
                                 </Email>
                             </EmailWrapper>
@@ -30,8 +31,8 @@ export default class ContactUsContainer extends Component {
                         <div>
                             <Title>Advertising</Title>
                             <EmailWrapper>
-                                <Icon style={{marginRight:"30px"}} icon="ios-mail-outline" fontSize="35px"/>
-                                <Email>
+                                <Icon style={{marginRight:"15px"}} icon="ios-mail-outline" fontSize="35px"/>
+                                <Email href={`mailto:advertising@dataskeptic.com`}>
                                     advertising@dataskeptic.com
                                 </Email>
                             </EmailWrapper>
@@ -39,8 +40,8 @@ export default class ContactUsContainer extends Component {
                         <div>
                             <Title> Review</Title>
                             <EmailWrapper>
-                                <Icon style={{marginRight:"30px"}} icon="ios-mail-outline" fontSize="35px"/>
-                                <Email>
+                                <Icon style={{marginRight:"15px"}} icon="ios-mail-outline" fontSize="35px"/>
+                                <Email href={`mailto:kyle@dataskeptic.com`}>
                                     kyle@dataskeptic.com
                                 </Email>
                             </EmailWrapper>
@@ -58,6 +59,13 @@ export default class ContactUsContainer extends Component {
 
                     </FormWrapper>
                 </Wrapper>
+                <Slack>
+                    <SlackTitle>To join our Slack channel, enter your email in the box below.</SlackTitle>
+                    <Form onSubmit={(data) => alert(data)}
+                          render={SlackForm}
+                          subscription={{submitting: true, pristine: true}}
+                    />
+                </Slack>
             </div>
         )
     }
@@ -75,14 +83,30 @@ const FormWrapper = styled.div`
  padding-left:60px;
  box-sizing: border-box;
 `
-const Email = styled.span`
+const Email = styled.a`
   border-bottom:2px solid #f0d943;
   font-size: 22px;
+  text-decoration: none;
+    color: #000;
 `
 const Title = styled.h3`
     font-size: 20px;
+    margin-bottom:14px;
 `
 const EmailWrapper = styled.div`
      display:flex;
      align-items: center;
+`
+const PromoText = styled.p`
+ margin:20px 0;
+ max-width: 992px;
+  color: rgba(0, 0, 0, 0.8);
+`
+const Slack = styled.div`
+    text-align: center;
+`
+const SlackTitle = styled.h3`
+  text-align: center;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.87);
 `
