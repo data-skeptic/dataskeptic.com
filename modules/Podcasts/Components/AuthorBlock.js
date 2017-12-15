@@ -29,7 +29,6 @@ const Data = styled.div`
 
 const Bio = styled.div`
   margin-top: 10px;
-  font-family: 'SF Light';
   line-height: 22px;
 `
 
@@ -40,7 +39,6 @@ const Label = styled.span`
     font-weight: 500;
     margin: 0;
     padding: 0;
-    font-family: 'SF Bold'
 `
 
 const Value = styled.span`
@@ -72,8 +70,6 @@ const Date = styled.div`
   letter-spacing: 1px;
   text-transform: uppercase;
   margin: 5px 0px;
-  
-  font-family: 'SF Bold';
 `;
 const Title = styled.span`
   font-size: 28px;
@@ -82,7 +78,6 @@ const Title = styled.span`
   letter-spacing: 0;
   margin-top: 8px;
   text-decoration: none;
-  font-family: 'SF Bold';
 `;
 
 const More = styled(Link)`
@@ -99,7 +94,6 @@ const Body = styled.div`
   & > a {
     border-bottom: 1px dotted;
     text-decoration: none;
-    font-family: "SF Medium";
     color: black;
   }
   color: #575959;
@@ -114,7 +108,6 @@ const PostLink = styled(Link)`margin-left: 10px;text-decoration: none;`;
 const Author = styled.div`
   padding-top: 6px;
   & > strong {
-    font-family: 'SF Medium';
   }
 `;
 

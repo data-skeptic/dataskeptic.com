@@ -36,16 +36,13 @@ const PlayButton = styled.div`
 `
 const EpisodeDate = styled.div`
   font-size: 9pt;
-  font-family: "SF Medium";
   margin: 10px 0px;
   color:${props => props.theme.colors.dark};
 `
 const HeaderTitle = styled.div`
   font-size: 11pt;
-  font-family: "SF Medium";
   color:${props => props.theme.colors.darker};
 `
-
 
 const Header = styled.div`
   display: flex;
@@ -64,8 +61,6 @@ const Date = styled.div`
   letter-spacing: 1px;
   text-transform: uppercase;
   margin: 5px 0px;
-  
-  font-family: 'SF Bold';
 `;
 const Title = styled.span`
   font-size: 28px;
@@ -74,7 +69,6 @@ const Title = styled.span`
   letter-spacing: 0;
   margin-top: 8px;
   text-decoration: none;
-  font-family: 'SF Bold';
 `;
 
 
@@ -84,7 +78,6 @@ const Body = styled.div`
   & > a {
     border-bottom: 1px dotted;
     text-decoration: none;
-    font-family: "SF Medium";
     color: black;
   }
   color: #575959;

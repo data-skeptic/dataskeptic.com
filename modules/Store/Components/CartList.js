@@ -59,7 +59,6 @@ const CheckOutBtn = styled(Link)`
     text-align: center;
     text-decoration: none;
     width: 100%;
-    font-family: 'SF Light'
     border: 0;
 `
 
@@ -71,10 +70,9 @@ const Row = styled.div`
     font-size: 15px;
 `
 const SubTotal = styled.div`
-    font-family: "SF light";
     border-bottom: 1px solid ${props => props.theme.colors.light}
 `
-const Total = styled.div`font-family: "SF light";`
+const Total = styled.div``
 const Wrapper = styled.div`
     margin-top: 80px;
     margin-bottom: 40px;
@@ -82,7 +80,6 @@ const Wrapper = styled.div`
     color: ${props => props.theme.colors.dark}
 `
 const Title = styled.div`
-    font-family: "SF Light";
     font-size: 16px;
     margin-bottom: 10px;
 `
@@ -94,6 +91,5 @@ const Line = styled.p `
 `
 const EmptyWarning = styled.div`
     text-align: center;  
-    font-family: "SF Light";
     margin: 50px 0px;
 `

@@ -59,5 +59,4 @@ const Date = styled.div`
   letter-spacing: 1px;
   text-transform: uppercase;
   margin-bottom: 15px;
-  font-family: 'SF Medium'
 `;

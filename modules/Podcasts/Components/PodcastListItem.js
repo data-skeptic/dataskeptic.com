@@ -75,7 +75,6 @@ const Body = styled.div`
   & > a {
     border-bottom: 1px dotted;
     text-decoration: none;
-    font-family: "SF Medium";
     color: black;
   }
   color: #575959;
@@ -94,9 +93,6 @@ const Avatar = styled.div`
 const PostLink = styled(Link)`text-decoration: none;`;
 const Author = styled.div`
   padding-top: 6px;
-  & > strong {
-    font-family: 'SF Medium';
-  }
 `;
 const TitleWrap = styled.div`  display: flex;
   flex-direction: column;`;
@@ -110,7 +106,6 @@ const Title = styled.span`
   letter-spacing: 0;
   margin-top: 8px;
   text-decoration: none;
-  font-family: 'SF Light';
   border-bottom: 1px dotted;
 `;
 

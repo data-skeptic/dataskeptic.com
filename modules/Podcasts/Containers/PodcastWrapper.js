@@ -27,7 +27,6 @@ export default class PodcastWrapper extends Component {
 const CategoryTitle = styled.h2`
   text-transform: capitalize;
   padding: 0;
-  font-family: "SF Light";
   font-size: 26px;
   color: #3a3b3b;
 `

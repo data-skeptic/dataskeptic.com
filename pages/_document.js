@@ -4,24 +4,32 @@ import styledNormalize from 'styled-normalize'
 
 injectGlobal`
   ${styledNormalize}
-  @font-face {
-    font-family: 'SF Light';
-    src: url('/static/fonts/SFUIDisplay-Light.otf');
-  }
-  @font-face {
-    font-family: 'SF Regular';
-    src: url('/static/fonts/SFUIDisplay-Regular.otf');
-  }
-  @font-face {
-    font-family: 'SF Medium';
-    src: url('/static/fonts/SFUIDisplay-Medium.otf');
-  } 
-  @font-face {
-    font-family: 'SF Bold';
-    src: url('/static/fonts/SFUIDisplay-Bold.otf');
-  }
+  
   body {
-    font-family: 'SF Regular';
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0;
+    padding: 0;
+    font-family: "Source Sans Pro", Calibri, Candara, Arial, sans-serif;
+    line-height: 1.42857143;
+    color: #333333;
+    background-color: #ffffff;
+  }
+  
+  * {
+      outline: none
+  }
+  
+  a {
+      color: #000;
+  }
+  
+  a,a:hover {
+      text-decoration: none
+  }
+  
+  a:hover {
+      color: #333;
   }
 `;
 
@@ -40,12 +48,16 @@ export default class MyDocument extends Document {
   render() {
     return (
       <html>
-      <Head>
-        {this.props.styleTags}
-      </Head>
+        <Head>
+          <meta charSet="utf-8" />
+          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+          <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet" />
+          {this.props.styleTags}
+        </Head>
       <body>
-      <Main />
-      <NextScript />
+        <Main />
+        <NextScript />
       </body>
       </html>
     );

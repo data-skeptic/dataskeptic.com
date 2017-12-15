@@ -77,7 +77,6 @@ const Number = styled.div`
     font-size: 13px;
     color: black;
     border-radius: 15px;
-    font-family: "SF Bold";
 `
 const Logo = styled(Link)`
     display: block;

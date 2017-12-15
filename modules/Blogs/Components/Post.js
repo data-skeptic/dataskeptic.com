@@ -44,8 +44,6 @@ const Date = styled.div`
   letter-spacing: 1px;
   text-transform: uppercase;
   margin: 5px 0px;
-  
-  font-family: 'SF Bold';
 `;
 const Title = styled.span`
   font-size: 28px;
@@ -54,7 +52,6 @@ const Title = styled.span`
   letter-spacing: 0;
   margin-top: 8px;
   text-decoration: none;
-  font-family: 'SF Bold';
 `;
 
 const More = styled(Link)`
@@ -71,7 +68,6 @@ const Body = styled.div`
   & > a {
     border-bottom: 1px dotted;
     text-decoration: none;
-    font-family: "SF Medium";
     color: black;
   }
   color: #575959;
@@ -89,9 +85,6 @@ const Avatar = styled.div`
 const PostLink = styled(Link)`margin-left: 10px;text-decoration: none;`;
 const Author = styled.div`
   padding-top: 6px;
-  & > strong {
-    font-family: 'SF Medium';
-  }
 `;
 
 const Wrapper = styled.div`margin-bottom: 20px;`;

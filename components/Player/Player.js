@@ -142,10 +142,8 @@ const MediaBlock = styled.div`
 `;
 
 const PodcastTitle = styled.div`
-  font-family: "SF Regular";
   font-size: 15px;
 `;
 const PodcastInfo = styled.div`
   margin-left: 24px;
-  font-family: "SF Light";
 `;

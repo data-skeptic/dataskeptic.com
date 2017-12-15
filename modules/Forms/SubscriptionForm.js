@@ -27,7 +27,6 @@ export default SubscriptionForm;
 const SubTitle = styled.div`
   color: #fff;
   font-size: 14px;
-  font-family: 'SF Medium';
   text-align: left;
 `;
 
@@ -87,6 +86,5 @@ const Title = styled.div`
   padding: 20px 0 0;
   text-align: center;
   color: #fff;
-  font-family: "SF Light";
   margin-bottom: 20px;
 `;

@@ -79,7 +79,7 @@ const loadBlogsContent = (env, blogs) => {
 }
 
 const getBlogs = (env) => {
-    let env2 = env;
+    let env2 = "master";
     if (env === "prod") {
         env2 = "master"
     }
@@ -152,6 +152,12 @@ const formatByKey = (items, key) => {
     return formattedItems
 }
 
+const exclude = items =>
+    items.filter((item) => {
+        return !(item.prettyname.indexOf('/episodes') === 0 ||
+                 item.prettyname.indexOf('/transcripts') === 0)
+    })
+
 const init = async (isProduction) => {
     const env = isProduction ? 'prod' : 'dev'
 
@@ -169,6 +175,7 @@ const init = async (isProduction) => {
 
     const cache = {
         blogs: formatByKey(blogs, `prettyname`),
+        posts: exclude(blogs),
         episodes: formatByKey(episodes, `guid`),
         latestEpisode,
         latestPost,

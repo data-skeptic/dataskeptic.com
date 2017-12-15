@@ -49,7 +49,6 @@ const Submit = styled.div`
     background-color: #f0d943;
     text-transform: uppercase; 
     -webkit-appearance: none;
-    font-family: "SF Medium";
     text-align: center;
     padding: 19px;
 `

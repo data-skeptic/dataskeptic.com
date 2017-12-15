@@ -15,19 +15,20 @@ import {
     setCurrentPage
 } from "../../redux/modules/blogReducer";
 
+const ALL = 'all'
+
 const getActualQuery = (category, page, isPage = false) => {
 
   if(!isNaN(category)) {
-    console.log('ok')
     page = category;
-    category = 'all'
+    category = ALL
   }
 
   if(!page) {
       page = 1;
   }
   if(!category) {
-      category = 'all'
+      category = ALL
   }
 
   if(isPage) {

@@ -63,7 +63,6 @@ const Body = styled.div`
   & > a {
     border-bottom: 1px dotted;
     text-decoration: none;
-    font-family: "SF Medium";
     color: black;
   }
   color: #575959;
@@ -82,7 +81,7 @@ const PostLink = styled(Link)`margin-left: 10px;text-decoration: none;`;
 const Author = styled.div`
   padding-top: 6px;
   & > strong {
-    font-family: 'SF Medium';
+    
   }
 `;
 const Header = styled.div`display: flex;`;
@@ -96,6 +95,5 @@ const Title = styled.span`
   letter-spacing: 0;
   margin-top: 8px;
   text-decoration: none;
-  font-family: 'SF Light';
   border-bottom: 1px dotted;
 `;

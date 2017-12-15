@@ -26,7 +26,6 @@ export default class StoreItem extends Component {
     }
 }
 const Title = styled.h3`
-   font-family: "SF Bold";
    margin-top: 0px;
 `
 
@@ -47,7 +46,6 @@ const ProductWrapper = styled.div`
 `
 const Description = styled.div`
   flex: 0 0 70%;
-  font-family: "SF Light";
 `
 const Price = styled.span`
    margin-right:10px;
