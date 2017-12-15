@@ -33,6 +33,7 @@ export default function reducer(state = initialState,
         case LOAD_BLOGS:
             return {
                 ...state,
+                list: [],
                 loading: true,
                 needReload: false
             };

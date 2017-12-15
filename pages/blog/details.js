@@ -4,7 +4,7 @@ import Icon from 'react-fontawesome'
 import styled from 'styled-components'
 import Page from '../../hoc/Page'
 import Container from "../../components/Container";
-import {loadSingleBlog} from "../../redux/modules/blogReducer";
+import {loadSingleBlog, getSingle} from "../../redux/modules/blogReducer";
 import BlogPost from '../../modules/Blogs/Containers/BlogSingle'
 
 @Page
@@ -13,7 +13,12 @@ export default class BlogDetails extends Component {
         const {category, year, name} = query;
         const prettyName = `${category}/${year}/${name}`
         const promises = []
-        promises.push(dispatch(loadSingleBlog(prettyName)))
+
+        console.dir(`loadSingleBlog`)
+        if (!getSingle(state)) {
+            promises.push(dispatch(loadSingleBlog(prettyName)))
+        }
+
         await Promise.all(promises)
     }
 

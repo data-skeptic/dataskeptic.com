@@ -22,13 +22,33 @@ const routes = [
         page: '/blog'
     },
     {
-        name: 'Podcasts',
+        name: 'Podcasts Page',
+        pattern: '/podcasts/:year/:page',
+        page: '/podcasts'
+    },
+    {
+        name: 'Year Podcasts',
         pattern: '/podcasts/:year',
+        page: '/podcasts'
+    },
+    {
+        name: 'Podcasts',
+        pattern: '/podcasts/:page',
         page: '/podcasts'
     },
     {
         name: 'Podcast',
         pattern: '/podcasts/:year/:name',
+        page: '/podcasts/details'
+    },
+    {
+        name: 'Episode Page',
+        pattern: '/blog/episodes/:year/:name',
+        page: '/podcasts/details'
+    },
+    {
+        name: 'Transcripts Page',
+        pattern: '/blog/episodes/:year/:name',
         page: '/podcasts/details'
     }
 ]

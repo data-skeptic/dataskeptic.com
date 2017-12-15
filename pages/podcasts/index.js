@@ -8,28 +8,56 @@ import {
     loadYears,
     hasEpisodes,
     hasYears,
-    setActiveYear
+    setActiveYear,
+    setCurrentPage
 } from "../../redux/modules/podcastReducer";
 import PodcastWrapper from '../../modules/Podcasts/Containers/PodcastWrapper'
 import YearList from '../../modules/Podcasts/Containers/YearList'
 import Container from "../../components/Container";
 
+const getActualQuery = (year, page, isPage = false) => {
+    if (!isNaN(year)) {
+        page = year;
+        year = null
+    }
+
+    if (!page) {
+        page = 1;
+    }
+
+    if (!year) {
+        year = null
+    }
+
+    if (isPage) {
+        return page
+    } else {
+        return year;
+    }
+}
+
 @Page
 export default class Podcasts extends Component {
     static async getInitialProps({store: {dispatch, getState}, query}) {
         const state = getState();
-        const {year} = query
+        let {year, page} = query
         const promises = [];
-        if (year) {
-            promises.push(dispatch(setActiveYear(year)))
+
+        const actualPage = getActualQuery(year, page, true);
+        const actualYear = getActualQuery(year, page);
+
+        promises.push(dispatch(setCurrentPage(actualPage)))
+        promises.push(dispatch(setActiveYear(actualYear)))
+
+        console.log(`loadEpisodesList`, actualPage, actualYear)
+        if (!hasEpisodes(state)) {
+            promises.push(dispatch(loadEpisodesList(actualYear, actualPage)));
         }
 
-        if (!hasEpisodes(state)) {
-            promises.push(dispatch(loadEpisodesList()));
-        }
         if (!hasYears(state)) {
             promises.push(dispatch(loadYears()));
         }
+
         await Promise.all(promises);
     }
 

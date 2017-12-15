@@ -90,7 +90,7 @@ export default function (cache) {
         const page = 1
 
         const total = Object.keys(cache.episodes).length
-        const pagination = paginationMeta(total, PER_PAGE, page)
+        const pagination = paginationMeta(total, PER_PAGE, +page)
         const episodes = paginate(cache.episodes, pagination.from, pagination.to)
 
         res.send({
@@ -103,7 +103,7 @@ export default function (cache) {
         const { page=1 } = req.params
 
         const total = Object.keys(cache.episodes).length
-        const pagination = paginationMeta(total, PER_PAGE, page)
+        const pagination = paginationMeta(total, PER_PAGE, +page)
         const episodes = paginate(cache.episodes, pagination.from, pagination.to)
 
         res.send({

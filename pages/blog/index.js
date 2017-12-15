@@ -42,7 +42,6 @@ export default class Dashboard extends Component {
     static async getInitialProps({store: {dispatch, getState}, query}) {
         const state = getState();
         let {category, page} = query
-        console.dir(query)
         const promises = [];
 
         const pageActual = getActualQuery(category, page, true);

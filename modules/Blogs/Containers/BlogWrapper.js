@@ -30,7 +30,7 @@ export default class BlogList extends Component {
 
     handlePageClick = data => {
         const page = data.selected + 1
-        const { category } = this.props
+        const category = (this.props.category === 'all') ? null :this.props.category
 
         if (category) {
             ParamRouter.pushRoute('Category Page', {category, page})
@@ -53,7 +53,7 @@ export default class BlogList extends Component {
     render() {
         const {posts, category, categories, pageCount, page} = this.props;
         const categoryExist = (categories.indexOf(category) !== -1) || (!category || category === 'all');
-        const showPaginate = pageCount > 1
+        const showPaginate = (pageCount-1) > 1
         return (
             <Wrapper>
                 {categoryExist && category &&
@@ -95,10 +95,12 @@ const CategoryTitle = styled.h2`
   font-size: 26px;
   color: #3a3b3b;
 `
+
 const PaginationContainer = styled.div`
   .pagination {
     display: flex;
     list-style: none;
+    padding-left: 0px;
   }
   
   .pagination > li {
