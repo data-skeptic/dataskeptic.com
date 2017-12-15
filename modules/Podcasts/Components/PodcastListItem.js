@@ -26,7 +26,6 @@ export default class EpisodeListItem extends Component {
                     </Avatar>
                     <Body>
                     <TitleWrap>
-                        {JSON.stringify({l: post.link})}
                         <PostLink href={formatLink(post.link)}>
                             <Title>
                                 {post.title}
