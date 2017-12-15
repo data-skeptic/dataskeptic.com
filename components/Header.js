@@ -4,42 +4,43 @@ import ActiveLink from './ActiveLink'
 import Link from './Link'
 import {connect} from 'react-redux'
 import {
-  getCartAmount,
+    getCartAmount,
 } from "../redux/modules/shopReducer";
-@connect(
-  state => ({
-    amount: getCartAmount(state),
-  }),
-  {})
-export default class Header extends Component {
-  render() {
-    const {amount} = this.props;
-    return(
-      <HeaderWrapper>
-        <Logo href="/">
-          <img src="/static/logo.svg" alt="DataSkeptic"/>
-        </Logo>
-        <Navs>
-          <ActiveLink href="/podcasts">Podcast</ActiveLink>
-          <ActiveLink href="/blog">Blogs</ActiveLink>
-          <ActiveLink href="/projects">Projects</ActiveLink>
-          <ActiveLink href="/services">Services</ActiveLink>
-          <ActiveLink href="/about">About</ActiveLink>
-        </Navs>
-        <Navs>
-          <ActiveLink href="/members"> Sponsor </ActiveLink>
-          <ActiveLink href="/store"> Store </ActiveLink>
-          <Cart>
-            <Icon>
-              <img src="/static/icon-cart.svg"/>
-              {amount !== 0 && <Number>{amount}</Number> }
-            </Icon>
 
-          </Cart>
-        </Navs>
-      </HeaderWrapper>
-    )
-  }
+@connect(
+    state => ({
+        amount: getCartAmount(state),
+    }),
+    {})
+export default class Header extends Component {
+    render() {
+        const {amount} = this.props;
+        return (
+            <HeaderWrapper>
+                <Logo href="/">
+                    <img src="/static/logo.svg" alt="DataSkeptic"/>
+                </Logo>
+                <Navs>
+                    <ActiveLink href="/podcasts">Podcast</ActiveLink>
+                    <ActiveLink href="/blog">Blogs</ActiveLink>
+                    <ActiveLink href="/projects">Projects</ActiveLink>
+                    <ActiveLink href="/services">Services</ActiveLink>
+                    <ActiveLink href="/about">About</ActiveLink>
+                </Navs>
+                <Navs>
+                    <ActiveLink href="/members"> Sponsor </ActiveLink>
+                    <ActiveLink href="/store"> Store </ActiveLink>
+                    <Cart>
+                        <Icon>
+                            <img src="/static/icon-cart.svg"/>
+                            {amount !== 0 && <Number>{amount}</Number>}
+                        </Icon>
+
+                    </Cart>
+                </Navs>
+            </HeaderWrapper>
+        )
+    }
 }
 
 

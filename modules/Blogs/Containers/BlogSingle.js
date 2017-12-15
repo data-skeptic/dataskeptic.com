@@ -1,11 +1,35 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import styled from 'styled-components'
+import ReactDisqusComments from 'react-disqus-comments'
 import {getSingle} from '../../../redux/modules/blogReducer'
 import Post from '../Components/Post'
 import AuthorBlock from '../Components/AuthorBlock'
+import ProposeButton from '../Components/ProposeButton'
+import RelatedContent from '../Components/RelatedContent'
 import {Form} from "react-final-form"
 import SubscriptionForm from '../../Forms/SubscriptionForm'
+
+const generateEditGithubPageUrl = (prettyName, env) => `https://github.com/data-skeptic/blog/edit/${env}${prettyName}.md`
+const generateEditJupyterPageUrl = (prettyName, env) => `https://github.com/data-skeptic/blog/blob/${env}${prettyName}.ipynb`
+
+const isGithubPost = (uri) => uri.indexOf('.md') > -1
+const isJupyterPost = (uri) => uri.indexOf('.ipynb') > -1
+
+
+const getProposeEditUrl = (currentPost) => {
+    if (isGithubPost(currentPost.uri)) {
+        return generateEditGithubPageUrl(currentPost.prettyname, currentPost.env);
+    }
+
+    if (this.isJupyterPost(currentPost.uri)) {
+        return generateEditJupyterPageUrl(currentPost.prettyname, currentPost.env);
+    }
+
+    return null;
+}
+
+const DisqusUsername = `dataskeptic`
 
 @connect(
     state => ({
@@ -14,10 +38,9 @@ import SubscriptionForm from '../../Forms/SubscriptionForm'
     {}
 )
 export default class BlogSingle extends Component {
-    constructor() {
-        super()
 
-    }
+    handleNewComment = () => alert('comment')
+    subscribe = () => alert('subscribe')
 
     render() {
         const {post} = this.props;
@@ -25,12 +48,27 @@ export default class BlogSingle extends Component {
             return <div>NO!</div>
         }
 
+        const uid = 'http://dataskeptic.com/blog' + post.prettyname;
+
+        const proposeEditUrl = getProposeEditUrl(post);
+
         return (
             <Wrapper>
                 <Post post={post}/>
                 <AuthorBlock author={post.author}/>
-                <Form onSubmit={(data) => alert(data)}
-                      render={SubscriptionForm}/>
+                <Form onSubmit={this.subscribe} render={SubscriptionForm}/>
+
+                {post.related && <RelatedContent items={post.related}/>}
+
+                {proposeEditUrl && <ProposeButton editUrl={proposeEditUrl}/>}
+
+                <ReactDisqusComments
+                    shortname={DisqusUsername}
+                    identifier={uid}
+                    title={post.title}
+                    url={uid}
+                    onNewComment={this.handleNewComment}
+                />
             </Wrapper>
         )
     }

@@ -31,6 +31,21 @@ injectGlobal`
   a:hover {
       color: #333;
   }
+  
+  h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-weight: 300;
+    line-height: 1.1;
+    color: inherit;
+  }
+  
+  h1, .h1, h2, .h2, h3, .h3 {
+    margin-top: 21px;
+    margin-bottom: 10.5px;
+  }
+  
+  h3, .h3 {
+    font-size: 26px;
+  }
 `;
 
 export default class MyDocument extends Document {
