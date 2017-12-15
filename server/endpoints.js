@@ -20,6 +20,8 @@ const paginate = (items, from, to) => filter(items, ({order}) => order >= from &
 
 export default function (cache) {
 
+    router.get('/test', (req, res) => res.send(cache.blogs))
+
     router.get('/home', (req, res) => {
         res.send({
             latestEpisode: cache.latestEpisode,
@@ -32,9 +34,9 @@ export default function (cache) {
     router.get('/blogs/', (req, res) => {
         const page = 1;
 
-        const total = Object.keys(cache.blogs).length
+        const total = Object.keys(cache.posts).length
         const pagination = paginationMeta(total, PER_PAGE, page)
-        const posts = paginate(cache.blogs, pagination.from, pagination.to)
+        const posts = paginate(cache.posts, pagination.from, pagination.to)
 
         res.send({
             posts,
@@ -45,9 +47,9 @@ export default function (cache) {
     router.get('/blogs/:page', (req, res) => {
         const { page } = req.params
 
-        const total = Object.keys(cache.blogs).length
+        const total = Object.keys(cache.posts).length
         const pagination = paginationMeta(total, PER_PAGE, page)
-        const posts = paginate(cache.blogs, pagination.from, pagination.to)
+        const posts = paginate(cache.posts, pagination.from, pagination.to)
 
         res.send({
             posts,

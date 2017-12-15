@@ -7,9 +7,9 @@ const development = {
 
 const production = {
   isProduction: true,
-  url: process.env.URL,
-  port: 80,
-  apiPort: 80
+  url: 'http://localhost:3000',
+  port: 3000,
+  apiPort: 8000
 }
 
 const environment =
