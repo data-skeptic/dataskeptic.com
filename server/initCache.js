@@ -1,6 +1,8 @@
 import xml2js from 'xml2js'
 import axios from 'axios'
+import moment from 'moment'
 import contributors from './contributors'
+import redirects from './redirects'
 
 const FEED_URL = `http://dataskeptic.libsyn.com/rss`
 
@@ -8,7 +10,19 @@ const ADVERTISE_CARD_CONTENT = 'https://s3.amazonaws.com/dataskeptic.com/dassets
 const ADVERTISE_BANNER_CONTENT = 'https://s3.amazonaws.com/dataskeptic.com/dassets/banner/latest.htm'
 
 const domain = "dataskeptic.com"
-const formatLink = (link) => link.replace("http://" + domain, "").replace("https://" + domain, '').replace('.php', '').replace('/blog/', '/').replace('/episodes/', '')
+const formatLink = (link) => {
+    link = link.replace("http://" + domain, "").replace("https://" + domain, '')
+
+    if (!!redirects[link]) {
+        link = redirects[link]
+    } else {
+        link = link.replace('/blog/', '/').replace('/episodes/', '')
+    }
+
+    return link.replace('.php', '')
+}
+
+const formatYear = (pubDate) => moment(pubDate).year();
 
 const convertEpidodes = (items) => {
     let episodes = []
@@ -122,7 +136,8 @@ const getEpisodes = () => {
         })
         .then((episodes) => episodes.map((episode) => ({
             ...episode,
-            link: formatLink(episode.link)
+            link: formatLink(episode.link),
+            year: formatYear(episode.pubDate)
         })))
 }
 

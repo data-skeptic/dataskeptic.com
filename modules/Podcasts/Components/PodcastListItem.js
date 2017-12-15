@@ -3,6 +3,9 @@ import styled, {withTheme} from "styled-components";
 import Link from "../../../components/Link";
 import moment from 'moment'
 import Ionicon from 'react-ionicons'
+import ParamRouter from "../../../components/Router";
+
+const formatLink = (link) => link.indexOf('/') === 0 ? link : `/podcasts/${link}`
 
 export default class EpisodeListItem extends Component {
     handlePlay = () => {
@@ -23,7 +26,8 @@ export default class EpisodeListItem extends Component {
                     </Avatar>
                     <Body>
                     <TitleWrap>
-                        <PostLink href={`/podcasts/${post.link}`}>
+                        {JSON.stringify({l: post.link})}
+                        <PostLink href={formatLink(post.link)}>
                             <Title>
                                 {post.title}
                             </Title>
@@ -39,7 +43,7 @@ export default class EpisodeListItem extends Component {
                     </TitleWrap>
                     {" "}
                     <div dangerouslySetInnerHTML={{__html: post.desc.replace(/Â/g, '')}}/>
-                    <More href={`/podcasts/${post.link}`}>View More</More>{" "}
+                    <More href={formatLink(post.link)}>View More</More>{" "}
                     </Body>
                 </Post>
             </Wrapper>

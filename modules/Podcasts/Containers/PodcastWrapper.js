@@ -42,9 +42,7 @@ export default class PodcastWrapper extends Component {
     }
 
     render() {
-        const {episodes, year} = this.props;
-        const page = 1;
-        const pageCount = 4;
+        const {episodes, year, page, pageCount} = this.props;
         const showPaginate = (pageCount - 1) > 1
 
         return (

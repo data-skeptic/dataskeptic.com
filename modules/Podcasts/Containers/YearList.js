@@ -1,23 +1,31 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import styled from 'styled-components'
-import {getActiveYear, getYears,setActiveYear} from '../../../redux/modules/podcastReducer'
+import {getActiveYear, getPage, getYears, setActiveYear} from '../../../redux/modules/podcastReducer'
 import CategoriesListItem from "../Components/CategoriesListItem";
-import Router from '../../../components/Router'
-
+import ParamRouter from "../../../components/Router";
 
 
 @connect(
     state => ({
         years: getYears(state),
-        activeYear:getActiveYear(state)
+        activeYear:getActiveYear(state),
+        page: getPage(state)
     }),
     {setActiveYear}
 )
 export default class YearList extends Component {
-    setActiveYear = label => {
-        Router.pushRoute(`/podcasts/${label}`)
+
+    setActiveYear = year => {
+        const page = this.props.page
+
+        if (year) {
+            ParamRouter.pushRoute('Podcasts Page', {year, page})
+        } else {
+            ParamRouter.pushRoute('Podcasts', {page})
+        }
     }
+
     render() {
         const {activeYear} = this.props;
         const yearMock = ['2014','2015','2016','2017']

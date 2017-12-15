@@ -23,6 +23,8 @@ const realPaginate = (items, from, to) =>
 const filterByCategory = (items, category) =>
     filter(items, (item) => item.category === category)
 
+const filterByYear = (items, year) =>
+    filter(items, (item) => item.year === year)
 
 export default function (cache) {
 
@@ -109,6 +111,22 @@ export default function (cache) {
         res.send({
             episodes,
             ...pagination
+        })
+    })
+
+    router.get('/episodes/:year(\\d+)/:page(\\d+)/', (req, res) => {
+        const { page=1, year } = req.params
+
+        const source = filterByYear(cache.episodes, +year)
+
+        const total = Object.keys(source).length
+        const pagination = paginationMeta(total, PER_PAGE, +page)
+        const episodes = realPaginate(source, pagination.from, pagination.to)
+
+        res.send({
+            episodes,
+            ...pagination,
+            year
         })
     })
 

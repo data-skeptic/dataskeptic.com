@@ -16,7 +16,7 @@ import YearList from '../../modules/Podcasts/Containers/YearList'
 import Container from "../../components/Container";
 
 const getActualQuery = (year, page, isPage = false) => {
-    if (!isNaN(year)) {
+    if (!year) {
         page = year;
         year = null
     }
@@ -48,8 +48,6 @@ export default class Podcasts extends Component {
 
         promises.push(dispatch(setCurrentPage(actualPage)))
         promises.push(dispatch(setActiveYear(actualYear)))
-
-        console.log(`loadEpisodesList`, actualPage, actualYear)
         if (!hasEpisodes(state)) {
             promises.push(dispatch(loadEpisodesList(actualYear, actualPage)));
         }

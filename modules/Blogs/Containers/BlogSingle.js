@@ -13,16 +13,17 @@ import SubscriptionForm from '../../Forms/SubscriptionForm'
 const generateEditGithubPageUrl = (prettyName, env) => `https://github.com/data-skeptic/blog/edit/${env}${prettyName}.md`
 const generateEditJupyterPageUrl = (prettyName, env) => `https://github.com/data-skeptic/blog/blob/${env}${prettyName}.ipynb`
 
-const isGithubPost = (uri) => uri.indexOf('.md') > -1
-const isJupyterPost = (uri) => uri.indexOf('.ipynb') > -1
-
+const isGithubPost = (uri) => uri && uri.indexOf('.md') > -1
+const isJupyterPost = (uri) => uri && uri.indexOf('.ipynb') > -1
 
 const getProposeEditUrl = (currentPost) => {
+    if (!currentPost || !currentPost.uri) return null
+
     if (isGithubPost(currentPost.uri)) {
         return generateEditGithubPageUrl(currentPost.prettyname, currentPost.env);
     }
 
-    if (this.isJupyterPost(currentPost.uri)) {
+    if (isJupyterPost(currentPost.uri)) {
         return generateEditJupyterPageUrl(currentPost.prettyname, currentPost.env);
     }
 
@@ -44,6 +45,7 @@ export default class BlogSingle extends Component {
 
     render() {
         const {post} = this.props;
+
         if (!post) {
             return <div>NO!</div>
         }

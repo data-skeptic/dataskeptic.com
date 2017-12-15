@@ -14,10 +14,7 @@ export default class BlogDetails extends Component {
         const prettyName = `${category}/${year}/${name}`
         const promises = []
 
-        console.dir(`loadSingleBlog`)
-        if (!getSingle(state)) {
-            promises.push(dispatch(loadSingleBlog(prettyName)))
-        }
+        promises.push(dispatch(loadSingleBlog(prettyName)))
 
         await Promise.all(promises)
     }
