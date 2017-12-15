@@ -64,6 +64,8 @@ const getBlogContent = (env, key) => {
         .catch((err) => console.error(`Error fetching ${key} content`))
 }
 
+const getCategory = (blog) => blog.prettyname.split('/')[1]
+
 const loadBlogsContent = (env, blogs) => {
     return Promise.all(blogs.map((blog) => {
         return getBlogContent(env, blog.rendered)
@@ -72,7 +74,8 @@ const loadBlogsContent = (env, blogs) => {
                 return {
                     ...blog,
                     content,
-                    author: getAuthor(author)
+                    author: getAuthor(author),
+                    category: getCategory(blog)
                 }
             })
     }))
@@ -158,6 +161,11 @@ const exclude = items =>
                  item.prettyname.indexOf('/transcripts') === 0)
     })
 
+const order = (items) => items.map((item, index) => {
+    item.order = index + 1
+    return item
+})
+
 const init = async (isProduction) => {
     const env = isProduction ? 'prod' : 'dev'
 
@@ -175,7 +183,7 @@ const init = async (isProduction) => {
 
     const cache = {
         blogs: formatByKey(blogs, `prettyname`),
-        posts: exclude(blogs),
+        posts: order(exclude(blogs)),
         episodes: formatByKey(episodes, `guid`),
         latestEpisode,
         latestPost,

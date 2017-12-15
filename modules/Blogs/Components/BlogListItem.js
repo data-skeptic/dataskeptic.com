@@ -5,9 +5,9 @@ import moment from 'moment'
 export default class BlogListItem extends Component {
 
   render() {
-    const { key, publish_date, prettyname, title, author, desc} = this.props;
+    const { publish_date, prettyname, title, author, desc} = this.props;
     return (
-      <Wrapper key={key}>
+      <Wrapper>
         <Post>
           <Date>
             {moment(publish_date).format('MMMM D, YYYY')}{" "}

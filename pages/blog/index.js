@@ -1,6 +1,4 @@
-import React, {Component} from "react";
-import Link from "../../components/Link";
-import Icon from "react-fontawesome";
+import React, {Component} from "react"
 import styled from "styled-components";
 import BlogList from "../../modules/Blogs/Containers/BlogWrapper";
 import CategoryList from "../../modules/Blogs/Containers/CategoryList";
@@ -12,31 +10,31 @@ import {
     hasBlogs,
     hasCategories,
     setActiveCategory,
-    setCurrentPage
+    setCurrentPage,
+    getPage, getActiveCategory
 } from "../../redux/modules/blogReducer";
 
 const ALL = 'all'
 
 const getActualQuery = (category, page, isPage = false) => {
+    if (!isNaN(category)) {
+        page = category;
+        category = ALL
+    }
 
-  if(!isNaN(category)) {
-    page = category;
-    category = ALL
-  }
+    if (!page) {
+        page = 1;
+    }
+    if (!category) {
+        category = ALL
+    }
 
-  if(!page) {
-      page = 1;
-  }
-  if(!category) {
-      category = ALL
-  }
-
-  if(isPage) {
-    return page
-  }
-  else {
-    return category;
-  }
+    if (isPage) {
+        return page
+    }
+    else {
+        return category;
+    }
 }
 
 @Page
@@ -44,26 +42,25 @@ export default class Dashboard extends Component {
     static async getInitialProps({store: {dispatch, getState}, query}) {
         const state = getState();
         let {category, page} = query
+        console.dir(query)
         const promises = [];
-        const pageActual = getActualQuery(category,page,true);
+
+        const pageActual = getActualQuery(category, page, true);
         const categoryActual = getActualQuery(category, page);
 
-        if (category) {
-            promises.push(dispatch(setActiveCategory(categoryActual)))
-        }
-        else {
-            promises.push(dispatch(setActiveCategory(categoryActual)))
-        }
+        promises.push(dispatch(setActiveCategory(categoryActual)))
+        promises.push(dispatch(setCurrentPage(pageActual)))
 
         if (!hasBlogs(state)) {
-            promises.push(dispatch(loadBlogList(pageActual)));
+            promises.push(dispatch(loadBlogList(categoryActual, pageActual)));
         }
+
         if (!hasCategories(state)) {
             promises.push(dispatch(loadCategories()));
         }
+
         await Promise.all(promises);
     }
-
 
     render() {
         return (

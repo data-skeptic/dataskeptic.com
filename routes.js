@@ -12,6 +12,11 @@ const routes = [
         page: '/blog'
     },
     {
+        name: 'Category Page',
+        pattern: '/blog/:category/:page',
+        page: '/blog'
+    },
+    {
         name: 'Page',
         pattern: '/blog/:page',
         page: '/blog'

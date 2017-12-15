@@ -6,13 +6,14 @@ import {
     getActiveCategory,
     getPageCount,
     loadBlogList,
-    getCategories
+    getCategories,
+    getPage,
+    setCurrentPage,
+    getNeedReload
 } from '../../../redux/modules/blogReducer'
 import BlogListItem from '../Components/BlogListItem'
 import ReactPaginate from 'react-paginate';
-import PodcastPlayer from "../../Podcasts/Containers/PodcastPlayer";
 import ParamRouter from '../../../components/Router'
-
 
 @connect(
     state => ({
@@ -20,41 +21,68 @@ import ParamRouter from '../../../components/Router'
         category: getActiveCategory(state),
         categories: getCategories(state),
         pageCount: getPageCount(state),
-
+        page: getPage(state),
+        needReload: getNeedReload(state)
     }),
-    {loadBlogList}
+    {loadBlogList, setCurrentPage}
 )
 export default class BlogList extends Component {
+
     handlePageClick = data => {
-        console.log(data);
-        this.props.loadBlogList(data.selected + 1)
-        ParamRouter.pushRoute('Page', {page: data.selected + 1})
+        const page = data.selected + 1
+        const { category } = this.props
+
+        if (category) {
+            ParamRouter.pushRoute('Category Page', {category, page})
+        } else {
+            ParamRouter.pushRoute('Page', {page})
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.needReload){
+            this.refresh(nextProps.category, nextProps.page)
+        }
+    }
+
+    refresh = (category, page) => {
+        this.props.loadBlogList(category, page)
+        window.scrollTo(0,0)
     }
 
     render() {
-        const {posts, category, categories, pageCount} = this.props;
+        const {posts, category, categories, pageCount, page} = this.props;
         const categoryExist = (categories.indexOf(category) !== -1) || (!category || category === 'all');
+        const showPaginate = pageCount > 1
         return (
             <Wrapper>
                 {categoryExist && category &&
                 (category !== 'all') && <CategoryTitle>{category}</CategoryTitle>}
 
-                {categoryExist && posts && posts.map(post => <BlogListItem key={post.c_hash} {...post}/>)}
+                {categoryExist && posts &&
+                    <Posts>
+                        {posts.length === 0
+                            ? <div>No posts found.</div>
+                            : posts.map(post => <BlogListItem key={post.c_hash} {...post}/>)
+                        }
+                    </Posts>
+                }
 
-                {category === 'all' && <PaginationContainer>
+                {showPaginate && <PaginationContainer>
                     <ReactPaginate
                         marginPagesDisplayed={1}
                         pageRangeDisplayed={2}
                         previousLabel={"<"}
                         nextLabel={">"}
                         containerClassName={'pagination'}
-                        initialPage={0}
+                        initialPage={page-1}
                         breakLabel={<span>...</span>}
-                        pageCount={pageCount}
+                        pageCount={pageCount-1}
                         onPageChange={this.handlePageClick}
                         disableInitialCallback
                     />
                 </PaginationContainer>}
+
                 {!categoryExist && <h2> Error </h2>}
             </Wrapper>
         )
@@ -82,9 +110,20 @@ const PaginationContainer = styled.div`
       cursor: not-allowed;
     }
     cursor: pointer;
-    min-width: 22px;
-    padding: 10px;
     text-align: center;
+    
+    &.break {
+        width: 42px;
+        height: 42px;
+        line-height: 42px;
+    }
+    
+    > a {
+        width: 42px;
+        height: 42px;
+        line-height: 42px;
+        display: block;
+    }
   }
   
 `
@@ -93,3 +132,5 @@ const Wrapper = styled.div`
     flex-grow: 1;
     flex-basis: 70%;
 `
+
+const Posts = styled.section``

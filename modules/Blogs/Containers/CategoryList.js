@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import styled from 'styled-components'
-import {getActiveCategory, getCategories,setActiveCategory} from '../../../redux/modules/blogReducer'
+import {getActiveCategory, getCategories, setActiveCategory, loadBlogList, getPage} from '../../../redux/modules/blogReducer'
 import BlogListItem from '../Components/BlogListItem'
 import CategoriesListItem from "../Components/CategoriesListItem";
 import ParamRouter from '../../../components/Router'
@@ -10,28 +10,35 @@ import Router from 'next/router'
 @connect(
     state => ({
         categories: getCategories(state),
-        activeCategory:getActiveCategory(state)
+        activeCategory: getActiveCategory(state),
+        page: getPage(state)
     }),
-    {setActiveCategory}
+    { setActiveCategory, loadBlogList }
 )
 export default class CategoryList extends Component {
-    setActiveCategory = label => {
-      ParamRouter.pushRoute(`Category`, {category: label})
+
+    setActiveCategory = category => {
+        ParamRouter.pushRoute(`Category`, {category})
+        // this.props.setActiveCategory(category)
     }
 
-
-
     render() {
-        const {categories,activeCategory} = this.props;
+        const {categories, activeCategory} = this.props;
 
         return (
             <Wrapper>
                 <Title>Categories</Title>
                 <List>
+                    <CategoriesListItem
+                        setActiveCategory={this.setActiveCategory}
+                        activeCategory={activeCategory}
+                        category={'all'}
+                    />
+
                     {categories && categories.map(category => <CategoriesListItem
                         key={category}
                         setActiveCategory={this.setActiveCategory}
-                        activeCategory={this.props.activeCategory}
+                        activeCategory={activeCategory}
                         category={category}/>)}
                 </List>
             </Wrapper>

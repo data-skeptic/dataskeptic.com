@@ -17,6 +17,12 @@ const paginationMeta = (total, itemsPerPage, currentPage) => ({
 })
 
 const paginate = (items, from, to) => filter(items, ({order}) => order >= from && order <= to)
+const realPaginate = (items, from, to) =>
+    filter(items, (item, realIndex) => realIndex >= from && realIndex <= to)
+
+const filterByCategory = (items, category) =>
+    filter(items, (item) => item.category === category)
+
 
 export default function (cache) {
 
@@ -31,16 +37,26 @@ export default function (cache) {
         })
     })
 
-    router.get('/blogs/', (req, res) => {
-        const page = 1;
 
-        const total = Object.keys(cache.posts).length
-        const pagination = paginationMeta(total, PER_PAGE, page)
-        const posts = paginate(cache.posts, pagination.from, pagination.to)
+    router.get('/blogs/:category/:year/:name', (req, res) => {
+        const prettyName = generatePrettyName(req.params.category, req.params.year, req.params.name);
+        const post = cache.blogs[prettyName]
+        res.send(post)
+    })
+
+    router.get('/blogs/:category/:page', (req, res) => {
+        const { category, page } = req.params
+
+        const source = filterByCategory(cache.posts, category)
+
+        const total = Object.keys(source).length
+        const pagination = paginationMeta(total, PER_PAGE, +page)
+        const posts = realPaginate(source, pagination.from, pagination.to)
 
         res.send({
             posts,
-            ...pagination
+            ...pagination,
+            category
         })
     })
 
@@ -48,7 +64,7 @@ export default function (cache) {
         const { page } = req.params
 
         const total = Object.keys(cache.posts).length
-        const pagination = paginationMeta(total, PER_PAGE, page)
+        const pagination = paginationMeta(total, PER_PAGE, +page)
         const posts = paginate(cache.posts, pagination.from, pagination.to)
 
         res.send({
@@ -57,10 +73,17 @@ export default function (cache) {
         })
     })
 
-    router.get('/blogs/:category/:year/:name', (req, res) => {
-        const prettyName = generatePrettyName(req.params.category, req.params.year, req.params.name);
-        const post = cache.blogs[prettyName]
-        res.send(post)
+    router.get('/blogs/', (req, res) => {
+        const page = 1;
+
+        const total = Object.keys(cache.posts).length
+        const pagination = paginationMeta(total, PER_PAGE, +page)
+        const posts = paginate(cache.posts, pagination.from, pagination.to)
+
+        res.send({
+            posts,
+            ...pagination
+        })
     })
 
     router.get('/episodes', (req, res) => {

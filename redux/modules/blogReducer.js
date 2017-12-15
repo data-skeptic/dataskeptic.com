@@ -33,18 +33,19 @@ export default function reducer(state = initialState,
         case LOAD_BLOGS:
             return {
                 ...state,
-                loading: true
+                loading: true,
+                needReload: false
             };
         case LOAD_BLOGS_SUCCESS:
             return {
                 ...state,
                 loading: false,
                 list: action.result.posts,
-                total:action.result.total,
-                currentPage:action.result.currentPage,
-                lastPage:action.result.lastPage,
-                from:action.result.from,
-                to:action.result.to
+                total: action.result.total,
+                currentPage: action.result.currentPage,
+                lastPage: action.result.lastPage,
+                from: action.result.from,
+                to: action.result.to
             }
         case LOAD_BLOG:
             return {
@@ -70,31 +71,41 @@ export default function reducer(state = initialState,
         case SET_ACTIVE_CATEGORY:
             return {
                 ...state,
+                needReload: true,
                 activeCategory: action.payload.prettyName
             }
-      case SET_CURRENT_PAGE:
-          return {
-            ...state,
-            currentPage: action.payload.page
-          }
+        case SET_CURRENT_PAGE:
+            return {
+                ...state,
+                needReload: true,
+                currentPage: action.payload.page
+            }
         default:
             return state
     }
 }
 
 
-export const loadBlogList = currentPage => ({
+const fetchBlogsUrl = (category, page) =>
+    (category === 'all')
+        ? `/blogs/${page}`
+        : `/blogs/${category}/${page}`
+
+export const loadBlogList = (category, page) => ({
     types: [LOAD_BLOGS, LOAD_BLOGS_SUCCESS, LOAD_BLOGS_FAIL],
-    promise: client => client.get(`/blogs/${currentPage && currentPage}`)
+    promise: client => client.get(fetchBlogsUrl(category, page))
 })
+
 export const loadSingleBlog = pn => ({
     types: [LOAD_BLOG, LOAD_BLOG_SUCCESS, LOAD_BLOG_FAIL],
     promise: client => client.get(`/blogs/${pn}`)
 })
+
 export const loadCategories = () => ({
     types: [LOAD_CATEGORIES, LOAD_CATEGORIES_SUCCESS, LOAD_CATEGORIES_FAIL],
     promise: client => client.get(`/categories`)
 })
+
 export const setActiveCategory = prettyName => ({
     type: SET_ACTIVE_CATEGORY,
     payload: {
@@ -103,10 +114,10 @@ export const setActiveCategory = prettyName => ({
 })
 
 export const setCurrentPage = page => ({
-  type: SET_CURRENT_PAGE,
-  payload: {
-      page
-  }
+    type: SET_CURRENT_PAGE,
+    payload: {
+        page
+    }
 })
 
 //Selectors
@@ -119,7 +130,11 @@ export const getCategories = state => state.blogs && state.blogs.categories
 
 export const getActiveCategory = state => state.blogs && state.blogs.activeCategory
 
-export const getPageCount = state => state.blogs && state.blogs.total && Math.ceil(state.blogs.total/10)
+export const getPageCount = state => state.blogs && state.blogs.lastPage
+
+export const getPage = state => state.blogs && state.blogs.currentPage
+
+export const getNeedReload = state => state.blogs && state.blogs.needReload
 
 //Helpers
 
