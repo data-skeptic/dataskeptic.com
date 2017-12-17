@@ -191,14 +191,16 @@ const init = async (isProduction) => {
         loadAdvertiseSourceContent(ADVERTISE_BANNER_CONTENT)
     ])
 
+    const posts = exclude(blogs)
+
     const latestEpisode = episodes[0]
-    const latestPost = blogs[0]
+    const latestPost = posts[0]
 
     const categories = extractCategories(blogs)
 
     const cache = {
         blogs: formatByKey(blogs, `prettyname`),
-        posts: order(exclude(blogs)),
+        posts: order(posts),
         episodes: formatByKey(episodes, `guid`),
         latestEpisode,
         latestPost,

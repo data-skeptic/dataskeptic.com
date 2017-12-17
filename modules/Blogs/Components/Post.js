@@ -1,21 +1,22 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import styled from "styled-components";
 import Link from "../../../components/Link";
 import Ionicon from 'react-ionicons'
 
 const Post = ({post}) => (
-  <Wrapper>
-    <Header>
-      <Author>Author: {post.author.prettyname}</Author>
-      <Social href={`http://twitter.com/${post.author.twitter}`}><Ionicon icon="logo-twitter" /> {post.author.twitter}</Social>
-      <Social href={`${post.author.linkedin}`}><Ionicon icon="logo-linkedin"/> LinkedIn</Social>
-    </Header>
-      <Date>{post.publish_date}</Date>
-      <Title>{post.title}</Title>
-    <Body>
-    <Content dangerouslySetInnerHTML={{__html:post.content}} />
-    </Body>
-  </Wrapper>
+    <Wrapper>
+        <Header>
+            <Author>Author: {post.author.prettyname}</Author>
+            <Social href={`http://twitter.com/${post.author.twitter}`}><Ionicon
+                icon="logo-twitter"/> {post.author.twitter}</Social>
+            <Social href={`${post.author.linkedin}`}><Ionicon icon="logo-linkedin"/> LinkedIn</Social>
+        </Header>
+        <Date>{post.publish_date}</Date>
+        <Title>{post.title}</Title>
+        <Body>
+        <Content dangerouslySetInnerHTML={{__html: post.content}}/>
+        </Body>
+    </Wrapper>
 )
 
 export default Post;
@@ -25,6 +26,7 @@ const Social = styled(Link)`
   display: flex;
   align-items: center;
   color: black;
+  
   & svg {
     margin-right: 10px;
   }

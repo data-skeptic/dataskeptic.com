@@ -12,7 +12,6 @@ import {getDailySponsor, getLatestBlogPost, getLatestEpisode} from "../../../red
         latestPost: getLatestBlogPost(state),
         latestEpisode:getLatestEpisode(state),
         dailySponsor:getDailySponsor(state)
-
     }),
     {}
 )

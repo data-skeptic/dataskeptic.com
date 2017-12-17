@@ -21,7 +21,7 @@ export default class EpisodeListItem extends Component {
                     {moment(post.pubDate).format('MMMM D, YYYY')}{" "}
                 </Date>
                 <Post>
-                    <Avatar>
+                    <Avatar href={formatLink(post.link)}>
                         <img src={post.img}/>
                     </Avatar>
                     <Body>
@@ -87,9 +87,10 @@ const Body = styled.div`
   font-weight: 500;
   padding: 0;
 `;
-const Avatar = styled.div`
+const Avatar = styled(Link)`  
   > img {
-    max-width: 200px;
+    width: 200px;
+    height: 200px;
     margin-right: 20px;
   }
 `;

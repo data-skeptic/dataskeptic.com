@@ -24,7 +24,7 @@ export default function reducer(state = initialState,
                 loading:false,
                 latestBlogPost:action.result.latestBlog,
                 latestEpisode:action.result.latestEpisode,
-                dailySponsor:action.result.latestSponsor
+                dailySponsor:action.result.latestCard
             }
         default:
             return state

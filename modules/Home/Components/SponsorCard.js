@@ -2,27 +2,16 @@ import React from "react";
 import {
     Wrapper,
     Label,
-    Card,
-    SponsorTitle,
-    SponsorMedia,
-    SponsorPromo
-
+    Card
 } from "../../../shared/styles";
 
-export default ({name, media, title, promo}) => (
+export default ({content, name=''}) => (
     <Wrapper>
         <Label>{name}</Label>
         <Card>
-            <SponsorTitle>{title}</SponsorTitle>
-            <SponsorMedia>
-                <img src={media} alt="sponsor"/>
-            </SponsorMedia>
-            <SponsorPromo>
-                {promo}
-            </SponsorPromo>
+            <div dangerouslySetInnerHTML={{__html: content}}/>
         </Card>
     </Wrapper>
-
 );
 
 
