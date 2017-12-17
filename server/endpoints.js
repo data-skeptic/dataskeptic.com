@@ -18,7 +18,7 @@ const paginationMeta = (total, itemsPerPage, currentPage) => ({
 
 const paginate = (items, from, to) => filter(items, ({order}) => order >= from && order <= to)
 const realPaginate = (items, from, to) =>
-    filter(items, (item, realIndex) => realIndex >= from && realIndex <= to)
+    filter(items, (item, realIndex) => (realIndex >= from-1) && (realIndex <= to-1))
 
 const filterByCategory = (items, category) =>
     filter(items, (item) => item.category === category)
