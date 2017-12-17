@@ -11,6 +11,7 @@ import {
     pause,
     setCurrentPlaying
 } from "../../../redux/modules/playerReducer";
+import Ionicon from 'react-ionicons'
 
 @connect(
     state => ({
@@ -58,7 +59,10 @@ export default class EpisodePlayer extends Component {
                 <HeaderTitle>{post.title}</HeaderTitle>
                 <EpisodeDate>{moment(post.publish_date).fromNow()}</EpisodeDate>
                 <PlayButton onClick={this.togglePlay}>
-                    <img src={!playing ? '/static/play.svg' : '/static/stop.svg'} alt=""/>
+                    {!playing
+                        ? <Ionicon icon={'md-play'} fontSize={'42px'}/>
+                        : <Ionicon icon={'md-pause'} fontSize={'42px'}/>
+                    }
                 </PlayButton>
             </Header>
         )

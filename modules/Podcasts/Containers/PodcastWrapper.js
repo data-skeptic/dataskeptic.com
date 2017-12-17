@@ -56,7 +56,7 @@ export default class PodcastWrapper extends Component {
 
                 {episodes && episodes.length === 0
                     ? <Empty>No episodes found.</Empty>
-                    : episodes.map(episode => <PodcastListItem play={this.props.setCurrentPlaying} key={episode.guid} post={episode}/>)}
+                    : episodes.map(episode => <PodcastListItem key={episode.guid} post={episode}/>)}
 
                 {showPaginate &&
                     <PaginationContainer>

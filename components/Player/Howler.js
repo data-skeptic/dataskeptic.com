@@ -17,11 +17,14 @@ export default class Howler extends Component {
     }
 
     setPosition = (progress) => {
-        if (!this.player) return;
-        this.props.setPosition(progress)
-        const position = progress * this.getDuration() / 100;
-        this.player.seek(position);
-        this.setState({progress: progress})
+        try {
+            this.props.setPosition(progress)
+            const position = progress * this.getDuration() / 100;
+            this.player.seek(position);
+            this.setState({progress: progress})
+        } catch (e) {
+            console.dir(e)
+        }
     }
 
     componentWillUnmount() {
@@ -59,10 +62,11 @@ export default class Howler extends Component {
         return formatSeconds(this.getDuration())
     }
 
+    end = () => alert('end')
+
     render() {
         const {mp3, isPlaying} = this.props
         const {loaded, currentPosition, progress} = this.state;
-        console.log(loaded)
         return (
             <PlayerWrapper>
                 <ReactHowler
@@ -72,6 +76,9 @@ export default class Howler extends Component {
                     step={0.01}
                     ref={(ref) => (this.player = ref)}
                     onLoad={this.loadCompleted}
+                    onEnd={this.end}
+                    onLoadError={(e) => console.dir(e)}
+                    preload={true}
                 />
                 {loaded &&
                 <PlayerData>

@@ -3,18 +3,54 @@ import styled, {withTheme} from "styled-components";
 import Link from "../../../components/Link";
 import moment from 'moment'
 import Ionicon from 'react-ionicons'
-import ParamRouter from "../../../components/Router";
+import {
+    getCurrentPlaying, getIsPlaying, getIsVisible, getPosition, pause, play,
+    setCurrentPlaying
+} from "../../../redux/modules/playerReducer";
+import {connect} from "react-redux";
 
 const formatLink = (link) => link.indexOf('/') === 0 ? link : `/podcasts/${link}`
 
-export default class EpisodeListItem extends Component {
-    handlePlay = () => {
-        const {post} = this.props;
-        this.props.play(post)
+@connect(
+    state => ({
+        currentPlaying: getCurrentPlaying(state),
+        isPlaying: getIsPlaying(state),
+        isVisible: getIsVisible(state),
+        position: getPosition(state)
+    }),
+    {play, pause, setCurrentPlaying}
+)
+export default class PodcastListItem extends Component {
+
+    playCurrent = () => this.props.setCurrentPlaying(this.props.post)
+
+    play = () => {
+        if (!this.isCurrentEpisodePlaying()) {
+            this.playCurrent()
+        }
+
+        this.props.play()
     }
+
+    pause = () => this.props.pause()
+
+    togglePlay = () => {
+        if (this.isCurrentEpisodePlaying()) {
+            this.pause()
+        } else {
+            this.play()
+        }
+    }
+
+    isCurrentEpisodePlaying = () =>
+        this.props.currentPlaying
+        && this.props.currentPlaying.mp3 === this.props.post.mp3
+        && this.props.isPlaying
 
     render() {
         const {post} = this.props;
+        const isPlaying = this.isCurrentEpisodePlaying()
+
         return (
             <Wrapper>
                 <Date>
@@ -27,17 +63,20 @@ export default class EpisodeListItem extends Component {
                     <Body>
                     <TitleWrap>
                         <PostLink href={formatLink(post.link)}>
-                            <Title>
-                                {post.title}
-                            </Title>
+                            <Title>{post.title}</Title>
                         </PostLink>
                         <ButtonsWrapper>
-                            <Button onClick={this.handlePlay}>
-                                <Ionicon icon={'md-play'}/> Play {post.duration}
+                            <Button onClick={this.togglePlay}>
+                                {isPlaying
+                                    ? <Ionicon icon={'md-pause'}/>
+                                    : <Ionicon icon={'md-play'}/>
+                                }
+                                <PlayingStatus>{isPlaying ? `Pause` : `Play` }</PlayingStatus>
+                                {' '}{post.duration}
                             </Button>
-                            <Button>
+                            <DownloadButton target="_blank" href={post.mp3}>
                                 <Ionicon icon={'md-download'}/> Download
-                            </Button>
+                            </DownloadButton>
                         </ButtonsWrapper>
                     </TitleWrap>
                     {" "}
@@ -117,7 +156,7 @@ const ButtonsWrapper = styled.div`
     margin-top: 10px;
 `
 
-const Button = styled.button`
+const Button = styled.a`
     background: #fff;
     display: flex;
     align-items: center;
@@ -144,4 +183,13 @@ const Button = styled.button`
     
     min-width: 120px;
     margin-right: 10px;
+`
+
+const DownloadButton = Button.extend`
+    
+`
+
+const PlayingStatus = styled.span`
+    text-align: left;
+    width: 50px;
 `

@@ -33,7 +33,7 @@ const getProposeEditUrl = (currentPost) => {
 
 const DisqusUsername = `dataskeptic`
 
-const isEpisodePost = (post) => (post.category === '/episodes' || post.category === '/transcripts')
+const isEpisodePost = (post) => (post.category === 'episodes' || post.category === 'transcripts')
 
 @connect(
     state => ({
@@ -61,9 +61,7 @@ export default class BlogSingle extends Component {
 
         return (
             <Wrapper>
-                {this.hasEpisode &&
-                    <EpisodePlayer post={post}/>
-                }
+                {this.hasEpisode() && <EpisodePlayer post={post}/> }
 
                 <Post post={post}/>
                 <AuthorBlock author={post.author}/>

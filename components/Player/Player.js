@@ -13,6 +13,7 @@ import {
 import styled from "styled-components";
 import moment from "moment";
 import Progress from './Progress';
+import Ionicon from 'react-ionicons'
 import Howler from './Howler';
 @connect(
   state => ({
@@ -78,14 +79,13 @@ export default class Player extends Component {
           />
         </PlayerBlock>
         <VolumeBlock>volume</VolumeBlock>
-
         <MediaBlock>
           {isPlaying
             ? <MediaButton onClick={this.pause}>
-                <img src="/static/stop.svg" alt="" />
+                  <Ionicon icon={'md-pause'} fontSize={'42px'}/>
               </MediaButton>
             : <MediaButton onClick={this.play}>
-                <img src="/static/play.svg" alt="" />
+                  <Ionicon icon={'md-play'} fontSize={'42px'}/>
               </MediaButton>}
         </MediaBlock>
       </PlayerWrapper>
@@ -108,6 +108,12 @@ const PlayerWrapper = styled.div`
 const MediaButton = styled.div`
   height: 60px;
   margin-right: 5px;
+  cursor: pointer;
+  
+  >svg {
+    height: 60px;
+    padding-right: 10px;
+  }
 `;
 
 const Date = styled.div`
