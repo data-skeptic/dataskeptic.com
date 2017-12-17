@@ -20,7 +20,7 @@ export default class YearList extends Component {
         const page = this.props.page
 
         if (year) {
-            ParamRouter.pushRoute('Podcasts Page', {year, page})
+            ParamRouter.pushRoute('Podcasts Page', {year, page: 1})
         } else {
             ParamRouter.pushRoute('Podcasts', {page})
         }
@@ -28,7 +28,7 @@ export default class YearList extends Component {
 
     render() {
         const {activeYear} = this.props;
-        const yearMock = ['2014','2015','2016','2017']
+        const yearMock = ['2017','2016','2015','2014']
         return (
             <Wrapper>
                 <Title>Years</Title>

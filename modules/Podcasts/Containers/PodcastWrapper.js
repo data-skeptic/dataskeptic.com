@@ -1,7 +1,10 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import styled from 'styled-components'
-import {loadEpisodesList, getEpisodes, getActiveYear, getNeedReload, getPage, getPageCount} from '../../../redux/modules/podcastReducer'
+import {
+    loadEpisodesList, getEpisodes, getActiveYear, getNeedReload, getPage, getPageCount,
+    setCurrentPage
+} from '../../../redux/modules/podcastReducer'
 import {setCurrentPlaying} from '../../../redux/modules/playerReducer'
 import PodcastListItem from '../Components/PodcastListItem'
 import ReactPaginate from 'react-paginate'
@@ -15,7 +18,7 @@ import ParamRouter from "../../../components/Router";
         page: getPage(state),
         needReload: getNeedReload(state)
     }),
-    {setCurrentPlaying, loadEpisodesList}
+    {setCurrentPlaying, loadEpisodesList, setCurrentPage}
 )
 export default class PodcastWrapper extends Component {
 
@@ -28,6 +31,8 @@ export default class PodcastWrapper extends Component {
         } else {
             ParamRouter.pushRoute('Podcasts', {page})
         }
+
+        this.props.setCurrentPage(page)
     }
 
     componentWillReceiveProps(nextProps) {

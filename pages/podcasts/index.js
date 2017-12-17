@@ -22,12 +22,11 @@ const getActualQuery = (year, page, isPage = false) => {
     }
 
     if (!page) {
-        page = 1;
-    }
-
-    if (!year) {
+        page = year;
         year = null
     }
+
+    if (!page) page = 1
 
     if (isPage) {
         return page
