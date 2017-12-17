@@ -90,7 +90,6 @@ const More = styled(Link)`
 
 const Body = styled.div`
   margin: 10px 0px;
-  text-align: justify;
   & > a {
     border-bottom: 1px dotted;
     text-decoration: none;

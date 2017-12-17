@@ -9,6 +9,7 @@ import ProposeButton from '../Components/ProposeButton'
 import RelatedContent from '../Components/RelatedContent'
 import {Form} from "react-final-form"
 import SubscriptionForm from '../../Forms/SubscriptionForm'
+import EpisodePlayer from "../../Player/Components/EpisodePlayer";
 
 const generateEditGithubPageUrl = (prettyName, env) => `https://github.com/data-skeptic/blog/edit/${env}${prettyName}.md`
 const generateEditJupyterPageUrl = (prettyName, env) => `https://github.com/data-skeptic/blog/blob/${env}${prettyName}.ipynb`
@@ -32,6 +33,8 @@ const getProposeEditUrl = (currentPost) => {
 
 const DisqusUsername = `dataskeptic`
 
+const isEpisodePost = (post) => (post.category === '/episodes' || post.category === '/transcripts')
+
 @connect(
     state => ({
         post: getSingle(state)
@@ -42,6 +45,8 @@ export default class BlogSingle extends Component {
 
     handleNewComment = () => alert('comment')
     subscribe = () => alert('subscribe')
+
+    hasEpisode = () => isEpisodePost(this.props.post)
 
     render() {
         const {post} = this.props;
@@ -56,6 +61,10 @@ export default class BlogSingle extends Component {
 
         return (
             <Wrapper>
+                {this.hasEpisode &&
+                    <EpisodePlayer post={post}/>
+                }
+
                 <Post post={post}/>
                 <AuthorBlock author={post.author}/>
                 <Form onSubmit={this.subscribe} render={SubscriptionForm}/>

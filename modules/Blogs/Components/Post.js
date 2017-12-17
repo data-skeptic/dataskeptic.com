@@ -56,17 +56,8 @@ const Title = styled.span`
   text-decoration: none;
 `;
 
-const More = styled(Link)`
-  color: #000;
-  letter-spacing: 0;
-  font-weight: 700;
-  font-size: 14px;
-`;
-
-
 const Body = styled.div`
   margin: 10px 0px;
-  text-align: justify;
   & > a {
     border-bottom: 1px dotted;
     text-decoration: none;
@@ -79,12 +70,7 @@ const Body = styled.div`
   font-weight: 500;
   padding: 0;
 `;
-const Avatar = styled.div`
-  & > img {
-    width: 60px;
-  }
-`;
-const PostLink = styled(Link)`margin-left: 10px;text-decoration: none;`;
+
 const Author = styled.div`
   padding-top: 6px;
 `;

@@ -44,7 +44,6 @@ const Intro = styled.h1`
     font-size: 48px;
     padding: 6px 0px;
     padding-left: 50px;
-    text-align: justify;
     margin-top: 85px;
     border-left: 4px solid ${props => props.theme.colors.dark};
     color: ${props => props.theme.colors.dark}

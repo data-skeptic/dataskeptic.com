@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled, {withTheme} from "styled-components";
-import Link from "../../../components/Link";
+import EpisodePlayer from "../../Player/Components/EpisodePlayer";
 import moment from 'moment';
 
 export default class Podcast extends Component {
@@ -9,16 +9,7 @@ export default class Podcast extends Component {
 
     return (
       <Wrapper>
-        <Header>
-          <HeaderTitle>{post.title}</HeaderTitle>
-          <EpisodeDate>{moment(post.publish_date).fromNow()}</EpisodeDate>
-          <PlayButton onClick={togglePlay}>
-            <img src={!playing ? '/static/play.svg' : '/static/stop.svg'} alt=""/>
-          </PlayButton>
-          {/*<Author>Author: {post.contributor.prettyname}</Author>*/}
-          {/*<Social href={`http://twitter.com/${post.contributor.twitter}`}><Ionicon icon="logo-twitter" /> {post.contributor.twitter}</Social>*/}
-          {/*<Social href={`${post.contributor.linkedin}`}><Ionicon icon="logo-linkedin"/> LinkedIn</Social>*/}
-        </Header>
+        <EpisodePlayer post={post}/>
         <Date>{moment(post.publish_date).format('MMMM D, YYYY')}</Date>
         <Title>{post.title}</Title>
         <Body>
@@ -74,7 +65,6 @@ const Title = styled.span`
 
 const Body = styled.div`
   margin: 10px 0px;
-  text-align: justify;
   & > a {
     border-bottom: 1px dotted;
     text-decoration: none;

@@ -74,7 +74,6 @@ const Date = styled.div`
   margin-bottom: 15px;
 `;
 const Body = styled.div`
-  text-align: justify;
   & > a {
     border-bottom: 1px dotted;
     text-decoration: none;

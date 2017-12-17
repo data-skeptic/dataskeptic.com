@@ -47,10 +47,14 @@ export default class Player extends Component {
   };
 
   render() {
-    const { currentPlaying, isPlaying, isVisible, position} = this.props;
+    let { currentPlaying, isPlaying, isVisible, position} = this.props;
     const {volume} = this.state;
+
+    if (!isVisible) {
+      return <div />
+    }
+
     return (
-      isVisible &&
       <PlayerWrapper show={isVisible}>
         <PodcastBlock>
           <PodcastCover>

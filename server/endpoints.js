@@ -26,6 +26,8 @@ const filterByCategory = (items, category) =>
 const filterByYear = (items, year) =>
     filter(items, (item) => item.year === year)
 
+const isEpisodePost = (post) => (post.prettyname.indexOf('/episodes') === 0 || post.prettyname.indexOf('/transcripts') === 0)
+
 export default function (cache) {
 
     router.get('/test', (req, res) => res.send(cache.blogs))
@@ -43,7 +45,20 @@ export default function (cache) {
     router.get('/blogs/:category/:year/:name', (req, res) => {
         const prettyName = generatePrettyName(req.params.category, req.params.year, req.params.name);
         const post = cache.blogs[prettyName]
-        res.send(post)
+
+        const isEpisode = isEpisodePost(post)
+
+        if (isEpisode) {
+            const episode = cache.episodes[post.guid]
+            res.send({
+                ...post,
+                ...episode
+            })
+        } else {
+            res.send({
+                ...post
+            })
+        }
     })
 
     router.get('/blogs/:category/:page', (req, res) => {
