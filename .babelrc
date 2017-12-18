@@ -1,8 +1,11 @@
 {
-  "presets": ["es2015", "stage-0", "react"],
+  "presets": [
+    "next/babel",
+    "es2015",
+    "stage-0"
+  ],
   "plugins": [
-    ["transform-object-rest-spread"],
-    ["transform-class-properties"],
-    ["transform-decorators-legacy"]
+    "transform-decorators-legacy",
+    ["styled-components", { "ssr": true, "displayName": true, "preprocess": true } ]
   ]
 }
