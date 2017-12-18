@@ -1,10 +1,13 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import styled from 'styled-components'
+import ReactDisqusComments from 'react-disqus-comments'
 import {getSingle} from '../../../redux/modules/podcastReducer'
 import Podcast from '../Components/Podcast'
 import {Form} from "react-final-form"
 import SubscriptionForm from '../../Forms/SubscriptionForm'
+
+const DisqusUsername = `dataskeptic`
 
 @connect(
     state => ({
@@ -27,10 +30,14 @@ export default class BlogSingle extends Component {
 
     render() {
         const {episode} = this.props;
+
         const {playing} = this.state;
         if (!episode) {
             return <div>Not found.</div>
         }
+
+        const uid = 'http://dataskeptic.com/blog' + episode.prettyname;
+
 
         return (
             <Wrapper>
@@ -39,6 +46,15 @@ export default class BlogSingle extends Component {
                 <Form
                     onSubmit={(data) => alert(data)}
                     render={SubscriptionForm}
+                />
+
+
+                <ReactDisqusComments
+                    shortname={DisqusUsername}
+                    identifier={uid}
+                    title={episode.title}
+                    url={uid}
+                    onNewComment={this.handleNewComment}
                 />
             </Wrapper>
         )

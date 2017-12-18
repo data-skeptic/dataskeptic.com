@@ -21,10 +21,11 @@ export default class Header extends Component {
                     <img src="/static/logo.svg" alt="DataSkeptic"/>
                 </Logo>
                 <Navs>
-                    <ActiveLink href="/podcasts">Podcast</ActiveLink>
-                    <ActiveLink href="/blog">Blogs</ActiveLink>
+                    <ActiveLink href="/podcasts">Podcasts</ActiveLink>
+                    <ActiveLink href="/blog">Blog</ActiveLink>
                     <ActiveLink href="/projects">Projects</ActiveLink>
                     <ActiveLink href="/services">Services</ActiveLink>
+                    <ActiveLink href="/about">About</ActiveLink>
                 </Navs>
                 <Navs>
                     <ActiveLink href="/members"> Sponsor </ActiveLink>
