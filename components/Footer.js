@@ -3,6 +3,17 @@ import styled from 'styled-components'
 import AdSense from 'react-adsense'
 import Link from './Link'
 
+const LINKS = {
+    ITUNES: 'https://itunes.apple.com/podcast/the-data-skeptic-podcast/id890348705',
+    GOOGLE: 'https://play.google.com/music/m/Ibr6e2jb7ot6m6gupwdjgsfmoqa?t=Data_Skeptic',
+    STITCHER: 'http://www.stitcher.com/s?fid=50561&amp;refid=stpr',
+    RSS: '/api/blog/rss',
+
+    TWITTER: 'https://twitter.com/dataskeptic',
+    FACEBOOK: 'https://www.facebook.com/dataskeptic',
+    YOUTUBE: 'https://youtube.com/dataskeptic'
+};
+
 const Footer = () => (
     <Container>
         <AdSense.Google client='ca-pub-4495792015968395' slot='2320193863'/>
@@ -42,29 +53,24 @@ const Footer = () => (
                 <NavSection>
                     <SectionTitle>Connect</SectionTitle>
                     <Links>
-                        <Item><Link href="/about">Twitter</Link></Item>
-                        <Item><Link href="/members">Facebook</Link></Item>
-                        <Item><Link href="/store">Youtube</Link></Item>
-                        <Item><Link href="/contact">Contact</Link></Item>
+                        <Item><Link href={LINKS.TWITTER}>Twitter</Link></Item>
+                        <Item><Link href={LINKS.FACEBOOK}>Facebook</Link></Item>
+                        <Item><Link href={LINKS.YOUTUBE}>Youtube</Link></Item>
                     </Links>
                 </NavSection>
                 <NavSection>
                     <SectionTitle>Subscribe</SectionTitle>
                     <Links>
                         <Item>
-                            <Link
-                                href="https://itunes.apple.com/us/podcast/the-data-skeptic-podcast/id890348705">iTunes</Link>
+                            <Link href={LINKS.ITUNES}>iTunes</Link>
                         </Item>
                         <Item>
-                            <Link
-                                href="https://play.google.com/music/listen?t=Data_Skeptic&view=/ps/Ibr6e2jb7ot6m6gupwdjgsfmoqa">Google
-                                Play</Link>
+                            <Link href={LINKS.GOOGLE}>Google Play</Link>
                         </Item>
                         <Item>
-                            <Link
-                                href="https://www.stitcher.com/podcast/data-skeptic-podcast/the-data-skeptic-podcast?amp;refid=stpr">Stitcher</Link>
+                            <Link href={LINKS.STITCHER}>Stitcher</Link>
                         </Item>
-                        <Item><Link href="/rss">RSS Feed</Link></Item>
+                        <Item><Link href={LINKS.RSS}>RSS Feed</Link></Item>
                     </Links>
                 </NavSection>
             </FooterNav>

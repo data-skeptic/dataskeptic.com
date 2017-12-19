@@ -1,7 +1,6 @@
 import React from 'react'
 import CartItem from "./CartItem";
 import styled from 'styled-components'
-import Link from '../../../components/Link'
 const CartList = ({amount, cartList, changeQuantity, removeItem, clearCart}) => (
     <Wrapper>
 
@@ -47,7 +46,7 @@ const CartList = ({amount, cartList, changeQuantity, removeItem, clearCart}) => 
 )
 export default CartList
 
-const CheckOutBtn = styled(Link)`
+const CheckOutBtn = styled.button`
     line-height: 48px;
     background: #f0d943;
     border-radius: 4px;

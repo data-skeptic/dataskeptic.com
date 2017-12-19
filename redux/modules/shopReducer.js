@@ -1,10 +1,33 @@
 import {updateQuantity} from "./helpers/helpers";
 
+const SYNC = 'SYNC'
 const LOAD_PRODUCTS = 'LOAD_PRODUCTS'
 const ADD_TO_CART = 'ADD_TO_CART'
 const CHANGE_QUANTITY = 'CHANGE_QUANTITY'
 const REMOVE_ITEM = 'REMOVE_ITEM'
 const CLEAR_CART = 'CLEAR_CART'
+
+const saveItems = (items) => localStorage.setItem('cart', JSON.stringify(items));
+const getCartItems = () => {
+    if (!process.browser) return []
+
+    try {
+        const data = localStorage.getItem("cart");
+        console.log(`getItems`)
+        console.dir(data)
+        if (!data) {
+            return []
+        }
+        return JSON.parse(data)
+    } catch (e) {
+        return []
+    }
+}
+
+const persistCartItems = (state) => {
+    process.browser && saveItems(state.cart)
+    return state
+}
 
 const initialState = {
     loading: false,
@@ -16,45 +39,57 @@ const initialState = {
 export default function reducer(state = initialState,
                                 action = {}) {
     switch (action.type) {
+        case SYNC: {
+            return {
+                ...state,
+                cart: getCartItems()
+            }
+        }
+
         case LOAD_PRODUCTS:{
             return {
                 ...state,
                 products: action.payload.productsList
             }
         }
+
         case ADD_TO_CART: {
             const {id} = action.payload
             const existingItem = state.cart.find(item => item.id === id);
             const cart = state.cart.filter((item) => item.id !== id);
-            return {
+            return persistCartItems({
                 ...state,
                 cart: !existingItem ? [...cart, action.payload] : [...cart, {
                     ...action.payload,
                     quantity: existingItem.quantity + 1
                 }]
-            }
+            })
         }
+
         case CHANGE_QUANTITY: {
             const {id, quantity} = action.payload
-            return {
+            return persistCartItems({
                 ...state,
-                cart:updateQuantity(id,state.cart,quantity)
-            }
+                cart: updateQuantity(id,state.cart,quantity)
+            })
         }
+
         case REMOVE_ITEM:{
             const {id} = action.payload
             const cart = state.cart.filter(item => item.id !== id);
-            return{
+            return persistCartItems({
                 ...state,
-                cart:[...cart]
-            }
+                cart: [...cart]
+            })
         }
+
         case CLEAR_CART: {
-            return {
+            return persistCartItems({
                 ...state,
-                cart:[]
-            }
+                cart: []
+            })
         }
+
         default:
             return state
     }
@@ -74,6 +109,7 @@ export const addToCart = item => ({
         quantity: 1
     }
 })
+
 export const changeQuantity = (id, quantity) => ({
     type: CHANGE_QUANTITY,
     payload: {
@@ -83,13 +119,19 @@ export const changeQuantity = (id, quantity) => ({
 })
 
 export const removeItem = id =>({
-    type:REMOVE_ITEM,
+    type: REMOVE_ITEM,
     payload:{
         id
     }
 })
+
 export const clearCart = ()=> ({
-    type:CLEAR_CART
+    type: CLEAR_CART
+})
+
+
+export const sync = ()=> ({
+    type: SYNC
 })
 
 

@@ -38,6 +38,7 @@ export default class StoreContainer extends Component {
                     products={products}
                     addToCart={this.addToCart}
                 />
+
                 <CartList
                     amount={amount}
                     cartList={cartList}
@@ -45,7 +46,6 @@ export default class StoreContainer extends Component {
                     removeItem={this.removeItem}
                     clearCart={this.clearCart}
                 />
-
             </StoreWrapper>
         )
     }
