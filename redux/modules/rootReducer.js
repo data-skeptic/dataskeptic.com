@@ -5,6 +5,7 @@ import {default as podcasts } from './podcastReducer'
 import {default as home} from './homeReducer'
 import {default as player} from './playerReducer'
 import {default as shop } from './shopReducer'
+import auth from './auth'
 
 export default combineReducers({
     router,
@@ -12,6 +13,6 @@ export default combineReducers({
     blogs,
     podcasts,
     player,
-    shop
-
+    shop,
+    auth
 })

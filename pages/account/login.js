@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import Link from "../../components/Link";
 import Icon from "react-fontawesome";
 import styled from "styled-components";
-import AdminPage from "../../hoc/AdminPage";
+import Page from "../../hoc/Page";
 import Container from "../../components/Container"
 
-@AdminPage
-export default class Admin extends Component {
+@Page
+export default class Account extends Component {
   static async getInitialProps({ store: { dispatch, getState }, query }) {
     const state = getState();
     const promises = [];
@@ -17,7 +17,7 @@ export default class Admin extends Component {
   render() {
     return (
       <Container>
-         Admin Area
+          Come in!
       </Container>
     );
   }

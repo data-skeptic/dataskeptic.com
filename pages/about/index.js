@@ -17,11 +17,11 @@ export default class About extends Component {
     return (
       <Container>
           <Inner>
-                <p>Data Skeptic is your source for a perspective of scientific skepticism
-                on topics in statistics, machine learning, big data, artificial
-                intelligence, and data science. Our weekly podcast and blog bring you
-                stories and tutorials to help understand our data-driven world.</p>
-                <p>To reach out to the podcast, please visit our <Link href={'/contact-us'}>Contact Us</Link>  page.</p>
+            <p>Data Skeptic is your source for a perspective of scientific skepticism
+            on topics in statistics, machine learning, big data, artificial
+            intelligence, and data science. Our weekly podcast and blog bring you
+            stories and tutorials to help understand our data-driven world.</p>
+            <p>To reach out to the podcast, please visit our <Link href={'/contact-us'}>Contact Us</Link>  page.</p>
           </Inner>
       </Container>
     );

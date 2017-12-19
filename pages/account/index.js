@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import Link from "../../components/Link";
 import Icon from "react-fontawesome";
 import styled from "styled-components";
-import Page from "../../hoc/Page";
+import MemberPage from "../../hoc/MemberPage";
 import Container from "../../components/Container"
 
-@Page
+@MemberPage
 export default class Account extends Component {
   static async getInitialProps({ store: { dispatch, getState }, query }) {
     const state = getState();
