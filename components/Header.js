@@ -28,8 +28,8 @@ export default class Header extends Component {
                     <ActiveLink href="/about">About</ActiveLink>
                 </Navs>
                 <Navs>
-                    <ActiveLink href="/members"> Sponsor </ActiveLink>
-                    <ActiveLink href="/store"> Store </ActiveLink>
+                    <ActiveLink href="/members">Membership</ActiveLink>
+                    <ActiveLink href="/store">Store</ActiveLink>
                     <Cart>
                         <Icon>
                             <img src="/static/icon-cart.svg"/>

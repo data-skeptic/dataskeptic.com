@@ -96,7 +96,7 @@ const loadBlogsContent = (env, blogs) => {
 }
 
 const getBlogs = (env) => {
-    let env2 = "master";
+    let env2 = "dev";
     if (env === "prod") {
         env2 = "master"
     }
