@@ -26,7 +26,7 @@ const filterByCategory = (items, category) =>
 const filterByYear = (items, year) =>
     filter(items, (item) => item.year === year)
 
-const isEpisodePost = (post) => (post.prettyname.indexOf('/episodes') === 0 || post.prettyname.indexOf('/transcripts') === 0)
+const isEpisodePost = (post) => post && (post.prettyname.indexOf('/episodes') === 0 || post.prettyname.indexOf('/transcripts') === 0)
 
 export default function (cache) {
 

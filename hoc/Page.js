@@ -40,13 +40,20 @@ const page = WrappedComponent => {
             super(props)
             const client = initClient(process.browser ? undefined : props.cookie)
             this.store = initStore(props.initialState, client)
+
+            this.state = {overflow: false}
         }
+
+        showOverflow = () => this.setState({overflow: true})
+        hideOverflow = () => this.setState({overflow: false})
 
         render() {
             const {initialState, cookie, ...rest} = this.props
+            const {overflow} = this.state
+
             return (
                 <Provider store={this.store}>
-                    <Layout>
+                    <Layout overflow={overflow} showOverflow={this.showOverflow} hideOverflow={this.hideOverflow}>
                         <DimmedComponent {...rest} />
                     </Layout>
                 </Provider>

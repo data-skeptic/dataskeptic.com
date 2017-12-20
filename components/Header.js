@@ -59,6 +59,8 @@ export default class Header extends Component {
         this.setState({showNav: false})
     }
 
+    showCart = () => this.props.showCart()
+
     render() {
         const {amount} = this.props;
         const {showNav} = this.state
@@ -78,7 +80,7 @@ export default class Header extends Component {
                     <Navs>
                         <ActiveLink href="/members" onClick={(e) => this.navClick(e, `members`)}>Membership</ActiveLink>
                         <ActiveLink href="/store" onClick={(e) => this.navClick(e, `store`)}>Store</ActiveLink>
-                        <Cart>
+                        <Cart onClick={this.showCart}>
                             <Icon>
                                 <Ionicon icon={amount > 0 ? 'ios-cart' : 'ios-cart-outline'} fontSize="32px" color="#fff"/>
                                 {amount !== 0 && <Number>{amount}</Number>}
@@ -177,6 +179,7 @@ const Cart = styled.div`
     align-items: center;
     justify-content: center;
     background-color: ${props => props.theme.colors.darker};
+    cursor: pointer;
 `
 
 const Profile = styled(Link)`
@@ -187,6 +190,7 @@ const Profile = styled(Link)`
     justify-content: center;
     border-left: 1px solid #000;
     background-color: ${props => props.theme.colors.darker};
+    cursor: pointer;
 `
 
 const Icon = styled.div`
