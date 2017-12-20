@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
 import {connect } from 'react-redux'
+import {addToCart, getMemberships} from "../../../redux/modules/shopReducer";
 import {media} from "../../styles";
 
 const Paypal = (value) =>
@@ -11,30 +12,32 @@ const Paypal = (value) =>
         <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1" />
     </form>
 
-const MemberCard = ({title, price, description, paypal, add}) =>
+const MemberCard = ({membership, add}) =>
     <Card>
-        <Title>{title}</Title>
-        <Description>{description}</Description>
-        <Price>${price}{' '}/{' '}month</Price>
+        <Title>{membership.title}</Title>
+        <Description>{membership.desc}</Description>
+        <Price>${membership.price}{' '}/{' '}month</Price>
 
         <Buttons>
-            <AddToCart onClick={add}>Add to Cart</AddToCart>
+            <AddToCart onClick={() => add(membership)}>Add to Cart</AddToCart>
             or
-            <Paypal value={paypal}/>
+            <Paypal value={membership.paypal}/>
         </Buttons>
     </Card>
 
-@connect(state => ({
-
-}), {})
+@connect((state) => ({
+    list: getMemberships(state)
+}), {addToCart})
 export default class Memberships extends Component {
+
+    addToCart = item => this.props.addToCart(item)
 
     render() {
         const { list } = this.props
 
         return (
             <Wrapper>
-                {list.map(membership => <MemberCard key={membership.title} {...membership} />)}
+                {list && list.map(membership => <MemberCard key={membership.id} membership={membership} add={this.addToCart}/>)}
             </Wrapper>
         )
     }
@@ -102,6 +105,7 @@ const AddToCart = styled.button`
     text-decoration: none;
     width: 100%;
     border: 0px;
+    cursor: pointer;
 `
 
 const PaypalButton = styled.input`
@@ -118,4 +122,5 @@ const PaypalButton = styled.input`
     text-decoration: none;
     width: 100%;
     border: 0px;
+    cursor: pointer;
 `

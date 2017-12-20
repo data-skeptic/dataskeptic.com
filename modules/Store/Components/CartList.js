@@ -1,18 +1,19 @@
 import React from 'react'
 import CartItem from "./CartItem";
 import styled from 'styled-components'
-const CartList = ({amount, cartList, changeQuantity, removeItem, clearCart}) => (
-    <Wrapper>
+import Link from '../../../components/Link'
 
+const CartList = ({amount, cartList, changeQuantity, removeItem, checkoutButton = true}) => (
+    <Wrapper>
         {!amount
             ? <EmptyWarning>
                 <Line>Your cart is empty.</Line>
                 <Line>If you take the union of your cart and the null set, you get your cart again.</Line>
-                <Line>Your cart has a closed form under addition, so why not head over to the Store and put something in it.</Line>
+                <Line>Your cart has a closed form under addition, so why not head over to the <Link href={'/store'}>Store</Link> and put something in
+                    it.</Line>
             </EmptyWarning>
             : <div>
 
-                {/*<button onClick={clearCart}>Clear</button>*/}
                 <Title>Cart</Title>
                 <Amount>{amount} items</Amount>
                 {cartList.map(item => <CartItem {...item}
@@ -24,7 +25,7 @@ const CartList = ({amount, cartList, changeQuantity, removeItem, clearCart}) => 
                 <SubTotal>
                     <Row>
                         <div>Subtotal</div>
-                        <div>${cartList.reduce((sum, item) => sum + (item.price*item.quantity), 0).toFixed(2) }</div>
+                        <div>${cartList.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}</div>
                     </Row>
                     <Row>
                         <div>Shipping [select]</div>
@@ -34,19 +35,17 @@ const CartList = ({amount, cartList, changeQuantity, removeItem, clearCart}) => 
                 <Total>
                     <Row>
                         <div>Total</div>
-                        <div>${(cartList.reduce((sum, item) => sum + (item.price*item.quantity), 0)+ (4)).toFixed(2)}</div>
+                        <div>${(cartList.reduce((sum, item) => sum + (item.price * item.quantity), 0) + (4)).toFixed(2)}</div>
                     </Row>
                 </Total>
-                <CheckOutBtn>Continue to Checkout</CheckOutBtn>
+                {checkoutButton && <CheckOutBtn href={`/checkout`}>Continue to Checkout</CheckOutBtn>}
             </div>
         }
-
-
     </Wrapper>
 )
 export default CartList
 
-const CheckOutBtn = styled.button`
+const CheckOutBtn = styled(Link)`
     line-height: 48px;
     background: #f0d943;
     border-radius: 4px;
@@ -73,9 +72,6 @@ const SubTotal = styled.div`
 `
 const Total = styled.div``
 const Wrapper = styled.div`
-    margin-top: 80px;
-    margin-bottom: 40px;
-    
     color: ${props => props.theme.colors.dark}
 `
 const Title = styled.div`
@@ -89,6 +85,5 @@ const Line = styled.p `
 
 `
 const EmptyWarning = styled.div`
-    text-align: center;  
-    margin: 50px 0px;
+    text-align: center;
 `

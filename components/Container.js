@@ -18,12 +18,12 @@ export default props =>
     </Container>
 
 const Container = styled.div`  
-  ${props => props.global && `min-height: 88vh;`}
-  ${props => !props.fullWidth && `padding:0 150px;`}
-  
   margin: 0 auto;
   width: 100%;
   min-height: 400px;
+  
+  ${props => !props.fullWidth && `padding:0 150px;`}
+  ${props => props.global && `min-height: 88vh;`}
    
   ${media.tablet`padding: 0 30px;`} 
   ${media.phone`padding: 0 15px;`};

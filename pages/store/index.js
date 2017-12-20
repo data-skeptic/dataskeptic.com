@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import Page from '../../hoc/Page'
-import {loadProducts} from "../../redux/modules/shopReducer";
-import {productList} from "../../modules/Store/mokedData";
+import {loadProducts, getProducts} from "../../redux/modules/shopReducer";
 import StoreContainer from "../../modules/Store/Containers/StoreContainer";
 import Container from '../../components/Container'
 
@@ -11,7 +10,9 @@ export default class Services extends Component {
         const state = getState()
         const promises = []
 
-        promises.push(dispatch(loadProducts(productList)))
+        if (!getProducts(state)) {
+            promises.push(dispatch(loadProducts()))
+        }
 
         await Promise.all(promises)
     }

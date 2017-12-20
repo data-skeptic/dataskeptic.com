@@ -23,7 +23,7 @@ import styled from 'styled-components'
     }),
     {addToCart,changeQuantity,removeItem,clearCart}
 )
-export default class StoreContainer extends Component {
+export default class Cart extends Component {
 
     addToCart = item => this.props.addToCart(item)
 
@@ -34,34 +34,21 @@ export default class StoreContainer extends Component {
     clearCart = () => this.props.clearCart()
 
     render() {
-        const {products, amount, cartList ,subTotal} = this.props
-        return (
-            <StoreWrapper>
-                <ProductList
-                    products={products}
-                    addToCart={this.addToCart}
-                />
+        const {checkoutButton, amount, cartList} = this.props
 
-                <List>
-                    <CartList
-                        amount={amount}
-                        cartList={cartList}
-                        changeQuantity={this.changeQuantity}
-                        removeItem={this.removeItem}
-                        clearCart={this.clearCart}
-                    />
-                </List>
-            </StoreWrapper>
+        return (
+            <CartList
+                amount={amount}
+                cartList={cartList}
+                changeQuantity={this.changeQuantity}
+                removeItem={this.removeItem}
+                clearCart={this.clearCart}
+                checkoutButton={checkoutButton}
+            />
         )
     }
 }
 
-const StoreWrapper = styled.div`
-  max-width: 800px;
-  margin: 0 auto;
-`
-
-const List = styled.div`
-    margin-top: 80px;
-    margin-bottom: 40px;
+const CartArea = styled.div`
+  
 `

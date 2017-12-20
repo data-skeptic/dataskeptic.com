@@ -41,7 +41,6 @@ export default function (cache) {
         })
     })
 
-
     router.get('/blogs/:category/:year/:name', (req, res) => {
         const prettyName = generatePrettyName(req.params.category, req.params.year, req.params.name);
         const post = cache.blogs[prettyName]
@@ -153,6 +152,16 @@ export default function (cache) {
             ...post,
             ...episode
         })
+    })
+
+    router.get('/memberships', (req, res) => {
+        const memberships = cache.products.filter((p) => p.type === "membership")
+        res.send(memberships)
+    })
+
+    router.get('/products', (req, res) => {
+        const products = cache.products.filter((p) => p.type === "misc")
+        res.send(products)
     })
 
     router.get('/latestEpisode', (req, res) => {

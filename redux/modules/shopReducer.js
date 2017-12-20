@@ -1,7 +1,15 @@
 import {updateQuantity} from "./helpers/helpers";
 
 const SYNC = 'SYNC'
+
 const LOAD_PRODUCTS = 'LOAD_PRODUCTS'
+const LOAD_PRODUCTS_SUCCESS = 'LOAD_PRODUCTS_SUCCESS'
+const LOAD_PRODUCTS_FAIL = 'LOAD_PRODUCTS_FAIL'
+
+const LOAD_MEMBERSHIPS = 'LOAD_MEMBERSHIPS'
+const LOAD_MEMBERSHIPS_SUCCESS = 'LOAD_MEMBERSHIPS_SUCCESS'
+const LOAD_MEMBERSHIPS_FAIL = 'LOAD_MEMBERSHIPS_FAIL'
+
 const ADD_TO_CART = 'ADD_TO_CART'
 const CHANGE_QUANTITY = 'CHANGE_QUANTITY'
 const REMOVE_ITEM = 'REMOVE_ITEM'
@@ -31,6 +39,7 @@ const initialState = {
     loaded: false,
     error: false,
     products: null,
+    memberships: null,
     cart: []
 }
 
@@ -45,10 +54,17 @@ export default function reducer(state = initialState,
             }
         }
 
-        case LOAD_PRODUCTS:{
+        case LOAD_PRODUCTS_SUCCESS: {
             return {
                 ...state,
-                products: action.payload.productsList
+                products: action.result
+            }
+        }
+
+        case LOAD_MEMBERSHIPS_SUCCESS: {
+            return {
+                ...state,
+                memberships: action.result
             }
         }
 
@@ -69,11 +85,11 @@ export default function reducer(state = initialState,
             const {id, quantity} = action.payload
             return persistCartItems({
                 ...state,
-                cart: updateQuantity(id,state.cart,quantity)
+                cart: updateQuantity(id, state.cart, quantity)
             })
         }
 
-        case REMOVE_ITEM:{
+        case REMOVE_ITEM: {
             const {id} = action.payload
             const cart = state.cart.filter(item => item.id !== id);
             return persistCartItems({
@@ -94,12 +110,16 @@ export default function reducer(state = initialState,
     }
 }
 
-export const loadProducts = productsList => ({
-    type: LOAD_PRODUCTS,
-    payload: {
-        productsList
-    }
+export const loadProducts = pn => ({
+    types: [LOAD_PRODUCTS, LOAD_PRODUCTS_SUCCESS, LOAD_PRODUCTS_FAIL],
+    promise: client => client.get(`/products`)
 })
+
+export const loadMemberships = pn => ({
+    types: [LOAD_MEMBERSHIPS, LOAD_MEMBERSHIPS_SUCCESS, LOAD_MEMBERSHIPS_FAIL],
+    promise: client => client.get(`/memberships`)
+})
+
 
 export const addToCart = item => ({
     type: ADD_TO_CART,
@@ -117,24 +137,25 @@ export const changeQuantity = (id, quantity) => ({
     }
 })
 
-export const removeItem = id =>({
+export const removeItem = id => ({
     type: REMOVE_ITEM,
-    payload:{
+    payload: {
         id
     }
 })
 
-export const clearCart = ()=> ({
+export const clearCart = () => ({
     type: CLEAR_CART
 })
 
 
-export const sync = ()=> ({
+export const sync = () => ({
     type: SYNC
 })
 
 
 export const getProducts = state => state.shop && state.shop.products
+export const getMemberships = state => state.shop && state.shop.memberships
 
 export const getCartAmount = state => state.shop && state.shop.cart && state.shop.cart.reduce((prev, curr) => (curr.quantity && (prev + curr.quantity)), 0)
 

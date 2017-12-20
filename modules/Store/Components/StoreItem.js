@@ -4,18 +4,18 @@ import Icon from 'react-ionicons'
 
 export default class StoreItem extends Component {
     handleAdd = () => {
-        const {title, description, price, id,img} = this.props
-        this.props.addToCart({title, description, price, id,img})
+        const {title, descr, price, id,img} = this.props
+        this.props.addToCart({title, descr, price, id, img})
     }
 
     render() {
-        const {title, description, price, img} = this.props
+        const {title, desc, price, img} = this.props
         return (
             <ProductWrapper>
-                <img src={img}/>
+                <img src={`/static${img}`}/>
                 <Description>
                     <Title>{title}</Title>
-                    <p>{description}</p>
+                    <p>{desc}</p>
                     <PriceWrapper>
                         <Price>${price}</Price>
                         <AddButton onClick={this.handleAdd}><Icon icon="md-add" color="#fff"/></AddButton>

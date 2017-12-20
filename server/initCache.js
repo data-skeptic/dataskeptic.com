@@ -141,6 +141,21 @@ const getEpisodes = () => {
         })))
 }
 
+const loadProducts = (env) => {
+    const uri = "https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + env + "/products"
+
+    return axios
+        .get(uri)
+        .then(function (result) {
+            const items = result.data.Items;
+
+            return items;
+        })
+        .catch((err) => {
+            console.log("Could not load prodcuts")
+        })
+}
+
 
 const loadAdvertiseSourceContent = (source) => {
     return new Promise((res, rej) => {
@@ -184,9 +199,10 @@ const order = (items) => items.map((item, index) => {
 const init = async (isProduction) => {
     const env = isProduction ? 'prod' : 'dev'
 
-    const [blogs, episodes, card, sponsor] = await Promise.all([
+    const [blogs, episodes, products, card, sponsor] = await Promise.all([
         getBlogs(env),
         getEpisodes(),
+        loadProducts(env),
         loadAdvertiseSourceContent(ADVERTISE_CARD_CONTENT),
         loadAdvertiseSourceContent(ADVERTISE_BANNER_CONTENT)
     ])
@@ -205,6 +221,7 @@ const init = async (isProduction) => {
         latestEpisode,
         latestPost,
         categories,
+        products,
         card,
         sponsor
     }

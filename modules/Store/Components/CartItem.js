@@ -1,51 +1,56 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import styled from "styled-components";
 import Ionicon from 'react-ionicons'
-export default class CartItem extends Component {
-  handleChange = amount => {
-    const { id, quantity } = this.props;
-    if (quantity + amount) {
-      this.props.changeQuantity(id, quantity + amount);
-    } else {
-      this.handleRemove();
-    }
-  };
-  handleRemove = () => {
-    const { id } = this.props;
-    this.props.removeItem(id);
-  };
 
-  render() {
-    const { id, title, img, quantity, price } = this.props;
-    return (
-      <Wrapper>
-        <Image>
-          <img src={img} alt="" />
-        </Image>
-        <Info>
-          <Row>
-            <Name>
-              {title}
-            </Name>
-            <div onClick={this.handleRemove}><Ionicon color="#3a3b3b" icon="md-close"/></div>
-          </Row>
-          <Separator/>
-          <Row>
-            <QuantityWrapper>
-              <Button onClick={() => this.handleChange(1)}><Ionicon  fontSize="12px" color={"#3a3b3b"} icon={"md-add"}/></Button>
-              <Quantity>
-                {quantity}
-              </Quantity>
-              <Button onClick={() => this.handleChange(-1)}><Ionicon  fontSize="12px" color="#3a3b3b" icon="md-remove"/></Button>
-            </QuantityWrapper>
-            <span>
-              ${(price * quantity).toFixed(2)}
-            </span>
-          </Row>
-        </Info>
-      </Wrapper>
-    );
-  }
+export default class CartItem extends Component {
+    handleChange = amount => {
+        const {id, quantity} = this.props;
+        if (quantity + amount) {
+            this.props.changeQuantity(id, quantity + amount);
+        } else {
+            this.handleRemove();
+        }
+    };
+    handleRemove = () => {
+        const {id} = this.props;
+        this.props.removeItem(id);
+    };
+
+    render() {
+        const {id, title, img, quantity, price} = this.props;
+        return (
+            <Wrapper>
+                <Image>
+                    <img src={img} alt=""/>
+                </Image>
+                <Info>
+                    <Row>
+                        <Name>
+                            {title}
+                        </Name>
+                        <X onClick={this.handleRemove}><Ionicon color="#3a3b3b" icon="md-close"/></X>
+                    </Row>
+                    <Separator/>
+                    <Row>
+                        <QuantityWrapper>
+                            <Button onClick={() => this.handleChange(1)}>
+                                <Ionicon fontSize="12px" color={"#3a3b3b"} icon={"md-add"}/>
+                            </Button>
+                            <Quantity>
+                                {quantity}
+                            </Quantity>
+                            <Button onClick={() => this.handleChange(-1)}>
+                                <Ionicon fontSize="12px" color="#3a3b3b" icon="md-remove"/>
+                            </Button>
+                        </QuantityWrapper>
+                        <span>
+                            ${(price * quantity).toFixed(2)}
+                        </span>
+                    </Row>
+                </Info>
+            </Wrapper>
+        );
+    }
 }
 
 const Name = styled.div``;
@@ -119,3 +124,5 @@ const Info = styled.div`
 
   flex-basis: 90%;
 `;
+
+const X = styled.div`cursor: pointer;`
