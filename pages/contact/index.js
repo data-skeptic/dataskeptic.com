@@ -16,7 +16,7 @@ export default class Contact extends Component {
 
   render() {
     return (
-      <Container>
+      <Container title={`Contact`}>
           Contact
       </Container>
     );

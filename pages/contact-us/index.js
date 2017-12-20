@@ -3,7 +3,6 @@ import Container from '../../components/Container'
 import Page from '../../hoc/Page'
 import ContactUsContainer from "../../modules/ContactUs/Containers/ContactUsContainer";
 
-
 @Page
 export default class ContactUs extends Component {
 
@@ -14,9 +13,10 @@ export default class ContactUs extends Component {
     }
 
     render() {
-        return <Container global>
-                  <ContactUsContainer/>
-               </Container>
-
+        return (
+            <Container global title={`Admin Login`}>
+              <ContactUsContainer/>
+           </Container>
+        )
     }
 }

@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import Link from '../../components/Link'
 import styled from 'styled-components'
 import Page from '../../hoc/Page'
+import Container from "../../components/Container";
 
 @Page
 export default class Projects extends Component {
@@ -14,7 +15,7 @@ export default class Projects extends Component {
 
     render() {
         return (
-            <Container>
+            <Container title={`Projects`}>
                 <Wrapper>
                     <Boxes>
                         <Box>
@@ -50,10 +51,6 @@ export default class Projects extends Component {
         )
     }
 }
-
-const Container = styled.div`
-
-`
 
 const Wrapper = styled.div`
   max-width:800px;

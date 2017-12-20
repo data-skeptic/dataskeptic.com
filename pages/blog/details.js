@@ -1,10 +1,6 @@
 import React, {Component} from 'react'
-import Link from '../../components/Link'
-import Icon from 'react-fontawesome'
-import styled from 'styled-components'
 import Page from '../../hoc/Page'
-import Container from "../../components/Container";
-import {loadSingleBlog, getSingle} from "../../redux/modules/blogReducer";
+import {loadSingleBlog} from "../../redux/modules/blogReducer";
 import BlogPost from '../../modules/Blogs/Containers/BlogSingle'
 
 @Page
@@ -20,16 +16,6 @@ export default class BlogDetails extends Component {
     }
 
     render() {
-        return (
-            <Container>
-                <BlogPost />
-            </Container>
-        )
+        return <BlogPost />
     }
 }
-
-
-const Title = styled.h1`
-  color: red;
-  text-align: center;
-`

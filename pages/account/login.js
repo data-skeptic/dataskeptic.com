@@ -8,7 +8,7 @@ import Ionicon from 'react-ionicons'
 export default class Account extends Component {
     render() {
         return (
-            <Container>
+            <Container title={`Account Login`}>
                 <Wrapper>
                     <Description>
                         <Ionicon icon="md-lock" fontSize="35px" color="#666"/><br/>

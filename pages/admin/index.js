@@ -16,7 +16,7 @@ export default class Admin extends Component {
 
   render() {
     return (
-      <Container>
+      <Container title={`Admin Area`}>
          Admin Area
       </Container>
     );

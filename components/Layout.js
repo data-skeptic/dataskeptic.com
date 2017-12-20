@@ -2,12 +2,10 @@ import Head from 'next/head'
 import React from 'react';
 import Header from "./Header";
 import Footer from "./Footer"
-import Container from "./Container";
 
 import Player from './Player/Player'
 import theme from '../shared/styles'
 import {ThemeProvider} from 'styled-components'
-
 
 const Layout = (props) => (
     <ThemeProvider theme={theme}>

@@ -15,7 +15,7 @@ export default class About extends Component {
 
   render() {
     return (
-      <Container>
+      <Container title={"About"}>
           <Inner>
             <p>Data Skeptic is your source for a perspective of scientific skepticism
             on topics in statistics, machine learning, big data, artificial

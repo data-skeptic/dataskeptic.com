@@ -6,6 +6,7 @@ import {getSingle} from '../../../redux/modules/podcastReducer'
 import Podcast from '../Components/Podcast'
 import {Form} from "react-final-form"
 import SubscriptionForm from '../../Forms/SubscriptionForm'
+import Container from "../../../components/Container";
 
 const DisqusUsername = `dataskeptic`
 
@@ -38,25 +39,25 @@ export default class BlogSingle extends Component {
 
         const uid = 'http://dataskeptic.com/blog' + episode.prettyname;
 
-
         return (
-            <Wrapper>
-                <Podcast post={episode} playing={playing} togglePlay={this.togglePlay}/>
-                {/*<AuthorBlock author={post.contributor}/>*/}
-                <Form
-                    onSubmit={(data) => alert(data)}
-                    render={SubscriptionForm}
-                />
+            <Container title={episode.title}>
+                <Wrapper>
+                    <Podcast post={episode} playing={playing} togglePlay={this.togglePlay}/>
 
+                    <Form
+                        onSubmit={(data) => alert(data)}
+                        render={SubscriptionForm}
+                    />
 
-                <ReactDisqusComments
-                    shortname={DisqusUsername}
-                    identifier={uid}
-                    title={episode.title}
-                    url={uid}
-                    onNewComment={this.handleNewComment}
-                />
-            </Wrapper>
+                    <ReactDisqusComments
+                        shortname={DisqusUsername}
+                        identifier={uid}
+                        title={episode.title}
+                        url={uid}
+                        onNewComment={this.handleNewComment}
+                    />
+                </Wrapper>
+            </Container>
         )
     }
 }
@@ -65,14 +66,5 @@ const Wrapper = styled.div`
     max-width:800px;
     margin: 0px auto;
     margin-top:20px;
-    flex-grow: 1;
-    
+    flex-grow: 1   
 `
-const Date = styled.div`
-  font-weight: 700;
-  font-size: 14px;
-  color: #7d8080;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-bottom: 15px;
-`;

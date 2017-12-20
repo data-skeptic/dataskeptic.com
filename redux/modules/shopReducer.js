@@ -13,8 +13,6 @@ const getCartItems = () => {
 
     try {
         const data = localStorage.getItem("cart");
-        console.log(`getItems`)
-        console.dir(data)
         if (!data) {
             return []
         }

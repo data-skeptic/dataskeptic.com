@@ -63,7 +63,6 @@ export default class Header extends Component {
 const Navs = styled.div`
     height: 100%;
     display: flex;
-  
 `
 
 const Cart = styled.div`

@@ -14,7 +14,7 @@ export default class Account extends Component {
 
   render() {
     return (
-      <Container>
+      <Container title={`Account`}>
           <Profile />
       </Container>
     );

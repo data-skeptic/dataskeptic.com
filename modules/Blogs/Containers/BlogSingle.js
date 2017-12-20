@@ -11,6 +11,8 @@ import {Form} from "react-final-form"
 import SubscriptionForm from '../../Forms/SubscriptionForm'
 import EpisodePlayer from "../../Player/Components/EpisodePlayer";
 
+import Container from "../../../components/Container";
+
 const generateEditGithubPageUrl = (prettyName, env) => `https://github.com/data-skeptic/blog/edit/${env}${prettyName}.md`
 const generateEditJupyterPageUrl = (prettyName, env) => `https://github.com/data-skeptic/blog/blob/${env}${prettyName}.ipynb`
 
@@ -60,25 +62,27 @@ export default class BlogSingle extends Component {
         const proposeEditUrl = getProposeEditUrl(post);
 
         return (
-            <Wrapper>
-                {this.hasEpisode() && <EpisodePlayer post={post}/> }
+            <Container title={post.title}>
+                <Wrapper>
+                    {this.hasEpisode() && <EpisodePlayer post={post}/> }
 
-                <Post post={post}/>
-                <AuthorBlock author={post.author}/>
-                <Form onSubmit={this.subscribe} render={SubscriptionForm}/>
+                    <Post post={post}/>
+                    <AuthorBlock author={post.author}/>
+                    <Form onSubmit={this.subscribe} render={SubscriptionForm}/>
 
-                {post.related && <RelatedContent items={post.related}/>}
+                    {post.related && <RelatedContent items={post.related}/>}
 
-                {proposeEditUrl && <ProposeButton editUrl={proposeEditUrl}/>}
+                    {proposeEditUrl && <ProposeButton editUrl={proposeEditUrl}/>}
 
-                <ReactDisqusComments
-                    shortname={DisqusUsername}
-                    identifier={uid}
-                    title={post.title}
-                    url={uid}
-                    onNewComment={this.handleNewComment}
-                />
-            </Wrapper>
+                    <ReactDisqusComments
+                        shortname={DisqusUsername}
+                        identifier={uid}
+                        title={post.title}
+                        url={uid}
+                        onNewComment={this.handleNewComment}
+                    />
+                </Wrapper>
+            </Container>
         )
     }
 }

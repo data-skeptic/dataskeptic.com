@@ -10,8 +10,7 @@ import {
     hasBlogs,
     hasCategories,
     setActiveCategory,
-    setCurrentPage,
-    getPage, getActiveCategory
+    setCurrentPage
 } from "../../redux/modules/blogReducer";
 
 const ALL = 'all'
@@ -63,7 +62,7 @@ export default class Dashboard extends Component {
 
     render() {
         return (
-            <Container>
+            <Container title={`Blog`}>
                 <Wrapper>
                     <BlogList/>
                     <CategoryList/>
@@ -76,8 +75,3 @@ export default class Dashboard extends Component {
 const Wrapper = styled.div`
   display: flex;
 `
-
-const Title = styled.h1`
-  color: red;
-  text-align: center;
-`;

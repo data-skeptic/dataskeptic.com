@@ -1,8 +1,8 @@
 const development = {
   isProduction: false,
-  url: 'http://localhost:3000',
-  port: 3000,
-  apiPort: 8000
+  url: 'http://localhost:4000',
+  port: 4000,
+  apiPort: 9000
 }
 
 const production = {

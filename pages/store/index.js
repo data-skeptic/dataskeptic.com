@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import styled from 'styled-components'
 import Page from '../../hoc/Page'
 import {loadProducts} from "../../redux/modules/shopReducer";
 import {productList} from "../../modules/Store/mokedData";
@@ -11,6 +10,7 @@ export default class Services extends Component {
     static async getInitialProps({store: {dispatch, getState}, query}) {
         const state = getState()
         const promises = []
+
         promises.push(dispatch(loadProducts(productList)))
 
         await Promise.all(promises)
@@ -18,7 +18,7 @@ export default class Services extends Component {
 
     render() {
         return (
-            <Container global>
+            <Container global title={`Store`}>
                 <StoreContainer/>
             </Container>
         )

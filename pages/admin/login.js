@@ -8,7 +8,7 @@ import Ionicon from 'react-ionicons'
 export default class AdminLogin extends Component {
     render() {
         return (
-            <Container>
+            <Container tilte={`Admin Login`}>
                 <Wrapper>
                     <GoogleLoginButton href={`/api/v1/auth/google`}>
                         <Ionicon icon="logo-google" fontSize="35px" color="#fff"/>

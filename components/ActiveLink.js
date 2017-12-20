@@ -20,7 +20,8 @@ export default withRouter(ActiveLink)
 
 const NavLink = styled.a`
     text-decoration:none;
-    font-size: 15px;
+    font-size: 14px;
+    font-weight: 200;
     color: ${props => props.active ? props => props.theme.colors.primary : props.theme.colors.link}; 
     padding: 30px 0px;
     border-bottom: 2px solid ${props => props.active ? props => props.theme.colors.primary : 'transparent'};

@@ -5,6 +5,7 @@ import {SERVICES} from "../../modules/Helpers/Contants";
 import ServiceList from '../../modules/Services/Components/ServiceList'
 import styled from 'styled-components'
 import Page from '../../hoc/Page'
+import Container from "../../components/Container"
 import { Form } from "react-final-form"
 import {contactFormValidator} from "../../modules/Forms/Validators";
 import ContactForm from '../../modules/Forms/ContactForm'
@@ -20,7 +21,7 @@ export default class Services extends Component {
 
     render() {
         return (
-            <Container>
+            <Container title={`Services`}>
                 <ServiceWrapper>
                     <ServiceList
                         list={SERVICES}
@@ -36,14 +37,11 @@ export default class Services extends Component {
     }
 }
 
-const Container = styled.div`
- 
-`
-
 const Title = styled.h1`
   color: red;
   text-align: center;
 `
+
 const ServiceWrapper = styled.div`
   max-width:800px;
   margin:0 auto;
