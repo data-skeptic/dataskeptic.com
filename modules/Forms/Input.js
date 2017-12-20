@@ -1,14 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
 
-
-export const ContactInput = ({input, meta, placeholder, label,type,textarea}) => (
+export default ({input, meta, placeholder, label, type, textarea}) => (
     <InputWrapper>
         {label && <label>{label}</label>}
-        {textarea ?  <textarea {...input} /> : <input  {...input} placeholder={placeholder} type={type}/>}
+        {textarea ? <textarea {...input} /> : <input  {...input} placeholder={placeholder} type={type}/>}
         {meta.touched && meta.error && <span>{meta.error}</span>}
     </InputWrapper>
 )
+
 const InputWrapper = styled.div`
     margin-bottom:20px;
     input,textarea{

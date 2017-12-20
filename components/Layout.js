@@ -18,7 +18,7 @@ const Layout = (props) => (
                 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
             </Head>
 
-            <Header showCart={props.showOverflow}/>
+            <Header showCart={props.showOverflow} />
 
             {props.overflow && <Overflow hide={props.hideOverflow}>
                 <Cart />

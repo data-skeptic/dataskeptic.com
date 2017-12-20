@@ -54,7 +54,6 @@ export default class Header extends Component {
     }
 
     navClick = (e, module) => {
-        alert(module)
         window.scrollTo(0, 0)
         this.setState({showNav: false})
     }

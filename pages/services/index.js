@@ -1,6 +1,4 @@
 import React, {Component} from 'react'
-import Link from '../../components/Link'
-import Icon from 'react-fontawesome'
 import {SERVICES} from "../../modules/Helpers/Contants";
 import ServiceList from '../../modules/Services/Components/ServiceList'
 import styled from 'styled-components'

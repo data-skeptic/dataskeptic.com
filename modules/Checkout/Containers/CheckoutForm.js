@@ -6,9 +6,10 @@ import {
     clearCart,
     getCart,
     removeItem
-} from "../../../redux/modules/shopReducer";
-import {connect} from "react-redux";
-
+} from "../../../redux/modules/shopReducer"
+import {connect} from "react-redux"
+import { Form } from "react-final-form"
+import Checkout from "../../Forms/Checkout"
 
 @connect(
     state => ({
@@ -29,7 +30,11 @@ export default class CheckoutForm extends Component {
 
         return (
             <Wrapper>
-                Form
+                <Form
+                    onSubmit={(data) => alert(data)}
+                    render={Checkout}
+                    subscription={{submitting: true, pristine: true}}
+                />
             </Wrapper>
         )
     }
