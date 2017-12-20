@@ -52,16 +52,12 @@ export default class MyDocument extends Document {
     render() {
         const sheet = new ServerStyleSheet();
         const main = sheet.collectStyles(<Main/>)
-        const styleTags = sheet.getStyleElement();
+        const styleTags = sheet.getStyleTags();
 
         return (
             <html>
             <Head>
-                <meta
-                    name="viewport"
-                    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-                />
-                {styleTags}
+                <style dangerouslySetInnerHTML={{ __html: styleTags}} />
             </Head>
             <body>
             {main}

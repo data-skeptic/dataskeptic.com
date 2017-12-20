@@ -10,14 +10,12 @@ const pageTitle = title =>
         : BASE_DOCUMENT_TITLE
 
 export default props =>
-    <div>
+    <Container global={props.global}
+               fullWidth={props.fullWidth}
+    >
         <Head><title>{pageTitle(props.title)}</title></Head>
-        <Container global={props.global}
-                   fullWidth={props.fullWidth}
-        >
-            {props.children}
-        </Container>
-    </div>
+        {props.children}
+    </Container>
 
 const maxWidth = 1200
 
