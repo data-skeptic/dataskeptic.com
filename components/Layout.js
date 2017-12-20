@@ -4,7 +4,7 @@ import Header from "./Header";
 import Footer from "./Footer"
 
 import Player from './Player/Player'
-import theme from '../shared/styles'
+import theme from '../modules/styles'
 import {ThemeProvider} from 'styled-components'
 
 const Layout = (props) => (

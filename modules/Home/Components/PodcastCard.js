@@ -9,11 +9,10 @@ import {
     Title,
     Description,
     Author,
-    Avatar,
     Info,
     Name,
     Date
-} from "../../../shared/styles";
+} from "../../styles";
 import Link from "../../../components/Link";
 
 export default ({link, pubDate, title, desc, img}) => (
@@ -24,7 +23,7 @@ export default ({link, pubDate, title, desc, img}) => (
                 <Media><img src={img} alt=""/></Media>
                 <Inner>
                     <Title>{title}</Title>
-                    {/*<Description dangerouslySetInnerHTML={{__html: desc}}/>*/}
+                    <Description dangerouslySetInnerHTML={{__html: desc}}/>
                     <Author>
                         {/*<Avatar src={}/>*/}
                         <Info>

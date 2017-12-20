@@ -16,7 +16,7 @@ const LINKS = {
 
 const Footer = () => (
     <Container>
-        {process.browser && <AdSense.Google client='ca-pub-4495792015968395' slot='2320193863'/>}
+        {/*{process.browser && <AdSense.Google client='ca-pub-4495792015968395' slot='2320193863'/>}*/}
 
         <FooterWrapper>
             <LogoWrapper>

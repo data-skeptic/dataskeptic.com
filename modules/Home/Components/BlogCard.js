@@ -12,7 +12,7 @@ import {
     Info,
     Name,
     Date
-} from "../../../shared/styles";
+} from "../../styles";
 import styled from 'styled-components'
 import Link from '../../../components/Link'
 

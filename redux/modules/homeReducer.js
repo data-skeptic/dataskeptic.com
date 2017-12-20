@@ -1,14 +1,15 @@
 const LOAD_ALL = 'LOAD_ALL'
 const LOAD_ALL_SUCCESS = 'LOAD_ALL_SUCCESS'
 const LOAD_ALL_FAIL = 'LOAD_ALL_FAIL'
+
 const initialState = {
     latestEpisode: null,
     latestBlogPost: null,
     dailySponsor: null,
     loading: false,
-    error: null
+    error: null,
+    loaded: false
 };
-
 
 export default function reducer(state = initialState,
                                 action = {}) {
@@ -24,7 +25,8 @@ export default function reducer(state = initialState,
                 loading:false,
                 latestBlogPost:action.result.latestBlog,
                 latestEpisode:action.result.latestEpisode,
-                dailySponsor:action.result.latestCard
+                dailySponsor:action.result.latestCard,
+                loaded: true
             }
         default:
             return state
@@ -47,7 +49,7 @@ export const getDailySponsor = state => state.home && state.home.dailySponsor;
 
 
 //Helpers
-export const hasHomeData = state => state.home && !!state.home.latestBlogPost && !!state.home.latestEpisode && !!state.home.dailySponsor
+export const hasHomeData = state => state.home && state.home.loaded
 
 
 

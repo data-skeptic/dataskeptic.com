@@ -20,10 +20,6 @@ export default class HomeContainer extends Component {
 
     setEpisodeDescription = episodeDescription => ({__html: episodeDescription});
 
-    subscribe(e) {
-        debugger;
-    }
-
     render() {
         const {latestPost, latestEpisode, dailySponsor} = this.props
         return (

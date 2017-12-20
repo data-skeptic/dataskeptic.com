@@ -3,7 +3,7 @@ import {
     Wrapper,
     Label,
     Card
-} from "../../../shared/styles";
+} from "../../styles";
 
 export default ({content, name=''}) => (
     <Wrapper>

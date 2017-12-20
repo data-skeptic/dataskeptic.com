@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, {css} from 'styled-components'
 
 const theme = {};
 
@@ -15,6 +15,22 @@ theme.colors = {
 theme.container = {
     margin: "150px",
 }
+
+const sizes = {
+    desktop: 992,
+    tablet: 768,
+    phone: 376
+}
+
+export const media = Object.keys(sizes).reduce((acc, label) => {
+    acc[label] = (...args) => css`
+    @media (max-width: ${sizes[label] / 16}em) {
+    ${css(...args)}
+    }
+    `
+
+    return acc
+}, {})
 
 export default theme;
 
