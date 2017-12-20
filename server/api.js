@@ -24,7 +24,7 @@ async function run(cache) {
     app.use(morgan('combined'))
     app.use(
         session({
-            secret: 'UvwDvTBzJXBVcPXJmkbHDHahAxU6AYFVbJDJyFKwBvGCDsxXgv',
+            secret: 'MvwDvTBzJXBVcPXJmkbHDHahAxU6AYFVbJDJyFKwBvGCDsxXgv',
             cookie: {
                 maxAge: 86400000
             },
