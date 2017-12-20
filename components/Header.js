@@ -1,16 +1,18 @@
-import styled from 'styled-components'
 import React, {Component} from 'react'
+import styled from 'styled-components'
 import ActiveLink from './ActiveLink'
 import Link from './Link'
 import Ionicon from 'react-ionicons'
 import {connect} from 'react-redux'
 import {
     getCartAmount,
-    sync
+    sync,
+    getLoaded
 } from "../redux/modules/shopReducer";
 
 @connect(
     state => ({
+        loaded: getLoaded(state),
         amount: getCartAmount(state),
     }),
     {sync}
@@ -18,7 +20,9 @@ import {
 export default class Header extends Component {
 
     componentDidMount() {
-        this.props.sync()
+        if (!this.props.loaded) {
+            this.props.sync()
+        }
     }
 
     render() {

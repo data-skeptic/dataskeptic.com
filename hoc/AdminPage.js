@@ -13,7 +13,7 @@ const adminPage = WrappedComponent => {
             const state = store.getState()
             const user = getUser(state)
 
-            if (!user) {
+            if (!user || !user.admin) {
                 redirect('/admin/login', res)
                 return
             }

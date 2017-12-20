@@ -4,13 +4,17 @@ import initStore from '../redux/initStore'
 import initClient from '../client'
 import Layout from '../components/Layout';
 import routingDimmer from './RoutingDimmer'
+import {
+    isReady as isAuthReady,
+    init as initAuth
+} from '../redux/modules/auth'
+
 import 'mdn-polyfills/Object.assign'
 import 'mdn-polyfills/String.prototype.startsWith'
 
 if (process.browser) {
     window.RichTextEditor = require('react-rte').default
 }
-
 
 const page = WrappedComponent => {
     const DimmedComponent = routingDimmer(WrappedComponent)
@@ -20,6 +24,10 @@ const page = WrappedComponent => {
             const cookie = context.req && context.req.headers.cookie
             const client = initClient(cookie)
             const store = initStore(undefined, client)
+
+            if (!isAuthReady(store.getState())) {
+                await store.dispatch(initAuth())
+            }
 
             const otherProps = WrappedComponent.getInitialProps
                 ? await WrappedComponent.getInitialProps({...context, store})

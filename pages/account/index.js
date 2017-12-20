@@ -1,9 +1,7 @@
 import React, { Component } from "react";
-import Link from "../../components/Link";
-import Icon from "react-fontawesome";
-import styled from "styled-components";
 import MemberPage from "../../hoc/MemberPage";
 import Container from "../../components/Container"
+import Profile from '../../modules/Members/Containers/Profile'
 
 @MemberPage
 export default class Account extends Component {
@@ -17,7 +15,7 @@ export default class Account extends Component {
   render() {
     return (
       <Container>
-          Authed Page!
+          <Profile />
       </Container>
     );
   }

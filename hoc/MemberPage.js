@@ -14,8 +14,7 @@ const memberPage = WrappedComponent => {
             const state = store.getState()
             const user = getUser(state)
 
-            console.dir()
-
+            console.dir(user)
             if (!user) {
                 redirect('/account/login', res)
                 return

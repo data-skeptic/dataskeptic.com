@@ -30,7 +30,7 @@ const persistCartItems = (state) => {
 }
 
 const initialState = {
-    loading: false,
+    loaded: false,
     error: false,
     products: null,
     cart: []
@@ -42,6 +42,7 @@ export default function reducer(state = initialState,
         case SYNC: {
             return {
                 ...state,
+                loaded: true,
                 cart: getCartItems()
             }
         }
@@ -140,5 +141,7 @@ export const getProducts = state => state.shop && state.shop.products
 export const getCartAmount = state => state.shop && state.shop.cart && state.shop.cart.reduce((prev, curr) => (curr.quantity && (prev + curr.quantity)), 0)
 
 export const getCart = state => state.shop && state.shop.cart
+
+export const getLoaded = state => state.shop && state.shop.loaded
 
 export const getSubTotal = state => state.shop && state.shop.cart.map(item => item.price * item.quantity).reduce((prev, curr) => (curr && (prev + curr)), 0)

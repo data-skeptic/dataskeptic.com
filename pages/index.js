@@ -20,9 +20,11 @@ export default class Dashboard extends Component {
     static async getInitialProps({store: {dispatch, getState}, query}) {
         const state = getState()
         const promises = []
+
         if (!hasHomeData(state)) {
             promises.push(dispatch(loadAll()))
         }
+
         await Promise.all(promises)
     }
 

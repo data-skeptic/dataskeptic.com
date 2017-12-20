@@ -5,19 +5,18 @@ import styled from 'styled-components'
 import Ionicon from 'react-ionicons'
 
 @Page
-export default class Account extends Component {
+export default class AdminLogin extends Component {
     render() {
         return (
             <Container>
                 <Wrapper>
-                    <Description>
-                        <Ionicon icon="md-lock" fontSize="35px" color="#666"/><br/>
-                        Please login before accessing to this page.
-                    </Description>
                     <GoogleLoginButton href={`/api/v1/auth/google`}>
                         <Ionicon icon="logo-google" fontSize="35px" color="#fff"/>
                         {' '}Continue with Google
                     </GoogleLoginButton>
+                    <Description>
+                        Admin Only Access
+                    </Description>
                 </Wrapper>
             </Container>
         );
@@ -35,7 +34,6 @@ const Wrapper = styled.div`
 
 const Description = styled.p`
     color: #666;
-    text-align: center;
 `
 
 const GoogleLoginButton = styled.a`

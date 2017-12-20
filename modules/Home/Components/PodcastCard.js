@@ -24,7 +24,7 @@ export default ({link, pubDate, title, desc, img}) => (
                 <Media><img src={img} alt=""/></Media>
                 <Inner>
                     <Title>{title}</Title>
-                    <Description dangerouslySetInnerHTML={{__html: desc}}/>
+                    {/*<Description dangerouslySetInnerHTML={{__html: desc}}/>*/}
                     <Author>
                         {/*<Avatar src={}/>*/}
                         <Info>
