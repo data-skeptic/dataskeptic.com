@@ -49,7 +49,7 @@ const Wrapper = styled.div`
     background-color: #38383a;
     color: #fff;
     padding: 0 30px;
-    padding-top:20px;
+    margin-top:20px;
     width: 30%;
     flex-basis: 30%;
     height: 100%;
@@ -58,6 +58,8 @@ const Wrapper = styled.div`
     padding-bottom: 30px;
 
     ${media.phone`
+        padding-top:00px;
+        margin-top:20px;
         flex-basis: 100%;
         width: 100%;
     `};

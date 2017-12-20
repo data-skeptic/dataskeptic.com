@@ -11,6 +11,15 @@ import {
 } from "../redux/modules/shopReducer";
 import {media} from "../modules/styles";
 
+const preventScroll = () => {
+    console.dir(`preventScroll`)
+}
+
+const turnScroll = () => {
+    console.dir(`turnScroll`)
+}
+
+
 @connect(
     state => ({
         loaded: getLoaded(state),
@@ -34,7 +43,15 @@ export default class Header extends Component {
         }
     }
 
-    toggleNav = () => this.setState({showNav: !this.state.showNav})
+    toggleNav = () => {
+        this.setState({showNav: !this.state.showNav})
+
+        if (!this.state.showNav) {
+            preventScroll()
+        } else {
+            turnScroll()
+        }
+    }
 
     navClick = (e, module) => {
         alert(module)
@@ -196,7 +213,8 @@ const Number = styled.div`
 
 const Logo = styled(Link)`
     display: block;
-    margin-left: 0px;
+    margin-left: 20px;
+    
     ${media.phone`
         margin-left: 0px; 
     `};
