@@ -28,7 +28,7 @@ export default class BlogListItem extends Component {
           </Header>
 
           <Body>
-          {" "}{desc}... <More href={`/blog${prettyname}`}>View More</More>{" "}
+          {" "}<div dangerouslySetInnerHTML={{__html: desc}} />... <More href={`/blog${prettyname}`}>View More</More>{" "}
           </Body>
         </Post>
       </Wrapper>
