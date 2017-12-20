@@ -2,7 +2,7 @@ const development = {
   isProduction: false,
   url: 'http://localhost:3000',
   port: 3000,
-  apiPort: 8080
+  apiPort: 8000
 }
 
 const production = {

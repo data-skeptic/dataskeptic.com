@@ -55,6 +55,7 @@
     "react-rte": "^0.14.1",
     "redux": "^3.7.2",
     "redux-devtools-extension": "^2.13.0",
+    "rss": "^1.2.2",
     "serve-favicon": "^2.4.2",
     "shallow-equal": "^1.0.0",
     "styled-components": "^2.1.2",

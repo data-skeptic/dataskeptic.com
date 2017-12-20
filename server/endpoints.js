@@ -1,9 +1,20 @@
 import express from 'express'
 import filter from 'lodash/Filter'
-
+import RSS from 'rss'
 const router = express.Router()
 
-const PER_PAGE = 10;
+const PER_PAGE = 10
+const BASE_URL = 'https://dataskeptic.com/'
+
+const BlogItem = (data) => ({
+    title: data['title'],
+    description: data['desc'],
+    url: BASE_URL + 'blog' + data['prettyname'],
+    guid: data['guid'],
+    author: data['author'],
+    categories: '',
+    date: Date.parse(data['publish_date'])
+})
 
 const generatePrettyName = (category, year, name) => `/${category}/${year}/${name}`;
 
@@ -39,6 +50,27 @@ export default function (cache) {
             latestSponsor: cache.sponsor,
             latestCard: cache.card
         })
+    })
+
+    router.get('/blog/rss', (req, res) => {
+        let feed = new RSS({
+            title: 'Data Skeptic',
+            description: 'Data Skeptic is your source for a perspective of scientific skepticism on topics in statistics, machine learning, big data, artificial intelligence, and data science. Our weekly podcast and blog bring you stories and tutorials to help understand our data-driven world.',
+            feed_url: `${BASE_URL}/api/blog/rss`,
+            site_url: BASE_URL,
+            managingEditor: 'Kyle',
+            language: 'en'
+        });
+
+        cache.posts.forEach((post) => {
+            if (post.env === 'master') { // don't share dev on master
+                feed.item(new BlogItem(post))
+            }
+        })
+
+        const xml = feed.xml()
+        res.set('Content-Type', 'application/rss+xml')
+        res.send(xml)
     })
 
     router.get('/blogs/:category/:year/:name', (req, res) => {
