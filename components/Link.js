@@ -4,7 +4,7 @@ import {Link} from '../routes';
 
 export default ({className, children, target, href, params, ...props }) => (
   <Link route={href} >
-      <a className={className} target={target}>
+      <a className={className} target={target} {...props}>
         {children}
       </a>
   </Link>
