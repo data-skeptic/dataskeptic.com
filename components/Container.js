@@ -26,8 +26,7 @@ const Container = styled.div`
   margin: 0 auto;
   width: 100%;
   max-width: ${maxWidth}px;
-  
-  ${media.desktop`padding: 0 18px;`} 
-  ${media.tablet`padding: 0 18px;`} 
-  ${media.phone`padding: 0 3px;`};
+   
+  ${media.tablet`padding: 0 30px;`} 
+  ${media.phone`padding: 0 15px;`};
 `

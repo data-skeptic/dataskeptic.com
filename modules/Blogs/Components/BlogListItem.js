@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import Link from "../../../components/Link";
 import moment from 'moment'
+import {media} from "../../styles";
 export default class BlogListItem extends Component {
 
   render() {
@@ -48,7 +49,12 @@ const Post = styled.div`
   border-color: #979797;
   border-style: solid;
   margin-right: 100px;
-`;
+ 
+  ${media.phone`
+      margin-right: 0px;
+  `}
+`
+
 const Date = styled.div`
   font-weight: 700;
   font-size: 14px;
@@ -95,4 +101,4 @@ const Title = styled.span`
   margin-top: 8px;
   text-decoration: none;
   border-bottom: 1px dotted;
-`;
+`

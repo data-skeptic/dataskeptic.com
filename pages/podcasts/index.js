@@ -12,6 +12,7 @@ import {
 import PodcastWrapper from '../../modules/Podcasts/Containers/PodcastWrapper'
 import YearList from '../../modules/Podcasts/Containers/YearList'
 import Container from "../../components/Container";
+import {media} from "../../modules/styles";
 
 const getActualQuery = (year, page, isPage = false) => {
     if (!year) {
@@ -69,5 +70,9 @@ export default class Podcasts extends Component {
 }
 
 const Wrapper = styled.div`
-  display: flex;
+    display: flex;
+    
+    ${media.phone`
+        flex-direction: column;
+    `};
 `

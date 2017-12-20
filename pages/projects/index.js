@@ -3,6 +3,7 @@ import Link from '../../components/Link'
 import styled from 'styled-components'
 import Page from '../../hoc/Page'
 import Container from "../../components/Container";
+import {media} from "../../modules/styles";
 
 @Page
 export default class Projects extends Component {
@@ -53,14 +54,18 @@ export default class Projects extends Component {
 }
 
 const Wrapper = styled.div`
-  max-width:800px;
-  margin:0 auto;
+    max-width:800px;
+    margin:0 auto;
 `
 
 const Boxes = styled.div`
     display:flex;
     flex-wrap: wrap;
     justify-content: space-between;
+
+    ${media.phone`
+        flex-direction: column;
+    `};
 `
 
 const Box = styled.div`

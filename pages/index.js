@@ -1,13 +1,6 @@
 import React, {Component} from 'react'
-import Container from '../components/Container'
-import Marker from '../components/Marker';
 import Page from '../hoc/Page'
-import Cards from '../modules/Home/Components/Cards';
-import styled from 'styled-components'
 import {
-    getDailySponsor,
-    getLatestBlogPost,
-    getLatestEpisode,
     loadAll,
     hasHomeData
 } from "../redux/modules/homeReducer";

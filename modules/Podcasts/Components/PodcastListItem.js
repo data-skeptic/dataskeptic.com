@@ -8,6 +8,7 @@ import {
     setCurrentPlaying
 } from "../../../redux/modules/playerReducer";
 import {connect} from "react-redux";
+import {media} from "../../styles";
 
 const formatLink = (link) => link.indexOf('/') === 0 ? link : `/podcasts/${link}`
 
@@ -103,7 +104,15 @@ const Post = styled.div`
   border-style: solid;
   margin-right: 100px;
   display: flex;
-`;
+
+  ${media.phone`
+    margin-right: 0px;
+    flex-direction: column;
+  `};
+`
+
+
+
 const Date = styled.div`
   font-weight: 700;
   font-size: 14px;
@@ -131,7 +140,19 @@ const Avatar = styled(Link)`
     height: 200px;
     margin-right: 20px;
   }
-`;
+
+  ${media.phone`
+    text-align: center;
+    
+    > img{
+      margin: 0px;
+      width: 100px;
+      height: 100px;
+    }
+  `};
+`
+
+
 const PostLink = styled(Link)`text-decoration: none;`;
 const Author = styled.div`
   padding-top: 6px;

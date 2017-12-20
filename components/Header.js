@@ -9,6 +9,7 @@ import {
     sync,
     getLoaded
 } from "../redux/modules/shopReducer";
+import {media} from "../modules/styles";
 
 @connect(
     state => ({
@@ -114,10 +115,10 @@ const Logo = styled(Link)`
 const HeaderWrapper = styled.div`
     background-color: ${props => props.theme.colors.dark};
     height: 80px;
-    display: flex;
     justify-content: space-between;
     align-items: center;
     overflow: hidden;
+    display: flex;
 `
 
 

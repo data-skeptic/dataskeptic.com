@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import AdSense from 'react-adsense'
 import Link from './Link'
+import {media} from "../modules/styles";
 
 const LINKS = {
     ITUNES: 'https://itunes.apple.com/podcast/the-data-skeptic-podcast/id890348705',
@@ -87,7 +88,13 @@ const FooterWrapper = styled.footer`
     color: #a2a6a6;
     padding:60px 100px;    
     margin-top: 20px;
+    
+    ${media.phone`
+        flex-direction: column;
+        padding: 20px 15px;
+    `};
 `
+
 
 const Logo = styled(Link)`
     display: block;   
@@ -110,10 +117,21 @@ const FooterNav = styled.nav`
    flex: 1;
    justify-content: flex-end;
    width: 100%;
+   
+   ${media.phone`
+      justify-content: space-around;
+      flex-wrap: wrap;
+   `};
 `
 
 const NavSection = styled.div`
     flex: 0 0 20%;
+    flex-wrap: wrap;
+    
+    ${media.phone`
+       padding-top: 10px; 
+       flex: 0 0 50%;
+   `};
 `
 
 const SectionTitle = styled.h3`

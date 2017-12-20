@@ -12,6 +12,7 @@ import {
     setActiveCategory,
     setCurrentPage
 } from "../../redux/modules/blogReducer";
+import {media} from "../../modules/styles";
 
 const ALL = 'all'
 
@@ -74,4 +75,8 @@ export default class Dashboard extends Component {
 
 const Wrapper = styled.div`
   display: flex;
+
+    ${media.phone`
+        flex-direction: column;
+    `};
 `

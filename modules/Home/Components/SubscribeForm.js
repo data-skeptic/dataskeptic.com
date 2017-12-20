@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import {media} from "../../styles";
 
 const SUBSCRIBE_URL = `//dataskeptic.us9.list-manage.com/subscribe/post?u=65e63d6f84f1d87759105d133&id=dc60d554db`
 
@@ -31,12 +32,16 @@ const Form = styled.form`
     align-items: center;
     margin-top: 60px;
     flex-direction: column;
+    
+    * {
+        box-sizing: border-box;
+    }
 `
 
 const Fields = styled.div`
     margin-top: 10px;
     & > input {
-        width: 400px;
+        width: 100%;
         margin-right: 5px;
         padding: 19px 29px;
         border: none;
@@ -46,6 +51,11 @@ const Fields = styled.div`
         border-radius: 5px;
     }
     display: flex;
+
+    ${media.phone`
+        flex-direction: column;
+        width: 80%;
+    `};
 `
 
 const Field = styled.input``
@@ -59,6 +69,12 @@ const Submit = styled.button`
     -webkit-appearance: none;
     text-align: center;
     padding: 19px;
+    border: 0px;
+ 
+    ${media.phone`
+        margin-top: 10px;
+        width: 100%;
+    `};
 `
 
 const Title = styled.div`

@@ -3,6 +3,7 @@ import PodcastCard from './PodcastCard';
 import BlogCard from './BlogCard'
 import SponsorCard from './SponsorCard'
 import styled from 'styled-components'
+import {media} from "../../styles";
 
 export default ({ latestPost, latestEpisode, sponsor, setEpisodeDescription}) => (
     <Cards>
@@ -24,4 +25,9 @@ export default ({ latestPost, latestEpisode, sponsor, setEpisodeDescription}) =>
 const Cards = styled.div`
     display: flex;
     justify-content: space-between;
+     
+    ${media.phone`
+       flex-direction: column;
+       padding: 20px 10px;
+    `};
 `

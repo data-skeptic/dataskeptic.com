@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import Link from "../../../components/Link";
 import Ionicon from 'react-ionicons'
+import {media} from "../../styles";
 
 const AuthorBlock = ({author}) => (
   <Wrapper>
@@ -20,9 +21,16 @@ const AuthorBlock = ({author}) => (
 )
 
 const Image = styled.div`
-  flex-basis: 42%;
-  text-align: center;
+    flex-basis: 42%;
+    text-align: center;
+      
+    ${media.phone`
+        img {
+            max-width: 40px;
+        }
+    `};
 `
+
 const Data = styled.div`
   flex-basis: 58%;
 `
@@ -42,7 +50,7 @@ const Label = styled.span`
 `
 
 const Value = styled.span`
-  font-family: 'SF Light'
+  
 `
 
 const Social = styled(Link)`
@@ -114,6 +122,10 @@ const Wrapper = styled.div`
     padding: 20px;
     background-color: #eee;
     display: flex;
-`;
+
+    ${media.phone`
+        flex-direction: column;
+    `};
+`
 
 

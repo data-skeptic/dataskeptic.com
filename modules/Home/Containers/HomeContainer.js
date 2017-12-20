@@ -7,6 +7,7 @@ import Container from '../../../components/Container'
 import Marker from '../../../components/Marker'
 import Cards from '../Components/Cards'
 import {getDailySponsor, getLatestBlogPost, getLatestEpisode} from "../../../redux/modules/homeReducer";
+import {media} from "../../styles";
 
 @connect(
     state => ({
@@ -47,4 +48,12 @@ const Intro = styled.h1`
     margin-top: 85px;
     border-left: 4px solid ${props => props.theme.colors.dark};
     color: ${props => props.theme.colors.dark}
+
+   ${media.phone`
+        font-size: 22px;
+        padding: 12px 0px;
+        padding-left: 10px;
+        border-left-width: 2px;
+        margin-top: 15px;
+   `};
 `

@@ -9,6 +9,7 @@ import {setCurrentPlaying} from '../../../redux/modules/playerReducer'
 import PodcastListItem from '../Components/PodcastListItem'
 import ReactPaginate from 'react-paginate'
 import ParamRouter from "../../../components/Router";
+import {media} from "../../styles";
 
 @connect(
     state => ({
@@ -92,6 +93,11 @@ const Wrapper = styled.div`
     flex-basis: 70%;
     width: 70%;
     overflow: hidden;
+
+    ${media.phone`
+        flex-basis: 100%;
+        width: 100%;
+    `};
 `
 
 

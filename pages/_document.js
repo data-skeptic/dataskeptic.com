@@ -17,7 +17,8 @@ injectGlobal`
   }
   
   * {
-      outline: none
+      outline: none;
+      box-sizing: border-box;
   }
   
   a {

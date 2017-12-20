@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import {getActiveYear, getPage, getYears, setActiveYear} from '../../../redux/modules/podcastReducer'
 import CategoriesListItem from "../Components/CategoriesListItem";
 import ParamRouter from "../../../components/Router";
+import {media} from "../../styles";
 
 
 @connect(
@@ -47,15 +48,21 @@ export default class YearList extends Component {
 const Wrapper = styled.div`
     background-color: #38383a;
     color: #fff;
-    margin-top:20px;
     padding: 0 30px;
+    padding-top:20px;
     width: 30%;
     flex-basis: 30%;
     height: 100%;
     position: sticky;
     top: 64px;
     padding-bottom: 30px;
+
+    ${media.phone`
+        flex-basis: 100%;
+        width: 100%;
+    `};
 `
+
 const Title = styled.h2`
   
 `
