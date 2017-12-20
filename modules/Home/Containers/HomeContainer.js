@@ -1,17 +1,18 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
-import { Form } from "react-final-form"
-import {connect } from 'react-redux'
+import {Form} from "react-final-form"
+import {connect} from 'react-redux'
 import SubscribeForm from '../Components/SubscribeForm'
 import Container from '../../../components/Container'
 import Marker from '../../../components/Marker'
 import Cards from '../Components/Cards'
 import {getDailySponsor, getLatestBlogPost, getLatestEpisode} from "../../../redux/modules/homeReducer";
+
 @connect(
     state => ({
         latestPost: getLatestBlogPost(state),
-        latestEpisode:getLatestEpisode(state),
-        dailySponsor:getDailySponsor(state)
+        latestEpisode: getLatestEpisode(state),
+        dailySponsor: getDailySponsor(state)
     }),
     {}
 )
@@ -19,23 +20,26 @@ export default class HomeContainer extends Component {
 
     setEpisodeDescription = episodeDescription => ({__html: episodeDescription});
 
+    subscribe(e) {
+        debugger;
+    }
 
     render() {
-        const {latestPost,latestEpisode,dailySponsor} = this.props
+        const {latestPost, latestEpisode, dailySponsor} = this.props
         return (
             <Container>
                 <Intro>
                     <Marker>Data Skeptic</Marker> is your source for a perspective of scientific skepticism
                 </Intro>
+
                 <Cards
                     setEpisodeDescription={this.setEpisodeDescription}
                     latestPost={latestPost}
                     latestEpisode={latestEpisode}
                     sponsor={dailySponsor}
                 />
-                <Form
-                    onSubmit={(data) => alert(data)}
-                    render={SubscribeForm} />
+
+                <SubscribeForm/>
             </Container>
         )
     }

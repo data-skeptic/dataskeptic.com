@@ -1,33 +1,39 @@
-import React, {Component} from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { Field } from "react-final-form";
-const SubscribeForm = ({ handleSubmit, reset, submitting, pristine, values }) => (
-            <Form onSubmit={handleSubmit}>
-                <Title>Subscribe to our mailing list</Title>
-                <FormWrap>
-                    <Field
-                        name="email"
-                        component="input"
-                        type="text"
-                        placeholder="Email"
-                    />
-                    <Submit type="submit" disabled={submitting || pristine}>
-                        Submit
-                    </Submit>
-                </FormWrap>
-            </Form>
-        )
+
+const SUBSCRIBE_URL = `//dataskeptic.us9.list-manage.com/subscribe/post?u=65e63d6f84f1d87759105d133&id=dc60d554db`
+
+const SubscribeForm = () => (
+    <Form
+        action={SUBSCRIBE_URL}
+        target="_blank"
+        method={`POST`}
+    >
+        <Title>Subscribe to our mailing list</Title>
+        <Fields>
+            <Field
+                name="EMAIL"
+                component="input"
+                type="text"
+                placeholder="Email"
+            />
+            <Submit type="submit">
+                Submit
+            </Submit>
+        </Fields>
+    </Form>
+)
 
 export default SubscribeForm
 
 const Form = styled.form`
     display: flex;
     align-items: center;
-    margin-top: 20px;
+    margin-top: 60px;
     flex-direction: column;
 `
 
-const FormWrap = styled.div`
+const Fields = styled.div`
     margin-top: 10px;
     & > input {
         width: 400px;
@@ -42,7 +48,9 @@ const FormWrap = styled.div`
     display: flex;
 `
 
-const Submit = styled.div`
+const Field = styled.input``
+
+const Submit = styled.button`
     width: 220px;
     border-radius: 5px;
     color: #fff;
