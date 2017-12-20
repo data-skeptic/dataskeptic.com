@@ -10,6 +10,14 @@ const app = express()
 
 import initCache from './initCache'
 import endpoints from './endpoints'
+import admin from './admin'
+
+const onlyAdmin = (req, res, next) => {
+    if (req.user && req.user.admin)
+        return next();
+
+    res.send(401)
+}
 
 async function run(cache) {
     app.use(bodyParser.json())
@@ -31,6 +39,7 @@ async function run(cache) {
     googleAuth()
 
     app.use(endpoints(cache));
+    app.use('/admin', onlyAdmin, admin(cache));
 
     app.get('/v1/auth/google',
         passport.authenticate('google', { scope: ['profile', 'email'] }));
