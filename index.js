@@ -17,12 +17,12 @@ const onError = (err) => {
     })
 }
 
-
 const cert_path = './cert/'
 const recordingServer = require('./recordingServer').default
 const app = require('./server').default
 
 var launch_with_ssl = function() {
+	console.log("Attempt to load SSL")
 	const httpsOptions = {
 		cert: fs.readFileSync(cert_path + 'cert.pem'),
 		ca: [ fs.readFileSync(cert_path + 'fullchain.pem') ],
@@ -46,6 +46,7 @@ var launch_with_ssl = function() {
 }
 
 var launch_without_ssl = function() {
+	console.log("Launch without SSL")
 	app.listen(3000, function () {
 		console.log('Server listening on 3000');
 	});
@@ -57,7 +58,7 @@ var config_load_promise = new Promise(function(resolve, reject) {
 	var promises = []
 	for (var file of files) {
 		var s3Key = file
-		console.log(s3Key)
+		console.log("Getting: " + s3Key)
 	    var p = new Promise((resolve, reject) => {
 		    const params = { Bucket: bucket, Key: s3Key }
 		    s3.getObject(params)
@@ -68,8 +69,6 @@ var config_load_promise = new Promise(function(resolve, reject) {
 		      })
 		  }) 
 	    promises.push(p)
-
-
 	}
 	return Promise.all(promises).then(function() {
 		var c = 0
@@ -80,11 +79,14 @@ var config_load_promise = new Promise(function(resolve, reject) {
 			}
 		}
 		if (c == files.length) {
+			console.log("Found all expected files")
 			resolve(true)
 		} else {
+			console.log("Found less files than expected: " + c + " instead of " + files.length)
 			resolve(false)
 		}
 	}).catch(function(err) {
+		console.log("Errors getting files")
 		console.log(err)
 		resolve(false)
 	})
@@ -93,7 +95,7 @@ var config_load_promise = new Promise(function(resolve, reject) {
 config_load_promise.then(function(result) {
 	launch_with_ssl()
 }, function(err) {
-	console.log(22222)
+	console.log("Error loading config, assuming development run")
 	console.log(err)
 	launch_without_ssl()
 });

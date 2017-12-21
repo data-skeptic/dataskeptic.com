@@ -568,15 +568,6 @@ const api = require('./backend/api/v1');
 app.use('/api/v1/', api(Cache));
 
 
-/***
- * DUMP GENERATION
- */
-// const heapdump =  require('heapdump');
-// setInterval(() => {
-//     console.log('writing dump');
-//     heapdump.writeSnapshot('heap/' + Date.now() + '.heapsnapshot');
-// }, 60000);
-
 function renderView(store, renderProps, location) {
     const InitialView = (
         <Provider store={store}>
