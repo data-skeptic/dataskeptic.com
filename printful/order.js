@@ -1,11 +1,11 @@
 var PrintfulClient = require('./printfulclient.js');
-var key = 'srpzc6en-ogi6-edom:n0ln-5zavj5mnhcxn';
+var key = '';
 
 const order = require('./order-template.json')
 var items = order['items']
 
-var name = "Tim Henderson"
-var address1 = "196 Redding Rd"
+var name = "n"
+var address1 = "a"
 var city = "Campbell"
 var state = "CA"
 var country_code = "US"
