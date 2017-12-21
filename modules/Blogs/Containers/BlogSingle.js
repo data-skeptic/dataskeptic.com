@@ -45,8 +45,7 @@ const isEpisodePost = (post) => (post.category === 'episodes' || post.category =
 )
 export default class BlogSingle extends Component {
 
-    handleNewComment = () => alert('comment')
-    subscribe = () => alert('subscribe')
+    handleNewComment = () => console.dir('comment')
 
     hasEpisode = () => isEpisodePost(this.props.post)
 
@@ -68,7 +67,7 @@ export default class BlogSingle extends Component {
 
                     <Post post={post}/>
                     <AuthorBlock author={post.author}/>
-                    <Form onSubmit={this.subscribe} render={SubscriptionForm}/>
+                    <SubscriptionForm />
 
                     {post.related && <RelatedContent items={post.related}/>}
 

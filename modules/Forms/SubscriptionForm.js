@@ -1,22 +1,15 @@
-import React, {Component} from "react";
-import styled from "styled-components";
-import {Field} from "react-final-form";
+import React, { Component } from "react"
+import styled from "styled-components"
 
-const SubscriptionForm = ({
-                              handleSubmit,
-                              reset,
-                              submitting,
-                              pristine,
-                              values
-                          }) =>
-    <Form onSubmit={handleSubmit}>
+const SubscriptionForm = () =>
+    <Form action="//dataskeptic.us9.list-manage.com/subscribe/post?u=65e63d6f84f1d87759105d133&id=dc60d554db" method="post" target="_blank" novalidate>
         <Title>
             Enjoy this post? Sign up for our mailing list and don't miss any updates.
         </Title>
         <SubTitle>Subscribe to our mailing list</SubTitle>
         <FormWrap>
-            <Field name="email" component="input" type="text" placeholder="Email"/>
-            <Submit type="submit" disabled={submitting || pristine}>
+            <input name="EMAIL" component="input" type="text" placeholder="Email"/>
+            <Submit type="submit">
                 Submit
             </Submit>
         </FormWrap>
@@ -59,7 +52,7 @@ const FormWrap = styled.div`
     flex-direction: column;
 `;
 
-const Submit = styled.div`
+const Submit = styled.button`
     background-color: #aaa;
     border: 0 none;
     letter-spacing: .03em;

@@ -44,10 +44,7 @@ export default class BlogSingle extends Component {
                 <Wrapper>
                     <Podcast post={episode} playing={playing} togglePlay={this.togglePlay}/>
 
-                    <Form
-                        onSubmit={(data) => alert(data)}
-                        render={SubscriptionForm}
-                    />
+                    <SubscriptionForm/>
 
                     <ReactDisqusComments
                         shortname={DisqusUsername}
