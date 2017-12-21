@@ -159,24 +159,6 @@ const validate = (values) => {
 const isProd = (process.env.NODE_ENV === 'production')
 const stripeKey = (isProd) ? 'pk_live_JcvvQ05E9jgvtPjONUQdCqYg' : 'pk_test_oYGXSwgw9Jde2TOg7vZtCRGo';
 
-const formMock = {
-    "firstName": "Firts",
-    "lastName": "Name",
-    "streetAddress": "Addr",
-    "apt": "ap",
-    "city": "Los",
-    "country": "us",
-    "state": "state",
-    "postal": "postal",
-    "email": "gleb@thespoon.co",
-    "phone": "phone",
-    "card": "4242 4242 4242 4242",
-    "cardHolder": "jonh",
-    "month": "12",
-    "year": "2020",
-    "cvv": "123"
-}
-
 const Processing = () =>
     <ProcessingWrapper>
         <Ionicon icon={'md-refresh'} fontSize={'32px'} rotate={true}/>
@@ -320,7 +302,6 @@ export default class CheckoutForm extends Component {
                 <Form
                     render={Checkout}
                     validate={validate}
-                    initialValues={formMock}
                     onSubmit={this.checkout}
                     subscription={{submitting: true, pristine: true}}
                 />
