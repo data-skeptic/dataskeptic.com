@@ -33,7 +33,7 @@ const Title = styled.h1`
 
 `
 
-const Inner = styled.h1`
+const Inner = styled.div`
     max-width: 800px;
     margin: 0px auto;
     margin-top: 20px;

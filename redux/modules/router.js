@@ -1,6 +1,6 @@
-const ROUTING_INIT = 'trueup-employer/router/ROUTING_INIT'
-const ROUTING_START = 'trueup-employer/router/ROUTING_START'
-const ROUTING_COMPLETE = 'trueup-employer/router/ROUTING_COMPLETE'
+const ROUTING_INIT = 'ROUTING_INIT'
+const ROUTING_START = 'ROUTING_START'
+const ROUTING_COMPLETE = 'ROUTING_COMPLETE'
 
 const initialState = {
     routing: false
