@@ -4,6 +4,8 @@ import {connect } from 'react-redux'
 import Container from '../../../components/Container'
 import {getUser, logout} from '../../../redux/modules/auth'
 import { redirect } from '../../../util'
+import Link from '../../../components/Link'
+import Icon from 'react-ionicons'
 
 const renderSubscription = (subscription) =>
     subscription
@@ -25,11 +27,12 @@ export default class MemberProfile extends Component {
 
         if (!user) return <div />
 
-        const {displayName, subscription} = user
+        const {displayName, subscription, admin} = user
 
         return (
             <Container>
                 <Info>
+                    {admin && <AdminButton href="/admin"><Icon icon="ios-grid" color="#fff"/>Admin Panel</AdminButton>}
                     <Name>{displayName}</Name>
                     <Subscription>Subscription: {renderSubscription(subscription)}</Subscription>
                 </Info>
@@ -40,6 +43,25 @@ export default class MemberProfile extends Component {
         )
     }
 }
+
+const AdminButton = styled(Link)`
+    background-color: #cccc;
+    color: #fff;
+    border: 0px;
+    cursor: pointer;
+    
+    padding: 8px 10px;
+    border-radius: 3px;
+    
+    display: flex;
+    flex-align: center;
+    align-items: center;
+    justify-content: center;
+    
+    &:hover {
+        color: #fff;
+    }
+`
 
 const Info = styled.div`
     padding-top: 10px;

@@ -5,7 +5,7 @@ import styled from "styled-components";
 import Page from "../../hoc/Page";
 import Container from "../../components/Container"
 @Page
-export default class About extends Component {
+export default class WPLogin extends Component {
   static async getInitialProps({ store: { dispatch, getState }, query }) {
     const state = getState();
     const promises = [];
@@ -15,17 +15,14 @@ export default class About extends Component {
 
   render() {
     return (
-      <Container title={"About"}>
+      <Container title={"This is not a wordpress site"}>
           <Inner>
-            <Title>About Data Skeptic</Title>
-            <p>Data Skeptic is your source for a perspective of scientific skepticism
-            on topics in statistics, machine learning, big data, artificial
-            intelligence, and data science. Our weekly podcast and blog bring you
-            stories and tutorials to help understand our data-driven world.</p>
-            <p>To reach out to the podcast, please visit our <Link href={'/contact-us'}><b>Contact Us</b></Link>  page.</p>
+            <Title>This is not a wordpress site</Title>
+            <p>It appears you're trying to access the administration section of a wordpress site. DataSkeptic.com is not based on wordpress. If you want to understand more about our site, please check out our corresponding github repository.</p>
+            <p>Since you were looking for the admin page, I'm guessing you're interested in helping us test our security. Please use our contact us form to find out about more productive ways you can help. Thanks!</p>
           </Inner>
       </Container>
-    )
+    );
   }
 }
 
