@@ -14,9 +14,9 @@ export default class ContactUs extends Component {
 
     render() {
         return (
-            <Container global title={`Admin Login`}>
-              <ContactUsContainer/>
-           </Container>
+            <Container global title={`Contact Us`}>
+                <ContactUsContainer/>
+            </Container>
         )
     }
 }
