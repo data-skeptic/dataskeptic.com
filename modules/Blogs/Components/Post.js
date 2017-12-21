@@ -5,12 +5,12 @@ import Ionicon from 'react-ionicons'
 
 const Post = ({post}) => (
     <Wrapper>
-        <Header>
+        {post.author && <Header>
             <Author>Author: {post.author.prettyname}</Author>
             <Social href={`http://twitter.com/${post.author.twitter}`}><Ionicon
                 icon="logo-twitter"/> {post.author.twitter}</Social>
             <Social href={`${post.author.linkedin}`}><Ionicon icon="logo-linkedin"/> LinkedIn</Social>
-        </Header>
+        </Header>}
         <Date>{post.publish_date}</Date>
         <Title>{post.title}</Title>
         <Body>

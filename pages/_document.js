@@ -58,11 +58,16 @@ export default class MyDocument extends Document {
         return (
             <html>
             <Head>
+                <meta charset="utf-8" />
+                <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+                <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
                 <style dangerouslySetInnerHTML={{ __html: styleTags}} />
+                <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
             </Head>
             <body>
             {main}
             <NextScript/>
+            <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
             </body>
             </html>
         );

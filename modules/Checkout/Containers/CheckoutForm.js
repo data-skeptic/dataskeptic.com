@@ -6,7 +6,9 @@ import {
     clearCart,
     getCart,
     removeItem,
-    checkout
+    checkout,
+    setCheckoutError,
+    getCheckoutError
 } from "../../../redux/modules/shopReducer"
 import {connect} from "react-redux"
 import {Form} from "react-final-form"
@@ -75,6 +77,8 @@ const validate = (values) => {
     return errors
 }
 
+const isProd = (process.env.NODE_ENV == 'production')
+const stripeKey = (isProd) ? 'pk_live_JcvvQ05E9jgvtPjONUQdCqYg' : 'pk_test_oYGXSwgw9Jde2TOg7vZtCRGo';
 
 const formMock = {
     "firstName": "Firts",
@@ -94,31 +98,53 @@ const formMock = {
     "cvv": "cvv"
 }
 
+
 @connect(
     state => ({
-        cart: getCart(state)
+        cart: getCart(state),
+        error: getCheckoutError(state)
     }),
-    { addToCart, changeQuantity, removeItem, clearCart, checkout}
+    { addToCart, changeQuantity, removeItem, clearCart, checkout, setCheckoutError}
 )
 export default class CheckoutForm extends Component {
 
     isEmpty = () => this.props.cart && this.props.cart.length === 0
 
+    error = (error) => this.props.setCheckoutError(error)
+
     checkout = async (data) => {
-        const checkoutData = {
-            ...data
-        }
+        Stripe.setPublishableKey(stripeKey);
 
-        const {success} = await this.props.checkout(checkoutData)
+        const cardData = {
+            number: data.card_number,
+            cvc: data.card_cvv,
+            exp_month: data.card_month,
+            exp_year: data.card_year
+        };
 
-        if (success) {
-            window.scrollTo(0, 0)
-            redirect(`/checkout/success`)
-        }
+        Stripe.createToken(cardData, (status, response) => {
+            if (response.error) {
+                this.error(response.error.message);
+            } else {
+                if (!data['street_2']) {
+                    data['street_2'] = ""
+                }
+
+                const token = response.id;
+
+                alert(token)
+            }
+        })
+        // const {success} = await this.props.checkout(checkoutData)
+        //
+        // if (success) {
+        //     window.scrollTo(0, 0)
+        //     redirect(`/checkout/success`)
+        // }
     }
 
     render() {
-        const {cart} = this.props
+        const {error} = this.props
 
         if (this.isEmpty()) {
             return <div/>
@@ -128,6 +154,7 @@ export default class CheckoutForm extends Component {
             <Wrapper>
                 <Title>Checkout</Title>
 
+
                 <Form
                     render={Checkout}
                     validate={validate}
@@ -135,6 +162,10 @@ export default class CheckoutForm extends Component {
                     onSubmit={this.checkout}
                     subscription={{submitting: true, pristine: true}}
                 />
+
+                {error && <Error>{error}</Error>}
+
+
             </Wrapper>
         )
     }
@@ -146,4 +177,9 @@ const Title = styled.h2`
     font-size: 32px;
     margin: 0px;
     padding: 0px;
+`
+
+const Error = styled.div`
+    color: indianred;
+    margin: 0 0 10.5px;
 `

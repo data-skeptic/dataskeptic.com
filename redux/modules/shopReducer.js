@@ -13,6 +13,7 @@ const LOAD_MEMBERSHIPS_FAIL = 'LOAD_MEMBERSHIPS_FAIL'
 const CHECKOUT = 'CHECKOUT'
 const CHECKOUT_SUCCESS = 'CHECKOUT_SUCCESS'
 const CHECKOUT_FAIL = 'CHECKOUT_FAIL'
+const CHECKOUT_ERROR = 'CHECKOUT_ERROR'
 
 const ADD_TO_CART = 'ADD_TO_CART'
 const CHANGE_QUANTITY = 'CHANGE_QUANTITY'
@@ -44,7 +45,10 @@ const initialState = {
     error: false,
     products: null,
     memberships: null,
-    cart: []
+    cart: [],
+    checkout: {
+        error: null
+    }
 }
 
 export default function reducer(state = initialState,
@@ -109,6 +113,15 @@ export default function reducer(state = initialState,
             })
         }
 
+        case CHECKOUT_ERROR: {
+            return {
+                ...state,
+                checkout: {
+                    error: action.payload.error
+                }
+            }
+        }
+
         default:
             return state
     }
@@ -161,6 +174,10 @@ export const sync = () => ({
     type: SYNC
 })
 
+export const setCheckoutError = (error) => ({
+    type: CHECKOUT_ERROR,
+    payload: { error }
+})
 
 export const getProducts = state => state.shop && state.shop.products
 export const getMemberships = state => state.shop && state.shop.memberships
@@ -170,5 +187,7 @@ export const getCartAmount = state => state.shop && state.shop.cart && state.sho
 export const getCart = state => state.shop && state.shop.cart
 
 export const getLoaded = state => state.shop && state.shop.loaded
+
+export const getCheckoutError = state => state.shop && state.shop.checkout.error
 
 export const getSubTotal = state => state.shop && state.shop.cart.map(item => item.price * item.quantity).reduce((prev, curr) => (curr && (prev + curr)), 0)

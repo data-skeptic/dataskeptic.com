@@ -13,7 +13,7 @@ const renderField = ({cols = 1, label, input, meta, required, ...rest}) => (
     </FieldWrapper>
 )
 
-const Checkout = ({handleSubmit, reset, submitting, pristine, values}) => (
+const Checkout = ({handleSubmit, reset, submitting, pristine, values, error}) => (
     <form onSubmit={handleSubmit}>
         <Section>
             <SectionTitle>Shipping Information</SectionTitle>
@@ -173,7 +173,8 @@ const Checkout = ({handleSubmit, reset, submitting, pristine, values}) => (
                 </Fields>
             </Fields>
         </Section>
-        <Submit type="submit">Complete Order</Submit>
+
+        <Submit type="submit" >Complete Order</Submit>
     </form>
 )
 export default Checkout
