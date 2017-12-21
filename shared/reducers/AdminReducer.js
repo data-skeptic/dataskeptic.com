@@ -3,6 +3,11 @@ import { fromJS } from 'immutable';
 import querystring from 'querystring'
 import axios from "axios"
 
+import PrintfulClient from './printfulclient'
+
+var key = 'srpzc6en-ogi6-edom:n0ln-5zavj5mnhcxn';
+var pf = new PrintfulClient(key);
+
 const init = {
     "email_send_msg": "",
 	"from": "orders@dataskeptic.com",
@@ -117,7 +122,8 @@ export default function adminReducer(state = defaultState, action) {
             if (item.description == "Data Skeptic t-shirt") {
                 var p = item.parent
                 var sizeKey = p.split("_")[2]
-                size = sizeMap[sizeKey]
+                //size = sizeMap[sizeKey]
+                size = sizeKey
             }
         }
         nstate.order.errorMsg = ''
@@ -149,42 +155,77 @@ export default function adminReducer(state = defaultState, action) {
         var dispatch = action.payload
         nstate.order.spError = "Ordering..."
         var order = nstate.order
-        var data = {
-          'type': 'dtg',
-          'products[0][id]': order.productId,
-          'address[name]': order.customerName,
-          'products[0][color]': order.color,
-          'products[0][quantity]': order.quantity,
-          'products[0][size]': order.size,
-          'address[address1]': order.address1,
-          'address[address2]': order.address2,
-          'address[city]': order.city,
-          'address[state]': order.state,
-          'address[zip]': order.zipcode,
-          'address[country]': order.country,
-          'designId': order.designId
+
+        var ok_callback = function(r, info) {
+            console.log("OK!!!")
+            var resp = r['data']
+            console.log(resp)
+            var errorMsg = "Success!"
+            dispatch({type: "SET_ORDER_SP_ERROR_MSG", payload: errorMsg })
         }
-        var url = "/api/order/create"
-        var sreq = querystring.stringify(data)
-        var config = {
-            'Content-Type' : "application/x-www-form-urlencoded"
-        };
-        axios
-            .post(url, sreq, config)
-            .then(function(r) {
-                console.log("OK!!!")
-                var resp = r['data']
-                console.log(resp)
-                var errorMsg = "Success!"
-                dispatch({type: "SET_ORDER_SP_ERROR_MSG", payload: errorMsg })
-            })
-            .catch(function(err) {
-                console.log("api error")
-                var resp = err['data']
-                var jstr = JSON.stringify(resp['response'])
-                var errorMsg = jstr
-                dispatch({type: "SET_ORDER_SP_ERROR_MSG", payload: errorMsg })
-            })
+
+        var error_callback = function(err) {
+            console.log("api error")
+            var resp = err['data']
+            var jstr = JSON.stringify(resp['response'])
+            var errorMsg = jstr
+            dispatch({type: "SET_ORDER_SP_ERROR_MSG", payload: errorMsg })
+        }
+
+        var variantMap = {
+              "S": 474
+            , "M": 505
+            ,"L": 536
+            ,"XL": 474
+            ,"2XL": 598
+            ,"3XL": 629
+        }
+
+        var variant_id = variantMap[nstate.order.size]
+
+        var oitem =     {
+          "variant_id": variant_id,
+          "quantity": 1,
+          "product": {"variant_id": variant_id, "product_id": 12},
+          "custom_product": [],
+          "files": [
+            {
+              "id": 37766873,
+              "type": "default",
+              "filename": "t-shirt.png",
+              "dpi": 300,
+              "created": 1511289196,
+              "preview_url": "https://d1yg28hrivmbqm.cloudfront.net/files/57c/57cc770e861106c42055789e4b0bab4b_preview.png" 
+            },
+            {
+              "id": 37766924,
+              "filename": "mockup_Flat-Front_Black.png",
+              "mime_type": "image/png",
+              "dpi": 72,
+              "preview_url": "https://d1yg28hrivmbqm.cloudfront.net/files/2c8/2c86623ea3caecd75518546e999c4933_preview.png" 
+            }
+          ],
+          "options": [],
+          "sku": null
+        }
+
+        var oitems = [oitem]
+
+        pf.post('orders',
+            {
+                recipient:  {
+                    name: order.customerName,
+                    address1: order.address1,
+                    address2: order.address2,
+                    city: order.city,
+                    state_code: order.state,
+                    country_code: order.country,
+                    zip: order.zipcode
+                },
+                items: oitems
+            },
+            {confirm: 1}
+        ).success(ok_callback).error(error_callback);
         break
     case 'INIT_ORDERS':
         var dispatch = action.payload.dispatch
