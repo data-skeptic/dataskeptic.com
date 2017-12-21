@@ -9,6 +9,28 @@ const passport = require('passport')
 const aws = require('aws-sdk')
 const s3 = new aws.S3();
 
+var env = 'prod'
+console.log("env="+env)
+
+if (process.env.NODE_ENV === 'dev') {
+    env = "dev"
+}
+
+const c = require('./config/config.json')
+console.dir('index.js : env = ' + env)
+var aws_accessKeyId = c[env]['aws']['accessKeyId']
+var aws_secretAccessKey = c[env]['aws']['secretAccessKey']
+var aws_region = c[env]['aws']['region']
+
+aws.config.update(
+    {
+        "accessKeyId": aws_accessKeyId,
+        "secretAccessKey": aws_secretAccessKey,
+        "region": aws_region
+    }
+);
+
+
 const onError = (err) => {
     fs.writeFile('./error.err', err, function(e) {
         if (e) {
@@ -23,6 +45,7 @@ const app = require('./server').default
 
 var launch_with_ssl = function() {
 	console.log("Attempt to load SSL")
+	console.dir("Attempt to load SSL")
 	const httpsOptions = {
 		cert: fs.readFileSync(cert_path + 'cert.pem'),
 		ca: [ fs.readFileSync(cert_path + 'fullchain.pem') ],
@@ -37,12 +60,17 @@ var launch_with_ssl = function() {
 		onError(err)
 		console.log(err)
 	})
+	console.log("Attempt to load SSL 2")
+	console.dir("Attempt to load SSL 2")
 
 	http.createServer(function (req, res) {
 		const host = 'dataskeptic.com'
 		res.writeHead(301, { "Location": "https://" + host + req.url })
 		res.end()
 	}).listen(80, '0.0.0.0')
+
+	console.log("Attempt to load SSL 3")
+	console.dir("Attempt to load SSL 3")
 }
 
 var launch_without_ssl = function() {
@@ -92,12 +120,20 @@ var config_load_promise = new Promise(function(resolve, reject) {
 	})
 })
 
-config_load_promise.then(function(result) {
-	launch_with_ssl()
-}, function(err) {
-	console.log("Error loading config, assuming development run")
-	console.log(err)
-	launch_without_ssl()
-});
+if (env == 'prod') {
+	config_load_promise.then(function(result) {
+		launch_with_ssl()
+	}, function(err) {
+		console.log("Error loading config, assuming development run")
+		console.log(err)
+		launch_without_ssl()
+	});
+} else {
+	console.log("Loading as dev")
+	launch_without_ssl()		
+}
 
+if (process.env.NODE_ENV === 'dev') {
+    require('./webpack.dev').default(app);
+}
 
