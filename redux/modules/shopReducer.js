@@ -10,6 +10,10 @@ const LOAD_MEMBERSHIPS = 'LOAD_MEMBERSHIPS'
 const LOAD_MEMBERSHIPS_SUCCESS = 'LOAD_MEMBERSHIPS_SUCCESS'
 const LOAD_MEMBERSHIPS_FAIL = 'LOAD_MEMBERSHIPS_FAIL'
 
+const CHECKOUT = 'CHECKOUT'
+const CHECKOUT_SUCCESS = 'CHECKOUT_SUCCESS'
+const CHECKOUT_FAIL = 'CHECKOUT_FAIL'
+
 const ADD_TO_CART = 'ADD_TO_CART'
 const CHANGE_QUANTITY = 'CHANGE_QUANTITY'
 const REMOVE_ITEM = 'REMOVE_ITEM'
@@ -120,6 +124,10 @@ export const loadMemberships = pn => ({
     promise: client => client.get(`/memberships`)
 })
 
+export const checkout = data => ({
+    types: [CHECKOUT, CHECKOUT_SUCCESS, CHECKOUT_FAIL],
+    promise: client => client.post(`/checkout`, data)
+})
 
 export const addToCart = item => ({
     type: ADD_TO_CART,

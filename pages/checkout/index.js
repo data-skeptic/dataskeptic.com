@@ -38,6 +38,7 @@ const Wrapper = styled.div`
     
     background: #FAFAFA;
     border-bottom: 1px solid #D7D9D9;
+    margin-bottom: -20px;
     
     ${media.phone`
         flex-direction: column;

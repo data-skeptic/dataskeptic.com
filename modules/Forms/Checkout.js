@@ -5,10 +5,10 @@ import CountrySelector from "../Store/Components/CountrySelector";
 import Ionicon from 'react-ionicons'
 import {media} from "../styles";
 
-const renderField = ({cols = 1, label, input, meta, required}) => (
-    <FieldWrapper hasError={meta.touched && meta.error} cols={cols}>
+const renderField = ({cols = 1, label, input, meta, required, ...rest}) => (
+    <FieldWrapper cols={cols}>
         <Label>{label} {required && <Required>*</Required>}</Label>
-        <Input><input {...input} /></Input>
+        <Input error={true} hasError={meta.touched && !!meta.error}><input {...input} {...rest} /></Input>
         <Error>{meta.touched && meta.error && <span>{meta.error}</span>}</Error>
     </FieldWrapper>
 )
@@ -222,6 +222,8 @@ const FieldWrapper = styled.div`
     ${media.phone`
         flex: 1;
     `}
+    
+   
 `
 
 const Input = styled.div`
@@ -231,9 +233,13 @@ const Input = styled.div`
         border: 1px solid #d7d9d9;
         border-radius: 4px;
         width: 100%;
+        
+        ${props => props.hasError && `
+            color: indianred;
+            border: 1px solid indianred;
+        `}
     }
 `
-
 const Error = styled.div`
     color: indianred;
     margin: 0 0 10.5px;

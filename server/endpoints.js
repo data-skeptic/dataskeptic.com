@@ -204,5 +204,11 @@ export default function (cache) {
         res.send(cache.categories)
     })
 
+    router.post('/checkout', (req, res) => {
+        res.send({
+            success: false
+        })
+    })
+
     return router
 }
