@@ -113,10 +113,29 @@ export default function reducer(state = initialState,
             })
         }
 
+        case CHECKOUT:
+            return {
+                ...state,
+                checkout: {
+                    processing: true,
+                    error: null
+                }
+            }
+
+        case CHECKOUT_SUCCESS:
+            return {
+                ...state,
+                checkout: {
+                    processing: false,
+                    error: null
+                }
+            }
+
         case CHECKOUT_ERROR: {
             return {
                 ...state,
                 checkout: {
+                    processing: false,
                     error: action.payload.error
                 }
             }
@@ -137,9 +156,19 @@ export const loadMemberships = pn => ({
     promise: client => client.get(`/memberships`)
 })
 
-export const checkout = data => ({
-    types: [CHECKOUT, CHECKOUT_SUCCESS, CHECKOUT_FAIL],
-    promise: client => client.post(`/checkout`, data)
+export const checkoutStart = () => ({
+    type: CHECKOUT
+})
+
+export const checkoutSuccess = () => ({
+    type: CHECKOUT_SUCCESS
+})
+
+export const checkoutError = (erorr) => ({
+    type: CHECKOUT_FAIL,
+    payload: {
+        error
+    }
 })
 
 export const addToCart = item => ({
@@ -174,11 +203,6 @@ export const sync = () => ({
     type: SYNC
 })
 
-export const setCheckoutError = (error) => ({
-    type: CHECKOUT_ERROR,
-    payload: { error }
-})
-
 export const getProducts = state => state.shop && state.shop.products
 export const getMemberships = state => state.shop && state.shop.memberships
 
@@ -189,5 +213,6 @@ export const getCart = state => state.shop && state.shop.cart
 export const getLoaded = state => state.shop && state.shop.loaded
 
 export const getCheckoutError = state => state.shop && state.shop.checkout.error
+export const getCheckoutProcessing = state => state.shop && state.shop.checkout.processing
 
 export const getSubTotal = state => state.shop && state.shop.cart.map(item => item.price * item.quantity).reduce((prev, curr) => (curr && (prev + curr)), 0)

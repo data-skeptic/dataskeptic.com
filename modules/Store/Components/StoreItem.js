@@ -4,8 +4,8 @@ import Icon from 'react-ionicons'
 
 export default class StoreItem extends Component {
     handleAdd = () => {
-        const {title, descr, price, id,img} = this.props
-        this.props.addToCart({title, descr, price, id, img})
+        const {title, descr, price, id, img, type} = this.props
+        this.props.addToCart({title, descr, price, id, img, type})
     }
 
     render() {
