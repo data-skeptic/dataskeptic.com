@@ -11,7 +11,7 @@ RUN npm install
 
 COPY . /usr/src/app
 
-EXPOSE 443 80 3000
+EXPOSE 443 80 3000 9001
 
 CMD ["npm", "run", "dev"]
 

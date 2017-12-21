@@ -18,6 +18,7 @@ class Admin extends Component {
 	componentDidMount() {
 		var dispatch = this.props.dispatch
 	    dispatch({type: "INIT_ORDERS", payload: {dispatch} })
+	    dispatch({type: "INIT_CMS", payload: {dispatch} })
         if (!this.hasAccess()) {
             this.props.history.push('/admin/login')
             return
@@ -74,6 +75,8 @@ class Admin extends Component {
 				{step}
 				{errorMsg}
 				<h2>Admin</h2>
+				<h3>CMS</h3>
+				Table of ready to publish posts
 				<h3>Order processing</h3>
 				<form>
 					<table>

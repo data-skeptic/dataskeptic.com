@@ -20,7 +20,7 @@ class Menu extends Component {
         const links = [
             { to: '/podcast', name: 'Podcasts' },
             { to: '/blog', name: 'Blog' },
-            { to: '/projects', name: 'Projects' },
+            { to: '/contact-us', name: 'Contact Us' },
             { to: '/services', name: 'Services' }
         ];
 

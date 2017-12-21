@@ -1,8 +1,30 @@
 var PrintfulClient = require('./printfulclient.js');
-var key = 'srpzc6en-ogi6-edom:n0ln-5zavj5mnhcxn';
+var key = '';
 
 const order = require('./order-template.json')
 var items = order['items']
+
+var name = "Kyle Polich"
+var address1 = "4158 Sutro Ave"
+var city = "Los Angeles"
+var state = "CA"
+var country_code = "US"
+var zip = "90008"
+
+var variantMap = {
+              "S": 474
+            , "M": 505
+            ,"L": 536
+            ,"XL": 474
+            ,"2XL": 598
+            ,"3XL": 629
+        }
+
+var variant_id = variantMap[size]
+
+items[0]['variant_id'] = variant_id
+items[0]['product']['variant_id'] = variant_id
+
 
 var ok_callback = function(data, info){
     console.log('SUCCESS');
@@ -20,13 +42,6 @@ var error_callback = function(message, info){
 }
 
 var pf = new PrintfulClient(key);
-
-var name = "Kyle Polich"
-var address1 = "4158 Sutro Ave"
-var city = "Los Angeles"
-var state = "CA"
-var country_code = "US"
-var zip = "90008"
 
 pf.post('orders',
     {
