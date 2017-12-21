@@ -23,7 +23,7 @@ const NavLink = styled.a`
     font-size: 14px;
     font-weight: 200;
     color: ${props => props.active ? props => props.theme.colors.primary : props.theme.colors.link}; 
-    padding: 30px 0px;
+    padding: 29px 0px;
     border-bottom: 2px solid ${props => props.active ? props => props.theme.colors.primary : 'transparent'};
     box-sizing: content-box;
     margin-right: 40px;

@@ -66,7 +66,7 @@ export default class BlogSingle extends Component {
                     {this.hasEpisode() && <EpisodePlayer post={post}/> }
 
                     <Post post={post}/>
-                    <AuthorBlock author={post.author}/>
+                    {post.author && <AuthorBlock author={post.author}/>}
                     <SubscriptionForm />
 
                     {post.related && <RelatedContent items={post.related}/>}
