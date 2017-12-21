@@ -91,7 +91,7 @@ const FooterWrapper = styled.footer`
     
     ${media.phone`
         flex-direction: column;
-        padding: 20px 15px;
+        padding: 20px 5px;
     `};
 `
 

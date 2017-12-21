@@ -2,6 +2,7 @@ import React from 'react'
 import CartItem from "./CartItem";
 import styled from 'styled-components'
 import Link from '../../../components/Link'
+import CountrySelector from "./CountrySelector";
 
 const CartList = ({amount, cartList, changeQuantity, removeItem, checkoutButton = true}) => (
     <Wrapper>
@@ -28,7 +29,7 @@ const CartList = ({amount, cartList, changeQuantity, removeItem, checkoutButton 
                         <div>${cartList.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}</div>
                     </Row>
                     <Row>
-                        <div>Shipping [select]</div>
+                        <div>Shipping [COUNTRY]</div>
                         <div>${(4).toFixed(2)}</div>
                     </Row>
                 </SubTotal>

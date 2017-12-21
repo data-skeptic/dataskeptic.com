@@ -27,4 +27,6 @@ const Container = styled.div`
    
   ${media.tablet`padding: 0 30px;`} 
   ${media.phone`padding: 0 15px;`};
+  
+  ${props => props.fullWidth && `padding:0 !important;`}
 `

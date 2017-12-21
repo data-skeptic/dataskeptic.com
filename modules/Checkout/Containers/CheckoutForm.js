@@ -30,6 +30,8 @@ export default class CheckoutForm extends Component {
 
         return (
             <Wrapper>
+                <Title>Checkout</Title>
+
                 <Form
                     onSubmit={(data) => alert(data)}
                     render={Checkout}
@@ -41,3 +43,9 @@ export default class CheckoutForm extends Component {
 }
 
 const Wrapper = styled.div``
+
+const Title = styled.h2`
+    font-size: 32px;
+    margin: 0px;
+    padding: 0px;
+`
