@@ -227,6 +227,16 @@ export default function adminReducer(state = defaultState, action) {
             {confirm: 1}
         ).success(ok_callback).error(error_callback);
         break
+    case 'INIT_CMS':
+        var env = 'dev'
+        var query = `
+        select prettyname, title, author, abstract
+        from blog
+        where env='` + env + `'
+        and coalesce(publish_date, '2099-01-01') > now()`
+
+
+        break
     case 'INIT_ORDERS':
         var dispatch = action.payload.dispatch
         var uri = "https://api.scalablepress.com/v2/categories"
