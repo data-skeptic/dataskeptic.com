@@ -95,15 +95,14 @@ export const getBlogRss = (blogmetadata_map, prettyname) => {
         description: 'Data Skeptic is your source for a perspective of scientific skepticism on topics in statistics, machine learning, big data, artificial intelligence, and data science. Our weekly podcast and blog bring you stories and tutorials to help understand our data-driven world.',
         feed_url: `${BASE_URL}/api/blog/rss`,
         site_url: BASE_URL,
-        managingEditor: 'Kyle',
-        language: 'en'
+        managingEditor: 'kyle@dataskeptic.com'
     });
 
     each(blogs, (blog) => {
         if (!blog) return;
 
         if (blog.env === 'master') { // don't share dev on master
-            feed.item(new BlogItem(blog, prettyname));
+            feed.item(new BlogItem(blog));
         }
     });
 

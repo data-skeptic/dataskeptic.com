@@ -51,7 +51,7 @@ module.exports = (cache) => {
 
         BlogServices.getBlogRss(cache().blogmetadata_map, prettyName)
             .then((data) => {
-                res.send(data);
+                res.status(200).end(data)
             })
             .catch((err) => {
                 res.send(err);
