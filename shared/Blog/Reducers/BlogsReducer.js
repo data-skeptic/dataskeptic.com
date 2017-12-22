@@ -166,7 +166,8 @@ export default function blogsReducer(state = defaultState, action) {
 
         case LOAD_BLOG_POST_SUCCESS:
             nstate.postLoading = false;
-            // nstate.currentPost = action.payload.post;
+            nstate.blog_focus.blog = action.payload.post
+            nstate.currentPost = action.payload.post;
             break;
 
         case LOAD_BLOG_POST_FAILED:

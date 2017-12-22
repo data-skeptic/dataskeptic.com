@@ -10,17 +10,14 @@ export function clearEpisode(dispatch) {
 }
 
 export function loadEpisode(guid, dispatch) {
-	let lastReqGuid = guid;
+    dispatch({type: "CLEAR_FOCUS_EPISODE"})
 
 	axios
 		.get("/api/episodes/get/" + guid)
   		.then(function(result) {
   			var episode = result["data"]
 
-			// update only with latest request
-			if (lastReqGuid === episode.guid) {
-  				dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
-			}
+            dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
 		})
 		.catch((err) => {
 			console.log(err)
@@ -144,7 +141,7 @@ export function get_homepage_content(dispatch) {
 	} else {
 		console.log("Loading homepage content")
 		axios
-			.get("/api/blog?limit=4")
+			.get("/api/v1/blog?limit=4")
 	  		.then(function(result) {
 	  			const { blogs }= result["data"]
 	  			var blog = blogs[0]
@@ -183,10 +180,9 @@ export function get_homepage_content(dispatch) {
 				console.log(err)
 			})
 		axios
-			.get("/api/episodes/list?limit=1")
+			.get("/api/v1/episodes/list?limit=1")
 	  		.then(function(result) {
-	  			var episodes = result["data"]
-	  			var episode = episodes[0]
+	  			var episode = result.data.episodes[0]
 				dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
 			})
 			.catch((err) => {

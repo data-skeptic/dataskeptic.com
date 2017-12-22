@@ -69,7 +69,7 @@ class BlogRouter extends React.Component {
 		var folders = oblogs.folders || []
 		var blog_focus = oblogs.blog_focus
 		if (prettyname != blog_focus.prettyname) {
-			getBlog(dispatch, env, prettyname)
+			// getBlog(dispatch, env, prettyname)
 		}
 	}
 
