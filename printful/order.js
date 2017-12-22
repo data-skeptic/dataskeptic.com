@@ -4,13 +4,12 @@ var key = '';
 const order = require('./order-template.json')
 var items = order['items']
 
-var name = "n"
-var address1 = "a"
-var city = "Campbell"
+var name = "Kyle Polich"
+var address1 = "4158 Sutro Ave"
+var city = "Los Angeles"
 var state = "CA"
 var country_code = "US"
-var zip = "95008"
-var size = "M"
+var zip = "90008"
 
 var variantMap = {
               "S": 474
@@ -43,7 +42,6 @@ var error_callback = function(message, info){
 }
 
 var pf = new PrintfulClient(key);
-
 
 pf.post('orders',
     {

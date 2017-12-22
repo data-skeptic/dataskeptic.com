@@ -30,58 +30,36 @@ aws.config.update(
     }
 );
 
-var sns = new aws.SNS();
-
-
-
- var endpointArn = "arn:aws:sns:us-east-1:085318171245:ds-boot";
-
-  var payload = {
-    default: 'Reboot',
-    APNS: {
-      aps: {
-        alert: 'Rebooting',
-        sound: 'default',
-        badge: 1
-      }
-    }
-  };
-  payload.APNS = JSON.stringify(payload.APNS);
-  payload = JSON.stringify(payload);
-  console.log('sending push');
-  console.dir('sending push');
-  sns.publish({
-    Message: payload,
-    MessageStructure: 'json',
-    TargetArn: endpointArn
-  }, function(err, data) {
-    if (err) {
-      console.log(err.stack);
-      return;
-    }
-    console.log('push sent');
-    console.log(data);
-  });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+if (env == "prod") {
+	var sns = new aws.SNS();
+	var endpointArn = "arn:aws:sns:us-east-1:085318171245:ds-boot";
+	var payload = {
+    	default: 'Reboot',
+    	APNS: {
+     		aps: {
+        		alert: 'Rebooting',
+		        sound: 'default',
+		        badge: 1
+      		}
+    	}
+  	};
+	payload.APNS = JSON.stringify(payload.APNS);
+	payload = JSON.stringify(payload);
+	console.log('sending push');
+	console.dir('sending push');
+	sns.publish({
+		Message: payload,
+		MessageStructure: 'json',
+		TargetArn: endpointArn
+	}, function(err, data) {
+		if (err) {
+			console.log(err.stack);
+			return;
+		}
+		console.log('push sent');
+		console.log(data);
+	});
+}
 
 
 const onError = (err) => {

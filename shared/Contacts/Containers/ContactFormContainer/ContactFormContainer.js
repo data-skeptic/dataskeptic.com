@@ -16,11 +16,10 @@ class ContactFormContainer extends Component {
     }
 
     handleSubmit({name, email, message}) {
-        const MAIL_SERVICE_URL = "https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/contact";
+        const MAIL_SERVICE_URL = "api/v1/mail";
         const error = '';
-        const data = {name, email, msg: message, error};
-        return axios
-            .post(MAIL_SERVICE_URL, data);
+        const data = {name, email, msg: message, error, type: "contact"};
+        return axios.post(MAIL_SERVICE_URL, data);
     }
 
     render() {
