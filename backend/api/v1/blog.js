@@ -48,11 +48,9 @@ module.exports = (cache) => {
     });
 
     router.get('/rss', (req, res) => {
-        const prettyName = generatePrettyName(req.params.category, req.params.year, req.params.name);
-
-        BlogServices.getBlogRss(cache.blogmetadata_map, prettyName)
+        BlogServices.getBlogRss(cache.blogmetadata_map)
             .then((data) => {
-                res.send(data);
+                res.status(200).end(data)
             })
             .catch((err) => {
                 res.send(err);
