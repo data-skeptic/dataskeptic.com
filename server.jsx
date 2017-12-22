@@ -120,20 +120,26 @@ console.log("Environment: ", env)
 const DEFAULT_ADVERTISE_HTML = `<img src="/img/advertise.png" width="100%"/>`;
 
 let Cache = {
-    title_map: {}         // `uri`             -> <title>
-    , content_map: {}       // `uri`             -? {s3 blog content}
-    , blogmetadata_map: {}  // `uri`             -> {blog}
-    , folders: []
-    , episodes_map: {}      // `guid` | 'latest' -> {episode}
-    , episodes_list: []     // guids
-    , products: {}
-    , contributors: {}
-    , advertise: {
-        card: DEFAULT_ADVERTISE_HTML,
-        banner: null
+
+}
+
+const resetCache = () => {
+    return {
+        title_map: {}         // `uri`             -> <title>
+        , content_map: {}       // `uri`             -? {s3 blog content}
+        , blogmetadata_map: {}  // `uri`             -> {blog}
+        , folders: []
+        , episodes_map: {}      // `guid` | 'latest' -> {episode}
+        , episodes_list: []     // guids
+        , products: {}
+        , contributors: {}
+        , advertise: {
+            card: DEFAULT_ADVERTISE_HTML,
+            banner: null
+        }
+        , rfc: {}
     }
-    , rfc: {}
-};
+}
 
 const reducer = combineReducers({
     ...reducers,
@@ -144,6 +150,8 @@ global.my_cache = Cache;
 global.env = env;
 
 const doRefresh = (store) => {
+    global.my_cache = Cache = resetCache()
+
     console.log("---[Refreshing cache]------------------");
     console.log(process.memoryUsage());
 
@@ -159,20 +167,6 @@ const doRefresh = (store) => {
         .then(function ({folders, blogmetadata_map, title_map, content_map}) {
             console.log("-[Refreshing blogs]-");
 
-            // clear references
-            Cache.folders = null;
-            delete Cache.folders;
-
-            Cache.blogmetadata_map = null;
-            delete Cache.blogmetadata_map;
-
-            Cache.title_map = null;
-            delete Cache.title_map;
-
-            Cache.content_map = null;
-            delete Cache.content_map;
-
-
             // fill the data again
             Cache.folders = folders;
             Cache.blogmetadata_map = blogmetadata_map;
@@ -182,13 +176,7 @@ const doRefresh = (store) => {
             return loadEpisodes(env, feed_uri, blogmetadata_map, aws);
         })
         .then(function ({episodes_map, episodes_list}, guid) {
-            console.log("-[Refreshing blogs]-");
-            // clear references
-            Cache.episodes_map = null;
-            delete Cache.episodes_map;
-
-            Cache.episodes_list = null;
-            delete Cache.episodes_list;
+            console.log("-[Refreshing episodes]-");
 
             // fill the data again
             Cache.blogmetadata_map[guid] = guid;
@@ -201,7 +189,6 @@ const doRefresh = (store) => {
             console.log("-[Refreshing products]-");
             // clear references
             Cache.products = null;
-            delete Cache.products;
 
             // fill the data
             Cache.products = {};
@@ -209,13 +196,11 @@ const doRefresh = (store) => {
         })
         .then(() => {
             Cache.contributors = get_contributors()
+
             return loadCurrentRFC()
         })
         .then((rfc) => {
-            Cache.rfc = null;
-            delete Cache.rfc;
             Cache.rfc = rfc
-            console.dir(rfc)
 
             console.log("Refreshing Finished")
         })
@@ -563,9 +548,8 @@ app.set('views', path.join(__dirname, 'views'));
 
 // authorization module
 app.use(session({secret: "DATAS"}))
-
 const api = require('./backend/api/v1');
-app.use('/api/v1/', api(Cache));
+app.use('/api/v1/', api(() => Cache));
 
 
 /***

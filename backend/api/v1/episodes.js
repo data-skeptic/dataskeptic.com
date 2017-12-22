@@ -23,7 +23,7 @@ module.exports = (cache) => {
         const pre = '/api/v1/episodes';
         url = url.substring(pre.length, url.length);
 
-        EpisodesServices.getAll(url, cache.episodes_map, offset, limit, global.env)
+        EpisodesServices.getAll(url, cache().episodes_map, offset, limit, global.env)
             .then((episodes) => {
                 res.send(episodes);
             })
@@ -35,7 +35,7 @@ module.exports = (cache) => {
     router.get('/get/:guid', function (req, res) {
 
 
-        EpisodesServices.getEpisode(cache.episodes_map, req.params.guid)
+        EpisodesServices.getEpisode(cache().episodes_map, req.params.guid)
             .then((episodes) => {
                 res.send(episodes);
             })

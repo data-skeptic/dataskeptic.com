@@ -23,8 +23,7 @@ module.exports = (cache) => {
         const pre = '/api/v1/blogs';
         url = url.substring(pre.length, url.length);
 
-
-        BlogServices.getAll(url, cache.blogmetadata_map, offset, limit, global.env)
+        BlogServices.getAll(url, cache().blogmetadata_map, offset, limit, global.env)
             .then((data) => {
                 res.send(data);
             })
@@ -38,7 +37,7 @@ module.exports = (cache) => {
     router.get('/:category/:year/:name', (req, res) => {
         const prettyName = generatePrettyName(req.params.category, req.params.year, req.params.name);
 
-        BlogServices.getPost(cache.blogmetadata_map, prettyName, cache.content_map)
+        BlogServices.getPost(cache().blogmetadata_map, prettyName, cache().content_map)
             .then((data) => {
                 res.send(data);
             })
@@ -50,7 +49,7 @@ module.exports = (cache) => {
     router.get('/rss', (req, res) => {
         const prettyName = generatePrettyName(req.params.category, req.params.year, req.params.name);
 
-        BlogServices.getBlogRss(cache.blogmetadata_map, prettyName)
+        BlogServices.getBlogRss(cache().blogmetadata_map, prettyName)
             .then((data) => {
                 res.send(data);
             })
@@ -60,7 +59,7 @@ module.exports = (cache) => {
     });
 
     router.get('/categories', (req,res) => {
-        BlogServices.getCategories(cache.folders)
+        BlogServices.getCategories(cache().folders)
             .then((data) => {
                 res.send(data);
             })
