@@ -133,54 +133,58 @@ var launch_without_ssl = function() {
 	});
 }
 
-var config_load_promise = new Promise(function(resolve, reject) {
-	var files = ['cert.pem', 'fullchain.pem', 'privkey.pem', 'config.jsn']
-	var bucket = "config-dataskeptic.com"
-	var promises = []
-	for (var file of files) {
-		var s3Key = file
-		console.log("Getting: " + s3Key)
-	    var p = new Promise((resolve, reject) => {
-		    const params = { Bucket: bucket, Key: s3Key }
-		    s3.getObject(params)
-		      .createReadStream()
-		      .pipe(fs.createWriteStream(cert_path + s3Key))
-		      .on('close', () => {
-		        resolve(true)
-		      })
-		  }) 
-	    promises.push(p)
-	}
-	return Promise.all(promises).then(function() {
-		var c = 0
-		for (file of files) {
-			console.log("Checking for " + file)
-			if (fs.existsSync(cert_path + file)) {
-			    c += 1
+function config_load_promise() {
+	var clp = new Promise(function(resolve, reject) {
+		console.log("config_load_promise")
+		var files = ['cert.pem', 'fullchain.pem', 'privkey.pem', 'config.jsn']
+		var bucket = "config-dataskeptic.com"
+		var promises = []
+		for (var file of files) {
+			var s3Key = file
+			console.log("Getting: " + s3Key)
+		    var p = new Promise((resolve, reject) => {
+			    const params = { Bucket: bucket, Key: s3Key }
+			    s3.getObject(params)
+			      .createReadStream()
+			      .pipe(fs.createWriteStream(cert_path + s3Key))
+			      .on('close', () => {
+			        resolve(true)
+			      })
+			  }) 
+		    promises.push(p)
+		}
+		return Promise.all(promises).then(function() {
+			var c = 0
+			for (file of files) {
+				console.log("Checking for " + file)
+				if (fs.existsSync(cert_path + file)) {
+				    c += 1
+				}
 			}
-		}
-		if (c == files.length) {
-			console.log("Found all expected files")
-			resolve(true)
-		} else {
-			console.log("Found less files than expected: " + c + " instead of " + files.length)
+			if (c == files.length) {
+				console.log("Found all expected files")
+				resolve(true)
+			} else {
+				console.log("Found less files than expected: " + c + " instead of " + files.length)
+				resolve(false)
+			}
+		}).catch(function(err) {
+			console.log("Errors getting files")
+			console.log(err)
 			resolve(false)
-		}
-	}).catch(function(err) {
-		console.log("Errors getting files")
-		console.log(err)
-		resolve(false)
-	})
-})
-
-if (env == 'prod') {
-	config_load_promise.then(function(result) {
+		})
+	}).then(function(result) {
 		launch_with_ssl()
 	}, function(err) {
 		console.log("Error loading config, assuming development run")
 		console.log(err)
 		launch_without_ssl()
 	});
+}
+
+if (env == 'prod') {
+	console.log("Loading as prod")
+	config_load_promise()
 } else {
 	console.log("Loading as dev")
 	launch_without_ssl()		

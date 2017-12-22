@@ -675,7 +675,6 @@ const renderPage = (req, res) => {
 
 doRefresh().then(() => {
     console.log('CACHE IS READY');
-
     app.use(renderPage);
 });
 
