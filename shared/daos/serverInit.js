@@ -110,6 +110,7 @@ export function loadBlogs(env) {
 export function loadEpisodes(env, feed_uri, blogmetadata_map, aws) {
     let data = {
         episodes_map: {},
+        episodes_content: {},
         episodes_list: []
     };
 
@@ -132,6 +133,7 @@ export function loadEpisodes(env, feed_uri, blogmetadata_map, aws) {
                         var prettyname = link.replace("http://" + domain, "").replace("https://" + domain, '').replace('.php', '').replace('/blog/', '/')
                         var guid = episode.guid
                         data.episodes_map[guid] = episode
+                        data.episodes_content[prettyname] = episode
                         if (i == 0) {
                             data.episodes_map["latest"] = episode
 
