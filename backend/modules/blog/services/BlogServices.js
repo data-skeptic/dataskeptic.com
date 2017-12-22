@@ -156,11 +156,19 @@ export const getAll = (url, blogmetadata_map, offset, limit, env, exclude = ['/e
 
 const isExist = (blogmetadata_map, prettyName) => !!blogmetadata_map[prettyName];
 
-export const getPost = (blogmetadata_map, prettyName, content_map) => {
+export const getPost = (blogmetadata_map, episodes_content, prettyName, content_map) => {
 
     let postData = {};
     let author = '';
     let relative = '';
+
+    let episodeData = {}
+    let isEpisode = false
+    if (isExist(episodes_content, prettyName)) {
+        episodeData = episodes_content[prettyName]
+        isEpisode = true
+    }
+
     if (isExist(blogmetadata_map, prettyName)) {
         const post = blogmetadata_map[prettyName];
         author = post["author"];
@@ -172,7 +180,7 @@ export const getPost = (blogmetadata_map, prettyName, content_map) => {
             title: post['title'],
             content: content_map[prettyName] || '',
 
-            isEpisode: post['isEpisode'] || false,
+            isEpisode: isEpisode,
 
             contributor: post['contributor'],
             related: post['related'],
@@ -190,6 +198,8 @@ export const getPost = (blogmetadata_map, prettyName, content_map) => {
             ...post
         });
     }
+
+
     return Promise.all([
         ContributorsService.getContributorByName(author.toLowerCase()),
         RelatedServices.getRelatedByURI("/blog" + relative.toLowerCase())
@@ -197,6 +207,7 @@ export const getPost = (blogmetadata_map, prettyName, content_map) => {
         return !isEmpty(postData) ?
             {
                 ...postData,
+                ...episodeData,
                 contributor,
                 relative
             }

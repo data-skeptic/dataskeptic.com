@@ -126,6 +126,7 @@ let Cache = {
     , folders: []
     , episodes_map: {}      // `guid` | 'latest' -> {episode}
     , episodes_list: []     // guids
+    , episodes_content: []     // pn
     , products: {}
     , contributors: {}
     , advertise: {
@@ -181,7 +182,7 @@ const doRefresh = (store) => {
 
             return loadEpisodes(env, feed_uri, blogmetadata_map, aws);
         })
-        .then(function ({episodes_map, episodes_list}, guid) {
+        .then(function ({episodes_map, episodes_list, episodes_content}, guid) {
             console.log("-[Refreshing blogs]-");
             // clear references
             Cache.episodes_map = null;
@@ -194,6 +195,7 @@ const doRefresh = (store) => {
             Cache.blogmetadata_map[guid] = guid;
             Cache.episodes_map = episodes_map;
             Cache.episodes_list = episodes_list;
+            Cache.episodes_content = episodes_content;
 
             return loadProducts(env, Cache);
         })

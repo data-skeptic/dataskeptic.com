@@ -38,7 +38,7 @@ module.exports = (cache) => {
     router.get('/:category/:year/:name', (req, res) => {
         const prettyName = generatePrettyName(req.params.category, req.params.year, req.params.name);
 
-        BlogServices.getPost(cache.blogmetadata_map, prettyName, cache.content_map)
+        BlogServices.getPost(cache.blogmetadata_map, cache.episodes_content, prettyName, cache.content_map)
             .then((data) => {
                 res.send(data);
             })
