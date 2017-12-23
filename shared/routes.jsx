@@ -24,6 +24,7 @@ import Logout                   from 'components/Logout';
 import Menu                    from 'components/Menu';
 import Membership              from 'components/Membership';
 import MembershipPortal              from 'components/MembershipPortal';
+import Analytics              from 'components/Analytics';
 import NotFound                from 'NotFound/Components/NotFound';
 import Podcast                 from 'Podcasts/Routes/Podcast';
 import Proposals               from 'Proposals/Routes/Proposals';
@@ -147,6 +148,10 @@ export default (
 
         <Route path="/membershipPortal" component={App}>
             <IndexRoute component={MembershipPortal}/>
+        </Route>
+
+        <Route path="/analytics" component={App}>
+            <IndexRoute component={Analytics}/>
         </Route>
 
         <Route path="/invoice" component={App}>
