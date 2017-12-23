@@ -5,11 +5,21 @@ import axios from "axios"
 
 import PrintfulClient from './printfulclient'
 
+var env='dev'
+
 var key = 'srpzc6en-ogi6-edom:n0ln-5zavj5mnhcxn';
 var pf = new PrintfulClient(key);
 
+var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
+
+function sns_error(location, msg) {
+    console.log({location, msg})
+}
+
 const init = {
     "email_send_msg": "",
+    "pending_blogs": [],
+    "recent_blogs": [],
 	"from": "orders@dataskeptic.com",
 	"to": "kylepolich@gmail.com",
 	"subject": "Hello from Data Skeptic",
@@ -67,8 +77,11 @@ var sizeMap = {
     "4XL": "xxxxl"
 }
 
+
+
 export default function adminReducer(state = defaultState, action) {
   var nstate = state.toJS()
+  var apromise = undefined
   switch(action.type) {
     case 'SET_EMAIL_FROM':
     	nstate.from = action.payload
@@ -285,6 +298,60 @@ export default function adminReducer(state = defaultState, action) {
     case 'ADD_INVOICE':
       nstate.invoice = action.payload
       break
+    case 'CMS_LOAD_PENDING_BLOGS':
+        var url = base_url + "/blog/pending"
+        var dispatch = action.payload.dispatch
+        axios
+            .get(url)
+            .then(function(result) {
+                console.log("good")
+                dispatch({type: "CMS_SET_PENDING_BLOGS", payload: result['data'] })
+            })
+            .catch((err) => {
+                console.log(err)
+                var errorMsg = JSON.stringify(err)
+                sns_error("CMS_LOAD_PENDING_BLOGS", errorMsg)
+                dispatch({type: "CMS_SET_PENDING_BLOGS", payload: [] })
+            })
+        break
+    case 'CMS_SET_PENDING_BLOGS':
+        var blogs = action.payload
+        nstate.pending_blogs = blogs
+        break
+    case 'CMS_LOAD_RECENT_BLOGS':
+        var url = base_url + "/blog/list"
+        var dispatch = action.payload.dispatch
+        axios
+            .get(url)
+            .then(function(result) {
+                console.log("good")
+                dispatch({type: "CMS_SET_RECENT_BLOGS", payload: result['data'] })
+            })
+            .catch((err) => {
+                console.log(err)
+                var errorMsg = JSON.stringify(err)
+                sns_error("CMS_LOAD_RECENT_BLOGS", errorMsg)
+                dispatch({type: "CMS_SET_RECENT_BLOGS", payload: [] })
+            })
+        break
+    case 'CMS_SET_RECENT_BLOGS':
+        var blogs = action.payload
+        nstate.recent_blogs = blogs
+        break
+    case 'CMS_UPDATE_BLOG':
+        var payload = action.payload
+        var url = base_url + "/blog/update"
+        axios
+            .post(url, payload)
+            .then(function(result) {
+                console.log("success!")
+            })
+            .catch((err) => {
+                console.log(err)
+                var errorMsg = JSON.stringify(err)
+                sns_error("CMS_UPDATE_BLOG", errorMsg)
+            })
+        break
   }
   return Immutable.fromJS(nstate)
 }

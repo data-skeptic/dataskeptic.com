@@ -413,7 +413,12 @@ function inject_podcast(store, my_cache, pathname) {
 }
 
 function install_blog(store, blog_metadata, content) {
-    var author = blog_metadata['author'].toLowerCase()
+    var author = blog_metadata['author']
+    if (author === undefined) {
+        author = ""
+    } else {
+        author = author.toLowerCase()
+    }
     var contributors = get_contributors()
     var contributor = contributors[author]
     var loaded = 1
@@ -625,8 +630,6 @@ const renderPage = (req, res) => {
     const location = createLocation(req.url);
 
     match({routes, location}, (err, redirectLocation, renderProps) => {
-        console.log('doing response');
-
         if (err) {
             console.error(err);
             return res.status(500).end('Internal server error');

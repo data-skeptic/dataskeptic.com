@@ -35,6 +35,7 @@ class OpenOrders extends React.Component {
 		}
 	    return (
 	    	<div>
+	    		<h3>Recent Orders</h3>
 				{
 					this.state.orders.map(function(order) {
 						return (<div key={order.id}>
