@@ -16,8 +16,8 @@ class Login extends Component {
     }
 
     componentDidMount() {
-        if (this.props.user) {
-            window.location.href = '/'
+        if (this.props.loggedIn) {
+            window.location.href = '/membershipPortal'
         }
     }
 
@@ -32,13 +32,12 @@ class Login extends Component {
     }
 
     render() {
-        const { user} = this.props
+        const { loggedIn, user } = this.props
 
-        return !user && (
+        return (
             <div className="center">
-                <code>{JSON.stringify(user)}</code>
                 <div className="admin-auth-container">
-                    {user
+                    {!loggedIn
                         ? (
                         <div>
                             <h3>Please log in</h3>
@@ -59,7 +58,8 @@ class Login extends Component {
 
 export default connect(
     (state) => ({
-        user: state.auth.getIn(['user']).toJS()
+        user: state.auth.getIn(['user']).toJS(),
+        loggedIn: state.auth.getIn(['loggedIn'])
     }),
     (dispatch) => bindActionCreators({
         changePageTitle

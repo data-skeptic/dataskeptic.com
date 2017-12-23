@@ -1,4 +1,5 @@
 import express from 'express'
+import session from "express-session";
 
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
@@ -20,18 +21,14 @@ const checkRoute = (route) => {
 module.exports = () => {
     const router = express.Router()
 
-    passport.serializeUser(function (user, done) {
-        done(null, user)
-    })
+    passport.serializeUser((user, done) => done(null, user))
+    passport.deserializeUser(async (id, done) =>
+        done(null, id)
+    )
 
-    passport.deserializeUser(function (user, done) {
-
-        done(null, user)
-    })
     //passport.use(GoogleStrategy({env}))
     passport.use(LinkedinStrategy(global.env))
-    router.use(passport.initialize())
-    router.use(passport.session())
+
 
     // REGULAR
     passport.use(
@@ -52,8 +49,6 @@ module.exports = () => {
             }
         )
     )
-
-    // REGULAR
 
     router.get('/usertest', (req, res) => {
         res.send(req.user);
@@ -123,6 +118,8 @@ module.exports = () => {
                     else{
                         //redirectURL = redirectURL + '/auth?user=' + JSON.stringify(user);
                     }
+
+                    console.dir(`user`)
                     return res.redirect(redirectURL)
                 }
 
@@ -163,8 +160,7 @@ module.exports = () => {
     router.all('/logout', function (req, res, next) {
         req.logout();
         req.session.destroy();
-        const redirectTo = req.headers.referer
-        res.redirect(redirectTo);
+        res.redirect('/');
     })
 
     return router

@@ -20,8 +20,10 @@ import DontHackMe              from 'components/DontHackMe';
 import Home                    from 'components/Home';
 import LightsOut               from 'components/LightsOut';
 import Login                   from 'components/Login';
+import Logout                   from 'components/Logout';
 import Menu                    from 'components/Menu';
 import Membership              from 'components/Membership';
+import MembershipPortal              from 'components/MembershipPortal';
 import NotFound                from 'NotFound/Components/NotFound';
 import Podcast                 from 'Podcasts/Routes/Podcast';
 import Proposals               from 'Proposals/Routes/Proposals';
@@ -137,6 +139,14 @@ export default (
 
         <Route path="/login" component={App}>
             <IndexRoute component={Login}/>
+        </Route>
+
+        <Route path="/logout" component={App}>
+            <IndexRoute component={Logout}/>
+        </Route>
+
+        <Route path="/membershipPortal" component={App}>
+            <IndexRoute component={MembershipPortal}/>
         </Route>
 
         <Route path="/invoice" component={App}>
