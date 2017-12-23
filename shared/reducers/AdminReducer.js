@@ -2,6 +2,7 @@ import Immutable from 'immutable';
 import { fromJS } from 'immutable';
 import querystring from 'querystring'
 import axios from "axios"
+import snserror from '../SnsUtil'
 
 import PrintfulClient from './printfulclient'
 
@@ -11,10 +12,6 @@ var key = 'srpzc6en-ogi6-edom:n0ln-5zavj5mnhcxn';
 var pf = new PrintfulClient(key);
 
 var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
-
-function sns_error(location, msg) {
-    console.log({location, msg})
-}
 
 const init = {
     "email_send_msg": "",
@@ -244,8 +241,7 @@ export default function adminReducer(state = defaultState, action) {
         from blog
         where env='` + env + `'
         and coalesce(publish_date, '2099-01-01') > now()`
-
-
+        snserror("test", {"hi":3})
         break
     case 'INIT_ORDERS':
         var dispatch = action.payload.dispatch
@@ -306,7 +302,7 @@ export default function adminReducer(state = defaultState, action) {
             .catch((err) => {
                 console.log(err)
                 var errorMsg = JSON.stringify(err)
-                sns_error("CMS_LOAD_PENDING_BLOGS", errorMsg)
+                snserror("CMS_LOAD_PENDING_BLOGS", errorMsg)
                 dispatch({type: "CMS_SET_PENDING_BLOGS", payload: [] })
             })
         break
@@ -325,7 +321,7 @@ export default function adminReducer(state = defaultState, action) {
             .catch((err) => {
                 console.log(err)
                 var errorMsg = JSON.stringify(err)
-                sns_error("CMS_LOAD_RECENT_BLOGS", errorMsg)
+                snserror("CMS_LOAD_RECENT_BLOGS", errorMsg)
                 dispatch({type: "CMS_SET_RECENT_BLOGS", payload: [] })
             })
         break
@@ -345,7 +341,7 @@ export default function adminReducer(state = defaultState, action) {
             .catch((err) => {
                 console.log(err)
                 var errorMsg = JSON.stringify(err)
-                sns_error("CMS_UPDATE_BLOG", errorMsg)
+                snserror("CMS_UPDATE_BLOG", errorMsg)
             })
         break
     case 'CMS_SET_HOMEPAGE_FEATURE':
@@ -359,7 +355,7 @@ export default function adminReducer(state = defaultState, action) {
             .catch((err) => {
                 console.log(err)
                 var errorMsg = JSON.stringify(err)
-                sns_error("CMS_SET_HOMEPAGE_FEATURE", errorMsg)
+                snserror("CMS_SET_HOMEPAGE_FEATURE", errorMsg)
             })
         break;
     case 'RELATED_CONTENT_ADD':
@@ -374,7 +370,7 @@ export default function adminReducer(state = defaultState, action) {
             .catch((err) => {
                 console.log(err)
                 var errorMsg = JSON.stringify(err)
-                sns_error("ADD_RELATED_CONTENT", errorMsg)
+                snserror("ADD_RELATED_CONTENT", errorMsg)
             })
         break
     case 'RELATED_CONTENT_LIST':
@@ -389,7 +385,7 @@ export default function adminReducer(state = defaultState, action) {
             .catch((err) => {
                 console.log(err)
                 var errorMsg = JSON.stringify(err)
-                sns_error("RELATED_CONTENT_LIST", errorMsg)
+                snserror("RELATED_CONTENT_LIST", errorMsg)
             })
         break
     case 'RELATED_CONTENT_LIST_SET':
@@ -419,7 +415,7 @@ export default function adminReducer(state = defaultState, action) {
             .catch((err) => {
                 console.log(err)
                 var errorMsg = JSON.stringify(err)
-                sns_error("RELATED_CONTENT_DELETE", errorMsg)
+                snserror("RELATED_CONTENT_DELETE", errorMsg)
             })        
         break
   }

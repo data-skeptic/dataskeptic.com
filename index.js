@@ -45,8 +45,6 @@ if (env == "prod") {
   	};
 	payload.APNS = JSON.stringify(payload.APNS);
 	payload = JSON.stringify(payload);
-	console.log('sending push');
-	console.dir('sending push');
 	sns.publish({
 		Message: payload,
 		MessageStructure: 'json',
