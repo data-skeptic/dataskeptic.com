@@ -123,10 +123,6 @@ export default (
             <IndexRoute component={ProposalsThankYouPage}/>
         </Route>
 
-        <Route path="/admin/login" component={App}>
-            <IndexRoute component={Login}/>
-        </Route>
-
         <Route path="/login" component={App}>
             <IndexRoute component={Login}/>
         </Route>
