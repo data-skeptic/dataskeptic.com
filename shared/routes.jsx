@@ -134,6 +134,11 @@ export default (
         <Route path="/admin/login" component={App}>
             <IndexRoute component={Login}/>
         </Route>
+
+        <Route path="/login" component={App}>
+            <IndexRoute component={Login}/>
+        </Route>
+
         <Route path="/invoice" component={App}>
             <IndexRoute component={Invoice}/>
         </Route>

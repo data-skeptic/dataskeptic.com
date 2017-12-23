@@ -16,7 +16,9 @@ class Login extends Component {
     }
 
     componentDidMount() {
-
+        if (this.props.user) {
+            window.location.href = '/'
+        }
     }
 
     static getPageMeta() {
@@ -30,11 +32,25 @@ class Login extends Component {
     }
 
     render() {
-        return (
+        const { user} = this.props
+
+        return !user && (
             <div className="center">
+                <code>{JSON.stringify(user)}</code>
                 <div className="admin-auth-container">
-                    <h3>Please log in</h3>
-                    <button className="btn btn-primary" onClick={this.login}>Log in</button>
+                    {user
+                        ? (
+                        <div>
+                            <h3>Please log in</h3>
+                            <button className="btn btn-primary" onClick={this.login}>Log in</button>
+                        </div>
+                        )
+                        : (
+                        <div>
+                            <h3>Login Success</h3>
+                        </div>
+                        )
+                    }
                 </div>
             </div>
         )
