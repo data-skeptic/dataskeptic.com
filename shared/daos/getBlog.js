@@ -10,7 +10,9 @@ export default function getBlog(dispatch, env, prettyname) {
 	} else {
 		console.log("Network: retrieving single blog metadata: " + prettyname)
 	}
-	var uri = "https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + env + "/blog?env=" + db_env + "&pn=" + prettyname
+	//var uri = "https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + env + "/blog?env=" + db_env + "&pn=" + prettyname
+	var uri = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env + "/blog/one?pn=" + prettyname
+	console.log(['uri', uri])
 	// TODO: check cache
 	axios
 		.get(uri)
