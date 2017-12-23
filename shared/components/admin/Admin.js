@@ -5,9 +5,11 @@ import {isAdministratorUser} from '../../Auth/Helpers/UserTypes'
 import SendEmail from './SendEmail'
 import OpenOrders from './OpenOrders'
 import OrderProcessing from './OrderProcessing'
+import HomepageController from './HomepageController'
 import CMS from './CMS'
 import Guests from './Guests'
 import RelatedContent from './RelatedContent'
+import RelatedContentList from './RelatedContentList'
 import Loading from '../../Common/Components/Loading'
 
 class Admin extends Component {
@@ -44,6 +46,7 @@ class Admin extends Component {
 
 	render() {
 		var oadmin = this.props.admin.toJS()
+		var relatedcontent = oadmin['relatedcontent'] || []
 		var order = oadmin.order
 		if (order == undefined) {
 			return <Loading />
@@ -65,7 +68,13 @@ class Admin extends Component {
 				<CMS admin={this.props.admin} mode="recent" />
 				<hr/>
 
+				<HomepageController />
+				<hr/>
+				
 				<RelatedContent />
+				<hr/>
+				
+				<RelatedContentList items={relatedcontent} />
 				<hr/>
 				
 				<OrderProcessing admin={this.props.admin} />

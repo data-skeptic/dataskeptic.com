@@ -33,8 +33,9 @@ class CMS extends React.Component {
 		} else if (mode == 'recent') {
 			blogs = oadmin['recent_blogs'] || []
 		}
+		var cn = "cms-" + mode
 		return (
-				<div>
+				<div className={cn}>
 				<h3>CMS {mode}</h3>
 				<table className="cms-table">
 					<thead>
