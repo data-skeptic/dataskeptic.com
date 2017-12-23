@@ -40,7 +40,8 @@ class Login extends Component {
                     {!loggedIn
                         ? (
                         <div>
-                            <h3>Please log in</h3>
+                            <h3>Membership login</h3>
+                            <p>For people with active Data Skeptic memberships, please log in via the botton below to manage your account and access exclusive features.</p>
                             <button className="btn btn-primary" onClick={this.login}>Log in</button>
                         </div>
                         )
