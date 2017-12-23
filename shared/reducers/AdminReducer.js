@@ -99,8 +99,6 @@ export default function adminReducer(state = defaultState, action) {
     	nstate.body = action.payload
     	break
     case 'SET_EMAIL_HEADER':
-        console.log("action.payload")
-        console.log(action.payload)
         nstate.send_headers = action.payload
     case 'UPDATE_ORDER':
         var u = action.payload
@@ -170,7 +168,6 @@ export default function adminReducer(state = defaultState, action) {
         var order = nstate.order
 
         var ok_callback = function(r, info) {
-            console.log("OK!!!")
             var resp = r['data']
             console.log(resp)
             var errorMsg = "Success!"
@@ -304,7 +301,6 @@ export default function adminReducer(state = defaultState, action) {
         axios
             .get(url)
             .then(function(result) {
-                console.log("good")
                 dispatch({type: "CMS_SET_PENDING_BLOGS", payload: result['data'] })
             })
             .catch((err) => {
@@ -324,7 +320,6 @@ export default function adminReducer(state = defaultState, action) {
         axios
             .get(url)
             .then(function(result) {
-                console.log("good")
                 dispatch({type: "CMS_SET_RECENT_BLOGS", payload: result['data'] })
             })
             .catch((err) => {
@@ -345,12 +340,87 @@ export default function adminReducer(state = defaultState, action) {
             .post(url, payload)
             .then(function(result) {
                 console.log("success!")
+                alert(result)
             })
             .catch((err) => {
                 console.log(err)
                 var errorMsg = JSON.stringify(err)
                 sns_error("CMS_UPDATE_BLOG", errorMsg)
             })
+        break
+    case 'CMS_SET_HOMEPAGE_FEATURE':
+        var payload = action.payload
+        var url = base_url + "/cms/homepage"
+        axios
+            .post(url, payload)
+            .then(function(result) {
+                alert("success!")
+            })
+            .catch((err) => {
+                console.log(err)
+                var errorMsg = JSON.stringify(err)
+                sns_error("CMS_SET_HOMEPAGE_FEATURE", errorMsg)
+            })
+        break;
+    case 'RELATED_CONTENT_ADD':
+        var payload = action.payload
+        var dispatch = payload['dispatch']
+        var url = base_url + "/blog/relatedcontent/add"
+        axios
+            .post(url, payload['data'])
+            .then(function(result) {
+                dispatch({type: "RELATED_CONTENT_LIST", payload: {dispatch} })
+            })
+            .catch((err) => {
+                console.log(err)
+                var errorMsg = JSON.stringify(err)
+                sns_error("ADD_RELATED_CONTENT", errorMsg)
+            })
+        break
+    case 'RELATED_CONTENT_LIST':
+        var dispatch = action.payload.dispatch
+        var url = base_url + "/blog/relatedcontent/list"
+        axios
+            .get(url)
+            .then(function(result) {
+                var rcs = result['data']
+                dispatch({type: "RELATED_CONTENT_LIST_SET", payload: rcs })
+            })
+            .catch((err) => {
+                console.log(err)
+                var errorMsg = JSON.stringify(err)
+                sns_error("RELATED_CONTENT_LIST", errorMsg)
+            })
+        break
+    case 'RELATED_CONTENT_LIST_SET':
+        var rcs = action.payload
+        nstate.relatedcontent = rcs
+        break
+    case 'RELATED_CONTENT_DELETE':
+        var payload = action.payload
+        var nlist = []
+        var content_id = payload['content_id']
+        var i = 0
+        while (i < nstate.relatedcontent.length) {
+            var rc = nstate.relatedcontent[i]
+            console.log([rc, i, content_id])
+            if (rc['content_id'] != content_id) {
+                nlist.push(rc)
+            }
+            i+=1
+        }
+        console.log(nlist)
+        nstate.relatedcontent = nlist
+        var url = base_url + "/blog/relatedcontent/delete"
+        axios
+            .post(url, payload)
+            .then(function(result) {
+            })
+            .catch((err) => {
+                console.log(err)
+                var errorMsg = JSON.stringify(err)
+                sns_error("RELATED_CONTENT_DELETE", errorMsg)
+            })        
         break
   }
   return Immutable.fromJS(nstate)

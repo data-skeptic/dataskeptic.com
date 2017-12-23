@@ -47,16 +47,6 @@ function loadData() {
 	}
 }
 
-// function checkLogin(nextState) {
-//     const login = false;
-//     if(login){
-//         History.replace('/admin')
-//     }
-//     else {
-//         History.replace('/*')
-//     }
-// }
-
 function onUpdate() {
     console.log("onUpdate")
 }
@@ -131,9 +121,6 @@ export default (
             <IndexRoute component={ProposalsThankYouPage}/>
         </Route>
 
-        <Route path="/admin/login" component={App}>
-            <IndexRoute component={Login}/>
-        </Route>
         <Route path="/invoice" component={App}>
             <IndexRoute component={Invoice}/>
         </Route>
@@ -150,6 +137,9 @@ export default (
 
         <Route path="/admin" component={App}>
             <IndexRoute component={Admin}  />
+        </Route>
+        <Route path="/admin/login" component={App}>
+            <IndexRoute component={Login}/>
         </Route>
 
         <Route path="/*" component={App} onEnter={loadData}>
