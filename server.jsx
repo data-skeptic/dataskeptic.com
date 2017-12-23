@@ -147,12 +147,10 @@ const reducer = combineReducers({
     form: formReducer
 });
 
-global.my_cache = Cache;
+global.my_cache = Cache = resetCache();
 global.env = env;
 
 const doRefresh = (store) => {
-    global.my_cache = Cache = resetCache()
-
     console.log("---[Refreshing cache]------------------");
     console.log(process.memoryUsage());
 
