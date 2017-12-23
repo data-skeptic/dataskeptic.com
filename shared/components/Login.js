@@ -16,7 +16,9 @@ class Login extends Component {
     }
 
     componentDidMount() {
-
+        if (this.props.loggedIn) {
+            window.location.href = '/membershipPortal'
+        }
     }
 
     static getPageMeta() {
@@ -30,11 +32,24 @@ class Login extends Component {
     }
 
     render() {
+        const { loggedIn, user } = this.props
+
         return (
             <div className="center">
                 <div className="admin-auth-container">
-                    <h3>Please log in</h3>
-                    <button className="btn btn-primary" onClick={this.login}>Log in</button>
+                    {!loggedIn
+                        ? (
+                        <div>
+                            <h3>Please log in</h3>
+                            <button className="btn btn-primary" onClick={this.login}>Log in</button>
+                        </div>
+                        )
+                        : (
+                        <div>
+                            <h3>Login Success</h3>
+                        </div>
+                        )
+                    }
                 </div>
             </div>
         )
@@ -43,7 +58,8 @@ class Login extends Component {
 
 export default connect(
     (state) => ({
-        user: state.auth.getIn(['user']).toJS()
+        user: state.auth.getIn(['user']).toJS(),
+        loggedIn: state.auth.getIn(['loggedIn'])
     }),
     (dispatch) => bindActionCreators({
         changePageTitle

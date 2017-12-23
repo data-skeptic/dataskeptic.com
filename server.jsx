@@ -1,5 +1,5 @@
 var aws = require('aws-sdk');
-import axios                     from 'axios';
+import passport from 'passport'
 import session from 'express-session';
 import {getRelatedContent, deleteRelatedContentByUri} from 'backend/admin/admin_related_services'
 import {get_blogs}               from 'backend/get_blogs'
@@ -245,6 +245,24 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
     extended: true
 }))
+
+app.use(
+    session({
+        secret: 'MvwDvMBzJXBVcPXJmkbHDHahAxU6AYFVbJDJyFKwBvGCDsxXgv',
+        cookie: {
+            maxAge: 86400000
+        },
+        resave: false,
+        saveUninitialized: false
+    })
+)
+app.use(passport.initialize());
+app.use(passport.session());
+
+// authorization module
+const api = require('./backend/api/v1');
+app.use('/api/v1/', api(() => Cache));
+
 
 function api_router(req, res) {
     if (req.url.indexOf('/api/slack/join') == 0) {
@@ -529,9 +547,7 @@ function updateState(store, pathname, req) {
         }
     })
 
-    const user = req.session &&
-        req.session.passport &&
-        req.session.passport.user;
+    const user = req.user;
 
     if (user) {
         console.log('dispatch sessioned user')
@@ -544,17 +560,11 @@ function updateState(store, pathname, req) {
             }
         })
     }
+    console.dir(`AUTH_USER_EMPTY`)
 }
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-
-
-// authorization module
-app.use(session({secret: "DATAS"}))
-const api = require('./backend/api/v1');
-app.use('/api/v1/', api(() => Cache));
-
 
 function renderView(store, renderProps, location) {
     const InitialView = (
