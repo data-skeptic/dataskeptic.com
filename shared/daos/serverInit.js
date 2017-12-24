@@ -49,7 +49,6 @@ function populate_one(cm, blog) {
 function populate_content_map(blogs, data) {
     var cm = data['content_map']
     var n = blogs.length
-    n = 4
     for (var i=0; i < n; i++) {
         var blog = blogs[i]
         populate_one(cm, blog)
