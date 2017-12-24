@@ -7,6 +7,7 @@ import snserror from '../../SnsUtil'
 import LatestEpisodePlayer from "../Containers/LatestEpisodePlayer"
 import MailingListBlogFooter from "./MailingListBlogFooter"
 import BlogLink from './BlogLink'
+import BlogBreadCrumbs from './BlogBreadCrumbs'
 
 class BlogItem extends React.Component {
 	constructor(props) {
@@ -45,6 +46,7 @@ class BlogItem extends React.Component {
 		}
 		return (
 			<div className="center">
+				<BlogBreadCrumbs prettyname={prettyname} />
 				{top}
 				<span dangerouslySetInnerHTML={{__html: content}} />
 				{bot}

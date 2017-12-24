@@ -6,9 +6,10 @@ import { redirects_map } from '../../../redirects';
 
 import NotFound from '../../NotFound/Components/NotFound'
 import BlogArticle from "../Containers/BlogArticle"
-import BlogNav from "../Components/BlogNav"
+import BlogTopNav from "../Components/BlogTopNav"
 import BlogItem from "../Components/BlogItem"
 import BlogList from "../Components/BlogList"
+import BlogBreadCrumbs from '../Components/BlogBreadCrumbs'
 import NoBlogs from "../Components/NoBlogs"
 import Error from "../../Common/Components/Error"
 import Loading from "../../Common/Components/Loading"
@@ -66,7 +67,7 @@ class BlogRouter extends React.Component {
 	    var k = '/blog'
 	    var path = pathname.substring(k.length, pathname.length)
 	    console.log("inject_blog router path=" + path)
-	    var limit = 10
+	    var limit = 100
 	    var count = 0
 	    var i = 0
 	    var l = allblogs.length
@@ -86,8 +87,10 @@ class BlogRouter extends React.Component {
 	render() {
 		console.log(this.props.location.pathname)
 		var pathname = this.props.location.pathname
+		var pname = pathname.substring(5, pathname.length)
 		var oblogs = this.props.blogs.toJS()
 		var allblogs = oblogs['blogs']
+		var folders = oblogs['folders']
 		var blogs = this.filter_blogs(allblogs, pathname)
 	    if (blogs.length == 0) {
 	        console.log("No blogs loaded")
@@ -97,7 +100,14 @@ class BlogRouter extends React.Component {
 	    	console.log(blogs[0])
 			return <BlogItem blog={blogs[0]} />
 		} else {
-			return <BlogList blogs={blogs} />
+			return (
+				<div className="center">
+					<BlogTopNav pathname={pathname} blogs={blogs} />
+					<div className="center">
+						<BlogList blogs={blogs} />
+					</div>
+				</div>
+			)
 		}
 	}
 }

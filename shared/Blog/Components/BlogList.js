@@ -8,9 +8,8 @@ import isCtrlOrCommandKey from '../../utils/isCtrlOrCommandKey';
 
 class BlogList extends Component {
 
-    constructor() {
-        super();
-
+    constructor(props) {
+        super(props);
         this.onItemClick = this.onItemClick.bind(this);
     }
 
@@ -26,10 +25,14 @@ class BlogList extends Component {
     render() {
     	const { blogs = [], onClick, latestId } = this.props;
         return (
-            <div className="center">
+            <div>
                 <div className="row blog-summary-container">
                     {blogs.map((blog, index) => {
-                        return <BlogListItem key={index} blog={blog} onClick={this.onItemClick} isLatest={blog.c_hash===latestId}/>
+                        return (
+                            <div>
+                                <BlogListItem key={index} blog={blog} onClick={this.onItemClick} isLatest={blog.c_hash===latestId}/>
+                            </div>
+                        )
                     })}
                 </div>
             </div>
