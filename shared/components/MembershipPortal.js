@@ -7,8 +7,8 @@ import Loading from '../Common/Components/Loading';
 import {changePageTitle} from '../Layout/Actions/LayoutActions';
 
 class MembershipPortal extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
     }
 
     componentWillMount() {
@@ -25,7 +25,7 @@ class MembershipPortal extends Component {
         }
         var user = this.props.user
         var p = {dispatch, user}
-        //dispatch({type: "CHECK_MEMBERSHIP", payload: p })      
+        dispatch({type: "CHECK_MEMBERSHIP", payload: p })      
     }
 
     static getPageMeta() {

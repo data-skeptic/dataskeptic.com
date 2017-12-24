@@ -2,8 +2,6 @@ import axios from "axios"
 import {get_contributors} from 'backend/get_contributors'
 import contact_form_send from '../daos/contact_form_send'
 
-import { loadBlogs } from '../../shared/Blog/Actions/BlogsActions';
-
 export function clearEpisode(dispatch) {
 	dispatch({type: "CLEAR_FOCUS_EPISODE"})
 }

@@ -417,8 +417,10 @@ function inject_blog(store, my_cache, pathname) {
 }
 
 function updateState(store, pathname, req) {
+    console.log(["updateState", pathname])
     inject_folders(store, Cache)
     inject_years(store, Cache)
+    inject_blog(store, Cache, pathname)
 
     store.dispatch({type: "PROPOSAL_SET_BUCKET", payload: {aws_proposals_bucket}})
 
@@ -429,7 +431,6 @@ function updateState(store, pathname, req) {
         inject_homepage(store, Cache, pathname)
     }
     if (pathname.indexOf('/blog') === 0) {
-        inject_blog(store, Cache, pathname)
     }
     else if (pathname === "/members" || pathname === "/store") {
         inject_products(store, Cache, pathname)
@@ -439,20 +440,6 @@ function updateState(store, pathname, req) {
     }
 
     store.dispatch({type: "ADD_FOLDERS", payload: Cache.folders});
-
-    store.dispatch({
-        type: 'SET_ADVERTISE_CARD_CONTENT',
-        payload: {
-            content: Cache.advertise.card
-        }
-    })
-
-    store.dispatch({
-        type: 'SET_ADVERTISE_BANNER_CONTENT',
-        payload: {
-            content: Cache.advertise.banner
-        }
-    })
 
     store.dispatch({
         type: 'FETCH_CURRENT_PROPOSAL_SUCCESS',

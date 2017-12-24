@@ -5,7 +5,6 @@ import isUndefined from 'lodash/isUndefined';
 import { redirects_map } from '../../../redirects';
 
 import NotFound from '../../NotFound/Components/NotFound'
-import BlogArticle from "../Containers/BlogArticle"
 import BlogTopNav from "../Components/BlogTopNav"
 import BlogItem from "../Components/BlogItem"
 import BlogList from "../Components/BlogList"
@@ -14,8 +13,6 @@ import NoBlogs from "../Components/NoBlogs"
 import Error from "../../Common/Components/Error"
 import Loading from "../../Common/Components/Loading"
 import transform_pathname from "../../utils/transform_pathname"
-
-import {changePageTitle} from '../../Layout/Actions/LayoutActions';
 
 class BlogRouter extends React.Component {
 
@@ -42,7 +39,8 @@ class BlogRouter extends React.Component {
         const isEpisode = !isUndefined(post.guid);
 
         let meta = {
-            title: `${post.title} | Data Skeptic`,
+            //title: `${post.title} | Data Skeptic`,
+            title: `Data Skeptic`,
 			description: post.desc
         };
 
@@ -57,7 +55,6 @@ class BlogRouter extends React.Component {
 	}
 
 	filter_blogs(allblogs, pathname) {
-	    var blogs = []
 
 	    // ???? 
 	    //var redirect = redirects_map[pathname]
@@ -71,6 +68,8 @@ class BlogRouter extends React.Component {
 	    var count = 0
 	    var i = 0
 	    var l = allblogs.length
+	    console.log("l="+l)
+	    var blogs = []
 	    while (i < l && count < limit) {
 	        var blog = allblogs[i]
 	        var pn = blog['prettyname']
@@ -80,7 +79,6 @@ class BlogRouter extends React.Component {
 	        }
 	        i += 1
 	    }
-	    var total = blogs.length
 	    return blogs
 	}
 
@@ -90,6 +88,14 @@ class BlogRouter extends React.Component {
 		var pname = pathname.substring(5, pathname.length)
 		var oblogs = this.props.blogs.toJS()
 		var allblogs = oblogs['blogs']
+		if (allblogs.length == 0) {
+			console.log("NO BLOGS IN MEMORY!")
+			return (
+				<div className="center">
+					<h2>Blog database is unreachable.  Please try again later.</h2>
+				</div>
+			)
+		}
 		var folders = oblogs['folders']
 		var blogs = this.filter_blogs(allblogs, pathname)
 	    if (blogs.length == 0) {

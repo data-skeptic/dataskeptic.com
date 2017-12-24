@@ -1,36 +1,9 @@
 import Immutable from 'immutable';
 import each from 'lodash/each';
 
-import {
-    LOAD_BLOGS_REQUEST,
-    LOAD_BLOGS_SUCCESS,
-    LOAD_BLOGS_FAILED,
-    LOAD_BLOG_POST_REQUEST,
-    LOAD_BLOG_POST_SUCCESS,
-    LOAD_BLOG_POST_FAILED,
-
-    STOP_BLOG_LOADING,
-    REMOVE_FOCUS_POST
-} from '../Actions/BlogsActions'
-
 const init = {
-    pagination: {
-        current: 0,
-        next: 1,
-        prev: 0
-    },
-    latestId: null,
-    total: 0,
     blogs: [],
-    folders: [],
-    blogs_loaded: 0,
-    blog_focus: {blog: undefined, contributor: undefined, loaded: 0, content: "", pathname: ""},
-    related: [],
-    transcript_map: {},
-    env: "prod",  // client/index.jsx will dispatch SET_BLOG_ENVIRONMENT on init
-
-    currentPost: {},
-    postLoading: true,
+    folders: []
 };
 
 const defaultState = Immutable.fromJS(init);
@@ -65,22 +38,12 @@ export default function blogsReducer(state = defaultState, action) {
                 var blog = nstate.blogs[i]
                 var pn = blog['prettyname']
                 if (blog.guid != undefined && pn.indexOf('/transcripts/') != -1) {
-                    nstate.transcript_map[blog.guid] = blog
+                    //nstate.transcript_map[blog.guid] = blog
                 }
             }
             break
-        case 'SET_BLOGS_LOADED':
-            nstate.blogs_loaded = action.payload
-            break
-        case 'FETCH_BLOGS_ERROR':
-            nstate.blogs_loaded = -1
-            nstate.blog_focus.loaded = -1
-            break
-        case 'SET_BLOGS_TOTAL':
-            nstate.total = action.payload;
-            break;
 
-
+/*
         // new code
         case LOAD_BLOGS_SUCCESS:
             nstate.blogs = action.payload.blogs;
@@ -121,7 +84,7 @@ export default function blogsReducer(state = defaultState, action) {
 
             nstate.postLoading = false;
             break;
-
+*/
     }
 
     return Immutable.fromJS(nstate)

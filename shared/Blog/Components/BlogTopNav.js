@@ -17,7 +17,9 @@ class BlogTopNav extends React.Component {
 		console.log(pname)
 		var blogs = this.props.blogs
 		var cmap = {}
-		for (var blog of blogs) {
+		console.log(blogs)
+		for (var i=0; i < blogs.length; i++) {
+			var blog = blogs[i]
 			var arr = blog['prettyname'].split('/')
 			var category = arr[1]
 			if (category != "" && category != "episodes" && category != "transcripts") {

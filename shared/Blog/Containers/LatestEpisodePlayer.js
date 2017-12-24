@@ -34,22 +34,24 @@ class LatestEpisodePlayer extends Component {
 
     render() {
         const guid = this.props.guid;
-        if (!guid) {
-            return <Error />
-        }
         var oplayer = this.props.player.toJS();
         var playback_loaded = oplayer.playback_loaded;
         var episodes = this.props.episodes.toJS();
-        var focus_episode = episodes.focus_episode;
+        console.log(episodes)
+        return <div>hi</div>
+        if (!guid) {
+            return <Error />
+        }
+        //var focus_episode = episodes.focus_episode;
 
-        var loaded = focus_episode.loaded;
-        var episode = focus_episode.episode;
-        if (loaded === -1) {
-            return <Error />
-        }
-        else if (!loaded || !episode) {
-            return <Error />
-        }
+        //var loaded = focus_episode.loaded;
+        //var episode = focus_episode.episode;
+        //if (loaded === -1) {
+        //    return <Error />
+        //}
+        //else if (!loaded || !episode) {
+        //    return <Error />
+        //}
 
         let play_symb = <span>&#9658;</span>;
         if (oplayer.is_playing) {

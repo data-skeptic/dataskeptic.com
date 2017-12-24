@@ -21,7 +21,6 @@ import PostBodyContainer from './PostBodyContainer'
 import {get_folders} from '../../utils/redux_loader'
 
 import isEmpty from 'lodash/isEmpty';
-import {loadBlogPost, stopBlogLoading} from '../Actions/BlogsActions';
 
 class BlogArticle extends Component {
     constructor(props) {

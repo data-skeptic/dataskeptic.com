@@ -4,7 +4,6 @@ import {connect} from 'react-redux';
 import moment from 'moment';
 
 import {redirects_map} from '../../../redirects';
-import {removeFocusPost} from '../../Blog/Actions/BlogsActions';
 import isCtrlOrCommandKey from '../../utils/isCtrlOrCommandKey';
 
 class Episode extends React.Component {
@@ -72,22 +71,7 @@ class Episode extends React.Component {
 
         var transcript = <div></div>
         var tep = undefined
-        try {
-            tep = oblogs.transcript_map[ep.guid]
-        } catch (err) {
-            console.log(err)
-        }
-
         const episodeLink = this.formatLink(ep.link);
-
-        if (tep) {
-            const pn = "/blog" + tep.prettyname;
-            transcript = (
-                <div className='episode-transcript-link'>
-                    <Link to={pn}>Read transcript</Link>
-                </div>
-            )
-        }
 
         return (
             <div className="row episode">

@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 
 import BlogListItem from "./BlogListItem"
-import { removeFocusPost } from '../../Blog/Actions/BlogsActions';
-
 import isCtrlOrCommandKey from '../../utils/isCtrlOrCommandKey';
 
 class BlogList extends Component {
@@ -24,6 +22,7 @@ class BlogList extends Component {
 
     render() {
     	const { blogs = [], onClick, latestId } = this.props;
+        console.log(blogs)
         return (
             <div>
                 <div className="row blog-summary-container">

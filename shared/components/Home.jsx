@@ -6,10 +6,6 @@ import Slider from "react-slick"
 
 import Episode from "../Podcasts/Components/Episode"
 import MailingList from "../Common/Components/MailingList"
-import SocialMediaCard from "./SocialMediaCard"
-import AdvertiserCard from "./AdvertiserCard"
-import EpisodeCard from "./EpisodeCard"
-import LatestBlogCard from "../Blog/Containers/LatestBlogCard"
 import LatestEpisodePlayer from "../Blog/Containers/LatestEpisodePlayer"
 import HomepageFeature from "./HomepageFeature"
 import BlogContainer from 'Blog/Routes/BlogContainer'
@@ -36,26 +32,11 @@ class Home extends Component {
   render() {
     var oepisodes = this.props.episodes.toJS()
     var oblogs = this.props.blogs.toJS()
-    var settings = {
-      dots: true,
-      infinite: true,
-      slidesToShow: 1,
-      slidesToScroll: 1,
-      arrows: 1,
-      adaptiveHeight: 1,
-      accessibility: 1,
-      autoplay: 1,
-      autoplaySpeed: 10000,
-      pauseOnHover: 1
-    };
+    var i = 0
+    console.log("lsss", oepisodes)
     var guid = undefined
-    var fe = oepisodes.focus_episode
-    if (fe != undefined) {
-      if (fe.episode != undefined) {
-        guid = fe.episode.guid
-      }
-    }
-    var blog_focus = oblogs.blog_focus
+
+    console.log("guid", guid)
     return (
       <div className="center">
         <div className="row">
