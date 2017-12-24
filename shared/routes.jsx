@@ -8,8 +8,6 @@ import configureStore                                        from './store';
 
 import Advertising             from 'components/Advertising';
 import App                     from 'components/index';
-import BlogContainer           from 'Blog/Routes/BlogContainer';
-import BlogArticle             from 'Blog/Containers/BlogArticle';
 import BlogRouter              from 'Blog/Routes/BlogRouter';
 import Checkout                from 'Checkout/Routes/Checkout/Checkout';
 import Coaching                from 'components/Coaching';
@@ -63,10 +61,7 @@ export default (
         <Route path="/advertising" name="app" component={App} onEnter={loadData}>
             <IndexRoute component={Advertising}/>
         </Route>
-        <Route path="/blog(/:pageNum)" component={App} onEnter={loadData}>
-            <IndexRoute component={BlogContainer}/>
-        </Route>
-        <Route path="/blog/*" component={App} onEnter={loadData}>
+        <Route path="/blog*" component={App} onEnter={loadData}>
             <IndexRoute component={BlogRouter}/>
         </Route>
         <Route path="/coaching" name="app" component={App} onEnter={loadData}>

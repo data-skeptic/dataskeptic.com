@@ -1,7 +1,6 @@
 import axios from "axios"
 import {get_contributors} from 'backend/get_contributors'
 import contact_form_send from '../daos/contact_form_send'
-import getBlog from '../daos/getBlog'
 
 import { loadBlogs } from '../../shared/Blog/Actions/BlogsActions';
 
@@ -116,69 +115,12 @@ export function get_folders(dispatch) {
 export function get_homepage_content(dispatch) {
 	var my_cache = global.my_cache
 	if (my_cache != undefined) {
-		var blog = my_cache.blogmetadata_map["latest"]
-		if (blog == undefined) {
-			console.log("Cound not retrieve latest")
-			var loaded = 0
-			var content = ""
-			var pathname = ""
-			var  ontributor = {}
-			var blog_focus = {blog, loaded, content, pathname, contributor}
-			dispatch({type: "SET_FOCUS_BLOG", payload: {blog_focus} })
-		} else {
-			var pathname = blog.prettyname
-			var content = my_cache.content_map[pathname]
-			var episode = my_cache.episodes_map["latest"]
-			var author = blog['author'].toLowerCase()
-			var contributors = get_contributors()
-			var contributor = contributors[author]
-			var loaded = 1
-			var blog_focus = {blog, loaded, content, pathname, contributor}
-			dispatch({type: "SET_FOCUS_BLOG", payload: {blog_focus} })
-			dispatch({type: "ADD_BLOG_CONTENT", payload: {content, blog} })
-			dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
-		}
+		var episode = my_cache.episodes_map["latest"]
+		var contributors = get_contributors()
+		var loaded = 1
+		dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
 	} else {
 		console.log("Loading homepage content")
-		axios
-			.get("/api/v1/blog?limit=4")
-	  		.then(function(result) {
-	  			const { blogs }= result["data"]
-	  			var blog = blogs[0]
-	  			var pn = blog.prettyname
-	  			var i = 1
-	  			while (i < blogs.length && (pn.indexOf("/episodes/") == 0 || pn.indexOf("/transcripts/") == 0)) {
-	  				blog = blogs[i]
-	  				pn = blog.prettyname
-	  				i += 1
-	  			}
-	  			var loaded = 1
-	  			var pathname = "/blog" + blog["prettyname"]
-				var author = blog['author'].toLowerCase()
-				var contributors = get_contributors()
-				var contributor = contributors[author]
-				var envv = blog["env"]
-				if (envv == "prod" || envv == "master") {
-					envv = ""
-				} else {
-					envv += "."
-				}
-				var key = blog["rendered"]
-				var uri = "https://s3.amazonaws.com/" + envv + 'dataskeptic.com/' + key
-				axios.get(uri).then(function(result) {
-					var content = result.data
-					var blog_focus = {blog, loaded, content, pathname, contributor}
-					dispatch({type: "SET_FOCUS_BLOG", payload: {blog_focus} })
-					dispatch({type: "ADD_BLOG_CONTENT", payload: {content, blog} })
-				})
-				.catch((err) => {
-					console.log("Content cache error trying to store blog content")
-					console.log(err)
-				})
-			})
-			.catch((err) => {
-				console.log(err)
-			})
 		axios
 			.get("/api/v1/episodes/list?limit=1")
 	  		.then(function(result) {
@@ -188,43 +130,6 @@ export function get_homepage_content(dispatch) {
 			.catch((err) => {
 				console.log(err)
 			})
-	}	
-}
-
-export function get_blogs_list(dispatch, pathname) {
-	const prefix = "/blog"
-	const bpathname = pathname.substring(prefix.length, pathname.length)
-	const my_cache = global.my_cache
-
-	if (my_cache != undefined) {
-		const blogmetadata_map = my_cache.blogmetadata_map
-		const keys = Object.keys(blogmetadata_map)
-		let blogs = []
-		let limit = 30
-		for (let i=0; i < keys.length & blogs.length < limit; i++) {
-			const key = keys[i]
-
-			// cached blogs structure
-            if (key === "latest" || key === "guid") {
-				continue;
-            }
-
-			const blog = blogmetadata_map[key]
-
-			if (!blog) continue;
-			const pn = blog.prettyname
-			if (pn.indexOf(bpathname) === 0) {
-                if (blog.author) {
-                    blog.contributor = my_cache.contributors[blog.author.toLowerCase()]
-                }
-                blogs.push(blog)
-			}
-		}
-		const total = keys.length;
-		dispatch({type: "ADD_BLOGS", payload: {blogs, total}})
-	} else {
-		console.log("Getting blogs")
-        loadBlogs(pathname, dispatch);
 	}	
 }
 

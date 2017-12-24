@@ -27,9 +27,12 @@ class BlogListItem extends Component {
     render() {
         const { onClick, blog, isLatest=false } = this.props;
 
+        // Get guest photo
+        // For mini, do LT+KP photo
+        // else img = default
+
         const link = this.formatLink(blog.prettyname);
         const date = isLatest ? moment(blog.publish_date).fromNow() : moment(blog.publish_date).format('MMMM D, YYYY');
-
         return (
             <div className="col-xs-12">
 	            <div className="blog-summary" key={blog.uri}>
@@ -47,7 +50,8 @@ class BlogListItem extends Component {
                     </div>
 	                <p className="blog-desc">
                         {blog.desc}
-                        ... <Link className="blog-view-more" to={link}>View More &gt;</Link>
+                        ... <br/>
+                        <Link className="blog-view-more" to={link}>View More &gt;</Link>
                     </p>
 	            </div>
             </div>

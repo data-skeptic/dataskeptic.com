@@ -186,7 +186,6 @@ export const getPost = (blogmetadata_map, episodes_content, prettyName, content_
 
             rendered: post['rendered'],
 
-            discoveredAt: post['date_discovered'],
             renderedAt: post['last_rendered'],
             publishedAt: post['publish_date'],
 

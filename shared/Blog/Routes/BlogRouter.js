@@ -1,7 +1,3 @@
-/*
-	Will ship you to either BlogArticle for a post
-	or to Blog.js for listings
-*/
 import React from "react"
 import ReactDOM from "react-dom"
 import { connect } from 'react-redux'
@@ -12,10 +8,11 @@ import NotFound from '../../NotFound/Components/NotFound'
 import BlogArticle from "../Containers/BlogArticle"
 import BlogNav from "../Components/BlogNav"
 import BlogItem from "../Components/BlogItem"
+import BlogList from "../Components/BlogList"
+import NoBlogs from "../Components/NoBlogs"
 import Error from "../../Common/Components/Error"
 import Loading from "../../Common/Components/Loading"
 import transform_pathname from "../../utils/transform_pathname"
-import getBlog from "../../daos/getBlog"
 
 import {changePageTitle} from '../../Layout/Actions/LayoutActions';
 
@@ -27,12 +24,11 @@ class BlogRouter extends React.Component {
 
     componentDidMount() {
         const {dispatch} = this.props;
-        const {title} = BlogRouter.getPageMeta(this.props);
-        dispatch(changePageTitle(title));
+        //const {title} = BlogRouter.getPageMeta(this.props);
+        //dispatch(changePageTitle(title));
     }
 
     static getPageMeta(state) {
-		// TODO: add 404 api method and provide not found page
 		const isExists = state.blogs.getIn(['blog_focus', 'blog']);
 		if (!isExists) {
 			return {
@@ -57,62 +53,52 @@ class BlogRouter extends React.Component {
     }
 
 	componentDidMount() {
-		var dispatch = this.props.dispatch
-		var pathname = this.props.location.pathname
-		var k = '/blog'
-		var prettyname = ""
-		if (pathname.length > k.length && pathname.indexOf(k) == 0) {
-			prettyname = pathname.substring(k.length, pathname.length)
-		}
-		var oblogs = this.props.blogs.toJS()
-		var env = oblogs.env
-		var folders = oblogs.folders || []
-		var blog_focus = oblogs.blog_focus
-		if (prettyname != blog_focus.prettyname) {
-			// getBlog(dispatch, env, prettyname)
-		}
+	}
+
+	filter_blogs(allblogs, pathname) {
+	    var blogs = []
+
+	    // ???? 
+	    //var redirect = redirects_map[pathname]
+	    //if (redirect) {
+	    //  pathname = redirect
+	    //}
+	    var k = '/blog'
+	    var path = pathname.substring(k.length, pathname.length)
+	    console.log("inject_blog router path=" + path)
+	    var limit = 10
+	    var count = 0
+	    var i = 0
+	    var l = allblogs.length
+	    while (i < l && count < limit) {
+	        var blog = allblogs[i]
+	        var pn = blog['prettyname']
+	        if (pn.indexOf(path) == 0) {
+                blogs.push(blog)
+                count += 1                
+	        }
+	        i += 1
+	    }
+	    var total = blogs.length
+	    return blogs
 	}
 
 	render() {
+		console.log(this.props.location.pathname)
 		var pathname = this.props.location.pathname
-		var k = '/blog'
-		var prettyname = ""
-		if (pathname.length > k.length && pathname.indexOf(k) == 0) {
-			prettyname = pathname.substring(k.length, pathname.length)
-		}
 		var oblogs = this.props.blogs.toJS()
-		if (oblogs.error) {
-			return <div>not found!</div>
+		var allblogs = oblogs['blogs']
+		var blogs = this.filter_blogs(allblogs, pathname)
+	    if (blogs.length == 0) {
+	        console.log("No blogs loaded")
+	        return <NoBlogs />
+	    } else if (blogs.length == 1) {
+	    	console.log("one blog")
+	    	console.log(blogs[0])
+			return <BlogItem blog={blogs[0]} />
+		} else {
+			return <BlogList blogs={blogs} />
 		}
-
-		var folders = oblogs.folders || []
-		var blog_focus = oblogs.blog_focus
-
-		/*
-			Check against folders
-		*/
-		var i=0
-		while (i < folders.length) {
-			var folder = "/" + folders[i] + "/"
-			if (folder == prettyname) {
-				return null;
-				return <Blog pathname={pathname} />
-			}
-			i += 1
-		}
-		/*
-			Must be a blog page if we got here
-		*/
-		var redirect = redirects_map[pathname]
-		if (redirect) {
-			pathname = redirect
-		}
-
-		return (
-			<div className="center">
-				<BlogArticle postUrl={pathname} />
-			</div>
-		)
 	}
 }
 

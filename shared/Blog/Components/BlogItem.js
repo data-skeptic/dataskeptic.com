@@ -3,7 +3,7 @@ import ReactDOM from "react-dom"
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import ReactDisqusComments from 'react-disqus-comments'
-
+import snserror from '../../SnsUtil'
 import LatestEpisodePlayer from "../Containers/LatestEpisodePlayer"
 import MailingListBlogFooter from "./MailingListBlogFooter"
 import BlogLink from './BlogLink'
@@ -20,44 +20,29 @@ class BlogItem extends React.Component {
 	}
 
     handleNewComment(comment) {
-    	// TODO: Maybe use a cognitive service here?
-        console.log(comment.text);
-    }
+        console.log(comment.text)
+		snserror("Blog comment", comment.text, "ds-newblog")
+	}
 
 	render() {
-		var oepisodes = this.props.episodes.toJS()
-		var oblogs = this.props.blogs.toJS()
+        console.log("render here")
 		var osite = this.props.site.toJS()
+		var oepisodes = this.props.episodes.toJS()
 		var disqus_username = osite.disqus_username
-		var blog_focus = oblogs.blog_focus
-		var title = this.props.title
-		var isEpisode = false
-
+		var blog = this.props.blog
+		var oblogs = this.props.blogs.toJS()
+		var prettyname = blog.prettyname
+		var content = oblogs.content_map[prettyname]
+		var url = 'http://dataskeptic.com/blog' + blog.prettyname
+		var title = blog['title']
 		var top = <div></div>
-		if (blog_focus.blog != undefined && blog_focus.blog.guid != undefined) {
-			var ep = oepisodes.episodes_map[blog_focus.blog.guid]
-			console.log("ep")
-			console.log(ep)
-			try {
-				top = (
-					<div className="home-player">
-						<LatestEpisodePlayer guid={blog_focus.blog.guid} />
-					</div>
-				)
-				isEpisode = true					
-			}
-			catch (err) {
-				console.log(err)
-				top = <div></div>
-			}
-		}
 		var bot = <div></div>
-		var content = blog_focus.content || "Loading...."
-		if (content == "") {
-			content = "Loading....."
+		var guid = blog.guid
+		if (guid) {
+			top = (
+				<LatestEpisodePlayer guid={guid} />
+			)				
 		}
-		var uid = 'http://dataskeptic.com/blog' + blog_focus.blog.prettyname
-
 		return (
 			<div className="center">
 				{top}
@@ -66,9 +51,9 @@ class BlogItem extends React.Component {
 				<MailingListBlogFooter />
 	            <ReactDisqusComments
 	                shortname={disqus_username}
-	                identifier={uid}
+	                identifier={url}
 	                title={title}
-	                url={uid}
+	                url={url}
 	                onNewComment={this.handleNewComment}/>
 			</div>
 		)

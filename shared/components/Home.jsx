@@ -11,6 +11,8 @@ import AdvertiserCard from "./AdvertiserCard"
 import EpisodeCard from "./EpisodeCard"
 import LatestBlogCard from "../Blog/Containers/LatestBlogCard"
 import LatestEpisodePlayer from "../Blog/Containers/LatestEpisodePlayer"
+import HomepageFeature from "./HomepageFeature"
+import BlogContainer from 'Blog/Routes/BlogContainer'
 
 import {changePageTitle} from '../Layout/Actions/LayoutActions';
 import {get_homepage_content} from '../utils/redux_loader'
@@ -57,13 +59,10 @@ class Home extends Component {
     return (
       <div className="center">
         <div className="row">
-          <div className="col-sm-12 home-statement">
-            <p>Data Skeptic is your source for a perspective of scientific skepticism on topics in statistics, machine learning, big data, artificial intelligence, and data science.  Our weekly podcast and blog bring you stories and tutorials to help understand our data-driven world.</p>
-            <p>To reach out to the podcast, please visit our <a href="/contact-us">Contact Us</a> page.</p>
+          <div className="col-xs-12 col-sm-8">
+            <HomepageFeature />
           </div>
-        </div>
-        <div className="row">
-          <div className="col-xs-12 col-sm-12">
+          <div className="col-xs-12 col-sm-4">
             <LatestEpisodePlayer guid={guid} />
             <MailingList />
           </div>
