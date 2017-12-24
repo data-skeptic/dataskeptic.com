@@ -127,7 +127,6 @@ const resetCache = () => {
     return {
         title_map: {}         // `uri`             -> <title>
         , content_map: {}       // `uri`             -? {s3 blog content}
-        , blogmetadata_map: {}  // `uri`             -> {blog}
         , folders: []
         , episodes_map: {}      // `guid` | 'latest' -> {episode}
         , episodes_list: []     // guids
@@ -151,34 +150,26 @@ global.my_cache = Cache = resetCache();
 global.env = env;
 
 const doRefresh = (store) => {
-    console.log("---[Refreshing cache]------------------");
-    console.log(process.memoryUsage());
-
     let env = global.env;
 
     return loadAdvertiseContent(env)
         .then(([cardHtml, bannerHtml]) => {
             Cache.advertise.card = cardHtml ? cardHtml : DEFAULT_ADVERTISE_HTML;
             Cache.advertise.banner = bannerHtml;
-
             return loadBlogs(env)
         })
-        .then(function ({folders, blogmetadata_map, title_map, content_map}) {
+        .then(function (result) {
             console.log("-[Refreshing blogs]-");
-
-            // fill the data again
-            Cache.folders = folders;
-            Cache.blogmetadata_map = blogmetadata_map;
-            Cache.title_map = title_map;
-            Cache.content_map = content_map;
-
-            return loadEpisodes(env, feed_uri, blogmetadata_map, aws);
+            console.log(Object.keys(result))
+            Cache.folders = result['folders']
+            Cache.blogs = result['blogs']
+            Cache.content_map = result['content_map']
+            return loadEpisodes(env)
         })
         .then(function ({episodes_map, episodes_list, episodes_content}, guid) {
             console.log("-[Refreshing episodes]-");
 
             // fill the data again
-            Cache.blogmetadata_map[guid] = guid;
             Cache.episodes_map = episodes_map;
             Cache.episodes_list = episodes_list;
             Cache.episodes_content = episodes_content;
@@ -203,7 +194,6 @@ const doRefresh = (store) => {
 
             console.log("Refreshing Finished")
         })
-        // .then(() => global.gc())
         .catch((err) => {
             console.log(err);
         })
@@ -331,11 +321,11 @@ function api_router(req, res) {
         return res.status(200).end(JSON.stringify(folders))
     }
     else if (req.url.indexOf('/api/blog/rss') === 0) {
-        get_blogs_rss(req, res, Cache.blogmetadata_map);
+        get_blogs_rss(req, res, Cache.blogs);
         return true
     }
     else if (req.url.indexOf('/api/blog') === 0) {
-        get_blogs(req, res, Cache.blogmetadata_map, env);
+        get_blogs(req, res, Cache.blogs, env);
         return true
     }
     else if (req.url.indexOf('/api/store/list') == 0) {
@@ -353,8 +343,6 @@ function api_router(req, res) {
     else if (req.url == '/api/rfc/list') {
         get_rfc_metadata(req, res, Cache, docClient, rfc_table_name, latest_rfc_id)
         return true
-    } else if (req.url == '/api/test') {
-        return res.status(200).end(JSON.stringify(Cache.blogmetadata_map));
     } else if (req.url === '/api/admin/related') {
         getRelatedContent(req.body.uri, docClient)
             .then(related => {
@@ -400,20 +388,6 @@ function inject_years(store, my_cache) {
 }
 
 function inject_homepage(store, my_cache, pathname) {
-    var map = my_cache.blogmetadata_map
-    var blog_metadata = map["latest"]
-    if (blog_metadata != undefined) {
-        var pn = blog_metadata.prettyname
-        var blog_page = pn.substring('/blog'.length, pn.length)
-        var content = my_cache.content_map[pn]
-        if (content == undefined) {
-            content = ""
-        }
-        install_blog(store, blog_metadata, content)
-        var episode = my_cache.episodes_map["latest"]
-        install_episode(store, episode);
-    }
-    install_blog(store, blog_metadata, content)
     var episode = my_cache.episodes_map["latest"]
     install_episode(store, episode)
 }
@@ -428,78 +402,18 @@ function inject_podcast(store, my_cache, pathname) {
     store.dispatch({type: "ADD_EPISODES", payload: episodes})
 }
 
-function install_blog(store, blog_metadata, content) {
-    var author = blog_metadata['author']
-    if (author === undefined) {
-        author = ""
-    } else {
-        author = author.toLowerCase()
-    }
-    var contributors = get_contributors()
-    var contributor = contributors[author]
-    var loaded = 1
-    var blog = blog_metadata
-    var pathname = "/blog" + blog.prettyname
-
-    const related = related_cache[pathname] || [];
-    blog.related = related;
-    var blog_focus = {blog, loaded, content, pathname, contributor};
-
-    const post = {
-        ...blog,
-        content
-    };
-
-    store.dispatch({type: "LOAD_BLOG_POST_SUCCESS", payload: {post}});
-    store.dispatch({type: "SET_FOCUS_BLOG", payload: {blog_focus}});
-}
-
 function install_episode(store, episode) {
     console.log('install_episode')
     store.dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
 }
 
 function inject_blog(store, my_cache, pathname) {
-    var blog_page = pathname.substring('/blog'.length, pathname.length)
-    var content = my_cache.content_map[blog_page]
-    if (content == undefined) {
-        content = ""
-    }
-    var blog_metadata = my_cache.blogmetadata_map[blog_page]
-    if (blog_metadata == undefined) {
-        blog_metadata = {}
-        var dispatch = store.dispatch
-        var blogs = get_blogs_list(dispatch, pathname)
-        console.log("Could not find blog_metadata for " + blog_page)
-    } else {
-        var guid = blog_metadata.guid
-        if (guid != undefined) {
-            var episode = my_cache.episodes_map[guid]
-            if (episode != undefined) {
-                install_episode(store, episode)
-            } else {
-                console.log("Bogus guid found")
-            }
-        } else {
-            var guid = blog_metadata.guid
-            if (guid) {
-                var episode = my_cache.episodes_map[guid]
-                if (episode) {
-                    blog_metadata['preview'] = episode.img;
-                    install_episode(store, episode)
-                } else {
-                    console.log("Bogus guid found")
-                }
-            } else {
-                console.log("No episode guid found")
-            }
-
-            install_blog(store, blog_metadata, content)
-        }
-
-        install_blog(store, blog_metadata, content)
-    }
-    console.log("done with blog inject")
+    console.log("pathname="+pathname)
+    console.log(Object.keys(my_cache))
+    var blogs = my_cache['blogs']
+    var content_map = my_cache['content_map']
+    var total = blogs.length
+    store.dispatch({type: "ADD_BLOGS", payload: {blogs, content_map, total}});
 }
 
 function updateState(store, pathname, req) {
