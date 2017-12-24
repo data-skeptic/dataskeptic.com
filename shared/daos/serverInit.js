@@ -38,14 +38,12 @@ function populate_one(cm, blog) {
     var s3key = src_file
     var params = { Bucket: bucket, Key: s3key }
     var prettyname = blog['prettyname']
-    /*
     s3.getObject(params, function(errr, d) {
         console.log("Retrieved: ", prettyname)
         var content = d.Body.toString('utf-8')
-        cm[prettyname] = d
+        cm[prettyname] = content
     });
-    */
-    cm[prettyname] = "Content for " + prettyname
+    cm[prettyname] = ""
 }
 
 function populate_content_map(blogs, data) {
