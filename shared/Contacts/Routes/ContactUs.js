@@ -22,8 +22,8 @@ class ContactUs extends React.Component {
 
     static getPageMeta() {
         return {
-            title: 'Contact Us | Data Skeptic',
-			description: 'We hope to respond to all inquiries, but sometimes the volume of incoming questions can cause our queue to explode. We prioritize responses to Data Skeptic members first, and to those who ask questions in a public forum like Twitter, our Facebook wall (not Facebook direct message), or Slack. Many people can benefit from responses in public places.'
+            title: `Contact Us | Data Skeptic`,
+			description: `We hope to respond to all inquiries, but sometimes the volume of incoming questions can cause our queue to explode. We prioritize responses to Data Skeptic members first, and to those who ask questions in a public forum like Twitter, our Facebook wall (not Facebook direct message), or Slack. Many people can benefit from responses in public places.`
         }
     }
 

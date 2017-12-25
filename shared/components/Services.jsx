@@ -19,7 +19,7 @@ class Services extends React.Component {
 
     static getPageMeta() {
         return {
-            title: 'Services | Data Skeptic'
+            title: `Services | Data Skeptic`
         }
     }
     

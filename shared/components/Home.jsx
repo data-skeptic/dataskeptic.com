@@ -25,7 +25,7 @@ class Home extends Component {
 
   static getPageMeta() {
       return {
-          title: 'Data Skeptic'
+          title: `Data Skeptic`
       }
   }
 

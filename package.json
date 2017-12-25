@@ -44,6 +44,7 @@
     "fs": "0.0.1-security",
     "fs-extra": "^2.0.0",
     "history": "^1.17.0",
+    "html-entities": "^1.2.1",
     "http-proxy-middleware": "^0.17.4",
     "http-server": "^0.8.5",
     "immutable": "^3.7.6",

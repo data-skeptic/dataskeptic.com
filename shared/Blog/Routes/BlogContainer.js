@@ -37,7 +37,7 @@ class BlogContainer extends Component {
 
     static getPageMeta() {
         return {
-            title: 'Blogs | Data Skeptic'
+            title: `Blogs | Data Skeptic`
         }
     }
 

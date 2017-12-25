@@ -23,7 +23,7 @@ class Login extends Component {
 
     static getPageMeta() {
         return {
-            title: 'Login | Data Skeptic'
+            title: `Login | Data Skeptic`
         }
     }
 

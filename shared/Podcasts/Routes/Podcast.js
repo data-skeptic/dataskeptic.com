@@ -34,7 +34,7 @@ class Podcast extends Component {
 
     static getPageMeta() {
         return {
-            title: 'Podcasts | Data Skeptic'
+            title: `Podcasts | Data Skeptic`
         }
     }
 

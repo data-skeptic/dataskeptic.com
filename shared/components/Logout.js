@@ -21,7 +21,7 @@ class Logout extends Component {
 
     static getPageMeta() {
         return {
-            title: 'Logout | Data Skeptic'
+            title: `Logout | Data Skeptic`
         }
     }
 

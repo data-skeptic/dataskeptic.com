@@ -45,7 +45,7 @@ class Proposals extends Component {
 
     static getPageMeta() {
         return {
-            title: 'Request for Comment | Data Skeptic'
+            title: `Request for Comment | Data Skeptic`
         }
     }
 

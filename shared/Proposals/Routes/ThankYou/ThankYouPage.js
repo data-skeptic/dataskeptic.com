@@ -18,7 +18,7 @@ class ProposalsThankYouPage extends Component {
 
     static getPageMeta() {
         return {
-            title: 'Thank you | Data Skeptic'
+            title: `Thank you | Data Skeptic`
         }
     }
 

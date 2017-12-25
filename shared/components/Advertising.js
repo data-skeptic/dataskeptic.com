@@ -13,7 +13,7 @@ class Advertising extends Component {
 
     static getPageMeta() {
         return {
-            title: 'Advertising | Data Skeptic'
+            title: `Advertising | Data Skeptic`
         }
     }
 

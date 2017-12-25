@@ -60,6 +60,10 @@ import {
     get_related_content
 }                         from 'utils/redux_loader';
 import redirects_map             from './redirects';
+// page meta data decoding
+const Entities = require('html-entities').XmlEntities;
+const entities = new Entities();
+
 
 import {reducer as formReducer} from 'redux-form'
 
@@ -488,6 +492,12 @@ function renderView(store, renderProps, location) {
     activePageComponent = (activePageComponent.length > 0) ? activePageComponent[0] : null;
     if (activePageComponent) {
         meta = extend(meta, activePageComponent.getPageMeta(state));
+        meta = {
+            title: entities.encode(meta.title),
+            description: entities.encode(meta.description),
+            author: entities.encode(meta.author),
+            keywoards: entities.encode(meta.keywoards),
+        }
     }
 
     return {

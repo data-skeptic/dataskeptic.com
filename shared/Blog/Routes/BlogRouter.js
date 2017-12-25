@@ -41,7 +41,7 @@ class BlogRouter extends React.Component {
         let meta = {
             //title: `${post.title} | Data Skeptic`,
             title: `Data Skeptic`,
-			description: post.desc
+			description: `${post.desc}`
         };
 
         if (isEpisode) {
