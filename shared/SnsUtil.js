@@ -1,6 +1,8 @@
 const aws = require('aws-sdk')
 
-var env = 'prod'
+var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
+console.info(`SNSUTIL ENV`, env)
+
 
 var sns = new aws.SNS()
 
