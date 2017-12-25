@@ -4,6 +4,15 @@ var env = 'prod'
 
 var sns = new aws.SNS()
 
+/*
+Member signup		ds-new-mbr
+Member login		ds-mem-log
+Item sold			ds-salesuc
+RFC login			ds-rfc-log
+New episode posted	ds-new-epi
+New blog posted		ds-newblog
+*/
+
 const c = require('../config/config.json')
 var aws_accessKeyId = c[env]['aws']['accessKeyId']
 var aws_secretAccessKey = c[env]['aws']['secretAccessKey']
