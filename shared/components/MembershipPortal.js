@@ -3,7 +3,6 @@ import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import Loading from '../Common/Components/Loading';
 
-
 import {changePageTitle} from '../Layout/Actions/LayoutActions';
 
 class MembershipPortal extends Component {
@@ -13,7 +12,7 @@ class MembershipPortal extends Component {
 
     componentWillMount() {
         const {title} = MembershipPortal.getPageMeta();
-        this.props.changePageTitle(title);
+        this.props.dispatch(changePageTitle(title))
     }
 
     componentDidMount() {
@@ -129,8 +128,5 @@ export default connect(
         user: state.auth.getIn(['user']).toJS(),
         loggedIn: state.auth.getIn(['loggedIn']),
         memberportal: state.memberportal,
-    }),
-    (dispatch) => bindActionCreators({
-        changePageTitle
-    }, dispatch)
+    })
 )(MembershipPortal);
