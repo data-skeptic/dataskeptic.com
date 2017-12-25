@@ -7,7 +7,7 @@ import sha1 from 'sha1';
 import NavLink from '../../../components/NavLink'
 
 const LINKS = {
-	ITUNES: 'https://itunes.apple.com/us/podcast/the-data-skeptic-podcast/id890348705',
+	ITUNES: 'https://itunes.apple.com/podcast/the-data-skeptic-podcast/id890348705',
 	GOOGLE: 'https://play.google.com/music/m/Ibr6e2jb7ot6m6gupwdjgsfmoqa?t=Data_Skeptic',
 	STITCHER: 'http://www.stitcher.com/s?fid=50561&amp;refid=stpr',
 	RSS: '/api/blog/rss',
