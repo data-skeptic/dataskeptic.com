@@ -17,7 +17,7 @@ const LINKS = {
 	YOUTUBE: 'https://youtube.com/dataskeptic'
 };
 
-export const Footer = ({showAds, foo, pathname, linkClick, banner=null }) =>  (
+export const Footer = ({showAds = true, foo, pathname, linkClick, banner=null }) =>  (
 	<div>
         <div className="advert center">
 			{showAds && (banner

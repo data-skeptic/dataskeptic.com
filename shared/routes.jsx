@@ -127,7 +127,7 @@ export default (
             <IndexRoute component={Logout}/>
         </Route>
 
-        <Route path="/membershipPortal" component={App}>
+        <Route path="/membershipPortal" showAds={false} component={App}>
             <IndexRoute component={MembershipPortal}/>
         </Route>
 
