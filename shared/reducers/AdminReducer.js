@@ -6,7 +6,7 @@ import snserror from '../SnsUtil'
 
 import PrintfulClient from './printfulclient'
 
-var env='dev'
+var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
 
 var key = 'srpzc6en-ogi6-edom:n0ln-5zavj5mnhcxn';
 var pf = new PrintfulClient(key);

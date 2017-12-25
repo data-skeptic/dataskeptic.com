@@ -4,7 +4,7 @@ import querystring from 'querystring'
 import axios from "axios"
 import snserror from '../SnsUtil'
 
-var env='dev'
+var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
 
 
 var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
