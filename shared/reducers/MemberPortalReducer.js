@@ -24,12 +24,11 @@ export default function memberPortalReducer(state = defaultState, action) {
     	var email = action.payload
     	var data = {email}
     	var dispatch = action.payload.dispatch
-    	console.log(email)
     	var uri = base_url + '/members/check'
         axios
-            .get(uri, data)
+            .post(uri, data)
             .then(function(result) {
-            	if (result['status'] == "ok") {
+            	if (result['data']['status'] == "ok") {
 	        		var mode = "found"
 		            dispatch({type: "UPDATE_MEMBERSHIP_MODE", payload: {mode} })
             	} else {
@@ -46,6 +45,8 @@ export default function memberPortalReducer(state = defaultState, action) {
         break
     case 'UPDATE_MEMBERSHIP_MODE':
     	console.log("UPDATE_MEMBERSHIP_MODE")
+        var mode = action.payload.mode
+        nstate.mode = mode
   }
   return Immutable.fromJS(nstate)
 }
