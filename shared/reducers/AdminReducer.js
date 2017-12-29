@@ -8,8 +8,10 @@ import PrintfulClient from './printfulclient'
 
 var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
 
-var key = 'srpzc6en-ogi6-edom:n0ln-5zavj5mnhcxn';
-var pf = new PrintfulClient(key);
+const config = require('../../config/config.json');
+
+var printful_key = config[env]["printful"]["api"]
+var pf = new PrintfulClient(printful_key);
 
 var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
