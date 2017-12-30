@@ -1,5 +1,6 @@
 import xml2js from 'xml2js'
 import axios  from 'axios'
+import snserror from '../SnsUtil'
 
 const aws = require('aws-sdk')
 const s3 = new aws.S3();
@@ -12,6 +13,9 @@ import {extractFolders} from '../utils/blog_utils'
 const ADVERTISE_CARD_CONTENT = 'https://s3.amazonaws.com/dataskeptic.com/dassets/carousel/latest.htm';
 const ADVERTISE_BANNER_CONTENT = 'https://s3.amazonaws.com/dataskeptic.com/dassets/banner/latest.htm';
 
+const env = process.env.NODE_ENV
+
+var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
 export function loadProducts(env) {
     const uri = "https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + env + "/products"
@@ -55,24 +59,19 @@ function populate_content_map(blogs, data) {
     }
 }
 
-export function loadBlogs(env) {
-    let data = {
-        folders: [],
-        blogs: [],
-        content_map: {}
-    };
-    var uri = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env + "/blog/all"
-    return axios.get(uri)
-        .then(function (result) {
-            let blogs = result.data;
-            console.log('load blogs success: ' + blogs.length)
-            populate_content_map(blogs, data)
-            data.folders = extractFolders(blogs)
-            data.blogs = blogs
-            return data
+export function load_blogs(prefix, limit, offset, dispatch) {
+    var url = base_url + "/blog/list?limit=" + limit + "&offset=" + offset + "&prefix=" + prefix
+    axios
+        .get(url)
+        .then(function(result) {
+            console.log("blog api success")
+            dispatch({type: "CMS_SET_RECENT_BLOGS", payload: result['data'] })
         })
         .catch((err) => {
-            console.log("loadBlogs error: " + err)
+            console.log(err)
+            var errorMsg = JSON.stringify(err)
+            snserror("CMS_LOAD_RECENT_BLOGS", errorMsg)
+            dispatch({type: "CMS_SET_RECENT_BLOGS", payload: [] })
         })
 }
 

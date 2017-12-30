@@ -10,6 +10,9 @@ class HomepageFeature extends React.Component {
 	}
 
 	render() {
+		var ocms = this.props.cms.toJS()
+		console.log(ocms)
+		
 		return (
 			<div>
 				<div className="hf-title"><h2>Title</h2></div>
@@ -22,5 +25,7 @@ class HomepageFeature extends React.Component {
 	}
 }
 
-export default connect(state => ({  }))(HomepageFeature)
+export default connect(state => ({ 
+	cms: state.cms
+}))(HomepageFeature)
 

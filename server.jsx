@@ -22,7 +22,6 @@ import bodyParser                from 'body-parser'
 import compression               from 'compression';
 import {feed_uri}                from 'daos/episodes'
 import {
-    loadBlogs,
     loadEpisodes,
     loadProducts,
     loadAdvertiseContent,
@@ -156,14 +155,6 @@ const doRefresh = (store) => {
         .then(([cardHtml, bannerHtml]) => {
             Cache.advertise.card = cardHtml ? cardHtml : DEFAULT_ADVERTISE_HTML;
             Cache.advertise.banner = bannerHtml;
-            return loadBlogs(env)
-        })
-        .then(function (result) {
-            console.log("-[Refreshing blogs]-");
-            console.log(Object.keys(result))
-            Cache.folders = result['folders']
-            Cache.blogs = result['blogs']
-            Cache.content_map = result['content_map']
             return loadEpisodes(env)
         })
         .then(function ({episodes_map, episodes_list, episodes_content}, guid) {
@@ -407,20 +398,10 @@ function install_episode(store, episode) {
     store.dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
 }
 
-function inject_blog(store, my_cache, pathname) {
-    console.log("pathname="+pathname)
-    console.log(Object.keys(my_cache))
-    var blogs = my_cache['blogs']
-    var content_map = my_cache['content_map']
-    var total = blogs.length
-    store.dispatch({type: "ADD_BLOGS", payload: {blogs, content_map, total}});
-}
-
 function updateState(store, pathname, req) {
     console.log(["updateState", pathname])
     inject_folders(store, Cache)
     inject_years(store, Cache)
-    inject_blog(store, Cache, pathname)
 
     store.dispatch({type: "PROPOSAL_SET_BUCKET", payload: {aws_proposals_bucket}})
 
