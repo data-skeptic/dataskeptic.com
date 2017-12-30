@@ -8,7 +8,7 @@ class HomepageController extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			blog_id: 0
+			"tmp_blog_id": 0
 		}
 	}
 
@@ -16,31 +16,47 @@ class HomepageController extends React.Component {
 	}
 
 	update(me, title, event) {
-		console.log(event)
-		console.log(event.target)
-		console.log(event.target.value)
 		var s = me.state
-		s[title] = event.target.value
-    	me.setState(s);
+		var val = event.target.value
+    	me.setState({"tmp_blog_id": val});
 	}
 
 	save(blog_id, dispatch) {
+		var blog_id = this.state.tmp_blog_id
+		console.log(blog_id)
 	    dispatch({type: "CMS_SET_HOMEPAGE_FEATURE", payload: {blog_id} })
 	}
 
 	render() {
 		var dispatch = this.props.dispatch
-		var blog_id = this.state.blog_id
+		var ocms = this.props.cms.toJS()
+		var blog_id = 0
+		if ('featured_blog' in ocms) {
+			var featured_blog = ocms['featured_blog']
+			blog_id = featured_blog['blog_id']
+		}
+		var tmp_blog_id = this.state.tmp_blog_id
+		if (tmp_blog_id != 0 && tmp_blog_id != blog_id) {
+			blog_id = tmp_blog_id
+		}
+		if (blog_id == 0 || blog_id == undefined) {
+			return <div className="center">Loading</div>
+		}
+
 		var me = this
 		return (
 			<div>
 				<h3>Feature of the week</h3>
-				blog_id:
-				<input onChange={this.update.bind(this, me, "blog_id")} value={blog_id} />
-				<button onClick={this.save.bind(this, blog_id, dispatch)}>Update</button>
+				<div className="row">
+					<div classname="col-xs-12 col-sm-2">blog_id:</div>
+					<div classname="col-xs-6 col-sm-5"><input onChange={this.update.bind(this, me, "blog_id")} value={blog_id} /></div>
+					<div classname="col-xs-6 col-sm-5"><button onClick={this.save.bind(this, blog_id, dispatch)}>Update</button></div>
+				</div>
 			</div>
 		)
 	}
 }
-export default connect(state => ({}))(HomepageController)
+export default connect(state => ({
+	cms: state.cms
+}))(HomepageController)
 

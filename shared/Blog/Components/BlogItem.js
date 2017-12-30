@@ -4,7 +4,7 @@ import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import ReactDisqusComments from 'react-disqus-comments'
 import snserror from '../../SnsUtil'
-import LatestEpisodePlayer from "../Containers/LatestEpisodePlayer"
+import EpisodePlayer from "../../components/EpisodePlayer"
 import MailingListBlogFooter from "./MailingListBlogFooter"
 import BlogLink from './BlogLink'
 import BlogBreadCrumbs from './BlogBreadCrumbs'
@@ -39,9 +39,10 @@ class BlogItem extends React.Component {
 		var top = <div></div>
 		var bot = <div></div>
 		var guid = blog.guid
+		var episode = undefined
 		if (guid) {
 			top = (
-				<LatestEpisodePlayer guid={guid} />
+				<EpisodePlayer episode={episode} />
 			)				
 		}
 		return (

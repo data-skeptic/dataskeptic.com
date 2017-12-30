@@ -4,54 +4,30 @@ import moment from 'moment';
 
 import {Link} from 'react-router';
 
-import Loading from "../../Common/Components/Loading"
-import Error from "../../Common/Components/Error"
-import {loadEpisode, clearEpisode} from "../../utils/redux_loader"
+import Loading from "../Common/Components/Loading"
+import Error from "../Common/Components/Error"
+import {loadEpisode, clearEpisode} from "../utils/redux_loader"
 
-class LatestEpisodePlayer extends Component {
+class EpisodePlayer extends Component {
     constructor(props) {
         super(props)
     }
 
-    componentWillMount() {
-        var dispatch = this.props.dispatch;
-        var episodes = this.props.episodes.toJS();
-        var focus_episode = episodes.focus_episode;
-        var guid = this.props.guid;
-        if (guid) {
-            loadEpisode(guid, dispatch)
-        }
-    }
-
-    componentWillUnmount() {
-        const {dispatch} = this.props;
-        clearEpisode(dispatch);
-    }
-
     onClick(episode) {
-        this.props.dispatch({type: "PLAY_EPISODE", payload: episode});
+        var episode = this.props.episode
+        this.props.dispatch({type: "PLAY_EPISODE", payload: episode})
     }
 
     render() {
-        const guid = this.props.guid;
-        var oplayer = this.props.player.toJS();
-        var playback_loaded = oplayer.playback_loaded;
-        var episodes = this.props.episodes.toJS();
+        const guid = this.props.guid
+        var oplayer = this.props.player.toJS()
+        var episode = this.props.episode
+        var playback_loaded = oplayer.playback_loaded
+        return <div>ok</div>
         console.log(episodes)
-        return <div>hi</div>
         if (!guid) {
             return <Error />
         }
-        //var focus_episode = episodes.focus_episode;
-
-        //var loaded = focus_episode.loaded;
-        //var episode = focus_episode.episode;
-        //if (loaded === -1) {
-        //    return <Error />
-        //}
-        //else if (!loaded || !episode) {
-        //    return <Error />
-        //}
 
         let play_symb = <span>&#9658;</span>;
         if (oplayer.is_playing) {
@@ -63,13 +39,13 @@ class LatestEpisodePlayer extends Component {
             }
         }
 
-        const date = moment(episode.pubDate).fromNow();
-
+        const date = moment(episode.published_date).fromNow()
+        var link = "/blog" + episode.prettyname
         return (
             <div className="home-player">
                 <div className="home-player-card">
                     <div className="home-player-title"><Link className="home-player-link"
-                                                             to={episode.link}>{episode.title}</Link></div>
+                                                             to={link}>{episode.title}</Link></div>
                     <p>{date}</p>
                     <button className="episode-button" onClick={this.onClick.bind(this, episode)}>{play_symb}</button>
                 </div>
@@ -78,6 +54,8 @@ class LatestEpisodePlayer extends Component {
     }
 }
 
-export default connect(state => ({episodes: state.episodes, player: state.player}))(LatestEpisodePlayer)
+export default connect(state => ({
+    player: state.player
+}))(EpisodePlayer)
 
 

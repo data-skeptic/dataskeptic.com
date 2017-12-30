@@ -21,7 +21,13 @@ class BlogRouter extends React.Component {
 	}
 
     componentDidMount() {
-        const {dispatch} = this.props;
+		console.log(this.props.location.pathname)
+		var pathname = this.props.location.pathname
+		var pname = pathname.substring(5, pathname.length)
+        const {dispatch} = this.props
+        // TODO: pathname
+        var payload = {limit: 100, offset: 0, prefix: "pname", dispatch}
+        dispatch({type: "CMS_LOAD_RECENT_BLOGS", payload })
         //const {title} = BlogRouter.getPageMeta(this.props);
         //dispatch(changePageTitle(title));
     }
@@ -51,9 +57,6 @@ class BlogRouter extends React.Component {
         return meta;
     }
 
-	componentDidMount() {
-	}
-
 	filter_blogs(allblogs, pathname) {
 
 	    // ???? 
@@ -75,7 +78,7 @@ class BlogRouter extends React.Component {
 	        var pn = blog['prettyname']
 	        if (pn.indexOf(path) == 0) {
                 blogs.push(blog)
-                count += 1                
+                count += 1
 	        }
 	        i += 1
 	    }
@@ -83,25 +86,19 @@ class BlogRouter extends React.Component {
 	}
 
 	render() {
-		console.log(this.props.location.pathname)
 		var pathname = this.props.location.pathname
 		var pname = pathname.substring(5, pathname.length)
-		var oblogs = this.props.blogs.toJS()
-		var allblogs = oblogs['blogs']
-		if (allblogs.length == 0) {
-			console.log("NO BLOGS IN MEMORY!")
-			return (
-				<div className="center">
-					<h2>Blog database is unreachable.  Please try again later.</h2>
-				</div>
-			)
+		var ocms = this.props.cms.toJS()
+		var blogs = ocms['recent_blogs']
+		var blog_state = ocms.blog_state
+		if (blog_state == "" || blog_state == "loading" && blogs.length == 0) {
+			return <Loading />
 		}
-		var folders = oblogs['folders']
-		var blogs = this.filter_blogs(allblogs, pathname)
-	    if (blogs.length == 0) {
-	        console.log("No blogs loaded")
-	        return <NoBlogs />
-	    } else if (blogs.length == 1) {
+		if (blogs.length == 0) {
+			console.log("NO BLOGS IN MEMORY!")
+			return <NoBlogs />
+		}
+	    if (blogs.length == 1) {
 	    	console.log("one blog")
 	    	console.log(blogs[0])
 			return <BlogItem blog={blogs[0]} />
@@ -122,6 +119,7 @@ export default connect(
 	(state, ownProps) => ({
 		player: state.player,
 		blogs: state.blogs,
+		cms: state.cms,
 		episodes: state.episodes,
 		site: state.site
 	}))
