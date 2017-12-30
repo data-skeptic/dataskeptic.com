@@ -8,7 +8,6 @@ import BlogUpdater from './BlogUpdater'
 class CMS extends React.Component {
 	constructor(props) {
 		super(props);
-		console.log(props)
 		this.state = {
 			mode: props.mode
 		}
@@ -24,14 +23,14 @@ class CMS extends React.Component {
 	}
 
 	render() {
-		var oadmin = this.props.admin.toJS()
+		var ocms = this.props.cms.toJS()
 		var mode = this.state.mode
 		var dispatch = this.props.dispatch
 		var blogs = []
 		if (mode == 'pending') {
-			blogs = oadmin['pending_blogs'] || []			
+			blogs = ocms['pending_blogs'] || []			
 		} else if (mode == 'recent') {
-			blogs = oadmin['recent_blogs'] || []
+			blogs = ocms['recent_blogs'] || []
 		}
 		var cn = "cms-" + mode
 		return (
@@ -62,4 +61,6 @@ class CMS extends React.Component {
 		)
 	}
 }
-export default connect(state => ({}))(CMS)
+export default connect(state => ({
+	cms: state.cms,
+}))(CMS)
