@@ -3,7 +3,6 @@ import { fromJS } from 'immutable';
 import querystring from 'querystring'
 import axios from "axios"
 import snserror from '../SnsUtil'
-
 import PrintfulClient from './printfulclient'
 
 var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
@@ -19,6 +18,7 @@ const init = {
     "email_send_msg": "",
     "pending_blogs": [],
     "recent_blogs": [],
+    "add_related_msg": "",
 	"from": "orders@dataskeptic.com",
 	"to": "kylepolich@gmail.com",
 	"subject": "Hello from Data Skeptic",
@@ -162,8 +162,9 @@ export default function adminReducer(state = defaultState, action) {
         nstate.order.spError = action.payload
         break;
     case 'PLACE_ORDER':
+        console.log("PLACE ORDER!!")
         var dispatch = action.payload
-        nstate.order.spError = "Ordering..."
+        nstate.order.spError = "Placing order..."
         var order = nstate.order
 
         var ok_callback = function(r, info) {
@@ -175,22 +176,23 @@ export default function adminReducer(state = defaultState, action) {
 
         var error_callback = function(err) {
             console.log("api error")
-            var resp = err['data']
-            var jstr = JSON.stringify(resp['response'])
-            var errorMsg = jstr
-            dispatch({type: "SET_ORDER_SP_ERROR_MSG", payload: errorMsg })
+            var jstr = JSON.stringify(err)
+            console.log(jstr)
+            dispatch({type: "SET_ORDER_SP_ERROR_MSG", payload: jstr })
         }
 
         var variantMap = {
-              "S": 474
-            , "M": 505
-            ,"L": 536
-            ,"XL": 474
-            ,"2XL": 598
-            ,"3XL": 629
+              "sml": 474
+            , "med": 505
+            , "lrg": 536
+            , "xlg": 474
+            , "xxl": 598
+            , "xxxL": 629
         }
 
+        console.log(nstate.order.size)
         var variant_id = variantMap[nstate.order.size]
+        console.log("variant_id = " + variant_id)
 
         var oitem =     {
           "variant_id": variant_id,
@@ -220,8 +222,7 @@ export default function adminReducer(state = defaultState, action) {
 
         var oitems = [oitem]
 
-        pf.post('orders',
-            {
+        var d = {
                 recipient:  {
                     name: order.customerName,
                     address1: order.address1,
@@ -232,18 +233,13 @@ export default function adminReducer(state = defaultState, action) {
                     zip: order.zipcode
                 },
                 items: oitems
-            },
+            }
+        console.log(JSON.stringify(d))
+
+        pf.post('orders',
+            d,
             {confirm: 1}
         ).success(ok_callback).error(error_callback);
-        break
-    case 'INIT_CMS':
-        var env = 'dev'
-        var query = `
-        select prettyname, title, author, abstract
-        from blog
-        where env='` + env + `'
-        and coalesce(publish_date, '2099-01-01') > now()`
-        snserror("test", {"hi":3})
         break
     case 'INIT_ORDERS':
         var dispatch = action.payload.dispatch
@@ -293,81 +289,15 @@ export default function adminReducer(state = defaultState, action) {
     case 'ADD_INVOICE':
       nstate.invoice = action.payload
       break
-    case 'CMS_LOAD_PENDING_BLOGS':
-        var url = base_url + "/blog/pending"
-        var dispatch = action.payload.dispatch
-        axios
-            .get(url)
-            .then(function(result) {
-                dispatch({type: "CMS_SET_PENDING_BLOGS", payload: result['data'] })
-            })
-            .catch((err) => {
-                console.log(err)
-                var errorMsg = JSON.stringify(err)
-                snserror("CMS_LOAD_PENDING_BLOGS", errorMsg)
-                dispatch({type: "CMS_SET_PENDING_BLOGS", payload: [] })
-            })
-        break
-    case 'CMS_SET_PENDING_BLOGS':
-        var blogs = action.payload
-        nstate.pending_blogs = blogs
-        break
-    case 'CMS_LOAD_RECENT_BLOGS':
-        var url = base_url + "/blog/list"
-        var dispatch = action.payload.dispatch
-        axios
-            .get(url)
-            .then(function(result) {
-                dispatch({type: "CMS_SET_RECENT_BLOGS", payload: result['data'] })
-            })
-            .catch((err) => {
-                console.log(err)
-                var errorMsg = JSON.stringify(err)
-                snserror("CMS_LOAD_RECENT_BLOGS", errorMsg)
-                dispatch({type: "CMS_SET_RECENT_BLOGS", payload: [] })
-            })
-        break
-    case 'CMS_SET_RECENT_BLOGS':
-        var blogs = action.payload
-        nstate.recent_blogs = blogs
-        break
-    case 'CMS_UPDATE_BLOG':
-        var payload = action.payload
-        var url = base_url + "/blog/update"
-        axios
-            .post(url, payload)
-            .then(function(result) {
-                console.log("success!")
-                alert(result)
-            })
-            .catch((err) => {
-                console.log(err)
-                var errorMsg = JSON.stringify(err)
-                snserror("CMS_UPDATE_BLOG", errorMsg)
-            })
-        break
-    case 'CMS_SET_HOMEPAGE_FEATURE':
-        var payload = action.payload
-        var url = base_url + "/cms/homepage"
-        axios
-            .post(url, payload)
-            .then(function(result) {
-                alert("success!")
-            })
-            .catch((err) => {
-                console.log(err)
-                var errorMsg = JSON.stringify(err)
-                snserror("CMS_SET_HOMEPAGE_FEATURE", errorMsg)
-            })
-        break;
     case 'RELATED_CONTENT_ADD':
         var payload = action.payload
         var dispatch = payload['dispatch']
         var url = base_url + "/blog/relatedcontent/add"
+        nstate.add_related_msg = "Saving..."
         axios
             .post(url, payload['data'])
             .then(function(result) {
-                dispatch({type: "RELATED_CONTENT_LIST", payload: {dispatch} })
+                dispatch({type: "RELATED_CONTENT_LIST", payload: {dispatch, "add_related_msg": "Saved!"} })
             })
             .catch((err) => {
                 console.log(err)
@@ -377,6 +307,9 @@ export default function adminReducer(state = defaultState, action) {
         break
     case 'RELATED_CONTENT_LIST':
         var dispatch = action.payload.dispatch
+        if (action.payload.add_related_msg != undefined) {
+            nstate.add_related_msg = action.payload.add_related_msg
+        }
         var url = base_url + "/blog/relatedcontent/list"
         axios
             .get(url)
