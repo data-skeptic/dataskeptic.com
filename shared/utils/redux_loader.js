@@ -21,61 +21,6 @@ export function loadEpisode(guid, dispatch) {
 		})
 }
 
-export function pay_invoice(prod, dispatch, event, id, amount) {
-	dispatch({type: "START_INVOICE_PAYMENT", payload: {}})
-	if (prod) {
-    	var key = 'pk_live_JcvvQ05E9jgvtPjONUQdCqYg'
-	} else {
-		var key = 'pk_test_oYGXSwgw9Jde2TOg7vZtCRGo'
-	}
-
-	Stripe.setPublishableKey(key)
-
-	Stripe.createToken(event.target, function(status, response) {
-		var token = response.id
-		var paymentError = ""
-		if (response.error) {
-			paymentError = response.error.message
-			var pubError = "Error: " + paymentError
-			console.log(pubError)
-			dispatch({type: "INVOICE_ERROR", payload: {paymentError: pubError}})
-			var msg = {err: paymentError, invoice: "yes"}
-			var email = "invoice"
-			contact_form_send("dataskeptic.com", email, msg, undefined)
-
-		} else {
-			var uri = "/api/invoice/pay?id=" + id + "&token=" + token + "&amount=" + amount
-			axios
-				.get(uri)
-				.then(function(resp) {
-					var r = resp['data']
-					dispatch({type: "INVOICE_RESULT", payload: r })
-				})
-				.catch(function(err) {
-					console.log(err)
-					var r = err["data"]
-					dispatch({type: "INVOICE_RESULT", payload: r })
-				})
-		}
-	})
-}
-
-export function get_invoice(dispatch, id) {
-    var uri = "/api/invoice?id=" + id
-    axios
-        .get(uri)
-        .then(function(resp) {
-          var invoice = resp['data']
-          console.log("invoice")
-          console.log(invoice)
-          console.log(uri)
-          dispatch({type: "ADD_INVOICE", payload: invoice })
-        })
-        .catch(function(err) {
-          console.log(err)
-        })
-}
-
 export function get_related_content(dispatch, pathname) {
     const uri = "/api/Related?uri=" + pathname;
 

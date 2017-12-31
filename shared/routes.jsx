@@ -35,7 +35,6 @@ import ProposalsThankYouPage   from 'Proposals/Routes/ThankYou/ThankYouPage';
 import PrivacyPageContainer    from 'Privacy/Containers/PrivacyPageContainer'
 
 import Admin                   from 'components/admin/Admin';
-import Invoice                 from 'Checkout/Routes/Invoices/Invoice';
 
 import SnlImpact               from 'components/l/SnlImpact';
 
@@ -133,10 +132,6 @@ export default (
 
         <Route path="/analytics" component={App}>
             <IndexRoute component={Analytics}/>
-        </Route>
-
-        <Route path="/invoice" component={App}>
-            <IndexRoute component={Invoice}/>
         </Route>
 
         <Route path="/wp-login.php" component={App} onEnter={loadData}>

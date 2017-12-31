@@ -5,10 +5,6 @@ import axios from 'axios';
 import contact_form_send from '../../daos/contact_form_send'
 
 import {
-    RESET_INVOICE,
-    START_INVOICE_PAYMENT,
-    INVOICE_ERROR,
-    INVOICE_RESULT,
     ADD_TO_CART,
     CHANGE_CART_QUANTITY,
     REMOVE_CART_PRODUCT,
@@ -55,12 +51,7 @@ const init = {
   },
   invalid_submit: false,
   focus: "first_name",
-  focus_msg: "",
-  invoice: {
-    submitDisabled: false,
-    paymentError: "",
-    paymentComplete: false
-  }
+  focus_msg: ""
 };
 
 const defaultState = Immutable.fromJS(init);
@@ -242,35 +233,6 @@ export default function CartReducer(state = defaultState, action) {
     nstate.country_long = "United States of America"
   }
   switch(action.type) {
-    case RESET_INVOICE:
-        nstate.invoice.submitDisabled = false
-        nstate.invoice.paymentError = ""
-        nstate.invoice.paymentComplete = false
-        break
-    case START_INVOICE_PAYMENT:
-        nstate.invoice.submitDisabled = true
-        nstate.invoice.paymentError = ""
-        nstate.invoice.paymentComplete = false
-        break
-    case INVOICE_ERROR:
-        nstate.invoice.submitDisabled = false
-        nstate.invoice.paymentError = action.payload.paymentError
-        nstate.invoice.paymentComplete = false
-        break
-    case INVOICE_RESULT:
-      var r = action.payload
-      var error = r['error']
-      var msg = r['msg']
-      if (error) {
-        nstate.invoice.submitDisabled = false
-        nstate.invoice.paymentError = msg
-        nstate.invoice.paymentComplete = false
-      } else {
-        nstate.invoice.submitDisabled = false
-        nstate.invoice.paymentError = msg
-        nstate.invoice.paymentComplete = true
-      }
-      break
   	case ADD_TO_CART:
       nstate.paymentComplete = false
       var found_index = -1

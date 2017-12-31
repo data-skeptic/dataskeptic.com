@@ -58,7 +58,6 @@ const init = {
         country: 'US',
         spError: ''
     },
-	invoice: undefined,
     isAdmin : false,
     loggedInAdmin:{}
 }
@@ -286,9 +285,6 @@ export default function adminReducer(state = defaultState, action) {
                 dispatch({type: "SET_ORDER_ERROR_MSG", payload: errorMsg })
             })
         break;
-    case 'ADD_INVOICE':
-      nstate.invoice = action.payload
-      break
     case 'RELATED_CONTENT_ADD':
         var payload = action.payload
         var dispatch = payload['dispatch']

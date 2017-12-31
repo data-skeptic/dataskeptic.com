@@ -7,14 +7,12 @@ import {get_blogs_rss}           from 'backend/get_blogs_rss'
 import {get_contributors}        from 'backend/get_contributors'
 import {get_episodes}            from 'backend/get_episodes'
 import {get_episodes_by_guid}    from 'backend/get_episodes_by_guid'
-import {get_invoice}             from 'backend/get_invoice'
 import {get_rfc_metadata}        from 'backend/get_rfc_metadata'
 import {join_slack}              from 'backend/join_slack'
 import {send_email}              from 'backend/send_email'
 import {order_create}            from 'backend/order_create'
 import {order_fulfill}           from 'backend/order_fulfill'
 import {order_list}              from 'backend/order_list'
-import {pay_invoice}             from 'backend/pay_invoice'
 import {related_content, related_cache} from 'backend/related_content'
 import {ready, getTempFile, getFile}  from 'backend/v1/recording';
 import {write as writeProposal, upload as uploadProposalFiles, getRecording}  from 'backend/v1/proposals'
@@ -280,14 +278,6 @@ function api_router(req, res) {
     }
     else if (req.url.indexOf('/api/email/send') == 0) {
         send_email(req, res)
-        return true
-    }
-    else if (req.url.indexOf('/api/invoice/pay') == 0) {
-        pay_invoice(req, res, stripe_key)
-        return true
-    }
-    else if (req.url.indexOf('/api/invoice') == 0) {
-        get_invoice(req, res)
         return true
     }
     else if (req.url.indexOf('/api/order/create') == 0) {
