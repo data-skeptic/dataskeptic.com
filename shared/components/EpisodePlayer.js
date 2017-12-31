@@ -24,7 +24,7 @@ class EpisodePlayer extends Component {
         var playback_loaded = oplayer.playback_loaded
         console.log(episode)
         if (!episode) {
-            return <Error />
+            return <div>Loading episode</div>
         }
 
         let play_symb = <span>&#9658;</span>;
