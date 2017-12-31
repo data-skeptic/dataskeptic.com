@@ -1,7 +1,8 @@
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
-import Loading from '../Common/Components/Loading';
+import Loading from '../Common/Components/Loading'
+import ContactFormContainer from '../Contacts/Containers/ContactFormContainer/ContactFormContainer'
 
 import {changePageTitle} from '../Layout/Actions/LayoutActions';
 
@@ -109,7 +110,7 @@ class MembershipPortal extends Component {
 
                     <a name="pi" />
                     <h3>Priority Inbox</h3>
-                    <p>TODO: Gleb - Please reuse the existing ContactUs component, but make some improvements.  ONLY when ContactUs is used via Member Portal, then the request should als be sent to SNS on the topic called `ds-mbrmsg`</p>
+                    <ContactFormContainer />
 
                     <a name="a" />
                     <h3>Analytics</h3>
