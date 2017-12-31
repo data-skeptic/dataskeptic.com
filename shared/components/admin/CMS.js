@@ -18,7 +18,11 @@ class CMS extends React.Component {
 		if (this.state.mode == 'pending') {
 		    dispatch({type: "CMS_LOAD_PENDING_BLOGS", payload: {dispatch} })
 		} else {
-		    dispatch({type: "CMS_LOAD_RECENT_BLOGS", payload: {dispatch} })
+	        var limit = 20
+	        var offset = 0
+	        var prefix = ''
+			var payload = {limit, offset, prefix, dispatch}
+		    dispatch({type: "CMS_LOAD_RECENT_BLOGS", payload })
 		}
 	}
 
@@ -32,6 +36,7 @@ class CMS extends React.Component {
 		} else if (mode == 'recent') {
 			blogs = ocms['recent_blogs'] || []
 		}
+		console.log(blogs)
 		var cn = "cms-" + mode
 		return (
 				<div className={cn}>
