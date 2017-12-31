@@ -28,12 +28,13 @@ export default function memberPortalReducer(state = defaultState, action) {
         axios
             .post(uri, data)
             .then(function(result) {
+                var msg = result['data']['msg']
             	if (result['data']['status'] == "ok") {
 	        		var mode = "found"
-		            dispatch({type: "UPDATE_MEMBERSHIP_MODE", payload: {mode} })
+		            dispatch({type: "UPDATE_MEMBERSHIP_MODE", payload: {mode, msg} })
             	} else {
 	        		var mode = "not-found"
-		            dispatch({type: "UPDATE_MEMBERSHIP_MODE", payload: {mode} })
+		            dispatch({type: "UPDATE_MEMBERSHIP_MODE", payload: {mode, msg} })
             	}
             })
             .catch((err) => {
