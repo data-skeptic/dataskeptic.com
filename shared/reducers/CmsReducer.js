@@ -4,6 +4,7 @@ import querystring from 'querystring'
 import axios from "axios"
 import snserror from '../SnsUtil'
 import { load_blogs } from '../daos/serverInit'
+const aws = require('aws-sdk')
 
 var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
 
@@ -15,15 +16,55 @@ const init = {
     "featured_blog": {},
     "latest_episode": {},
     "recent_blogs": [],
+    "loaded_prettyname": "",
     "pending_blogs": [],
-    "blog_state": ""
+    "blog_state": "",
+    "blog_content": {}
 }
 
 const defaultState = Immutable.fromJS(init);
 
+const s3 = new aws.S3()
+
 export default function cmsReducer(state = defaultState, action) {
   var nstate = state.toJS()
   switch(action.type) {
+    case 'CMS_LOAD_BLOG_CONTENT':
+        var dispatch = action.payload.dispatch
+        var src_file = action.payload.src_file
+        var check = nstate.blog_content[src_file]
+        if (check == undefined) {
+            var envp = ""
+            if (env != "prod") {
+                envp = env + "."
+            }
+            var bucket = envp + "dataskeptic.com"
+            var s3key = src_file
+            var params = { Bucket: bucket, Key: s3key }
+            s3.getObject(params, function(err, d) {
+                if (err) {
+                    console.log("Can't retrieve blog")
+                    console.log(err)
+                } else {
+                    var content = d.Body.toString('utf-8')
+                    console.log("resp len: " + content.length)
+                    var payload = { src_file, content }
+                    dispatch({type: "CMS_ADD_BLOG_CONTENT", payload })                    
+                }
+            });
+        } else {
+            console.log("Blog already in cache")
+        }
+        break
+    case 'CMS_EXPIRE_ALL_CONTENT':
+        nstate.blog_content = {}
+        break
+    case 'CMS_ADD_BLOG_CONTENT':
+        var src_file = action.payload.src_file
+        var content = action.payload.content
+        console.log([src_file, content.substring(0,10)])
+        nstate.blog_content[src_file] = content
+        break
     case 'CMS_LOAD_PENDING_BLOGS':
         var url = base_url + "/blog/pending"
         var dispatch = action.payload.dispatch
@@ -53,10 +94,11 @@ export default function cmsReducer(state = defaultState, action) {
         load_blogs(prefix, limit, offset, dispatch)
         break
     case 'CMS_SET_RECENT_BLOGS':
-        var blogs = action.payload
-        console.log(['bl', blogs.length])
+        var blogs = action.payload.blogs
+        var prefix = action.payload.prefix
         nstate.blog_state = "loaded"
         nstate.recent_blogs = blogs
+        nstate.loaded_prettyname = prefix
         break
     case 'CMS_UPDATE_BLOG':
         var payload = action.payload

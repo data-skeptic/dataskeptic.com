@@ -8,6 +8,7 @@ import EpisodePlayer from "../../components/EpisodePlayer"
 import MailingListBlogFooter from "./MailingListBlogFooter"
 import BlogLink from './BlogLink'
 import BlogBreadCrumbs from './BlogBreadCrumbs'
+import Loading from "../../Common/Components/Loading"
 
 class BlogItem extends React.Component {
 	constructor(props) {
@@ -20,21 +21,31 @@ class BlogItem extends React.Component {
 		}, 10)
 	}
 
+	componentWillMount() {
+		var dispatch = this.props.dispatch
+		var blog = this.props.blog
+		var src_file = blog.src_file
+		dispatch({ type: "CMS_LOAD_BLOG_CONTENT", payload: {src_file, dispatch} })
+	}
+
     handleNewComment(comment) {
         console.log(comment.text)
 		snserror("Blog comment", comment.text, "ds-newblog")
 	}
 
 	render() {
-        console.log("render here")
 		var osite = this.props.site.toJS()
+		var ocms = this.props.cms.toJS()
 		var oepisodes = this.props.episodes.toJS()
 		var disqus_username = osite.disqus_username
 		var blog = this.props.blog
-		var oblogs = this.props.blogs.toJS()
 		var prettyname = blog.prettyname
-		var content = oblogs.content_map[prettyname]
-		var url = 'http://dataskeptic.com/blog' + blog.prettyname
+		var src_file = blog.src_file
+		var content = ocms.blog_content[src_file]
+		if (content == undefined) {
+			return <Loading />
+		}
+		var url = 'http://dataskeptic.com/blog' + prettyname
 		var title = blog['title']
 		var top = <div></div>
 		var bot = <div></div>
@@ -62,5 +73,10 @@ class BlogItem extends React.Component {
 		)
 	}
 }
-export default connect(state => ({ site: state.site, episodes: state.episodes, blogs: state.blogs }))(BlogItem)
+export default connect(state => ({ 
+	site: state.site,
+	cms: state.cms,
+	episodes: state.episodes,
+	blogs: state.blogs
+}))(BlogItem)
 

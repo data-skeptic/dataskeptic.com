@@ -19,13 +19,11 @@ class EpisodePlayer extends Component {
     }
 
     render() {
-        const guid = this.props.guid
         var oplayer = this.props.player.toJS()
         var episode = this.props.episode
         var playback_loaded = oplayer.playback_loaded
-        return <div>ok</div>
-        console.log(episodes)
-        if (!guid) {
+        console.log(episode)
+        if (!episode) {
             return <Error />
         }
 

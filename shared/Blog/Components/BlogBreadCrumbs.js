@@ -24,7 +24,6 @@ class BlogBreadCrumbs extends React.Component {
 			items.push(item)
 		}
 		arr[0] = "home"
-		console.log(arr)
 		return (
 			<div className="blog-bread-crumbs">
 			{
@@ -34,6 +33,7 @@ class BlogBreadCrumbs extends React.Component {
 					return <div className="blog-bread-crumbs-item"><a href={url}>{name}</a> / </div>
 				})
 			}
+			<br/>
 			</div>
 		)
 	}

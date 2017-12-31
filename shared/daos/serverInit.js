@@ -61,17 +61,21 @@ function populate_content_map(blogs, data) {
 
 export function load_blogs(prefix, limit, offset, dispatch) {
     var url = base_url + "/blog/list?limit=" + limit + "&offset=" + offset + "&prefix=" + prefix
+    console.log("Load blogs: " + url)
     axios
         .get(url)
         .then(function(result) {
             console.log("blog api success")
-            dispatch({type: "CMS_SET_RECENT_BLOGS", payload: result['data'] })
+            console.log(result)
+            var payload = {"blogs": result['data'], "prefix": prefix}
+            dispatch({type: "CMS_SET_RECENT_BLOGS", payload: payload })
         })
         .catch((err) => {
             console.log(err)
             var errorMsg = JSON.stringify(err)
             snserror("CMS_LOAD_RECENT_BLOGS", errorMsg)
-            dispatch({type: "CMS_SET_RECENT_BLOGS", payload: [] })
+            var payload = {"blogs": [], "prefix": prefix}
+            dispatch({type: "CMS_SET_RECENT_BLOGS", payload: payload })
         })
 }
 

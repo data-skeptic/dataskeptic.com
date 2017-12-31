@@ -150,6 +150,10 @@ global.env = env;
 
 const doRefresh = (store) => {
     let env = global.env;
+    if (store != undefined) {
+        var d = store.dispatch
+        console.log(["d", d])        
+    }
 
     return loadAdvertiseContent(env)
         .then(([cardHtml, bannerHtml]) => {

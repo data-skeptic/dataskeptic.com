@@ -21,13 +21,28 @@ class BlogRouter extends React.Component {
 	}
 
     componentDidMount() {
-		console.log(this.props.location.pathname)
 		var pathname = this.props.location.pathname
 		var pname = pathname.substring(5, pathname.length)
-        const {dispatch} = this.props
-        // TODO: pathname
-        var payload = {limit: 100, offset: 0, prefix: "pname", dispatch}
-        dispatch({type: "CMS_LOAD_RECENT_BLOGS", payload })
+    	var ocms = this.props.cms.toJS()
+		var blogs = ocms['recent_blogs']
+		var exact_match = false
+		for (var blog of blogs) {
+			var pn = blog['prettyname']
+			if (pname == pn) {
+				exact_match = true
+			}
+		}
+		if (exact_match) {
+			// This means the current state contains the single page requested, so it need not be reloaded
+		} else {
+	        const {dispatch} = this.props
+	        // TODO: pathname
+	        var payload = {limit: 10, offset: 0, prefix: pname, dispatch}
+	        var loaded_prettyname = ocms.loaded_prettyname
+	        console.log("Asking blogs to reload")
+	        console.log(payload)
+	        dispatch({type: "CMS_LOAD_RECENT_BLOGS", payload })
+		}
         //const {title} = BlogRouter.getPageMeta(this.props);
         //dispatch(changePageTitle(title));
     }
@@ -87,9 +102,22 @@ class BlogRouter extends React.Component {
 
 	render() {
 		var pathname = this.props.location.pathname
+		console.log(pathname)
 		var pname = pathname.substring(5, pathname.length)
 		var ocms = this.props.cms.toJS()
 		var blogs = ocms['recent_blogs']
+		// Somehow we're here again witout the dispatched reload
+		var exact = undefined
+		for (var blog of blogs) {
+			var pn = blog['prettyname']
+			if (pname == pn) {
+				exact = blog
+			}
+		}
+		if (exact != undefined) {
+			console.log("Render details page")
+			blogs = [exact]
+		}
 		var blog_state = ocms.blog_state
 		if (blog_state == "" || blog_state == "loading" && blogs.length == 0) {
 			return <Loading />
@@ -99,8 +127,6 @@ class BlogRouter extends React.Component {
 			return <NoBlogs />
 		}
 	    if (blogs.length == 1) {
-	    	console.log("one blog")
-	    	console.log(blogs[0])
 			return <BlogItem blog={blogs[0]} />
 		} else {
 			return (
