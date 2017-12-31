@@ -15,7 +15,7 @@ class BlogList extends Component {
         if (window) {
             if (!isCtrlOrCommandKey(e)) {
                 window.scrollTo(0, 0);
-                this.props.dispatch(removeFocusPost());
+                //this.props.dispatch(removeFocusPost());
             }
         }
     }

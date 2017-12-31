@@ -10,7 +10,6 @@ import BlogItem from "../Components/BlogItem"
 import BlogList from "../Components/BlogList"
 import BlogBreadCrumbs from '../Components/BlogBreadCrumbs'
 import NoBlogs from "../Components/NoBlogs"
-import Error from "../../Common/Components/Error"
 import Loading from "../../Common/Components/Loading"
 import transform_pathname from "../../utils/transform_pathname"
 

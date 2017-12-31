@@ -16,9 +16,6 @@ class BlogItem extends React.Component {
 		var title = this.props.title
 		var dispatch = this.props.dispatch
 		var pathname = this.props.pathname
-		setTimeout(function() {
-		    dispatch({type: "SET_TITLE", payload: title })
-		}, 10)
 	}
 
 	componentWillMount() {
@@ -50,8 +47,14 @@ class BlogItem extends React.Component {
 		var top = <div></div>
 		var bot = <div></div>
 		var guid = blog.guid
-		var episode = undefined
 		if (guid) {
+			var episode = undefined
+			console.log(oepisodes)
+			for (var ep of oepisodes.episodes) {
+				if (ep.guid == guid) {
+					episode = ep
+				}
+			}
 			top = (
 				<EpisodePlayer episode={episode} />
 			)				
