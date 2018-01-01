@@ -60,7 +60,7 @@ class BlogItem extends React.Component {
 			)				
 		}
 		return (
-			<div className="center">
+			<div className="blog-item-wrapper">
 				<BlogBreadCrumbs prettyname={prettyname} />
 				{top}
 				<span dangerouslySetInnerHTML={{__html: content}} />

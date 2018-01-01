@@ -23,7 +23,7 @@ class HomepageFeature extends React.Component {
 		if (featured_blog.publish_date) {
 			date = featured_blog.publish_date.substring(0, 10)			
 		}
-		var img = featured_blog['img']//https://4.bp.blogspot.com/-7VeCN1lPAeA/WL2abQ8pfmI/AAAAAAAADnE/u4dhz3tRGysJppPoMm6np-N24Rqfvgc9wCLcB/s1600/Katrina_Go_Away_sign.jpg"
+		var img = featured_blog['img']
 		var href = 'blog' + featured_blog['prettyname']
 		return (
 			<div className="feature_of_the_week">

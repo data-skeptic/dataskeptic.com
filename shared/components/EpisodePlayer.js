@@ -37,7 +37,9 @@ class EpisodePlayer extends Component {
         }
 
         const date = moment(episode.published_date).fromNow()
-        var link = "/blog" + episode.prettyname
+        var link = episode.link
+        var i = link.indexOf('/blog/')
+        link = link.substring(i, link.length)
         return (
             <div className="home-player">
                 <div className="home-player-card">

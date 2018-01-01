@@ -22,7 +22,6 @@ import {feed_uri}                from 'daos/episodes'
 import {
     loadEpisodes,
     loadProducts,
-    loadAdvertiseContent,
     load,
     loadCurrentRFC
 }  from 'daos/serverInit'
@@ -153,12 +152,7 @@ const doRefresh = (store) => {
         console.log(["d", d])        
     }
 
-    return loadAdvertiseContent(env)
-        .then(([cardHtml, bannerHtml]) => {
-            Cache.advertise.card = cardHtml ? cardHtml : DEFAULT_ADVERTISE_HTML;
-            Cache.advertise.banner = bannerHtml;
-            return loadEpisodes(env)
-        })
+    return loadEpisodes(env)
         .then(function ({episodes_map, episodes_list, episodes_content}, guid) {
             console.log("-[Refreshing episodes]-");
 
