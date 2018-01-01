@@ -235,8 +235,7 @@ export default connect(
       cart: state.cart,
       isCartVisible: state.cart.getIn(['cart_visible']),
       site: state.site,
-      isMobileMenuVisible: state.layout.getIn(['isMobileMenuVisible']),
-      bannerContent: state.advertise.getIn(['banner'])
+      isMobileMenuVisible: state.layout.getIn(['isMobileMenuVisible'])
     }),
     dispatch => bindActionCreators({
       toggleMobileMenu,
