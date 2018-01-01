@@ -2,6 +2,7 @@ import React, { PropTypes } from "react"
 import ReactDOM from "react-dom"
 import { connect } from 'react-redux'
 import BlogBreadCrumbs from './BlogBreadCrumbs'
+import { Link } from 'react-router'
 
 class BlogTopNav extends React.Component {
 	constructor(props) {
@@ -43,7 +44,7 @@ class BlogTopNav extends React.Component {
 							var url = "/blog/" + cat
 							return (
 								<span className="category">
-									&nbsp;<a href={url}>{cat}</a>&nbsp;|
+									&nbsp;<Link to={url}>{cat}</Link>&nbsp;|
 								</span>
 							)
 						})

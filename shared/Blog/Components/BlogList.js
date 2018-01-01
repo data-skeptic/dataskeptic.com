@@ -22,18 +22,15 @@ class BlogList extends Component {
 
     render() {
     	const { blogs = [], onClick, latestId } = this.props;
-        console.log(blogs)
         return (
-            <div>
-                <div className="row blog-summary-container">
-                    {blogs.map((blog, index) => {
-                        return (
-                            <div>
-                                <BlogListItem key={index} blog={blog} onClick={this.onItemClick} isLatest={blog.c_hash===latestId}/>
-                            </div>
-                        )
-                    })}
-                </div>
+            <div className="row blog-list-container">
+                {blogs.map((blog, index) => {
+                    return (
+                        <div>
+                            <BlogListItem key={index} blog={blog} onClick={this.onItemClick} isLatest={blog.c_hash===latestId}/>
+                        </div>
+                    )
+                })}
             </div>
         )
     }

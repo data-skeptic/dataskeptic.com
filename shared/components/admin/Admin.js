@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import axios from "axios"
 import { connect } from 'react-redux'
 import {isAdministratorUser} from '../../Auth/Helpers/UserTypes'
 import SendEmail from './SendEmail'

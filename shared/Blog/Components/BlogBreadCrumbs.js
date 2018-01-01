@@ -1,6 +1,7 @@
 import React, { PropTypes } from "react"
 import ReactDOM from "react-dom"
 import { connect } from 'react-redux'
+import { Link } from 'react-router'
 
 class BlogBreadCrumbs extends React.Component {
 	constructor(props) {
@@ -30,7 +31,7 @@ class BlogBreadCrumbs extends React.Component {
 				items.map((item) => {
 					var name = item['name']
 					var url = item['url']
-					return <div className="blog-bread-crumbs-item"><a href={url}>{name}</a> / </div>
+					return <div className="blog-bread-crumbs-item"><Link to={url}>{name}</Link> / </div>
 				})
 			}
 			<br/>
