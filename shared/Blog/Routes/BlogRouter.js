@@ -3,6 +3,7 @@ import ReactDOM from "react-dom"
 import { connect } from 'react-redux'
 import isUndefined from 'lodash/isUndefined';
 import { redirects_map } from '../../../redirects';
+import {get_podcasts_by_guid} from '../../utils/redux_loader'
 
 import NotFound from '../../NotFound/Components/NotFound'
 import BlogTopNav from "../Components/BlogTopNav"
@@ -20,22 +21,21 @@ class BlogRouter extends React.Component {
 	}
 
     componentDidMount() {
+        const dispatch = this.props.dispatch
 		var pathname = this.props.location.pathname
 		var pname = pathname.substring(5, pathname.length)
     	var ocms = this.props.cms.toJS()
 		var blogs = ocms['recent_blogs']
-		var exact_match = false
+		var exact = undefined
 		for (var blog of blogs) {
 			var pn = blog['prettyname']
 			if (pname == pn) {
-				exact_match = true
+				exact = blog
 			}
 		}
-		if (exact_match) {
+		if (exact) {
 			// This means the current state contains the single page requested, so it need not be reloaded
 		} else {
-	        const {dispatch} = this.props
-	        // TODO: pathname
 	        var payload = {limit: 10, offset: 0, prefix: pname, dispatch}
 	        var loaded_prettyname = ocms.loaded_prettyname
 	        console.log("Asking blogs to reload")
@@ -101,11 +101,9 @@ class BlogRouter extends React.Component {
 
 	render() {
 		var pathname = this.props.location.pathname
-		console.log(pathname)
 		var pname = pathname.substring(5, pathname.length)
 		var ocms = this.props.cms.toJS()
 		var blogs = ocms['recent_blogs']
-		// Somehow we're here again witout the dispatched reload
 		var exact = undefined
 		for (var blog of blogs) {
 			var pn = blog['prettyname']
@@ -114,7 +112,6 @@ class BlogRouter extends React.Component {
 			}
 		}
 		if (exact != undefined) {
-			console.log("Render details page")
 			blogs = [exact]
 		}
 		var blog_state = ocms.blog_state
