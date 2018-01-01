@@ -9,12 +9,7 @@ const passport = require('passport')
 const aws = require('aws-sdk')
 const s3 = new aws.S3();
 
-var env = 'prod'
-console.log("env="+env)
-
-if (process.env.NODE_ENV === 'dev') {
-    env = "dev"
-}
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
 const c = require('./config/config.json')
 console.dir('index.js : env = ' + env)
