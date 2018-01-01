@@ -21,8 +21,10 @@ class BlogRouter extends React.Component {
 	}
 
     componentDidMount() {
+    	console.log("BR did mount")
         const dispatch = this.props.dispatch
 		var pathname = this.props.location.pathname
+		console.log(pathname)
 		var pname = pathname.substring(5, pathname.length)
     	var ocms = this.props.cms.toJS()
 		var blogs = ocms['recent_blogs']

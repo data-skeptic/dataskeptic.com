@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux';
+import { Link } from 'react-router'
 
 import Loading from "../Common/Components/Loading"
 import Error from "../Common/Components/Error"
@@ -26,11 +27,11 @@ class HomepageFeature extends React.Component {
 		var href = 'blog' + featured_blog['prettyname']
 		return (
 			<div className="feature_of_the_week">
-				<div className="hf-img"><a href={href}><img width="600" height="250" src={img} /></a></div>
-				<div className="hf-title"><a href={href}><h2 className="hf-title-h2">{title}</h2></a></div>
+				<div className="hf-img"><Link to={href}><img width="600" height="250" src={img} /></Link></div>
+				<div className="hf-title"><Link to={href}><h2 className="hf-title-h2">{title}</h2></Link></div>
 				<div className="hf-date">{date}</div>
 				<div className="hf-abstract">{abstract}</div>
-				<div className="hf-readmore"><a href={href}>read more</a></div>
+				<div className="hf-readmore"><Link to={href}>read more</Link></div>
 			</div>
 		)
 	}
