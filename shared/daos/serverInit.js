@@ -166,29 +166,6 @@ export function loadEpisodes(env) {
         })
 }
 
-export function loadAdvertiseSourceContent(source) {
-    return new Promise((res, rej) => {
-        axios.get(source)
-            .then(function (result) {
-                if (result.status = 200) {
-                    res(result.data);
-                } else {
-                    res(null);
-                }
-            })
-            .catch((err) => {
-                res(null);
-            })
-    })
-}
-
-export function loadAdvertiseContent() {
-    return Promise.all([
-        loadAdvertiseSourceContent(ADVERTISE_CARD_CONTENT),
-        loadAdvertiseSourceContent(ADVERTISE_BANNER_CONTENT)
-    ])
-}
-
 const RFC_TABLE_NAME = 'rfc';
 const LATEST_RFC_ID = 'test-request';
 
