@@ -38,17 +38,25 @@ class RelatedContentList extends React.Component {
         <h3>Recent Related Content</h3>
         {
             related.map((rc) => {
-              //console.log(rc)
+              console.log(rc)
               var content_id = rc['content_id']
               var blog_id = rc['blog_id']
               var dest = rc['dest']
               var title = rc['title']
+              var body = rc['body']
               return (
                 <div className="row admin-related-content-row">
-                  <div className="col-xs-1">{blog_id}</div>
-                  <div className="col-xs-12 col-sm-5">{title}</div>
-                  <div className="col-xs-12 col-sm-5">{dest}</div>
-                  <div className="col-xs-12 col-sm-1"><button onClick={this.delete.bind(this, content_id, dispatch)}>Delete</button></div>
+                  <div className="col-xs-12 col-sm-1">blog_id:</div>
+                  <div className="col-xs-12 col-sm-11">{blog_id}</div>
+                  <div className="col-xs-12 col-sm-1">title:</div>
+                  <div className="col-xs-12 col-sm-11">{title}</div>
+                  <div className="col-xs-12 col-sm-1">Destination:</div>
+                  <div className="col-xs-12 col-sm-11">{dest}</div>
+                  <div className="col-xs-12 col-sm-1">Comment:</div>
+                  <div className="col-xs-12 col-sm-11">{body}</div>
+                  <div className="col-xs-12 col-sm-1"></div>
+                  <div className="col-xs-12 col-sm-11"><button onClick={this.delete.bind(this, content_id, dispatch)}>Delete</button></div>
+                  <hr/>
                 </div>
               )
             })
