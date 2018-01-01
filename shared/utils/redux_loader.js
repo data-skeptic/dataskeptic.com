@@ -55,27 +55,6 @@ export function get_folders(dispatch) {
 	}
 }
 
-export function get_homepage_content(dispatch) {
-	var my_cache = global.my_cache
-	if (my_cache != undefined) {
-		var episode = my_cache.episodes_map["latest"]
-		var contributors = get_contributors()
-		var loaded = 1
-		dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
-	} else {
-		console.log("Loading homepage content")
-		axios
-			.get("/api/v1/episodes/list?limit=1")
-	  		.then(function(result) {
-	  			var episode = result.data.episodes[0]
-				dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
-			})
-			.catch((err) => {
-				console.log(err)
-			})
-	}	
-}
-
 export function get_products(dispatch) {
 	var my_cache = global.my_cache
 	if (my_cache != undefined) {
@@ -123,6 +102,7 @@ export function get_podcasts_from_cache(my_cache, pathname) {
 	}
 	return episodes
 }
+
 
 export function get_podcasts(dispatch, pathname) {
 	var year = year_from_path(pathname)

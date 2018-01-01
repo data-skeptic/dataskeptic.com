@@ -59,6 +59,31 @@ function populate_content_map(blogs, data) {
     }
 }
 
+export function get_podcasts_by_guid(dispatch, guid) {
+    var my_cache = global.my_cache
+    if (my_cache != undefined) {
+        var episodes = []
+        var allepisodes = get_podcasts_from_cache(my_cache, pathname)
+        for (var episode of allepisodes) {
+            if (episode.guid == guid) {
+                episodes.push(episode)
+            }
+        }
+        dispatch({type: "ADD_EPISODES", payload: episodes})
+    } else {
+        console.log("Getting episodes")
+        axios
+            .get("/api/episodes/get/" + guid)
+            .then(function(result) {
+                var episode = result["data"]
+                dispatch({type: "ADD_EPISODES", payload: [episode]})
+                dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+}
 export function load_blogs(prefix, limit, offset, dispatch) {
     var url = base_url + "/blog/list?limit=" + limit + "&offset=" + offset + "&prefix=" + prefix
     console.log("Load blogs: " + url)
@@ -67,7 +92,20 @@ export function load_blogs(prefix, limit, offset, dispatch) {
         .then(function(result) {
             console.log("blog api success")
             console.log(result)
-            var payload = {"blogs": result['data'], "prefix": prefix}
+            var blogs = result['data']
+            var payload = {blogs, prefix}
+            var guids = []
+            for (var blog of blogs) {
+                if (blog.guid) {
+                    guids.push(blog.guid)
+                }
+            }
+            if (guids.length == 1) {
+                var guid = guids[0]
+                get_podcasts_by_guid(dispatch, guid)
+            } else if (guids.length > 1) {
+                // TODO: grab them all and do something nice on the blog list page
+            }
             dispatch({type: "CMS_SET_RECENT_BLOGS", payload: payload })
         })
         .catch((err) => {

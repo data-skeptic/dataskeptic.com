@@ -2,9 +2,9 @@ import Immutable, { fromJS } from 'immutable';
 
 const init = {
     episodes: [],
+    ep_map: {},
     loaded: false,
-    years: [],
-    focus_episode: {episode: undefined, loaded: 0}
+    years: []
 };
 
 const defaultState = fromJS(init);
@@ -14,19 +14,19 @@ export default function EpisodesReducer(state = defaultState, action) {
 
     switch (action.type) {
         case 'ADD_EPISODES':
-            nstate.episodes = action.payload;
-            nstate.loaded = true;
-            break;
+            console.log(action.payload)
+            var episodes = action.payload
+            console.log('ADD_EPISODES: ' + episodes.length)
+            nstate.episodes = episodes
+            nstate.ep_map = {}
+            for (var episode of episodes) {
+                var guid = episode.guid
+                nstate.ep_map[guid] = episode
+            }
+            nstate.loaded = true
+            break
         case 'SET_YEARS':
             nstate.years = action.payload;
-            break;
-        case 'SET_FOCUS_EPISODE':
-            nstate.focus_episode.episode = action.payload;
-            nstate.focus_episode.loaded = 1;
-            break;
-
-        case 'CLEAR_FOCUS_EPISODE':
-            nstate.focus_episode = {episode: undefined, loaded: 0};
             break;
     }
 

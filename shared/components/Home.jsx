@@ -14,11 +14,9 @@ import {get_homepage_content} from '../utils/redux_loader'
 class Home extends Component {
 
   componentWillMount() {
-      var dispatch = this.props.dispatch;
-      get_homepage_content(dispatch);
-
-      const {title} = Home.getPageMeta();
-      dispatch(changePageTitle(title));
+      var dispatch = this.props.dispatch
+      const {title} = Home.getPageMeta()
+      dispatch(changePageTitle(title))
       dispatch({type: "CMS_GET_HOMEPAGE_CONTENT", payload: {dispatch} })
   }
 
@@ -30,11 +28,11 @@ class Home extends Component {
 
   render() {
     var ocms = this.props.cms.toJS()
+    var latest_episode_blog = ocms.latest_episode
+    var guid = latest_episode_blog['guid']
     var oepisodes = this.props.episodes.toJS()
-    var i = 0
-    var latest_episode = ocms.latest_episode
-
-    //console.log("guid", guid)
+    var ep_map = oepisodes.ep_map
+    var latest_episode = ep_map[guid]
     return (
       <div className="center">
         <div className="row">
@@ -42,8 +40,8 @@ class Home extends Component {
             <HomepageFeature />
           </div>
           <div className="col-xs-12 col-sm-4">
-            <EpisodePlayer episode={latest_episode} />
-            <MailingList />
+             <EpisodePlayer episode={latest_episode} />
+             <MailingList />
           </div>
         </div>
         <div className="clear"></div>

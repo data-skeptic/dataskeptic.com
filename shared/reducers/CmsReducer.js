@@ -62,7 +62,6 @@ export default function cmsReducer(state = defaultState, action) {
     case 'CMS_ADD_BLOG_CONTENT':
         var src_file = action.payload.src_file
         var content = action.payload.content
-        console.log([src_file, content.substring(0,10)])
         nstate.blog_content[src_file] = content
         break
     case 'CMS_LOAD_PENDING_BLOGS':
@@ -102,6 +101,8 @@ export default function cmsReducer(state = defaultState, action) {
         break
     case 'CMS_UPDATE_BLOG':
         var payload = action.payload
+        payload['title'] = payload['title'].replace("'", "\\'")
+        payload['abstract'] = payload['abstract'].replace("'", "\\'")
         var dispatch = payload.dispatch
         var url = base_url + "/blog/update"
         axios
@@ -118,7 +119,6 @@ export default function cmsReducer(state = defaultState, action) {
         break
     case 'CMS_SET_HOMEPAGE_FEATURE':
         var payload = action.payload
-        console.log(['payload', payload])
         var url = base_url + "/cms/homepage"
         axios
             .post(url, payload)
@@ -138,7 +138,6 @@ export default function cmsReducer(state = defaultState, action) {
             })
         break;
     case 'CMS_GET_HOMEPAGE_CONTENT':
-        console.log('CMS_GET_HOMEPAGE_CONTENT')
         var payload = action.payload
         var dispatch = payload.dispatch
         var url = base_url + "/cms/homepage"
@@ -146,8 +145,7 @@ export default function cmsReducer(state = defaultState, action) {
             .get(url, payload)
             .then(function(result) {
                 var data = result['data']
-                console.log(data)
-                dispatch({type: "CMS_INJECT_HOMEPAGE_CONTENT", payload: data })
+                dispatch({type: "CMS_INJECT_HOMEPAGE_CONTENT", payload: {data, dispatch} })
             })
             .catch((err) => {
                 console.log(err)
@@ -157,11 +155,23 @@ export default function cmsReducer(state = defaultState, action) {
         break;
     case 'CMS_INJECT_HOMEPAGE_CONTENT':
         var payload = action.payload
-        var le = payload['latest_episode']
-        var fb = payload['featured_blog']
-        console.log(le, fb)
+        var data = payload.data
+        var dispatch = payload.dispatch
+        var le = data['latest_episode']
+        var fb = data['featured_blog']
         nstate.latest_episode = le
         nstate.featured_blog = fb
+        var url = "/api/episodes/get/" + le.guid
+        axios
+            .get(url)
+            .then(function(result) {
+                var episode = result.data
+                dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
+                dispatch({type: "ADD_EPISODES", payload: [episode]})
+            })
+            .catch((err) => {
+                console.log(err)
+            })
         break;
   }
   return Immutable.fromJS(nstate)
