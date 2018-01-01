@@ -322,6 +322,7 @@ function api_router(req, res) {
         return true
     }
     else if (req.url.indexOf('/api/episodes/get') == 0) {
+        console.log("here!")
         get_episodes_by_guid(req, res, Cache.episodes_map, Cache.episodes_list)
         return true
     }
