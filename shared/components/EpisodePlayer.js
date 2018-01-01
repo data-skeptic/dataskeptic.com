@@ -22,7 +22,6 @@ class EpisodePlayer extends Component {
         var oplayer = this.props.player.toJS()
         var episode = this.props.episode
         var playback_loaded = oplayer.playback_loaded
-        console.log(episode)
         if (!episode) {
             return <div>Loading episode</div>
         }
