@@ -20,11 +20,8 @@ class BlogRouter extends React.Component {
 		super(props)
 	}
 
-    componentDidMount() {
-    	console.log("BR did mount")
+	handle_reload(pathname) {
         const dispatch = this.props.dispatch
-		var pathname = this.props.location.pathname
-		console.log(pathname)
 		var pname = pathname.substring(5, pathname.length)
     	var ocms = this.props.cms.toJS()
 		var blogs = ocms['recent_blogs']
@@ -46,6 +43,23 @@ class BlogRouter extends React.Component {
 		}
         //const {title} = BlogRouter.getPageMeta(this.props);
         //dispatch(changePageTitle(title));
+	}
+
+	componentWillReceiveProps(nextProps) {
+		var opathname = this.props.location.pathname
+		var npathname = nextProps.location.pathname
+		if (opathname != npathname) {
+			console.log("Going to reload")
+			this.handle_reload(npathname)
+		} else {
+			console.log("Not reloading since " + opathname + "=" + npathname)
+		}
+	}
+
+    componentDidMount() {
+    	console.log("BR did mount")
+		var pathname = this.props.location.pathname
+    	this.handle_reload(pathname)
     }
 
     static getPageMeta(state) {
@@ -103,6 +117,7 @@ class BlogRouter extends React.Component {
 
 	render() {
 		var pathname = this.props.location.pathname
+		console.log("BlogRouter render " + pathname)
 		var pname = pathname.substring(5, pathname.length)
 		var ocms = this.props.cms.toJS()
 		var blogs = ocms['recent_blogs']

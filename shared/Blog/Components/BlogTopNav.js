@@ -15,10 +15,8 @@ class BlogTopNav extends React.Component {
 		if (pname == "") {
 			pname = "/"
 		}
-		console.log(pname)
 		var blogs = this.props.blogs
 		var cmap = {}
-		console.log(blogs)
 		for (var i=0; i < blogs.length; i++) {
 			var blog = blogs[i]
 			var arr = blog['prettyname'].split('/')
@@ -33,7 +31,6 @@ class BlogTopNav extends React.Component {
 		}
 		var cats = Object.keys(cmap)
 		cats.sort()
-		console.log(cats)
 		if (cats.length > 1) {
 			return (
 				<div className="blog-top-nav">
@@ -55,7 +52,7 @@ class BlogTopNav extends React.Component {
 		} else {
 			return (
 				<div className="blog-top-nav">
-					<a href="/blog/">root</a>/
+					<Link to="/blog/">root</Link>/
 				</div>
 			)
 		}

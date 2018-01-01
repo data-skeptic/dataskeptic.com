@@ -31,6 +31,9 @@ class BlogBreadCrumbs extends React.Component {
 				items.map((item) => {
 					var name = item['name']
 					var url = item['url']
+					if (name=="root") {
+						console.log(url)
+					}
 					return <div className="blog-bread-crumbs-item"><Link to={url}>{name}</Link> / </div>
 				})
 			}
