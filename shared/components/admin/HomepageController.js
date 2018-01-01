@@ -33,7 +33,11 @@ class HomepageController extends React.Component {
 		var blog_id = 0
 		if ('featured_blog' in ocms) {
 			var featured_blog = ocms['featured_blog']
-			blog_id = featured_blog['blog_id']
+			if (featured_blog) {
+				blog_id = featured_blog['blog_id']
+			} else {
+				blog_id = -1
+			}
 		}
 		var tmp_blog_id = this.state.tmp_blog_id
 		if (tmp_blog_id != 0 && tmp_blog_id != blog_id) {
