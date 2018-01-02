@@ -47,7 +47,7 @@ export const Footer = ({showAds = true, foo, pathname, linkClick, banner=null })
 				<div className="col-xs-6 col-sm-3 col-md-2 links-block">
 					<h3>Data Skeptic</h3>
 					<div className="links">
-						<NavLink active={pathname} to="/" onClick={linkClick}>About</NavLink>
+						<NavLink active={pathname} to="/about" onClick={linkClick}>About</NavLink>
 						<NavLink active={pathname} to="/members" onClick={linkClick}>Membership</NavLink>
 						<NavLink active={pathname} to="/store" onClick={linkClick}>Store</NavLink>
 						<NavLink active={pathname} to="/contact-us" onClick={linkClick}>Contact</NavLink>
