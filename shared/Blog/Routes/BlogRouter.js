@@ -41,8 +41,6 @@ class BlogRouter extends React.Component {
 	        console.log(payload)
 	        dispatch({type: "CMS_LOAD_RECENT_BLOGS", payload })
 		}
-        //const {title} = BlogRouter.getPageMeta(this.props);
-        //dispatch(changePageTitle(title));
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -63,25 +61,27 @@ class BlogRouter extends React.Component {
     }
 
     static getPageMeta(state) {
-		const isExists = state.blogs.getIn(['blog_focus', 'blog']);
-		if (!isExists) {
-			return {
-				title: 'Data Skeptic',
-				description: ''
+        var ocms = state.cms.toJS()
+        var blogs = ocms['recent_blogs']
+
+		let meta = {}
+
+        if (blogs.length === 0) {
+            return {
+                title: 'Blog Not Found'
+            }
+        }
+
+        if (blogs.length === 1) {
+        	const post = blogs[0]
+        	const isEpisode = !isUndefined(post.guid)
+
+			meta.title = `Data Skeptic`
+			meta.description = post.desc
+
+			if (isEpisode) {
+                meta.image = post.preview;
 			}
-		}
-
-		const post = state.blogs.getIn(['blog_focus', 'blog']).toJS();
-        const isEpisode = !isUndefined(post.guid);
-
-        let meta = {
-            //title: `${post.title} | Data Skeptic`,
-            title: `Data Skeptic`,
-			description: `${post.desc}`
-        };
-
-        if (isEpisode) {
-			meta.image = post.preview;
 		}
 
         return meta;

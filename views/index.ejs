@@ -8,9 +8,10 @@
     <title><%- meta.title %></title>
     <meta name="apple-itunes-app" content="app-id=<%- itunesId %>" />
     <meta name="author" content="<%- meta.author %>">
-    <meta name="description" content="<%- meta.description %>">
     <meta property="og:title" content="<%- meta.title %>">
-    <meta property="og:description" content="<%- meta.description %>">
+    <% if(meta.description){ %><meta name="description" content="<%- meta.description %>"><% } %>
+    <% if(meta.description){ %><meta property="og:description" content="<%- meta.description %>"><% } %>
+    <% if(meta.image){ %><meta property="og:image" content="<%- meta.image %>"><% } %>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" />
     <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cosmo/bootstrap.min.css" type="text/css" rel="stylesheet"/>
     <%- env === 'prod' ? '<link href="/main.css" type="text/css" rel="stylesheet"/>' : '' -%>
