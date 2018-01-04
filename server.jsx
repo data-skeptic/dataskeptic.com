@@ -86,7 +86,6 @@ var itunesId = "xxxx"
 //=========== CONFIG
 const c = require('./config/config.json')
 console.dir('env = ' + env)
-const challenge_response = c[env]['challenge']
 itunesId = c[env]['itunes']
 stripe_key = c[env]['stripe']
 sp_key = c[env]['sp']
@@ -142,7 +141,6 @@ const doRefresh = (store) => {
     let env = global.env;
     if (store != undefined) {
         var d = store.dispatch
-        console.log(["d", d])        
     }
 
     return loadEpisodes(env)
@@ -229,6 +227,8 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+var challenge_response = "not_set"
+
 app.all("/.well-known/acme-challenge/:id", function(req, res) { 
     res.status(200).send(`${req.params.id}.${challenge_response}`); 
 });
@@ -310,7 +310,6 @@ function api_router(req, res) {
         return true
     }
     else if (req.url.indexOf('/api/episodes/get') == 0) {
-        console.log("here!")
         get_episodes_by_guid(req, res, Cache.episodes_map, Cache.episodes_list)
         return true
     }
@@ -335,6 +334,11 @@ function api_router(req, res) {
                 res.send(related);
             })
         return true;
+    } else if (req.url === '/api/cert/set') {
+        var b = req.body
+        var chal = b['c']
+        challenge_response = chal
+        return res.status(200).end(JSON.stringify({"status": chal}))
     }
 
     return false
@@ -377,7 +381,6 @@ function inject_podcast(store, my_cache, pathname) {
 }
 
 function install_episode(store, episode) {
-    console.log('install_episode')
     store.dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
 }
 
@@ -415,9 +418,6 @@ function updateState(store, pathname, req) {
     const user = req.user;
 
     if (user) {
-        console.log('dispatch sessioned user')
-        console.dir(`AUTH_USER_SUCCESS`)
-
         store.dispatch({
             type: 'AUTH_USER_SUCCESS',
             payload: {
@@ -425,7 +425,6 @@ function updateState(store, pathname, req) {
             }
         })
     }
-    console.dir(`AUTH_USER_EMPTY`)
 }
 
 app.set('view engine', 'ejs');

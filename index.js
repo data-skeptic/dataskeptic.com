@@ -7,7 +7,6 @@ const https = require('https')
 const path = require('path')
 const passport = require('passport')
 const aws = require('aws-sdk')
-const s3 = new aws.S3();
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
@@ -24,6 +23,8 @@ aws.config.update(
         "region": aws_region
     }
 );
+const s3 = new aws.S3();
+
 
 if (env == "prod") {
 	var sns = new aws.SNS();
@@ -110,14 +111,14 @@ function config_load_promise() {
 		console.log("start")
 		if (!fs.existsSync(cert_path)) {
 			console.log("Creating cert directory")
-			fs.mkdirSync(cert_name, 744);
+			fs.mkdirSync(cert_path, 777);
 		} else {
 			console.log("Cert path exists")
 		}		
 		for (var file of files) {
 			var s3Key = file
 		    var p = new Promise((resolve, reject) => {
-				console.log("Gettin': " + s3Key)
+				console.log("Gettin': " + bucket + " " + s3Key)
 			    const params = { Bucket: bucket, Key: s3Key }
 			    s3.getObject(params)
 			      .createReadStream()
