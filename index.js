@@ -16,10 +16,6 @@ var aws_accessKeyId = c[env]['aws']['accessKeyId']
 var aws_secretAccessKey = c[env]['aws']['secretAccessKey']
 var aws_region = c[env]['aws']['region']
 
-console.log(aws_accessKeyId)
-console.log(aws_secretAccessKey)
-console.log(aws_region)
-
 aws.config.update(
     {
         "accessKeyId": aws_accessKeyId,

@@ -101,8 +101,8 @@ export default function cmsReducer(state = defaultState, action) {
         break
     case 'CMS_UPDATE_BLOG':
         var payload = action.payload
-        payload['title'] = payload['title'].replace("'", "\\'")
-        payload['abstract'] = payload['abstract'].replace("'", "\\'")
+        payload['title'] = payload['title']
+        payload['abstract'] = payload['abstract']
         var dispatch = payload.dispatch
         var url = base_url + "/blog/update"
         axios
