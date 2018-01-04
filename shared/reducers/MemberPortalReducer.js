@@ -4,7 +4,7 @@ import querystring from 'querystring'
 import axios from "axios"
 import snserror from '../SnsUtil'
 
-var env='dev'
+var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
 
 
 var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
@@ -24,17 +24,17 @@ export default function memberPortalReducer(state = defaultState, action) {
     	var email = action.payload
     	var data = {email}
     	var dispatch = action.payload.dispatch
-    	console.log(email)
     	var uri = base_url + '/members/check'
         axios
-            .get(uri, data)
+            .post(uri, data)
             .then(function(result) {
-            	if (result['status'] == "ok") {
+                var msg = result['data']['msg']
+            	if (result['data']['status'] == "ok") {
 	        		var mode = "found"
-		            dispatch({type: "UPDATE_MEMBERSHIP_MODE", payload: {mode} })
+		            dispatch({type: "UPDATE_MEMBERSHIP_MODE", payload: {mode, msg} })
             	} else {
 	        		var mode = "not-found"
-		            dispatch({type: "UPDATE_MEMBERSHIP_MODE", payload: {mode} })
+		            dispatch({type: "UPDATE_MEMBERSHIP_MODE", payload: {mode, msg} })
             	}
             })
             .catch((err) => {
@@ -46,6 +46,8 @@ export default function memberPortalReducer(state = defaultState, action) {
         break
     case 'UPDATE_MEMBERSHIP_MODE':
     	console.log("UPDATE_MEMBERSHIP_MODE")
+        var mode = action.payload.mode
+        nstate.mode = mode
   }
   return Immutable.fromJS(nstate)
 }

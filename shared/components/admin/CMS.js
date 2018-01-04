@@ -1,6 +1,5 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import axios from "axios"
 import querystring from 'querystring'
 import { connect } from 'react-redux'
 import BlogUpdater from './BlogUpdater'
@@ -8,7 +7,6 @@ import BlogUpdater from './BlogUpdater'
 class CMS extends React.Component {
 	constructor(props) {
 		super(props);
-		console.log(props)
 		this.state = {
 			mode: props.mode
 		}
@@ -19,20 +17,25 @@ class CMS extends React.Component {
 		if (this.state.mode == 'pending') {
 		    dispatch({type: "CMS_LOAD_PENDING_BLOGS", payload: {dispatch} })
 		} else {
-		    dispatch({type: "CMS_LOAD_RECENT_BLOGS", payload: {dispatch} })
+	        var limit = 20
+	        var offset = 0
+	        var prefix = ''
+			var payload = {limit, offset, prefix, dispatch}
+		    dispatch({type: "CMS_LOAD_RECENT_BLOGS", payload })
 		}
 	}
 
 	render() {
-		var oadmin = this.props.admin.toJS()
+		var ocms = this.props.cms.toJS()
 		var mode = this.state.mode
 		var dispatch = this.props.dispatch
 		var blogs = []
 		if (mode == 'pending') {
-			blogs = oadmin['pending_blogs'] || []			
+			blogs = ocms['pending_blogs'] || []			
 		} else if (mode == 'recent') {
-			blogs = oadmin['recent_blogs'] || []
+			blogs = ocms['recent_blogs'] || []
 		}
+		console.log(blogs)
 		var cn = "cms-" + mode
 		return (
 				<div className={cn}>
@@ -62,4 +65,6 @@ class CMS extends React.Component {
 		)
 	}
 }
-export default connect(state => ({}))(CMS)
+export default connect(state => ({
+	cms: state.cms,
+}))(CMS)

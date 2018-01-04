@@ -1,8 +1,8 @@
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
-import Loading from '../Common/Components/Loading';
-
+import Loading from '../Common/Components/Loading'
+import ContactFormContainer from '../Contacts/Containers/ContactFormContainer/ContactFormContainer'
 
 import {changePageTitle} from '../Layout/Actions/LayoutActions';
 
@@ -13,18 +13,17 @@ class MembershipPortal extends Component {
 
     componentWillMount() {
         const {title} = MembershipPortal.getPageMeta();
-        this.props.changePageTitle(title);
+        this.props.dispatch(changePageTitle(title))
     }
 
     componentDidMount() {
-        console.log(this.props)
         var dispatch = this.props.dispatch
-        console.log(dispatch)
         if (!this.props.loggedIn) {
             window.location.href = '/login'
         }
         var user = this.props.user
         var p = {dispatch, user}
+        console.log("DISPATCHING")
         dispatch({type: "CHECK_MEMBERSHIP", payload: p })      
     }
 
@@ -86,8 +85,8 @@ class MembershipPortal extends Component {
                         <p>Happy 2018 and thank you for your support of Data Skeptic!</p>
                         <p>This humble page you're viewing now is a work in progress, but one that we'll be making considerable improvements to in the coming months.  We're waiting on all your member surveys to be returned to help us set priorities.  I'm going to leave this "Member's Corner" section at the top of your login and provide small updates and behind-the-scenes details.  If you're interested in that, check back here often for updates.</p>
                         <p>As we launch today, there's three useful features in your Member Portal:</p>
+                        <p><b>Change membership</b> - Change membership level or cancel (gasp!)</p>
                         <p><b>Priority inbox</b> - Get in contact with me fast (member's only)</p>
-                        <p><b>Manage membership</b> - Change membership level or cancel (gasp!)</p>
                         <p><b>Podcast Analytics</b> - A few details about which episodes are most popular</p>
                     </div>
                     <div className="clear"></div>
@@ -111,7 +110,7 @@ class MembershipPortal extends Component {
 
                     <a name="pi" />
                     <h3>Priority Inbox</h3>
-                    <p>TODO: Gleb - Please reuse the existing ContactUs component, but make some improvements.  ONLY when ContactUs is used via Member Portal, then the request should als be sent to SNS on the topic called `ds-mbrmsg`</p>
+                    <ContactFormContainer />
 
                     <a name="a" />
                     <h3>Analytics</h3>
@@ -129,8 +128,5 @@ export default connect(
         user: state.auth.getIn(['user']).toJS(),
         loggedIn: state.auth.getIn(['loggedIn']),
         memberportal: state.memberportal,
-    }),
-    (dispatch) => bindActionCreators({
-        changePageTitle
-    }, dispatch)
+    })
 )(MembershipPortal);

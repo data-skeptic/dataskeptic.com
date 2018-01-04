@@ -39,8 +39,8 @@ import {float32ToInt16} from '../../Helpers/Converter';
 import Resampler from '../../Helpers/Resampler'
 
 
-const env = process.env.NODE_ENV
-const IS_PROD = (env === 'production')
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const IS_PROD = (env === 'prod')
 
 /**
  * Recording flow

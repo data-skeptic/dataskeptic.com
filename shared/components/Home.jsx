@@ -2,11 +2,9 @@ import React, { Component , PropTypes }   from 'react';
 import { bindActionCreators } from 'redux';
 import { connect }            from 'react-redux';
 
-import Slider from "react-slick"
-
 import Episode from "../Podcasts/Components/Episode"
 import MailingList from "../Common/Components/MailingList"
-import LatestEpisodePlayer from "../Blog/Containers/LatestEpisodePlayer"
+import EpisodePlayer from "./EpisodePlayer"
 import HomepageFeature from "./HomepageFeature"
 import BlogContainer from 'Blog/Routes/BlogContainer'
 
@@ -16,11 +14,10 @@ import {get_homepage_content} from '../utils/redux_loader'
 class Home extends Component {
 
   componentWillMount() {
-      var dispatch = this.props.dispatch;
-      get_homepage_content(dispatch);
-
-      const {title} = Home.getPageMeta();
-      dispatch(changePageTitle(title));
+      var dispatch = this.props.dispatch
+      const {title} = Home.getPageMeta()
+      dispatch(changePageTitle(title))
+      dispatch({type: "CMS_GET_HOMEPAGE_CONTENT", payload: {dispatch} })
   }
 
   static getPageMeta() {
@@ -30,13 +27,12 @@ class Home extends Component {
   }
 
   render() {
+    var ocms = this.props.cms.toJS()
+    var latest_episode_blog = ocms.latest_episode
+    var guid = latest_episode_blog['guid']
     var oepisodes = this.props.episodes.toJS()
-    var oblogs = this.props.blogs.toJS()
-    var i = 0
-    console.log("lsss", oepisodes)
-    var guid = undefined
-
-    console.log("guid", guid)
+    var ep_map = oepisodes.ep_map
+    var latest_episode = ep_map[guid]
     return (
       <div className="center">
         <div className="row">
@@ -44,8 +40,8 @@ class Home extends Component {
             <HomepageFeature />
           </div>
           <div className="col-xs-12 col-sm-4">
-            <LatestEpisodePlayer guid={guid} />
-            <MailingList />
+             <EpisodePlayer episode={latest_episode} />
+             <MailingList />
           </div>
         </div>
         <div className="clear"></div>
@@ -55,6 +51,6 @@ class Home extends Component {
 }
 
 export default connect(state => ({
-    episodes: state.episodes, blogs: state.blogs,
-    cardContent: state.advertise.getIn(['card'])
+    episodes: state.episodes, 
+    cms: state.cms
 }))(Home)

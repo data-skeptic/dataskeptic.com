@@ -6,6 +6,7 @@ import {reduxReactRouter, routerStateReducer, ReduxRouter} from 'redux-react-rou
 import createBrowserHistory                                  from 'history/lib/createBrowserHistory';
 import configureStore                                        from './store';
 
+import About                   from 'components/About';
 import Advertising             from 'components/Advertising';
 import App                     from 'components/index';
 import BlogRouter              from 'Blog/Routes/BlogRouter';
@@ -35,7 +36,6 @@ import ProposalsThankYouPage   from 'Proposals/Routes/ThankYou/ThankYouPage';
 import PrivacyPageContainer    from 'Privacy/Containers/PrivacyPageContainer'
 
 import Admin                   from 'components/admin/Admin';
-import Invoice                 from 'Checkout/Routes/Invoices/Invoice';
 
 import SnlImpact               from 'components/l/SnlImpact';
 
@@ -58,6 +58,9 @@ function requireAuth(nextState, replaceState) {
 
 export default (
     <Router onUpdate={onUpdate}>
+        <Route path="/about" name="app" component={App} onEnter={loadData}>
+            <IndexRoute component={About}/>
+        </Route>
         <Route path="/advertising" name="app" component={App} onEnter={loadData}>
             <IndexRoute component={Advertising}/>
         </Route>
@@ -127,16 +130,12 @@ export default (
             <IndexRoute component={Logout}/>
         </Route>
 
-        <Route path="/membershipPortal" component={App}>
+        <Route path="/membershipPortal" showAds={false} component={App}>
             <IndexRoute component={MembershipPortal}/>
         </Route>
 
         <Route path="/analytics" component={App}>
             <IndexRoute component={Analytics}/>
-        </Route>
-
-        <Route path="/invoice" component={App}>
-            <IndexRoute component={Invoice}/>
         </Route>
 
         <Route path="/wp-login.php" component={App} onEnter={loadData}>

@@ -7,7 +7,7 @@ import sha1 from 'sha1';
 import NavLink from '../../../components/NavLink'
 
 const LINKS = {
-	ITUNES: 'https://itunes.apple.com/us/podcast/the-data-skeptic-podcast/id890348705',
+	ITUNES: 'https://itunes.apple.com/podcast/the-data-skeptic-podcast/id890348705',
 	GOOGLE: 'https://play.google.com/music/m/Ibr6e2jb7ot6m6gupwdjgsfmoqa?t=Data_Skeptic',
 	STITCHER: 'http://www.stitcher.com/s?fid=50561&amp;refid=stpr',
 	RSS: '/api/blog/rss',
@@ -17,7 +17,7 @@ const LINKS = {
 	YOUTUBE: 'https://youtube.com/dataskeptic'
 };
 
-export const Footer = ({showAds, foo, pathname, linkClick, banner=null }) =>  (
+export const Footer = ({showAds = true, foo, pathname, linkClick, banner=null }) =>  (
 	<div>
         <div className="advert center">
 			{showAds && (banner
@@ -47,7 +47,7 @@ export const Footer = ({showAds, foo, pathname, linkClick, banner=null }) =>  (
 				<div className="col-xs-6 col-sm-3 col-md-2 links-block">
 					<h3>Data Skeptic</h3>
 					<div className="links">
-						<NavLink active={pathname} to="/" onClick={linkClick}>About</NavLink>
+						<NavLink active={pathname} to="/about" onClick={linkClick}>About</NavLink>
 						<NavLink active={pathname} to="/members" onClick={linkClick}>Membership</NavLink>
 						<NavLink active={pathname} to="/store" onClick={linkClick}>Store</NavLink>
 						<NavLink active={pathname} to="/contact-us" onClick={linkClick}>Contact</NavLink>

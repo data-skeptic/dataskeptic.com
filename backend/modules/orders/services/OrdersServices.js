@@ -99,7 +99,7 @@ export const fulFillOrder = (stripe_key, obj) => {
         })
     })
 };
-
+/*
 export const createOrder = (obj, key) => {
 
     var t = 'Basic ' + new Buffer(':' + key).toString('base64')
@@ -166,3 +166,4 @@ export const createOrder = (obj, key) => {
             })
     })
 };
+*/

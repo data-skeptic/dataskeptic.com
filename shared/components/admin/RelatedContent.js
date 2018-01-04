@@ -1,6 +1,5 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import axios from "axios"
 import querystring from 'querystring'
 import { connect } from 'react-redux'
 
@@ -8,11 +7,12 @@ class RelatedContent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-    	type: "internal-link",
+    	type: "",
       source: "",
       dest: "",
       title: "",
-      body: ""
+      body: "",
+      selected: false
     }
   }
 
@@ -23,17 +23,19 @@ class RelatedContent extends React.Component {
     me.setState(s);
     if (title == "type") {
       if (val == "internal-link") {
-        me.setState({"lbl2": "Related page url", "lbl3": "Link Anchor Text", "lbl4": "Comment", "dest": "https://dataskeptic.com/blog/"})
+        me.setState({"lbl2": "Related blog_id", "lbl3": "Link Anchor Text", "lbl4": "Comment", "dest": "https://dataskeptic.com/blog/", "selected": true})
       } else if (val == "external-link") {
-        me.setState({"lbl2": "Related page url", "lbl3": "Link Anchor Text", "lbl4": "Comment", "dest": "https://"})
+        me.setState({"lbl2": "Related page url", "lbl3": "Link Anchor Text", "lbl4": "Comment", "dest": "https://", "selected": true})
       } else if (val == "mp3") {
-        me.setState({"lbl2": "Media URL", "lbl3": "Title of recording", "lbl4": "Description", "dest": "https://dataskeptic.com/blog/"})
+        me.setState({"lbl2": "Media URL", "lbl3": "Title of recording", "lbl4": "Description", "dest": "https://dataskeptic.com/blog/", "selected": true})
       } else if (val == "person") {
-        me.setState({"lbl2": "Leave blank", "lbl3": "Guest Name", "lbl4": "Guest Bio", "dest": ""})
+        me.setState({"lbl2": "Leave blank", "lbl3": "Guest Name", "lbl4": "Guest Bio", "dest": "", "selected": true})
       } else if (val == "homepage-image") {
-        me.setState({"lbl2": "Image url", "lbl3": "Alt text", "lbl4": "Leave Blank", "dest": ""})
+        me.setState({"lbl2": "Image url (600x250px)", "lbl3": "Alt text", "lbl4": "Leave Blank", "dest": "", "selected": true})
       } else if (val == "blog-header-img") {
-        me.setState({"lbl2": "Image url", "lbl3": "Alt text", "lbl4": "Leave Blank", "dest": ""})        
+        me.setState({"lbl2": "Image url (800x150px)", "lbl3": "Alt text", "lbl4": "Leave Blank", "dest": "", "selected": true})
+      } else {
+        me.setState({"selected": false})
       }
     }
   }
@@ -43,8 +45,44 @@ class RelatedContent extends React.Component {
   }
 
   render() {
+    var oadmin = this.props.admin.toJS()
+    var add_related_msg = oadmin['add_related_msg']
     var me = this
     var dispatch = this.props.dispatch
+    var bdy = (
+        <div></div>
+      )
+    if (this.state.selected) {
+      bdy = (
+        <div className="center">
+          <div className="row">
+            <div className="col-xs-3"><p>Source blog_id:</p></div>
+            <div className="col-xs-9"><input width="100%" onChange={this.update.bind(this, me, "source")} value={this.state.source} /></div>
+          </div>
+
+          <div className="row">
+            <div className="col-xs-3"><p>{this.state.lbl2}:</p></div>
+            <div className="col-xs-9"><input onChange={this.update.bind(this, me, "dest")} value={this.state.dest} /></div>
+          </div>
+
+          <div className="row">
+            <div className="col-xs-3"><p>{this.state.lbl3}:</p></div>
+            <div className="col-xs-9"><input onChange={this.update.bind(this, me, "title")} value={this.state.title} /></div>
+          </div>
+
+          <div className="row">
+            <div className="col-xs-3"><p>{this.state.lbl4}:</p></div>
+            <div className="col-xs-9"><input onChange={this.update.bind(this, me, "body")} value={this.state.body} /></div>
+          </div>
+
+          <div className="row">
+            <div className="col-xs-3"></div>
+            <div className="col-xs-9"><button onClick={this.save.bind(this, dispatch)}>Add</button></div>
+          </div>
+          <p>{add_related_msg}</p>
+        </div>
+      )
+    }
   	return (
       <div>
         <h3>Add Related Content</h3>
@@ -59,23 +97,13 @@ class RelatedContent extends React.Component {
           <option value="person">person</option>
         </select>
 
-        <p>Source blog_id:</p>
-        <input onChange={this.update.bind(this, me, "source")} value={this.state.source} />
-        <p>{this.state.lbl2}:</p>
-        <input onChange={this.update.bind(this, me, "dest")} value={this.state.dest} />
-
-        <p>{this.state.lbl3}:</p>
-        <input onChange={this.update.bind(this, me, "title")} value={this.state.title} />
-
-        <p>{this.state.lbl4}:</p>
-        <input onChange={this.update.bind(this, me, "body")} value={this.state.body} />
-
-        <br/>
-        <button onClick={this.save.bind(this, dispatch)}>Add</button>
+        {bdy}
       </div>
   	)
   }
 }
-export default connect(state => ({ }))(RelatedContent)
+export default connect(state => ({
+  admin: state.admin
+}))(RelatedContent)
 
 

@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import axios from "axios"
 import { connect } from 'react-redux'
 import {isAdministratorUser} from '../../Auth/Helpers/UserTypes'
 import SendEmail from './SendEmail'
@@ -22,13 +21,13 @@ class Admin extends Component {
 
 	componentDidMount() {
 		var dispatch = this.props.dispatch
-	    dispatch({type: "INIT_ORDERS", payload: {dispatch} })
-	    dispatch({type: "INIT_CMS", payload: {dispatch} })
         if (!this.hasAccess()) {
             this.props.history.push('/admin/login')
             return
         } else {
             this.setState({ ready: true })
+		    dispatch({type: "INIT_ORDERS", payload: {dispatch} })
+		    dispatch({type: "CMS_GET_HOMEPAGE_CONTENT", payload: {dispatch} })
         }
 	}
 
@@ -96,5 +95,4 @@ export default connect(state => ({
 	isAdmin : state.admin.isAdmin,
 	products: state.products,
     user: state.auth.getIn(['user']).toJS()
-
 }))(Admin)

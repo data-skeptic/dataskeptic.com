@@ -15,25 +15,22 @@ class BlogList extends Component {
         if (window) {
             if (!isCtrlOrCommandKey(e)) {
                 window.scrollTo(0, 0);
-                this.props.dispatch(removeFocusPost());
+                //this.props.dispatch(removeFocusPost());
             }
         }
     }
 
     render() {
     	const { blogs = [], onClick, latestId } = this.props;
-        console.log(blogs)
         return (
-            <div>
-                <div className="row blog-summary-container">
-                    {blogs.map((blog, index) => {
-                        return (
-                            <div>
-                                <BlogListItem key={index} blog={blog} onClick={this.onItemClick} isLatest={blog.c_hash===latestId}/>
-                            </div>
-                        )
-                    })}
-                </div>
+            <div className="row blog-list-container">
+                {blogs.map((blog, index) => {
+                    return (
+                        <div>
+                            <BlogListItem key={index} blog={blog} onClick={this.onItemClick} isLatest={blog.c_hash===latestId}/>
+                        </div>
+                    )
+                })}
             </div>
         )
     }

@@ -1,8 +1,19 @@
 const aws = require('aws-sdk')
 
-var env = 'prod'
+var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
+console.info(`SNSUTIL ENV`, env)
+
 
 var sns = new aws.SNS()
+
+/*
+Member signup		ds-new-mbr
+Member login		ds-mem-log
+Item sold			ds-salesuc
+RFC login			ds-rfc-log
+New episode posted	ds-new-epi
+New blog posted		ds-newblog
+*/
 
 const c = require('../config/config.json')
 var aws_accessKeyId = c[env]['aws']['accessKeyId']

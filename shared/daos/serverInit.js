@@ -1,5 +1,6 @@
 import xml2js from 'xml2js'
 import axios  from 'axios'
+import snserror from '../SnsUtil'
 
 const aws = require('aws-sdk')
 const s3 = new aws.S3();
@@ -9,9 +10,9 @@ const proposalsDocs = new aws.DynamoDB.DocumentClient();
 import {convert_items_to_json} from 'daos/episodes'
 import {extractFolders} from '../utils/blog_utils'
 
-const ADVERTISE_CARD_CONTENT = 'https://s3.amazonaws.com/dataskeptic.com/dassets/carousel/latest.htm';
-const ADVERTISE_BANNER_CONTENT = 'https://s3.amazonaws.com/dataskeptic.com/dassets/banner/latest.htm';
+var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
 
+var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
 export function loadProducts(env) {
     const uri = "https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + env + "/products"
@@ -55,24 +56,61 @@ function populate_content_map(blogs, data) {
     }
 }
 
-export function loadBlogs(env) {
-    let data = {
-        folders: [],
-        blogs: [],
-        content_map: {}
-    };
-    var uri = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env + "/blog/all"
-    return axios.get(uri)
-        .then(function (result) {
-            let blogs = result.data;
-            console.log('load blogs success: ' + blogs.length)
-            populate_content_map(blogs, data)
-            data.folders = extractFolders(blogs)
-            data.blogs = blogs
-            return data
+export function get_podcasts_by_guid(dispatch, guid) {
+    var my_cache = global.my_cache
+    if (my_cache != undefined) {
+        var episodes = []
+        var allepisodes = get_podcasts_from_cache(my_cache, pathname)
+        for (var episode of allepisodes) {
+            if (episode.guid == guid) {
+                episodes.push(episode)
+            }
+        }
+        dispatch({type: "ADD_EPISODES", payload: episodes})
+    } else {
+        console.log("Getting episodes")
+        axios
+            .get("/api/episodes/get/" + guid)
+            .then(function(result) {
+                var episode = result["data"]
+                dispatch({type: "ADD_EPISODES", payload: [episode]})
+                dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+}
+export function load_blogs(prefix, limit, offset, dispatch) {
+    var url = base_url + "/blog/list?limit=" + limit + "&offset=" + offset + "&prefix=" + prefix
+    console.log("Load blogs: " + url)
+    axios
+        .get(url)
+        .then(function(result) {
+            console.log("blog api success")
+            console.log(result)
+            var blogs = result['data']
+            var payload = {blogs, prefix}
+            var guids = []
+            for (var blog of blogs) {
+                if (blog.guid) {
+                    guids.push(blog.guid)
+                }
+            }
+            if (guids.length == 1) {
+                var guid = guids[0]
+                get_podcasts_by_guid(dispatch, guid)
+            } else if (guids.length > 1) {
+                // TODO: grab them all and do something nice on the blog list page
+            }
+            dispatch({type: "CMS_SET_RECENT_BLOGS", payload: payload })
         })
         .catch((err) => {
-            console.log("loadBlogs error: " + err)
+            console.log(err)
+            var errorMsg = JSON.stringify(err)
+            snserror("CMS_LOAD_RECENT_BLOGS", errorMsg)
+            var payload = {"blogs": [], "prefix": prefix}
+            dispatch({type: "CMS_SET_RECENT_BLOGS", payload: payload })
         })
 }
 
@@ -123,29 +161,6 @@ export function loadEpisodes(env) {
             console.log("loadEpisodes error: " + err);
             console.log(err)
         })
-}
-
-export function loadAdvertiseSourceContent(source) {
-    return new Promise((res, rej) => {
-        axios.get(source)
-            .then(function (result) {
-                if (result.status = 200) {
-                    res(result.data);
-                } else {
-                    res(null);
-                }
-            })
-            .catch((err) => {
-                res(null);
-            })
-    })
-}
-
-export function loadAdvertiseContent() {
-    return Promise.all([
-        loadAdvertiseSourceContent(ADVERTISE_CARD_CONTENT),
-        loadAdvertiseSourceContent(ADVERTISE_BANNER_CONTENT)
-    ])
 }
 
 const RFC_TABLE_NAME = 'rfc';

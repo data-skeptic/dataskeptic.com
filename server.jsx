@@ -7,14 +7,12 @@ import {get_blogs_rss}           from 'backend/get_blogs_rss'
 import {get_contributors}        from 'backend/get_contributors'
 import {get_episodes}            from 'backend/get_episodes'
 import {get_episodes_by_guid}    from 'backend/get_episodes_by_guid'
-import {get_invoice}             from 'backend/get_invoice'
 import {get_rfc_metadata}        from 'backend/get_rfc_metadata'
 import {join_slack}              from 'backend/join_slack'
 import {send_email}              from 'backend/send_email'
 import {order_create}            from 'backend/order_create'
 import {order_fulfill}           from 'backend/order_fulfill'
 import {order_list}              from 'backend/order_list'
-import {pay_invoice}             from 'backend/pay_invoice'
 import {related_content, related_cache} from 'backend/related_content'
 import {ready, getTempFile, getFile}  from 'backend/v1/recording';
 import {write as writeProposal, upload as uploadProposalFiles, getRecording}  from 'backend/v1/proposals'
@@ -22,10 +20,8 @@ import bodyParser                from 'body-parser'
 import compression               from 'compression';
 import {feed_uri}                from 'daos/episodes'
 import {
-    loadBlogs,
     loadEpisodes,
     loadProducts,
-    loadAdvertiseContent,
     load,
     loadCurrentRFC
 }  from 'daos/serverInit'
@@ -119,10 +115,6 @@ if (process.env.NODE_ENV === 'dev') {
     env = "dev"
 }
 
-console.log("Environment: ", env)
-
-const DEFAULT_ADVERTISE_HTML = `<img src="/img/advertise.png" width="100%"/>`;
-
 let Cache = {
 
 }
@@ -137,10 +129,6 @@ const resetCache = () => {
         , episodes_content: []     // pn
         , products: {}
         , contributors: {}
-        , advertise: {
-            card: DEFAULT_ADVERTISE_HTML,
-            banner: null
-        }
         , rfc: {}
     }
 }
@@ -155,21 +143,11 @@ global.env = env;
 
 const doRefresh = (store) => {
     let env = global.env;
+    if (store != undefined) {
+        var d = store.dispatch
+    }
 
-    return loadAdvertiseContent(env)
-        .then(([cardHtml, bannerHtml]) => {
-            Cache.advertise.card = cardHtml ? cardHtml : DEFAULT_ADVERTISE_HTML;
-            Cache.advertise.banner = bannerHtml;
-            return loadBlogs(env)
-        })
-        .then(function (result) {
-            console.log("-[Refreshing blogs]-");
-            console.log(Object.keys(result))
-            Cache.folders = result['folders']
-            Cache.blogs = result['blogs']
-            Cache.content_map = result['content_map']
-            return loadEpisodes(env)
-        })
+    return loadEpisodes(env)
         .then(function ({episodes_map, episodes_list, episodes_content}, guid) {
             console.log("-[Refreshing episodes]-");
 
@@ -253,6 +231,13 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+var challenge_response = "not_set"
+
+app.all("/.well-known/acme-challenge/:id", function(req, res) { 
+    res.status(200).send(`${req.params.id}.${challenge_response}`); 
+});
+
+
 // authorization module
 const api = require('./backend/api/v1');
 app.use('/api/v1/', api(() => Cache));
@@ -263,14 +248,10 @@ function api_router(req, res) {
         var req = req.body
         join_slack(req, res, slack_key)
         return true
-    }
-
-    if (req.url.indexOf('/api/v1/proposals/files') == 0) {
+    } else if (req.url.indexOf('/api/v1/proposals/files') == 0) {
         uploadProposalFiles(req, res, aws_proposals_bucket);
         return true;
-    }
-
-    if (req.url.indexOf('/api/v1/proposals/recording') == 0) {
+    } else if (req.url.indexOf('/api/v1/proposals/recording') == 0) {
         getRecording(req, res);
         return true;
     } else if (req.url.indexOf('/api/v1/proposals') == 0) {
@@ -289,14 +270,6 @@ function api_router(req, res) {
     }
     else if (req.url.indexOf('/api/email/send') == 0) {
         send_email(req, res)
-        return true
-    }
-    else if (req.url.indexOf('/api/invoice/pay') == 0) {
-        pay_invoice(req, res, stripe_key)
-        return true
-    }
-    else if (req.url.indexOf('/api/invoice') == 0) {
-        get_invoice(req, res)
         return true
     }
     else if (req.url.indexOf('/api/order/create') == 0) {
@@ -365,6 +338,11 @@ function api_router(req, res) {
                 res.send(related);
             })
         return true;
+    } else if (req.url === '/api/cert/set') {
+        var b = req.body
+        var chal = b['c']
+        challenge_response = chal
+        return res.status(200).end(JSON.stringify({"status": chal}))
     }
 
     return false
@@ -407,24 +385,13 @@ function inject_podcast(store, my_cache, pathname) {
 }
 
 function install_episode(store, episode) {
-    console.log('install_episode')
     store.dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
-}
-
-function inject_blog(store, my_cache, pathname) {
-    console.log("pathname="+pathname)
-    console.log(Object.keys(my_cache))
-    var blogs = my_cache['blogs']
-    var content_map = my_cache['content_map']
-    var total = blogs.length
-    store.dispatch({type: "ADD_BLOGS", payload: {blogs, content_map, total}});
 }
 
 function updateState(store, pathname, req) {
     console.log(["updateState", pathname])
     inject_folders(store, Cache)
     inject_years(store, Cache)
-    inject_blog(store, Cache, pathname)
 
     store.dispatch({type: "PROPOSAL_SET_BUCKET", payload: {aws_proposals_bucket}})
 
@@ -455,9 +422,6 @@ function updateState(store, pathname, req) {
     const user = req.user;
 
     if (user) {
-        console.log('dispatch sessioned user')
-        console.dir(`AUTH_USER_SUCCESS`)
-
         store.dispatch({
             type: 'AUTH_USER_SUCCESS',
             payload: {
@@ -465,7 +429,6 @@ function updateState(store, pathname, req) {
             }
         })
     }
-    console.dir(`AUTH_USER_EMPTY`)
 }
 
 app.set('view engine', 'ejs');

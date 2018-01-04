@@ -1,7 +1,7 @@
 import aws from 'aws-sdk';
 import {getEmail} from '../../../Emails/template';
 const config = require('../../../../config/config.json');
-const env = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
 const ses = new aws.SES({apiVersion: '2010-12-01'});
 

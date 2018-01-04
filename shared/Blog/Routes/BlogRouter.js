@@ -3,6 +3,7 @@ import ReactDOM from "react-dom"
 import { connect } from 'react-redux'
 import isUndefined from 'lodash/isUndefined';
 import { redirects_map } from '../../../redirects';
+import {get_podcasts_by_guid} from '../../utils/redux_loader'
 
 import NotFound from '../../NotFound/Components/NotFound'
 import BlogTopNav from "../Components/BlogTopNav"
@@ -10,7 +11,6 @@ import BlogItem from "../Components/BlogItem"
 import BlogList from "../Components/BlogList"
 import BlogBreadCrumbs from '../Components/BlogBreadCrumbs'
 import NoBlogs from "../Components/NoBlogs"
-import Error from "../../Common/Components/Error"
 import Loading from "../../Common/Components/Loading"
 import transform_pathname from "../../utils/transform_pathname"
 
@@ -20,10 +20,46 @@ class BlogRouter extends React.Component {
 		super(props)
 	}
 
-    componentDidMount() {
-        const {dispatch} = this.props;
+	handle_reload(pathname) {
+        const dispatch = this.props.dispatch
+		var pname = pathname.substring(5, pathname.length)
+    	var ocms = this.props.cms.toJS()
+		var blogs = ocms['recent_blogs']
+		var exact = undefined
+		for (var blog of blogs) {
+			var pn = blog['prettyname']
+			if (pname == pn) {
+				exact = blog
+			}
+		}
+		if (exact) {
+			// This means the current state contains the single page requested, so it need not be reloaded
+		} else {
+	        var payload = {limit: 10, offset: 0, prefix: pname, dispatch}
+	        var loaded_prettyname = ocms.loaded_prettyname
+	        console.log("Asking blogs to reload")
+	        console.log(payload)
+	        dispatch({type: "CMS_LOAD_RECENT_BLOGS", payload })
+		}
         //const {title} = BlogRouter.getPageMeta(this.props);
         //dispatch(changePageTitle(title));
+	}
+
+	componentWillReceiveProps(nextProps) {
+		var opathname = this.props.location.pathname
+		var npathname = nextProps.location.pathname
+		if (opathname != npathname) {
+			console.log("Going to reload")
+			this.handle_reload(npathname)
+		} else {
+			console.log("Not reloading since " + opathname + "=" + npathname)
+		}
+	}
+
+    componentDidMount() {
+    	console.log("BR did mount")
+		var pathname = this.props.location.pathname
+    	this.handle_reload(pathname)
     }
 
     static getPageMeta(state) {
@@ -51,9 +87,6 @@ class BlogRouter extends React.Component {
         return meta;
     }
 
-	componentDidMount() {
-	}
-
 	filter_blogs(allblogs, pathname) {
 
 	    // ???? 
@@ -75,7 +108,7 @@ class BlogRouter extends React.Component {
 	        var pn = blog['prettyname']
 	        if (pn.indexOf(path) == 0) {
                 blogs.push(blog)
-                count += 1                
+                count += 1
 	        }
 	        i += 1
 	    }
@@ -83,27 +116,30 @@ class BlogRouter extends React.Component {
 	}
 
 	render() {
-		console.log(this.props.location.pathname)
 		var pathname = this.props.location.pathname
+		console.log("BlogRouter render " + pathname)
 		var pname = pathname.substring(5, pathname.length)
-		var oblogs = this.props.blogs.toJS()
-		var allblogs = oblogs['blogs']
-		if (allblogs.length == 0) {
-			console.log("NO BLOGS IN MEMORY!")
-			return (
-				<div className="center">
-					<h2>Blog database is unreachable.  Please try again later.</h2>
-				</div>
-			)
+		var ocms = this.props.cms.toJS()
+		var blogs = ocms['recent_blogs']
+		var exact = undefined
+		for (var blog of blogs) {
+			var pn = blog['prettyname']
+			if (pname == pn) {
+				exact = blog
+			}
 		}
-		var folders = oblogs['folders']
-		var blogs = this.filter_blogs(allblogs, pathname)
-	    if (blogs.length == 0) {
-	        console.log("No blogs loaded")
-	        return <NoBlogs />
-	    } else if (blogs.length == 1) {
-	    	console.log("one blog")
-	    	console.log(blogs[0])
+		if (exact != undefined) {
+			blogs = [exact]
+		}
+		var blog_state = ocms.blog_state
+		if (blog_state == "" || blog_state == "loading" && blogs.length == 0) {
+			return <Loading />
+		}
+		if (blogs.length == 0) {
+			console.log("NO BLOGS IN MEMORY!")
+			return <NoBlogs />
+		}
+	    if (blogs.length == 1) {
 			return <BlogItem blog={blogs[0]} />
 		} else {
 			return (
@@ -122,6 +158,7 @@ export default connect(
 	(state, ownProps) => ({
 		player: state.player,
 		blogs: state.blogs,
+		cms: state.cms,
 		episodes: state.episodes,
 		site: state.site
 	}))

@@ -1,8 +1,8 @@
 import aws from 'aws-sdk'
-import axios from 'axios'
 import {getEmail} from '../../shared/Emails/template';
 const config = require('../../config/config.json');
-const env = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+
 if (!aws.config.region) {
   aws.config.update({
     region: 'us-east-1'
@@ -40,11 +40,9 @@ module.exports = {
 	    };
 	    ses.sendEmail(email_request, function(err, data) {
 	      if (err != null) {
-	        console.log("---[ERROR]-------------------")
 	        console.log(err)
 	        return res.status(500).end(JSON.stringify(err))
 	      } else {
-	        console.log("Email sent")
 	        resp = {status: 200, msg: err}
 	        return res.status(200).end(JSON.stringify(resp))
 	      }

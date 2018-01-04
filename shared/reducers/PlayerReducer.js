@@ -18,6 +18,7 @@ export default function PlayerReducer(state = defaultState, action) {
     switch (action.type) {
         case 'PLAY_EPISODE':
             var episode = action.payload
+            console.log(episode)
 
             if (isEmpty(episode)) {
                 nstate.is_playing = false
