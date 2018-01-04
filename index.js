@@ -16,6 +16,10 @@ var aws_accessKeyId = c[env]['aws']['accessKeyId']
 var aws_secretAccessKey = c[env]['aws']['secretAccessKey']
 var aws_region = c[env]['aws']['region']
 
+console.log(aws_accessKeyId)
+console.log(aws_secretAccessKey)
+console.log(aws_region)
+
 aws.config.update(
     {
         "accessKeyId": aws_accessKeyId,
@@ -24,7 +28,6 @@ aws.config.update(
     }
 );
 const s3 = new aws.S3();
-
 
 if (env == "prod") {
 	var sns = new aws.SNS();
@@ -114,12 +117,13 @@ function config_load_promise() {
 			fs.mkdirSync(cert_path, 777);
 		} else {
 			console.log("Cert path exists")
-		}		
+		}
 		for (var file of files) {
 			var s3Key = file
 		    var p = new Promise((resolve, reject) => {
 				console.log("Gettin': " + bucket + " " + s3Key)
 			    const params = { Bucket: bucket, Key: s3Key }
+console.log(params)
 			    s3.getObject(params)
 			      .createReadStream()
 			      .pipe(fs.createWriteStream(cert_path + s3Key))
