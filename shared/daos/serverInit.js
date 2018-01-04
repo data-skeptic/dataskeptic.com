@@ -13,7 +13,7 @@ import {extractFolders} from '../utils/blog_utils'
 const ADVERTISE_CARD_CONTENT = 'https://s3.amazonaws.com/dataskeptic.com/dassets/carousel/latest.htm';
 const ADVERTISE_BANNER_CONTENT = 'https://s3.amazonaws.com/dataskeptic.com/dassets/banner/latest.htm';
 
-const env = process.env.NODE_ENV
+var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
 
 var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
