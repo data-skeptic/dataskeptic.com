@@ -63,7 +63,7 @@ class BlogItem extends React.Component {
 			<div className="blog-item-wrapper">
 				<BlogBreadCrumbs prettyname={prettyname} />
 				{top}
-				<span dangerouslySetInnerHTML={{__html: content}} />
+				<div className="content" dangerouslySetInnerHTML={{__html: content}} />
 				{bot}
 				<MailingListBlogFooter />
 	            <ReactDisqusComments
