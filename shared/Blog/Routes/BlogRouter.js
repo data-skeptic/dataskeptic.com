@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import isUndefined from 'lodash/isUndefined';
 import { redirects_map } from '../../../redirects';
 import {get_podcasts_by_guid} from '../../utils/redux_loader'
+import snserror from '../../SnsUtil'
 
 import NotFound from '../../NotFound/Components/NotFound'
 import BlogTopNav from "../Components/BlogTopNav"
@@ -21,6 +22,7 @@ class BlogRouter extends React.Component {
 	}
 
 	handle_reload(pathname) {
+		console.log("handle_reload of " + pathname)
         const dispatch = this.props.dispatch
 		var pname = pathname.substring(5, pathname.length)
     	var ocms = this.props.cms.toJS()
@@ -115,6 +117,12 @@ class BlogRouter extends React.Component {
 	    return blogs
 	}
 
+	missing() {
+		var location = this.props.location.pathname
+		console.log(location)
+		snserror(location, "404!", "ds-blog404")		
+	}
+
 	render() {
 		var pathname = this.props.location.pathname
 		console.log("BlogRouter render " + pathname)
@@ -137,6 +145,7 @@ class BlogRouter extends React.Component {
 		}
 		if (blogs.length == 0) {
 			console.log("NO BLOGS IN MEMORY!")
+			this.missing()
 			return <NoBlogs />
 		}
 	    if (blogs.length == 1) {
