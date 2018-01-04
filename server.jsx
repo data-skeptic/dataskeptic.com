@@ -1,6 +1,6 @@
 var aws = require('aws-sdk');
 import passport from 'passport'
-import session from 'express-session';
+import session from 'cookie-session';
 import {getRelatedContent, deleteRelatedContentByUri} from 'backend/admin/admin_related_services'
 import {get_blogs}               from 'backend/get_blogs'
 import {get_blogs_rss}           from 'backend/get_blogs_rss'
@@ -216,12 +216,11 @@ app.use(bodyParser.urlencoded({
 
 app.use(
     session({
-        secret: 'MvwDvMBzJXBVcPXJmkbHDHahAxU6AYFVbJDJyFKwBvGCDsxXgv',
-        cookie: {
-            maxAge: 86400000
-        },
-        resave: false,
-        saveUninitialized: false
+        name: 'session',
+        keys: ['datas', 'member'],
+
+        // Cookie Options
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
     })
 )
 app.use(passport.initialize());
