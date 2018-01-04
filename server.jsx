@@ -86,6 +86,7 @@ var itunesId = "xxxx"
 //=========== CONFIG
 const c = require('./config/config.json')
 console.dir('env = ' + env)
+const challenge_response = c[env]['challenge']
 itunesId = c[env]['itunes']
 stripe_key = c[env]['stripe']
 sp_key = c[env]['sp']
@@ -111,10 +112,6 @@ if (process.env.NODE_ENV === 'dev') {
     env = "dev"
 }
 
-console.log("Environment: ", env)
-
-const DEFAULT_ADVERTISE_HTML = `<img src="/img/advertise.png" width="100%"/>`;
-
 let Cache = {
 
 }
@@ -129,10 +126,6 @@ const resetCache = () => {
         , episodes_content: []     // pn
         , products: {}
         , contributors: {}
-        , advertise: {
-            card: DEFAULT_ADVERTISE_HTML,
-            banner: null
-        }
         , rfc: {}
     }
 }
@@ -236,6 +229,11 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.all("/.well-known/acme-challenge/:id", function(req, res) { 
+    res.status(200).send(`${req.params.id}.${challenge_response}`); 
+});
+
+
 // authorization module
 const api = require('./backend/api/v1');
 app.use('/api/v1/', api(() => Cache));
@@ -246,14 +244,10 @@ function api_router(req, res) {
         var req = req.body
         join_slack(req, res, slack_key)
         return true
-    }
-
-    if (req.url.indexOf('/api/v1/proposals/files') == 0) {
+    } else if (req.url.indexOf('/api/v1/proposals/files') == 0) {
         uploadProposalFiles(req, res, aws_proposals_bucket);
         return true;
-    }
-
-    if (req.url.indexOf('/api/v1/proposals/recording') == 0) {
+    } else if (req.url.indexOf('/api/v1/proposals/recording') == 0) {
         getRecording(req, res);
         return true;
     } else if (req.url.indexOf('/api/v1/proposals') == 0) {

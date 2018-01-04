@@ -7,20 +7,18 @@ const https = require('https')
 const path = require('path')
 const passport = require('passport')
 const aws = require('aws-sdk')
-const s3 = new aws.S3();
 
-var env = 'prod'
-console.log("env="+env)
-
-if (process.env.NODE_ENV === 'dev') {
-    env = "dev"
-}
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
 const c = require('./config/config.json')
 console.dir('index.js : env = ' + env)
 var aws_accessKeyId = c[env]['aws']['accessKeyId']
 var aws_secretAccessKey = c[env]['aws']['secretAccessKey']
 var aws_region = c[env]['aws']['region']
+
+console.log(aws_accessKeyId)
+console.log(aws_secretAccessKey)
+console.log(aws_region)
 
 aws.config.update(
     {
@@ -29,6 +27,7 @@ aws.config.update(
         "region": aws_region
     }
 );
+const s3 = new aws.S3();
 
 if (env == "prod") {
 	var sns = new aws.SNS();
@@ -69,12 +68,12 @@ const onError = (err) => {
 }
 
 const cert_path = './cert/'
+
 const recordingServer = require('./recordingServer').default
 const app = require('./server').default
 
 var launch_with_ssl = function() {
 	console.log("Attempt to load SSL")
-	console.dir("Attempt to load SSL")
 	const httpsOptions = {
 		cert: fs.readFileSync(cert_path + 'cert.pem'),
 		ca: [ fs.readFileSync(cert_path + 'fullchain.pem') ],
@@ -90,7 +89,6 @@ var launch_with_ssl = function() {
 		console.log(err)
 	})
 	console.log("Attempt to load SSL 2")
-	console.dir("Attempt to load SSL 2")
 
 	http.createServer(function (req, res) {
 		const host = 'dataskeptic.com'
@@ -99,7 +97,6 @@ var launch_with_ssl = function() {
 	}).listen(80, '0.0.0.0')
 
 	console.log("Attempt to load SSL 3")
-	console.dir("Attempt to load SSL 3")
 }
 
 var launch_without_ssl = function() {
@@ -111,25 +108,34 @@ var launch_without_ssl = function() {
 
 function config_load_promise() {
 	var clp = new Promise(function(resolve, reject) {
-		console.log("config_load_promise")
 		var files = ['cert.pem', 'fullchain.pem', 'privkey.pem', 'config.jsn']
 		var bucket = "config-dataskeptic.com"
 		var promises = []
+		console.log("start")
+		if (!fs.existsSync(cert_path)) {
+			console.log("Creating cert directory")
+			fs.mkdirSync(cert_path, 744);
+		} else {
+			console.log("Cert path exists")
+		}
 		for (var file of files) {
 			var s3Key = file
-			console.log("Getting: " + s3Key)
 		    var p = new Promise((resolve, reject) => {
+				console.log("Gettin': " + bucket + " " + s3Key)
 			    const params = { Bucket: bucket, Key: s3Key }
+console.log(params)
 			    s3.getObject(params)
 			      .createReadStream()
 			      .pipe(fs.createWriteStream(cert_path + s3Key))
 			      .on('close', () => {
+			      	console.log("Resolving: " + s3Key)
 			        resolve(true)
 			      })
 			  }) 
 		    promises.push(p)
 		}
 		return Promise.all(promises).then(function() {
+			console.log("All promises complete")
 			var c = 0
 			for (file of files) {
 				console.log("Checking for " + file)
@@ -150,6 +156,7 @@ function config_load_promise() {
 			resolve(false)
 		})
 	}).then(function(result) {
+		console.log("Done, now launch with SSL")
 		launch_with_ssl()
 	}, function(err) {
 		console.log("Error loading config, assuming development run")
