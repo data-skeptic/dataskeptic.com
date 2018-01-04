@@ -114,7 +114,7 @@ function config_load_promise() {
 		console.log("start")
 		if (!fs.existsSync(cert_path)) {
 			console.log("Creating cert directory")
-			fs.mkdirSync(cert_path, 744);
+			fs.mkdirSync(cert_path, 777);
 		} else {
 			console.log("Cert path exists")
 		}
