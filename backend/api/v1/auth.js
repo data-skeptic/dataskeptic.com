@@ -1,5 +1,4 @@
 import express from 'express'
-import session from "express-session";
 
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy

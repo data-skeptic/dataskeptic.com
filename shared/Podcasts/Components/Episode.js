@@ -31,8 +31,6 @@ class Episode extends React.Component {
     onEpisodeClick(e) {
         if (!isCtrlOrCommandKey(e)) {
             window.scrollTo(0, 0);
-
-            this.props.dispatch(removeFocusPost());
         }
     }
 
@@ -76,9 +74,9 @@ class Episode extends React.Component {
         return (
             <div className="row episode">
                 <div className="col-xs-12 col-sm-3 episode-left">
-                    <a href={episodeLink} onClick={this.onEpisodeClick}>
+                    <Link to={episodeLink} onClick={this.onEpisodeClick}>
                         <img className="episode-img" src={ep.img}/>
-                    </a>
+                    </Link>
                 </div>
                 <div className="col-xs-12 col-sm-8 episode-middle">
                     <div className="blog-date">{date}</div>
@@ -98,7 +96,7 @@ class Episode extends React.Component {
                     <div className="clear"></div>
                     <div className="episode-desc">
                         <p>{desc}</p>
-                        <a href={episodeLink} className="episode-view-more">View More <i className="glyphicon glyphicon-more glyphicon-chevron-right"/></a>
+                        <Link to={episodeLink} className="episode-view-more">View More <i className="glyphicon glyphicon-more glyphicon-chevron-right"/></Link>
                     </div>
                 </div>
                 <div className="clear"></div>
