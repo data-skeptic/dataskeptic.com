@@ -39,8 +39,13 @@ import Admin                   from 'components/admin/Admin';
 
 import SnlImpact               from 'components/l/SnlImpact';
 
+const env = (process.env.NODE_ENV === "production") ? 'prod' : 'dev'
 
 function loadData() {
+    if (env === "dev") {
+        return; // ga initialize at index.js only for prod
+    }
+
 	if (typeof window !== 'undefined') {
 		const p = window.location.pathname;
 		ReactGA.set({ page: p });
