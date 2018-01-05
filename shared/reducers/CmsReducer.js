@@ -34,6 +34,7 @@ export default function cmsReducer(state = defaultState, action) {
         var src_file = action.payload.src_file
         var check = nstate.blog_content[src_file]
         if (check == undefined) {
+            nstate.blog_state = "loading"
             var envp = ""
             if (env != "prod") {
                 envp = env + "."
@@ -53,6 +54,7 @@ export default function cmsReducer(state = defaultState, action) {
                 }
             });
         } else {
+            nstate.blog_state = "loaded"
             console.log("Blog already in cache")
         }
         break
@@ -63,6 +65,7 @@ export default function cmsReducer(state = defaultState, action) {
         var src_file = action.payload.src_file
         var content = action.payload.content
         nstate.blog_content[src_file] = content
+        nstate.blog_state = "loaded"
         break
     case 'CMS_LOAD_PENDING_BLOGS':
         var url = base_url + "/blog/pending"

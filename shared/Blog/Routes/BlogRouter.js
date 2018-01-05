@@ -149,7 +149,7 @@ class BlogRouter extends React.Component {
 			return <NoBlogs />
 		}
 	    if (blogs.length == 1) {
-			return <BlogItem blog={blogs[0]} />
+			return <BlogItem blog={blogs[0]} loading={blog_state === "loading"}/>
 		} else {
 			return (
 				<div className="center">
