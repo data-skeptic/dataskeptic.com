@@ -54,11 +54,47 @@ export default function memberPortalReducer(state = defaultState, action) {
         nstate.mode = mode
     case 'CANCEL_MEMBERSHIP':
         console.log("CANCEL_MEMBERSHIP")
+        var email = action.payload.email
+        var uri = base_url + '/members/cancel'
+        axios
+            .post(uri, {email})
+            .then(function(result) {
+                console.log(result['data'])
+                var status = result['data']['status']
+                if (status == "ok") {
+                    alert("Your membership has been cancelled.  Please allow 2-3 days for processing.")
+                } else {
+                    alert("An error has occurred.  Please email orders@dataskeptic.com")
+                }
+            })
+            .catch((err) => {
+                var errorMsg = JSON.stringify(err)
+                console.log(errorMsg)
+            })
         ///axis api members/cancel
         break
     case 'CHANGE_MEMBERSHIP':
         console.log("CHANGE_MEMBERSHIP")
-        ///members/upgrade
+        var email = action.payload.email
+        var uri = base_url + '/members/change'
+        axios
+            .post(uri, {email})
+            .then(function(result) {
+                console.log(result['data'])
+                var status = result['data']['status']
+                if (status == "ok") {
+                    alert("Your membership has been cancelled.  Please allow 2-3 days for processing.")
+                } else if (status == "not-implemented") {
+                    alert("Hrmm.  Sorry, we didn't implement that yet!  You have two options 1) Cancel your current membership and re-subscribe 2) Contact orders@dataskeptic.com with your specific request and we can help.")
+                } else {
+                    alert("An error has occurred.  Please email orders@dataskeptic.com")
+                }
+            })
+            .catch((err) => {
+                var errorMsg = JSON.stringify(err)
+                console.log(errorMsg)
+            })
+        ///axis api members/cancel
         break
   }
   return Immutable.fromJS(nstate)
