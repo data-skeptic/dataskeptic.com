@@ -162,9 +162,12 @@ const doRefresh = (store) => {
             // fill the data
             Cache.products = {};
             Cache.products.items = products;
+            return get_contributors()
         })
-        .then(() => {
-            Cache.contributors = get_contributors()
+        .then((contributors) => {
+            console.log('contributors')
+            console.log(contributors)
+            Cache.contributors = contributors
             return loadCurrentRFC()
         })
         .then((rfc) => {
@@ -279,9 +282,12 @@ function api_router(req, res) {
         order_list(req, res, stripe_key)
         return true
     }
-    else if (req.url.indexOf('/api/contributors/list') == 0) {
+    else if (req.url.indexOf('/api/v1/contributors/list') == 0) {
         var req = req.body
-        var resp = get_contributors()
+        console.log("HERE!")
+        var resp = Cache.contributors
+        console.log("HERE2!")
+        console.log(resp)
         return res.status(200).end(JSON.stringify(resp))
     }
     else if (req.url.indexOf('/api/Related') == 0) {
@@ -389,10 +395,23 @@ function updateState(store, pathname, req) {
     inject_years(store, Cache)
 
     store.dispatch({type: "PROPOSAL_SET_BUCKET", payload: {aws_proposals_bucket}})
-
-    var contributors = get_contributors();
-    store.dispatch({type: "LOAD_CONTRIBUTORS_LIST_SUCCESS", payload: {contributors}});
-
+    if (Cache.contributors != undefined && Cache.contributors != []) {
+        console.log("usingcache")
+        console.log(Cache.contributors)
+        store.dispatch({type: "SET_CONTRIBUTORS", payload: Cache.contributors})
+    } else {
+        return new Promise(function(resolve, reject) {
+            console.log("@@@")
+            resolve(get_contributors())
+        }).then(function(contributors) {
+            console.log("Got contributors")
+            console.log(contributors)
+            store.dispatch({type: "SET_CONTRIBUTORS", payload: contributors})
+        }, function(err) {
+            console.log("Error getting contributors")
+            console.log(err)
+        });
+    }
     if (pathname === "" || pathname === "/") {
         inject_homepage(store, Cache, pathname)
     }
