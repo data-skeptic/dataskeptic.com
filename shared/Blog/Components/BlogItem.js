@@ -38,11 +38,12 @@ class BlogItem extends React.Component {
 		var oepisodes = this.props.episodes.toJS()
 		var disqus_username = osite.disqus_username
 		var blog = this.props.blog
+		var loading = this.props.loading
 		var author = blog['author']
 		var prettyname = blog.prettyname
 		var src_file = blog.src_file
 		var content = ocms.blog_content[src_file]
-		if (content == undefined) {
+		if (content === undefined || loading) {
 			return <Loading />
 		}
 		var contributors = osite.contributors
