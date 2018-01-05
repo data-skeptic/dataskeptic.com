@@ -10,7 +10,8 @@ console.log(["MPR env", env])
 var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
 const init = {
-	mode: "loading"
+	mode: "loading",
+    update_member_msg: ""
 }
 
 const defaultState = Immutable.fromJS(init);
@@ -55,6 +56,7 @@ export default function memberPortalReducer(state = defaultState, action) {
     case 'CANCEL_MEMBERSHIP':
         console.log("CANCEL_MEMBERSHIP")
         var email = action.payload.email
+        var dispatch = action.payload.dispatch
         var uri = base_url + '/members/cancel'
         axios
             .post(uri, {email})
@@ -70,12 +72,19 @@ export default function memberPortalReducer(state = defaultState, action) {
             .catch((err) => {
                 var errorMsg = JSON.stringify(err)
                 console.log(errorMsg)
+                var msg = "An error has occurred.  Please email orders@dataskeptic.com"
+                dispatch({type: "UPDATE_MEMBERSHIP_MSG", payload: {msg} })
             })
         ///axis api members/cancel
+        break
+    case 'UPDATE_MEMBERSHIP_MSG':
+        console.log("UPDATE_MEMBERSHIP_MSG")
+        nstate.update_member_msg = action.payload.msg
         break
     case 'CHANGE_MEMBERSHIP':
         console.log("CHANGE_MEMBERSHIP")
         var email = action.payload.email
+        var dispatch = action.payload.dispatch
         var uri = base_url + '/members/change'
         axios
             .post(uri, {email})
