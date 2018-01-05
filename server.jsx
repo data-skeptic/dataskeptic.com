@@ -84,6 +84,12 @@ var latest_rfc_id = "test-request"
 var itunesId = "xxxx"
 
 //=========== CONFIG
+const IS_PROD = process.env.NODE_ENV !== 'dev';
+if (process.env.NODE_ENV === 'dev') {
+    require('./webpack.dev').default(app);
+    env = "dev"
+}
+
 const c = require('./config/config.json')
 console.dir('env = ' + env)
 itunesId = c[env]['itunes']
@@ -105,11 +111,6 @@ aws.config.update(
 
 const docClient = new aws.DynamoDB.DocumentClient();
 
-const IS_PROD = process.env.NODE_ENV !== 'dev';
-if (process.env.NODE_ENV === 'dev') {
-    require('./webpack.dev').default(app);
-    env = "dev"
-}
 
 let Cache = {
 
