@@ -8,6 +8,8 @@ import EpisodePlayer from "../../components/EpisodePlayer"
 import MailingListBlogFooter from "./MailingListBlogFooter"
 import BlogLink from './BlogLink'
 import BlogBreadCrumbs from './BlogBreadCrumbs'
+import BlogAuthorTop from './BlogAuthorTop'
+import BlogAuthorBottom from './BlogAuthorBottom'
 import Loading from "../../Common/Components/Loading"
 
 class BlogItem extends React.Component {
@@ -36,16 +38,23 @@ class BlogItem extends React.Component {
 		var oepisodes = this.props.episodes.toJS()
 		var disqus_username = osite.disqus_username
 		var blog = this.props.blog
+		var author = blog['author']
 		var prettyname = blog.prettyname
 		var src_file = blog.src_file
 		var content = ocms.blog_content[src_file]
 		if (content == undefined) {
 			return <Loading />
 		}
+		var contributors = osite.contributors
+		var contributor = contributors[author.toLowerCase()]
 		var url = 'http://dataskeptic.com/blog' + prettyname
 		var title = blog['title']
 		var top = <div></div>
 		var bot = <div></div>
+		if (contributor != undefined) {
+			top = <BlogAuthorTop contributor={contributor} />			
+			bot = <BlogAuthorBottom contributor={contributor} />
+		}
 		var guid = blog.guid
 		if (guid) {
 			var episode = undefined
