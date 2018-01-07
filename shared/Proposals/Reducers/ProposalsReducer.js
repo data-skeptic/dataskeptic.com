@@ -25,7 +25,9 @@ import {
 
     SUBMIT_COMMENT_FORM_REQUEST,
     SUBMIT_COMMENT_FORM_SUCCESS,
-    SUBMIT_COMMENT_FORM_FAIL
+    SUBMIT_COMMENT_FORM_FAIL,
+
+    RESET_SUBMIT
 } from '../Actions/CommentBoxFormActions';
 
 import {
@@ -172,6 +174,14 @@ export default function ProposalsReducer(state = initialState, action) {
         case LOG_OUT:
             nstate.hasAccess = false;
             break;
+
+        case RESET_SUBMIT:
+            nstate.form.error = {}
+            nstate.form.recording = null
+            nstate.form.submitted = false
+            nstate.review.url = ''
+            break;
+
         default:
             break;
     }

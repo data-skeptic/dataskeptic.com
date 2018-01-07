@@ -1,4 +1,4 @@
-import axios                     from 'axios';
+import axios from 'axios'
 import React from "react"
 import ReactDOM from "react-dom"
 import { connect } from 'react-redux'
@@ -35,6 +35,7 @@ class OpenOrders extends React.Component {
 		}
 	    return (
 	    	<div>
+	    		<h3>Recent Orders</h3>
 				{
 					this.state.orders.map(function(order) {
 						return (<div key={order.id}>

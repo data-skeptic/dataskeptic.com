@@ -12,16 +12,14 @@ const Post = (data) => ({
     contributor: data['contributor'],
     related: data['related'],
 
-    rendered: data['rendered'],
+    rendered: data['src_file'],
 
-    discoveredAt: data['date_discovered'],
     renderedAt: data['last_rendered'],
     publishedAt: data['publish_date'],
 
     author: data['author'],
 
-    env: data['env'],
-    uri: data['uri']
+    env: data['env']
 
 });
 

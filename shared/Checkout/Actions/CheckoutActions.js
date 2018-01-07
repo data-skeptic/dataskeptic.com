@@ -67,15 +67,8 @@ export function checkoutRequestStart(data) {
 
 export function checkoutRequestSuccess(message, data) {
     const emailData = {
-        msg: `
-            Hi ${data.first_name},
-            
-            Thank you for supporting Data Skeptic.  Your order has been recieved and will be processed on our end right away.  Please allow a few weeks for shipping.  If you have any questions or issues with your order, don't hesitate to reach out to me directly.
-
-            All the best,
-
-            Kyle
-        `,
+        ...data,
+        type: 'checkout',
         to: data.email,
         subject: 'Your dataskeptic.com order confirmation'
     };

@@ -33,6 +33,10 @@ class MainView extends React.Component {
     this.onNavigationItemClick = this.onNavigationItemClick.bind(this)
     this.onOverflowClick = this.onOverflowClick.bind(this)
     this.onFooterItemClick = this.onFooterItemClick.bind(this)
+
+    this.state = {
+      ready: false
+    }
   }
 
   loadState() {
@@ -197,6 +201,8 @@ class MainView extends React.Component {
     const itemsCount = getCartItemsCount(cart.toJS().cart_items);
     const isOverflowMode = isCartVisible
 
+    const { ready } = this.state
+
     return (
         <div className={ classNames('site', {'no-scroll' : isMobileMenuVisible}) }>
           <div className="container-fluid">
@@ -229,8 +235,7 @@ export default connect(
       cart: state.cart,
       isCartVisible: state.cart.getIn(['cart_visible']),
       site: state.site,
-      isMobileMenuVisible: state.layout.getIn(['isMobileMenuVisible']),
-      bannerContent: state.advertise.getIn(['banner'])
+      isMobileMenuVisible: state.layout.getIn(['isMobileMenuVisible'])
     }),
     dispatch => bindActionCreators({
       toggleMobileMenu,

@@ -64,8 +64,6 @@ export default class LightsOut extends React.Component {
 		if (!this.state.won) {
 			return (
 				<div className="center">
-					<h2>Lights Out</h2>
-					<p>Click on the squares below to turn off adjacent lights.  Turn off all the lights to win!</p>
 					<div className="lights-out">
 						{arr.map(function(r) {
 							return (
@@ -80,6 +78,7 @@ export default class LightsOut extends React.Component {
 							)
 						})}
 					</div>
+					<p>Click on the squares below to turn off adjacent lights.  Turn off all the lights to win!</p>
 				</div>
 			)
 		}
@@ -89,7 +88,6 @@ export default class LightsOut extends React.Component {
 					<div className="lo-container">
 						<div className="lo-congrats">
 							<p>Congratulations, you've won the game!!!</p>
-							<p>We add easter eggs to dataskeptic.com from time to time where visitors can win prizes.  This easter egg was already solved and the winner got a Data Skeptic t-shirt.</p>
 						</div>
 					</div>
 				</div>

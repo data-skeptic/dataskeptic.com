@@ -3,10 +3,14 @@ import ReactDOM from "react-dom"
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import ReactDisqusComments from 'react-disqus-comments'
-
-import LatestEpisodePlayer from "../Containers/LatestEpisodePlayer"
+import snserror from '../../SnsUtil'
+import EpisodePlayer from "../../components/EpisodePlayer"
 import MailingListBlogFooter from "./MailingListBlogFooter"
 import BlogLink from './BlogLink'
+import BlogBreadCrumbs from './BlogBreadCrumbs'
+import BlogAuthorTop from './BlogAuthorTop'
+import BlogAuthorBottom from './BlogAuthorBottom'
+import Loading from "../../Common/Components/Loading"
 
 class BlogItem extends React.Component {
 	constructor(props) {
@@ -14,65 +18,78 @@ class BlogItem extends React.Component {
 		var title = this.props.title
 		var dispatch = this.props.dispatch
 		var pathname = this.props.pathname
-		setTimeout(function() {
-		    dispatch({type: "SET_TITLE", payload: title })
-		}, 10)
+	}
+
+	componentWillMount() {
+		var dispatch = this.props.dispatch
+		var blog = this.props.blog
+		var src_file = blog.src_file
+		dispatch({ type: "CMS_LOAD_BLOG_CONTENT", payload: {src_file, dispatch} })
 	}
 
     handleNewComment(comment) {
-    	// TODO: Maybe use a cognitive service here?
-        console.log(comment.text);
-    }
+        console.log(comment.text)
+		snserror("Blog comment", comment.text, "ds-newblog")
+	}
 
 	render() {
-		var oepisodes = this.props.episodes.toJS()
-		var oblogs = this.props.blogs.toJS()
 		var osite = this.props.site.toJS()
+		var ocms = this.props.cms.toJS()
+		var oepisodes = this.props.episodes.toJS()
 		var disqus_username = osite.disqus_username
-		var blog_focus = oblogs.blog_focus
-		var title = this.props.title
-		var isEpisode = false
-
+		var blog = this.props.blog
+		var loading = this.props.loading
+		var author = blog['author']
+		var prettyname = blog.prettyname
+		var src_file = blog.src_file
+		var content = ocms.blog_content[src_file]
+		if (content === undefined || loading) {
+			return <Loading />
+		}
+		var contributors = osite.contributors
+		var contributor = contributors[author.toLowerCase()]
+		var url = 'http://dataskeptic.com/blog' + prettyname
+		var title = blog['title']
 		var top = <div></div>
-		if (blog_focus.blog != undefined && blog_focus.blog.guid != undefined) {
-			var ep = oepisodes.episodes_map[blog_focus.blog.guid]
-			console.log("ep")
-			console.log(ep)
-			try {
-				top = (
-					<div className="home-player">
-						<LatestEpisodePlayer guid={blog_focus.blog.guid} />
-					</div>
-				)
-				isEpisode = true					
-			}
-			catch (err) {
-				console.log(err)
-				top = <div></div>
-			}
-		}
 		var bot = <div></div>
-		var content = blog_focus.content || "Loading...."
-		if (content == "") {
-			content = "Loading....."
+		if (contributor != undefined) {
+			top = <BlogAuthorTop contributor={contributor} />			
+			bot = <BlogAuthorBottom contributor={contributor} />
 		}
-		var uid = 'http://dataskeptic.com/blog' + blog_focus.blog.prettyname
-
+		var guid = blog.guid
+		if (guid) {
+			var episode = undefined
+			console.log(oepisodes)
+			for (var ep of oepisodes.episodes) {
+				if (ep.guid == guid) {
+					episode = ep
+				}
+			}
+			top = (
+				<EpisodePlayer episode={episode} />
+			)				
+		}
 		return (
-			<div className="center">
+			<div className="blog-item-wrapper">
+				<BlogBreadCrumbs prettyname={prettyname} />
 				{top}
-				<span dangerouslySetInnerHTML={{__html: content}} />
+				<div className="content" dangerouslySetInnerHTML={{__html: content}} />
 				{bot}
 				<MailingListBlogFooter />
 	            <ReactDisqusComments
 	                shortname={disqus_username}
-	                identifier={uid}
+	                identifier={url}
 	                title={title}
-	                url={uid}
+	                url={url}
 	                onNewComment={this.handleNewComment}/>
 			</div>
 		)
 	}
 }
-export default connect(state => ({ site: state.site, episodes: state.episodes, blogs: state.blogs }))(BlogItem)
+export default connect(state => ({ 
+	site: state.site,
+	cms: state.cms,
+	episodes: state.episodes,
+	blogs: state.blogs
+}))(BlogItem)
 

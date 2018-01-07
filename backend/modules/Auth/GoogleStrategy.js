@@ -1,12 +1,13 @@
 let passport = require('passport');
 let googleStrategy = require('passport-google-oauth').OAuth2Strategy;
-const config = require('../../../config/config.json')
-
+const configJson = require('../../../config/config.json')
+const env = process.env.NODE_ENV;
+const config = env === 'production' ? configJson.prod : configJson.dev;
 module.exports = function() {
   passport.use(new googleStrategy({
-    clientID: `${config.dev.googlePassport.clientId}`,
-    clientSecret: `${config.dev.googlePassport.clientSecret}`,
-    callbackURL: 'http://localhost:3000/api/v1/auth/google/callback',
+    clientID: `${config.googlePassport.clientId}`,
+    clientSecret: `${config.googlePassport.clientSecret}`,
+    callbackURL: '/api/v1/auth/google/callback',
     passReqToCallback:true
   },
     function (req, accessToken, refreshToken, profile, done){

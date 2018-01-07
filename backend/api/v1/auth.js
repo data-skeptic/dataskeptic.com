@@ -6,24 +6,28 @@ const LinkedinStrategy = require('../../modules/Auth/LinkedinStrategy').default
 const GoogleStrategy = require('../../modules/Auth/GoogleStrategy')();
 const UserServices = require('../../modules/Users/Services/UserServices');
 let redirectURL;
+
+const checkIfAdmin = (email) => {
+    const email_reg_exp = /^.*@dataskeptic\.com/i;
+    return email_reg_exp.test(email);
+};
+
+const checkRoute = (route) => {
+    const admin_rexp = new RegExp('.*\/admin\/login')
+    return admin_rexp.test(route)
+}
+
 module.exports = () => {
     const router = express.Router()
 
-    passport.serializeUser(function (user, done) {
-        done(null, user.id)
-    })
+    passport.serializeUser((user, done) => done(null, user))
+    passport.deserializeUser(async (id, done) =>
+        done(null, id)
+    )
 
-    passport.deserializeUser(function (id, done) {
-        const user = {
-            id
-        }
-
-        done(null, user)
-    })
     //passport.use(GoogleStrategy({env}))
     passport.use(LinkedinStrategy(global.env))
-    router.use(passport.initialize())
-    router.use(passport.session())
+
 
     // REGULAR
     passport.use(
@@ -45,7 +49,10 @@ module.exports = () => {
         )
     )
 
-    // REGULAR
+    router.get('/usertest', (req, res) => {
+        res.send(req.user);
+    });
+
     router.post('/login', (req, res, next) => {
         passport.authenticate('local', {failWithError: true}, function (err, user, info) {
             if (err) {
@@ -92,6 +99,7 @@ module.exports = () => {
             if (!user) {
                 return res.status(403).send({message: 'System Error'})
             }
+
             req.logIn(user, err => {
                 if (err) {
                     return res.send({
@@ -99,8 +107,18 @@ module.exports = () => {
                         message: err
                     })
                 } else {
-                    console.dir(redirectURL)
-                    redirectURL = redirectURL + '/auth?user=' + JSON.stringify(user);
+                    user.type = checkIfAdmin(user.email) ? 'admin' : 'user';
+                    user.hasAccess = true
+                    if(checkRoute(redirectURL)){
+                        if(checkIfAdmin(user.email)) {
+                            redirectURL = redirectURL.replace('/login', '');
+                        }
+                    }
+                    else{
+                        //redirectURL = redirectURL + '/auth?user=' + JSON.stringify(user);
+                    }
+
+                    console.dir(`user`)
                     return res.redirect(redirectURL)
                 }
 
@@ -109,7 +127,6 @@ module.exports = () => {
     })
 
     router.get('/linkedin/callback', function (req, res, next) {
-
         passport.authenticate('linkedin', {
             failWithError: true,
             failureFlash: true
@@ -142,7 +159,7 @@ module.exports = () => {
     router.all('/logout', function (req, res, next) {
         req.logout();
         req.session.destroy();
-        res.redirect('/rfc/logout');
+        res.redirect('/');
     })
 
     return router

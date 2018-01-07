@@ -222,31 +222,11 @@ export function review() {
 }
 
 /**
- * SUBMIT
+ * SUBMITTING
  */
-export function submit() {
+export function submitting() {
     return (dispatch) => {
-        dispatch(submitRequest());
-
-        dispatch(changeStep(steps.COMPLETE));
-    }
-}
-
-export function submitRequest() {
-    return {
-        type: RECORDING_FLOW_SUBMIT_REQUEST
-    }
-}
-
-export function submitSuccess(data) {
-    return {
-        type: RECORDING_FLOW_SUBMIT_SUCCESS
-    }
-}
-
-export function submitError(data) {
-    return {
-        type: RECORDING_FLOW_SUBMIT_FAIL
+        dispatch(changeStep(steps.SUBMITTING));
     }
 }
 
@@ -254,8 +234,8 @@ export function submitError(data) {
  * COMPLETE
  */
 export function complete() {
-    return {
-        type: RECORDING_FLOW_COMPLETE
+    return (dispatch) => {
+        dispatch(changeStep(steps.COMPLETE));
     }
 }
 

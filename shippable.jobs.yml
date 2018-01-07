@@ -1,0 +1,22 @@
+jobs:
+  - name: shipdemo-manifest
+    type: manifest
+    steps:
+     - IN: shipdemo-img
+     - TASK: managed
+
+  - name: dataskepticcom_runCI
+    type: runCI
+    steps:
+      - OUT: shipdemo-img
+       
+  - name: shipdemo-test-deploy
+    type: deploy
+    steps:
+      - IN: shipdemo-manifest
+        force: true
+      - IN: shipdemo-img-options
+      - IN: ecs-test-cluster
+      - TASK: managed
+        deployMethod: replace
+        

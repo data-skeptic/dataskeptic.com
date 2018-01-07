@@ -12,8 +12,6 @@ import PaginationContainer from '../../Pagination/Containers/PaginationContainer
 
 import transform_pathname from "../../utils/transform_pathname"
 
-import {loadBlogs} from '../Actions/BlogsActions';
-
 import isNaN from 'lodash/isNaN';
 
 import Container from '../../Layout/Components/Container/Container';

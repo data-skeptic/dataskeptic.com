@@ -45,11 +45,6 @@ const getInitialState = (state) => {
 
 const initialState = immutifyState(getInitialState(window.__INITIAL_STATE__));
 
-console.log("Initialize GA")
-ReactGA.initialize("UA-51062432-1", {
-    debug: false
-});
-
 const history = createBrowserHistory();
 
 const reducer = combineReducers({
@@ -66,6 +61,12 @@ var env = "prod"
 
 if (process.env.NODE_ENV != "production") {
     env = "dev"
+} else {
+    console.log("index.jsx env=" + process.env.NODE_ENV)
+    console.log("Initialize GA")
+    ReactGA.initialize("UA-51062432-1", {
+        debug: false
+    });
 }
 
 var country = "us"

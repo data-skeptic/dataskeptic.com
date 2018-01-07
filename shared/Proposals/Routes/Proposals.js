@@ -34,7 +34,7 @@ class Proposals extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.hasAccess && this.state.authorizedUser) {
+        if (nextProps.user && this.state.authorizedUser) {
             this.setState({ready: true})
         }
     }
@@ -45,7 +45,7 @@ class Proposals extends Component {
 
     static getPageMeta() {
         return {
-            title: 'Proposals | Data Skeptic'
+            title: 'Request for Comment | Data Skeptic'
         }
     }
 
@@ -57,11 +57,10 @@ class Proposals extends Component {
     }
 
     getAuthorizedUser() {
-        const user = localStorage.getItem('authorizedUser');
-        if (user) {
+        const {user} = this.props;
+        if (user && user.hasAccess) {
             try {
-                this.setState({ authorizedUser: JSON.parse(user) })
-                this.props.authorize(!!user)
+                this.setState({ authorizedUser: user })
             } catch (e) {}
         }
     }
@@ -94,36 +93,33 @@ class Proposals extends Component {
 
                     <Container>
                         <Content>
-                            <div className="log-out-wrapper">
-                                <button className="btn" onClick={this.logout}><i className="glyphicon glyphicon-arrow-left"></i>Log out</button>
-                            </div>
-                            {!isClosed && (
-                                <div>
-                                    <h2>Request for Comment</h2>
-                                    <p>Thanks for considering contributing your thoughts for an upcoming episode. Please
-                                        review the
-                                        topic below and share any thoughts you have on it. We aren't always able to use
-                                        every
-                                        comment submitted, but we will do our best and appreciate your input.</p>
-                                    <h3><b>Current topic:</b> {topic}</h3>
-                                    <p dangerouslySetInnerHTML={this.getMarkdown(`${long_description}`)}>
-
-                                    </p>
-
+                            <div class="row">
+                                <div className="col-xs-12 col-md-8 countdown-wrapper">
                                     {deadline ?
-                                        <p className="deadline"><b>Time to comment:</b><Countdown to={to.toString()}
-                                                                                                  onDeadlineReached={this.deadline}/>
-                                        </p>
-                                        : null}
+                                            <p className="deadline"><b>Time to comment:</b><Countdown to={to.toString()}
+                                                                                                      onDeadlineReached={this.deadline}/>
+                                            </p>
+                                            : null}
+                                </div>
+                                <div className="col-xs-12 col-md-4 log-out-wrapper">
+                                    <button className="btn" onClick={this.logout}><i className="glyphicon glyphicon-arrow-left"></i>Log out</button>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                            {!isClosed && (
+                                <div className="col-xs-12">
+                                    <span className="rfc-title"><b>Topic:</b> {topic}</span>
+                                    <p dangerouslySetInnerHTML={this.getMarkdown(`${long_description}`)}>
+                                    </p>
                                 </div>
                             )}
 
-
                             {isClosed
                                 ?
-                                <div className="panel panel-default">
+                                <div className="col-xs-12 panel panel-default">
                                     <div className="panel-heading">
-                                        <h3 className="panel-title">This RFC has closed.</h3>
+                                        <h3 className="panel-title">The last Request For Comment has closed</h3>
                                     </div>
                                     <div className="panel-body">
                                         We don't have any active topics. Please check back soon when we launch the next!
@@ -132,6 +128,7 @@ class Proposals extends Component {
                                 :
                                 <CommentBoxFormContainer user={user} aws_proposals_bucket={aws_proposals_bucket}/>
                             }
+                            </div>
 
                         </Content>
                     </Container>
@@ -144,8 +141,20 @@ class Proposals extends Component {
                     <Container>
                         <div className="login-container">
                             <h2>Welcome to the Data Skeptic</h2>
-                            <h3>Request For Comment</h3>
+                            <h3>Request For Comment System</h3>
+                            <p>
+                            This is the login to an invite-only browser based recording system<br/>
+                            where you can share your thoughts on a chosen topic.  Your comments<br/>
+                            are likely to be included in a future episode of Data Skeptic.
+                            </p>
                             <button onClick={this.login} className="btn btn-primary">Login</button>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
                         </div>
                     </Container>
                 </div>
@@ -160,7 +169,7 @@ export default connect(
     state => ({
         aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket']),
         proposal: state.proposals.getIn(['proposal']).toJS(),
-        hasAccess: state.proposals.getIn(['hasAccess'])
+        user: state.auth.getIn(['user']).toJS()
     }),
     dispatch => bindActionCreators({
         fetchCurrentProposal,

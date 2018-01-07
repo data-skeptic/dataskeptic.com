@@ -90,6 +90,8 @@ class SendEmail extends React.Component {
 			response_msg = <div classname="error-box">{email_send_msg}</div>
 		}
 		return (
+			<div>
+			<h3>Send Confirmation Email</h3>
 			<div className="send-email">
 				<select onChange={this.pickTemplate.bind(this)}>
 				<option key={"---[Choose]---"} value={""}>---[Choose]---</option>
@@ -117,6 +119,7 @@ class SendEmail extends React.Component {
 						<button className="col-xs-12 btn" onClick={this.sendEmail.bind(this)}>Send Email</button>
 					</div>
 				</div>
+			</div>
 			</div>
 		)
 	}

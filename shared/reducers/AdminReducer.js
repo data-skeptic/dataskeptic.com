@@ -2,9 +2,23 @@ import Immutable from 'immutable';
 import { fromJS } from 'immutable';
 import querystring from 'querystring'
 import axios from "axios"
+import snserror from '../SnsUtil'
+import PrintfulClient from './printfulclient'
+
+var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
+
+const config = require('../../config/config.json');
+
+var printful_key = config[env]["printful"]["api"]
+var pf = new PrintfulClient(printful_key);
+
+var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
 const init = {
     "email_send_msg": "",
+    "pending_blogs": [],
+    "recent_blogs": [],
+    "add_related_msg": "",
 	"from": "orders@dataskeptic.com",
 	"to": "kylepolich@gmail.com",
 	"subject": "Hello from Data Skeptic",
@@ -44,7 +58,8 @@ const init = {
         country: 'US',
         spError: ''
     },
-	invoice: undefined
+    isAdmin : false,
+    loggedInAdmin:{}
 }
 
 const defaultState = Immutable.fromJS(init);
@@ -60,8 +75,11 @@ var sizeMap = {
     "4XL": "xxxxl"
 }
 
+
+
 export default function adminReducer(state = defaultState, action) {
   var nstate = state.toJS()
+  var apromise = undefined
   switch(action.type) {
     case 'SET_EMAIL_FROM':
     	nstate.from = action.payload
@@ -79,8 +97,6 @@ export default function adminReducer(state = defaultState, action) {
     	nstate.body = action.payload
     	break
     case 'SET_EMAIL_HEADER':
-        console.log("action.payload")
-        console.log(action.payload)
         nstate.send_headers = action.payload
     case 'UPDATE_ORDER':
         var u = action.payload
@@ -103,9 +119,9 @@ export default function adminReducer(state = defaultState, action) {
     		i += 1
     	}
     case 'SEND_EMAIL':
-    	var header = "https://s3.amazonaws.com/dataskeptic.com/img/png/email-header.png"
-    	var header = "https://s3.amazonaws.com/dataskeptic.com/img/png/email-footer.png"
-    	break;
+        var header = `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta charset="UTF-8"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <meta name="viewport" content="width=device-width, initial-scale=1"><title>dataskeptic</title><style type="text/css">@media only screen and (min-width:481px) and (max-width: 600px){.whole-width{width:425px !Important;}.left-side{float: left !important;}.left-side img{width:100% !important;}.left-sideimg{width:100% !important;}.td_1{width:100% !important;float:left !important;}.td_12{width: 100% !important;float:left !important;}}@media only screen and (min-width:321px) and (max-width: 480px){.whole-width{width:355px !Important;}.hello{float: left !important;}.hello2{padding:0 0 0 14px !important;}.hello3{padding:0 15px 0 19px !important;}.hello4{padding:0px !important;}.access{padding:22px 0 25px 26px !important;}.pic{padding:25px 0 0 90px !important;}.left-side{float: left !important;}.left-side img{width:100% !important;}.left-sideimg{width:100% !important;}.td_1{width:100% !important;float:left !important;}.td_12{width: 100% !important;float:left !important;}.email_btn img{width:274px !important;}.centerr{text-align:center !important;}}@media only screen and (max-width:320px){.whole-width{width:300px !Important;}.left-side{float: left !important;}.left-side img{width:100% !important;}.left-sideimg{width:100% !important;}.td_1{width:100% !important;float:left !important;}.td_12{width: 100% !important;float:left !important;}.centerr{text-align:center !important;}}</style></head> <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0"> <center> <table bgcolor="#047595" align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" > <tr> <td align="center" valign="top" id="bodyCell"><table border="0" cellpadding="0" cellspacing="0" class="whole-width" style="width:600px;background:#002940;"><tr bgcolor="#3a3b3b"><td align="left" valign="top"><table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td style="padding:20px 0 23px 0px;" align="center" valign="top" ><a title="dataskeptic" href="https://dataskeptic.com/"><img style="display:block;" width="180" align="center" src="https://dataskeptic.com/img/png/logo.png" border="0" alt=""/></a></td></tr></table></td></tr><tr bgcolor="#ffffff"><td align="left" valign="top"><table border="0" cellpadding="0" cellspacing="0" width="100%"><tr> <td style="text-align:center;line-height:29px;font-size:24px;font-family:\'Helvetica Neue\',Arial,\'sans-serif\';padding:25px 30px 35px 30px;color:#333333;" align="left" valign="top" >`
+        var footer = `</td></tr></table></td></tr></table><table border="0" cellpadding="0" cellspacing="0" class="whole-width" class="wrapper" style="width:600px;background:#3a3b3b;"><tr bgcolor="#3a3b3b"><td style="padding:5px 0 5px 0;" align="center" valign="top"><table border="0" cellpadding="0" cellspacing="0" width="100%"><tr bgcolor="#3a3b3b"><td align="center" valign="top"><table border="0" cellpadding="0" cellspacing="0" width="100%"><tr> <td style="padding:13px 0 10px 0;" align="center" valign="top" ><a title="dataskeptic" style="display:inline-block;" href="https://www.facebook.com/dataskeptic"><img border="0" style="display:block;border-width:0;" src="https://gallery.mailchimp.com/aabfeb82daabbad28e6f6745e/images/a301be2d-6f98-445a-9737-70d211cacbf5.jpg" alt=""></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a title="dataskeptic" style="display:inline-block;" href="https://twitter.com/dataskeptic"><img border="0" style="display:block;border-width:0;" src="https://gallery.mailchimp.com/aabfeb82daabbad28e6f6745e/images/fd5592b5-72f5-4f44-bd49-3bc5205f0a55.jpg" alt=""></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a title="dataskeptic" style="display:inline-block;" href="https://youtube.com/dataskeptic"><img border="0" style="display:block;border-width:0;" src="https://gallery.mailchimp.com/aabfeb82daabbad28e6f6745e/images/e76d4bc1-5f25-4423-b5e3-8bdce65d5f83.jpg" alt=""></a></td></tr></table></td></tr></table></td></tr></table> </td></tr></table> </center> </body></html>`
+        break;
     case 'ORDER_POPULATE':
         var order = action.payload
         var size = ''
@@ -115,7 +131,8 @@ export default function adminReducer(state = defaultState, action) {
             if (item.description == "Data Skeptic t-shirt") {
                 var p = item.parent
                 var sizeKey = p.split("_")[2]
-                size = sizeMap[sizeKey]
+                //size = sizeMap[sizeKey]
+                size = sizeKey
             }
         }
         nstate.order.errorMsg = ''
@@ -144,45 +161,84 @@ export default function adminReducer(state = defaultState, action) {
         nstate.order.spError = action.payload
         break;
     case 'PLACE_ORDER':
+        console.log("PLACE ORDER!!")
         var dispatch = action.payload
-        nstate.order.spError = "Ordering..."
+        nstate.order.spError = "Placing order..."
         var order = nstate.order
-        var data = {
-          'type': 'dtg',
-          'products[0][id]': order.productId,
-          'address[name]': order.customerName,
-          'products[0][color]': order.color,
-          'products[0][quantity]': order.quantity,
-          'products[0][size]': order.size,
-          'address[address1]': order.address1,
-          'address[address2]': order.address2,
-          'address[city]': order.city,
-          'address[state]': order.state,
-          'address[zip]': order.zipcode,
-          'address[country]': order.country,
-          'designId': order.designId
+
+        var ok_callback = function(r, info) {
+            var resp = r['data']
+            console.log(resp)
+            var errorMsg = "Success!"
+            dispatch({type: "SET_ORDER_SP_ERROR_MSG", payload: errorMsg })
         }
-        var url = "/api/order/create"
-        var sreq = querystring.stringify(data)
-        var config = {
-            'Content-Type' : "application/x-www-form-urlencoded"
-        };
-        axios
-            .post(url, sreq, config)
-            .then(function(r) {
-                console.log("OK!!!")
-                var resp = r['data']
-                console.log(resp)
-                var errorMsg = "Success!"
-                dispatch({type: "SET_ORDER_SP_ERROR_MSG", payload: errorMsg })
-            })
-            .catch(function(err) {
-                console.log("api error")
-                var resp = err['data']
-                var jstr = JSON.stringify(resp['response'])
-                var errorMsg = jstr
-                dispatch({type: "SET_ORDER_SP_ERROR_MSG", payload: errorMsg })
-            })
+
+        var error_callback = function(err) {
+            console.log("api error")
+            var jstr = JSON.stringify(err)
+            console.log(jstr)
+            dispatch({type: "SET_ORDER_SP_ERROR_MSG", payload: jstr })
+        }
+
+        var variantMap = {
+              "sml": 474
+            , "med": 505
+            , "lrg": 536
+            , "xlg": 474
+            , "xxl": 598
+            , "xxxL": 629
+        }
+
+        console.log(nstate.order.size)
+        var variant_id = variantMap[nstate.order.size]
+        console.log("variant_id = " + variant_id)
+
+        var oitem =     {
+          "variant_id": variant_id,
+          "quantity": 1,
+          "product": {"variant_id": variant_id, "product_id": 12},
+          "custom_product": [],
+          "files": [
+            {
+              "id": 37766873,
+              "type": "default",
+              "filename": "t-shirt.png",
+              "dpi": 300,
+              "created": 1511289196,
+              "preview_url": "https://d1yg28hrivmbqm.cloudfront.net/files/57c/57cc770e861106c42055789e4b0bab4b_preview.png" 
+            },
+            {
+              "id": 37766924,
+              "filename": "mockup_Flat-Front_Black.png",
+              "mime_type": "image/png",
+              "dpi": 72,
+              "preview_url": "https://d1yg28hrivmbqm.cloudfront.net/files/2c8/2c86623ea3caecd75518546e999c4933_preview.png" 
+            }
+          ],
+          "options": [],
+          "sku": null
+        }
+
+        var oitems = [oitem]
+
+        var d = {
+                recipient:  {
+                    name: order.customerName,
+                    address1: order.address1,
+                    address2: order.address2,
+                    city: order.city,
+                    state_code: order.state,
+                    country_code: order.country,
+                    zip: order.zipcode
+                },
+                items: oitems
+            }
+        console.log(JSON.stringify(d))
+
+        pf.post('orders',
+            d,
+            {confirm: 1}
+        ).success(ok_callback).error(error_callback);
         break
     case 'INIT_ORDERS':
         var dispatch = action.payload.dispatch
@@ -229,9 +285,70 @@ export default function adminReducer(state = defaultState, action) {
                 dispatch({type: "SET_ORDER_ERROR_MSG", payload: errorMsg })
             })
         break;
-    case 'ADD_INVOICE':
-      nstate.invoice = action.payload
-      break
+    case 'RELATED_CONTENT_ADD':
+        var payload = action.payload
+        var dispatch = payload['dispatch']
+        var url = base_url + "/blog/relatedcontent/add"
+        nstate.add_related_msg = "Saving..."
+        axios
+            .post(url, payload['data'])
+            .then(function(result) {
+                dispatch({type: "RELATED_CONTENT_LIST", payload: {dispatch, "add_related_msg": "Saved!"} })
+            })
+            .catch((err) => {
+                console.log(err)
+                var errorMsg = JSON.stringify(err)
+                snserror("ADD_RELATED_CONTENT", errorMsg)
+            })
+        break
+    case 'RELATED_CONTENT_LIST':
+        var dispatch = action.payload.dispatch
+        if (action.payload.add_related_msg != undefined) {
+            nstate.add_related_msg = action.payload.add_related_msg
+        }
+        var url = base_url + "/blog/relatedcontent/list"
+        axios
+            .get(url)
+            .then(function(result) {
+                var rcs = result['data']
+                dispatch({type: "RELATED_CONTENT_LIST_SET", payload: rcs })
+            })
+            .catch((err) => {
+                console.log(err)
+                var errorMsg = JSON.stringify(err)
+                snserror("RELATED_CONTENT_LIST", errorMsg)
+            })
+        break
+    case 'RELATED_CONTENT_LIST_SET':
+        var rcs = action.payload
+        nstate.relatedcontent = rcs
+        break
+    case 'RELATED_CONTENT_DELETE':
+        var payload = action.payload
+        var nlist = []
+        var content_id = payload['content_id']
+        var i = 0
+        while (i < nstate.relatedcontent.length) {
+            var rc = nstate.relatedcontent[i]
+            console.log([rc, i, content_id])
+            if (rc['content_id'] != content_id) {
+                nlist.push(rc)
+            }
+            i+=1
+        }
+        console.log(nlist)
+        nstate.relatedcontent = nlist
+        var url = base_url + "/blog/relatedcontent/delete"
+        axios
+            .post(url, payload)
+            .then(function(result) {
+            })
+            .catch((err) => {
+                console.log(err)
+                var errorMsg = JSON.stringify(err)
+                snserror("RELATED_CONTENT_DELETE", errorMsg)
+            })        
+        break
   }
   return Immutable.fromJS(nstate)
 }

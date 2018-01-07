@@ -1,0 +1,24 @@
+resources:
+  - name: shipdemo-img
+    type: image
+    integration: ECR_INT
+    pointer:
+      sourceName: "189353835613.dkr.ecr.us-west-1.amazonaws.com/dataskeptic-rep" # replace with a pointer to your docker image
+      isPull: false
+    seed:
+      versionName: "latest"  #replace with your image tag on Amazon ECR
+
+  - name: shipdemo-img-options
+    type: dockerOptions
+    version:
+      portMappings:
+        - 3000:3000
+        - 443:443
+        - 80:80
+
+  - name: ecs-test-cluster
+    type: cluster
+    integration: AWS_INT
+    pointer:
+      sourceName : "dataskeptic-cluster" #replace with name of the cluster to which you are deploying
+      region: "us-west-1" #replace with region of the cluster to which you are deploying

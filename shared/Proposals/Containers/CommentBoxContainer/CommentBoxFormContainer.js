@@ -13,7 +13,8 @@ import {
     updateFiles,
     reviewRecording,
     completeRecording,
-    submitCommentForm
+    submitCommentForm,
+    resetForm
 } from '../../Actions/CommentBoxFormActions';
 
 import {
@@ -68,12 +69,13 @@ class CommentBoxFormContainer extends Component {
         this.recorderRecording = this.recorderRecording.bind(this);
         this.recorderStop = this.recorderStop.bind(this);
         this.recorderReview = this.recorderReview.bind(this);
-        this.recorderSubmit = this.recorderSubmit.bind(this);
         this.recorderComplete = this.recorderComplete.bind(this);
         this.recorderError = this.recorderError.bind(this);
 
         this.fileDrop = this.fileDrop.bind(this);
         this.fileRemove = this.fileRemove.bind(this);
+
+        this.reset = this.reset.bind(this);
     }
 
     handleSubmit(data) {
@@ -101,17 +103,11 @@ class CommentBoxFormContainer extends Component {
 
     recorderStop(id) {
         this.props.recordingFinish(id);
-        const bucket = this.props.aws_proposals_bucket
-        const recordingUrl = `https://s3.amazonaws.com/${bucket}/${id}`;
-        this.props.reviewRecording(recordingUrl);
+        this.props.reviewRecording(id);
     }
 
     recorderReview(id) {
         this.props.review()
-    }
-
-    recorderSubmit(id) {
-        this.props.submit();
     }
 
     recorderComplete(id) {
@@ -172,10 +168,14 @@ class CommentBoxFormContainer extends Component {
     }
 
     getSuccessMessage() {
-        const {customSubmitting} = this.props;
+        const {customSubmitting, messageType} = this.props;
 
         if (customSubmitting) {
-            return 'Thank you for proposal!'
+            if (messageType === RECORDING) {
+                return `Your recording has been successfully uploaded. Thanks for sharing your thoughts!`
+            }
+
+            return `Thank you for your feedback!`
         } else {
             return false;
         }
@@ -184,7 +184,11 @@ class CommentBoxFormContainer extends Component {
     getSubmitText() {
         const {messageType} = this.props;
 
-        return (messageType === RECORDING) ? 'Ready to submit' : 'Submit proposal';
+        return (messageType === RECORDING) ? 'Ready to submit' : 'Submit comment';
+    }
+
+    reset() {
+        this.props.resetForm()
     }
 
     render() {
@@ -199,6 +203,8 @@ class CommentBoxFormContainer extends Component {
 /*
     Disabling these for now.  Leave them here in case I easily want to add them back.
     
+                <Debug data={values}/>
+                <Debug data={syncErrors}/>
                         <CommentTypeBox key={TEXT}/>
 
                         <UploadFileTypeBox
@@ -211,8 +217,6 @@ class CommentBoxFormContainer extends Component {
 
         return (
             <div className="comment-box-form-container">
-                <Debug data={values}/>
-                <Debug data={syncErrors}/>
                 <CommentTypeSelectorContainer onChangeCommentType={this.onChangeCommentType} messageType={messageType}/>
                 <b>{customSubmitting}</b>
                 <CommentBoxForm
@@ -225,7 +229,7 @@ class CommentBoxFormContainer extends Component {
                     initialValues={{
                         name: user.name,
                         email: user.email,
-                        type: 'TEXT',
+                        type: 'RECORDING',
                         files: [],
                         recording: {}
                     }}
@@ -247,6 +251,7 @@ class CommentBoxFormContainer extends Component {
                             complete={this.recorderComplete}
                             error={this.recorderError}
                             submittedUrl={submittedUrl}
+                            reset={this.reset}
                         />
 
                         <CommentTypeBox key={TEXT}/>
@@ -298,6 +303,8 @@ export default connect(
         submit,
         review,
         complete,
-        fail
+        fail,
+
+        resetForm
     }, dispatch)
 )(CommentBoxFormContainer);

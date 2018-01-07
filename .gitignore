@@ -55,3 +55,11 @@ api/place_tshirt_order.py
 
 recordings/*
 temp_files/*
+
+# NEXT
+.next/
+.dist
+.vscode/
+*.log
+*.map
+*.swp
