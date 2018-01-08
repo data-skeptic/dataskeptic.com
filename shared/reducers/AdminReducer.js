@@ -3,14 +3,14 @@ import { fromJS } from 'immutable';
 import querystring from 'querystring'
 import axios from "axios"
 import snserror from '../SnsUtil'
-import PrintfulClient from './printfulclient'
+import PrintfulClient from '../printful/printfulclient'
+import place_order from '../printful/wrapper'
 
 var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
 
 const config = require('../../config/config.json');
 
 var printful_key = config[env]["printful"]["api"]
-var pf = new PrintfulClient(printful_key);
 
 var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
@@ -161,11 +161,11 @@ export default function adminReducer(state = defaultState, action) {
         nstate.order.spError = action.payload
         break;
     case 'PLACE_ORDER':
-        console.log("PLACE ORDER!!")
         var dispatch = action.payload
+        console.log(dispatch)
         nstate.order.spError = "Placing order..."
         var order = nstate.order
-
+        console.log(JSON.stringify(order))
         var ok_callback = function(r, info) {
             var resp = r['data']
             console.log(resp)
@@ -179,66 +179,7 @@ export default function adminReducer(state = defaultState, action) {
             console.log(jstr)
             dispatch({type: "SET_ORDER_SP_ERROR_MSG", payload: jstr })
         }
-
-        var variantMap = {
-              "sml": 474
-            , "med": 505
-            , "lrg": 536
-            , "xlg": 474
-            , "xxl": 598
-            , "xxxL": 629
-        }
-
-        console.log(nstate.order.size)
-        var variant_id = variantMap[nstate.order.size]
-        console.log("variant_id = " + variant_id)
-
-        var oitem =     {
-          "variant_id": variant_id,
-          "quantity": 1,
-          "product": {"variant_id": variant_id, "product_id": 12},
-          "custom_product": [],
-          "files": [
-            {
-              "id": 37766873,
-              "type": "default",
-              "filename": "t-shirt.png",
-              "dpi": 300,
-              "created": 1511289196,
-              "preview_url": "https://d1yg28hrivmbqm.cloudfront.net/files/57c/57cc770e861106c42055789e4b0bab4b_preview.png" 
-            },
-            {
-              "id": 37766924,
-              "filename": "mockup_Flat-Front_Black.png",
-              "mime_type": "image/png",
-              "dpi": 72,
-              "preview_url": "https://d1yg28hrivmbqm.cloudfront.net/files/2c8/2c86623ea3caecd75518546e999c4933_preview.png" 
-            }
-          ],
-          "options": [],
-          "sku": null
-        }
-
-        var oitems = [oitem]
-
-        var d = {
-                recipient:  {
-                    name: order.customerName,
-                    address1: order.address1,
-                    address2: order.address2,
-                    city: order.city,
-                    state_code: order.state,
-                    country_code: order.country,
-                    zip: order.zipcode
-                },
-                items: oitems
-            }
-        console.log(JSON.stringify(d))
-
-        pf.post('orders',
-            d,
-            {confirm: 1}
-        ).success(ok_callback).error(error_callback);
+        place_order(printful_key, order, ok_callback, error_callback)
         break
     case 'INIT_ORDERS':
         var dispatch = action.payload.dispatch

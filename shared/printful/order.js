@@ -1,8 +1,12 @@
+var wrapper = require('wrapper.js')['place_order']
+
 var PrintfulClient = require('./printfulclient.js');
 var key = 'sa9n9761-l8po-nes1:svvg-wh4xfayxwwcd';
 
 const order = require('./order-template.json')
 var items = order['items']
+items[0]['variant_id'] = variant_id
+items[0]['product']['variant_id'] = variant_id
 
 var name = "Kyle Polich"
 var address1 = "4158 Sutro Ave"
@@ -23,10 +27,6 @@ var variantMap = {
 
 var variant_id = variantMap[size]
 
-items[0]['variant_id'] = variant_id
-items[0]['product']['variant_id'] = variant_id
-
-
 var ok_callback = function(data, info){
     console.log('SUCCESS');
     console.log(JSON.stringify(data));
@@ -42,6 +42,8 @@ var error_callback = function(message, info){
     console.log(info.response_raw);
 }
 
+place_order(printful_key, order, ok_callback, error_callback)
+/*
 var pf = new PrintfulClient(key);
 
 
@@ -64,3 +66,5 @@ pf.post('orders',
     d2,
     {confirm: 1}
 ).success(ok_callback).error(error_callback);
+*/
+
