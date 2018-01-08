@@ -156,6 +156,35 @@ export default (
         <Route path="/admin" component={App}>
             <IndexRoute component={Admin}  />
         </Route>
+
+        <Route path="/admin/cms/pending" component={App}>
+            <IndexRoute component={Admin}  />
+        </Route>
+
+        <Route path="/admin/cms/recent" component={App}>
+            <IndexRoute component={Admin}  />
+        </Route>
+
+        <Route path="/admin/cms/feature" component={App}>
+            <IndexRoute component={Admin}  />
+        </Route>
+
+        <Route path="/admin/cms/add_related" component={App}>
+            <IndexRoute component={Admin}  />
+        </Route>
+
+        <Route path="/admin/cms/recent_related" component={App}>
+            <IndexRoute component={Admin}  />
+        </Route>
+
+        <Route path="/admin/orders/new" component={App}>
+            <IndexRoute component={Admin}  />
+        </Route>
+
+        <Route path="/admin/emails/send" component={App}>
+            <IndexRoute component={Admin}  />
+        </Route>
+
         <Route path="/admin/login" component={App}>
             <IndexRoute component={Login}/>
         </Route>

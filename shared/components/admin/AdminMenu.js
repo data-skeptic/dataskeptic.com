@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import { Link } from 'react-router'
 
 class AdminMenu extends Component {
 
@@ -12,11 +13,11 @@ class AdminMenu extends Component {
                         <div className="fulldrop">
                             <div className="column">
                                 <ul>
-                                    <li><a href="#">CMS pending</a></li>
-                                    <li><a href="#">CMS recent</a></li>
-                                    <li><a href="#">Feature of the week</a></li>
-                                    <li><a href="#">Add Related Content</a></li>
-                                    <li><a href="#">Recent Related Content</a></li>
+                                    <li><Link to="/admin/cms/pending">CMS pending</Link></li>
+                                    <li><Link to="/admin/cms/recent">CMS recent</Link></li>
+                                    <li><Link to="/admin/cms/feature">Feature of the week</Link></li>
+                                    <li><Link to="/admin/cms/add_related">Add Related Content</Link></li>
+                                    <li><Link to="/admin/cms/recent_related">Recent Related Content</Link></li>
                                 </ul>
                             </div>
                         </div>
@@ -27,7 +28,7 @@ class AdminMenu extends Component {
                         <div className="fulldrop">
                             <div className="column">
                                 <ul>
-                                    <li><a href="#">New</a></li>
+                                    <li><Link to="/admin/orders/new">New</Link></li>
                                 </ul>
                             </div>
                         </div>
@@ -38,7 +39,7 @@ class AdminMenu extends Component {
                         <div className="fulldrop">
                             <div className="column">
                                 <ul>
-                                    <li><a href="#">Send</a></li>
+                                    <li><Link to="/admin/emails/send">Send</Link></li>
                                 </ul>
                             </div>
                         </div>
