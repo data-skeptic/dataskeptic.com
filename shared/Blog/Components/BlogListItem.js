@@ -25,7 +25,7 @@ class BlogListItem extends Component {
     }
 
     render() {
-        const { onClick, blog, isLatest=false } = this.props;
+        const { onClick, blog, contributor, isLatest=false } = this.props;
 
         // Get guest photo
         // For mini, do LT+KP photo
@@ -40,12 +40,12 @@ class BlogListItem extends Component {
                         <span className="blog-date">{date}</span>
                     </div>
                     <div className="media">
-                        {blog.contributor && <div className="media-left contributor-preview">
-                            <img src={blog.contributor.img}/>
+                        {contributor && <div className="media-left contributor-preview">
+                            <img src={contributor.img}/>
                         </div>}
                         <div className="media-body">
                             <Link className="blog-title media-heading" to={link} onClick={ onClick }>{blog.title}</Link>
-                            {blog.contributor && <p className="by">by <b>{blog.contributor.prettyname}</b></p>}
+                            {contributor && <p className="by">by <b>{contributor.prettyname}</b></p>}
                         </div>
                     </div>
 	                <p className="blog-desc">

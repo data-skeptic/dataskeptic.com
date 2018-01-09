@@ -147,6 +147,22 @@ export function loadEpisodes(env) {
                         list.push(episode.guid)
                     }
 
+                    if (list.length > 0) {
+                        var latest = list[0]
+                        console.log(latest)
+                        var url = base_url + "/episodes?latest=" + latest
+                        axios
+                            .post(url)
+                            .then(function(result) {
+                                console.log("success")
+                                console.log(result)
+                                // TODO: should we dispatch some action?
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                    }
+
                     for (var i = 0; i < list.length; i++) {
                         data.episodes_list.push(list[i])
                     }

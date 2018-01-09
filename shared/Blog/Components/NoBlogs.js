@@ -3,27 +3,20 @@ import ReactDOM from "react-dom"
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import LightsOut from '../../components/LightsOut'
-import snserror from '../../SnsUtil'
 
 class NoBlogs extends React.Component {
 	constructor(props) {
 		super(props)
 	}
 
-	componentDidMount() {
-		console.log("here!")
-		console.log(this.props)
-		snserror("", "404", "ds-blog404")
-	}
-
 	render() {
 		return (
-			<div className="center">
+			<div className="blog-item-wrapper">
 				<h2>Request not found</h2>
 				<p>I'm sorry Dave, I'm not going to be able to retrieve that blog post for you.</p>
-				<br/><br/><br/><br/><br/><br/><br/><br/>
+				<p>How about you just forget about it and solve the puzzle below by turning off all the lights.</p>
 				<LightsOut />
-				<br/><br/><br/><br/><br/><br/><br/><br/>
+				<br/><br/>
 			</div>
 		)
 	}
