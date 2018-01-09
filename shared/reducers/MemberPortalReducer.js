@@ -19,12 +19,14 @@ export default function memberPortalReducer(state = defaultState, action) {
   var nstate = state.toJS()
   switch(action.type) {
     case 'CHECK_MEMBERSHIP':
-	    console.log("Checking membership")
+	    console.log("Checking membership!!!")
     	nstate.from = action.payload
-    	var email = action.payload
+    	var email = action.payload.user.email
     	var data = {email}
     	var dispatch = action.payload.dispatch
     	var uri = base_url + '/members/check'
+        console.log(uri)
+        console.log(data)
         axios
             .post(uri, data)
             .then(function(result) {
