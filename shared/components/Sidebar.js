@@ -32,7 +32,7 @@ class Sidebar extends Component {
 	    return (
 	    	<div className={ classNames('sidebar', { 'opened': cart_visible, 'closed': !cart_visible }) }>
 		    	<div className="inner">
-					<button className="sidebar-close" onClick={this.toggleCart}><img src="img/svg/x.svg" alt=""/></button>
+					<button className="sidebar-close" onClick={this.toggleCart}><img src="https://s3.amazonaws.com/dataskeptic.com/img/svg/x.svg" alt=""/></button>
 
 					<CartContainer
 						needCheckout={true}
