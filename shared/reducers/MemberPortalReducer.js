@@ -11,6 +11,7 @@ var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
 const init = {
 	mode: "loading",
+    "analytics": [],
     update_member_msg: ""
 }
 
@@ -104,6 +105,25 @@ export default function memberPortalReducer(state = defaultState, action) {
                 console.log(errorMsg)
             })
         ///axis api members/cancel
+        break
+    case 'LOAD_MEMBER_ANALYTICS':
+        var dispatch = action.payload.dispatch
+        var url = base_url + "/members/analytics/list"
+        axios
+            .get(url)
+            .then(function(result) {
+                var data = result['data']
+                dispatch({type: "SET_MEMBER_ANALYTICS", payload: data })
+            })
+            .catch((err) => {
+                console.log(err)
+                var errorMsg = JSON.stringify(err)
+                snserror("SET_MEMBER_ANALYTICS", errorMsg)
+            })        
+        break
+    case 'SET_MEMBER_ANALYTICS':
+        var data = action.payload
+        nstate.analytics = data
         break
   }
   return Immutable.fromJS(nstate)
