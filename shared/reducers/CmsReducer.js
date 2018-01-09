@@ -104,15 +104,21 @@ export default function cmsReducer(state = defaultState, action) {
         break
     case 'CMS_UPDATE_BLOG':
         var payload = action.payload
-        payload['title'] = payload['title']
-        payload['abstract'] = payload['abstract']
         var dispatch = payload.dispatch
+        //payload['title'] = payload['title']
+        //payload['abstract'] = payload['abstract']
         var url = base_url + "/blog/update"
         axios
             .post(url, payload)
             .then(function(result) {
-                console.log("success!")
-                alert(JSON.stringify(result))
+                console.log("success!!!")
+                var data = result['data']
+                var error = data['error']
+                if (error) {
+                    alert("ERROR:  " + JSON.stringify(result))
+                } else {
+                    alert("SUCCESS:  " + JSON.stringify(result))
+                }
             })
             .catch((err) => {
                 console.log(err)
