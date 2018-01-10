@@ -18,8 +18,10 @@ const init = {
     "featured_blog3": {},
     "latest_episode": {},
     "recent_blogs": [],
+    "recent_blogs_loaded": false,
     "loaded_prettyname": "",
     "pending_blogs": [],
+    "pending_blogs_loaded": false,
     "blog_state": "",
     "blog_content": {}
 }
@@ -72,6 +74,7 @@ export default function cmsReducer(state = defaultState, action) {
     case 'CMS_LOAD_PENDING_BLOGS':
         var url = base_url + "/blog/pending"
         var dispatch = action.payload.dispatch
+        nstate.pending_blogs_loaded = false
         axios
             .get(url)
             .then(function(result) {
@@ -87,6 +90,7 @@ export default function cmsReducer(state = defaultState, action) {
     case 'CMS_SET_PENDING_BLOGS':
         var blogs = action.payload
         nstate.pending_blogs = blogs
+        nstate.pending_blogs_loaded = true
         break
     case 'CMS_LOAD_RECENT_BLOGS':
         var payload = action.payload
@@ -95,6 +99,7 @@ export default function cmsReducer(state = defaultState, action) {
         var prefix = payload['prefix']
         var dispatch = payload['dispatch']
         nstate.blog_state = "loading"
+        nstate.recent_blogs_loaded = false
         load_blogs(prefix, limit, offset, dispatch)
         break
     case 'CMS_SET_RECENT_BLOGS':
@@ -102,6 +107,7 @@ export default function cmsReducer(state = defaultState, action) {
         var prefix = action.payload.prefix
         nstate.blog_state = "loaded"
         nstate.recent_blogs = blogs
+        nstate.recent_blogs_loaded = true
         nstate.loaded_prettyname = prefix
         break
     case 'CMS_UPDATE_BLOG':
