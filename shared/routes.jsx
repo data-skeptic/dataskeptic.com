@@ -163,7 +163,7 @@ export default (
         </Route>
 
         <Route path="/admin" component={App}>
-            <IndexRoute component={Admin}  />
+            <IndexRoute component={AdminHome}  />
         </Route>
 
         <Route path="/wp-login.php" component={App} onEnter={loadData}>
