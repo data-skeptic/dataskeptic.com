@@ -21,8 +21,8 @@ class BlogRouter extends React.Component {
 		super(props)
 	}
 
-	handle_reload(pathname) {
-		console.log("handle_reload of " + pathname)
+	handle_reload(pathname, oldpathname) {
+		console.log("handle_reload of " + pathname + " over " + oldpathname)
         const dispatch = this.props.dispatch
 		var pname = pathname.substring(5, pathname.length)
     	var ocms = this.props.cms.toJS()
@@ -30,17 +30,25 @@ class BlogRouter extends React.Component {
 		var exact = undefined
 		for (var blog of blogs) {
 			var pn = blog['prettyname']
+			console.log(">>>>>>>" + pn +":" + pname)
 			if (pname == pn) {
 				exact = blog
 			}
 		}
+		var request_reload = pathname != oldpathname
 		if (exact) {
-			// This means the current state contains the single page requested, so it need not be reloaded
-		} else {
+			console.log("Exact match")
+			if (blogs.length != 1) {
+				var blogs = [exact]
+				var prefix = pname
+				var payload = {blogs, prefix}
+				dispatch({type: "CMS_SET_RECENT_BLOGS", payload: payload })
+			}
+		}
+		if (request_reload) {
 	        var payload = {limit: 10, offset: 0, prefix: pname, dispatch}
 	        var loaded_prettyname = ocms.loaded_prettyname
 	        console.log("Asking blogs to reload")
-	        console.log(payload)
 	        dispatch({type: "CMS_LOAD_RECENT_BLOGS", payload })
 		}
         //const {title} = BlogRouter.getPageMeta(this.props);
@@ -50,18 +58,12 @@ class BlogRouter extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		var opathname = this.props.location.pathname
 		var npathname = nextProps.location.pathname
-		if (opathname != npathname) {
-			console.log("Going to reload")
-			this.handle_reload(npathname)
-		} else {
-			console.log("Not reloading since " + opathname + "=" + npathname)
-		}
+		this.handle_reload(npathname, opathname)
 	}
 
     componentDidMount() {
-    	console.log("BR did mount")
 		var pathname = this.props.location.pathname
-    	this.handle_reload(pathname)
+    	this.handle_reload(pathname, "")
     }
 
     static getPageMeta(state) {

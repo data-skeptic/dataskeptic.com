@@ -7,6 +7,7 @@ import snserror from '../../SnsUtil'
 import EpisodePlayer from "../../components/EpisodePlayer"
 import MailingListBlogFooter from "./MailingListBlogFooter"
 import BlogLink from './BlogLink'
+import RelatedContent from './RelatedContent'
 import BlogBreadCrumbs from './BlogBreadCrumbs'
 import BlogAuthorTop from './BlogAuthorTop'
 import BlogAuthorBottom from './BlogAuthorBottom'
@@ -46,6 +47,8 @@ class BlogItem extends React.Component {
 		if (content === undefined || loading) {
 			return <Loading />
 		}
+		var related_items = blog.related
+		console.log(blog)
 		var contributors = osite.contributors
 		var contributor = contributors[author.toLowerCase()]
 		var url = 'http://dataskeptic.com/blog' + prettyname
@@ -74,6 +77,7 @@ class BlogItem extends React.Component {
 				<BlogBreadCrumbs prettyname={prettyname} />
 				{top}
 				<div className="content" dangerouslySetInnerHTML={{__html: content}} />
+				<RelatedContent items={related_items} />
 				{bot}
 				<MailingListBlogFooter />
 	            <ReactDisqusComments
