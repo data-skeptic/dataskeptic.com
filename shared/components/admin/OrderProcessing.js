@@ -45,8 +45,13 @@ class OrderProcessing extends React.Component {
 		return (
 				<div>
 					<h3>Order processing</h3>
-					<form>
-						<table>
+						<table className="cms-table">
+							<thead>
+								<tr>
+									<th>Value</th>
+									<th></th>
+								</tr>
+							</thead>
 							<tbody>
 							<tr>
 								<td>DesignID:</td>
@@ -104,10 +109,12 @@ class OrderProcessing extends React.Component {
 								<td>Color</td>
 								<td><input id="color" value={order.color} onChange={this.formUpdate.bind(this)} /></td>
 							</tr>
+							<tr>
+								<td></td>
+								<td><button className="btn2" onClick={this.orderTshirt.bind(this)}>Order T-shirt</button></td>
+							</tr>
 							</tbody>
 						</table>
-					</form>
-					<button className="btn2" onClick={this.orderTshirt.bind(this)}>Order T-shirt</button>
 					<div>{order.spError}</div>
 				</div>
 		)

@@ -34,6 +34,7 @@ export default function cmsReducer(state = defaultState, action) {
         var src_file = action.payload.src_file
         var check = nstate.blog_content[src_file]
         if (check == undefined) {
+            nstate.blog_state = "loading"
             var envp = ""
             if (env != "prod") {
                 envp = env + "."
@@ -53,6 +54,7 @@ export default function cmsReducer(state = defaultState, action) {
                 }
             });
         } else {
+            nstate.blog_state = "loaded"
             console.log("Blog already in cache")
         }
         break
@@ -63,6 +65,7 @@ export default function cmsReducer(state = defaultState, action) {
         var src_file = action.payload.src_file
         var content = action.payload.content
         nstate.blog_content[src_file] = content
+        nstate.blog_state = "loaded"
         break
     case 'CMS_LOAD_PENDING_BLOGS':
         var url = base_url + "/blog/pending"
@@ -101,15 +104,21 @@ export default function cmsReducer(state = defaultState, action) {
         break
     case 'CMS_UPDATE_BLOG':
         var payload = action.payload
-        payload['title'] = payload['title'].replace("'", "\\'")
-        payload['abstract'] = payload['abstract'].replace("'", "\\'")
         var dispatch = payload.dispatch
+        //payload['title'] = payload['title']
+        //payload['abstract'] = payload['abstract']
         var url = base_url + "/blog/update"
         axios
             .post(url, payload)
             .then(function(result) {
-                console.log("success!")
-                alert(JSON.stringify(result))
+                console.log("success!!!")
+                var data = result['data']
+                var error = data['error']
+                if (error) {
+                    alert("ERROR:  " + JSON.stringify(result))
+                } else {
+                    alert("SUCCESS:  " + JSON.stringify(result))
+                }
             })
             .catch((err) => {
                 console.log(err)

@@ -10,10 +10,7 @@ const proposalsDocs = new aws.DynamoDB.DocumentClient();
 import {convert_items_to_json} from 'daos/episodes'
 import {extractFolders} from '../utils/blog_utils'
 
-const ADVERTISE_CARD_CONTENT = 'https://s3.amazonaws.com/dataskeptic.com/dassets/carousel/latest.htm';
-const ADVERTISE_BANNER_CONTENT = 'https://s3.amazonaws.com/dataskeptic.com/dassets/banner/latest.htm';
-
-const env = process.env.NODE_ENV
+var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
 
 var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
@@ -148,6 +145,22 @@ export function loadEpisodes(env) {
                             episode.img = episode.img.replace("http://", "https://");
                         }
                         list.push(episode.guid)
+                    }
+
+                    if (list.length > 0) {
+                        var latest = list[0]
+                        console.log(latest)
+                        var url = base_url + "/episodes?latest=" + latest
+                        axios
+                            .post(url)
+                            .then(function(result) {
+                                console.log("success")
+                                console.log(result)
+                                // TODO: should we dispatch some action?
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
                     }
 
                     for (var i = 0; i < list.length; i++) {

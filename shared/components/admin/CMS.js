@@ -35,7 +35,6 @@ class CMS extends React.Component {
 		} else if (mode == 'recent') {
 			blogs = ocms['recent_blogs'] || []
 		}
-		console.log(blogs)
 		var cn = "cms-" + mode
 		return (
 				<div className={cn}>

@@ -1,6 +1,6 @@
 var aws = require('aws-sdk');
 import passport from 'passport'
-import session from 'express-session';
+import session from 'cookie-session';
 import {getRelatedContent, deleteRelatedContentByUri} from 'backend/admin/admin_related_services'
 import {get_blogs}               from 'backend/get_blogs'
 import {get_blogs_rss}           from 'backend/get_blogs_rss'
@@ -84,6 +84,12 @@ var latest_rfc_id = "test-request"
 var itunesId = "xxxx"
 
 //=========== CONFIG
+const IS_PROD = process.env.NODE_ENV !== 'dev';
+if (process.env.NODE_ENV === 'dev') {
+    require('./webpack.dev').default(app);
+    env = "dev"
+}
+
 const c = require('./config/config.json')
 console.dir('env = ' + env)
 itunesId = c[env]['itunes']
@@ -105,15 +111,6 @@ aws.config.update(
 
 const docClient = new aws.DynamoDB.DocumentClient();
 
-const IS_PROD = process.env.NODE_ENV !== 'dev';
-if (process.env.NODE_ENV === 'dev') {
-    require('./webpack.dev').default(app);
-    env = "dev"
-}
-
-console.log("Environment: ", env)
-
-const DEFAULT_ADVERTISE_HTML = `<img src="/img/advertise.png" width="100%"/>`;
 
 let Cache = {
 
@@ -129,10 +126,6 @@ const resetCache = () => {
         , episodes_content: []     // pn
         , products: {}
         , contributors: {}
-        , advertise: {
-            card: DEFAULT_ADVERTISE_HTML,
-            banner: null
-        }
         , rfc: {}
     }
 }
@@ -149,7 +142,6 @@ const doRefresh = (store) => {
     let env = global.env;
     if (store != undefined) {
         var d = store.dispatch
-        console.log(["d", d])        
     }
 
     return loadEpisodes(env)
@@ -225,16 +217,22 @@ app.use(bodyParser.urlencoded({
 
 app.use(
     session({
-        secret: 'MvwDvMBzJXBVcPXJmkbHDHahAxU6AYFVbJDJyFKwBvGCDsxXgv',
-        cookie: {
-            maxAge: 86400000
-        },
-        resave: false,
-        saveUninitialized: false
+        name: 'session',
+        keys: ['datas', 'member'],
+
+        // Cookie Options
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
     })
 )
 app.use(passport.initialize());
 app.use(passport.session());
+
+var challenge_response = "not_set"
+
+app.all("/.well-known/acme-challenge/:id", function(req, res) { 
+    res.status(200).send(`${req.params.id}.${challenge_response}`); 
+});
+
 
 // authorization module
 const api = require('./backend/api/v1');
@@ -246,14 +244,10 @@ function api_router(req, res) {
         var req = req.body
         join_slack(req, res, slack_key)
         return true
-    }
-
-    if (req.url.indexOf('/api/v1/proposals/files') == 0) {
+    } else if (req.url.indexOf('/api/v1/proposals/files') == 0) {
         uploadProposalFiles(req, res, aws_proposals_bucket);
         return true;
-    }
-
-    if (req.url.indexOf('/api/v1/proposals/recording') == 0) {
+    } else if (req.url.indexOf('/api/v1/proposals/recording') == 0) {
         getRecording(req, res);
         return true;
     } else if (req.url.indexOf('/api/v1/proposals') == 0) {
@@ -316,7 +310,6 @@ function api_router(req, res) {
         return true
     }
     else if (req.url.indexOf('/api/episodes/get') == 0) {
-        console.log("here!")
         get_episodes_by_guid(req, res, Cache.episodes_map, Cache.episodes_list)
         return true
     }
@@ -341,6 +334,11 @@ function api_router(req, res) {
                 res.send(related);
             })
         return true;
+    } else if (req.url === '/api/cert/set') {
+        var b = req.body
+        var chal = b['c']
+        challenge_response = chal
+        return res.status(200).end(JSON.stringify({"status": chal}))
     }
 
     return false
@@ -383,7 +381,6 @@ function inject_podcast(store, my_cache, pathname) {
 }
 
 function install_episode(store, episode) {
-    console.log('install_episode')
     store.dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
 }
 
@@ -421,9 +418,6 @@ function updateState(store, pathname, req) {
     const user = req.user;
 
     if (user) {
-        console.log('dispatch sessioned user')
-        console.dir(`AUTH_USER_SUCCESS`)
-
         store.dispatch({
             type: 'AUTH_USER_SUCCESS',
             payload: {
@@ -431,7 +425,6 @@ function updateState(store, pathname, req) {
             }
         })
     }
-    console.dir(`AUTH_USER_EMPTY`)
 }
 
 app.set('view engine', 'ejs');

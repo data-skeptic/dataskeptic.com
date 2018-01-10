@@ -8,6 +8,8 @@ import EpisodePlayer from "../../components/EpisodePlayer"
 import MailingListBlogFooter from "./MailingListBlogFooter"
 import BlogLink from './BlogLink'
 import BlogBreadCrumbs from './BlogBreadCrumbs'
+import BlogAuthorTop from './BlogAuthorTop'
+import BlogAuthorBottom from './BlogAuthorBottom'
 import Loading from "../../Common/Components/Loading"
 
 class BlogItem extends React.Component {
@@ -36,16 +38,24 @@ class BlogItem extends React.Component {
 		var oepisodes = this.props.episodes.toJS()
 		var disqus_username = osite.disqus_username
 		var blog = this.props.blog
+		var loading = this.props.loading
+		var author = blog['author']
 		var prettyname = blog.prettyname
 		var src_file = blog.src_file
 		var content = ocms.blog_content[src_file]
-		if (content == undefined) {
+		if (content === undefined || loading) {
 			return <Loading />
 		}
+		var contributors = osite.contributors
+		var contributor = contributors[author.toLowerCase()]
 		var url = 'http://dataskeptic.com/blog' + prettyname
 		var title = blog['title']
 		var top = <div></div>
 		var bot = <div></div>
+		if (contributor != undefined) {
+			top = <BlogAuthorTop contributor={contributor} />			
+			bot = <BlogAuthorBottom contributor={contributor} />
+		}
 		var guid = blog.guid
 		if (guid) {
 			var episode = undefined
@@ -63,7 +73,7 @@ class BlogItem extends React.Component {
 			<div className="blog-item-wrapper">
 				<BlogBreadCrumbs prettyname={prettyname} />
 				{top}
-				<span dangerouslySetInnerHTML={{__html: content}} />
+				<div className="content" dangerouslySetInnerHTML={{__html: content}} />
 				{bot}
 				<MailingListBlogFooter />
 	            <ReactDisqusComments

@@ -23,7 +23,7 @@ class RelatedContent extends React.Component {
     me.setState(s);
     if (title == "type") {
       if (val == "internal-link") {
-        me.setState({"lbl2": "Related page url", "lbl3": "Link Anchor Text", "lbl4": "Comment", "dest": "https://dataskeptic.com/blog/", "selected": true})
+        me.setState({"lbl2": "Related blog_id", "lbl3": "Link Anchor Text", "lbl4": "Comment", "dest": "https://dataskeptic.com/blog/", "selected": true})
       } else if (val == "external-link") {
         me.setState({"lbl2": "Related page url", "lbl3": "Link Anchor Text", "lbl4": "Comment", "dest": "https://", "selected": true})
       } else if (val == "mp3") {
