@@ -19,6 +19,7 @@ module.exports = {
 		var type = obj['type'] || 'default';
 	    var send_headers = obj['send_headers']
 	    var toa = [to]
+	    aws.config.update({region: 'us-east-1'});
 	    var ses = new aws.SES({apiVersion: '2010-12-01'});
 	    var from = email
 	    var subject = obj['subject']

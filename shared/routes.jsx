@@ -19,11 +19,14 @@ import DontHackMe              from 'components/DontHackMe';
 import Home                    from 'components/Home';
 import LightsOut               from 'components/LightsOut';
 import Login                   from 'components/Login';
-import Logout                   from 'components/Logout';
+import Logout                  from 'components/Logout';
 import Menu                    from 'components/Menu';
 import Membership              from 'components/Membership';
-import MembershipPortal              from 'components/MembershipPortal';
-import Analytics              from 'components/Analytics';
+import MembershipPortal        from 'components/MembershipPortal';
+import ChangeMembership        from 'components/membership/ChangeMembership';
+import MembershipInbox         from 'components/membership/MembershipInbox';
+import MembershipAnalytics     from 'components/membership/MembershipAnalytics';
+import Analytics               from 'components/Analytics';
 import NotFound                from 'NotFound/Components/NotFound';
 import Podcast                 from 'Podcasts/Routes/Podcast';
 import Proposals               from 'Proposals/Routes/Proposals';
@@ -145,9 +148,22 @@ export default (
         <Route path="/membershipPortal" showAds={false} component={App}>
             <IndexRoute component={MembershipPortal}/>
         </Route>
+        <Route path="/membership/change" showAds={false} component={App}>
+            <IndexRoute component={ChangeMembership}/>
+        </Route>
+        <Route path="/membership/inbox" showAds={false} component={App}>
+            <IndexRoute component={MembershipInbox}/>
+        </Route>
+        <Route path="/membership/analytics" showAds={false} component={App}>
+            <IndexRoute component={MembershipAnalytics}/>
+        </Route>
 
         <Route path="/analytics" component={App}>
             <IndexRoute component={Analytics}/>
+        </Route>
+
+        <Route path="/admin" component={App}>
+            <IndexRoute component={Admin}  />
         </Route>
 
         <Route path="/wp-login.php" component={App} onEnter={loadData}>

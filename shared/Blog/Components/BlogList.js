@@ -20,20 +20,29 @@ class BlogList extends Component {
         }
     }
 
+    getContributor = (contributor) => {
+        contributor = contributor.toLowerCase()
+        return this.props.contributors[contributor]
+    }
+
     render() {
     	const { blogs = [], onClick, latestId } = this.props;
         return (
             <div className="row blog-list-container">
-                {blogs.map((blog, index) => {
-                    return (
-                        <div>
-                            <BlogListItem key={index} blog={blog} onClick={this.onItemClick} isLatest={blog.c_hash===latestId}/>
-                        </div>
-                    )
-                })}
+                {blogs.map((blog, index) =>
+                    <BlogListItem
+                        key={index}
+                        blog={blog}
+                        onClick={this.onItemClick}
+                        isLatest={blog.c_hash===latestId}
+                        contributor={this.getContributor(blog.author)}
+                    />
+                )}}
             </div>
         )
     }
 }
 
-export default connect(state => ({  }))(BlogList)
+export default connect(state => ({
+    contributors: state.contributors.get('list').toJS()
+}))(BlogList)
