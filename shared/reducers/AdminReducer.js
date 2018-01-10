@@ -288,7 +288,7 @@ export default function adminReducer(state = defaultState, action) {
                 console.log(err)
                 var errorMsg = JSON.stringify(err)
                 snserror("RELATED_CONTENT_DELETE", errorMsg)
-            })        
+            })
         break
   }
   return Immutable.fromJS(nstate)
