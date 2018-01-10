@@ -14,10 +14,14 @@ var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
 const init = {
     "featured_blog": {},
+    "featured_blog2": {},
+    "featured_blog3": {},
     "latest_episode": {},
     "recent_blogs": [],
+    "recent_blogs_loaded": false,
     "loaded_prettyname": "",
     "pending_blogs": [],
+    "pending_blogs_loaded": false,
     "blog_state": "",
     "blog_content": {}
 }
@@ -70,6 +74,7 @@ export default function cmsReducer(state = defaultState, action) {
     case 'CMS_LOAD_PENDING_BLOGS':
         var url = base_url + "/blog/pending"
         var dispatch = action.payload.dispatch
+        nstate.pending_blogs_loaded = false
         axios
             .get(url)
             .then(function(result) {
@@ -85,6 +90,7 @@ export default function cmsReducer(state = defaultState, action) {
     case 'CMS_SET_PENDING_BLOGS':
         var blogs = action.payload
         nstate.pending_blogs = blogs
+        nstate.pending_blogs_loaded = true
         break
     case 'CMS_LOAD_RECENT_BLOGS':
         var payload = action.payload
@@ -93,6 +99,7 @@ export default function cmsReducer(state = defaultState, action) {
         var prefix = payload['prefix']
         var dispatch = payload['dispatch']
         nstate.blog_state = "loading"
+        nstate.recent_blogs_loaded = false
         load_blogs(prefix, limit, offset, dispatch)
         break
     case 'CMS_SET_RECENT_BLOGS':
@@ -100,6 +107,7 @@ export default function cmsReducer(state = defaultState, action) {
         var prefix = action.payload.prefix
         nstate.blog_state = "loaded"
         nstate.recent_blogs = blogs
+        nstate.recent_blogs_loaded = true
         nstate.loaded_prettyname = prefix
         break
     case 'CMS_UPDATE_BLOG':
@@ -127,24 +135,35 @@ export default function cmsReducer(state = defaultState, action) {
             })
         break
     case 'CMS_SET_HOMEPAGE_FEATURE':
-        var payload = action.payload
+        var blog_id = nstate.featured_blog.blog_id
+        var featured_2_blog_id = nstate.featured_blog2.blog_id
+        var featured_3_blog_id = nstate.featured_blog3.blog_id
+        var payload = {
+            blog_id,
+            featured_2_blog_id,
+            featured_3_blog_id
+        }
         var url = base_url + "/cms/homepage"
         axios
             .post(url, payload)
             .then(function(result) {
-                nstate.featured_blog = result['featured_blog']
                 var le = result['latest_episode']
                 if (le == undefined) {
                     le = {}
                     console.log("ERROR: Latest episode undefined in /cms/homepage")
                 }
-                nstate.latest_episode = le
             })
             .catch((err) => {
                 console.log(err)
                 var errorMsg = JSON.stringify(err)
                 snserror("CMS_SET_HOMEPAGE_FEATURE", errorMsg)
             })
+        break;
+    case 'CMS_UPDATE_HOMEPAGE_FEATURE':
+        var payload = action.payload
+        var f = payload.f
+        var val = payload.val
+        nstate[f]['blog_id'] = val
         break;
     case 'CMS_GET_HOMEPAGE_CONTENT':
         var payload = action.payload
@@ -166,10 +185,16 @@ export default function cmsReducer(state = defaultState, action) {
         var payload = action.payload
         var data = payload.data
         var dispatch = payload.dispatch
+        console.log('CMS_INJECT_HOMEPAGE_CONTENT')
+        console.log(data)
         var le = data['latest_episode']
         var fb = data['featured_blog']
+        var fb2 = data['featured_2']
+        var fb3 = data['featured_3']
         nstate.latest_episode = le
         nstate.featured_blog = fb
+        nstate.featured_blog2 = fb2
+        nstate.featured_blog3 = fb3
         var url = "/api/episodes/get/" + le.guid
         axios
             .get(url)

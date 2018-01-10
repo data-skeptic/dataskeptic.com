@@ -6,41 +6,47 @@ import { connect } from 'react-redux'
 class HomepageController extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			"tmp_blog_id": 0
-		}
 	}
 
 	componentDidMount() {
 	}
 
 	update(me, title, event) {
-		var s = me.state
-		var val = event.target.value
-    	me.setState({"tmp_blog_id": val});
+		var dispatch = me.props.dispatch
+		var target = event.target
+		var f = target.id
+		var val = target.value
+	    dispatch({type: "CMS_UPDATE_HOMEPAGE_FEATURE", payload: {f, val} })
 	}
 
-	save(blog_id, dispatch) {
-		var blog_id = this.state.tmp_blog_id
-		console.log(blog_id)
-	    dispatch({type: "CMS_SET_HOMEPAGE_FEATURE", payload: {blog_id} })
+	save(dispatch) {
+	    dispatch({type: "CMS_SET_HOMEPAGE_FEATURE", payload: {} })
 	}
 
 	render() {
 		var dispatch = this.props.dispatch
 		var ocms = this.props.cms.toJS()
-		var blog_id = 0
-		if ('featured_blog' in ocms) {
-			var featured_blog = ocms['featured_blog']
-			if (featured_blog) {
-				blog_id = featured_blog['blog_id']
-			} else {
-				blog_id = -1
-			}
+		console.log(ocms)
+		var featured_blog = ocms['featured_blog']
+		var featured_blog2 = ocms['featured_blog2']
+		var featured_blog3 = ocms['featured_blog3']
+		var blog_id  = -1
+		var blog_id2 = -1
+		var blog_id3 = -1
+		if (featured_blog) {
+			blog_id = featured_blog['blog_id']
+		} else {
+			blog_id = -1
 		}
-		var tmp_blog_id = this.state.tmp_blog_id
-		if (tmp_blog_id != 0 && tmp_blog_id != blog_id) {
-			blog_id = tmp_blog_id
+		if (featured_blog2) {
+			blog_id2 = featured_blog2['blog_id']
+		} else {
+			blog_id2 = -1
+		}
+		if (featured_blog3) {
+			blog_id3 = featured_blog3['blog_id']
+		} else {
+			blog_id3 = -1
 		}
 		if (blog_id == 0 || blog_id == undefined) {
 			return <div className="center">Loading</div>
@@ -49,11 +55,15 @@ class HomepageController extends React.Component {
 		var me = this
 		return (
 			<div>
-				<h3>Feature of the week</h3>
+				<h3>Homepage content</h3>
 				<div className="row">
-					<div classname="col-xs-12 col-sm-2">blog_id:</div>
-					<div classname="col-xs-6 col-sm-5"><input onChange={this.update.bind(this, me, "blog_id")} value={blog_id} /></div>
-					<div classname="col-xs-6 col-sm-5"><button onClick={this.save.bind(this, blog_id, dispatch)}>Update</button></div>
+					<div classname="col-xs-12 col-sm-2">Feature of the week blog_id:</div>
+					<div classname="col-xs-6 col-sm-5"><input id="featured_blog" onChange={this.update.bind(this, me, "X")} value={blog_id} /></div>
+					<div classname="col-xs-12 col-sm-2">2nd position blog_id:</div>
+					<div classname="col-xs-6 col-sm-5"><input id="featured_blog2" onChange={this.update.bind(this, me, "X")} value={blog_id2} /></div>
+					<div classname="col-xs-12 col-sm-2">3rd position blog_id:</div>
+					<div classname="col-xs-6 col-sm-5"><input id="featured_blog3" onChange={this.update.bind(this, me, "X")} value={blog_id3} /></div>
+					<div classname="col-xs-6 col-sm-5"><button onClick={this.save.bind(this, dispatch)}>Update</button></div>
 				</div>
 			</div>
 		)

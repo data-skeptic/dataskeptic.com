@@ -108,7 +108,7 @@ export function load_blogs(prefix, limit, offset, dispatch) {
         .catch((err) => {
             console.log(err)
             var errorMsg = JSON.stringify(err)
-            snserror("CMS_LOAD_RECENT_BLOGS", errorMsg)
+            snserror("load_blogs " + prefix, errorMsg)
             var payload = {"blogs": [], "prefix": prefix}
             dispatch({type: "CMS_SET_RECENT_BLOGS", payload: payload })
         })
