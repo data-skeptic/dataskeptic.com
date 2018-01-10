@@ -35,7 +35,14 @@ import CheckoutThankYouPage    from 'Checkout/Routes/ThankYouRoute/ThankYouRoute
 import ProposalsThankYouPage   from 'Proposals/Routes/ThankYou/ThankYouPage';
 import PrivacyPageContainer    from 'Privacy/Containers/PrivacyPageContainer'
 
-import Admin                   from 'components/admin/Admin';
+import AdminHome               from 'components/admin/AdminHome';
+import AdminCmsPending         from 'components/admin/AdminCmsPending';
+import AdminCmsAddRelated      from 'components/admin/AdminCmsAddRelated';
+import AdminCmsRecent          from 'components/admin/AdminCmsRecent';
+import AdminCmsFeature         from 'components/admin/AdminCmsFeature';
+import AdminCmsRecentRelated   from 'components/admin/AdminCmsRecentRelated';
+import AdminEmailsSend         from 'components/admin/AdminEmailsSend';
+import AdminOrdersNew          from 'components/admin/AdminOrdersNew';
 
 import SnlImpact               from 'components/l/SnlImpact';
 
@@ -154,35 +161,35 @@ export default (
         </Route>
 
         <Route path="/admin" component={App}>
-            <IndexRoute component={Admin}  />
+            <IndexRoute component={AdminHome}  />
         </Route>
 
         <Route path="/admin/cms/pending" component={App}>
-            <IndexRoute component={Admin}  />
+            <IndexRoute component={AdminCmsPending}  />
         </Route>
 
         <Route path="/admin/cms/recent" component={App}>
-            <IndexRoute component={Admin}  />
+            <IndexRoute component={AdminCmsRecent}  />
         </Route>
 
         <Route path="/admin/cms/feature" component={App}>
-            <IndexRoute component={Admin}  />
+            <IndexRoute component={AdminCmsFeature}  />
         </Route>
 
         <Route path="/admin/cms/add_related" component={App}>
-            <IndexRoute component={Admin}  />
+            <IndexRoute component={AdminCmsAddRelated}  />
         </Route>
 
         <Route path="/admin/cms/recent_related" component={App}>
-            <IndexRoute component={Admin}  />
+            <IndexRoute component={AdminCmsRecentRelated}  />
         </Route>
 
         <Route path="/admin/orders/new" component={App}>
-            <IndexRoute component={Admin}  />
+            <IndexRoute component={AdminOrdersNew}  />
         </Route>
 
         <Route path="/admin/emails/send" component={App}>
-            <IndexRoute component={Admin}  />
+            <IndexRoute component={AdminEmailsSend}  />
         </Route>
 
         <Route path="/admin/login" component={App}>

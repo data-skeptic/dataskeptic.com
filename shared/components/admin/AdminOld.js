@@ -32,19 +32,6 @@ class Admin extends Component {
         }
 	}
 
-    hasAccess() {
-		return true
-       const { user } = this.props;
-          if(isAdministratorUser(user.type)){
-       	     return true
-	   }
-	   else {
-       	return false
-	   }
-    }
-
-
-
 	render() {
 		var oadmin = this.props.admin.toJS()
 		var relatedcontent = oadmin['relatedcontent'] || []
@@ -64,8 +51,6 @@ class Admin extends Component {
                     {step}
                     {errorMsg}
                     <h2>Admin</h2>
-
-                    menu?
 
                     <CMS admin={this.props.admin} mode="pending" />
                     <hr/>
