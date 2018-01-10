@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import AdminLayout from "./AdminLayout";
+import RelatedContent from "./RelatedContent"
 
 class AdminCmsAddRelated extends Component {
 	render() {
@@ -8,7 +9,9 @@ class AdminCmsAddRelated extends Component {
 
 		return (
 			<AdminLayout history={history}>
-                <h3>AdminCmsAddRelated</h3>
+                <h3>Related Content</h3>
+
+                <RelatedContent />
             </AdminLayout>
 		)
 	}

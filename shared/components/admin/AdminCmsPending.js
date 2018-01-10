@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import AdminLayout from "./AdminLayout";
+import CMS from "./CMS";
 
 class AdminCmsPending extends Component {
 	render() {
@@ -8,11 +9,13 @@ class AdminCmsPending extends Component {
 
 		return (
 			<AdminLayout history={history}>
-                <h3>AdminCmsPending</h3>
+                <h3>Pending</h3>
+
+                <CMS admin={this.props.admin} mode="pending" />
             </AdminLayout>
 		)
 	}
 }
 export default connect(state => ({
-
+    admin: state.admin
 }))(AdminCmsPending)

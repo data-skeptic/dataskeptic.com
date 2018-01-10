@@ -7,10 +7,13 @@ import AdminMenu from './AdminMenu'
 class AdminLayout extends Component {
 
     componentDidMount() {
-        return true; // TOOD: only for dev
+        const dispatch = this.props.dispatch
         if (!this.hasAccess()) {
             return this.props.history.push('/admin/login')
         }
+
+        dispatch({type: "INIT_ORDERS", payload: {dispatch} })
+        dispatch({type: "CMS_GET_HOMEPAGE_CONTENT", payload: {dispatch} })
     }
 
     hasAccess() {
