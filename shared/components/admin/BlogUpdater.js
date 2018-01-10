@@ -36,7 +36,7 @@ class BlogUpdater extends React.Component {
 		var publish_date = blog["publish_date"]
 		var me = this
 		return (
-			<div className="cms-admin-container2">
+			<div className="cms-admin-container">
 				<div className="row">
 					<div className="bbb col-xs-12 col-sm-2">blog_id:</div>
 					<div className="col-xs-12 col-sm-10">{blog_id}</div>
@@ -47,11 +47,11 @@ class BlogUpdater extends React.Component {
 						<textarea className="cms-abstract-textarea" onChange={this.update.bind(this, me, "abstract")} value={abstract} />
 					</div>
 					<div className="col-xs-12 col-sm-2">Author:</div>
-					<div className="col-xs-12 col-sm-10"><input onChange={this.update.bind(this, me, "author")} value={author} /></div>
+					<div className="col-xs-12 col-sm-2"><input onChange={this.update.bind(this, me, "author")} value={author} /></div>
 					<div className="col-xs-12 col-sm-2">Publish date:</div>
-					<div className="col-xs-12 col-sm-10"><input onChange={this.update.bind(this, me, "publish_date")} value={publish_date}/></div>
+					<div className="col-xs-12 col-sm-6"><input className="cms-publish-date-input" onChange={this.update.bind(this, me, "publish_date")} value={publish_date}/></div>
 					<div className="col-xs-12 col-sm-2"></div>
-					<div className="col-xs-12 col-sm-10 cms-admin-save-btn"><button onClick={this.save.bind(this, blog_id, title, abstract, author, publish_date, dispatch)}>Save</button></div>
+					<div className="col-xs-12 col-sm-10 cms-admin-save-btn"><button className="cms-btn-save" onClick={this.save.bind(this, blog_id, title, abstract, author, publish_date, dispatch)}>Save</button></div>
 				</div>
 			</div>
 		)

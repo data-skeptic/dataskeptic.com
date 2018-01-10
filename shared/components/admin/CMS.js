@@ -39,7 +39,7 @@ class CMS extends React.Component {
 		return (
 				<div className={cn}>
 					<h3>CMS {mode}</h3>
-					<div className="cms-admin-container">
+					<div>
 					{
 						blogs.map((blog) => {
 							return (
