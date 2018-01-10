@@ -161,10 +161,8 @@ export default function cmsReducer(state = defaultState, action) {
         break;
     case 'CMS_UPDATE_HOMEPAGE_FEATURE':
         var payload = action.payload
-        console.log(payload)
         var f = payload.f
         var val = payload.val
-        console.log([f, val, nstate[f]])
         nstate[f]['blog_id'] = val
         break;
     case 'CMS_GET_HOMEPAGE_CONTENT':

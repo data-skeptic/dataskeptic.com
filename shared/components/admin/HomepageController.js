@@ -58,11 +58,11 @@ class HomepageController extends React.Component {
 				<h3>Homepage content</h3>
 				<div className="row">
 					<div classname="col-xs-12 col-sm-2">Feature of the week blog_id:</div>
-					<div classname="col-xs-6 col-sm-5"><input id="tmp_blog_id" onChange={this.update.bind(this, me, "X")} value={blog_id} /></div>
+					<div classname="col-xs-6 col-sm-5"><input id="featured_blog" onChange={this.update.bind(this, me, "X")} value={blog_id} /></div>
 					<div classname="col-xs-12 col-sm-2">2nd position blog_id:</div>
-					<div classname="col-xs-6 col-sm-5"><input id="tmp_blog_id2" onChange={this.update.bind(this, me, "X")} value={blog_id2} /></div>
+					<div classname="col-xs-6 col-sm-5"><input id="featured_blog2" onChange={this.update.bind(this, me, "X")} value={blog_id2} /></div>
 					<div classname="col-xs-12 col-sm-2">3rd position blog_id:</div>
-					<div classname="col-xs-6 col-sm-5"><input id="tmp_blog_id3" onChange={this.update.bind(this, me, "X")} value={blog_id3} /></div>
+					<div classname="col-xs-6 col-sm-5"><input id="featured_blog3" onChange={this.update.bind(this, me, "X")} value={blog_id3} /></div>
 					<div classname="col-xs-6 col-sm-5"><button onClick={this.save.bind(this, dispatch)}>Update</button></div>
 				</div>
 			</div>
