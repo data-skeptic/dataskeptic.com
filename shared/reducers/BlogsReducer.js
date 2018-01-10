@@ -42,49 +42,6 @@ export default function blogsReducer(state = defaultState, action) {
                 }
             }
             break
-
-/*
-        // new code
-        case LOAD_BLOGS_SUCCESS:
-            nstate.blogs = action.payload.blogs;
-            nstate.total = action.payload.total;
-
-            each(nstate.blogs, (blog) => {
-                if (blog.guid && blog.uri.indexOf('/transcripts/') > -1) {
-                    nstate.transcript_map[blog.guid] = blog
-                }
-            });
-
-            nstate.latestId = action.payload.latestId;
-            nstate.blogs_loaded = 1;
-            break;
-
-        case LOAD_BLOGS_REQUEST:
-            nstate.blogs = [];
-            nstate.postLoading = true;
-            break;
-
-        case STOP_BLOG_LOADING:
-        case REMOVE_FOCUS_POST:
-        case LOAD_BLOG_POST_REQUEST:
-            nstate.postLoading = true;
-            nstate.currentPost = {}
-            break;
-
-        case LOAD_BLOG_POST_SUCCESS:
-            nstate.postLoading = false;
-            nstate.blog_focus.blog = action.payload.post
-            nstate.currentPost = action.payload.post;
-            break;
-
-        case LOAD_BLOG_POST_FAILED:
-            nstate.currentPost = {
-                error: action.payload.error
-            };
-
-            nstate.postLoading = false;
-            break;
-*/
     }
 
     return Immutable.fromJS(nstate)
