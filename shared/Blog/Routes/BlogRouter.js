@@ -30,7 +30,6 @@ class BlogRouter extends React.Component {
 		var exact = undefined
 		for (var blog of blogs) {
 			var pn = blog['prettyname']
-			console.log(">>>>>>>" + pn +":" + pname)
 			if (pname == pn) {
 				exact = blog
 			}
