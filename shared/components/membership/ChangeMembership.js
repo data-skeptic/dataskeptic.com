@@ -39,12 +39,40 @@ class ChangeMembership extends Component {
         console.log(this.props.memberportal.toJS())
         var omemberportal = this.props.memberportal.toJS()
         var msg = omemberportal.update_member_msg
+        var email = "k@p"
+        var member_since = "ms"
+        var address_line_1 = "a1"
+        var address_line_2 = "a1"
+        var city = "c"
+        var state = "s"
+        var country = "co"
+        var postal_code = "pc"
         return (
             <div className="member-portal-container">
                 <MembershipHeader user={user} />
 
                 <div className="members-corner">
                     <h3>Change Membership</h3>
+                    <div className="row">
+                        <div className="col-xs-12 col-sm-2">Email:</div>
+                        <div className="col-xs-12 col-sm-10">{email}</div>
+                        <div className="col-xs-12 col-sm-2">Member since:</div>
+                        <div className="col-xs-12 col-sm-10">{member_since}</div>
+                        <div className="col-xs-12 col-sm-2">Address Line 1:</div>
+                        <div className="col-xs-12 col-sm-10"><input value={address_line_1} /></div>
+                        <div className="col-xs-12 col-sm-2">Address Line 2:</div>
+                        <div className="col-xs-12 col-sm-10"><input value={address_line_2} /></div>
+                        <div className="col-xs-12 col-sm-2">City:</div>
+                        <div className="col-xs-12 col-sm-10"><input value={city} /></div>
+                        <div className="col-xs-12 col-sm-2">State:</div>
+                        <div className="col-xs-12 col-sm-10"><input value={state} /></div>
+                        <div className="col-xs-12 col-sm-2">Postal code:</div>
+                        <div className="col-xs-12 col-sm-10"><input value={postal_code} /></div>
+                        <div className="col-xs-12 col-sm-2">Country:</div>
+                        <div className="col-xs-12 col-sm-10"><input value={country} /></div>
+                        <div className="col-xs-12 col-sm-2"></div>
+                        <div className="col-xs-12 col-sm-10"><button>Save</button></div>                        
+                    </div>
                     <p>{msg}</p>
                     <button onClick={this.changeMembership.bind(this)}>Change Membership</button>
                     <br/><br/>
