@@ -162,10 +162,6 @@ export default (
             <IndexRoute component={Analytics}/>
         </Route>
 
-        <Route path="/admin" component={App}>
-            <IndexRoute component={Admin}  />
-        </Route>
-
         <Route path="/wp-login.php" component={App} onEnter={loadData}>
             <IndexRoute component={DontHackMe}/>
         </Route>
