@@ -35,23 +35,11 @@ class CMS extends React.Component {
 		} else if (mode == 'recent') {
 			blogs = ocms['recent_blogs'] || []
 		}
-		console.log(blogs)
 		var cn = "cms-" + mode
 		return (
 				<div className={cn}>
-				<h3>CMS {mode}</h3>
-				<table className="cms-table">
-					<thead>
-						<tr>
-							<th>blog_id</th>
-							<th>Title</th>
-							<th>Abstract</th>
-							<th>Author</th>
-							<th>Publish Date</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
+					<h3>CMS {mode}</h3>
+					<div>
 					{
 						blogs.map((blog) => {
 							return (
@@ -59,8 +47,7 @@ class CMS extends React.Component {
 							)
 						})
 					}
-					</tbody>
-				</table>
+					</div>
 				</div>
 		)
 	}
