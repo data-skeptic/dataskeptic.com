@@ -2,9 +2,6 @@ var aws = require('aws-sdk');
 import passport from 'passport'
 import session from 'cookie-session';
 import {getRelatedContent, deleteRelatedContentByUri} from 'backend/admin/admin_related_services'
-import {get_blogs}               from 'backend/get_blogs'
-import {get_blogs_rss}           from 'backend/get_blogs_rss'
-import {get_contributors}        from 'backend/get_contributors'
 import {get_episodes}            from 'backend/get_episodes'
 import {get_episodes_by_guid}    from 'backend/get_episodes_by_guid'
 import {get_rfc_metadata}        from 'backend/get_rfc_metadata'
@@ -13,7 +10,6 @@ import {send_email}              from 'backend/send_email'
 import {order_create}            from 'backend/order_create'
 import {order_fulfill}           from 'backend/order_fulfill'
 import {order_list}              from 'backend/order_list'
-import {related_content, related_cache} from 'backend/related_content'
 import {ready, getTempFile, getFile}  from 'backend/v1/recording';
 import {write as writeProposal, upload as uploadProposalFiles, getRecording}  from 'backend/v1/proposals'
 import bodyParser                from 'body-parser'
@@ -23,7 +19,8 @@ import {
     loadEpisodes,
     loadProducts,
     load,
-    loadCurrentRFC
+    loadCurrentRFC,
+    get_contributors
 }  from 'daos/serverInit'
 import express                   from 'express';
 import FileStreamRotator         from 'file-stream-rotator'
@@ -48,13 +45,9 @@ import {
     combineReducers,
     applyMiddleware
 }       from 'redux';
-import getContentWrapper         from 'utils/content_wrapper';
-import {
-    get_blogs_list,
-    get_podcasts_from_cache,
-    get_related_content
-}                         from 'utils/redux_loader';
-import redirects_map             from './redirects';
+import getContentWrapper           from 'utils/content_wrapper';
+import { get_podcasts_from_cache } from 'utils/redux_loader';
+import redirects_map               from './redirects';
 
 import {reducer as formReducer} from 'redux-form'
 
@@ -137,33 +130,29 @@ const doRefresh = (store) => {
         var d = store.dispatch
     }
 
+    console.log("-[Refreshing episodes]-");
     return loadEpisodes(env)
         .then(function ({episodes_map, episodes_list, episodes_content}, guid) {
-            console.log("-[Refreshing episodes]-");
-
-            // fill the data again
             Cache.episodes_map = episodes_map;
             Cache.episodes_list = episodes_list;
             Cache.episodes_content = episodes_content;
-
-            return loadProducts(env, Cache);
+            console.log("-[Refreshing products]-");
+            return loadProducts()
         })
         .then((products) => {
-            console.log("-[Refreshing products]-");
-            // clear references
             Cache.products = null;
-
-            // fill the data
             Cache.products = {};
             Cache.products.items = products;
+            console.log("-[Refreshing Contributors]-");
+            return get_contributors()
         })
-        .then(() => {
-            Cache.contributors = get_contributors()
+        .then((contributors) => {
+            Cache.contributors = contributors
+            console.log("-[Refreshing RFC]-");
             return loadCurrentRFC()
         })
         .then((rfc) => {
             Cache.rfc = rfc
-
             console.log("Refreshing Finished")
         })
         .catch((err) => {
@@ -172,8 +161,6 @@ const doRefresh = (store) => {
 };
 
 setInterval(doRefresh, 60 * 60 * 1000);
-
-console.log("*** ENV")
 
 /*
  * ENVIRONMENT SPECIFIC CONFIGURATION
@@ -297,7 +284,7 @@ function api_router(req, res) {
     }
     else if (req.url.indexOf('/api/contributors/list') == 0) {
         var req = req.body
-        var resp = get_contributors()
+        var resp = Cache.contributors
         return res.status(200).end(JSON.stringify(resp))
     }
     else if (req.url.indexOf('/api/Related') == 0) {
@@ -404,15 +391,29 @@ function install_episode(store, episode) {
 }
 
 function updateState(store, pathname, req) {
-    console.log(["updateState", pathname])
+    console.log("server.jsx : updateState for " + pathname)
     inject_folders(store, Cache)
     inject_years(store, Cache)
 
     store.dispatch({type: "PROPOSAL_SET_BUCKET", payload: {aws_proposals_bucket}})
 
-    var contributors = get_contributors();
-    store.dispatch({type: "LOAD_CONTRIBUTORS_LIST_SUCCESS", payload: {contributors}});
+    console.log('Cache')
+    for (var k of Object.keys(Cache)) {
+        console.log(["Cache", k, k.length])
+    }
+    var contributors = Cache.contributors
+    if (!contributors || contributors.length == 0) {
+        console.log("server.jsx : Loading contributors")
+        var promise = get_contributors()
+        promise.then(function(contributors) {
+            console.log(contributors)
+            store.dispatch({type: "SET_CONTRIBUTORS", payload: contributors});
+        })
+    }
+    
+    // Do this on all pages
 
+    // Do these as needed
     if (pathname === "" || pathname === "/") {
         inject_homepage(store, Cache, pathname)
     }

@@ -3,7 +3,8 @@ let googleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const configJson = require('../../../config/config.json')
 const env = process.env.NODE_ENV;
 const config = env === 'production' ? configJson.prod : configJson.dev;
-module.exports = function() {
+
+export default function (env) {
   passport.use(new googleStrategy({
     clientID: `${config.googlePassport.clientId}`,
     clientSecret: `${config.googlePassport.clientSecret}`,
