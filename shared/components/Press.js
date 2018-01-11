@@ -14,7 +14,7 @@ class Coaching extends Component {
 
     static getPageMeta() {
         return {
-            title: 'Coaching | Data Skeptic'
+            title: `Coaching | Data Skeptic`
         }
     }
 

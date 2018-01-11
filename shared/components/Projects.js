@@ -14,7 +14,7 @@ class Projects extends Component {
 
     static getPageMeta() {
         return {
-            title: 'Projects | Data Skeptic'
+            title: `Projects | Data Skeptic`
         }
     }
 

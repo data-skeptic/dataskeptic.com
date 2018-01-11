@@ -26,7 +26,7 @@ class Store extends React.Component {
 
     static getPageMeta() {
         return {
-            title: 'Store | Data Skeptic'
+            title: `Store | Data Skeptic`
         }
     }
 

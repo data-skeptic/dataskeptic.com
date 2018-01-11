@@ -31,7 +31,7 @@ class MembershipPortal extends Component {
 
     static getPageMeta() {
         return {
-            title: 'Membership Portal | Data Skeptic'
+            title: `Membership Portal | Data Skeptic`
         }
     }
 

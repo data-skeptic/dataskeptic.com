@@ -23,7 +23,7 @@ class AnalyticsPage extends Component {
 
     static getPageMeta() {
         return {
-            title: 'Analytics | Data Skeptic'
+            title: `Analytics | Data Skeptic`
         }
     }
 

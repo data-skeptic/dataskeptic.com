@@ -23,7 +23,7 @@ class Checkout extends Component {
 
     static getPageMeta() {
         return {
-            title: 'Checkout | Data Skeptic'
+            title: `Checkout | Data Skeptic`
         }
     }
 
