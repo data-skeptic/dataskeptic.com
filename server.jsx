@@ -26,7 +26,6 @@ import {
     loadCurrentRFC
 }  from 'daos/serverInit'
 import express                   from 'express';
-
 import FileStreamRotator         from 'file-stream-rotator'
 import fs                        from 'fs'
 import createLocation            from 'history/lib/createLocation';
@@ -59,18 +58,15 @@ import redirects_map             from './redirects';
 
 import {reducer as formReducer} from 'redux-form'
 
-const app = express()
-var logDirectory = path.join(__dirname, 'log')
-fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
-var accessLogStream = FileStreamRotator.getStream({
-    date_format: 'YYYYMMDD',
-    filename: path.join(logDirectory, 'access-%DATE%.log'),
-    frequency: 'daily',
-    verbose: false
-})
-app.use(morgan('combined', {stream: accessLogStream}))
+console.log("server.jsx : starting")
 
-var env = "prod"
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+
+const app = express()
+
+/*
+ * CONFIGURATION
+ */
 
 var aws_accessKeyId = ""
 var aws_secretAccessKey = ""
@@ -82,13 +78,6 @@ var aws_proposals_bucket = ""
 var rfc_table_name = "rfc"
 var latest_rfc_id = "test-request"
 var itunesId = "xxxx"
-
-//=========== CONFIG
-const IS_PROD = process.env.NODE_ENV !== 'dev';
-if (process.env.NODE_ENV === 'dev') {
-    require('./webpack.dev').default(app);
-    env = "dev"
-}
 
 const c = require('./config/config.json')
 console.dir('env = ' + env)
@@ -107,10 +96,10 @@ aws.config.update(
         "region": aws_region
     }
 );
-//=========== CONFIG
 
-const docClient = new aws.DynamoDB.DocumentClient();
-
+/*
+ * INITIALIZE CACHE
+ */
 
 let Cache = {
 
@@ -137,6 +126,10 @@ const reducer = combineReducers({
 
 global.my_cache = Cache = resetCache();
 global.env = env;
+
+/*
+ * REFRESH
+ */
 
 const doRefresh = (store) => {
     let env = global.env;
@@ -180,7 +173,12 @@ const doRefresh = (store) => {
 
 setInterval(doRefresh, 60 * 60 * 1000);
 
-if (process.env.NODE_ENV == 'production') {
+console.log("*** ENV")
+
+/*
+ * ENVIRONMENT SPECIFIC CONFIGURATION
+ */
+if (env == "prod") {
     function shouldCompress(req, res) {
         if (req.headers['x-no-compression']) {
             // don't compress responses with this request header
@@ -189,13 +187,19 @@ if (process.env.NODE_ENV == 'production') {
         // fallback to standard filter function
         return compression.filter(req, res)
     }
-
     app.use(compression({filter: shouldCompress}))
-}
 
-app.use(express.static(path.join(__dirname, 'public')));
-
-if (!IS_PROD) {
+    var logDirectory = path.join(__dirname, 'log')
+    fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
+    var accessLogStream = FileStreamRotator.getStream({
+        date_format: 'YYYYMMDD',
+        filename: path.join(logDirectory, 'access-%DATE%.log'),
+        frequency: 'daily',
+        verbose: false
+    })
+    app.use(morgan('combined', {stream: accessLogStream}))    
+} else {
+    require('./webpack.dev').default(app);
     const proxy = require('http-proxy-middleware');
     const wsProxy = proxy('/recording', {
         target: 'ws://127.0.0.1:9001',
@@ -210,6 +214,14 @@ if (!IS_PROD) {
     app.use(wsProxy);
 }
 
+/*
+ * WIRING UP APP
+ */
+console.log("*** WIRE")
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
     extended: true
@@ -233,11 +245,14 @@ app.all("/.well-known/acme-challenge/:id", function(req, res) {
     res.status(200).send(`${req.params.id}.${challenge_response}`); 
 });
 
-
-// authorization module
 const api = require('./backend/api/v1');
 app.use('/api/v1/', api(() => Cache));
 
+/*
+ * SETUP API
+ */
+
+const docClient = new aws.DynamoDB.DocumentClient();
 
 function api_router(req, res) {
     if (req.url.indexOf('/api/slack/join') == 0) {
@@ -344,6 +359,10 @@ function api_router(req, res) {
     return false
 }
 
+/*
+ * INITIALIZE STORE
+ */
+
 function inject_folders(store, my_cache) {
     var folders = my_cache.folders
     store.dispatch({type: "ADD_FOLDERS", payload: folders})
@@ -427,8 +446,9 @@ function updateState(store, pathname, req) {
     }
 }
 
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+/*
+ * RENDERING
+ */
 
 function renderView(store, renderProps, location) {
     const InitialView = (

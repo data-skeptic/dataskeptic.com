@@ -1,8 +1,6 @@
 const aws = require('aws-sdk')
 
 var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
-console.info(`SNSUTIL ENV`, env)
-
 
 var sns = new aws.SNS()
 
@@ -28,8 +26,14 @@ aws.config.update(
     }
 );
 
+function snserror(location, msg, topic) {
+	// For now errors and alert are the same,
+	// but eventually it will be two separate Topics
+	// Maybe other changes too.
+	snsalert(location, msg, topic)
+}
 
-export default function snserror(location, msg, topic) {
+function snsalert(details, msg, topic) {
 	if (topic == undefined) {
 		topic = "ds-error"
 	}
@@ -37,10 +41,10 @@ export default function snserror(location, msg, topic) {
 	var endpointArn = "arn:aws:sns:us-east-1:085318171245:" + topic;
 	console.log(endpointArn)
 	var payload = {
-    	default: 'Site error: ' + JSON.stringify({location, msg}),
+    	default: 'Site error: ' + JSON.stringify({details, msg}),
     	APNS: {
      		aps: {
-        		location, msg
+        		details, msg
       		}
     	}
   	};
@@ -57,4 +61,7 @@ export default function snserror(location, msg, topic) {
 		}
 		console.log('push sent');
 		console.log(data);
-	});}
+	});
+}
+
+export {snsalert, snserror}

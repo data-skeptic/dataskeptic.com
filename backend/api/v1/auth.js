@@ -3,9 +3,12 @@ import express from 'express'
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const LinkedinStrategy = require('../../modules/Auth/LinkedinStrategy').default
-const GoogleStrategy = require('../../modules/Auth/GoogleStrategy')();
 const UserServices = require('../../modules/Users/Services/UserServices');
 let redirectURL;
+
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+
+const c = require('../../../config/config.json')
 
 const checkIfAdmin = (email) => {
     const email_reg_exp = /^.*@dataskeptic\.com/i;
@@ -25,8 +28,9 @@ module.exports = () => {
         done(null, id)
     )
 
-    //passport.use(GoogleStrategy({env}))
-    passport.use(LinkedinStrategy(global.env))
+    if (c[env]['linkedin']) {
+        passport.use(LinkedinStrategy(global.env))
+    }
 
 
     // REGULAR
@@ -117,8 +121,6 @@ module.exports = () => {
                     else{
                         //redirectURL = redirectURL + '/auth?user=' + JSON.stringify(user);
                     }
-
-                    console.dir(`user`)
                     return res.redirect(redirectURL)
                 }
 
