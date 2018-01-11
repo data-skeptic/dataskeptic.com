@@ -41,8 +41,6 @@ class Admin extends Component {
 	   }
     }
 
-
-
 	render() {
 		var oadmin = this.props.admin.toJS()
 		var relatedcontent = oadmin['relatedcontent'] || []

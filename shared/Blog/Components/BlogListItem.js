@@ -25,11 +25,17 @@ class BlogListItem extends Component {
     }
 
     render() {
-        const { onClick, blog, isLatest=false } = this.props;
-
-        // Get guest photo
-        // For mini, do LT+KP photo
-        // else img = default
+        const { onClick, blog, contributor, isLatest=false } = this.props;
+        var img = ""
+        var prettyname = ""
+        if (contributor) {
+            if (contributor.img) {
+                img = contributor.img
+            }
+            if (contributor.prettyname) {
+                prettyname = contributor.prettyname
+            }
+        }
 
         const link = this.formatLink(blog.prettyname);
         const date = isLatest ? moment(blog.publish_date).fromNow() : moment(blog.publish_date).format('MMMM D, YYYY');
@@ -40,12 +46,12 @@ class BlogListItem extends Component {
                         <span className="blog-date">{date}</span>
                     </div>
                     <div className="media">
-                        {blog.contributor && <div className="media-left contributor-preview">
-                            <img src={blog.contributor.img}/>
-                        </div>}
+                        <div className="media-left contributor-preview">
+                            <img src={img}/>
+                        </div>
                         <div className="media-body">
                             <Link className="blog-title media-heading" to={link} onClick={ onClick }>{blog.title}</Link>
-                            {blog.contributor && <p className="by">by <b>{blog.contributor.prettyname}</b></p>}
+                            <p className="by">by <b>{prettyname}</b></p>
                         </div>
                     </div>
 	                <p className="blog-desc">

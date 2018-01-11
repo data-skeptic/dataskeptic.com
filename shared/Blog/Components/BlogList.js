@@ -21,14 +21,19 @@ class BlogList extends Component {
     }
 
     render() {
-    	const { blogs = [], onClick, latestId } = this.props;
+    	const { blogs = [], contributors={}, onClick, latestId } = this.props;
         return (
             <div className="row blog-list-container">
                 {blogs.map((blog, index) => {
+                    var contributor = contributors[blog.author.toLowerCase()]
                     return (
-                        <div>
-                            <BlogListItem key={index} blog={blog} onClick={this.onItemClick} isLatest={blog.c_hash===latestId}/>
-                        </div>
+                        <BlogListItem
+                            key={index}
+                            blog={blog}
+                            onClick={this.onItemClick}
+                            isLatest={blog.c_hash===latestId}
+                            contributor={contributor}
+                        />
                     )
                 })}
             </div>
@@ -36,4 +41,6 @@ class BlogList extends Component {
     }
 }
 
-export default connect(state => ({  }))(BlogList)
+export default connect(state => ({
+    site: state.site
+}))(BlogList)

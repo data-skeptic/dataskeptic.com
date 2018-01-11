@@ -7,7 +7,11 @@ import snserror from '../../SnsUtil'
 import EpisodePlayer from "../../components/EpisodePlayer"
 import MailingListBlogFooter from "./MailingListBlogFooter"
 import BlogLink from './BlogLink'
+import RelatedContent from './RelatedContent'
 import BlogBreadCrumbs from './BlogBreadCrumbs'
+import BlogAuthorTop from './BlogAuthorTop'
+import BlogAuthorBottom from './BlogAuthorBottom'
+import BlogShareBar from './BlogShareBar'
 import Loading from "../../Common/Components/Loading"
 
 class BlogItem extends React.Component {
@@ -36,16 +40,28 @@ class BlogItem extends React.Component {
 		var oepisodes = this.props.episodes.toJS()
 		var disqus_username = osite.disqus_username
 		var blog = this.props.blog
+		var loading = this.props.loading
+		var author = blog['author']
 		var prettyname = blog.prettyname
 		var src_file = blog.src_file
 		var content = ocms.blog_content[src_file]
-		if (content == undefined) {
+		if (content === undefined || loading) {
 			return <Loading />
 		}
+		var related_items = blog.related
+		var contributors = osite.contributors
+		var contributor = contributors[author.toLowerCase()]
 		var url = 'http://dataskeptic.com/blog' + prettyname
+		if (prettyname.indexOf('/episodes/') == 0) {
+			contributor = undefined
+		}
 		var title = blog['title']
 		var top = <div></div>
 		var bot = <div></div>
+		if (contributor != undefined) {
+			top = <BlogAuthorTop contributor={contributor} />			
+			bot = <BlogAuthorBottom contributor={contributor} />
+		}
 		var guid = blog.guid
 		if (guid) {
 			var episode = undefined
@@ -59,11 +75,18 @@ class BlogItem extends React.Component {
 				<EpisodePlayer episode={episode} />
 			)				
 		}
-		return (
+    	var shareUrl = url
+    	var exampleImage = "https://s3.amazonaws.com/dataskeptic.com/img/primary-logo-400.jpg"
+    	if (!guid && contributor && contributor.img) {
+    		exampleImage = contributor.img
+    	}
+    	return (
 			<div className="blog-item-wrapper">
-				<BlogBreadCrumbs prettyname={prettyname} />
+				<BlogBreadCrumbs prettyname={prettyname} exampleImage={exampleImage} />
 				{top}
 				<div className="content" dangerouslySetInnerHTML={{__html: content}} />
+				<RelatedContent items={related_items} />
+				<BlogShareBar shareUrl={shareUrl} title={title} exampleImage={exampleImage} />
 				{bot}
 				<MailingListBlogFooter />
 	            <ReactDisqusComments
@@ -71,7 +94,7 @@ class BlogItem extends React.Component {
 	                identifier={url}
 	                title={title}
 	                url={url}
-	                onNewComment={this.handleNewComment}/>
+	                onNewComment={this.handleNewComment} />
 			</div>
 		)
 	}

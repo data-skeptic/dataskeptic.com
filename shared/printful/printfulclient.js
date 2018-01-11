@@ -97,10 +97,14 @@ var PrintfulClient = function(key){
             auth: key,
             headers: {
                 'User-Agent': USER_AGENT,
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': 'true'
             }
         };
+        console.log(options)
         var req = https.request(options, function(res) {
+            console.log("here!")
             var body = '';
 
             res.on('data', function(chunk) {

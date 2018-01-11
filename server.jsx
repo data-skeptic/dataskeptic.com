@@ -2,9 +2,6 @@ var aws = require('aws-sdk');
 import passport from 'passport'
 import session from 'cookie-session';
 import {getRelatedContent, deleteRelatedContentByUri} from 'backend/admin/admin_related_services'
-import {get_blogs}               from 'backend/get_blogs'
-import {get_blogs_rss}           from 'backend/get_blogs_rss'
-import {get_contributors}        from 'backend/get_contributors'
 import {get_episodes}            from 'backend/get_episodes'
 import {get_episodes_by_guid}    from 'backend/get_episodes_by_guid'
 import {get_rfc_metadata}        from 'backend/get_rfc_metadata'
@@ -13,7 +10,6 @@ import {send_email}              from 'backend/send_email'
 import {order_create}            from 'backend/order_create'
 import {order_fulfill}           from 'backend/order_fulfill'
 import {order_list}              from 'backend/order_list'
-import {related_content, related_cache} from 'backend/related_content'
 import {ready, getTempFile, getFile}  from 'backend/v1/recording';
 import {write as writeProposal, upload as uploadProposalFiles, getRecording}  from 'backend/v1/proposals'
 import bodyParser                from 'body-parser'
@@ -23,10 +19,10 @@ import {
     loadEpisodes,
     loadProducts,
     load,
-    loadCurrentRFC
+    loadCurrentRFC,
+    get_contributors
 }  from 'daos/serverInit'
 import express                   from 'express';
-
 import FileStreamRotator         from 'file-stream-rotator'
 import fs                        from 'fs'
 import createLocation            from 'history/lib/createLocation';
@@ -49,28 +45,21 @@ import {
     combineReducers,
     applyMiddleware
 }       from 'redux';
-import getContentWrapper         from 'utils/content_wrapper';
-import {
-    get_blogs_list,
-    get_podcasts_from_cache,
-    get_related_content
-}                         from 'utils/redux_loader';
-import redirects_map             from './redirects';
+import getContentWrapper           from 'utils/content_wrapper';
+import { get_podcasts_from_cache } from 'utils/redux_loader';
+import redirects_map               from './redirects';
 
 import {reducer as formReducer} from 'redux-form'
 
-const app = express()
-var logDirectory = path.join(__dirname, 'log')
-fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
-var accessLogStream = FileStreamRotator.getStream({
-    date_format: 'YYYYMMDD',
-    filename: path.join(logDirectory, 'access-%DATE%.log'),
-    frequency: 'daily',
-    verbose: false
-})
-app.use(morgan('combined', {stream: accessLogStream}))
+console.log("server.jsx : starting")
 
-var env = "prod"
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+
+const app = express()
+
+/*
+ * CONFIGURATION
+ */
 
 var aws_accessKeyId = ""
 var aws_secretAccessKey = ""
@@ -83,7 +72,6 @@ var rfc_table_name = "rfc"
 var latest_rfc_id = "test-request"
 var itunesId = "xxxx"
 
-//=========== CONFIG
 const c = require('./config/config.json')
 console.dir('env = ' + env)
 itunesId = c[env]['itunes']
@@ -101,15 +89,10 @@ aws.config.update(
         "region": aws_region
     }
 );
-//=========== CONFIG
 
-const docClient = new aws.DynamoDB.DocumentClient();
-
-const IS_PROD = process.env.NODE_ENV !== 'dev';
-if (process.env.NODE_ENV === 'dev') {
-    require('./webpack.dev').default(app);
-    env = "dev"
-}
+/*
+ * INITIALIZE CACHE
+ */
 
 let Cache = {
 
@@ -137,42 +120,39 @@ const reducer = combineReducers({
 global.my_cache = Cache = resetCache();
 global.env = env;
 
+/*
+ * REFRESH
+ */
+
 const doRefresh = (store) => {
     let env = global.env;
     if (store != undefined) {
         var d = store.dispatch
     }
 
+    console.log("-[Refreshing episodes]-");
     return loadEpisodes(env)
         .then(function ({episodes_map, episodes_list, episodes_content}, guid) {
-            console.log("-[Refreshing episodes]-");
-
-            // fill the data again
             Cache.episodes_map = episodes_map;
             Cache.episodes_list = episodes_list;
             Cache.episodes_content = episodes_content;
-
-            return loadProducts(env, Cache);
+            console.log("-[Refreshing products]-");
+            return loadProducts()
         })
         .then((products) => {
-            console.log("-[Refreshing products]-");
-            // clear references
             Cache.products = null;
-
-            // fill the data
             Cache.products = {};
             Cache.products.items = products;
+            console.log("-[Refreshing Contributors]-");
             return get_contributors()
         })
         .then((contributors) => {
-            console.log('contributors')
-            console.log(contributors)
             Cache.contributors = contributors
+            console.log("-[Refreshing RFC]-");
             return loadCurrentRFC()
         })
         .then((rfc) => {
             Cache.rfc = rfc
-
             console.log("Refreshing Finished")
         })
         .catch((err) => {
@@ -182,7 +162,10 @@ const doRefresh = (store) => {
 
 setInterval(doRefresh, 60 * 60 * 1000);
 
-if (process.env.NODE_ENV == 'production') {
+/*
+ * ENVIRONMENT SPECIFIC CONFIGURATION
+ */
+if (env == "prod") {
     function shouldCompress(req, res) {
         if (req.headers['x-no-compression']) {
             // don't compress responses with this request header
@@ -191,13 +174,19 @@ if (process.env.NODE_ENV == 'production') {
         // fallback to standard filter function
         return compression.filter(req, res)
     }
-
     app.use(compression({filter: shouldCompress}))
-}
 
-app.use(express.static(path.join(__dirname, 'public')));
-
-if (!IS_PROD) {
+    var logDirectory = path.join(__dirname, 'log')
+    fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
+    var accessLogStream = FileStreamRotator.getStream({
+        date_format: 'YYYYMMDD',
+        filename: path.join(logDirectory, 'access-%DATE%.log'),
+        frequency: 'daily',
+        verbose: false
+    })
+    app.use(morgan('combined', {stream: accessLogStream}))    
+} else {
+    require('./webpack.dev').default(app);
     const proxy = require('http-proxy-middleware');
     const wsProxy = proxy('/recording', {
         target: 'ws://127.0.0.1:9001',
@@ -212,6 +201,14 @@ if (!IS_PROD) {
     app.use(wsProxy);
 }
 
+/*
+ * WIRING UP APP
+ */
+console.log("*** WIRE")
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
     extended: true
@@ -235,11 +232,14 @@ app.all("/.well-known/acme-challenge/:id", function(req, res) {
     res.status(200).send(`${req.params.id}.${challenge_response}`); 
 });
 
-
-// authorization module
 const api = require('./backend/api/v1');
 app.use('/api/v1/', api(() => Cache));
 
+/*
+ * SETUP API
+ */
+
+const docClient = new aws.DynamoDB.DocumentClient();
 
 function api_router(req, res) {
     if (req.url.indexOf('/api/slack/join') == 0) {
@@ -284,10 +284,7 @@ function api_router(req, res) {
     }
     else if (req.url.indexOf('/api/v1/contributors/list') == 0) {
         var req = req.body
-        console.log("HERE!")
         var resp = Cache.contributors
-        console.log("HERE2!")
-        console.log(resp)
         return res.status(200).end(JSON.stringify(resp))
     }
     else if (req.url.indexOf('/api/Related') == 0) {
@@ -349,6 +346,10 @@ function api_router(req, res) {
     return false
 }
 
+/*
+ * INITIALIZE STORE
+ */
+
 function inject_folders(store, my_cache) {
     var folders = my_cache.folders
     store.dispatch({type: "ADD_FOLDERS", payload: folders})
@@ -390,7 +391,7 @@ function install_episode(store, episode) {
 }
 
 function updateState(store, pathname, req) {
-    console.log(["updateState", pathname])
+    console.log("server.jsx : updateState for " + pathname)
     inject_folders(store, Cache)
     inject_years(store, Cache)
 
@@ -412,6 +413,21 @@ function updateState(store, pathname, req) {
             console.log(err)
         });
     }
+
+    console.log('Cache')
+    for (var k of Object.keys(Cache)) {
+        console.log(["Cache", k, k.length])
+    }
+    var contributors = Cache.contributors
+    if (!contributors || contributors.length == 0) {
+        console.log("server.jsx : Loading contributors")
+        var promise = get_contributors()
+        promise.then(function(contributors) {
+            console.log(contributors)
+            store.dispatch({type: "SET_CONTRIBUTORS", payload: contributors});
+        })
+    }
+    
     if (pathname === "" || pathname === "/") {
         inject_homepage(store, Cache, pathname)
     }
@@ -445,8 +461,9 @@ function updateState(store, pathname, req) {
     }
 }
 
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+/*
+ * RENDERING
+ */
 
 function renderView(store, renderProps, location) {
     const InitialView = (

@@ -45,7 +45,6 @@ class OrderProcessing extends React.Component {
 		return (
 				<div>
 					<h3>Order processing</h3>
-					<form>
 						<table className="cms-table">
 							<thead>
 								<tr>
@@ -116,7 +115,6 @@ class OrderProcessing extends React.Component {
 							</tr>
 							</tbody>
 						</table>
-					</form>
 					<div>{order.spError}</div>
 				</div>
 		)

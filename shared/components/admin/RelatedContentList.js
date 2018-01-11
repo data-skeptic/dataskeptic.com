@@ -23,7 +23,6 @@ class RelatedContentList extends React.Component {
   render() {
     var me = this
     var related = this.props.items || []
-    //console.log(related)
     var dispatch = this.props.dispatch
     if (related.length == 0) {
       return (
@@ -38,7 +37,6 @@ class RelatedContentList extends React.Component {
         <h3>Recent Related Content</h3>
         {
             related.map((rc) => {
-              console.log(rc)
               var content_id = rc['content_id']
               var blog_id = rc['blog_id']
               var dest = rc['dest']
