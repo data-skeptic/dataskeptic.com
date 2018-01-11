@@ -1,3 +1,5 @@
+// DEPRECATED
+
 let passport = require('passport');
 let googleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const configJson = require('../../../config/config.json')
