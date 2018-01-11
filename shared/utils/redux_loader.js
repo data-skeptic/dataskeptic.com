@@ -1,5 +1,4 @@
 import axios from "axios"
-import {get_contributors} from 'backend/get_contributors'
 import contact_form_send from '../daos/contact_form_send'
 
 export function clearEpisode(dispatch) {
@@ -8,7 +7,6 @@ export function clearEpisode(dispatch) {
 
 export function loadEpisode(guid, dispatch) {
     dispatch({type: "CLEAR_FOCUS_EPISODE"})
-
 	axios
 		.get("/api/episodes/get/" + guid)
   		.then(function(result) {
@@ -20,21 +18,6 @@ export function loadEpisode(guid, dispatch) {
 			console.log(err)
 		})
 }
-
-export function get_related_content(dispatch, pathname) {
-    const uri = "/api/Related?uri=" + pathname;
-
-    return axios.get(uri)
-        .then(function(resp) {
-          const data = resp['data'];
-          const items = data;
-          dispatch({type: "ADD_RELATED", payload: {items, uri: pathname} })
-        })
-        .catch(function(err) {
-          console.log(err)
-        })
-}
-
 
 export function get_folders(dispatch) {
 	var my_cache = global.my_cache
@@ -48,25 +31,6 @@ export function get_folders(dispatch) {
 	  		.then(function(result) {
 	  			var folders = result["data"]
 				dispatch({type: "ADD_FOLDERS", payload: folders})
-			})
-			.catch((err) => {
-				console.log(err)
-			})			
-	}
-}
-
-export function get_products(dispatch) {
-	var my_cache = global.my_cache
-	if (my_cache != undefined) {
-		var products = my_cache.products
-		dispatch({type: "ADD_PRODUCTS", payload: products})
-	} else {
-		console.log("Getting products")
-		axios
-			.get("/api/store/list")
-	  		.then(function(result) {
-	  			var products = result["data"]["items"]
-				dispatch({type: "ADD_PRODUCTS", payload: products})
 			})
 			.catch((err) => {
 				console.log(err)
@@ -103,7 +67,6 @@ export function get_podcasts_from_cache(my_cache, pathname) {
 	return episodes
 }
 
-
 export function get_podcasts(dispatch, pathname) {
 	var year = year_from_path(pathname)
 	var my_cache = global.my_cache
@@ -122,4 +85,23 @@ export function get_podcasts(dispatch, pathname) {
 				console.log(err)
 			})			
 	}
+}
+
+export function get_products(dispatch) {
+       var my_cache = global.my_cache
+       if (my_cache != undefined) {
+               var products = my_cache.products
+               dispatch({type: "ADD_PRODUCTS", payload: products})
+       } else {
+               console.log("Getting products")
+               axios
+                       .get("/api/store/list")
+                       .then(function(result) {
+                               var products = result["data"]
+                               dispatch({type: "ADD_PRODUCTS", payload: products})
+                       })
+                       .catch((err) => {
+                               console.log(err)
+                       })                      
+       }
 }
