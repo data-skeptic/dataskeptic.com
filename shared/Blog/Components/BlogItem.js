@@ -49,10 +49,12 @@ class BlogItem extends React.Component {
 			return <Loading />
 		}
 		var related_items = blog.related
-		console.log(blog)
 		var contributors = osite.contributors
 		var contributor = contributors[author.toLowerCase()]
 		var url = 'http://dataskeptic.com/blog' + prettyname
+		if (prettyname.indexOf('/episodes/') == 0) {
+			contributor = undefined
+		}
 		var title = blog['title']
 		var top = <div></div>
 		var bot = <div></div>
@@ -83,8 +85,8 @@ class BlogItem extends React.Component {
 				<BlogBreadCrumbs prettyname={prettyname} exampleImage={exampleImage} />
 				{top}
 				<div className="content" dangerouslySetInnerHTML={{__html: content}} />
-				<BlogShareBar shareUrl={shareUrl} title={title} exampleImage={exampleImage} />
 				<RelatedContent items={related_items} />
+				<BlogShareBar shareUrl={shareUrl} title={title} exampleImage={exampleImage} />
 				{bot}
 				<MailingListBlogFooter />
 	            <ReactDisqusComments
