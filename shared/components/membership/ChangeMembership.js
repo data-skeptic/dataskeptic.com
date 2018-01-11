@@ -34,6 +34,10 @@ class ChangeMembership extends Component {
         dispatch({type: "UPDATE_MEMBERSHIP_MSG", payload: {msg} })
     }
 
+    updateMembership() {
+        alert("I wish I could!")
+    }
+
     render() {
         const { user } = this.props
         console.log(this.props.memberportal.toJS())
@@ -51,32 +55,49 @@ class ChangeMembership extends Component {
             <div className="member-portal-container">
                 <MembershipHeader user={user} />
 
-                <div className="members-corner">
-                    <h3>Change Membership</h3>
-                    <div className="row">
-                        <div className="col-xs-12 col-sm-2">Email:</div>
-                        <div className="col-xs-12 col-sm-10">{email}</div>
-                        <div className="col-xs-12 col-sm-2">Member since:</div>
-                        <div className="col-xs-12 col-sm-10">{member_since}</div>
-                        <div className="col-xs-12 col-sm-2">Address Line 1:</div>
-                        <div className="col-xs-12 col-sm-10"><input value={address_line_1} /></div>
-                        <div className="col-xs-12 col-sm-2">Address Line 2:</div>
-                        <div className="col-xs-12 col-sm-10"><input value={address_line_2} /></div>
-                        <div className="col-xs-12 col-sm-2">City:</div>
-                        <div className="col-xs-12 col-sm-10"><input value={city} /></div>
-                        <div className="col-xs-12 col-sm-2">State:</div>
-                        <div className="col-xs-12 col-sm-10"><input value={state} /></div>
-                        <div className="col-xs-12 col-sm-2">Postal code:</div>
-                        <div className="col-xs-12 col-sm-10"><input value={postal_code} /></div>
-                        <div className="col-xs-12 col-sm-2">Country:</div>
-                        <div className="col-xs-12 col-sm-10"><input value={country} /></div>
-                        <div className="col-xs-12 col-sm-2"></div>
-                        <div className="col-xs-12 col-sm-10"><button>Save</button></div>                        
+                <div className="members-update-account-details-container">
+                    <h3>Update Account Details</h3>
+                    <div className="row member-frm-inner">
+                        <div className="col-xs-12 col-sm-2 member-frm-label">Email:</div>
+                        <div className="col-xs-12 col-sm-10"><div className="member-frm-ninput">{email}</div></div>
                     </div>
+                    <div className="row member-frm-inner">
+                        <div className="col-xs-12 col-sm-2 member-frm-label">Member since:</div>
+                        <div className="col-xs-12 col-sm-10"><div className="member-frm-ninput">{member_since}</div></div>
+                    </div>
+                    <div className="row member-frm-inner">
+                        <div className="col-xs-12 col-sm-2 member-frm-label">Address Line 1:</div>
+                        <div className="col-xs-12 col-sm-10"><div className="member-frm-ninput"><input className="member-frm-input" value={address_line_1} /></div></div>
+                    </div>
+                    <div className="row member-frm-inner">
+                        <div className="col-xs-12 col-sm-2 member-frm-label">Address Line 2:</div>
+                        <div className="col-xs-12 col-sm-10"><div className="member-frm-ninput"><input className="member-frm-input" value={address_line_2} /></div></div>
+                    </div>
+                    <div className="row member-frm-inner">
+                        <div className="col-xs-12 col-sm-2 member-frm-label">City:</div>
+                        <div className="col-xs-12 col-sm-10"><div className="member-frm-ninput"><input className="member-frm-input" value={city} /></div></div>
+                    </div>
+                    <div className="row member-frm-inner">
+                        <div className="col-xs-12 col-sm-2 member-frm-label">State:</div>
+                        <div className="col-xs-12 col-sm-10"><div className="member-frm-ninput"><input className="member-frm-input" value={state} /></div></div>
+                    </div>
+                    <div className="row member-frm-inner">
+                        <div className="col-xs-12 col-sm-2 member-frm-label">Postal code:</div>
+                        <div className="col-xs-12 col-sm-10"><div className="member-frm-ninput"><input className="member-frm-input" value={postal_code} /></div></div>
+                    </div>
+                    <div className="row member-frm-inner">
+                        <div className="col-xs-12 col-sm-2 member-frm-label">Country:</div>
+                        <div className="col-xs-12 col-sm-10"><div className="member-frm-ninput"><input className="member-frm-input" value={country} /></div></div>
+                    </div>
+                    <div className="row member-frm-inner">
+                        <div className="col-xs-12 col-sm-2"></div>
+                        <div className="col-xs-12 col-sm-10"><button onClick={this.updateMembership.bind(this)} className="member-frm-btn">Save</button></div>                        
+                    </div>
+                    <hr />
                     <p>{msg}</p>
-                    <button onClick={this.changeMembership.bind(this)}>Change Membership</button>
+                    <button className="member-frm-btn" onClick={this.changeMembership.bind(this)}>Change Membership</button>
                     <br/><br/>
-                    <button onClick={this.cancelMembership.bind(this)}>Cancel Membership</button>
+                    <button className="member-frm-btn" onClick={this.cancelMembership.bind(this)}>Cancel Membership</button>
                 </div>
 
             </div>
