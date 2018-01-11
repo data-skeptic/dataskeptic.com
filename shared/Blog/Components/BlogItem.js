@@ -77,7 +77,7 @@ class BlogItem extends React.Component {
 		}
     	var shareUrl = url
     	var exampleImage = "https://s3.amazonaws.com/dataskeptic.com/img/primary-logo-400.jpg"
-    	if (!guid && contributor.img) {
+    	if (!guid && contributor && contributor.img) {
     		exampleImage = contributor.img
     	}
     	return (
