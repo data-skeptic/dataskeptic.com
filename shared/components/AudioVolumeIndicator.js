@@ -23,6 +23,9 @@ class AudioVolumeIndicator extends Component {
         this.audio.connect(this.analyser);
         this.analyser.connect(this.context.destination);
 
+        // store previous values
+        this.capYPositionArray = [];
+
         this.start()
     }
 
@@ -37,6 +40,8 @@ class AudioVolumeIndicator extends Component {
             window.cancelAnimationFrame(this.drawing);
             this.drawing = undefined;
         }
+
+        this.capYPositionArray = [];
     }
 
     loop = () => {
@@ -49,30 +54,53 @@ class AudioVolumeIndicator extends Component {
     draw = () => {
         const ctx = this.ctx
         const analyser = this.analyser
+
         const {width, height} = this.props
+        const {barWidth = 10, barSpace = 4, capHeight = 2} = this.props
+        const {
+            normalLevelColor = '#0f0',
+            averageLevelColor = '#ff0',
+            highLevelColor = '#f00',
+            capColor='#000'
+        } = this.props
 
         const array = new Uint8Array(analyser.fftSize);
-        analyser.getByteTimeDomainData(array);
-        ctx.clearRect(0, 0, width, height);
+        analyser.getByteFrequencyData(array);
 
-        var average = 0;
-        var max = 0;
-        for (let i = 0; i < array.length; i++) {
-            let a = Math.abs(array[i] - 128);
-            average += a;
-            max = Math.max(max, a);
+        let gradient = ctx.createLinearGradient(0, 0, 0, height);
+        gradient.addColorStop(1, normalLevelColor);
+        gradient.addColorStop(0.5, averageLevelColor);
+        gradient.addColorStop(0, highLevelColor);
+
+        let capYPositionArray = this.capYPositionArray;
+
+        let meterNum = width
+
+        let cwidth = width,
+            cheight = height - barSpace;
+
+        ctx.clearRect(0, 0, cwidth, cheight);
+
+        const step = Math.round(array.length / meterNum);
+        for (let i = 0; i < meterNum; i++) {
+            let value = array[i * step]
+
+            if (capYPositionArray.length < Math.round(meterNum)) {
+                capYPositionArray.push(value)
+            }
+            ctx.fillStyle = capColor
+
+            //draw the cap, with transition effect
+            if (value < capYPositionArray[i]) {
+                ctx.fillRect(i * (barSpace + barWidth), cheight - (--capYPositionArray[i]), barWidth, capHeight);
+            } else {
+                ctx.fillRect(i * (barSpace + barWidth), cheight - value, barWidth, capHeight);
+                capYPositionArray[i] = value;
+            }
+
+            ctx.fillStyle = gradient;
+            ctx.fillRect(i * (barWidth+barSpace), cheight - value + capHeight, barWidth, cheight); //the meter
         }
-
-        average /= array.length;
-        ctx.fillStyle = 'blue';
-        ctx.fillRect(0, 512-average, 512, 512);
-        ctx.beginPath();
-        ctx.arc(128, 128, average, 0, Math.PI * 2, true);
-        ctx.arc(128 + 256, 128, max, 0, Math.PI * 2, true);
-        ctx.closePath();
-        ctx.fill();
-
-        this.start()
     }
 
     render() {

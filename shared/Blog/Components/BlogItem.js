@@ -13,7 +13,6 @@ import BlogAuthorTop from './BlogAuthorTop'
 import BlogAuthorBottom from './BlogAuthorBottom'
 import BlogShareBar from './BlogShareBar'
 import Loading from "../../Common/Components/Loading"
-import AudioVolumeIndicator from "../../components/AudioVolumeIndicator";
 
 class BlogItem extends React.Component {
 	constructor(props) {
@@ -83,21 +82,6 @@ class BlogItem extends React.Component {
     	}
     	return (
 			<div className="blog-item-wrapper">
-
-				<audio
-					id='v'
-					controls
-					crossOrigin="anonymous"
-					src="https://upload.wikimedia.org/wikipedia/en/3/3d/Sample_of_Daft_Punk%27s_Da_Funk.ogg"
-				/>
-
-				<br />
-				<AudioVolumeIndicator
-					audioId={"v"}
-					width={200}
-					height={150}
-				/>
-
 				<BlogBreadCrumbs prettyname={prettyname} exampleImage={exampleImage} />
 				{top}
 				<div className="content" dangerouslySetInnerHTML={{__html: content}} />

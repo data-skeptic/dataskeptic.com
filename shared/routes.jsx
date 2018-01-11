@@ -36,6 +36,7 @@ import Services                from 'components/Services';
 import Store                   from 'components/Store';
 import CheckoutThankYouPage    from 'Checkout/Routes/ThankYouRoute/ThankYouRoute';
 import ProposalsThankYouPage   from 'Proposals/Routes/ThankYou/ThankYouPage';
+import AudioExample            from 'Proposals/Routes/AudioExample';
 import PrivacyPageContainer    from 'Privacy/Containers/PrivacyPageContainer'
 
 import Admin                   from 'components/admin/Admin';
@@ -129,6 +130,10 @@ export default (
         <Route path="/rfc/thank-you" showAds={false} component={App} onEnter={loadData}>
             <IndexRoute component={ProposalsThankYouPage}/>
         </Route>
+        <Route path="/rfc/example" component={App} onEnter={loadData}>
+            <IndexRoute component={AudioExample}/>
+        </Route>
+
 
         <Route path="/login" component={App}>
             <IndexRoute component={Login}/>
