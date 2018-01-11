@@ -10,6 +10,7 @@ import Guests from './Guests'
 import RelatedContent from './RelatedContent'
 import RelatedContentList from './RelatedContentList'
 import Loading from '../../Common/Components/Loading'
+import PriorityInbox from "./PriorityInbox";
 
 class Admin extends Component {
 	constructor(props) {
@@ -83,6 +84,9 @@ class Admin extends Component {
 				<hr/>
 				
 				<SendEmail />
+				<hr/>
+
+				<PriorityInbox />
 				<hr/>
 				
 				<div className="clear" />

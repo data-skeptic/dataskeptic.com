@@ -10,6 +10,7 @@ module.exports = (cache) => {
     router.use('/related', require('./related')(cache));
     router.use('/orders', require('./orders')(cache));
     router.use('/mail', require('./mail')(cache));
+    router.use('/priorityInbox', require('./priorityInbox')(cache));
     router.use('/store', require('./store')(cache));
     router.use('/slack', require('./slack')(cache));
     router.use('/rfc', require('./rfc')(cache));
