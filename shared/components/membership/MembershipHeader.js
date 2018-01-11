@@ -23,8 +23,6 @@ class MembershipHeader extends Component {
                     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
                     <Link to="/membership/change">Change Membership</Link>
                     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-                    <Link to="/membership/inbox">Priority Inbox</Link>
-                    &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
                     <Link to="/membership/analytics">Analytics</Link>
                 </div>
                 <br/>

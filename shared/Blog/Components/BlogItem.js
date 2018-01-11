@@ -7,9 +7,11 @@ import snserror from '../../SnsUtil'
 import EpisodePlayer from "../../components/EpisodePlayer"
 import MailingListBlogFooter from "./MailingListBlogFooter"
 import BlogLink from './BlogLink'
+import RelatedContent from './RelatedContent'
 import BlogBreadCrumbs from './BlogBreadCrumbs'
 import BlogAuthorTop from './BlogAuthorTop'
 import BlogAuthorBottom from './BlogAuthorBottom'
+import BlogShareBar from './BlogShareBar'
 import Loading from "../../Common/Components/Loading"
 
 class BlogItem extends React.Component {
@@ -46,9 +48,13 @@ class BlogItem extends React.Component {
 		if (content === undefined || loading) {
 			return <Loading />
 		}
+		var related_items = blog.related
 		var contributors = osite.contributors
 		var contributor = contributors[author.toLowerCase()]
 		var url = 'http://dataskeptic.com/blog' + prettyname
+		if (prettyname.indexOf('/episodes/') == 0) {
+			contributor = undefined
+		}
 		var title = blog['title']
 		var top = <div></div>
 		var bot = <div></div>
@@ -69,11 +75,18 @@ class BlogItem extends React.Component {
 				<EpisodePlayer episode={episode} />
 			)				
 		}
-		return (
+    	var shareUrl = url
+    	var exampleImage = "https://s3.amazonaws.com/dataskeptic.com/img/primary-logo-400.jpg"
+    	if (!guid && contributor.img) {
+    		exampleImage = contributor.img
+    	}
+    	return (
 			<div className="blog-item-wrapper">
-				<BlogBreadCrumbs prettyname={prettyname} />
+				<BlogBreadCrumbs prettyname={prettyname} exampleImage={exampleImage} />
 				{top}
 				<div className="content" dangerouslySetInnerHTML={{__html: content}} />
+				<RelatedContent items={related_items} />
+				<BlogShareBar shareUrl={shareUrl} title={title} exampleImage={exampleImage} />
 				{bot}
 				<MailingListBlogFooter />
 	            <ReactDisqusComments
@@ -81,7 +94,7 @@ class BlogItem extends React.Component {
 	                identifier={url}
 	                title={title}
 	                url={url}
-	                onNewComment={this.handleNewComment}/>
+	                onNewComment={this.handleNewComment} />
 			</div>
 		)
 	}
