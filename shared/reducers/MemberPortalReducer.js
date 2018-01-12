@@ -5,14 +5,24 @@ import axios from "axios"
 import snserror from '../SnsUtil'
 
 var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
-console.log(["MPR env", env])
 
 var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
 const init = {
 	mode: "loading",
     "analytics": [],
-    update_member_msg: ""
+    "details": {
+        "email": "",
+        "member_since": "",
+        "address_line_1": "",
+        "address_line_2": "",
+        "city": "",
+        "state": "",
+        "postal_code": "",
+        "country": ""
+    },
+    update_member_msg: "",
+    address_msg: ""
 }
 
 const defaultState = Immutable.fromJS(init);
@@ -20,8 +30,26 @@ const defaultState = Immutable.fromJS(init);
 export default function memberPortalReducer(state = defaultState, action) {
   var nstate = state.toJS()
   switch(action.type) {
+    case 'LOAD_MEMBER':
+        var dispatch = action.payload.dispatch
+        var email = action.payload.email
+        var url = base_url + "/member?email=" + email
+        axios
+            .get(url)
+            .then(function(result) {
+                console.log(result)
+                dispatch({type: "SET_MEMBER", payload: result.data })
+            })
+            .catch((err) => {
+                var errorMsg = JSON.stringify(err)
+                console.log(errorMsg)
+                snserror("LOAD_MEMBER", errorMsg)
+            })
+        break;
+    case 'SET_MEMBER':
+        nstate.details = action.payload
+        break;
     case 'CHECK_MEMBERSHIP':
-        console.log("Checking membership!!!")
         nstate.from = action.payload
     	var email = action.payload.user.email
         var dispatch = action.payload.dispatch
@@ -29,12 +57,9 @@ export default function memberPortalReducer(state = defaultState, action) {
     	var data = {email}
     	var dispatch = action.payload.dispatch
     	var uri = base_url + '/members/check'
-        console.log(uri)
-        console.log(data)
         axios
             .post(uri, data)
             .then(function(result) {
-                console.log(result['data'])
                 var msg = result['data']['msg']
             	if (result['data']['status'] == "ok") {
 	        		var mode = "found"
@@ -58,6 +83,7 @@ export default function memberPortalReducer(state = defaultState, action) {
         nstate.mode = mode
     case 'CANCEL_MEMBERSHIP':
         console.log("CANCEL_MEMBERSHIP")
+        nstate.update_member_msg = "Processing..."
         var email = action.payload.email
         var dispatch = action.payload.dispatch
         var uri = base_url + '/members/cancel'
@@ -86,6 +112,7 @@ export default function memberPortalReducer(state = defaultState, action) {
         break
     case 'CHANGE_MEMBERSHIP':
         console.log("CHANGE_MEMBERSHIP")
+        nstate.update_member_msg = "Processing..."
         var email = action.payload.email
         var dispatch = action.payload.dispatch
         var uri = base_url + '/members/change'
@@ -126,6 +153,35 @@ export default function memberPortalReducer(state = defaultState, action) {
     case 'SET_MEMBER_ANALYTICS':
         var data = action.payload
         nstate.analytics = data
+        break
+    case 'SAVE_MEMBERSHIP_ADDRESS':
+        console.log('SAVE_MEMBERSHIP_ADDRESS')
+        var dispatch = action.payload.dispatch
+        var address = nstate.details
+        var user = action.payload.user
+        address['email'] = user.email
+        var url = base_url + "/members/address/update"
+        nstate.address_msg = "Saving..."
+        axios
+            .post(url, address)
+            .then(function(result) {
+                console.log(result)
+                dispatch({type: "SET_ADDRESS_MSG", payload: "Saved" })
+            })
+            .catch((err) => {
+                console.log(err)
+                snserror("SET_ADDRESS_MSG", "Failed!  Please email kyle@dataskeptic.com to get assistance.")
+            })        
+        break
+    case 'SET_ADDRESS_MSG':
+        var msg = action.payload
+        console.log(["SAG", msg])
+        nstate.address_msg = msg
+    case 'UPDATE_MEMBERSHIP_ADDRESS':
+        console.log('UPDATE_MEMBERSHIP_ADDRESS')
+        var field = action.payload.field
+        var val = action.payload.val
+        nstate.details[field] = val
         break
   }
   return Immutable.fromJS(nstate)

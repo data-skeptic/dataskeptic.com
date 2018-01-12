@@ -35,8 +35,7 @@ class EpisodePlayer extends Component {
                 }
             }
         }
-
-        const date = moment(episode.published_date).fromNow()
+        const date = moment(episode.pubDate).fromNow()
         var link = episode.link
         var i = link.indexOf('/blog/')
         link = link.substring(i, link.length)

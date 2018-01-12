@@ -32,6 +32,16 @@ class Admin extends Component {
         }
 	}
 
+    hasAccess() {
+       const { user } = this.props;
+          if(isAdministratorUser(user.type)){
+       	     return true
+	   }
+	   else {
+       	return false
+	   }
+    }
+
 	render() {
 		var oadmin = this.props.admin.toJS()
 		var relatedcontent = oadmin['relatedcontent'] || []

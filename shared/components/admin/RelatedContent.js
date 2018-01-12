@@ -23,13 +23,13 @@ class RelatedContent extends React.Component {
     me.setState(s);
     if (title == "type") {
       if (val == "internal-link") {
-        me.setState({"lbl2": "Related blog_id", "lbl3": "Link Anchor Text", "lbl4": "Comment", "dest": "https://dataskeptic.com/blog/", "selected": true})
+        me.setState({"lbl2": "Related blog_id", "lbl3": "Link Anchor Text", "lbl4": "Comment", "dest": "", "selected": true})
       } else if (val == "external-link") {
         me.setState({"lbl2": "Related page url", "lbl3": "Link Anchor Text", "lbl4": "Comment", "dest": "https://", "selected": true})
       } else if (val == "mp3") {
         me.setState({"lbl2": "Media URL", "lbl3": "Title of recording", "lbl4": "Description", "dest": "https://dataskeptic.com/blog/", "selected": true})
       } else if (val == "person") {
-        me.setState({"lbl2": "Leave blank", "lbl3": "Guest Name", "lbl4": "Guest Bio", "dest": "", "selected": true})
+        me.setState({"lbl2": "IMG URL", "lbl3": "Guest Name", "lbl4": "Guest Bio", "dest": "", "selected": true})
       } else if (val == "homepage-image") {
         me.setState({"lbl2": "Image url (600x250px)", "lbl3": "Alt text", "lbl4": "Leave Blank", "dest": "", "selected": true})
       } else if (val == "blog-header-img") {

@@ -50,6 +50,12 @@ class CMS extends React.Component {
 					<Loading />
 				</div>
 			)
+		} else if (blogs.length == 0) {
+			return (
+				<div className={cn}>
+					<p>Nothing to Show.</p>
+				</div>
+			)
 		}
 		return (
 				<div className={cn}>
