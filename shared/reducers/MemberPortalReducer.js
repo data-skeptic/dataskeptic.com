@@ -81,30 +81,6 @@ export default function memberPortalReducer(state = defaultState, action) {
     	console.log("UPDATE_MEMBERSHIP_MODE")
         var mode = action.payload.mode
         nstate.mode = mode
-    case 'CANCEL_MEMBERSHIP':
-        console.log("CANCEL_MEMBERSHIP")
-        nstate.update_member_msg = "Processing..."
-        var email = action.payload.email
-        var dispatch = action.payload.dispatch
-        var uri = base_url + '/members/cancel'
-        axios
-            .post(uri, {email})
-            .then(function(result) {
-                console.log(result['data'])
-                var status = result['data']['status']
-                if (status == "ok") {
-                    alert("Your membership has been cancelled.  Please allow 2-3 days for processing.")
-                } else {
-                    alert("An error has occurred.  Please email orders@dataskeptic.com")
-                }
-            })
-            .catch((err) => {
-                var errorMsg = JSON.stringify(err)
-                console.log(errorMsg)
-                var msg = "An error has occurred.  Please email orders@dataskeptic.com"
-                dispatch({type: "UPDATE_MEMBERSHIP_MSG", payload: {msg} })
-            })
-        ///axis api members/cancel
         break
     case 'UPDATE_MEMBERSHIP_MSG':
         console.log("UPDATE_MEMBERSHIP_MSG")
