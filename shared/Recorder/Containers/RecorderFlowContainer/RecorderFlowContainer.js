@@ -7,7 +7,6 @@ import {connect} from 'react-redux';
 import moment from 'moment';
 
 
-import RecorderContainer from '../../Containers/RecorderContainer/RecorderContainer';
 import {
     INIT,
     READY,
@@ -37,6 +36,7 @@ import RecordingTimeTracker from '../../Components/RecordingTimeTracker/Recordin
 
 import {float32ToInt16} from '../../Helpers/Converter';
 import Resampler from '../../Helpers/Resampler'
+import AudioVolumeIndicator from "../../../components/AudioVolumeIndicator";
 
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
@@ -454,6 +454,18 @@ class RecorderFlowContainer extends Component {
                             disabled={!isMetaReady}
                         />
 
+                        <AudioVolumeIndicator
+                            audioId="rfcRecorder"
+
+                            width={600}
+                            height={350}
+
+                            barSpace={2}
+                            barWidth={10}
+
+                            capHeight={4}
+                        />
+
                         {isMetaReady &&
                         <div className="buttons">
                             <button type="button" onClick={this.discardRecord}
@@ -480,7 +492,7 @@ class RecorderFlowContainer extends Component {
                     </div>
                 </Wizard>
 
-                <audio ref="listen_controller" className="recording-listener" controls="false"/>
+                <audio ref="listen_controller" className="recording-listener" controls="false" id="rfcRecorder"/>
             </div>
         )
     }
