@@ -14,37 +14,7 @@ var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
 
 var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
-export function loadProducts() {
-    const uri = base_url + "/store/products/list"
-    return axios
-        .get(uri)
-        .then(function (result) {
-            console.log("loadProducts")
-            const items = result.data.Items;
-            return items;
-        })
-        .catch((err) => {
-            console.log("Could not load products")
-            console.log(err)
-            return []
-        })
-}
-
-export function get_contributors() {
-    const uri = base_url + "/blog/contributors/list"
-    return axios
-        .get(uri)
-        .then(function (result) {
-            const contributors = result.data;
-            return contributors;
-        })
-        .catch((err) => {
-            console.log("Could not load products")
-            console.log(err)
-        })
-}
-
-export function populate_one(cm, blog) {
+function populate_one(cm, blog) {
     var src_file = blog['src_file']
     var env = ''
     if (global.env != 'prod') {
