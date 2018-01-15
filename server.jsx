@@ -19,8 +19,7 @@ import {feed_uri}                from 'daos/episodes'
 import {
     loadEpisodes,
     load,
-    loadCurrentRFC,
-    get_contributors
+    loadCurrentRFC
 }  from 'daos/serverInit'
 import { getProducts }           from 'daos/products'
 import express                   from 'express';
@@ -316,6 +315,9 @@ function api_router(req, res) {
     else if (req.url.indexOf('/api/episodes/list') == 0) {
         get_episodes(req, res, Cache.episodes_map, Cache.episodes_list)
         return true
+    }
+    else if (req.url.indexOf('/api/v1/store/order/add') == 0) {
+        add_order(req)
     }
     else if (req.url.indexOf('/api/episodes/get') == 0) {
         get_episodes_by_guid(req, res, Cache.episodes_map, Cache.episodes_list)

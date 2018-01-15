@@ -97,7 +97,7 @@ export function get_products(dispatch) {
                axios
                        .get("/api/store/list")
                        .then(function(result) {
-                               var products = result["data"]
+                               var products = result["data"].items
                                dispatch({type: "ADD_PRODUCTS", payload: products})
                        })
                        .catch((err) => {
