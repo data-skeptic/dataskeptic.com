@@ -17,12 +17,9 @@ var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
 export function get_contributors() {
     const uri = base_url + "/blog/contributors/list"
-    console.log("@@##$$")
     return axios
         .get(uri)
         .then(function (result) {
-            console.log("&&&&&&&")
-            console.log(result)
             const contributors = result.data;
             return contributors;
         })

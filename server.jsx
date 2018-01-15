@@ -290,7 +290,7 @@ function api_router(req, res) {
         order_list(req, res, stripe_key)
         return true
     }
-    else if (req.url.indexOf('/api/v1/contributors/list') == 0) {
+    else if (req.url.indexOf('/api/contributors/list') == 0) {
         var req = req.body
         var resp = Cache.contributors
         return res.status(200).end(JSON.stringify(resp))

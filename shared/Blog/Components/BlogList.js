@@ -21,20 +21,16 @@ class BlogList extends Component {
     }
 
     render() {
-        console.log('this.props')
-        console.log(this.props)
         var latestId = ""
         var blogs = this.props.blogs
         var osite = this.props.site.toJS()
-        console.log(osite)
         var contributors = osite.contributors
         var me = this
         return (
             <div className="row blog-list-container">
             {
                 blogs.map(function(blog, index) {
-                    var contributor = contributors[blog.author]
-                    console.log(contributor)
+                    var contributor = contributors[blog.author.toLowerCase()]
                     return (
                         <BlogListItem
                             key={index}
