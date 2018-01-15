@@ -52,7 +52,6 @@ export default function cmsReducer(state = defaultState, action) {
                     console.log(err)
                 } else {
                     var content = d.Body.toString('utf-8')
-                    console.log("resp len: " + content.length)
                     var payload = { src_file, content }
                     dispatch({type: "CMS_ADD_BLOG_CONTENT", payload })                    
                 }
@@ -186,7 +185,6 @@ export default function cmsReducer(state = defaultState, action) {
         var data = payload.data
         var dispatch = payload.dispatch
         console.log('CMS_INJECT_HOMEPAGE_CONTENT')
-        console.log(data)
         var le = data['latest_episode']
         var fb = data['featured_blog']
         var fb2 = data['featured_2']

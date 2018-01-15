@@ -2,9 +2,10 @@ import express from 'express'
 
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
+let googleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const LinkedinStrategy = require('../../modules/Auth/LinkedinStrategy').default
 const UserServices = require('../../modules/Users/Services/UserServices');
-let redirectURL;
+let redirectURL;0
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
@@ -29,7 +30,29 @@ module.exports = () => {
     )
 
     if (c[env]['linkedin']) {
+        console.log("AUTH: allowing Linkedin Login")
         passport.use(LinkedinStrategy(global.env))
+    }
+    var gp = c[env]['googlePassport']
+    if (gp) {
+        console.log("AUTH: allowing Google Login")
+            passport.use(new googleStrategy({
+                clientID: gp.clientId,
+                clientSecret: gp.clientSecret,
+                callbackURL: '/api/v1/auth/google/callback',
+                passReqToCallback:true
+            },
+            function (req, accessToken, refreshToken, profile, done){
+                let user ={};
+                user.id = profile.id;
+                user.displayName = profile.displayName;
+                user.google ={};
+                user.google.id = profile.id;
+                user.google.token = accessToken;
+                user.email = profile.emails[0].value;
+                done(null, user);
+            })
+        )
     }
 
 

@@ -53,7 +53,10 @@ class CartContainer extends React.Component {
 
         const { onCheckoutClick, needCheckout } = this.props
 
-        const subtotal = cart_items.reduce((mem, item) => (item.product.price * item.quantity), 0);
+        var subtotal = 0
+        for (var item of cart_items) {
+            subtotal += item.product.price * item.quantity
+        }
         if (cart_items.length == 0) {
             return <EmptyCart />
         } else {

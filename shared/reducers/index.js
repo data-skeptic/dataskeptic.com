@@ -10,7 +10,6 @@ export { default as site } from './SiteReducer';
 export { default as auth} from '../Auth/Reducers/AuthReducer'
 export { default as cart } from '../Cart/Reducers/CartReducer';
 export { default as checkout } from '../Checkout/Reducers/CheckoutReducer';
-export { default as contributors } from '../Contributors/Reducers/ContributorsReducer';
 export { default as episodes } from './EpisodesReducer';
 export { default as layout } from '../Layout/Reducers/LayoutReducer';
 export { default as proposals } from '../Proposals/Reducers/ProposalsReducer';
