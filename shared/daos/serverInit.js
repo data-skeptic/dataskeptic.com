@@ -14,21 +14,6 @@ var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
 
 var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
-export function loadProducts(env) {
-    const uri = "https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + env + "/products"
-    return axios
-        .get(uri)
-        .then(function (result) {
-            const items = result.data.Items;
-
-            return items;
-        })
-        .catch((err) => {
-            console.log("Could not load prodcuts")
-        })
-
-}
-
 function populate_one(cm, blog) {
     var src_file = blog['src_file']
     var env = ''
