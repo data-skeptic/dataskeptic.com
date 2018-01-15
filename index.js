@@ -8,6 +8,7 @@ const path = require('path')
 const passport = require('passport')
 const aws = require('aws-sdk')
 const snsalert = require('./shared/SnsUtil').snsalert
+const stripe = require('stripe')
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
@@ -17,6 +18,7 @@ const app = require('./server').default
 const c = require('./config/config.json')
 console.log('index.js : env = ' + env)
 var aws_accessKeyId = c[env]['aws']['accessKeyId']
+console.log(aws_accessKeyId)
 var aws_secretAccessKey = c[env]['aws']['secretAccessKey']
 var aws_region = c[env]['aws']['region']
 
