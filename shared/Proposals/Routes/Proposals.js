@@ -81,7 +81,7 @@ class Proposals extends Component {
             const {proposal = {}, aws_proposals_bucket} = this.props;
             const {topic, long_description, deadline, active} = proposal;
             const to = moment(deadline);
-            const isClosed = !active;
+            const isClosed = false
 
             const user = {
                 email: authorizedUser.email,
