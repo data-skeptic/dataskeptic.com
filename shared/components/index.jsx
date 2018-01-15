@@ -22,6 +22,7 @@ import MobileMenu from '../MobileMenu/Components/MobileMenu'
 import { getItemsCount as getCartItemsCount } from '../Cart/Helpers/getItemsCount';
 import { toggleCart } from '../Cart/Actions/CartActions'
 import ChatBotContainer from "../ChatBot/Containers/ChatBotContainer";
+import HomeContainer from '../Home'
 
 class MainView extends React.Component {
   constructor(props) {
@@ -202,7 +203,7 @@ class MainView extends React.Component {
     const isOverflowMode = isCartVisible
 
     const { ready } = this.state
-
+    console.log('pathname', pathname)
     return (
         <div className={ classNames('site', {'no-scroll' : isMobileMenuVisible}) }>
           <div className="container-fluid">
@@ -216,13 +217,16 @@ class MainView extends React.Component {
             <div className="row row-centered">
               <Header pathname={pathname} />
             </div>
-            <div className="row">
+            {/* <div className="row">
               <PlayerContainer />
             </div>
             {this.props.children}
-            <Sidebar />
+            <Sidebar /> */}
+            <div className="row">
+              <HomeContainer />
+            </div>
           </div>
-          <ChatBotContainer/>
+          {/* <ChatBotContainer/> */}
           <Footer showAds={showAds} linkClick={this.onFooterItemClick} banner={this.props.bannerContent}/>
           <Overflow visible={isOverflowMode} onClick={this.onOverflowClick}/>
         </div>
