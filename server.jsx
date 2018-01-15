@@ -20,7 +20,8 @@ import {
     loadProducts,
     load,
     loadCurrentRFC,
-    get_contributors
+    get_contributors,
+    add_order
 }  from 'daos/serverInit'
 import express                   from 'express';
 import FileStreamRotator         from 'file-stream-rotator'
@@ -310,6 +311,9 @@ function api_router(req, res) {
     else if (req.url.indexOf('/api/episodes/list') == 0) {
         get_episodes(req, res, Cache.episodes_map, Cache.episodes_list)
         return true
+    }
+    else if (req.url.indexOf('/api/v1/store/order/add') == 0) {
+        add_order(req)
     }
     else if (req.url.indexOf('/api/episodes/get') == 0) {
         get_episodes_by_guid(req, res, Cache.episodes_map, Cache.episodes_list)
