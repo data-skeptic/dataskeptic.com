@@ -45,8 +45,6 @@ export default function siteReducer(state = defaultState, action) {
       nstate.contact_form.send = "no"
       break
     case 'SET_CONTRIBUTORS':
-      console.log('action.payload')
-      console.log(action.payload)
       nstate.contributors = action.payload
       break
     case 'SET_TITLE':
