@@ -1,19 +1,27 @@
 import axios from "axios"
 
-export default function getProducts(store, env) {
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const c = require('../../config/config.json')
+var base_url = c[env]['base_api'] + env
+
+export function getProducts(store, env) {
 	console.log("Network: retrieving all products")
-	var uri = "https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + env + "/products"
-	console.log(uri)
-	axios
-		.get(uri)
-		.then(function(result) {
-			var products = result.data.Items
-			if (products != undefined) {
-				store.dispatch({type: "ADD_PRODUCTS", payload: products })
-				console.log("Loaded products")
-			}
+	var url = base_url + "/store/products/list"
+	return axios
+		.get(url)
+  		.then(function(result) {
+  			console.log(result)
+  			var products = result["data"]["Items"]
+  			if (store) {
+				store.dispatch({type: "ADD_PRODUCTS", payload: products})
+  			}
+			return products
 		})
 		.catch((err) => {
-			store.dispatch({type: "FETCH_PRODUCTS_ERROR", playload: err})
-		})			
+			console.log(err)
+			if (store) {
+				store.dispatch({type: "FETCH_PRODUCTS_ERROR", playload: err})
+			}
+			return []
+		})
 }

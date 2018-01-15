@@ -8,6 +8,7 @@ import {get_rfc_metadata}        from 'backend/get_rfc_metadata'
 import {join_slack}              from 'backend/join_slack'
 import {send_email}              from 'backend/send_email'
 import {order_create}            from 'backend/order_create'
+import {add_order}               from 'backend/add_order'
 import {order_fulfill}           from 'backend/order_fulfill'
 import {order_list}              from 'backend/order_list'
 import {ready, getTempFile, getFile}  from 'backend/v1/recording';
@@ -17,12 +18,12 @@ import compression               from 'compression';
 import {feed_uri}                from 'daos/episodes'
 import {
     loadEpisodes,
-    loadProducts,
     load,
     loadCurrentRFC,
     get_contributors,
     add_order
 }  from 'daos/serverInit'
+import { getProducts }           from 'daos/products'
 import express                   from 'express';
 import FileStreamRotator         from 'file-stream-rotator'
 import fs                        from 'fs'
@@ -134,13 +135,14 @@ const doRefresh = (store) => {
     console.log("-[Refreshing episodes]-");
     return loadEpisodes(env)
         .then(function ({episodes_map, episodes_list, episodes_content}, guid) {
+            console.log("-[Refreshing episodes]-");
             Cache.episodes_map = episodes_map;
             Cache.episodes_list = episodes_list;
             Cache.episodes_content = episodes_content;
-            console.log("-[Refreshing products]-");
-            return loadProducts()
+            return getProducts(store, env)
         })
         .then((products) => {
+            console.log("-[Refreshing products]-");
             Cache.products = null;
             Cache.products = {};
             Cache.products.items = products;
@@ -272,7 +274,11 @@ function api_router(req, res) {
         return true
     }
     else if (req.url.indexOf('/api/order/create') == 0) {
-        order_create(req, res, sp_key)
+        order_create(req, res, stripe_key)
+        return true
+    }
+    else if (req.url.indexOf('/api/order/add') == 0) {
+        add_order(req, res, stripe_key)
         return true
     }
     else if (req.url.indexOf('/api/order/fulfill') == 0) {
@@ -382,6 +388,7 @@ function inject_homepage(store, my_cache, pathname) {
 
 function inject_products(store, my_cache, pathname) {
     var products = my_cache.products['items']
+    console.log("inject_products " + products.length)
     store.dispatch({type: "ADD_PRODUCTS", payload: products})
 }
 
