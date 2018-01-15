@@ -12,7 +12,7 @@ const proposalsDocs = new aws.DynamoDB.DocumentClient();
 
 const PROPOSALS_TABLE_NAME = 'proposals';
 
-const env="prod";
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
 //=========== CONFIG
 const c = require('../../../config/config.json')

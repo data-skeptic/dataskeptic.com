@@ -56,6 +56,21 @@ class RelatedContent extends React.Component {
 							</div>
 						</div>
 					)
+				} else if (type == "external-link") {
+					var to = dest
+					// TODO: incorporate these three elements into the design
+					var author = item.author
+					var publish_date = item.publish_date
+					var guid = item.guid
+					return (
+						<div className="related-content-container">
+							<div className="related-content-imageless-inner">
+								<Link to={to}><h3 className="related-content-h3" >{title}</h3></Link>
+								<p>{body}</p>
+								<p><a href={dest}>{dest}</a></p>
+							</div>
+						</div>
+					)
 				} else {
 					console.log("UNSUPPORTED TYPE: " + type)
 					return (

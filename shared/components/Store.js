@@ -40,6 +40,7 @@ class Store extends React.Component {
 			return <div><Loading /></div>			
 		} else {
 			var products = oproducts.products
+			console.log(products)
 			return (
 				<div className="center">
 					<div className="store-items">
