@@ -3,7 +3,6 @@ import AdSense from 'react-adsense'
 import { Link } from 'react-router'
 import ReactDOM from "react-dom"
 import sha1 from 'sha1';
-import styled from 'styled-components'
 
 import NavLink from '../../../components/NavLink'
 
@@ -20,13 +19,12 @@ const LINKS = {
 
 export const Footer = ({showAds = true, foo, pathname, linkClick, banner=null }) =>  (
 	<div>
-        <AdSenseDiv className="advert center">
-			{/* <ADGoesHere>ad goes here</ADGoesHere> */}
+        <div className="advert center">
 			{showAds && (banner
                 ? <div key={sha1(banner)} dangerouslySetInnerHTML={{__html: banner}}/>
                 : <AdSense.Google client='ca-pub-4495792015968395' slot='2320193863'/>
 			)}
-		</AdSenseDiv>
+		</div>
 
 		<div className="footer">
 			<div className="container">
@@ -37,7 +35,7 @@ export const Footer = ({showAds = true, foo, pathname, linkClick, banner=null })
 					</p>
 					<a className="creative-commons" href="https://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="/img/png/by-nc-sa.eu.png" className="footer-img" alt="Data Skeptic is released under a creative commons attribution non-comercial share alike 4.0 license" /></a>
 				</div>
-				<div className="col-xs-12 col-sm-3 col-md-offset-1 col-md-2 links-block">
+				<div className="col-xs-6 col-sm-3 col-md-offset-1 col-md-2 links-block">
 					<h3>Content</h3>
 					<div className="links">
 						<NavLink active={pathname} to="/podcast" onClick={linkClick}>Podcasts</NavLink>
@@ -46,7 +44,7 @@ export const Footer = ({showAds = true, foo, pathname, linkClick, banner=null })
 						<NavLink active={pathname} to="/services" onClick={linkClick}>Services</NavLink>
 					</div>
 				</div>
-				<div className="col-xs-12 col-sm-3 col-md-2 links-block">
+				<div className="col-xs-6 col-sm-3 col-md-2 links-block">
 					<h3>Data Skeptic</h3>
 					<div className="links">
 						<NavLink active={pathname} to="/about" onClick={linkClick}>About</NavLink>
@@ -55,7 +53,7 @@ export const Footer = ({showAds = true, foo, pathname, linkClick, banner=null })
 						<NavLink active={pathname} to="/contact-us" onClick={linkClick}>Contact</NavLink>
 					</div>
 				</div>
-				<div className="col-xs-12 col-sm-3 col-md-2 links-block">
+				<div className="col-xs-6 col-sm-3 col-md-2 links-block">
 					<h3>Connect</h3>
 					<div className="links">
 						<a className='twitter' href={LINKS.TWITTER} onClick={linkClick}>Twitter</a>
@@ -63,7 +61,7 @@ export const Footer = ({showAds = true, foo, pathname, linkClick, banner=null })
 						<a className='youtube' href={LINKS.YOUTUBE} onClick={linkClick}>Youtube</a>
 					</div>
 				</div>
-				<div className="col-xs-12 col-sm-3 col-md-2 links-block">
+				<div className="col-xs-6 col-sm-3 col-md-2 links-block">
 					<h3>Subscribe</h3>
 					<div className="links">
 						<a className='itunes' href={LINKS.ITUNES} onClick={linkClick}>iTunes</a>
@@ -78,18 +76,3 @@ export const Footer = ({showAds = true, foo, pathname, linkClick, banner=null })
 );
 
 export default Footer
-
-// const ADGoesHere = styled.button`
-//   background-color: #D8D8D8;
-//   color: #979797;
-//   text-transform: uppercase;
-//   font-size: 38px;
-//   height: 90px;
-//   margin: 64px 0 0;
-//   bottom: 0;
-//   width: 100%;
-// `
-
-const AdSenseDiv = styled.div`
-  display: none;
-`
