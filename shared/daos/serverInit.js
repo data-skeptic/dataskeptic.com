@@ -5,13 +5,14 @@ import snserror from '../SnsUtil'
 const aws = require('aws-sdk')
 const s3 = new aws.S3();
 
+const c = require('../../config/config.json')
+
 const proposalsDocs = new aws.DynamoDB.DocumentClient();
 
 import {convert_items_to_json} from 'daos/episodes'
 import {extractFolders} from '../utils/blog_utils'
 
 var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
-
 var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
 export function loadProducts() {
@@ -213,4 +214,91 @@ export function loadCurrentRFC() {
             }
         });
     });
+}
+
+
+export function add_order(req) {
+    var email    = req['email']
+    var token    = req['token']
+    var customer = req['customer']
+    var products = req['products']
+    var shipping = req['shipping']
+
+    var name    = customer['first_name'] + ' ' + customer['last_name'] 
+    var stripe = require("stripe")(c[env]['stripe']);
+    var address = customer
+    console.log("Go go stripe!")
+    let promise = new Promise(function (resolve, reject) {
+        stripe.customers.create({
+            description: 'Customer for ' + email,
+            email: email,
+            source: token
+        }, function(err, customer) {
+            if (err) {
+                console.log("error: " + err)
+                return reject(err)
+            }
+            console.log("Stripe customer ready")
+            var items = create_items_list(stripe, customer, products)
+            if (items.length > 0) {
+                item = {
+                    "amount": shipping,
+                    "currency": "usd",
+                    "description": "shipping",
+                    "parent": "shipping",
+                    "type": "sku",
+                    "quantity": 1
+                }
+                stripe.orders.create({
+                  currency: 'usd',
+                  items: items,
+                  shipping: {
+                    name,
+                    address
+                  },
+                  email
+                }, function(err, order) {
+                    if (err) {
+                        console.log("error stripe.orders.create " + err)
+                        return reject(err)
+                    }
+                    var stripe_order_id = order.id
+                    console.log('stripe_order_id=' + stripe_order_id)
+                    return stripe.orders.pay(stripe_order_id, {
+                        customer: customer.id
+                    }, function(err, order2) {
+                        if (err) {
+                            console.log(err)
+                            reject(err)
+                        }
+                        resolve({stripe_order_id})
+                    });
+                });
+            }
+        });
+    })
+    return promise.then(function(result) {
+        console.log("STEP 2!")
+        var stripe_order_id = result.stripe_order_id
+        var url = base_url + '/store/order/add'
+        return axios
+            .post(url, {order, stripe_order_id})
+            .then(function(resp) {
+                const result = resp.data;
+                let paymentComplete = false;
+                let paymentError = '';
+                if (result.msg !== 'ok') {
+                    paymentComplete = false;
+                    paymentError = result.msg || result.errorMessage || "";
+                } else {
+                    paymentComplete = true
+                }
+
+                if (paymentComplete) {
+                    return result;
+                } else {
+                    throw new Error(paymentError);
+                }
+            });
+    })
 }
