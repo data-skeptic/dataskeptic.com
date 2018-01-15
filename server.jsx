@@ -19,8 +19,7 @@ import {feed_uri}                from 'daos/episodes'
 import {
     loadEpisodes,
     load,
-    loadCurrentRFC,
-    get_contributors
+    loadCurrentRFC
 }  from 'daos/serverInit'
 import { getProducts }           from 'daos/products'
 import express                   from 'express';
