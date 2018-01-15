@@ -20,8 +20,7 @@ import {
     loadEpisodes,
     load,
     loadCurrentRFC,
-    get_contributors,
-    add_order
+    get_contributors
 }  from 'daos/serverInit'
 import { getProducts }           from 'daos/products'
 import express                   from 'express';
