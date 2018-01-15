@@ -19,6 +19,7 @@ import {feed_uri}                from 'daos/episodes'
 import {
     loadEpisodes,
     load,
+    get_contributors,
     loadCurrentRFC
 }  from 'daos/serverInit'
 import { getProducts }           from 'daos/products'
@@ -148,6 +149,8 @@ const doRefresh = (store) => {
             return get_contributors()
         })
         .then((contributors) => {
+            console.log('======================')
+            console.log(contributors)
             Cache.contributors = contributors
             console.log("-[Refreshing RFC]-");
             return loadCurrentRFC()
