@@ -93,7 +93,6 @@
     "stripe": "^5.4.0",
     "striptags": "^3.0.0",
     "style-loader": "^0.13.2",
-    "styled-components": "^2.4.0",
     "tls": "0.0.1",
     "uuid": "^3.0.1",
     "wav": "^1.0.1",
