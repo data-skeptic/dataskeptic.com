@@ -22,7 +22,6 @@ class Store extends React.Component {
     }
 
     onAddToCart(event) {
-        console.log(this.props)
         var btn = event.target
         var id = btn.id.split("_")[1]
         var product = this.props.product
