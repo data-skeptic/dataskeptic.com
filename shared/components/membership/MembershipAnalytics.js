@@ -21,6 +21,9 @@ class MembershipAnalytics extends Component {
         const { user, loggedIn } = this.props
         var omembership = this.props.memberportal.toJS()
         var analytics = omembership['analytics']
+        if (!analytics || analytics.length == 0) {
+            return <Loading />
+        }
         return (
             <div className="member-portal-container">
                 <MembershipHeader user={user} />

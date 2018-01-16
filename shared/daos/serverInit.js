@@ -5,28 +5,28 @@ import snserror from '../SnsUtil'
 const aws = require('aws-sdk')
 const s3 = new aws.S3();
 
+const c = require('../../config/config.json')
+
 const proposalsDocs = new aws.DynamoDB.DocumentClient();
 
 import {convert_items_to_json} from 'daos/episodes'
 import {extractFolders} from '../utils/blog_utils'
 
 var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
-
 var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
-export function loadProducts(env) {
-    const uri = "https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + env + "/products"
+export function get_contributors() {
+    const uri = base_url + "/blog/contributors/list"
     return axios
         .get(uri)
         .then(function (result) {
-            const items = result.data.Items;
-
-            return items;
+            const contributors = result.data;
+            return contributors;
         })
         .catch((err) => {
-            console.log("Could not load prodcuts")
+            console.log("Could not load products")
+            console.log(err)
         })
-
 }
 
 function populate_one(cm, blog) {
@@ -46,7 +46,7 @@ function populate_one(cm, blog) {
     cm[prettyname] = ""
 }
 
-function populate_content_map(blogs, data) {
+export function populate_content_map(blogs, data) {
     var cm = data['content_map']
     var n = blogs.length
     n=4
@@ -149,13 +149,12 @@ export function loadEpisodes(env) {
 
                     if (list.length > 0) {
                         var latest = list[0]
-                        console.log(latest)
+                        console.log("Going to inform server of latest guid:" + latest)
                         var url = base_url + "/episodes?latest=" + latest
                         axios
                             .post(url)
                             .then(function(result) {
-                                console.log("success")
-                                console.log(result)
+                                console.log(result.data)
                                 // TODO: should we dispatch some action?
                             })
                             .catch((err) => {
@@ -200,3 +199,5 @@ export function loadCurrentRFC() {
         });
     });
 }
+
+

@@ -11,7 +11,7 @@ export default function productsReducer(state = defaultState, action) {
   var nstate = state.toJS()
   switch(action.type) {
     case 'ADD_PRODUCTS':
-      nstate.products = new Immutable.List(action.payload)
+      nstate.products = action.payload
       nstate.products_loaded = 1
       break;
     case 'FETCH_PRODUCTS_ERROR':

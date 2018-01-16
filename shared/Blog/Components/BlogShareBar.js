@@ -42,11 +42,9 @@ const LivejournalIcon = generateShareIcon('livejournal');
 
 export default class BlogShareBar extends Component {
     render() {
-    	console.log(this.props)
     	var shareUrl = this.props.shareUrl
     	var title = this.props.title
     	var exampleImage = this.props.exampleImage
-    	console.log([shareUrl, title, exampleImage])
         return (
             <div className="blog-share-bar-container">
             	<h3>Share this post</h3>

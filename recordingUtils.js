@@ -8,7 +8,7 @@ const exec = require('child_process').exec;
 const AWS = require("aws-sdk");
 
 //=========== CONFIG
-const env = "prod"
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
 const c = require('./config/config.json')
 const aws_accessKeyId = c[env]['aws']['accessKeyId']

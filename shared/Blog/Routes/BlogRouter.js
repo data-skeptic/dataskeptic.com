@@ -128,6 +128,8 @@ class BlogRouter extends React.Component {
 		var pathname = this.props.location.pathname
 		console.log("BlogRouter render " + pathname)
 		var pname = pathname.substring(5, pathname.length)
+		var osite = this.props.site.toJS()
+		var contributors = osite.contributors
 		var ocms = this.props.cms.toJS()
 		var blogs = ocms['recent_blogs']
 		var exact = undefined
@@ -156,7 +158,7 @@ class BlogRouter extends React.Component {
 				<div className="center">
 					<BlogTopNav pathname={pathname} blogs={blogs} />
 					<div className="center">
-						<BlogList blogs={blogs} />
+						<BlogList blogs={blogs} contributors={contributors} />
 					</div>
 				</div>
 			)

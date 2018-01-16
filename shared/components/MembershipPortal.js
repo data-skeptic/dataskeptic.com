@@ -77,9 +77,10 @@ class MembershipPortal extends Component {
                             <img src="https://s3.amazonaws.com/dataskeptic.com/contributors/kyle-polich.png" /><br/>
                             <i>Kyle Polich, executive producer</i>
                         </div>
+                        <h4>Member's notes</h4>
                         <p>Happy 2018 and thank you for your support of Data Skeptic!</p>
                         <p>This humble page you're viewing now is a work in progress, but one that we'll be making considerable improvements to in the coming months.  We're waiting on all your member surveys to be returned to help us set priorities.  I'm going to leave this "Member's Corner" section at the top of your login and provide small updates and behind-the-scenes details.  If you're interested in that, check back here often for updates.</p>
-                        <p>As we launch today, there's three useful features in your Member Portal:</p>
+                        <p>As we launch today, there's two useful features in your Member Portal:</p>
                         <p><b>Change membership</b> - Change membership level or cancel (gasp!)</p>
                         <p><b>Podcast Analytics</b> - A few details about which blog posts have been popular recently.</p>
                     </div>

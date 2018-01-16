@@ -16,7 +16,7 @@ class Membership extends Component {
 
 	componentWillMount() {
 		var oproducts = this.props.products.toJS()
-		if (oproducts.products.length == 0) {
+		if (!oproducts.products || oproducts.products.length == 0) {
 			get_products(this.props.dispatch)			
 		}
 
@@ -33,8 +33,6 @@ class Membership extends Component {
     }
 
 	addToCart(product) {
-		console.log("addToCart")
-		console.log(product)
 		var size = ""
 		this.props.dispatch({type: "ADD_TO_CART", payload: {product, size} })
 		this.props.dispatch({type: "SHOW_CART", payload: true })
@@ -51,6 +49,9 @@ class Membership extends Component {
 			return <div><Error /></div>
 		} else {
 			products = oproducts.products
+			if (!products) {
+				products = []
+			}
 			products.sort(function(a, b) {
 				return a['price'] - b['price']
 			})
