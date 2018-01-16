@@ -35,12 +35,15 @@ import Recorder from '../../Components/Recorder/Recorder';
 import RecordingTimeTracker from '../../Components/RecordingTimeTracker/RecordingTimeTracker';
 
 import {float32ToInt16} from '../../Helpers/Converter';
-import Resampler from '../../Helpers/Resampler'
 import AudioVolumeIndicator from "../../../components/AudioVolumeIndicator";
-
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 const IS_PROD = (env === 'prod')
+
+const getAudioContext = () => {
+    const audioContextSource = window.AudioContext || window.webkitAudioContext;
+    return new audioContextSource();
+}
 
 /**
  * Recording flow
@@ -102,6 +105,7 @@ class RecorderFlowContainer extends Component {
 
     componentDidMount() {
         this.audioController = ReactDOM.findDOMNode(this.refs.listen_controller);
+        this.audioContext = getAudioContext()
     }
 
     componentWillReceiveProps(nextProps) {
@@ -304,24 +308,14 @@ class RecorderFlowContainer extends Component {
         }
     }
 
-    getAudioContext() {
-        if (!this.audioContext) {
-            const audioContextSource = window.AudioContext || window.webkitAudioContext;
-            this.audioContext = new audioContextSource();
-        }
-
-        return this.audioContext;
-    }
-
     initRecorderSuccess(stream) {
         this.browserStream = stream;
-        const context = this.getAudioContext();
 
         // the sample rate is in context.sampleRate
-        this.audioInput = context.createMediaStreamSource(stream);
+        this.audioInput = this.audioContext.createMediaStreamSource(stream);
 
         const bufferSize = 4096;
-        this.recorder = context.createScriptProcessor(bufferSize, 2, 2);
+        this.recorder = this.audioContext.createScriptProcessor(bufferSize, 2, 2);
 
         this.startTimeCounter();
 
@@ -333,7 +327,7 @@ class RecorderFlowContainer extends Component {
         };
 
         this.audioInput.connect(this.recorder);
-        this.recorder.connect(context.destination);
+        this.recorder.connect(this.audioContext.destination);
     }
 
     startTimeCounter() {
@@ -441,6 +435,16 @@ class RecorderFlowContainer extends Component {
                             onClick={this.toggleRecording}
                             info={this.getInfoMessage()}
                         />
+
+                        <br />
+
+                        <AudioVolumeIndicator
+                            audioInput={this.audioInput}
+                            audioContext={this.audioContext}
+
+                            width={400}
+                            height={220}
+                        />
                     </div>
 
                     <div key={UPLOADING} className="uploading-step">
@@ -452,18 +456,6 @@ class RecorderFlowContainer extends Component {
                             onClick={this.togglePlaying}
                             playing={isPlaying}
                             disabled={!isMetaReady}
-                        />
-
-                        <AudioVolumeIndicator
-                            audioId="rfcRecorder"
-
-                            width={600}
-                            height={350}
-
-                            barSpace={2}
-                            barWidth={10}
-
-                            capHeight={4}
                         />
 
                         {isMetaReady &&

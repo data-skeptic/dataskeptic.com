@@ -4,24 +4,32 @@ class AudioVolumeIndicator extends Component {
 
     componentDidMount() {
         this.ctx = this.refs.canvas.getContext('2d')
+    }
 
-        this.init()
+    componentWillUpdate(nextProps) {
+        if (!nextProps.audioInput || !nextProps.audioContext) {
+            return
+        }
+
+        this.init(nextProps)
     }
 
     componentWillUnmount() {
         this.stop()
     }
 
-    init() {
-        const { audioId } = this.props
+    init(props) {
+        const { audioInput, audioContext } = props
 
-        this.context = new AudioContext();
-        this.audio = this.context.createMediaElementSource(document.getElementById(audioId));
-        this.analyser = this.context.createAnalyser(); //we create an analyser
+        if (this.analyser) {
+            this.analyser = null
+        }
+
+        this.analyser = audioContext.createAnalyser(); //we create an analyser
         this.analyser.smoothingTimeConstant = 0.9;
         this.analyser.fftSize = 512; //the total samples are half the fft size.
-        this.audio.connect(this.analyser);
-        this.analyser.connect(this.context.destination);
+        audioInput.connect(this.analyser);
+        // this.analyser.connect(audioContext.destination);
 
         // store previous values
         this.capYPositionArray = [];
@@ -88,7 +96,6 @@ class AudioVolumeIndicator extends Component {
             if (capYPositionArray.length < Math.round(meterNum)) {
                 capYPositionArray.push(value)
             }
-            ctx.fillStyle = capColor
 
             //draw the cap, with transition effect
             if (value < capYPositionArray[i]) {
