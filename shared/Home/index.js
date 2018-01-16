@@ -2,6 +2,8 @@ import React, { Component }  from 'react'
 import Content from './Content'
 import { Banner } from './style'
 
+const pageType = "homepage"
+
 class HomeContainer extends Component {
   constructor(props) {
     super(props)
@@ -14,7 +16,7 @@ class HomeContainer extends Component {
     return (
       <div>
         <Banner />
-        <Content />
+        <Content pageType={pageType}/>
       </div>
     )
   }

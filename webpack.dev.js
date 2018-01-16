@@ -31,6 +31,7 @@ export default function(app) {
   const config = Object.assign(prodCfg, {
     devtool: 'inline-source-map',
     entry:   [
+      'babel-polyfill',
       'webpack-hot-middleware/client',
       './client'
     ],

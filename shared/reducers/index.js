@@ -5,6 +5,7 @@ export { default as memberportal } from './MemberPortalReducer';
 export { default as products } from './ProductsReducer';
 export { default as player } from './PlayerReducer';
 export { default as site } from './SiteReducer';
+export { default as features } from './HomeReducer'
 
 // TODO: migrate these to /shared/reducers folder
 export { default as auth} from '../Auth/Reducers/AuthReducer'

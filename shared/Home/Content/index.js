@@ -1,15 +1,28 @@
 import React, { Component }  from 'react'
+import PropTypes from 'prop-types'
 import { ContentContainer, BlogContainer, PodContainer, ADGoesHere } from './style'
 import Feature from './Feature'
 import Blog from './Blog'
 import Podcast from './Podcast'
+import { connect } from 'react-redux'
+
+import { GET_FEATURES, GET_FEATURES_PENDING } from '../../../actions/home'
 
 class Content extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
+  static propTypes = {
+    pageType: PropTypes.string,
+    features: PropTypes.array,
+    getFeatures: PropTypes.func
+  }
 
-    }
+  componentDidMount () {
+    const { pageType, getFeatures } = this.props
+    getFeatures(pageType)
+  }
+
+  componentWillReceiveProps (nextProps) {
+    const { features } = nextProps
+    console.log('Features nextProps DATA : ', features)
   }
 
   render () {
@@ -28,4 +41,19 @@ class Content extends Component {
   }
 }
 
-export default Content
+function mapStateToProps (state, props) {
+  const { features } = state.features
+  return { features }
+}
+
+function mapDispatchToProps (dispatch, props) {
+  return {
+    getFeatures: async (pageType) => {
+      dispatch({ type: GET_FEATURES_PENDING, payload: pageType })
+      const res = await GET_FEATURES(pageType)
+      return dispatch(res)
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Content)
