@@ -5,9 +5,14 @@ const uuidV4 = require('uuid/v4');
 const moment = require('moment');
 const docClient = new AWS.DynamoDB.DocumentClient();
 
-var env = process.NODE_ENV === "production" ? "prod" : "dev"
 
-var tablename = `${config[env].player_metadata.play_metadata}`
+
+var env = process.env.NODE_ENV === "production" ? "prod" : "dev"
+
+var tablename = config[env]['player_metadata']['player_metadata']
+console.log(env)
+console.log(config[env]['player_metadata'])
+console.log("TB: " + tablename)
 
 export const getMeta = () => {
     const params = {
@@ -19,7 +24,7 @@ export const getMeta = () => {
                 console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
                 return reject(err);
             } else {
-                console.log("GetItem succeeded:", JSON.stringify(data, null, 2));
+                //console.log("GetItem succeeded:", JSON.stringify(data, null, 2));
                 return resolve(data);
             }
         });
@@ -44,7 +49,7 @@ export const getMetaById = (id) => {
                 console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
                 return reject(err);
             } else {
-                console.log("GetItem succeeded:", JSON.stringify(data, null, 2));
+                //console.log("GetItem succeeded:", JSON.stringify(data, null, 2));
                 return resolve(data);
             }
         });
@@ -66,6 +71,7 @@ export const insertMeta = (data) => {
     return new Promise((resolve, reject) => {
         docClient.put(params, function (err, data) {
             if (err) {
+                console.log(tablename)
                 console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
                 return reject(err);
             } else {

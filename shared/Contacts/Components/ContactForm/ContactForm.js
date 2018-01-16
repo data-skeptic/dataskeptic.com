@@ -14,7 +14,6 @@ import { renderField } from '../../../Forms/Components/Field/Field';
 
 const Form = ({ handleSubmit, pristine, reset, submitting, invalid, submitSucceeded, submitFailed }) => (
     <FormController name="contacts" handleSubmit={handleSubmit} submitValue={<span>Submit</span>} showSubmit={true}>
-        <div className="col-xs-12 col-md-12"><h2>Contact Us</h2></div>
 
         <Field
             label="Name"

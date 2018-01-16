@@ -137,6 +137,7 @@ class ContactUs extends React.Component {
 					</div>
 					&nbsp;
 					<br/>
+			        <h2>Send us a message</h2>
 					<ContactFormContainer/>
 
 				</div>

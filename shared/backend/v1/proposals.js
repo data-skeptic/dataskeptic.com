@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
 const mime = require('mime');
+const moment = require('moment');
 
 const uuid = require('uuid').v4;
 const aws = require("aws-sdk");
@@ -11,8 +12,7 @@ const proposalsDocs = new aws.DynamoDB.DocumentClient();
 
 const PROPOSALS_TABLE_NAME = 'proposals';
 
-
-const env="prod";
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
 //=========== CONFIG
 const c = require('../../../config/config.json')
@@ -32,10 +32,17 @@ aws.config.update(
         "region": aws_region
     }
 );
+
+import {
+    uploadToS3,
+    generateChunkPath,
+    clearRecordingPath
+} from '../../../recordingUtils'
+
 //=========== CONFIG
 
-function saveProposal(proposal) {
-    proposal.id = uuid();
+function saveProposal(proposal, id) {
+    proposal.id = id;
 
     const params = {
         TableName: PROPOSALS_TABLE_NAME,
@@ -89,6 +96,32 @@ function uploadFilesS3Async(files, aws_files_bucket) {
         })
 }
 
+function getProposalById(recordingId){
+  const params = {
+      TableName: PROPOSALS_TABLE_NAME,
+      Key: {
+          recording: recordingId
+      }
+  };
+
+  return new Promise((res, rej) => {
+      proposalsDocs.scan(params, function(err, data) {
+        console.dir(`scan by id`)
+          if (err) {
+            rej(err);
+          } else {
+            console.log(`have data`)
+            console.log(data.Items)
+            if (data.Items.length > 0) {
+              res(data.Items[0])
+            } else {
+              rej(null)
+            }
+          }
+      });
+  });
+}
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, path.resolve(__dirname, '../../../', temp_files))
@@ -100,8 +133,8 @@ const storage = multer.diskStorage({
 
 const generateUrserDataBlock = (userData) => {
     return `
-        <p><b>Name:</b> ${userData.name}</p>  
-        <p><b>Email:</b> ${userData.email}</p>  
+        <p><b>Name:</b> ${userData.name}</p>
+        <p><b>Email:</b> ${userData.email}</p>
     `;
 };
 
@@ -143,6 +176,24 @@ const generateProposalBody = (type, proposal) => {
     return heading + body + generateUrserDataBlock(proposal);
 };
 
+const randomDigit = () => Math.floor((Math.random() * 10) + 1)
+
+const random4Digits = () => {
+    return randomDigit() * 1000
+         + randomDigit() * 100
+         + randomDigit() * 10
+         + randomDigit()
+}
+
+const generateFileName = ({email}) => {
+    const date = moment().format('YYYYMMDD')
+    const rand = random4Digits();
+
+    email = email.replace('@', '_')
+
+    return `${date}-${rand}-${email}`
+}
+
 module.exports = {
     write: function (req, res) {
         const ip = req.headers['x-forwarded-for'] ||
@@ -171,7 +222,34 @@ module.exports = {
                 userData.comment = req.body.comment;
         }
 
-        saveProposal(userData)
+        const fileName = generateFileName({ email: userData.email })
+        const filePath = generateChunkPath(req.body.recording, 0)
+
+        let flow;
+
+        if (req.body.type === 'RECORDING') {
+            console.dir(`RECORD UPLOAD`)
+            flow = new Promise((res, rej) => {
+                uploadToS3(filePath, fileName, (err, data) => {
+                    if (err) {
+                        console.log('error')
+                        console.error(err);
+                        rej(err)
+                    } else {
+                        console.log('success')
+                        console.dir(data);
+
+                        console.log('Success upload to S3', req.body.recording);
+                        clearRecordingPath(req.body.recording);
+                        res()
+                    }
+                });
+            })
+        } else {
+            flow = Promise.resolve()
+        }
+
+        flow.then(() => saveProposal(userData, fileName))
             .then((proposal) => {
                 const destination = EMAIL_ADDRESS;
                 const subject = '[Notification] New proposal';
@@ -196,7 +274,6 @@ module.exports = {
                     error: err
                 })
             })
-
     },
     upload: (req, res, aws_files_bucket) => {
         const upload = multer({
@@ -219,5 +296,24 @@ module.exports = {
                 })
             }
         })
+    },
+    getRecording: (req, res, aws_files_bucket) => {
+        const recordingId = req.query.id;
+
+        getProposalById(recordingId)
+          .then((item) => {
+            const fileKey = `${item.id}.mp3`
+
+            var options = {
+                Bucket: aws_files_bucket,
+                Key: fileKey,
+            };
+
+            res.send(options)
+          })
+          .catch((err) => res.send({
+            ok: false,
+            err
+          }))
     }
 };

@@ -1,17 +1,16 @@
 import aws from 'aws-sdk';
+import {getEmail} from '../../../Emails/template';
+const config = require('../../../../config/config.json');
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
 const ses = new aws.SES({apiVersion: '2010-12-01'});
 
-const header = '<div><img src="https://s3.amazonaws.com/dataskeptic.com/img/png/email-header.png" /></div><br/>';
-const footer = '<br/><br/><div><img src="https://s3.amazonaws.com/dataskeptic.com/img/png/email-footer.png" /></div>';
-
-const generateBody = (message) => header + message + footer;
 
 export const send = (destination, message, subject, source) => {
-    const body = generateBody(message);
-
+    var email = config[env].emails.admin;
+    const body = getEmail({msg: message});
     const emailRequestData = {
-        Source: source ? source : "kyle@dataskeptic.com",
+        Source: source ? source : email,
         Destination: { ToAddresses: [destination], BccAddresses: []},
         Message: {
             Subject: {

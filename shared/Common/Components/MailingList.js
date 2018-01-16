@@ -1,5 +1,4 @@
 import React from "react"
-import ReactDOM from "react-dom"
 
 export default class MailingList extends React.Component {
 	constructor(props) {
@@ -9,7 +8,7 @@ export default class MailingList extends React.Component {
 		}
 	}
 
-	onChange(e) {
+	onChange = (e) => {
 		var email = e.target.value
 		this.setState({email})
 	}

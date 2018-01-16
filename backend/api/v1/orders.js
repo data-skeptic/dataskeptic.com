@@ -30,7 +30,7 @@ module.exports = (cache) => {
                 res.send(err);
             })
     });
-
+/*
     router.post('/create', function (req, res) {
         OrdersServices.createOrder(req.body, sp_key)
             .then((data) => {
@@ -40,7 +40,7 @@ module.exports = (cache) => {
                 res.send(err);
             })
     });
-
+*/
     router.put('/fulfill', function (req, res) {
         OrdersServices.fulFillOrder(sp_key, req.body)
             .then((data) => {

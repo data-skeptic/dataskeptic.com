@@ -2,15 +2,11 @@ import React, { Component , PropTypes }   from 'react';
 import { bindActionCreators } from 'redux';
 import { connect }            from 'react-redux';
 
-import Slider from "react-slick"
-
 import Episode from "../Podcasts/Components/Episode"
 import MailingList from "../Common/Components/MailingList"
-import SocialMediaCard from "./SocialMediaCard"
-import AdvertiserCard from "./AdvertiserCard"
-import EpisodeCard from "./EpisodeCard"
-import LatestBlogCard from "../Blog/Containers/LatestBlogCard"
-import LatestEpisodePlayer from "../Blog/Containers/LatestEpisodePlayer"
+import EpisodePlayer from "./EpisodePlayer"
+import HomepageFeature from "./HomepageFeature"
+import BlogContainer from 'Blog/Routes/BlogContainer'
 
 import {changePageTitle} from '../Layout/Actions/LayoutActions';
 import {get_homepage_content} from '../utils/redux_loader'
@@ -18,11 +14,10 @@ import {get_homepage_content} from '../utils/redux_loader'
 class Home extends Component {
 
   componentWillMount() {
-      var dispatch = this.props.dispatch;
-      get_homepage_content(dispatch);
-
-      const {title} = Home.getPageMeta();
-      dispatch(changePageTitle(title));
+      var dispatch = this.props.dispatch
+      const {title} = Home.getPageMeta()
+      dispatch(changePageTitle(title))
+      dispatch({type: "CMS_GET_HOMEPAGE_CONTENT", payload: {dispatch} })
   }
 
   static getPageMeta() {
@@ -32,55 +27,21 @@ class Home extends Component {
   }
 
   render() {
+    var ocms = this.props.cms.toJS()
+    var latest_episode_blog = ocms.latest_episode
+    var guid = latest_episode_blog['guid']
     var oepisodes = this.props.episodes.toJS()
-    var oblogs = this.props.blogs.toJS()
-    var settings = {
-      dots: true,
-      infinite: true,
-      slidesToShow: 1,
-      slidesToScroll: 1,
-      arrows: 1,
-      adaptiveHeight: 1,
-      accessibility: 1,
-      autoplay: 1,
-      autoplaySpeed: 10000,
-      pauseOnHover: 1
-    };
-    var guid = undefined
-    var fe = oepisodes.focus_episode
-    if (fe != undefined) {
-      if (fe.episode != undefined) {
-        guid = fe.episode.guid
-      }
-    }
-    var blog_focus = oblogs.blog_focus
+    var ep_map = oepisodes.ep_map
+    var latest_episode = ep_map[guid]
     return (
       <div className="center">
         <div className="row">
-          <div className="col-sm-12 home-statement">
-            <p>Data Skeptic is your source for a perspective of scientific skepticism on topics in statistics, machine learning, big data, artificial intelligence, and data science.  Our weekly podcast and blog bring you stories and tutorials to help understand our data-driven world.</p>
-            <p>To reach out to the podcast, please visit our <a href="/contact-us">Contact Us</a> page.</p>
-          </div>
-        </div>
-        <div className="row">
           <div className="col-xs-12 col-sm-8">
-            <div className="carousel">
-              <Slider {...settings}>
-                <div className="card">
-                  <AdvertiserCard content={this.props.cardContent}/>
-                </div>
-                <div className="card">
-                  <SocialMediaCard />
-                </div>
-                <div className="card">
-                  <LatestBlogCard blog={blog_focus.blog} contributor={blog_focus.contributor} />
-                </div>
-              </Slider>
-            </div>          
+            <HomepageFeature />
           </div>
           <div className="col-xs-12 col-sm-4">
-            <LatestEpisodePlayer guid={guid} />
-            <MailingList />
+             <EpisodePlayer episode={latest_episode} />
+             <MailingList />
           </div>
         </div>
         <div className="clear"></div>
@@ -90,6 +51,6 @@ class Home extends Component {
 }
 
 export default connect(state => ({
-    episodes: state.episodes, blogs: state.blogs,
-    cardContent: state.advertise.getIn(['card'])
+    episodes: state.episodes, 
+    cms: state.cms
 }))(Home)

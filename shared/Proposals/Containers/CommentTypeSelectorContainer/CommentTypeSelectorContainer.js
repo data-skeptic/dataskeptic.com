@@ -17,6 +17,7 @@ class CommentTypeSelectorContainer extends Component {
     }
 
     onChoose(type) {
+        console.log(type)
         this.props.onChangeCommentType(type);
     }
 

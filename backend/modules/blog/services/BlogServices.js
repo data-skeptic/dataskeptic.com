@@ -95,15 +95,14 @@ export const getBlogRss = (blogmetadata_map, prettyname) => {
         description: 'Data Skeptic is your source for a perspective of scientific skepticism on topics in statistics, machine learning, big data, artificial intelligence, and data science. Our weekly podcast and blog bring you stories and tutorials to help understand our data-driven world.',
         feed_url: `${BASE_URL}/api/blog/rss`,
         site_url: BASE_URL,
-        managingEditor: 'Kyle',
-        language: 'en'
+        managingEditor: 'kyle@dataskeptic.com'
     });
 
     each(blogs, (blog) => {
         if (!blog) return;
 
         if (blog.env === 'master') { // don't share dev on master
-            feed.item(new BlogItem(blog, prettyname));
+            feed.item(new BlogItem(blog));
         }
     });
 
@@ -156,11 +155,19 @@ export const getAll = (url, blogmetadata_map, offset, limit, env, exclude = ['/e
 
 const isExist = (blogmetadata_map, prettyName) => !!blogmetadata_map[prettyName];
 
-export const getPost = (blogmetadata_map, prettyName, content_map) => {
+export const getPost = (blogmetadata_map, episodes_content, prettyName, content_map) => {
 
     let postData = {};
     let author = '';
     let relative = '';
+
+    let episodeData = {}
+    let isEpisode = false
+    if (isExist(episodes_content, prettyName)) {
+        episodeData = episodes_content[prettyName]
+        isEpisode = true
+    }
+
     if (isExist(blogmetadata_map, prettyName)) {
         const post = blogmetadata_map[prettyName];
         author = post["author"];
@@ -172,14 +179,13 @@ export const getPost = (blogmetadata_map, prettyName, content_map) => {
             title: post['title'],
             content: content_map[prettyName] || '',
 
-            isEpisode: post['isEpisode'] || false,
+            isEpisode: isEpisode,
 
             contributor: post['contributor'],
             related: post['related'],
 
             rendered: post['rendered'],
 
-            discoveredAt: post['date_discovered'],
             renderedAt: post['last_rendered'],
             publishedAt: post['publish_date'],
 
@@ -190,6 +196,8 @@ export const getPost = (blogmetadata_map, prettyName, content_map) => {
             ...post
         });
     }
+
+
     return Promise.all([
         ContributorsService.getContributorByName(author.toLowerCase()),
         RelatedServices.getRelatedByURI("/blog" + relative.toLowerCase())
@@ -197,6 +205,7 @@ export const getPost = (blogmetadata_map, prettyName, content_map) => {
         return !isEmpty(postData) ?
             {
                 ...postData,
+                ...episodeData,
                 contributor,
                 relative
             }

@@ -4,8 +4,6 @@ import { connect } from 'react-redux'
 
 import Loading from '../Common/Components/Loading'
 import Error from '../Common/Components/Error'
-import LightsOut from './LightsOut'
-
 import {get_products} from '../utils/redux_loader'
 
 import {changePageTitle} from '../Layout/Actions/LayoutActions';
@@ -18,7 +16,7 @@ class Membership extends Component {
 
 	componentWillMount() {
 		var oproducts = this.props.products.toJS()
-		if (oproducts.products.length == 0) {
+		if (!oproducts.products || oproducts.products.length == 0) {
 			get_products(this.props.dispatch)			
 		}
 
@@ -35,8 +33,6 @@ class Membership extends Component {
     }
 
 	addToCart(product) {
-		console.log("addToCart")
-		console.log(product)
 		var size = ""
 		this.props.dispatch({type: "ADD_TO_CART", payload: {product, size} })
 		this.props.dispatch({type: "SHOW_CART", payload: true })
@@ -53,6 +49,9 @@ class Membership extends Component {
 			return <div><Error /></div>
 		} else {
 			products = oproducts.products
+			if (!products) {
+				products = []
+			}
 			products.sort(function(a, b) {
 				return a['price'] - b['price']
 			})
@@ -60,9 +59,8 @@ class Membership extends Component {
 			return (
 				<div className="center">
 					<h2>Data Skeptic Membership</h2>
-					<p>Are you a corporation or group?  Contact <a href="mailto:kyle@dataskeptic.com">kyle@dataskeptic.com</a> regarding opportunties to partner with Data Skeptic.</p>
+					<p>If you are already a member, you can log-in <a href="/login">here</a>.</p>
 					<p>Your membership supports Data Skeptic's ability to continue delivering quality content on a weekly basis and expand into new mediums.  For $1 per episode, your contributions can help us launch more projects and continuously improve the content of the podcast.</p>
-					<p>We have some surprise members only perks planned for 2017.  Sign up now so you don't miss out.  If you'd like, you can play <Link to="/lightsout">lights out</Link> on this site.</p>
 					<div>
 						<h3>Donations</h3>
 						<p>If you prefer to make a one time contribution, you can do so via the Paypal button below.</p>

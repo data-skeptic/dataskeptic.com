@@ -38,6 +38,10 @@ import RecordingTimeTracker from '../../Components/RecordingTimeTracker/Recordin
 import {float32ToInt16} from '../../Helpers/Converter';
 import Resampler from '../../Helpers/Resampler'
 
+
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const IS_PROD = (env === 'prod')
+
 /**
  * Recording flow
  *
@@ -81,6 +85,8 @@ class RecorderFlowContainer extends Component {
         this.initRecorderSuccess = this.initRecorderSuccess.bind(this);
         this.uploadChunk = this.uploadChunk.bind(this);
         this.updateDuration = this.updateDuration.bind(this);
+
+        this.resetProcess = this.resetProcess.bind(this);
 
         this.state = {
             uploading: false,
@@ -170,7 +176,7 @@ class RecorderFlowContainer extends Component {
 
     onReview() {
         console.log('onReview()');
-        this.audioController.src = this.props.submittedUrl + '.wav';
+        this.audioController.src = `/api/v1/recording/get?id=${this.props.submittedUrl}`
 
         this.audioController.onloadedmetadata = () => {
             this.setState({metaReady: true});
@@ -183,7 +189,6 @@ class RecorderFlowContainer extends Component {
 
     onSubmitting() {
         console.log('onSubmitting()');
-        this.props.submit();
     }
 
     onComplete() {
@@ -211,8 +216,15 @@ class RecorderFlowContainer extends Component {
             const {id, chunkId} = this.props.recorder;
 
             const BinaryClient = require('binaryjs-client').BinaryClient;
-            const hostname = window.location.hostname;
-            this.client = new BinaryClient(`ws://${hostname}:9001/recording`);
+
+            let hostname;
+            if (IS_PROD) {
+                hostname = `wss://${window.location.hostname}${window.location.port && `:${window.location.port}`}/recording`;
+            } else {
+                hostname = `ws://${window.location.hostname}:9001/recording`;
+            }
+
+            this.client = new BinaryClient(hostname);
 
             const audioCtx = new AudioContext();
             const sampleRate = audioCtx.sampleRate;
@@ -392,6 +404,11 @@ class RecorderFlowContainer extends Component {
         this.audioController.play();
     }
 
+    resetProcess() {
+        this.discardRecord()
+        this.props.reset()
+    }
+
     render() {
         const {activeStep, recorder, errorMessage = {}, submittedUrl} = this.props;
         const {isRecording, isUploading, duration, recordingId, chunkId} = recorder;
@@ -400,76 +417,70 @@ class RecorderFlowContainer extends Component {
         const isPlaying = this.isPlaying();
 
         return (
-            <div>
+            <div className={`recording-flow-container step-${activeStep}`}>
 
-                <div className={`recording-flow-container step-${activeStep}`}>
+                <Wizard activeKey={activeStep}>
 
-                    <Wizard activeKey={activeStep}>
-
-                        <div key={INIT} className="init-step">
-                            <div className="media init-box">
-                                <div className="media-left">
-                                    <i className="glyphicon glyphicon-wrench icon"/>
-                                </div>
-                                <div className="media-body">
-                                    <h4 className="media-heading">Setting up recorder...</h4>
-                                    <p className="text">Checking browser microphone access and server availability.</p>
-                                </div>
+                    <div key={INIT} className="init-step">
+                        <div className="media init-box">
+                            <div className="media-left">
+                                <i className="glyphicon glyphicon-wrench icon"/>
+                            </div>
+                            <div className="media-body">
+                                <h4 className="media-heading">Setting up recorder...</h4>
+                                <p className="text">Checking browser microphone access and server availability.</p>
                             </div>
                         </div>
+                    </div>
 
-                        <div key={[READY, RECORDING]} className="recording-step">
-                            <Recorder
-                                recording={this.isRecording()}
-                                startComponent={<i className="fa fa-microphone icon">&nbsp;</i>}
-                                stopComponent={<i className="fa fa-circle icon">&nbsp;</i>}
-                                onClick={this.toggleRecording}
-                                info={this.getInfoMessage()}
-                            />
+                    <div key={[READY, RECORDING]} className="recording-step">
+                        <Recorder
+                            recording={this.isRecording()}
+                            startComponent={<i className="fa fa-microphone icon">&nbsp;</i>}
+                            stopComponent={<i className="fa fa-circle icon">&nbsp;</i>}
+                            onClick={this.toggleRecording}
+                            info={this.getInfoMessage()}
+                        />
+                    </div>
+
+                    <div key={UPLOADING} className="uploading-step">
+                        <ProposalLoading/>
+                    </div>
+
+                    <div key={[REVIEW]} className="review-step">
+                        <TogglePlayButton
+                            onClick={this.togglePlaying}
+                            playing={isPlaying}
+                            disabled={!isMetaReady}
+                        />
+
+                        {isMetaReady &&
+                        <div className="buttons">
+                            <button type="button" onClick={this.discardRecord}
+                                    className="btn btn-recording-discard btn-xs">
+                                <i className="fa fa-undo" aria-hidden="true"/> Discard and record again
+                            </button>
                         </div>
+                        }
+                    </div>
 
-                        <div key={UPLOADING} className="uploading-step">
-                            <ProposalLoading/>
-                        </div>
+                    <div key={SUBMITTING} className="complete-step">
+                        Processing recording...
+                    </div>
 
-                        <div key={[REVIEW, SUBMITTING]} className="review-step">
-                            <TogglePlayButton
-                                onClick={this.togglePlaying}
-                                playing={isPlaying}
-                                disabled={!isMetaReady}
-                            />
+                    <div key={COMPLETE} className="complete-step">
+                        <button type="button" onClick={this.resetProcess}
+                                className="btn btn-recording-discard btn-xs">
+                            <i className="fa fa-undo" aria-hidden="true"/> Record another submission
+                        </button>
+                    </div>
 
-                            {isMetaReady &&
-                                <div className="buttons">
-                                    <button type="button" onClick={this.discardRecord}
-                                            className="btn btn-recording-discard btn-xs">
-                                        <i className="fa fa-undo" aria-hidden="true"/> Discard and record again
-                                    </button>
-                                </div>
-                            }
-                        </div>
+                    <div key={ERROR} className="error-step">
+                        Something went wrong.
+                    </div>
+                </Wizard>
 
-                        <div key={COMPLETE} className="complete-step">
-                            <div className="text-success">
-                                <i className="fa fa-check-circle" aria-hidden="true"/> Audio recording submitted
-                            </div>
-                        </div>
-
-                        <div key={ERROR} className="error-step">
-                            <div className="media error-box">
-                                <div className="media-left">
-                                    <i className="glyphicon glyphicon-warning-sign icon"/>
-                                </div>
-                                <div className="media-body">
-                                    <h4 className="media-heading">{errorMessage.title}</h4>
-                                    <p className="text">{errorMessage.body}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </Wizard>
-
-                    <audio ref="listen_controller" className="recording-listener" controls="false"/>
-                </div>
+                <audio ref="listen_controller" className="recording-listener" controls="false"/>
             </div>
         )
     }

@@ -27,10 +27,8 @@ class CartContainer extends React.Component {
             let key = "key_" + item.product.id
             if (item.size != "") {
                 title += " (" + item.size + ")"
-                key += "_" + item.size
+                key += "_" + item.size + "_" + index
             }
-
-            key = index
             return (
                 <CartItem key={key}
                           title={title}
@@ -53,7 +51,10 @@ class CartContainer extends React.Component {
 
         const { onCheckoutClick, needCheckout } = this.props
 
-        const subtotal = cart_items.reduce((mem, item) => (item.product.price * item.quantity), 0);
+        var subtotal = 0
+        for (var item of cart_items) {
+            subtotal += item.product.price * item.quantity
+        }
         if (cart_items.length == 0) {
             return <EmptyCart />
         } else {

@@ -1,118 +1,126 @@
 import xml2js from 'xml2js'
 import axios  from 'axios'
+import snserror from '../SnsUtil'
 
-const AWS = require("aws-sdk");
+const aws = require('aws-sdk')
+const s3 = new aws.S3();
 
-const proposalsDocs = new AWS.DynamoDB.DocumentClient();
+const c = require('../../config/config.json')
+
+const proposalsDocs = new aws.DynamoDB.DocumentClient();
 
 import {convert_items_to_json} from 'daos/episodes'
 import {extractFolders} from '../utils/blog_utils'
 
-const ADVERTISE_CARD_CONTENT = 'https://s3.amazonaws.com/dataskeptic.com/dassets/carousel/latest.htm';
-const ADVERTISE_BANNER_CONTENT = 'https://s3.amazonaws.com/dataskeptic.com/dassets/banner/latest.htm';
+var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
+var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
-function generate_content_map(env, blog, my_cache) {
-    var pn = blog['prettyname']
-    var envv = env + "."
-    if (env === "prod") {
-        envv = ""
-    }
-    var key = blog["rendered"]
-    var pn = blog["prettyname"]
-    var check = my_cache.content_map[pn];
-    if (!check) {
-        var uri = "https://s3.amazonaws.com/" + envv + 'dataskeptic.com/' + key
-        return axios.get(uri)
-            .then(function (result) {
-                var content = result.data;
-                my_cache.content_map[pn] = content;
-                return content;
-            })
-            .catch((err) => {
-                console.log("Content cache e3rror trying to store blog content")
-                console.log(err)
-            })
-    } else {
-        return Promise.resolve(check);
-    }
-}
-
-export function loadProducts(env) {
-    const uri = "https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + env + "/products"
+export function get_contributors() {
+    const uri = base_url + "/blog/contributors/list"
     return axios
         .get(uri)
         .then(function (result) {
-            const items = result.data.Items;
-
-            return items;
+            const contributors = result.data;
+            return contributors;
         })
         .catch((err) => {
-            console.log("Could not load prodcuts")
+            console.log("Could not load products")
+            console.log(err)
         })
-
 }
 
-export function loadBlogs(env) {
-    let data = {
-        folders: [],
-        content_map: {},
-        blogmetadata_map: {},
-        title_map: {}
-    };
-
-    let env2 = env;
-    if (env === "prod") {
-        env2 = "master"
+function populate_one(cm, blog) {
+    var src_file = blog['src_file']
+    var env = ''
+    if (global.env != 'prod') {
+        env = global.env + '.'
     }
+    var bucket = env + "dataskeptic.com"
+    var s3key = src_file
+    var params = { Bucket: bucket, Key: s3key }
+    var prettyname = blog['prettyname']
+    s3.getObject(params, function(errr, d) {
+        var content = d.Body.toString('utf-8')
+        cm[prettyname] = content
+    });
+    cm[prettyname] = ""
+}
 
-    let totalPosts = 0;
+export function populate_content_map(blogs, data) {
+    var cm = data['content_map']
+    var n = blogs.length
+    n=4
+    for (var i=0; i < n; i++) {
+        var blog = blogs[i]
+        populate_one(cm, blog)
+    }
+}
 
-    var uri = "https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/" + env + "/blogs?env=" + env2
-    return axios.get(uri)
-        .then(function (result) {
-            console.log('load blogs success')
-            let blogs = result.data;
-            let latest;
-            const folders = extractFolders(blogs);
-            data.folders = folders;
-
-            let contentMapRequests = [];
-            for (let i = 0; i < blogs.length; i++) {
-                const blog = blogs[i];
-                const pn = blog['prettyname'];
-                // delete my_cache.blogmetadata_map[pn];
-                data.blogmetadata_map[pn] = blog
-                if (!latest) {
-                    if (pn.indexOf("/episodes/") !== 0 && pn.indexOf("/transcripts/") !== 0) {
-                        latest = blog;
-                        data.blogmetadata_map["latest"] = latest
-                    }
-                }
-                const title = blog['title'];
-                data.title_map[pn] = title;
-
-                contentMapRequests.push(generate_content_map(env, blog, data));
+export function get_podcasts_by_guid(dispatch, guid) {
+    var my_cache = global.my_cache
+    if (my_cache != undefined) {
+        var episodes = []
+        var allepisodes = get_podcasts_from_cache(my_cache, pathname)
+        for (var episode of allepisodes) {
+            if (episode.guid == guid) {
+                episodes.push(episode)
             }
-
-            totalPosts = blogs.length;
-
-            return Promise.all(contentMapRequests);
-        })
-        .then(() => {
-            console.log("Loaded " + totalPosts + " blogs into content_map");
-            return data;
+        }
+        dispatch({type: "ADD_EPISODES", payload: episodes})
+    } else {
+        console.log("Getting episodes")
+        axios
+            .get("/api/episodes/get/" + guid)
+            .then(function(result) {
+                var episode = result["data"]
+                dispatch({type: "ADD_EPISODES", payload: [episode]})
+                dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+}
+export function load_blogs(prefix, limit, offset, dispatch) {
+    var url = base_url + "/blog/list?limit=" + limit + "&offset=" + offset + "&prefix=" + prefix
+    console.log("Load blogs: " + url)
+    axios
+        .get(url)
+        .then(function(result) {
+            console.log("blog api success")
+            console.log(result)
+            var blogs = result['data']
+            var payload = {blogs, prefix}
+            var guids = []
+            for (var blog of blogs) {
+                if (blog.guid) {
+                    guids.push(blog.guid)
+                }
+            }
+            if (guids.length == 1) {
+                var guid = guids[0]
+                get_podcasts_by_guid(dispatch, guid)
+            } else if (guids.length > 1) {
+                // TODO: grab them all and do something nice on the blog list page
+            }
+            dispatch({type: "CMS_SET_RECENT_BLOGS", payload: payload })
         })
         .catch((err) => {
-            console.log("loadBlogs error: " + err)
+            console.log(err)
+            var errorMsg = JSON.stringify(err)
+            snserror("load_blogs " + prefix, errorMsg)
+            var payload = {"blogs": [], "prefix": prefix}
+            dispatch({type: "CMS_SET_RECENT_BLOGS", payload: payload })
         })
 }
 
-export function loadEpisodes(env, feed_uri, blogmetadata_map, aws) {
+export function loadEpisodes(env) {
     let data = {
         episodes_map: {},
+        episodes_content: {},
         episodes_list: []
     };
-
+    var feed_uri = "http://dataskeptic.libsyn.com/rss"
     var domain = "dataskeptic.com";
     return axios.get(feed_uri)
         .then(function (result) {
@@ -132,54 +140,26 @@ export function loadEpisodes(env, feed_uri, blogmetadata_map, aws) {
                         var prettyname = link.replace("http://" + domain, "").replace("https://" + domain, '').replace('.php', '').replace('/blog/', '/')
                         var guid = episode.guid
                         data.episodes_map[guid] = episode
-                        if (i == 0) {
-                            data.episodes_map["latest"] = episode
-
-                            var blogs = blogmetadata_map;
-                            console.dir(prettyname);
-                            var shownotes = blogs[prettyname]
-                            if (shownotes == undefined) {
-                                console.log("ERROR: Unlinkable episode: " + episode['guid'] + ' ' + episode['title'])
-                                console.log(prettyname)
-                            } else {
-                                if (shownotes['guid'] == undefined) {
-                                    console.log("Going to link " + episode['title'] + ' to ' + shownotes['prettyname'])
-                                    latestGuid = guid;
-                                    var docClient = new aws.DynamoDB.DocumentClient()
-                                    var table = "blog"
-                                    var pre = ""
-                                    if (env != "prod" && env != "master") {
-                                        pre = env + "."
-                                    }
-                                    var uri = shownotes['uri']
-                                    var params = {
-                                        TableName: table,
-                                        Key: {
-                                            "uri": uri
-                                        },
-                                        UpdateExpression: "set guid = :g",
-                                        ExpressionAttributeValues: {
-                                            ":g": guid
-                                        },
-                                        ReturnValues: "UPDATED_NEW"
-                                    };
-                                    docClient.update(params, function (err, data) {
-                                        if (err) {
-                                            rej(err);
-                                            console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
-                                        } else {
-                                            console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
-                                        }
-                                    });
-                                }
-                            }
-                        }
-
+                        data.episodes_content[prettyname] = episode
                         if (episode.img) {
                             episode.img = episode.img.replace("http://", "https://");
                         }
-
                         list.push(episode.guid)
+                    }
+
+                    if (list.length > 0) {
+                        var latest = list[0]
+                        console.log("Going to inform server of latest guid:" + latest)
+                        var url = base_url + "/episodes?latest=" + latest
+                        axios
+                            .post(url)
+                            .then(function(result) {
+                                console.log(result.data)
+                                // TODO: should we dispatch some action?
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
                     }
 
                     for (var i = 0; i < list.length; i++) {
@@ -196,29 +176,6 @@ export function loadEpisodes(env, feed_uri, blogmetadata_map, aws) {
             console.log("loadEpisodes error: " + err);
             console.log(err)
         })
-}
-
-export function loadAdvertiseSourceContent(source) {
-    return new Promise((res, rej) => {
-        axios.get(source)
-            .then(function (result) {
-                if (result.status = 200) {
-                    res(result.data);
-                } else {
-                    res(null);
-                }
-            })
-            .catch((err) => {
-                res(null);
-            })
-    })
-}
-
-export function loadAdvertiseContent() {
-    return Promise.all([
-        loadAdvertiseSourceContent(ADVERTISE_CARD_CONTENT),
-        loadAdvertiseSourceContent(ADVERTISE_BANNER_CONTENT)
-    ])
 }
 
 const RFC_TABLE_NAME = 'rfc';
@@ -242,3 +199,5 @@ export function loadCurrentRFC() {
         });
     });
 }
+
+
