@@ -1,10 +1,16 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { map, isEmpty } from 'lodash'
+import marked from "marked"
 
 import {changePageTitle} from '../Layout/Actions/LayoutActions';
 
 const AVATAR_SIZE = 60
+
+const markdown = (text) => {
+    const rawMarkup = marked(text, {sanitize: true});
+    return {__html: rawMarkup}
+}
 
 class About extends Component {
 
@@ -20,7 +26,7 @@ class About extends Component {
             </div>
             <div className="media-body">
                 <h4 className="media-heading">{contributor.prettyname}</h4>
-				<p>{contributor.bio}</p>
+				<p dangerouslySetInnerHTML={markdown(contributor.bio)} />
             </div>
         </div>
 
