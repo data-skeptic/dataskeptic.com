@@ -29,6 +29,7 @@ class AdminMenu extends Component {
                             <div className="column">
                                 <ul>
                                     <li><Link to="/admin/orders/new">New</Link></li>
+                                    <li><Link to="/admin/orders/processing">Processing</Link></li>
                                 </ul>
                             </div>
                         </div>

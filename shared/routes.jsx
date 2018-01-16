@@ -46,6 +46,7 @@ import AdminCmsFeature         from 'components/admin/AdminCmsFeature';
 import AdminCmsRecentRelated   from 'components/admin/AdminCmsRecentRelated';
 import AdminEmailsSend         from 'components/admin/AdminEmailsSend';
 import AdminOrdersNew          from 'components/admin/AdminOrdersNew';
+import AdminOrdersProcessing   from 'components/admin/AdminOrdersProcessing';
 
 import SnlImpact               from 'components/l/SnlImpact';
 
@@ -198,6 +199,10 @@ export default (
 
         <Route path="/admin/orders/new" component={App}>
             <IndexRoute component={AdminOrdersNew}  />
+        </Route>
+
+        <Route path="/admin/orders/processing" component={App}>
+            <IndexRoute component={AdminOrdersProcessing}  />
         </Route>
 
         <Route path="/admin/emails/send" component={App}>
