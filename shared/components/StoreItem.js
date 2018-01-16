@@ -56,7 +56,7 @@ class Store extends React.Component {
                 cls = "add-to-cart-clicked"
             }
             return (
-                <div className="col-md-4 product-item" key={product.id}>
+                <div className="col-md-4 col-sm-6 product-item" key={product.id}>
                     <div className="content">
                         <div className="prod-img">
                             <img className="product-image" src={product.img}/>
