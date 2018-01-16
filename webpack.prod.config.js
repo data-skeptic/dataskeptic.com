@@ -6,6 +6,7 @@ var extractLESS = new ExtractTextPlugin('[name].css');
 
 module.exports = {
     entry: [
+        'babel-polyfill',
         './client'
     ],
     resolve: {

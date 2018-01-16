@@ -7,6 +7,7 @@ import {get_episodes_by_guid}    from 'backend/get_episodes_by_guid'
 import {get_rfc_metadata}        from 'backend/get_rfc_metadata'
 import {join_slack}              from 'backend/join_slack'
 import {send_email}              from 'backend/send_email'
+import {get_blogs_rss}           from 'backend/get_blogs_rss'
 import {order_create}            from 'backend/order_create'
 import {add_order}               from 'backend/add_order'
 import {order_fulfill}           from 'backend/order_fulfill'
@@ -304,7 +305,7 @@ function api_router(req, res) {
         return res.status(200).end(JSON.stringify(folders))
     }
     else if (req.url.indexOf('/api/blog/rss') === 0) {
-        get_blogs_rss(req, res, Cache.blogs);
+        get_blogs_rss(req, res);
         return true
     }
     else if (req.url.indexOf('/api/blog') === 0) {
