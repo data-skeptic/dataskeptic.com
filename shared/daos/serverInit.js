@@ -5,30 +5,15 @@ import snserror from '../SnsUtil'
 const aws = require('aws-sdk')
 const s3 = new aws.S3();
 
+const c = require('../../config/config.json')
+
 const proposalsDocs = new aws.DynamoDB.DocumentClient();
 
 import {convert_items_to_json} from 'daos/episodes'
 import {extractFolders} from '../utils/blog_utils'
 
 var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
-
 var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
-
-export function loadProducts() {
-    const uri = base_url + "/store/products/list"
-    return axios
-        .get(uri)
-        .then(function (result) {
-            console.log("loadProducts")
-            const items = result.data.Items;
-            return items;
-        })
-        .catch((err) => {
-            console.log("Could not load products")
-            console.log(err)
-            return []
-        })
-}
 
 export function get_contributors() {
     const uri = base_url + "/blog/contributors/list"
@@ -44,7 +29,7 @@ export function get_contributors() {
         })
 }
 
-export function populate_one(cm, blog) {
+function populate_one(cm, blog) {
     var src_file = blog['src_file']
     var env = ''
     if (global.env != 'prod') {
@@ -214,3 +199,5 @@ export function loadCurrentRFC() {
         });
     });
 }
+
+

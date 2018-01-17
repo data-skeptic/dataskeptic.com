@@ -21,21 +21,27 @@ class BlogList extends Component {
     }
 
     render() {
-    	const { blogs = [], contributors={}, onClick, latestId } = this.props;
+        var latestId = ""
+        var blogs = this.props.blogs
+        var osite = this.props.site.toJS()
+        var contributors = osite.contributors
+        var me = this
         return (
             <div className="row blog-list-container">
-                {blogs.map((blog, index) => {
+            {
+                blogs.map(function(blog, index) {
                     var contributor = contributors[blog.author.toLowerCase()]
                     return (
                         <BlogListItem
                             key={index}
                             blog={blog}
-                            onClick={this.onItemClick}
+                            onClick={me.onItemClick}
                             isLatest={blog.c_hash===latestId}
                             contributor={contributor}
                         />
                     )
-                })}
+                })
+            }
             </div>
         )
     }

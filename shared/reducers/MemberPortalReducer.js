@@ -60,6 +60,8 @@ export default function memberPortalReducer(state = defaultState, action) {
         axios
             .post(uri, data)
             .then(function(result) {
+                console.log('result')
+                console.log(result)
                 var msg = result['data']['msg']
             	if (result['data']['status'] == "ok") {
 	        		var mode = "found"

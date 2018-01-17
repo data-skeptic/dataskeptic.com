@@ -130,7 +130,6 @@ class BlogRouter extends React.Component {
 		var pname = pathname.substring(5, pathname.length)
 		var osite = this.props.site.toJS()
 		var contributors = osite.contributors
-		console.log(contributors)
 		var ocms = this.props.cms.toJS()
 		var blogs = ocms['recent_blogs']
 		var exact = undefined
