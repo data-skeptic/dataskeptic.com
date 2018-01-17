@@ -11,8 +11,6 @@ const c = require('../../config/config.json')
 const BASE_URL = 'https://dataskeptic.com/';
 var api_url = c[env]['base_api'] + env
 
-console.dir('env = ' + env)
-
 const BlogItemModel = ({ title, publish_date, prettyname, desc, author, guid }) => (
     {
         title: title,
@@ -30,12 +28,8 @@ module.exports = {
     get_blogs_rss: function (req, res) {
         // TODO: setup caching here instead
         var url = api_url + "/blog/all"
-        axios.get(url).then(function(blogs) {
-            blogs = filter(blogs, (post) => !!post);
-            blogs = map(blogs, (post) => {
-                return post;
-            });
-
+        axios.get(url).then(function(data) {
+            var blogs = data.data
             let feed = new RSS({
                 title: 'Data Skeptic',
                 description: 'Data Skeptic is your source for a perspective of scientific skepticism on topics in statistics, machine learning, big data, artificial intelligence, and data science. Our weekly podcast and blog bring you stories and tutorials to help understand our data-driven world.',

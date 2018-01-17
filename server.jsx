@@ -308,10 +308,6 @@ function api_router(req, res) {
         get_blogs_rss(req, res);
         return true
     }
-    else if (req.url.indexOf('/api/blog') === 0) {
-        get_blogs(req, res, Cache.blogs, env);
-        return true
-    }
     else if (req.url.indexOf('/api/store/list') == 0) {
         var products = Cache.products
         return res.status(200).end(JSON.stringify(products))
