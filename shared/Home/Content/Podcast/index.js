@@ -1,5 +1,6 @@
 import React, { Component }  from 'react'
 import moment from 'moment'
+import { Link } from 'react-router'
 import {
   PostTitle,
   Container,
@@ -30,7 +31,7 @@ class Podcast extends Component {
     this.setState({ expanded: true });
   }
 
-  getViewMoreTextDiv (text='') {
+  getViewMoreTextDiv (text='', href='') {
     if ( text.length > 200) {
       if ( this.state.expanded ) {
         return (
@@ -42,7 +43,7 @@ class Podcast extends Component {
         return (
           <div>
             <ItemDesc>{text.substring(0,200)}...</ItemDesc>
-            <ViewMore onClick={this.expandedText}>View More</ViewMore>
+            <ViewMore onClick={this.expandedText} to='a'>View More</ViewMore>
             <ArrowRight />
           </div>
         )
@@ -59,18 +60,20 @@ class Podcast extends Component {
   render () {
     const { expanded } = this.state
     const { latest_episode } = this.props
+    let href = 'blog' + latest_episode.prettyname
+    console.log('podcast href', href)
     return (
       <Container>
         <PostTitle>LATEST PODCAST</PostTitle>
         <PodcastBox>
           <ItemDate>{moment(latest_episode.publish_date).format('MMMM D, Y')}</ItemDate>
-          <ItemTitle>{latest_episode.title}</ItemTitle>
+          <Link to={href}><ItemTitle>{latest_episode.title}</ItemTitle></Link>
           <PlayBox>
             <Arrow />
             <PlayText>Play</PlayText>
             <PlayText>15:59</PlayText>
           </PlayBox>
-          { this.getViewMoreTextDiv(latest_episode.abstract) }
+          { this.getViewMoreTextDiv(latest_episode.abstract, href) }
         </PodcastBox>
       </Container>
     )

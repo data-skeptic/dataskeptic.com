@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { ViewMore } from '../Blog/style'
 
 export const Container = styled.div`
   @media (max-width: 414px) {
@@ -43,7 +44,12 @@ export const SubTitle = styled.p`
   font-size: 40px;
 `
 
-export const Desc = styled.div`
+export const Desc = styled.span`
+  color: #3A3B3B;
+  font-size: 20px;
+`
+
+export const BlogViewMore = ViewMore.extend`
   color: #3A3B3B;
   font-size: 20px;
 `

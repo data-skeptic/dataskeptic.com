@@ -1,5 +1,6 @@
 import React, { Component }  from 'react'
 import moment from 'moment'
+import { Link } from 'react-router'
 import {
   Container,
   Title,
@@ -13,17 +14,20 @@ import {
 
 const BlogBox = props => {
   const { blogList } = props
+  console.log('blogList - homepage', blogList)
   return (
     <div>
       {
         blogList.map(
           (item, index) => {
+            console.log('prettyname', item.prettyname)
+            let href = 'blog' + item.prettyname
             return (
               <BlogItem key={index}>
                 <ItemDate>{moment(item.publish_date).format('MMMM D, Y')}</ItemDate>
-                <ItemTitle>{item.title}</ItemTitle>
+                <Link to={href}><ItemTitle>{item.title}</ItemTitle></Link>
                 <ItemDesc>{item.abstract}</ItemDesc>
-                <ViewMore>View More</ViewMore>
+                <ViewMore to='href'>View More</ViewMore>
                 <ArrowRight />
               </BlogItem>
             )
@@ -37,9 +41,6 @@ const BlogBox = props => {
 class Blog extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-
-    }
   }
 
   render () {

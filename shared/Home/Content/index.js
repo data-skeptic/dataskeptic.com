@@ -26,6 +26,7 @@ class Content extends Component {
 
   componentWillReceiveProps (nextProps) {
     const { features } = nextProps
+    blogList = []
     featured_blog = features.featured_blog
     blogList.push(features.featured_2)
     blogList.push(features.featured_3)

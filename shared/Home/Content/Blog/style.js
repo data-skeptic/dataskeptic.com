@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { Link } from 'react-router'
 
 export const Container = styled.div`
   border-top: 1px solid #979797;
@@ -47,7 +48,7 @@ export const ItemDesc = styled.span`
   color: #575959;
 `
 
-export const ViewMore = styled.a`
+export const ViewMore = styled(Link)`
   font-size: 14px;
   color: #000;
   line-height: 17px;
