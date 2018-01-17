@@ -1,10 +1,15 @@
 const RSS = require('rss');
-
+var axios = require('axios');
+var fs = require('fs');
 const map = require('lodash/map');
 const each = require('lodash/each');
 const filter= require('lodash/filter');
 
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const c = require('../../config/config.json')
+
 const BASE_URL = 'https://dataskeptic.com/';
+var api_url = c[env]['base_api'] + env
 
 const BlogItemModel = ({ title, publish_date, prettyname, desc, author, guid }) => (
     {
@@ -20,33 +25,29 @@ const BlogItemModel = ({ title, publish_date, prettyname, desc, author, guid }) 
 
 
 module.exports = {
-    get_blogs_rss: function (req, res, blogmetadata_map, exclude = ['/episodes', '/transcripts']) {
-        let blogs = blogmetadata_map;
+    get_blogs_rss: function (req, res) {
+        // TODO: setup caching here instead
+        var url = api_url + "/blog/all"
+        axios.get(url).then(function(data) {
+            var blogs = data.data
+            let feed = new RSS({
+                title: 'Data Skeptic',
+                description: 'Data Skeptic is your source for a perspective of scientific skepticism on topics in statistics, machine learning, big data, artificial intelligence, and data science. Our weekly podcast and blog bring you stories and tutorials to help understand our data-driven world.',
+                feed_url: `${BASE_URL}/api/blog/rss`,
+                site_url: BASE_URL,
+                managingEditor: 'Kyle',
+                language: 'en'
+            });
 
-        blogs = filter(blogs, (post) => !!post);
-        blogs = map(blogs, (post) => {
-            return post;
-        });
-
-        let feed = new RSS({
-            title: 'Data Skeptic',
-            description: 'Data Skeptic is your source for a perspective of scientific skepticism on topics in statistics, machine learning, big data, artificial intelligence, and data science. Our weekly podcast and blog bring you stories and tutorials to help understand our data-driven world.',
-            feed_url: `${BASE_URL}/api/blog/rss`,
-            site_url: BASE_URL,
-            managingEditor: 'Kyle',
-            language: 'en'
-        });
-
-        each(blogs, (blog) => {
-            if (!blog) return;
-
-            if (blog.env === 'master') { // don't share dev on master
+            each(blogs, (blog) => {
+                if (!blog) return;
                 feed.item(BlogItemModel(blog));
-            }
-        });
+            });
 
-        const xml = feed.xml();
+            const xml = feed.xml();
 
-        return res.status(200).end(xml)
+            return res.status(200).end(xml)
+
+        })
     }
 }
