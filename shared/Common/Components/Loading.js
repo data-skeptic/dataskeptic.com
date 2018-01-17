@@ -3,11 +3,10 @@ import React from 'react'
 const Loading = () => {
     return (
         <div className="center">
-            <div className="loading">
-                <div className="loading-icon-container">
-                    <p><img className="loading-icon" src="https://s3.amazonaws.com/dataskeptic.com/img/2018/Loading_icon.gif" /></p>
-                </div>
-            </div>
+        	<center>
+	        	<h2>Loading...</h2>
+	            <img className="media-object img-circle img-thumbnail" src="https://s3.amazonaws.com/dataskeptic.com/contributors/yoshi.gif" />
+        	</center>
         </div>
     )
 }

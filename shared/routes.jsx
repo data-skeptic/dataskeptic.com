@@ -1,6 +1,6 @@
 import React                                                 from 'react';
 import {Provider}                                          from 'react-redux';
-import {Router, Route, IndexRoute}                         from 'react-router';
+import {Router, Route, IndexRoute, History}                         from 'react-router';
 import ReactGA from 'react-ga'
 import {reduxReactRouter, routerStateReducer, ReduxRouter} from 'redux-react-router';
 import createBrowserHistory                                  from 'history/lib/createBrowserHistory';
@@ -18,6 +18,7 @@ import ContactUs               from 'Contacts/Routes/ContactUs';
 import DontHackMe              from 'components/DontHackMe';
 import Home                    from 'components/Home';
 import LightsOut               from 'components/LightsOut';
+import Loading                 from 'Common/Components/Loading.js';
 import Login                   from 'components/Login';
 import Logout                  from 'components/Logout';
 import Menu                    from 'components/Menu';
@@ -36,11 +37,19 @@ import Services                from 'components/Services';
 import Store                   from 'components/Store';
 import CheckoutThankYouPage    from 'Checkout/Routes/ThankYouRoute/ThankYouRoute';
 import ProposalsThankYouPage   from 'Proposals/Routes/ThankYou/ThankYouPage';
+import AudioExample            from 'Proposals/Routes/AudioExample';
 import PrivacyPageContainer    from 'Privacy/Containers/PrivacyPageContainer'
 import QuestionsContainer      from './Questions/Containers/QuestionsContainer'
 
-import Admin                   from 'components/admin/Admin';
-import Invoice                 from 'Checkout/Routes/Invoices/Invoice';
+import AdminHome               from 'components/admin/AdminHome';
+import AdminCmsPending         from 'components/admin/AdminCmsPending';
+import AdminCmsAddRelated      from 'components/admin/AdminCmsAddRelated';
+import AdminCmsRecent          from 'components/admin/AdminCmsRecent';
+import AdminCmsFeature         from 'components/admin/AdminCmsFeature';
+import AdminCmsRecentRelated   from 'components/admin/AdminCmsRecentRelated';
+import AdminEmailsSend         from 'components/admin/AdminEmailsSend';
+import AdminOrdersNew          from 'components/admin/AdminOrdersNew';
+import AdminOrdersProcessing   from 'components/admin/AdminOrdersProcessing';
 
 import SnlImpact               from 'components/l/SnlImpact';
 
@@ -104,6 +113,9 @@ export default (
         <Route path="/contact-us" component={App} onEnter={loadData}>
             <IndexRoute component={ContactUs}/>
         </Route>
+        <Route path="/loading" component={App} onEnter={loadData}>
+            <IndexRoute component={Loading}/>
+        </Route>
         <Route path="/lightsout" component={App} onEnter={loadData}>
             <IndexRoute component={LightsOut}/>
         </Route>
@@ -131,6 +143,10 @@ export default (
         <Route path="/rfc/thank-you" showAds={false} component={App} onEnter={loadData}>
             <IndexRoute component={ProposalsThankYouPage}/>
         </Route>
+        <Route path="/rfc/example" component={App} onEnter={loadData}>
+            <IndexRoute component={AudioExample}/>
+        </Route>
+
 
         <Route path="/login" component={App}>
             <IndexRoute component={Login}/>
@@ -161,10 +177,6 @@ export default (
             <IndexRoute component={Analytics}/>
         </Route>
 
-        <Route path="/admin" component={App}>
-            <IndexRoute component={Admin}  />
-        </Route>
-
         <Route path="/wp-login.php" component={App} onEnter={loadData}>
             <IndexRoute component={DontHackMe}/>
         </Route>
@@ -176,8 +188,41 @@ export default (
         </Route>
 
         <Route path="/admin" component={App}>
-            <IndexRoute component={Admin}  />
+            <IndexRoute component={AdminHome}  />
         </Route>
+
+        <Route path="/admin/cms/pending" component={App}>
+            <IndexRoute component={AdminCmsPending}  />
+        </Route>
+
+        <Route path="/admin/cms/recent" component={App}>
+            <IndexRoute component={AdminCmsRecent}  />
+        </Route>
+
+        <Route path="/admin/cms/feature" component={App}>
+            <IndexRoute component={AdminCmsFeature}  />
+        </Route>
+
+        <Route path="/admin/cms/add_related" component={App}>
+            <IndexRoute component={AdminCmsAddRelated}  />
+        </Route>
+
+        <Route path="/admin/cms/recent_related" component={App}>
+            <IndexRoute component={AdminCmsRecentRelated}  />
+        </Route>
+
+        <Route path="/admin/orders/new" component={App}>
+            <IndexRoute component={AdminOrdersNew}  />
+        </Route>
+
+        <Route path="/admin/orders/processing" component={App}>
+            <IndexRoute component={AdminOrdersProcessing}  />
+        </Route>
+
+        <Route path="/admin/emails/send" component={App}>
+            <IndexRoute component={AdminEmailsSend}  />
+        </Route>
+
         <Route path="/admin/login" component={App}>
             <IndexRoute component={Login}/>
         </Route>
