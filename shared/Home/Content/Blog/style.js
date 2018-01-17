@@ -47,7 +47,7 @@ export const ItemDesc = styled.span`
   color: #575959;
 `
 
-export const ViewMore = styled.button`
+export const ViewMore = styled.a`
   font-size: 14px;
   color: #000;
   line-height: 17px;

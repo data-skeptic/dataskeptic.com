@@ -24,6 +24,7 @@ class Feature extends Component {
   }
 
   render () {
+    const { feature_blog } = this.props
     return (
       <Container>
         <LogoContainer className="col-xs-12 col-sm-12 col-md-3">
@@ -31,13 +32,13 @@ class Feature extends Component {
         </LogoContainer >
         <DescBox className="col-xs-12 col-sm-12 col-md-9">
           <Title>feature of the week</Title>
-          <SubTitle>Reprogramming the Human Genome Using AI</SubTitle>
-          <Desc>{DescText}</Desc>
+          <SubTitle>{feature_blog.title}</SubTitle>
+          <Desc>{feature_blog.abstract}</Desc>
           <UserBox>
-            <UserImg src="/img/png/kyle-polich.png" />
+            <UserImg src={feature_blog.img} />
             <UserDetail>
-              <UserInfo>Kyle Polich</UserInfo>
-              <UserInfo>@dataskeptic</UserInfo>
+              <UserInfo>{feature_blog.author}</UserInfo>
+              <UserInfo>{}</UserInfo>
             </UserDetail>
           </UserBox>
         </DescBox>

@@ -8,10 +8,14 @@ import { connect } from 'react-redux'
 
 import { GET_FEATURES, GET_FEATURES_PENDING } from '../../../actions/home'
 
+let featured_blog = {}
+let blogList = []
+let latest_episode = {}
+
 class Content extends Component {
   static propTypes = {
     pageType: PropTypes.string,
-    features: PropTypes.array,
+    features: PropTypes.object,
     getFeatures: PropTypes.func
   }
 
@@ -22,18 +26,21 @@ class Content extends Component {
 
   componentWillReceiveProps (nextProps) {
     const { features } = nextProps
-    console.log('Features nextProps DATA : ', features)
+    featured_blog = features.featured_blog
+    blogList.push(features.featured_2)
+    blogList.push(features.featured_3)
+    latest_episode = features.latest_episode
   }
 
   render () {
     return (
       <ContentContainer>
-        <Feature />
+        <Feature feature_blog={featured_blog}/>
         <BlogContainer className="col-xs-12 col-sm-12 col-md-7">
-          <Blog />
+          <Blog blogList={blogList}/>
         </BlogContainer>
         <PodContainer className="col-xs-12 col-sm-12 col-md-5">
-          <Podcast />
+          <Podcast latest_episode={latest_episode}/>
         </PodContainer>
         <ADGoesHere>ad goes here</ADGoesHere>
       </ContentContainer>

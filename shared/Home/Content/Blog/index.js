@@ -1,4 +1,5 @@
 import React, { Component }  from 'react'
+import moment from 'moment'
 import {
   Container,
   Title,
@@ -10,22 +11,8 @@ import {
   ArrowRight
 } from './style'
 
-const BlogList = [
-  {
-    date: 'November 18, 2016',
-    title: 'Relaunching DataSkeptic.com',
-    desc: 'Financial analysis techniques for studying numeric, well structured data are very mature. While using unstructured data in finance is not necessarily a new idea, the area is still very greenfield. On this episode, Delia Rusu shares her thoughts on the potential'
-  },
-  {
-    date: 'November 18, 2016',
-    title: 'Relaunching DataSkeptic.com',
-    desc: 'Financial analysis techniques for studying numeric, well structured data are very mature. While using unstructured data in finance is not necessarily a new idea, the area is still very greenfield. On this episode, Delia Rusu shares her thoughts on the potential'
-  }
-]
-
 const BlogBox = props => {
   const { blogList } = props
-  console.log('blogList', blogList)
   return (
     <div>
       {
@@ -33,9 +20,9 @@ const BlogBox = props => {
           (item, index) => {
             return (
               <BlogItem key={index}>
-                <ItemDate>{item.date}</ItemDate>
+                <ItemDate>{moment(item.publish_date).format('MMMM D, Y')}</ItemDate>
                 <ItemTitle>{item.title}</ItemTitle>
-                <ItemDesc>{item.desc}</ItemDesc>
+                <ItemDesc>{item.abstract}</ItemDesc>
                 <ViewMore>View More</ViewMore>
                 <ArrowRight />
               </BlogItem>
@@ -56,10 +43,11 @@ class Blog extends Component {
   }
 
   render () {
+    const { blogList } = this.props
     return (
       <Container>
         <Title>From the Blog</Title>
-        <BlogBox blogList={BlogList} />
+        <BlogBox blogList={blogList} />
       </Container>
     )
   }
