@@ -71,6 +71,16 @@ export const UserDetail = styled.div`
   color: #4A4A4A;
 `
 
-export const UserInfo = styled.span`
-  display: block;
+export const UserInfo = styled.a`
+  border: none;
+  :hover {
+    border: none;
+  }
+`
+
+export const UserImgLink = styled.a`
+  border: none;
+  :hover {
+    border: none;
+  }
 `

@@ -12,7 +12,8 @@ import {
   UserImg,
   UserDetail,
   UserInfo,
-  BlogViewMore
+  BlogViewMore,
+  UserImgLink
 } from './style'
 
 import { ArrowRight } from '../Blog/style'
@@ -39,10 +40,9 @@ class Feature extends Component {
             <BlogViewMore to={href}>View More</BlogViewMore>
             <ArrowRight />
           <UserBox>
-            <UserImg src="/img/png/kyle-polich.png" />
+            <UserImgLink href="https://twitter.com/dataskeptic"><UserImg src="/img/png/kyle-polich.png" /></UserImgLink>
             <UserDetail>
-              <UserInfo>{feature_blog.author}</UserInfo>
-              <UserInfo>{}</UserInfo>
+              <UserInfo href="https://twitter.com/dataskeptic">{feature_blog.author}</UserInfo>
             </UserDetail>
           </UserBox>
         </DescBox>
