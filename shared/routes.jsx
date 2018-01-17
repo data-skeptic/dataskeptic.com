@@ -18,6 +18,7 @@ import ContactUs               from 'Contacts/Routes/ContactUs';
 import DontHackMe              from 'components/DontHackMe';
 import Home                    from 'components/Home';
 import LightsOut               from 'components/LightsOut';
+import Loading                 from 'Common/Components/Loading.js';
 import Login                   from 'components/Login';
 import Logout                  from 'components/Logout';
 import Menu                    from 'components/Menu';
@@ -109,6 +110,9 @@ export default (
         </Route>
         <Route path="/contact-us" component={App} onEnter={loadData}>
             <IndexRoute component={ContactUs}/>
+        </Route>
+        <Route path="/loading" component={App} onEnter={loadData}>
+            <IndexRoute component={Loading}/>
         </Route>
         <Route path="/lightsout" component={App} onEnter={loadData}>
             <IndexRoute component={LightsOut}/>
