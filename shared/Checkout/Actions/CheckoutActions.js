@@ -11,6 +11,10 @@ export const CHECKOUT_MAKE_ORDER = 'CHECKOUT_MAKE_ORDER';
 
 const SUCCESS_REDIRECT_DELAY = 1000;
 
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const c = require('../../../config/config.json')
+var base_url = c[env] + env
+
 function redirectToThankYouPage() {
     window.location.href = '/thank-you';
 }
@@ -20,7 +24,8 @@ export function checkout(data) {
         dispatch(checkoutRequestStart(data));
 
         const prod = getState().cart.get('prod');
-        const key = (prod) ? 'pk_live_JcvvQ05E9jgvtPjONUQdCqYg' : 'pk_test_oYGXSwgw9Jde2TOg7vZtCRGo';
+        const stripe_publishable = 'pk_live_JcvvQ05E9jgvtPjONUQdCqYg'
+        const key = (prod) ? stripe_publishable : 'pk_test_oYGXSwgw9Jde2TOg7vZtCRGo'
 
         Stripe.setPublishableKey(key);
 
@@ -34,21 +39,30 @@ export function checkout(data) {
         Stripe.createToken(cardData, (status, response) => {
 
             if (response.error) {
+                console.log("ERRRO!")
+                console.log(response.error)
                 dispatch(checkoutRequestFailed(response.error.message, data));
             } else {
                 if (data['street_2'] == undefined) {
                     data['street_2'] = ""
                 }
                 const token = response.id;
-
+                console.log("checkoutMakeOrder")
+                console.log(data)
+                console.log(prod)
                 checkoutMakeOrder(data, token, prod)
                     .then((successData) => {
-                        dispatch(checkoutRequestSuccess(successData, data));
-                        setTimeout(() => {
-                            dispatch(clearCart());
-                            // react-redux-router push doesn't work
-                            redirectToThankYouPage();
-                        }, SUCCESS_REDIRECT_DELAY);
+                        console.log("success")
+                        if (successData.status == "ok") {
+                            dispatch(checkoutRequestSuccess(successData, data))
+                            setTimeout(() => {
+                                dispatch(clearCart());
+                                // react-redux-router push doesn't work
+                                redirectToThankYouPage();
+                            }, SUCCESS_REDIRECT_DELAY);
+                        } else {
+                            dispatch(checkoutRequestFailed(successData.msg))
+                        }
                     })
                     .catch(({message}) => dispatch(checkoutRequestFailed(message)));
             }
@@ -110,7 +124,9 @@ export function checkoutRequestFailed(error, data) {
 }
 
 export function checkoutMakeOrder(data, token, prod) {
-    const dt = (new Date()).toString();
+    console.log('checkoutMakeOrder----')
+    var email = data.email
+    var shipping = data.shipping
     const customer = {
         first_name: data.first_name,
         last_name: data.last_name,
@@ -119,47 +135,37 @@ export function checkoutMakeOrder(data, token, prod) {
         city: data.city,
         state: data.state,
         zip: data.zip,
-        email: data.email,
+        email,
         phone: data.phone
     };
 
-    //if (isEmpty(data.street_2)) {
-    ///    delete customer.street_2;
-    //}
+    var products = data.products.toJS()
+    for (var product of products) {
+        if (product.size) {
+            product.product.sku = product.product.sku + '_' + product.size
+        }
+    }
 
+    var total = data.total
     let order = {
-        customer: customer,
-        products: data.products,
-        total: data.total,
-        paymentComplete: false,
+        customer,
+        products,
+        total,
         token,
-        paymentError: '',
-        prod,
         country: data.country,
-        dt,
-        shipping: data.shipping
+        shipping
     };
-
-    order = adjust_for_dynamodb_bug(order);
+    console.log(JSON.stringify(order))
+    console.log("CheckoutActions starting with stripe")
+    var url0 = '/api/order/add'
     return axios
-        .post("https://obbec1jy5l.execute-api.us-east-1.amazonaws.com/prod/order", order)
+        .post(url0, order)
         .then(function(resp) {
-            const result = resp.data;
-            let paymentComplete = false;;
-            let paymentError = '';
-            if (result.msg !== 'ok') {
-                paymentComplete = false;
-                paymentError = result.msg || result.errorMessage || "";
-            } else {
-                paymentComplete = true
-            }
-
-            if (paymentComplete) {
-                return result;
-            } else {
-                throw new Error(paymentError);
-            }
-        });
+            console.log('resp')
+            var d = resp.data
+            console.log(d)
+            return d
+        })
 }
 
 

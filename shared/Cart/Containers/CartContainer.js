@@ -27,10 +27,8 @@ class CartContainer extends React.Component {
             let key = "key_" + item.product.id
             if (item.size != "") {
                 title += " (" + item.size + ")"
-                key += "_" + item.size
+                key += "_" + item.size + "_" + index
             }
-
-            key = index
             return (
                 <CartItem key={key}
                           title={title}

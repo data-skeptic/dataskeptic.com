@@ -59,7 +59,7 @@ class BlogItem extends React.Component {
 		var top = <div></div>
 		var bot = <div></div>
 		if (contributor != undefined) {
-			top = <BlogAuthorTop contributor={contributor} />			
+			top = <BlogAuthorTop contributor={contributor} />
 			bot = <BlogAuthorBottom contributor={contributor} />
 		}
 		var guid = blog.guid
@@ -72,9 +72,32 @@ class BlogItem extends React.Component {
 				}
 			}
 			top = (
-				<EpisodePlayer episode={episode} />
-			)				
+                <EpisodePlayer episode={episode} />
+			)
+		} else {
+			let related_mp3_items = related_items.filter((item) => item.type === "mp3")
+			if (related_mp3_items.length > 0) {
+			    const item_data = related_mp3_items[0] // hope it only one
+				let mp3_item = {
+			        "img": "https://s3.amazonaws.com/dataskeptic.com/img/primary-logo-400.jpg",
+                    "num": item_data['blog_id'],
+                    "guid": item_data['content_id'],
+                    "pubDate": blog['publish_date'],
+                    "mp3": item_data['dest'],
+                    "desc": item_data['body'],
+                    "duration": item_data['duration'],
+                    "title": item_data['title'],
+                    "link": "https://dataskeptic.com/blog/"+prettyname
+				}
+
+                top = (
+                    <div>
+                        <EpisodePlayer episode={mp3_item} />
+                    </div>
+                )
+			}
 		}
+
     	var shareUrl = url
     	var exampleImage = "https://s3.amazonaws.com/dataskeptic.com/img/primary-logo-400.jpg"
     	if (!guid && contributor && contributor.img) {
@@ -99,7 +122,7 @@ class BlogItem extends React.Component {
 		)
 	}
 }
-export default connect(state => ({ 
+export default connect(state => ({
 	site: state.site,
 	cms: state.cms,
 	episodes: state.episodes,

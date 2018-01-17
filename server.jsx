@@ -7,7 +7,9 @@ import {get_episodes_by_guid}    from 'backend/get_episodes_by_guid'
 import {get_rfc_metadata}        from 'backend/get_rfc_metadata'
 import {join_slack}              from 'backend/join_slack'
 import {send_email}              from 'backend/send_email'
+import {get_blogs_rss}           from 'backend/get_blogs_rss'
 import {order_create}            from 'backend/order_create'
+import {add_order}               from 'backend/add_order'
 import {order_fulfill}           from 'backend/order_fulfill'
 import {order_list}              from 'backend/order_list'
 import {ready, getTempFile, getFile}  from 'backend/v1/recording';
@@ -17,11 +19,11 @@ import compression               from 'compression';
 import {feed_uri}                from 'daos/episodes'
 import {
     loadEpisodes,
-    loadProducts,
     load,
-    loadCurrentRFC,
-    get_contributors
+    get_contributors,
+    loadCurrentRFC
 }  from 'daos/serverInit'
+import { getProducts }           from 'daos/products'
 import express                   from 'express';
 import FileStreamRotator         from 'file-stream-rotator'
 import fs                        from 'fs'
@@ -133,13 +135,14 @@ const doRefresh = (store) => {
     console.log("-[Refreshing episodes]-");
     return loadEpisodes(env)
         .then(function ({episodes_map, episodes_list, episodes_content}, guid) {
+            console.log("-[Refreshing episodes]-");
             Cache.episodes_map = episodes_map;
             Cache.episodes_list = episodes_list;
             Cache.episodes_content = episodes_content;
-            console.log("-[Refreshing products]-");
-            return loadProducts()
+            return getProducts(store, env)
         })
         .then((products) => {
+            console.log("-[Refreshing products]-");
             Cache.products = null;
             Cache.products = {};
             Cache.products.items = products;
@@ -147,6 +150,8 @@ const doRefresh = (store) => {
             return get_contributors()
         })
         .then((contributors) => {
+            console.log('======================')
+            console.log(contributors)
             Cache.contributors = contributors
             console.log("-[Refreshing RFC]-");
             return loadCurrentRFC()
@@ -271,7 +276,11 @@ function api_router(req, res) {
         return true
     }
     else if (req.url.indexOf('/api/order/create') == 0) {
-        order_create(req, res, sp_key)
+        order_create(req, res, stripe_key)
+        return true
+    }
+    else if (req.url.indexOf('/api/order/add') == 0) {
+        add_order(req, res, stripe_key)
         return true
     }
     else if (req.url.indexOf('/api/order/fulfill') == 0) {
@@ -296,11 +305,7 @@ function api_router(req, res) {
         return res.status(200).end(JSON.stringify(folders))
     }
     else if (req.url.indexOf('/api/blog/rss') === 0) {
-        get_blogs_rss(req, res, Cache.blogs);
-        return true
-    }
-    else if (req.url.indexOf('/api/blog') === 0) {
-        get_blogs(req, res, Cache.blogs, env);
+        get_blogs_rss(req, res);
         return true
     }
     else if (req.url.indexOf('/api/store/list') == 0) {
@@ -310,6 +315,9 @@ function api_router(req, res) {
     else if (req.url.indexOf('/api/episodes/list') == 0) {
         get_episodes(req, res, Cache.episodes_map, Cache.episodes_list)
         return true
+    }
+    else if (req.url.indexOf('/api/v1/store/order/add') == 0) {
+        add_order(req)
     }
     else if (req.url.indexOf('/api/episodes/get') == 0) {
         get_episodes_by_guid(req, res, Cache.episodes_map, Cache.episodes_list)
@@ -378,6 +386,7 @@ function inject_homepage(store, my_cache, pathname) {
 
 function inject_products(store, my_cache, pathname) {
     var products = my_cache.products['items']
+    console.log("inject_products " + products.length)
     store.dispatch({type: "ADD_PRODUCTS", payload: products})
 }
 
@@ -396,6 +405,23 @@ function updateState(store, pathname, req) {
     inject_years(store, Cache)
 
     store.dispatch({type: "PROPOSAL_SET_BUCKET", payload: {aws_proposals_bucket}})
+    if (Cache.contributors != undefined && Cache.contributors != []) {
+        console.log("usingcache")
+        console.log(Cache.contributors)
+        store.dispatch({type: "SET_CONTRIBUTORS", payload: Cache.contributors})
+    } else {
+        return new Promise(function(resolve, reject) {
+            console.log("@@@")
+            resolve(get_contributors())
+        }).then(function(contributors) {
+            console.log("Got contributors")
+            console.log(contributors)
+            store.dispatch({type: "SET_CONTRIBUTORS", payload: contributors})
+        }, function(err) {
+            console.log("Error getting contributors")
+            console.log(err)
+        });
+    }
 
     console.log('Cache')
     for (var k of Object.keys(Cache)) {
@@ -411,9 +437,6 @@ function updateState(store, pathname, req) {
         })
     }
     
-    // Do this on all pages
-
-    // Do these as needed
     if (pathname === "" || pathname === "/") {
         inject_homepage(store, Cache, pathname)
     }
