@@ -28,14 +28,14 @@ class Feature extends Component {
     return (
       <Container>
         <LogoContainer className="col-xs-12 col-sm-12 col-md-3">
-          <LogoImg src="/img/png/bitmap.png" />
+          <LogoImg src={feature_blog.img} />
         </LogoContainer >
         <DescBox className="col-xs-12 col-sm-12 col-md-9">
           <Title>feature of the week</Title>
           <SubTitle>{feature_blog.title}</SubTitle>
           <Desc>{feature_blog.abstract}</Desc>
           <UserBox>
-            <UserImg src={feature_blog.img} />
+            <UserImg src="/img/png/kyle-polich.png" />
             <UserDetail>
               <UserInfo>{feature_blog.author}</UserInfo>
               <UserInfo>{}</UserInfo>
