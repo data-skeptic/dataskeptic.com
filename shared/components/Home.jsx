@@ -13,7 +13,7 @@ import {get_homepage_content} from '../utils/redux_loader'
 
 class Home extends Component {
 
-  constructor () {
+  constructor (props) {
     super(props)
   }
 
@@ -25,6 +25,7 @@ class Home extends Component {
   }
 
   componentDidMount() {
+    var dispatch = this.props.dispatch
     var pageType = "homepage"
     dispatch({type: "LOAD_HOME", payload: {dispatch, pageType} })
   }
