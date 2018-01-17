@@ -7,9 +7,6 @@ const pageType = "homepage"
 class HomeContainer extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-
-    }
   }
 
   render () {
