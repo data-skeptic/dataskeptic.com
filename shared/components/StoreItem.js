@@ -8,6 +8,8 @@ import SizeSelector from './SizeSelector'
 class Store extends React.Component {
     constructor(props) {
         super(props)
+
+        this.onSizeSelection = this.onSizeSelection.bind(this)
         this.state = {
             sizeSelected: undefined,
             wasClicked: false
@@ -54,31 +56,24 @@ class Store extends React.Component {
                 cls = "add-to-cart-clicked"
             }
             return (
-                <div className="row prod-outer">
-                    <div className="col-xs-12 col-sm-4">
+                <div className="col-md-4 col-sm-6 product-item" key={product.id}>
+                    <div className="content">
                         <div className="prod-img">
                             <img className="product-image" src={product.img}/>
                         </div>
-                    </div>
-                    <div className="col-xs-12 col-sm-8">
-                        <div className="row">
-                            <div className="col-xs-12">
-                                <div className="prod-desc">
-                                    <span className="product-title">{product.title}</span>
-                                    <br/>
-                                    <span className="product-desc">{product.desc}</span>
-                                </div>
+                        <div className="info">
+                            <h3 className="title">{product.title}</h3>
+                            <p className="product-desc">{product.desc}</p>
+                            <div className="price">${product.price.toFixed(2)}</div>
+                            <div className="size">
+                                <SizeSelector
+                                    id={sizeSelectorId}
+                                    sizes={product['sizes']}
+                                    value={selection}
+                                    onChange={this.onSizeSelection}
+                                />
                             </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-xs-8 product-pull-down">
-                                <SizeSelector id={sizeSelectorId} sizes={product['sizes']} value={selection}
-                                              onChange={this.onSizeSelection.bind(this)}/>
-                            </div>
-                            <div className="col-xs-2 product-price">${product.price}</div>
-                            <div className="cls-xs-2">
-                                <button className={cls} id={btnId} onClick={this.onAddToCart.bind(this)}>+</button>
-                            </div>
+                            <button className={cls} id={btnId} onClick={this.onAddToCart.bind(this)}>+</button>
                         </div>
                     </div>
                 </div>

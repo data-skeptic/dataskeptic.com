@@ -13,11 +13,20 @@ import {get_homepage_content} from '../utils/redux_loader'
 
 class Home extends Component {
 
+  constructor () {
+    super(props)
+  }
+
   componentWillMount() {
       var dispatch = this.props.dispatch
       const {title} = Home.getPageMeta()
       dispatch(changePageTitle(title))
       dispatch({type: "CMS_GET_HOMEPAGE_CONTENT", payload: {dispatch} })
+  }
+
+  componentDidMount() {
+    var pageType = "homepage"
+    dispatch({type: "LOAD_HOME", payload: {dispatch, pageType} })
   }
 
   static getPageMeta() {

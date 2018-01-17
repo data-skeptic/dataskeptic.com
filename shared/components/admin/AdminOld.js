@@ -10,6 +10,7 @@ import Guests from './Guests'
 import RelatedContent from './RelatedContent'
 import RelatedContentList from './RelatedContentList'
 import Loading from '../../Common/Components/Loading'
+import AdminMenu from './AdminMenu'
 
 class Admin extends Component {
 	constructor(props) {
@@ -54,37 +55,40 @@ class Admin extends Component {
 		const { ready } = this.state
 
 		return ready && (
-			<div className="center">
-				{step}
-				{errorMsg}
-				<h2>Admin</h2>
+			<div>
+                <AdminMenu />
+                <div className="center">
+                    {step}
+                    {errorMsg}
+                    <h2>Admin</h2>
 
-				<CMS admin={this.props.admin} mode="pending" />
-				<hr/>
+                    <CMS admin={this.props.admin} mode="pending" />
+                    <hr/>
 
-				<CMS admin={this.props.admin} mode="recent" />
-				<hr/>
+                    <CMS admin={this.props.admin} mode="recent" />
+                    <hr/>
 
-				<HomepageController />
-				<hr/>
-				
-				<RelatedContent />
-				<hr/>
-				
-				<RelatedContentList items={relatedcontent} />
-				<hr/>
-				
-				<OrderProcessing admin={this.props.admin} />
-				<hr/>
-				
-				<OpenOrders />
-				<hr/>
-				
-				<SendEmail />
-				<hr/>
-				
-				<div className="clear" />
-			</div>
+                    <HomepageController />
+                    <hr/>
+
+                    <RelatedContent />
+                    <hr/>
+
+                    <RelatedContentList items={relatedcontent} />
+                    <hr/>
+
+                    <OrderProcessing admin={this.props.admin} />
+                    <hr/>
+
+                    <OpenOrders />
+                    <hr/>
+
+                    <SendEmail />
+                    <hr/>
+
+                    <div className="clear" />
+                </div>
+            </div>
 		)
 	}
 }

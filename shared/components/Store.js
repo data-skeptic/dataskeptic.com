@@ -42,13 +42,15 @@ class Store extends React.Component {
 			var products = oproducts.products
 			console.log(products)
 			return (
-				<div className="center">
-					<div className="store-items">
+				<div className="">
+					<div className="col-md-8 col-sm-12 store-items">
 						{products.map(function(product) {
 							return <StoreItem key={product.id} product={product} />
 						})}
 					</div>
-					<CartContainer needCheckout={true} updatable={true} />
+					<div className="col-md-4 col-sm-12">
+						<CartContainer needCheckout={true} updatable={true} />
+					</div>
 				</div>
 			)
 		}
