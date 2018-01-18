@@ -45,18 +45,15 @@ class Content extends Component {
   render () {
     var that = this
     if ( featured_blog !== undefined) {
-      console.log('AUTHOR : ', featured_blog)
       if ( featured_blog.author !== undefined ) {
         if ( this.state.twitterAuthor === null) {
           var author = featured_blog.author.toLowerCase();
           var promise = get_contributors()
           promise.then(function(contributors) {
-            console.log('Contributors : ', contributors)
             var contentKeys = Object.keys(contributors);
             for ( var i=0; i<contentKeys.length; i++) {
               if ( contributors[contentKeys[i]].author === author ) {
                 that.setState({twitterAuthor: contributors[contentKeys[i]]})
-                console.log('testsetsetetsetes', this.state.twitterAuthor)
                 break
               }
             }
