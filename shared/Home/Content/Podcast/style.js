@@ -32,6 +32,7 @@ export const PlayBox = styled.div`
   padding: 12px 22px;
   margin: 20px 0;
   display: flex;
+  cursor: pointer;
 `
 
 export const Arrow = styled.div`
