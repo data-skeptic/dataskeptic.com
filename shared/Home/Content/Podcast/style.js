@@ -37,6 +37,7 @@ export const PlayBox = styled.div`
 export const Arrow = styled.div`
   padding-right: 11px;
   color: white;
+  cursor: pointer;
 `
 
 export const PlayText = styled.span`
