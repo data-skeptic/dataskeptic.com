@@ -48,7 +48,17 @@ class Home extends Component {
       //   </div>
       //   <div className="clear"></div>
       // </div>
-      <HomeContainer />
+      <div>
+        <HomeContainer />
+        <div className="clear" />
+        <div className="home-mailing-list-outer">
+          <div className="home-mailing-list-container">
+            <MailingList />
+          </div>
+          <div className="clear" />
+        </div>
+        <br/><br/>
+      </div>
     );
   }
 }
