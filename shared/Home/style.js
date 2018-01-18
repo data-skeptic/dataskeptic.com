@@ -5,7 +5,7 @@ export const Banner = styled.div`
   height: 360px;
   background-size: cover;
   background-position: center;
-  border-top: 1px solid;
+  border-top: .4px solid;
   border-color: rgba(255, 255, 255, 0.2);
   @media (max-width: 1024px) {
     height: 256px;
