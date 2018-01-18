@@ -8,8 +8,7 @@ import {
   ItemDate,
   ItemTitle,
   ItemDesc,
-  ViewMore,
-  ArrowRight
+  ViewMore
 } from './style'
 
 const BlogBox = props => {
@@ -27,8 +26,7 @@ const BlogBox = props => {
                 <ItemDate>{moment(item.publish_date).format('MMMM D, Y')}</ItemDate>
                 <Link to={href}><ItemTitle>{item.title}</ItemTitle></Link>
                 <ItemDesc>{item.abstract}</ItemDesc>
-                <ViewMore to='href'>View More</ViewMore>
-                <ArrowRight />
+                <ViewMore to={href}>View More</ViewMore>
               </BlogItem>
             )
           }

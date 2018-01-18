@@ -49,6 +49,7 @@ export const ItemDesc = styled.span`
 `
 
 export const ViewMore = styled(Link)`
+  display: inline-block;
   font-size: 14px;
   color: #000;
   line-height: 17px;
@@ -56,13 +57,24 @@ export const ViewMore = styled(Link)`
   margin-right: 3px;
   border: 0;
   background: transparent;
-`
+  position: relative;
+  padding-right: 20px;
 
-export const ArrowRight = styled.div`
-  border: solid black;
-  border-width: 0 2px 2px 0;
-  display: inline-block;
-  padding: 3px;
-  vertical-align: middle;
-  transform: rotate(-45deg);
+  :before, :after {
+    border-right: 2px solid;
+    content: '';
+    display: block;
+    height: 8px;
+    margin-top: -6px;
+    position: absolute;
+    transform: rotate(135deg);
+    right: 10px;
+    top: 50%;
+    width: 0;
+  }
+
+  :after {
+    margin-top: -1px;
+    transform: rotate(45deg);
+  }
 `

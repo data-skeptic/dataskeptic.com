@@ -27,6 +27,7 @@ class Feature extends Component {
 
   render () {
     const { feature_blog } = this.props
+    console.log('feature_blog', feature_blog)
     var href = 'blog' + feature_blog.prettyname
     return (
       <Container>
@@ -38,11 +39,11 @@ class Feature extends Component {
             <Link to={href}><SubTitle>{feature_blog.title}</SubTitle></Link>
             <Desc>{feature_blog.abstract}</Desc>
             <BlogViewMore to={href}>View More</BlogViewMore>
-            <ArrowRight />
           <UserBox>
             <UserImgLink href="https://twitter.com/dataskeptic"><UserImg src="/img/png/kyle-polich.png" /></UserImgLink>
-            <UserDetail>
-              <UserInfo href="https://twitter.com/dataskeptic">{feature_blog.author}</UserInfo>
+            <UserDetail href="https://twitter.com/dataskeptic">
+              <UserInfo>{feature_blog.author}</UserInfo>
+              <UserInfo>@dataskeptic</UserInfo>
             </UserDetail>
           </UserBox>
         </DescBox>

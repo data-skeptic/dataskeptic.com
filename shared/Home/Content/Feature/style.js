@@ -65,17 +65,18 @@ export const UserImg = styled.img`
   height: 48px;
 `
 
-export const UserDetail = styled.div`
+export const UserDetail = styled.a`
   padding-left: 20px;
   font-size: 14px;
   color: #4A4A4A;
-`
-
-export const UserInfo = styled.a`
   border: none;
   :hover {
     border: none;
   }
+`
+
+export const UserInfo = styled.span`
+  display: block
 `
 
 export const UserImgLink = styled.a`

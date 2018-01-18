@@ -1,6 +1,6 @@
 import React, { Component }  from 'react'
 import PropTypes from 'prop-types'
-import { ContentContainer, BlogContainer, PodContainer, ADGoesHere } from './style'
+import { ContentContainer, BlogContainer, PodContainer } from './style'
 import Feature from './Feature'
 import Blog from './Blog'
 import Podcast from './Podcast'
@@ -43,7 +43,6 @@ class Content extends Component {
         <PodContainer className="col-xs-12 col-sm-12 col-md-5">
           <Podcast latest_episode={latest_episode}/>
         </PodContainer>
-        <ADGoesHere>ad goes here</ADGoesHere>
       </ContentContainer>
     )
   }

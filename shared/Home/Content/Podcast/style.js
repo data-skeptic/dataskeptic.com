@@ -35,12 +35,8 @@ export const PlayBox = styled.div`
 `
 
 export const Arrow = styled.div`
-  width: 0px;
-  height: 0px;
-  border-top: 7px solid transparent;
-  border-bottom: 7px solid transparent;
-  border-left: 9px solid white;
   padding-right: 11px;
+  color: white;
 `
 
 export const PlayText = styled.span`
@@ -48,4 +44,35 @@ export const PlayText = styled.span`
   color: white;
   line-height: 17px;
   padding-right: 15px;
+`
+
+export const PodViewMore = styled.a`
+  display: inline-block;
+  font-size: 14px;
+  color: #000;
+  line-height: 17px;
+  margin-left: 5px;
+  margin-right: 3px;
+  border: 0;
+  background: transparent;
+  position: relative;
+  padding-right: 20px;
+
+  :before, :after {
+    border-right: 2px solid;
+    content: '';
+    display: block;
+    height: 8px;
+    margin-top: -6px;
+    position: absolute;
+    transform: rotate(135deg);
+    right: 10px;
+    top: 50%;
+    width: 0;
+  }
+
+  :after {
+    margin-top: -1px;
+    transform: rotate(45deg);
+  }
 `
