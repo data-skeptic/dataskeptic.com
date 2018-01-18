@@ -11,22 +11,15 @@ import BlogContainer from 'Blog/Routes/BlogContainer'
 import {changePageTitle} from '../Layout/Actions/LayoutActions';
 import {get_homepage_content} from '../utils/redux_loader'
 
-class Home extends Component {
+import HomeContainer from '../../shared/Home'
 
-  constructor () {
-    super(props)
-  }
+class Home extends Component {
 
   componentWillMount() {
       var dispatch = this.props.dispatch
       const {title} = Home.getPageMeta()
       dispatch(changePageTitle(title))
       dispatch({type: "CMS_GET_HOMEPAGE_CONTENT", payload: {dispatch} })
-  }
-
-  componentDidMount() {
-    var pageType = "homepage"
-    dispatch({type: "LOAD_HOME", payload: {dispatch, pageType} })
   }
 
   static getPageMeta() {
@@ -43,17 +36,28 @@ class Home extends Component {
     var ep_map = oepisodes.ep_map
     var latest_episode = ep_map[guid]
     return (
-      <div className="center">
-        <div className="row">
-          <div className="col-xs-12 col-sm-8">
-            <HomepageFeature />
+      // <div className="center">
+      //   <div className="row">
+      //     <div className="col-xs-12 col-sm-8">
+      //       <HomepageFeature />
+      //     </div>
+      //     <div className="col-xs-12 col-sm-4">
+      //        <EpisodePlayer episode={latest_episode} />
+      //        <MailingList />
+      //     </div>
+      //   </div>
+      //   <div className="clear"></div>
+      // </div>
+      <div>
+        <HomeContainer />
+        <div className="clear" />
+        <div className="home-mailing-list-outer">
+          <div className="home-mailing-list-container">
+            <MailingList />
           </div>
-          <div className="col-xs-12 col-sm-4">
-             <EpisodePlayer episode={latest_episode} />
-             <MailingList />
-          </div>
+          <div className="clear" />
         </div>
-        <div className="clear"></div>
+        <br/><br/>
       </div>
     );
   }

@@ -8,48 +8,101 @@ import Loading from "../Common/Components/Loading"
 import Error from "../Common/Components/Error"
 import {loadEpisode, clearEpisode} from "../utils/redux_loader"
 
+import {
+  Container,
+  PodcastBox,
+  PlayBox,
+  Arrow,
+  PlayText,
+  PodViewMore
+} from '../../shared/Home/Content/Podcast/style'
+
+import {
+  ItemDate,
+  ItemTitle,
+  ItemDesc
+ } from '../../shared/Home/Content/Blog/style'
+
 class EpisodePlayer extends Component {
-    constructor(props) {
-        super(props)
+  constructor(props) {
+    super(props)
+    this.state = {
+      expanded: false
     }
+    this.expandedText = this.expandedText.bind(this);
+  }
 
-    onClick(episode) {
-        var episode = this.props.episode
-        this.props.dispatch({type: "PLAY_EPISODE", payload: episode})
-    }
+  expandedText () {
+    this.setState({ expanded: true });
+  }
 
-    render() {
-        var oplayer = this.props.player.toJS()
-        var episode = this.props.episode
-        var playback_loaded = oplayer.playback_loaded
-        if (!episode) {
-            return <div>Loading episode</div>
-        }
-
-        let play_symb = <span>&#9658;</span>;
-        if (oplayer.is_playing) {
-            if (oplayer.episode.guid === episode.guid) {
-                play_symb = <span>&#10073;&#10073;</span>
-                if (!playback_loaded) {
-                    play_symb = <span>?</span>
-                }
-            }
-        }
-        const date = moment(episode.pubDate).fromNow()
-        var link = episode.link
-        var i = link.indexOf('/blog/')
-        link = link.substring(i, link.length)
+  getViewMoreTextDiv (text='') {
+    if ( text.length > 200) {
+      if ( this.state.expanded ) {
         return (
-            <div className="home-player">
-                <div className="home-player-card">
-                    <div className="home-player-title"><Link className="home-player-link"
-                                                             to={link}>{episode.title}</Link></div>
-                    <p>{date}</p>
-                    <button className="episode-button" onClick={this.onClick.bind(this, episode)}>{play_symb}</button>
-                </div>
-            </div>
+          <div>
+            <ItemDesc>{text}</ItemDesc>
+          </div>
         )
+      } else {
+        return (
+          <div>
+            <ItemDesc>{text.substring(0,200)}...</ItemDesc>
+            <PodViewMore onClick={this.expandedText}>View More</PodViewMore>
+          </div>
+        )
+      }
+    } else {
+      return (
+        <div>
+          <ItemDesc>{text}</ItemDesc>
+        </div>
+      )
     }
+  }
+
+  onClick(episode) {
+    var episode = this.props.episode
+    this.props.dispatch({type: "PLAY_EPISODE", payload: episode})
+  }
+
+  render() {
+    const { expanded } = this.state
+    var oplayer = this.props.player.toJS()
+    var episode = this.props.episode
+    var desc = this.props.desc
+    var playback_loaded = oplayer.playback_loaded
+    if (!episode) {
+      return <div>Loading episode</div>
+    }
+
+    let play_symb = <span>&#9658;</span>;
+    if (oplayer.is_playing) {
+      if (oplayer.episode.guid === episode.guid) {
+        play_symb = <span>&#10073;&#10073;</span>
+        if (!playback_loaded) {
+          play_symb = <span>?</span>
+        }
+      }
+    }
+    const date = moment(episode.pubDate).fromNow()
+    var link = episode.link
+    var i = link.indexOf('/blog/')
+    link = link.substring(i, link.length)
+    return (
+    
+      <PodcastBox>
+        <ItemDate>{moment(episode.pubDate).format('MMMM D, Y')}</ItemDate>
+        <Link to={link}><ItemTitle>{episode.title}</ItemTitle></Link>
+        <PlayBox>
+          <Arrow onClick={this.onClick.bind(this, episode)}>{play_symb}</Arrow>
+          <PlayText>Play</PlayText>
+          <PlayText>15:59</PlayText>
+        </PlayBox>
+        { this.getViewMoreTextDiv(desc) }
+      </PodcastBox>
+    )
+  }
 }
 
 export default connect(state => ({
