@@ -18,16 +18,13 @@ import {
 
 import { ArrowRight } from '../Blog/style'
 
-const DescText = 'The second day of NIPS kicked off with this presentation from Brendan Frey. In the first minute, he put forward the bold claim "without artificial intelligence medicine is going to completely fail". The presentation was support for that idea.'
-
 class Feature extends Component {
   constructor(props) {
     super(props)
   }
-
+  
   render () {
-    const { feature_blog } = this.props
-    console.log('feature_blog', feature_blog)
+    const { feature_blog, twitterAuthor } = this.props
     var href = 'blog' + feature_blog.prettyname
     return (
       <Container>
@@ -36,16 +33,18 @@ class Feature extends Component {
         </LogoContainer >
         <DescBox className="col-xs-12 col-sm-12 col-md-9">
           <Title>feature of the week</Title>
-            <Link to={href}><SubTitle>{feature_blog.title}</SubTitle></Link>
-            <Desc>{feature_blog.abstract}</Desc>
-            <BlogViewMore to={href}>View More</BlogViewMore>
-          <UserBox>
-            <UserImgLink href="https://twitter.com/dataskeptic"><UserImg src="/img/png/kyle-polich.png" /></UserImgLink>
-            <UserDetail href="https://twitter.com/dataskeptic">
-              <UserInfo>{feature_blog.author}</UserInfo>
-              <UserInfo>@dataskeptic</UserInfo>
-            </UserDetail>
-          </UserBox>
+          <Link to={href}><SubTitle>{feature_blog.title}</SubTitle></Link>
+          <Desc>{feature_blog.abstract}</Desc>
+          <BlogViewMore to={href}>View More</BlogViewMore>
+          { twitterAuthor !== null && 
+            <UserBox>
+              <UserImgLink href={'https://twitter.com/' + twitterAuthor.twitter}><UserImg src={twitterAuthor.img} /></UserImgLink>
+              <UserDetail href={'https://twitter.com/' + twitterAuthor.twitter}>
+                <UserInfo>{twitterAuthor.prettyname}</UserInfo>
+                <UserInfo>@{twitterAuthor.twitter}</UserInfo>
+              </UserDetail>
+            </UserBox>
+          }
         </DescBox>
       </Container>
     )
