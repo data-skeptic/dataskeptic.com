@@ -6,13 +6,66 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 
 import ContactFormContainer from '../Containers/ContactFormContainer/ContactFormContainer';
-
 import {changePageTitle} from '../../Layout/Actions/LayoutActions';
+import {formValueSelector} from 'redux-form';
+import {
+    init,
+    ready,
+    recordingStart,
+    recordingFinish,
+    review,
+    submit,
+    complete,
+    fail
+} from '../../Proposals/Actions/RecordingFlowActions';
+import {RECORDING} from "../../Proposals/Constants/CommentTypes";
+import Recorder, {steps} from '../../Recorder';
+import QuestionForm from "../../Questions/Forms/QuestionForm";
 
 class ContactUs extends React.Component {
-	constructor(props) {
-		super(props)
-	}
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            submittedUrl: ''
+        }
+    }
+
+    recordingReady = (noDelay) => {
+        this.props.dispatch(ready(noDelay))
+        this.setState({submittedUrl: ''});
+    }
+
+    recorderRecording = () =>{
+        this.props.dispatch(recordingStart())
+    }
+
+    recorderStop = (id) => {
+        this.props.dispatch(recordingFinish(id))
+        this.setState({submittedUrl:id});
+    }
+
+    recorderReview = (id) => {
+        this.props.dispatch(review())
+    }
+
+    recorderSubmit = (id) => {
+        this.props.dispatch(submit())
+    }
+
+    recorderComplete = (id) => {
+        this.props.dispatch(complete(id))
+        this.props.dispatch(completeRecording(id))
+    }
+
+    recorderError = (error) => {
+        this.props.dispatch(fail(error))
+    }
+
+    questionSubmit = (data) => {
+        console.log(`question submit`)
+        console.dir(data)
+    }
 
     componentDidMount() {
         const {dispatch} = this.props;
@@ -83,6 +136,9 @@ class ContactUs extends React.Component {
 
 		*/
 
+        const {confirmPolicy,activeStep,errorMessage} = this.props;
+        const { submittedUrl } = this.state
+
 		return (
 	    	<div className="center">
 				<div className="row contact-page">
@@ -140,16 +196,55 @@ class ContactUs extends React.Component {
 			        <h2>Send us a message</h2>
 					<ContactFormContainer/>
 
+                    <br/>
+                    <h2>Listener Questions</h2>
+                    <p>
+						We love hearing from our listeners!
+                        If you have a question about one of our episodes or a general question that's relevant to Data
+                        Skeptic, please ask via the in-browser recording system below.
+                        Try to keep your question to 30 seconds or less and make sure your question is a question.
+					</p>
+                    <div>
+                        <QuestionForm
+                            allowSubmit={!!confirmPolicy}
+                            initialValues={{
+                                confirmPolicy: true
+                            }}
+                            onSubmit={this.questionSubmit}
+                        >
+                            <Recorder
+                                key={RECORDING}
+                                activeStep={activeStep}
+                                errorMessage={errorMessage}
+                                ready={this.recordingReady}
+                                recording={this.recorderRecording}
+                                stop={this.recorderStop}
+                                review={this.recorderReview}
+                                submit={this.recorderSubmit}
+                                complete={this.recorderComplete}
+                                error={this.recorderError}
+                                submittedUrl={submittedUrl}
+                                reset={this.reset}
+                            />
+                        </QuestionForm>
+                    </div>
+
 				</div>
 			</div>
 		)
 	}
 }
 
+
+const selector = formValueSelector('question');
 export default connect(
 	state => ({
 		cart: state.cart,
-		site: state.site
+		site: state.site,
+        confirmPolicy: selector(state, 'confirmPolicy'),
+        activeStep: state.questions.getIn(['form', 'step']),
+        errorMessage : state.questions.getIn(['form', 'error']),
+        aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket'])
 	})
 )(ContactUs)
 
