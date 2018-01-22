@@ -88,7 +88,6 @@ export function load_blogs(prefix, limit, offset, dispatch) {
         .get(url)
         .then(function(result) {
             console.log("blog api success")
-            console.log(result)
             var blogs = result['data']
             var payload = {blogs, prefix}
             var guids = []
@@ -198,4 +197,23 @@ export function loadCurrentRFC() {
             }
         });
     });
+}
+
+export function get_bot_status(dispatch) {
+    var url = base_url + '/bot/status'
+    return axios
+        .get(url)
+        .then(function(result) {
+            var resp = result.data
+            if (dispatch) {
+                dispatch({type: "SET_BOT", payload: resp })
+            } else {
+                console.log("Can't update because dispatch not set.")
+            }
+            return resp
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+
 }

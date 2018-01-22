@@ -94,10 +94,10 @@ class EpisodePlayer extends Component {
       <PodcastBox>
         <ItemDate>{moment(episode.pubDate).format('MMMM D, Y')}</ItemDate>
         <Link to={link}><ItemTitle>{episode.title}</ItemTitle></Link>
-        <PlayBox>
-          <Arrow onClick={this.onClick.bind(this, episode)}>{play_symb}</Arrow>
+        <PlayBox onClick={this.onClick.bind(this, episode)}>
+          <Arrow>{play_symb}</Arrow>
           <PlayText>Play</PlayText>
-          <PlayText>15:59</PlayText>
+          <PlayText>{oplayer.episode.duration}</PlayText>
         </PlayBox>
         { this.getViewMoreTextDiv(desc) }
       </PodcastBox>
