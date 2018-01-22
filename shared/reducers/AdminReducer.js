@@ -15,6 +15,7 @@ var printful_key = config[env]["printful"]["api"]
 var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
 const init = {
+    "bot": false,
     "email_send_msg": "",
     "pending_blogs": [],
     "recent_blogs": [],
@@ -69,6 +70,10 @@ export default function adminReducer(state = defaultState, action) {
   var nstate = state.toJS()
   var apromise = undefined
   switch(action.type) {
+    case 'SET_BOT':
+        console.log("SET_BOT")
+        console.log(action.payload)
+        nstate.bot = action.payload.ison
     case 'SET_EMAIL_FROM':
     	nstate.from = action.payload
     	break
