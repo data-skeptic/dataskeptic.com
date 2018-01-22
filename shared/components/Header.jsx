@@ -90,9 +90,9 @@ class Header extends React.Component {
 						<CartLink itemCount={itemsCount} onClick={this.onCartClick} />
 					</div>
 					<div className="logo">
-						<div id="logo_mobile">
+						<Link to="/" id="logo_mobile">
 							<img src="/img/svg/logo-min.svg" alt="Data Skeptic logo" />
-						</div>
+						</Link>
 					</div>
 				</div>
 			</div>
