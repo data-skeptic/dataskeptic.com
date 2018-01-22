@@ -195,13 +195,21 @@ class MainView extends React.Component {
 
   render() {
     this.logPageView()
-    const {isMobileMenuVisible, cart, isCartVisible} = this.props;
+    const {isMobileMenuVisible, admin, cart, isCartVisible} = this.props;
     const {showAds = true} = this.props.route;
     const {pathname} = this.props.location
     const itemsCount = getCartItemsCount(cart.toJS().cart_items);
     const isOverflowMode = isCartVisible
 
     const { ready } = this.state
+
+    var oadmin = admin.toJS()
+    console.log("@#@$$$$$@##")
+    console.log(oadmin)
+    var cbc = <ChatBotContainer/>
+    if (!oadmin['bot']) {
+      cbc = <div></div>
+    }
 
     return (
         <div className={ classNames('site', {'no-scroll' : isMobileMenuVisible}) }>
@@ -222,7 +230,7 @@ class MainView extends React.Component {
             {this.props.children}
             <Sidebar />
           </div>
-          <ChatBotContainer/>
+          {cbc}
           <Footer showAds={showAds} linkClick={this.onFooterItemClick} banner={this.props.bannerContent}/>
           <Overflow visible={isOverflowMode} onClick={this.onOverflowClick}/>
         </div>
@@ -233,6 +241,7 @@ class MainView extends React.Component {
 export default connect(
     state => ({ 
       cart: state.cart,
+      admin: state.admin,
       isCartVisible: state.cart.getIn(['cart_visible']),
       site: state.site,
       isMobileMenuVisible: state.layout.getIn(['isMobileMenuVisible'])
