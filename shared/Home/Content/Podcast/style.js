@@ -33,6 +33,9 @@ export const PlayBox = styled.div`
   margin: 20px 0;
   display: flex;
   cursor: pointer;
+  :hover {
+    opacity: .7;
+  }
 `
 
 export const Arrow = styled.div`
