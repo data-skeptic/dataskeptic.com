@@ -23,11 +23,8 @@ class ContactFormContainer extends Component {
     }
 
     render() {
-        return (
-            <div>
-            <ContactForm onSubmit={this.handleSubmit}/>
-            </div>
-        );
+        const { ...rest } = this.props
+        return <ContactForm onSubmit={this.handleSubmit} {...rest}/>
     }
 }
 
