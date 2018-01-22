@@ -1,13 +1,43 @@
-import React from 'react'
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import {changePageTitle} from "../../Layout/Actions/LayoutActions";
+import ContactFormContainer from "../../Contacts/Containers/ContactFormContainer/ContactFormContainer";
 
-const NotFound = ({location}) => {
-	return (
-		<div className="center">
-			<p>Sorry, that page is not found.</p>
-			<p>If you wouldn't mind, please drop a line to <a href="mailto:kyle@dataskeptic.com">kyle@dataskeptic.com</a> and let us know what you were looking for.</p>
-			<p>{location.pathname}</p>
-		</div>
-	)
+class NotFound extends Component {
+
+    static getPageMeta() {
+        return {
+            notFoundPage: true,
+            title: 'Page Not Found'
+        }
+    }
+
+    componentWillMount() {
+        const {dispatch} = this.props;
+        dispatch(changePageTitle("Page Not Found"));
+    }
+
+    render() {
+    	const { url } = this.props
+        const missedMessage =  `I was looking for a page on your site at ${url}\n`
+
+        return (
+            <div className="notFoundPage">
+                <h2>Page Not Found</h2>
+                <p>If you wouldn't mind, please drop a line and let us know what you were looking for.</p>
+
+                <div className="feedbackForm">
+                    <ContactFormContainer
+                        initialValues={{
+                            message: missedMessage
+                        }}
+                    />
+                </div>
+            </div>
+        )
+    }
 }
 
-export default NotFound
+export default connect((state, ownProps) => ({
+    url: ownProps.location.pathname
+}))(NotFound)

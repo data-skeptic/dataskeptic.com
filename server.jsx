@@ -561,7 +561,17 @@ const renderPage = (req, res) => {
         fetchComponentData(store.dispatch, renderProps.components, renderProps.params)
             .then(() => renderView(store, renderProps, location))
             .then(({html, state, meta}) => {
-                res.render('index', {
+                if (meta.notFoundPage) {
+                    return res.status(404).render('index', {
+                        staticHTML: html,
+                        initialState: state,
+                        meta,
+                        env,
+                        itunesId
+                    });
+                }
+
+                return res.render('index', {
                     staticHTML: html,
                     initialState: state,
                     meta,
