@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import AdminLayout from "./AdminLayout";
 
 class AdminHome extends Component {
+
 	render() {
 		const { history } = this.props
 

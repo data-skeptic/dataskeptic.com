@@ -21,7 +21,8 @@ import {
     loadEpisodes,
     load,
     get_contributors,
-    loadCurrentRFC
+    loadCurrentRFC,
+    get_bot_status
 }  from 'daos/serverInit'
 import { getProducts }           from 'daos/products'
 import express                   from 'express';
@@ -150,15 +151,18 @@ const doRefresh = (store) => {
             return get_contributors()
         })
         .then((contributors) => {
-            console.log('======================')
-            console.log(contributors)
             Cache.contributors = contributors
             console.log("-[Refreshing RFC]-");
             return loadCurrentRFC()
         })
         .then((rfc) => {
             Cache.rfc = rfc
-            console.log("Refreshing Finished")
+            console.log("-[Refreshing Bot]-");
+            return get_bot_status(d)
+        })
+        .then((bot) => {
+            Cache.bot = bot
+            console.log("-[Refreshing Complete]-");
         })
         .catch((err) => {
             console.log(err);
@@ -209,7 +213,6 @@ if (env == "prod") {
 /*
  * WIRING UP APP
  */
-console.log("*** WIRE")
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -400,6 +403,7 @@ function install_episode(store, episode) {
 }
 
 function updateState(store, pathname, req) {
+    // TODO: find a way to better sync this section with each page's componentWillMount
     console.log("server.jsx : updateState for " + pathname)
     inject_folders(store, Cache)
     inject_years(store, Cache)
@@ -407,15 +411,13 @@ function updateState(store, pathname, req) {
     store.dispatch({type: "PROPOSAL_SET_BUCKET", payload: {aws_proposals_bucket}})
     if (Cache.contributors != undefined && Cache.contributors != []) {
         console.log("usingcache")
-        console.log(Cache.contributors)
         store.dispatch({type: "SET_CONTRIBUTORS", payload: Cache.contributors})
     } else {
         return new Promise(function(resolve, reject) {
-            console.log("@@@")
+            console.log("Need to load contributors")
             resolve(get_contributors())
         }).then(function(contributors) {
             console.log("Got contributors")
-            console.log(contributors)
             store.dispatch({type: "SET_CONTRIBUTORS", payload: contributors})
         }, function(err) {
             console.log("Error getting contributors")
@@ -423,9 +425,13 @@ function updateState(store, pathname, req) {
         });
     }
 
-    console.log('Cache')
     for (var k of Object.keys(Cache)) {
-        console.log(["Cache", k, k.length])
+        console.log(["Cache", k, typeof(Cache[k])])
+    }
+    var bot = Cache.bot
+    console.log(["bot", bot])
+    if (bot) {
+        store.dispatch({type: "SET_BOT", payload: bot})
     }
     var contributors = Cache.contributors
     if (!contributors || contributors.length == 0) {

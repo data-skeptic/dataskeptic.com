@@ -15,6 +15,7 @@ var printful_key = config[env]["printful"]["api"]
 var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
 const init = {
+    "bot": false,
     "email_send_msg": "",
     "pending_blogs": [],
     "recent_blogs": [],
@@ -45,10 +46,11 @@ const init = {
         step: 'init',
         productId: undefined,
         errorMsg: '',
-        designId: '58196cb41338d457459d579c',
+        designId: 'orig | ai',
         color: 'Black',
         quantity: '1',
         size: '',
+        variant_id: '',
         customerName: '',
         address1: '',
         address2: '',
@@ -64,23 +66,14 @@ const init = {
 
 const defaultState = Immutable.fromJS(init);
 
-var sizeMap = {
-    "XS": "xsl",
-    "S": "sml", 
-    "M": "med", 
-    "L": "lrg", 
-    "XL": "xlg", 
-    "2L": "xxl", 
-    "3XL": "xxxl", 
-    "4XL": "xxxxl"
-}
-
-
-
 export default function adminReducer(state = defaultState, action) {
   var nstate = state.toJS()
   var apromise = undefined
   switch(action.type) {
+    case 'SET_BOT':
+        console.log("SET_BOT")
+        console.log(action.payload)
+        nstate.bot = action.payload.ison
     case 'SET_EMAIL_FROM':
     	nstate.from = action.payload
     	break
@@ -162,7 +155,6 @@ export default function adminReducer(state = defaultState, action) {
         break;
     case 'PLACE_ORDER':
         var dispatch = action.payload
-        console.log(dispatch)
         nstate.order.spError = "Placing order..."
         var order = nstate.order
         console.log(JSON.stringify(order))
@@ -179,7 +171,61 @@ export default function adminReducer(state = defaultState, action) {
             console.log(jstr)
             dispatch({type: "SET_ORDER_SP_ERROR_MSG", payload: jstr })
         }
-        place_order(printful_key, order, ok_callback, error_callback)
+
+        var name         = order['customerName']
+        var address1     = order['address1']
+        var address2     = order['address2']
+        var city         = order['city']
+        var state        = order['state']
+        var country_code = order['country']
+        var zipcode      = order['zipcode']
+        var quantity     = parseInt(order['quantity'])
+        var variant_id   = order['variant_id']
+        var size         = order['size']
+        var designId     = order['designId']
+
+        var customer = {
+            name,
+            address1,
+            address2,
+            city,
+            state,
+            country_code,
+            zipcode
+        }
+        
+        var file_id = 37766873
+        var preview_url = "https://d1yg28hrivmbqm.cloudfront.net/files/57c/57cc770e861106c42055789e4b0bab4b_preview.png"
+        if (designId == "ai") {
+            file_id = 43205824
+            preview_url = "https://d1yg28hrivmbqm.cloudfront.net/files/6b4/6b496bab9e2bde219acbe29769e4732c_preview.png"
+        }
+
+        var product_name = "Data Skeptic t-shirt, size " + size
+
+        var files = [
+            {
+                id: file_id,
+                preview_url
+            }
+        ]
+
+        var items = [
+            {
+                variant_id, 
+                quantity, 
+                name: product_name, 
+                files
+            }
+        ]
+
+        console.log('printful_key')
+        console.log(printful_key)
+        console.log('customer')
+        console.log(customer)
+        console.log('items')
+        console.log(items)
+        place_order(printful_key, customer, items, ok_callback, error_callback)
         break
     case 'INIT_ORDERS':
         var dispatch = action.payload.dispatch

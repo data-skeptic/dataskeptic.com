@@ -17,7 +17,16 @@ class OrderProcessing extends React.Component {
 	
 	onSizeChange(e) {
 		var size = e.target.value
-		var u = {size}
+        var variantMap = {
+                      "S": 474
+                    , "M": 505
+                    ,"L": 536
+                    ,"XL": 567
+                    ,"2XL": 598
+                    ,"3XL": 629
+                }
+        var variant_id = variantMap[size]
+		var u = {variant_id, size}
 		this.props.dispatch({type: "UPDATE_ORDER", payload: u })		
 	}
 
@@ -62,14 +71,12 @@ class OrderProcessing extends React.Component {
 								<td>
 									<select id="size" onChange={this.onSizeChange.bind(this)}>
 										<option value=''>---[Choose]---</option>
-										<option value='sml'>Small</option>
-										<option value='med'>Medium</option>
-										<option value='lrg'>Large</option>
-										<option value='xlg'>X-Large</option>
-										<option value='xxl'>XX-Large</option>
-										<option value='xxxl'>3XL</option>
-										<option value='xxxxl'>4XL</option>
-										<option value='xxxxxl'>5XL</option>
+										<option value='S'>Small</option>
+										<option value='M'>Medium</option>
+										<option value='L'>Large</option>
+										<option value='XL'>X-Large</option>
+										<option value='2XL'>XX-Large</option>
+										<option value='3XL'>3XL</option>
 									</select>
 								</td>
 							</tr>
