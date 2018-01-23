@@ -53,6 +53,8 @@ import { get_podcasts_from_cache } from 'utils/redux_loader';
 import redirects_map               from './redirects';
 
 import {reducer as formReducer} from 'redux-form'
+import tunnel from 'tunnel'
+import http from 'http'
 
 console.log("server.jsx : starting")
 
@@ -254,6 +256,25 @@ function api_router(req, res) {
         var req = req.body
         join_slack(req, res, slack_key)
         return true
+    } else if (req.url.indexOf('/api/messages') == 0) {
+        console.log("here!")
+        var tunnelingAgent = tunnel.httpOverHttp({
+          maxSockets: 5,
+          proxy: {
+            host: '/api/messages',
+            port: 3978,
+            headers: {
+              'User-Agent': 'dataskeptic.com bot proxy'
+            }
+          }
+        });
+
+        var req = http.request({
+          host: 'bot.dataskeptic.com',
+          port: 3978,
+          agent: tunnelingAgent
+        });
+        res.status(200).end(req)
     } else if (req.url.indexOf('/api/v1/proposals/files') == 0) {
         uploadProposalFiles(req, res, aws_proposals_bucket);
         return true;
@@ -382,11 +403,6 @@ function inject_years(store, my_cache) {
     store.dispatch({type: "SET_YEARS", payload: years})
 }
 
-function inject_homepage(store, my_cache, pathname) {
-    var episode = my_cache.episodes_map["latest"]
-    install_episode(store, episode)
-}
-
 function inject_products(store, my_cache, pathname) {
     var products = my_cache.products['items']
     console.log("inject_products " + products.length)
@@ -396,10 +412,6 @@ function inject_products(store, my_cache, pathname) {
 function inject_podcast(store, my_cache, pathname) {
     var episodes = get_podcasts_from_cache(my_cache, pathname)
     store.dispatch({type: "ADD_EPISODES", payload: episodes})
-}
-
-function install_episode(store, episode) {
-    store.dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
 }
 
 function updateState(store, pathname, req) {
@@ -444,7 +456,6 @@ function updateState(store, pathname, req) {
     }
     
     if (pathname === "" || pathname === "/") {
-        inject_homepage(store, Cache, pathname)
     }
     if (pathname.indexOf('/blog') === 0) {
     }

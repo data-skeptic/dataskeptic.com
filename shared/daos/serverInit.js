@@ -74,7 +74,6 @@ export function get_podcasts_by_guid(dispatch, guid) {
             .then(function(result) {
                 var episode = result["data"]
                 dispatch({type: "ADD_EPISODES", payload: [episode]})
-                dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
             })
             .catch((err) => {
                 console.log(err)

@@ -11,8 +11,7 @@ export function loadEpisode(guid, dispatch) {
 		.get("/api/episodes/get/" + guid)
   		.then(function(result) {
   			var episode = result["data"]
-
-            dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
+  			console.log("Got episode for no reason in redux_loader")
 		})
 		.catch((err) => {
 			console.log(err)
@@ -71,8 +70,8 @@ export function get_podcasts(dispatch, pathname) {
 	var year = year_from_path(pathname)
 	var my_cache = global.my_cache
 	if (my_cache != undefined) {
+		console.log("get_podcasts with no cache")
 		var episodes = get_podcasts_from_cache(my_cache, pathname)
-		dispatch({type: "ADD_EPISODES", payload: episodes})
 	} else {
 		console.log("Getting episodes")
 		axios

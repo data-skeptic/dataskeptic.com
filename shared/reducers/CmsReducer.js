@@ -193,15 +193,16 @@ export default function cmsReducer(state = defaultState, action) {
         nstate.featured_blog = fb
         nstate.featured_blog2 = fb2
         nstate.featured_blog3 = fb3
+        
         var url = "/api/episodes/get/" + le.guid
         axios
             .get(url)
             .then(function(result) {
                 var episode = result.data
-                dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
                 dispatch({type: "ADD_EPISODES", payload: [episode]})
             })
             .catch((err) => {
+                console.log("Caught in CmsReducer")
                 console.log(err)
             })
         break;

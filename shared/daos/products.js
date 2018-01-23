@@ -10,7 +10,6 @@ export function getProducts(store, env) {
 	return axios
 		.get(url)
   		.then(function(result) {
-  			console.log(result)
   			var products = result["data"]["Items"]
   			if (store) {
 				store.dispatch({type: "ADD_PRODUCTS", payload: products})
