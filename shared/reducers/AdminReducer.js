@@ -193,39 +193,7 @@ export default function adminReducer(state = defaultState, action) {
             country_code,
             zipcode
         }
-        
-        var file_id = 37766873
-        var preview_url = "https://d1yg28hrivmbqm.cloudfront.net/files/57c/57cc770e861106c42055789e4b0bab4b_preview.png"
-        if (designId == "ai") {
-            file_id = 43205824
-            preview_url = "https://d1yg28hrivmbqm.cloudfront.net/files/6b4/6b496bab9e2bde219acbe29769e4732c_preview.png"
-        }
-
-        var product_name = "Data Skeptic t-shirt, size " + size
-
-        var files = [
-            {
-                id: file_id,
-                preview_url
-            }
-        ]
-
-        var items = [
-            {
-                variant_id, 
-                quantity, 
-                name: product_name, 
-                files
-            }
-        ]
-
-        console.log('printful_key')
-        console.log(printful_key)
-        console.log('customer')
-        console.log(customer)
-        console.log('items')
-        console.log(items)
-        place_order(printful_key, customer, items, ok_callback, error_callback)
+        place_order(printful_key, customer, designId, size, ok_callback, error_callback)
         break
     case 'INIT_ORDERS':
         var dispatch = action.payload.dispatch
