@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ProposalLoading = ({title="We're processing your proposal...", content="Please wait until we will process your proposal"}) => {
+const ProposalLoading = ({title="We're processing your recording...", content="Please wait until we will process your recording"}) => {
     return (
         <div className="center">
             <div className="loading proposal">

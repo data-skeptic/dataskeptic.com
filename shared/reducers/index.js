@@ -15,3 +15,4 @@ export { default as episodes } from './EpisodesReducer';
 export { default as layout } from '../Layout/Reducers/LayoutReducer';
 export { default as proposals } from '../Proposals/Reducers/ProposalsReducer';
 export { default as recorder } from '../Recorder/Reducers/RecorderReducer';
+export {default as questions } from '../Questions/Reducers/QuestionsReducer'

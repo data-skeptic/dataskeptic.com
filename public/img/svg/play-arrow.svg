@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="36px" height="40px" viewBox="0 0 36 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 43 (38999) - http://www.bohemiancoding.com/sketch -->
+    <title>play-arrow</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" fill-opacity="0.8">
+        <g id="contac-us-copy-2" transform="translate(-206.000000, -470.000000)" fill-rule="nonzero" fill="#000000">
+            <g id="play" transform="translate(144.000000, 415.000000)">
+                <g id="play-arrow" transform="translate(62.000000, 55.000000)">
+                    <path d="M35.0127971,18.313411 L2.96160878,0.258876768 C1.64533821,-0.480009862 0,0.451629802 0,1.92940306 L0,38.0705969 C0,39.5483702 1.64533821,40.4800099 2.96160878,39.7411232 L35.0127971,21.686589 C36.3290676,20.9152557 36.3290676,19.0522976 35.0127971,18.313411 Z" id="Shape"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

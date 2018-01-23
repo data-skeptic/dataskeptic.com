@@ -252,7 +252,7 @@ module.exports = {
         flow.then(() => saveProposal(userData, fileName))
             .then((proposal) => {
                 const destination = EMAIL_ADDRESS;
-                const subject = '[Notification] New proposal';
+                const subject = '[Notification] New recording';
 
                 let message = generateProposalBody(req.body.type, userData);
 

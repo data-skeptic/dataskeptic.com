@@ -39,6 +39,7 @@ import CheckoutThankYouPage    from 'Checkout/Routes/ThankYouRoute/ThankYouRoute
 import ProposalsThankYouPage   from 'Proposals/Routes/ThankYou/ThankYouPage';
 import AudioExample            from 'Proposals/Routes/AudioExample';
 import PrivacyPageContainer    from 'Privacy/Containers/PrivacyPageContainer'
+import QuestionsContainer      from './Questions/Containers/QuestionsContainer'
 
 import AdminHome               from 'components/admin/AdminHome';
 import AdminCmsPending         from 'components/admin/AdminCmsPending';
@@ -149,6 +150,10 @@ export default (
 
         <Route path="/login" component={App}>
             <IndexRoute component={Login}/>
+        </Route>
+
+        <Route path="/questions" component={App}>
+            <IndexRoute component={QuestionsContainer}/>
         </Route>
 
         <Route path="/logout" component={App}>
