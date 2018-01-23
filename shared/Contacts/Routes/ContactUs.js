@@ -7,7 +7,7 @@ import axios from 'axios';
 
 import ContactFormContainer from '../Containers/ContactFormContainer/ContactFormContainer';
 import {changePageTitle} from '../../Layout/Actions/LayoutActions';
-import {formValueSelector} from 'redux-form';
+import {formValueSelector, reset} from 'redux-form';
 import {
     init,
     ready,
@@ -21,6 +21,7 @@ import {
 import {RECORDING} from "../../Proposals/Constants/CommentTypes";
 import Recorder, {steps} from '../../Recorder';
 import QuestionForm from "../../Questions/Forms/QuestionForm";
+import {submitCommentForm} from "../../Proposals/Actions/CommentBoxFormActions";
 
 class ContactUs extends React.Component {
     constructor(props) {
@@ -55,7 +56,6 @@ class ContactUs extends React.Component {
 
     recorderComplete = (id) => {
         this.props.dispatch(complete(id))
-        this.props.dispatch(completeRecording(id))
     }
 
     recorderError = (error) => {
@@ -63,9 +63,17 @@ class ContactUs extends React.Component {
     }
 
     questionSubmit = (data) => {
+        data.recording = this.state.submittedUrl;
+    	data.type = RECORDING;
         console.log(`question submit`)
         console.dir(data)
+    	this.props.dispatch(submitCommentForm(data))
     }
+
+    reset = () => {
+        this.setState({submittedUrl: ''});
+    	this.props.dispatch(reset(`question`))
+	}
 
     componentDidMount() {
         const {dispatch} = this.props;
@@ -206,14 +214,14 @@ class ContactUs extends React.Component {
 					</p>
                     <div>
                         <QuestionForm
-                            allowSubmit={!!confirmPolicy}
+                            allowSubmit={confirmPolicy }
+                            showSubmit={activeStep === 'REVIEW'}
                             initialValues={{
                                 confirmPolicy: true
                             }}
                             onSubmit={this.questionSubmit}
                         >
                             <Recorder
-                                key={RECORDING}
                                 activeStep={activeStep}
                                 errorMessage={errorMessage}
                                 ready={this.recordingReady}
@@ -226,6 +234,7 @@ class ContactUs extends React.Component {
                                 submittedUrl={submittedUrl}
                                 reset={this.reset}
                             />
+                            {activeStep === 'COMPLETE' && <p>Thanks for your question!</p>}
                         </QuestionForm>
                     </div>
 

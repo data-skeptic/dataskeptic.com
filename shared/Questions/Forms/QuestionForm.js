@@ -18,12 +18,13 @@ const QuestionForm = ({
                           submit,
                           complete,
                           submittedUrl,
-                          error
+                          error,
+                          showSubmit
                       }) => (
 
     <FormController
         name={`question`}
-        showSubmit={true}
+        showSubmit={showSubmit}
         invalid={!allowSubmit}
         submitValue={`Submit`}
         handleSubmit={handleSubmit}
