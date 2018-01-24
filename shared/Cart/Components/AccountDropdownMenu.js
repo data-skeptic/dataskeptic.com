@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import classNames from "classnames";
 import {Link} from "react-router";
+import NavLink from "../../components/NavLink";
 
 export default class AccountDropdownMenu extends Component {
 
@@ -38,10 +39,20 @@ export default class AccountDropdownMenu extends Component {
     }
 
     render() {
+        const {mobile, onClick} = this.props
         const {show} = this.state
 
+        if (mobile) {
+            return (
+                <div>
+                    <NavLink to="/membershipPortal" onClick={onClick}>Membership Portal</NavLink>
+                    <NavLink to="/logout" onClick={onClick}>Logout</NavLink>
+                </div>
+            )
+        }
+
         return (
-            <div className={ classNames('navlink-li-container dropdown', {'open': show} ) } innerRef={this.setWrapperRef}>
+            <div className={ classNames('navlink-li-container dropdown', {'open': show} ) } ref={this.setWrapperRef}>
                 <button className="btn btn-default dropdown-toggle navlink-btn"
                         type="button"
                         data-toggle="dropdown"

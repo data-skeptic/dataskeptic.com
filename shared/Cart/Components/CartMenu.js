@@ -4,12 +4,13 @@ import NavLink from '../../components/NavLink'
 import CartLink from './CartLink'
 import AccountDropdownMenu from "./AccountDropdownMenu";
 
-export const CartMenu = ({pathname, cartItemsCount, cartClick, cartButton = true, itemClick, loggedIn}) => (
+export const CartMenu = ({pathname, cartItemsCount, cartClick, cartButton = true, itemClick, mobile, loggedIn}) => (
     <div className="nav">
         {loggedIn
-            ? <AccountDropdownMenu onClick={itemClick}/>
+            ? <AccountDropdownMenu onClick={itemClick} mobile={mobile}/>
             : <NavLink active={pathname} to="/members" onClick={itemClick}><span className="membership-link">Membership</span></NavLink>
         }
+
         <NavLink active={pathname} to="/store" onClick={itemClick}>Store</NavLink>
 
         { cartButton ?

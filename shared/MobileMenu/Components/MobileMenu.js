@@ -4,7 +4,7 @@ import Menu from '../../components/Menu'
 import NavLink from '../../components/NavLink'
 import CartMenu from '../../Cart/Components/CartMenu'
 
-export const MobileMenu = ({ pathname, visible = false, itemClick }) => {
+export const MobileMenu = ({ pathname, visible = false, itemClick, loggedIn }) => {
     const classList = 'mobile-menu ' + (visible ? 'overlay': '');
 
     return (
@@ -15,9 +15,12 @@ export const MobileMenu = ({ pathname, visible = false, itemClick }) => {
                 </Menu>
             </div>
             <div className="second">
-                <CartMenu pathname={pathname}
-                          itemClick={itemClick}
-                          cartButton={false}
+                <CartMenu
+                    pathname={pathname}
+                    itemClick={itemClick}
+                    cartButton={false}
+                    loggedIn={loggedIn}
+                    mobile={true}
                 />
             </div>
         </div>
