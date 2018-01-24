@@ -3,6 +3,8 @@ import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 
 import {changePageTitle} from '../Layout/Actions/LayoutActions';
+import LoginForm from "./LoginForm";
+import {Link} from "react-router";
 
 class Login extends Component {
     constructor() {
@@ -27,8 +29,12 @@ class Login extends Component {
         }
     }
 
-    login() {
+    followLogin() {
         window.location.href = '/api/v1/auth/login/google/'
+    }
+
+    login = (data) => {
+        alert(JSON.stringify(data))
     }
 
     render() {
@@ -42,7 +48,18 @@ class Login extends Component {
                         <div>
                             <h3>Membership login</h3>
                             <p>For people with active Data Skeptic memberships, please log in via the botton below to manage your account and access exclusive features.</p>
-                            <button className="btn btn-primary" onClick={this.login}>Log in</button>
+
+                            <div className="login-form-area">
+                                <div className="row"><LoginForm btnWrapperClasses="col-md-12" onSubmit={this.login}/></div>
+                                <div className="or">
+                                    <hr/>
+                                    <span>or</span>
+                                </div>
+                                <div className="buttons col-xs-12 col-sm-12">
+                                    <button className="btn google-btn" onClick={this.followLogin}>Log in with <b>Google</b></button>
+                                    <Link className="btn signup-btn" to="">Sign Up</Link>
+                                </div>
+                            </div>
                         </div>
                         )
                         : (
