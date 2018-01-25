@@ -57,7 +57,8 @@ class MembershipPortal extends Component {
             return (
                 <div className="member-not-found-outer">
                     <div className="member-not-found">
-                        <h2>Membership not found</h2>
+                        <h2>Logged in!</h2>
+                        <p>You are now logged in to dataskeptic.com.  Today, the benefits of your account are only useful if you're a Data Skeptic Member, although features for everyone will come soon.</p>
                         <p>We are unable to connect the account you logged in with ({user.email}) to an active membership account.  There are two possible reasons for this:</p>
                         <p><b>A)</b> You are not a Data Skeptic Member.  Easy solution: <a href="https://dataskeptic.com/members">sign up here</a>.</p>
                         <p><b>B)</b> Our database does not have your login account linked to your membership account.  In this case, please email <a href="mailto:orders@dataskeptic.com">orders@dataskeptic.com</a> and let us know what email account we should link you to.</p>
