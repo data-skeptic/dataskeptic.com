@@ -19,7 +19,10 @@ class Home extends Component {
       var dispatch = this.props.dispatch
       const {title} = Home.getPageMeta()
       dispatch(changePageTitle(title))
-      dispatch({type: "CMS_GET_HOMEPAGE_CONTENT", payload: {dispatch} })
+
+      if (!this.props.cms.get('home_loaded')) {
+          dispatch({type: "CMS_GET_HOMEPAGE_CONTENT", payload: {dispatch}})
+      }
   }
 
   static getPageMeta() {

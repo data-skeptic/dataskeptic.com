@@ -1,69 +1,20 @@
 import React, { Component }  from 'react'
-import PropTypes from 'prop-types'
 import { ContentContainer, BlogContainer, PodContainer } from './style'
 import Feature from './Feature'
 import Blog from './Blog'
 import Podcast from './Podcast'
 import { connect } from 'react-redux'
 
-import { GET_FEATURES, GET_FEATURES_PENDING } from '../../../actions/home'
-import { get_contributors }  from '../../daos/serverInit'
-
-let featured_blog = {}
-let blogList = []
-let latest_episode = {}
-
 class Content extends Component {
-  static propTypes = {
-    pageType: PropTypes.string,
-    features: PropTypes.object,
-    getFeatures: PropTypes.func
-  }
 
-  constructor (props) {
-    super(props)
-    this.state = {
-      twitterAuthor: null
-    }
-  }
-
-  componentDidMount () {
-    const { pageType, getFeatures } = this.props
-    getFeatures(pageType)
-  }
-
-  componentWillReceiveProps (nextProps) {
-    const { features } = nextProps
-    blogList = []
-    featured_blog = features.featured_blog
-    console.log('featured_blog -- homepage', featured_blog)
-    blogList.push(features.featured_2)
-    blogList.push(features.featured_3)
-    latest_episode = features.latest_episode
-  }
+  getContributor = ({ author='' }) => this.props.contributors && this.props.contributors[author.toLowerCase()]
 
   render () {
-    var that = this
-    if ( featured_blog !== undefined) {
-      if ( featured_blog.author !== undefined ) {
-        if ( this.state.twitterAuthor === null) {
-          var author = featured_blog.author.toLowerCase();
-          var promise = get_contributors()
-          promise.then(function(contributors) {
-            var contentKeys = Object.keys(contributors);
-            for ( var i=0; i<contentKeys.length; i++) {
-              if ( contributors[contentKeys[i]].author === author ) {
-                that.setState({twitterAuthor: contributors[contentKeys[i]]})
-                break
-              }
-            }
-          })
-        }
-      }
-    }
+    const { featured_2, featured_3, featured_blog, latest_episode } = this.props
+    const blogList = [featured_2, featured_3]
     return (
       <ContentContainer>
-        <Feature feature_blog={featured_blog} twitterAuthor={this.state.twitterAuthor}/>
+        <Feature feature_blog={featured_blog} twitterAuthor={this.getContributor(featured_blog)}/>
         <BlogContainer className="col-xs-12 col-sm-12 col-md-7">
           <Blog blogList={blogList}/>
         </BlogContainer>
@@ -73,21 +24,14 @@ class Content extends Component {
       </ContentContainer>
     )
   }
+
 }
 
-function mapStateToProps (state, props) {
-  const { features } = state.features
-  return { features }
-}
-
-function mapDispatchToProps (dispatch, props) {
-  return {
-    getFeatures: async (pageType) => {
-      dispatch({ type: GET_FEATURES_PENDING, payload: pageType })
-      const res = await GET_FEATURES(pageType)
-      return dispatch(res)
-    }
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Content)
+export default connect((state) => ({
+    home_loaded: state.cms.get('home_loaded'),
+    featured_blog: state.cms.get('featured_blog').toJS(),
+    featured_2: state.cms.get('featured_blog2').toJS(),
+    featured_3: state.cms.get('featured_blog3').toJS(),
+    latest_episode: state.cms.get('latest_episode').toJS(),
+    contributors: state.site.get('contributors').toJS()
+}))(Content)

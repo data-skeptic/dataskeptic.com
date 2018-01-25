@@ -36,7 +36,7 @@ class Feature extends Component {
           <Link to={href}><SubTitle>{feature_blog.title}</SubTitle></Link>
           <Desc>{feature_blog.abstract}</Desc>
           <BlogViewMore to={href}>View More</BlogViewMore>
-          { twitterAuthor !== null && 
+          { twitterAuthor &&
             <UserBox>
               <UserImgLink href={'https://twitter.com/' + twitterAuthor.twitter}><UserImg src={twitterAuthor.img} /></UserImgLink>
               <UserDetail href={'https://twitter.com/' + twitterAuthor.twitter}>
