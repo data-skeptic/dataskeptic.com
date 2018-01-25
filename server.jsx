@@ -53,10 +53,12 @@ import { get_podcasts_from_cache } from 'utils/redux_loader';
 import redirects_map               from './redirects';
 
 import {reducer as formReducer} from 'redux-form'
+import axios from "axios";
 
 console.log("server.jsx : starting")
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
 const app = express()
 
@@ -382,9 +384,19 @@ function inject_years(store, my_cache) {
     store.dispatch({type: "SET_YEARS", payload: years})
 }
 
-function inject_homepage(store, my_cache, pathname) {
-    var episode = my_cache.episodes_map["latest"]
-    install_episode(store, episode)
+function getFeaturesAPI(pageType) {
+    return axios.get(`${base_url}/cms${pageType ? '/' + pageType : ''}`)
+}
+
+async function inject_homepage(store, my_cache, pathname) {
+    const res = await getFeaturesAPI("homepage")
+    store.dispatch({type: "CMS_INJECT_HOMEPAGE_CONTENT", payload: { data: res.data }})
+
+    const guid = res.data.latest_episode.guid
+    let episode = my_cache.episodes_map[guid]
+
+    store.dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
+    store.dispatch({type: "ADD_EPISODES", payload: [episode]})
 }
 
 function inject_products(store, my_cache, pathname) {
@@ -402,7 +414,7 @@ function install_episode(store, episode) {
     store.dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
 }
 
-function updateState(store, pathname, req) {
+async function updateState(store, pathname, req) {
     // TODO: find a way to better sync this section with each page's componentWillMount
     console.log("server.jsx : updateState for " + pathname)
     inject_folders(store, Cache)
@@ -444,7 +456,7 @@ function updateState(store, pathname, req) {
     }
     
     if (pathname === "" || pathname === "/") {
-        inject_homepage(store, Cache, pathname)
+        await inject_homepage(store, Cache, pathname)
     }
     if (pathname.indexOf('/blog') === 0) {
     }
@@ -551,7 +563,7 @@ const renderPage = (req, res) => {
 
     const location = createLocation(req.url);
 
-    match({routes, location}, (err, redirectLocation, renderProps) => {
+    match({routes, location}, async (err, redirectLocation, renderProps) => {
         if (err) {
             console.error(err);
             return res.status(500).end('Internal server error');
@@ -562,7 +574,7 @@ const renderPage = (req, res) => {
         }
 
         let store = applyMiddleware(thunk, promiseMiddleware)(createStore)(reducer);
-        updateState(store, location.pathname, req);
+        await updateState(store, location.pathname, req);
 
         fetchComponentData(store.dispatch, renderProps.components, renderProps.params)
             .then(() => renderView(store, renderProps, location))
