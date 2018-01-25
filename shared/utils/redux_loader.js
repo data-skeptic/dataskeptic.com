@@ -93,12 +93,8 @@ export function get_podcasts(dispatch, pathname) {
 		console.log("Getting episodes")
 		axios
 			.get("/api/episodes/list?year=" + year)
-	  		.then(function(result) {
-	  			return getEpisodesData(result["data"])
-			})
+	  		.then((result) => getEpisodesData(result["data"]))
 			.then((episodes) => {
-                console.dir(`get_podcasts`)
-                console.dir(episodes)
                 dispatch({type: "ADD_EPISODES", payload: episodes})
 			})
 			.catch((err) => {
