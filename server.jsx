@@ -252,12 +252,32 @@ app.use('/api/v1/', api(() => Cache));
 const docClient = new aws.DynamoDB.DocumentClient();
 
 function api_router(req, res) {
+    console.log('!req!')
+    console.log(req)
     if (req.url.indexOf('/api/slack/join') == 0) {
         var req = req.body
         join_slack(req, res, slack_key)
         return true
     } else if (req.url.indexOf('/api/messages') == 0) {
         console.log("here!")
+        var p = req.url
+        var Http = require('http');
+        var req = Http.request({
+            host: 'bot.dataskeptic.com',
+            // proxy IP
+            port: 3978,
+            // proxy port
+            method: 'GET',
+            path: p
+            }, function (res) {
+                console.log('res')
+                console.log(res)
+                res.on('data', function (data) {
+                console.log(data.toString());
+            });
+        });
+        req.end();
+/*
         var tunnelingAgent = tunnel.httpOverHttp({
           maxSockets: 5,
           proxy: {
@@ -275,6 +295,7 @@ function api_router(req, res) {
           agent: tunnelingAgent
         });
         res.status(200).end(req)
+*/
     } else if (req.url.indexOf('/api/v1/proposals/files') == 0) {
         uploadProposalFiles(req, res, aws_proposals_bucket);
         return true;
@@ -291,7 +312,7 @@ function api_router(req, res) {
         getTempFile(req, res, aws_proposals_bucket);
         return true;
     }
-    if (req.url.indexOf('/api/refresh') == 0) {
+    else if (req.url.indexOf('/api/refresh') == 0) {
         doRefresh()
         return res.status(200).end(JSON.stringify({'status': 'ok'}))
     }
