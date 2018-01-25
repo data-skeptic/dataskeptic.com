@@ -384,16 +384,21 @@ function inject_years(store, my_cache) {
     store.dispatch({type: "SET_YEARS", payload: years})
 }
 
-function getFeaturesAPI(pageType) {
-    return axios.get(`${base_url}/cms${pageType ? '/' + pageType : ''}`)
-}
+const getFeaturesAPI = (pageType) => axios.get(`${base_url}/cms${pageType ? '/' + pageType : ''}`)
+const getEpisodeData = (guid) => axios.get(`${base_url}/blog/list?guid=${guid}`).then((res) => res.data[0])
 
 async function inject_homepage(store, my_cache, pathname) {
     const res = await getFeaturesAPI("homepage")
     store.dispatch({type: "CMS_INJECT_HOMEPAGE_CONTENT", payload: { data: res.data }})
 
     const guid = res.data.latest_episode.guid
-    let episode = my_cache.episodes_map[guid]
+    const episodeContent = my_cache.episodes_map[guid]
+    const episodeData = await getEpisodeData(guid)
+
+    const episode = {
+        ...episodeContent,
+        ...episodeData
+    }
 
     store.dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
     store.dispatch({type: "ADD_EPISODES", payload: [episode]})

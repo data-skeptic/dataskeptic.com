@@ -31,10 +31,10 @@ const BlogBox = props => {
                 <Link to={href}><ItemTitle>{item.title}</ItemTitle></Link>
                 <ItemDesc>{item.abstract}</ItemDesc>
                 <ViewMore to={href}>View More</ViewMore>
-                <Author>
+                {author && <Author>
                   <Avatar src={author.img} />
                   <Name>{author.prettyname}</Name>
-                </Author>
+                </Author>}
               </BlogItem>
             )
           }

@@ -31,6 +31,18 @@ const defaultState = Immutable.fromJS(init);
 
 const s3 = new aws.S3()
 
+const getEpisode = async (guid) => {
+    const [episodeContent, episodeData] = await Promise.all([
+        axios.get(`/api/episodes/get/${guid}`).then((res) => res.data),
+        axios.get(`${base_url}/blog/list?guid=${guid}`).then((res) => res.data[0])
+    ])
+
+    return {
+        ...episodeContent,
+        ...episodeData
+    }
+}
+
 export default function cmsReducer(state = defaultState, action) {
   var nstate = state.toJS()
   switch(action.type) {
@@ -194,16 +206,11 @@ export default function cmsReducer(state = defaultState, action) {
         nstate.featured_blog2 = fb2
         nstate.featured_blog3 = fb3
         nstate.home_loaded = true
-        var url = "/api/episodes/get/" + le.guid
-        axios
-            .get(url)
-            .then(function(result) {
-                var episode = result.data
+
+        getEpisode(le.guid)
+            .then((episode) => {
                 dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
                 dispatch({type: "ADD_EPISODES", payload: [episode]})
-            })
-            .catch((err) => {
-                console.log(err)
             })
         break;
   }
