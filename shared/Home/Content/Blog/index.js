@@ -8,11 +8,14 @@ import {
   ItemDate,
   ItemTitle,
   ItemDesc,
-  ViewMore
+  ViewMore,
+  Author,
+  Avatar,
+  Name
 } from './style'
 
 const BlogBox = props => {
-  const { blogList } = props
+  const { blogList, getContributor } = props
   console.log('blogList - homepage', blogList)
   return (
     <div>
@@ -21,12 +24,17 @@ const BlogBox = props => {
           (item, index) => {
             console.log('prettyname', item.prettyname)
             let href = 'blog' + item.prettyname
+            const author = getContributor(item)
             return (
               <BlogItem key={index}>
                 <ItemDate>{moment(item.publish_date).format('MMMM D, Y')}</ItemDate>
                 <Link to={href}><ItemTitle>{item.title}</ItemTitle></Link>
                 <ItemDesc>{item.abstract}</ItemDesc>
                 <ViewMore to={href}>View More</ViewMore>
+                <Author>
+                  <Avatar src={author.img} />
+                  <Name>{author.prettyname}</Name>
+                </Author>
               </BlogItem>
             )
           }
@@ -42,11 +50,11 @@ class Blog extends Component {
   }
 
   render () {
-    const { blogList } = this.props
+    const { blogList, getContributor } = this.props
     return (
       <Container>
         <Title>From the Blog</Title>
-        <BlogBox blogList={blogList} />
+        <BlogBox blogList={blogList} getContributor={getContributor} />
       </Container>
     )
   }

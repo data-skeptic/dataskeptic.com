@@ -24,7 +24,7 @@ class Feature extends Component {
   }
   
   render () {
-    const { feature_blog, twitterAuthor } = this.props
+    const { feature_blog, author } = this.props
     var href = 'blog' + feature_blog.prettyname
     return (
       <Container>
@@ -36,12 +36,12 @@ class Feature extends Component {
           <Link to={href}><SubTitle>{feature_blog.title}</SubTitle></Link>
           <Desc>{feature_blog.abstract}</Desc>
           <BlogViewMore to={href}>View More</BlogViewMore>
-          { twitterAuthor &&
+          { author &&
             <UserBox>
-              <UserImgLink href={'https://twitter.com/' + twitterAuthor.twitter}><UserImg src={twitterAuthor.img} /></UserImgLink>
-              <UserDetail href={'https://twitter.com/' + twitterAuthor.twitter}>
-                <UserInfo>{twitterAuthor.prettyname}</UserInfo>
-                <UserInfo>@{twitterAuthor.twitter}</UserInfo>
+              <UserImgLink href={'https://twitter.com/' + author.twitter}><UserImg src={author.img} /></UserImgLink>
+              <UserDetail href={'https://twitter.com/' + author.twitter}>
+                <UserInfo>{author.prettyname}</UserInfo>
+                <UserInfo>@{author.twitter}</UserInfo>
               </UserDetail>
             </UserBox>
           }
