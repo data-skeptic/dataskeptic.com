@@ -15,7 +15,7 @@ class AdminMenu extends Component {
                                 <ul>
                                     <li><Link to="/admin/cms/pending">CMS pending</Link></li>
                                     <li><Link to="/admin/cms/recent">CMS recent</Link></li>
-                                    <li><Link to="/admin/cms/feature">Feature of the week</Link></li>
+                                    <li><Link to="/admin/cms/feature">Homepage</Link></li>
                                     <li><Link to="/admin/cms/add_related">Add Related Content</Link></li>
                                     <li><Link to="/admin/cms/recent_related">Recent Related Content</Link></li>
                                 </ul>
@@ -28,8 +28,8 @@ class AdminMenu extends Component {
                         <div className="fulldrop">
                             <div className="column">
                                 <ul>
-                                    <li><Link to="/admin/orders/new">New</Link></li>
-                                    <li><Link to="/admin/orders/processing">Processing</Link></li>
+                                    <li><Link to="/admin/orders/new">Recent</Link></li>
+                                    <li><Link to="/admin/orders/processing">Add Order</Link></li>
                                 </ul>
                             </div>
                         </div>

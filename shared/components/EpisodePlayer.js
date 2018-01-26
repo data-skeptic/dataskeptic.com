@@ -81,7 +81,7 @@ class EpisodePlayer extends Component {
       if (oplayer.episode.guid === episode.guid) {
         play_symb = <span>&#10073;&#10073;</span>
         if (!playback_loaded) {
-          play_symb = <span>?</span>
+          play_symb = <img src="/img/player-spinner.gif" width="14" height="14"/>
         }
       }
     }

@@ -71,8 +71,6 @@ export default function adminReducer(state = defaultState, action) {
   var apromise = undefined
   switch(action.type) {
     case 'SET_BOT':
-        console.log("SET_BOT")
-        console.log(action.payload)
         nstate.bot = action.payload.ison
     case 'SET_EMAIL_FROM':
     	nstate.from = action.payload
@@ -157,10 +155,8 @@ export default function adminReducer(state = defaultState, action) {
         var dispatch = action.payload
         nstate.order.spError = "Placing order..."
         var order = nstate.order
-        console.log(JSON.stringify(order))
         var ok_callback = function(r, info) {
             var resp = r['data']
-            console.log(resp)
             var errorMsg = "Success!"
             dispatch({type: "SET_ORDER_SP_ERROR_MSG", payload: errorMsg })
         }
@@ -193,39 +189,7 @@ export default function adminReducer(state = defaultState, action) {
             country_code,
             zipcode
         }
-        
-        var file_id = 37766873
-        var preview_url = "https://d1yg28hrivmbqm.cloudfront.net/files/57c/57cc770e861106c42055789e4b0bab4b_preview.png"
-        if (designId == "ai") {
-            file_id = 43205824
-            preview_url = "https://d1yg28hrivmbqm.cloudfront.net/files/6b4/6b496bab9e2bde219acbe29769e4732c_preview.png"
-        }
-
-        var product_name = "Data Skeptic t-shirt, size " + size
-
-        var files = [
-            {
-                id: file_id,
-                preview_url
-            }
-        ]
-
-        var items = [
-            {
-                variant_id, 
-                quantity, 
-                name: product_name, 
-                files
-            }
-        ]
-
-        console.log('printful_key')
-        console.log(printful_key)
-        console.log('customer')
-        console.log(customer)
-        console.log('items')
-        console.log(items)
-        place_order(printful_key, customer, items, ok_callback, error_callback)
+        place_order(printful_key, customer, designId, size, ok_callback, error_callback)
         break
     case 'INIT_ORDERS':
         var dispatch = action.payload.dispatch
@@ -317,13 +281,11 @@ export default function adminReducer(state = defaultState, action) {
         var i = 0
         while (i < nstate.relatedcontent.length) {
             var rc = nstate.relatedcontent[i]
-            console.log([rc, i, content_id])
             if (rc['content_id'] != content_id) {
                 nlist.push(rc)
             }
             i+=1
         }
-        console.log(nlist)
         nstate.relatedcontent = nlist
         var url = base_url + "/blog/relatedcontent/delete"
         axios

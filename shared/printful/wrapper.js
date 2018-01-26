@@ -1,29 +1,34 @@
 var PrintfulClient = require('./printfulclient')
 
-function place_order(printful_key, customer, items, ok_callback, error_callback) {
-  	var pf = new PrintfulClient(printful_key);
-    var item = items[0]
-    var variant_id = item['variant_id']
-    var oitem =     {
-      "variant_id": variant_id,
-      "quantity": item['quantity'],
-      "product": {"variant_id": variant_id, "product_id": 12},
-      "files": [
-        {
-          "id": 37766873,
-          "type": "default",
-          "filename": "t-shirt.png",
-          "dpi": 300,
-          "created": 1511289196,
-          "preview_url": "https://d1yg28hrivmbqm.cloudfront.net/files/57c/57cc770e861106c42055789e4b0bab4b_preview.png" 
-        }
-      ]
+function place_order(printful_key, customer, designId, size, ok_callback, error_callback) {
+    var confirm = 0
+    // https://www.printful.com/docs/orders
+    var variantMap = {
+                  "S": 474
+                , "M": 505
+                ,"L": 536
+                ,"XL": 567
+                ,"2XL": 598
+                ,"3XL": 629
+            }
+    var variant_id = variantMap[size]
+    var quantity = 1
+    var product_name = "Data Skeptic " + designId + " t-shirt, size " + size
+    if (designId == "ai") {
+      var url = "https://s3.amazonaws.com/dataskeptic.com/img/merch/printful-t-shirt-ai.png"
+    } else {
+      var url = "https://s3.amazonaws.com/dataskeptic.com/img/merch/printful-t-shirt-logo.png"
     }
-
+  	var pf = new PrintfulClient(printful_key);
+    var oitem = {
+      variant_id: variant_id,
+      quantity,
+      files: [{url}]
+    }
     var oitems = [oitem]
     var d = {
         recipient:  {
-            name         : customer.customer,
+            name         : customer.name,
             address1     : customer.address1,
             address2     : customer.address2,
             city         : customer.city,
@@ -37,7 +42,7 @@ function place_order(printful_key, customer, items, ok_callback, error_callback)
 
     pf.post('orders',
         d
-        ,{confirm: 1}
+        ,{confirm: confirm}
     ).success(ok_callback).error(error_callback);
 }
 

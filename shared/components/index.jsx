@@ -195,7 +195,7 @@ class MainView extends React.Component {
 
   render() {
     this.logPageView()
-    const {isMobileMenuVisible, admin, cart, isCartVisible} = this.props;
+    const {isMobileMenuVisible, admin, cart, isCartVisible, loggedIn} = this.props;
     const {showAds = true} = this.props.route;
     const {pathname} = this.props.location
     const itemsCount = getCartItemsCount(cart.toJS().cart_items);
@@ -204,8 +204,6 @@ class MainView extends React.Component {
     const { ready } = this.state
 
     var oadmin = admin.toJS()
-    console.log("@#@$$$$$@##")
-    console.log(oadmin)
     var cbc = <ChatBotContainer/>
     if (!oadmin['bot']) {
       cbc = <div></div>
@@ -219,6 +217,7 @@ class MainView extends React.Component {
                 pathname={pathname}
                 cartItemsCount={itemsCount}
                 visible={isMobileMenuVisible}
+                loggedIn={loggedIn}
             />
 
             <div className="row row-centered">
@@ -244,7 +243,8 @@ export default connect(
       admin: state.admin,
       isCartVisible: state.cart.getIn(['cart_visible']),
       site: state.site,
-      isMobileMenuVisible: state.layout.getIn(['isMobileMenuVisible'])
+      isMobileMenuVisible: state.layout.getIn(['isMobileMenuVisible']),
+      loggedIn: state.auth.getIn(['loggedIn']),
     }),
     dispatch => bindActionCreators({
       toggleMobileMenu,

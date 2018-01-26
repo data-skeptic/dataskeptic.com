@@ -42,6 +42,10 @@ export const Arrow = styled.div`
   padding-right: 11px;
   color: white;
   cursor: pointer;
+  
+  > img {
+    vertical-align: baseline;
+  }
 `
 
 export const PlayText = styled.span`

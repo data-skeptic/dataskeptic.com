@@ -13,13 +13,11 @@ import {
 
 const BlogBox = props => {
   const { blogList } = props
-  console.log('blogList - homepage', blogList)
   return (
     <div>
       {
         blogList.map(
           (item, index) => {
-            console.log('prettyname', item.prettyname)
             let href = 'blog' + item.prettyname
             return (
               <BlogItem key={index}>

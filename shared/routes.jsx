@@ -20,6 +20,7 @@ import Home                    from 'components/Home';
 import LightsOut               from 'components/LightsOut';
 import Loading                 from 'Common/Components/Loading.js';
 import Login                   from 'components/Login';
+import SignUp                  from 'components/SignUp';
 import Logout                  from 'components/Logout';
 import Menu                    from 'components/Menu';
 import Membership              from 'components/Membership';
@@ -39,6 +40,7 @@ import CheckoutThankYouPage    from 'Checkout/Routes/ThankYouRoute/ThankYouRoute
 import ProposalsThankYouPage   from 'Proposals/Routes/ThankYou/ThankYouPage';
 import AudioExample            from 'Proposals/Routes/AudioExample';
 import PrivacyPageContainer    from 'Privacy/Containers/PrivacyPageContainer'
+import QuestionsContainer      from './Questions/Containers/QuestionsContainer'
 
 import AdminHome               from 'components/admin/AdminHome';
 import AdminCmsPending         from 'components/admin/AdminCmsPending';
@@ -149,6 +151,14 @@ export default (
 
         <Route path="/login" component={App}>
             <IndexRoute component={Login}/>
+        </Route>
+
+        <Route path="/signup" component={App}>
+            <IndexRoute component={SignUp}/>
+        </Route>
+
+        <Route path="/questions" component={App}>
+            <IndexRoute component={QuestionsContainer}/>
         </Route>
 
         <Route path="/logout" component={App}>

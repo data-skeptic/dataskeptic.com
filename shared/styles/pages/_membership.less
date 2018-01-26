@@ -125,3 +125,52 @@
 .membership-link {
   color: #d2bf41;
 }
+
+.login-form-area {
+
+  max-width: 400px;
+  margin: 0px auto;
+  text-align: left;
+
+  > .row {
+    text-align: left;
+  }
+
+  .or {
+    position: relative;
+    text-align: center;
+
+    > span {
+      top: -11px;
+      margin-left: -8px;
+      padding: 0px 4px;
+      background: #fff;
+      position: absolute;
+    }
+  }
+
+  .buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .google-btn {
+      flex: 1 1 auto;
+      margin-right: 4px;
+      background: #DB4438;
+      color: #fff;
+    }
+
+    .signup-btn {
+      flex: 1 1 auto;
+      margin-left: 4px;
+      background: #f0d943;
+      color: #333;
+
+      &:hover {
+        border-bottom-color: transparent;
+      }
+    }
+  }
+
+}

@@ -53,12 +53,16 @@ import { get_podcasts_from_cache } from 'utils/redux_loader';
 import redirects_map               from './redirects';
 
 import {reducer as formReducer} from 'redux-form'
+import axios from "axios"
+
 import tunnel from 'tunnel'
 import http from 'http'
+
 
 console.log("server.jsx : starting")
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
 const app = express()
 
@@ -251,51 +255,30 @@ app.use('/api/v1/', api(() => Cache));
 
 const docClient = new aws.DynamoDB.DocumentClient();
 
+console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+
 function api_router(req, res) {
-    console.log('!req!')
-    console.log(req)
+    console.log("##########################")
     if (req.url.indexOf('/api/slack/join') == 0) {
         var req = req.body
         join_slack(req, res, slack_key)
         return true
     } else if (req.url.indexOf('/api/messages') == 0) {
-        console.log("here!")
         var p = req.url
-        var Http = require('http');
-        var req = Http.request({
-            host: 'bot.dataskeptic.com',
-            // proxy IP
+        var options = {
+            hostname: 'bot.dataskeptic.com',
             port: 3978,
-            // proxy port
-            method: 'GET',
-            path: p
-            }, function (res) {
-                console.log('res')
-                console.log(res)
-                res.on('data', function (data) {
-                console.log(data.toString());
-            });
-        });
-        req.end();
-/*
-        var tunnelingAgent = tunnel.httpOverHttp({
-          maxSockets: 5,
-          proxy: {
-            host: '/api/messages',
-            port: 3978,
-            headers: {
-              'User-Agent': 'dataskeptic.com bot proxy'
-            }
-          }
-        });
-
-        var req = http.request({
-          host: 'bot.dataskeptic.com',
-          port: 3978,
-          agent: tunnelingAgent
-        });
-        res.status(200).end(req)
-*/
+            path: req.url,
+            method: 'POST'
+        };
+        console.log("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
+        var proxy = http.request(options, function (presponse) {
+            presponse.pipe(res, {end: true})
+        })
+        console.log("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
+        req.pipe(proxy, {end: true})
+        console.log("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
+        return true
     } else if (req.url.indexOf('/api/v1/proposals/files') == 0) {
         uploadProposalFiles(req, res, aws_proposals_bucket);
         return true;
@@ -424,6 +407,21 @@ function inject_years(store, my_cache) {
     store.dispatch({type: "SET_YEARS", payload: years})
 }
 
+function getFeaturesAPI(pageType) {
+    return axios.get(`${base_url}/cms${pageType ? '/' + pageType : ''}`)
+}
+
+async function inject_homepage(store, my_cache, pathname) {
+    const res = await getFeaturesAPI("homepage")
+    store.dispatch({type: "CMS_INJECT_HOMEPAGE_CONTENT", payload: { data: res.data }})
+
+    const guid = res.data.latest_episode.guid
+    let episode = my_cache.episodes_map[guid]
+
+    store.dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
+    store.dispatch({type: "ADD_EPISODES", payload: [episode]})
+}
+
 function inject_products(store, my_cache, pathname) {
     var products = my_cache.products['items']
     console.log("inject_products " + products.length)
@@ -435,7 +433,11 @@ function inject_podcast(store, my_cache, pathname) {
     store.dispatch({type: "ADD_EPISODES", payload: episodes})
 }
 
-function updateState(store, pathname, req) {
+function install_episode(store, episode) {
+    store.dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
+}
+
+async function updateState(store, pathname, req) {
     // TODO: find a way to better sync this section with each page's componentWillMount
     console.log("server.jsx : updateState for " + pathname)
     inject_folders(store, Cache)
@@ -458,25 +460,20 @@ function updateState(store, pathname, req) {
         });
     }
 
-    for (var k of Object.keys(Cache)) {
-        console.log(["Cache", k, typeof(Cache[k])])
-    }
     var bot = Cache.bot
-    console.log(["bot", bot])
     if (bot) {
         store.dispatch({type: "SET_BOT", payload: bot})
     }
     var contributors = Cache.contributors
     if (!contributors || contributors.length == 0) {
-        console.log("server.jsx : Loading contributors")
         var promise = get_contributors()
         promise.then(function(contributors) {
-            console.log(contributors)
             store.dispatch({type: "SET_CONTRIBUTORS", payload: contributors});
         })
     }
     
     if (pathname === "" || pathname === "/") {
+        await inject_homepage(store, Cache, pathname)
     }
     if (pathname.indexOf('/blog') === 0) {
     }
@@ -583,7 +580,7 @@ const renderPage = (req, res) => {
 
     const location = createLocation(req.url);
 
-    match({routes, location}, (err, redirectLocation, renderProps) => {
+    match({routes, location}, async (err, redirectLocation, renderProps) => {
         if (err) {
             console.error(err);
             return res.status(500).end('Internal server error');
@@ -594,7 +591,7 @@ const renderPage = (req, res) => {
         }
 
         let store = applyMiddleware(thunk, promiseMiddleware)(createStore)(reducer);
-        updateState(store, location.pathname, req);
+        await updateState(store, location.pathname, req);
 
         fetchComponentData(store.dispatch, renderProps.components, renderProps.params)
             .then(() => renderView(store, renderProps, location))

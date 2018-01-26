@@ -13,6 +13,7 @@ const config = require('../../config/config.json');
 var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
 const init = {
+    "home_loaded": false,
     "featured_blog": {},
     "featured_blog2": {},
     "featured_blog3": {},
@@ -184,7 +185,6 @@ export default function cmsReducer(state = defaultState, action) {
         var payload = action.payload
         var data = payload.data
         var dispatch = payload.dispatch
-        console.log('CMS_INJECT_HOMEPAGE_CONTENT')
         var le = data['latest_episode']
         var fb = data['featured_blog']
         var fb2 = data['featured_2']
@@ -193,7 +193,7 @@ export default function cmsReducer(state = defaultState, action) {
         nstate.featured_blog = fb
         nstate.featured_blog2 = fb2
         nstate.featured_blog3 = fb3
-        
+        nstate.home_loaded = true
         var url = "/api/episodes/get/" + le.guid
         axios
             .get(url)

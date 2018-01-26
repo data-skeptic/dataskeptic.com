@@ -5,11 +5,9 @@
 .header {
   background: #2D1454;
   height: 80px;
-  overflow: hidden;
 }
 
 .header .nav {
-  overflow: hidden;
   text-align: center;
 }
 
@@ -37,24 +35,56 @@
   margin-right: 0 !important;
 }
 
-.header .nav .navlink-li-container a {
-  display: block;
-  padding: 28px 0;
-  list-style: none;
-  text-decoration: none;
-  border-bottom: 2px transparent solid;
-  color: #FFFFFF;
+.header .nav .navlink-li-container {
+  .navlink-btn {
+    padding: 28px 0;
+    background: transparent;
+    border: none;
+  }
+
+  &.dropdown {
+    .dropdown-menu {
+      margin-top: -20px;
+      background-color: rgba(46, 20, 83, 0.9);
+
+      .divider {
+        background-color: #3d2660;
+      }
+
+      a {
+        color: #fff;
+        border: 0px;
+
+        &:hover,
+        &:focus {
+          background-color: transparent;
+        }
+      }
+    }
+  }
 }
 
-.header .nav .navlink-li-container a:hover {
-  color: #f0e8b4;
-  border-bottom-color: #f0e8b4;
+.header .nav .navlink-li-container {
+  > a {
+    display: block;
+    padding: 28px 0;
+    list-style: none;
+    text-decoration: none;
+    border-bottom: 2px transparent solid;
+    color: #FFFFFF;
+
+    &:hover {
+      color: #f0e8b4;
+      border-bottom-color: #f0e8b4;
+    }
+
+    &.menu-active {
+      color: #F0D943;
+      border-bottom-color: #F0D943;
+    }
+  }
 }
 
-.header .nav .navlink-li-container a.menu-active {
-  color: #F0D943;
-  border-bottom-color: #F0D943;
-}
 
 .header .mainnav {
   width: 456px;

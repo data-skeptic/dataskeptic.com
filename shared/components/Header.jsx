@@ -54,7 +54,7 @@ class Header extends React.Component {
 	}
 
 	render() {
-		const {pathname, isMobileMenuVisible, cart} = this.props
+		const {pathname, isMobileMenuVisible, cart, loggedIn} = this.props
 		const itemsCount = getCartItemsCount(cart.toJS().cart_items);
 		const classList = this.getClassList({ isMobileMenuVisible });
 
@@ -62,9 +62,11 @@ class Header extends React.Component {
 			<div className={classList}>
 				<div className="hidden-xs desktop">
 					<div className="cart-menu pull-right">
-						<CartMenu pathname={pathname}
-								  cartItemsCount={itemsCount}
-								  cartClick={this.onCartClick}
+						<CartMenu
+                            loggedIn={loggedIn}
+							pathname={pathname}
+							cartItemsCount={itemsCount}
+							cartClick={this.onCartClick}
 						/>
 					</div>
 					<div className="cart-menu pull-right">
@@ -102,6 +104,7 @@ class Header extends React.Component {
 
 export default connect(
 	state => ({
+        loggedIn: state.auth.getIn(['loggedIn']),
 		isMobileMenuVisible: state.layout.getIn(['isMobileMenuVisible']),
 		cart: state.cart
 	}),

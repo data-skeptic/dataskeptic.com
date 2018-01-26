@@ -105,7 +105,7 @@ class RecorderFlowContainer extends Component {
 
     componentDidMount() {
         this.audioController = ReactDOM.findDOMNode(this.refs.listen_controller);
-        this.audioContext = getAudioContext()
+        this.audioContext = this.audioContext || getAudioContext()
     }
 
     componentWillReceiveProps(nextProps) {
