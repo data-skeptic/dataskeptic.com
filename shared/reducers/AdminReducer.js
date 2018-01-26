@@ -4,7 +4,6 @@ import querystring from 'querystring'
 import axios from "axios"
 import snserror from '../SnsUtil'
 import PrintfulClient from '../printful/printfulclient'
-import place_order from '../printful/wrapper'
 
 var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
 
@@ -155,18 +154,7 @@ export default function adminReducer(state = defaultState, action) {
         var dispatch = action.payload
         nstate.order.spError = "Placing order..."
         var order = nstate.order
-        var ok_callback = function(r, info) {
-            var resp = r['data']
-            var errorMsg = "Success!"
-            dispatch({type: "SET_ORDER_SP_ERROR_MSG", payload: errorMsg })
-        }
-
-        var error_callback = function(err) {
-            console.log("api error")
-            var jstr = JSON.stringify(err)
-            console.log(jstr)
-            dispatch({type: "SET_ORDER_SP_ERROR_MSG", payload: jstr })
-        }
+        console.log(JSON.stringify(order))
 
         var name         = order['customerName']
         var address1     = order['address1']
@@ -175,10 +163,11 @@ export default function adminReducer(state = defaultState, action) {
         var state        = order['state']
         var country_code = order['country']
         var zipcode      = order['zipcode']
-        var quantity     = parseInt(order['quantity'])
-        var variant_id   = order['variant_id']
         var size         = order['size']
         var designId     = order['designId']
+
+        var quantity     = parseInt(order['quantity'])
+        var variant_id   = order['variant_id']
 
         var customer = {
             name,
@@ -189,7 +178,19 @@ export default function adminReducer(state = defaultState, action) {
             country_code,
             zipcode
         }
-        place_order(printful_key, customer, designId, size, ok_callback, error_callback)
+        var url = "/api/store/order/add"
+        var payload = {customer, designId, size}
+        axios
+            .post(url, payload)
+            .then(function(result) {
+                console.log(result)
+                dispatch({type: "SET_ORDER_SP_ERROR_MSG", payload: result['data']['msg'] })
+            })
+            .catch((err) => {
+                console.log(err)
+                var jstr = JSON.stringify(err)
+                dispatch({type: "SET_ORDER_SP_ERROR_MSG", payload: jstr })
+            })
         break
     case 'INIT_ORDERS':
         var dispatch = action.payload.dispatch

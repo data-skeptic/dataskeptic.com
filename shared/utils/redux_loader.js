@@ -1,6 +1,10 @@
 import axios from "axios"
 import contact_form_send from '../daos/contact_form_send'
 
+var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
+const base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
+
+
 export function clearEpisode(dispatch) {
 	dispatch({type: "CLEAR_FOCUS_EPISODE"})
 }
@@ -66,6 +70,18 @@ export function get_podcasts_from_cache(my_cache, pathname) {
 	return episodes
 }
 
+const getEpisodeData = (guid) => axios.get(`${base_url}/blog/list?guid=${guid}`).then((res) => res.data[0])
+
+function getEpisodesData(episodes) {
+	return Promise.all(episodes.map(ep => getEpisodeData(ep.guid)))
+		.then((episodesData) => {
+			return episodes.map((ep, index) => ({
+				...ep,
+				...episodesData[index]
+			}))
+		})
+}
+
 export function get_podcasts(dispatch, pathname) {
 	var year = year_from_path(pathname)
 	var my_cache = global.my_cache
@@ -76,9 +92,9 @@ export function get_podcasts(dispatch, pathname) {
 		console.log("Getting episodes")
 		axios
 			.get("/api/episodes/list?year=" + year)
-	  		.then(function(result) {
-	  			var episodes = result["data"]
-				dispatch({type: "ADD_EPISODES", payload: episodes})
+	  		.then((result) => getEpisodesData(result["data"]))
+			.then((episodes) => {
+                dispatch({type: "ADD_EPISODES", payload: episodes})
 			})
 			.catch((err) => {
 				console.log(err)

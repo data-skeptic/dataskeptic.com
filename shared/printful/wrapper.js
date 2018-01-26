@@ -40,7 +40,7 @@ function place_order(printful_key, customer, designId, size, ok_callback, error_
     }
     console.log(JSON.stringify(d))
 
-    pf.post('orders',
+    return pf.post('orders',
         d
         ,{confirm: confirm}
     ).success(ok_callback).error(error_callback);
