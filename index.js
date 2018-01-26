@@ -69,6 +69,7 @@ var launch_with_ssl = function() {
 		res.end()
 	}).listen(80, '0.0.0.0')
 
+    recordingServer(server)
 	console.log("Attempt to load SSL 3")
 }
 
