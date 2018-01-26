@@ -464,11 +464,7 @@ async function updateState(store, pathname, req) {
         });
     }
 
-    for (var k of Object.keys(Cache)) {
-        console.log(["Cache", k, typeof(Cache[k])])
-    }
     var bot = Cache.bot
-    console.log(["bot", bot])
     if (bot) {
         store.dispatch({type: "SET_BOT", payload: bot})
     }
