@@ -204,8 +204,6 @@ class MainView extends React.Component {
     const { ready } = this.state
 
     var oadmin = admin.toJS()
-    console.log("@#@$$$$$@##")
-    console.log(oadmin)
     var cbc = <ChatBotContainer/>
     if (!oadmin['bot']) {
       cbc = <div></div>
