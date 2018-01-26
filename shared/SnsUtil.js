@@ -34,6 +34,7 @@ function snserror(location, msg, topic) {
 }
 
 function snsalert(details, msg, topic) {
+	console.log("snsalert: " + msg)
 	if (topic == undefined) {
 		topic = "ds-error"
 	}

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import isUndefined from 'lodash/isUndefined';
 import { redirects_map } from '../../../redirects';
 import {get_podcasts_by_guid} from '../../utils/redux_loader'
-import snserror from '../../SnsUtil'
+import {snserror} from '../../SnsUtil'
 
 import NotFound from '../../NotFound/Components/NotFound'
 import BlogTopNav from "../Components/BlogTopNav"

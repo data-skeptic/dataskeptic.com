@@ -256,25 +256,31 @@ app.use('/api/v1/', api(() => Cache));
 
 const docClient = new aws.DynamoDB.DocumentClient();
 
-console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-
 function api_router(req, res) {
-    console.log("##########################")
     if (req.url.indexOf('/api/slack/join') == 0) {
         var req = req.body
         join_slack(req, res, slack_key)
         return true
-    } else if (req.url.indexOf('/api/messages') == 0) {
+    } else if (req.url
+        .indexOf('/api/messages') == 0) {
+        console.log(Object.keys(req))
         var p = req.url
+        var post_data = req.body
+        var pd = JSON.stringify(post_data)
         var options = {
             hostname: 'bot.dataskeptic.com',
             port: 3978,
             path: req.url,
-            method: 'POST'
+            method: 'POST',
+            headers: req.headers
         };
         console.log("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
         var proxy = http.request(options, function (presponse) {
             presponse.pipe(res, {end: true})
+        })
+        proxy.write(pd)
+        proxy.on('error', function(err) {
+            console.log(err)
         })
         console.log("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
         req.pipe(proxy, {end: true})
