@@ -18,6 +18,7 @@ import bodyParser                from 'body-parser'
 import compression               from 'compression';
 import {feed_uri}                from 'daos/episodes'
 import {
+    apiMemberFeed,
     loadEpisodes,
     load,
     get_contributors,
@@ -142,11 +143,12 @@ const doRefresh = (store) => {
 
     console.log("-[Refreshing episodes]-");
     return loadEpisodes(env)
-        .then(function ({episodes_map, episodes_list, episodes_content}, guid) {
+        .then(function ({episodes_map, episodes_list, episodes_content, member_feed}) {
             console.log("-[Refreshing episodes]-");
-            Cache.episodes_map = episodes_map;
-            Cache.episodes_list = episodes_list;
-            Cache.episodes_content = episodes_content;
+            Cache.episodes_map = episodes_map
+            Cache.episodes_list = episodes_list
+            Cache.episodes_content = episodes_content
+            Cache.member_feed = member_feed
             return getProducts(store, env)
         })
         .then((products) => {
@@ -286,6 +288,9 @@ function api_router(req, res) {
         req.pipe(proxy, {end: true})
         console.log("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
         return true
+    } else if (req.url.indexOf('/api/members/feed') == 0) {
+        apiMemberFeed(req, res, Cache.member_feed)
+        return true;
     } else if (req.url.indexOf('/api/v1/proposals/files') == 0) {
         uploadProposalFiles(req, res, aws_proposals_bucket);
         return true;
