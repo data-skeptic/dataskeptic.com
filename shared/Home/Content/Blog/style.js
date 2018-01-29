@@ -78,3 +78,20 @@ export const ViewMore = styled(Link)`
     transform: rotate(45deg);
   }
 `
+
+export const Author = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  padding-top: 16px;
+`
+
+export const Avatar = styled.img`
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+`
+
+export const Name = styled.div`
+  padding-left: 12px;
+`

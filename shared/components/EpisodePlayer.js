@@ -1,12 +1,8 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux';
 import moment from 'moment';
-
+import styled from 'styled-components'
 import {Link} from 'react-router';
-
-import Loading from "../Common/Components/Loading"
-import Error from "../Common/Components/Error"
-import {loadEpisode, clearEpisode} from "../utils/redux_loader"
 
 import {
   Container,
@@ -22,6 +18,8 @@ import {
   ItemTitle,
   ItemDesc
  } from '../../shared/Home/Content/Blog/style'
+
+import GuestImage from "./GuestImage"
 
 class EpisodePlayer extends Component {
   constructor(props) {
@@ -89,6 +87,9 @@ class EpisodePlayer extends Component {
     var link = episode.link
     var i = link.indexOf('/blog/')
     link = link.substring(i, link.length)
+
+    const guests = episode.related && episode.related.filter((r) => r.type === 'person')
+
     return (
     
       <PodcastBox>
@@ -100,10 +101,21 @@ class EpisodePlayer extends Component {
           <PlayText>{oplayer.episode.duration}</PlayText>
         </PlayBox>
         { this.getViewMoreTextDiv(desc) }
+        <Guests>
+            {guests && guests.map((g, i) => <GuestImage key={i} {...g} />)}
+        </Guests>
       </PodcastBox>
     )
   }
 }
+
+const Guests = styled.div`
+  padding: 8px 0px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  clear: both;
+`
 
 export default connect(state => ({
     player: state.player
