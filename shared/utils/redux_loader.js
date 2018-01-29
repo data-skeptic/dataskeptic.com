@@ -90,6 +90,7 @@ export function get_podcasts(dispatch, pathname) {
 		var episodes = get_podcasts_from_cache(my_cache, pathname)
 	} else {
 		console.log("Getting episodes")
+        dispatch({type: "LOADING_EPISODES"})
 		axios
 			.get("/api/episodes/list?year=" + year)
 	  		.then((result) => getEpisodesData(result["data"]))
