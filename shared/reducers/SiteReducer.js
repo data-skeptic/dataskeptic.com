@@ -69,8 +69,10 @@ export default function siteReducer(state = defaultState, action) {
       var error = action.payload.error
       nstate.contact_form.error = error
       nstate.contact_form.send = "no"
+      break
     case 'SET_SENDING':
       nstate.contact_form.send = "sending"
+      break
     case 'CONTACT_FORM_COMPLETE':
       var success = action.payload.success
       if (success) {

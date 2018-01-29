@@ -2,9 +2,11 @@ import React from "react";
 import {Link} from 'react-router';
 import {connect} from 'react-redux';
 import moment from 'moment';
+import styled from 'styled-components'
 
 import {redirects_map} from '../../../redirects';
 import isCtrlOrCommandKey from '../../utils/isCtrlOrCommandKey';
+import GuestImage from "./GuestImage";
 
 class Episode extends React.Component {
     constructor(props) {
@@ -70,13 +72,20 @@ class Episode extends React.Component {
         var transcript = <div></div>
         var tep = undefined
         const episodeLink = this.formatLink(ep.link);
+        const guests = ep.related && ep.related.filter((r) => r.type === 'person')
 
         return (
             <div className="row episode">
                 <div className="col-xs-12 col-sm-3 episode-left">
-                    <Link to={episodeLink} onClick={this.onEpisodeClick}>
-                        <img className="episode-img" src={ep.img}/>
-                    </Link>
+                    <LinkArea>
+                        <Link to={episodeLink} onClick={this.onEpisodeClick}>
+                            <img className="episode-img" src={ep.img}/>
+                        </Link>
+                    </LinkArea>
+
+                    <Guests>
+                        {guests && guests.map((g, i) => <GuestImage key={i} {...g} />)}
+                    </Guests>
                 </div>
                 <div className="col-xs-12 col-sm-8 episode-middle">
                     <div className="blog-date">{date}</div>
@@ -104,6 +113,17 @@ class Episode extends React.Component {
         )
     }
 }
+
+const LinkArea = styled.div`
+`
+
+const Guests = styled.div`
+    padding: 4px 0px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    clear: both;
+`
 
 export default connect(state => ({player: state.player, episodes: state.episodes, blogs: state.blogs}))(Episode)
 

@@ -1,15 +1,18 @@
 import express from 'express'
-
+import axios   from 'axios'
+import sha1 from 'sha1'
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 let googleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const LinkedinStrategy = require('../../modules/Auth/LinkedinStrategy').default
 const UserServices = require('../../modules/Users/Services/UserServices');
-let redirectURL;0
+let redirectURL;
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
 const c = require('../../../config/config.json')
+const salt = c[env]['auth']['salt']
+const base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
 const checkIfAdmin = (email) => {
     const email_reg_exp = /^.*@dataskeptic\.com/i;
@@ -21,13 +24,26 @@ const checkRoute = (route) => {
     return admin_rexp.test(route)
 }
 
+const ALREADY_EXIST_MSG = `User already exist`
+const INCORRECT_PASSWORD_MSG = `Incorrect login id or password`
+
+const saltPassword = (password) => sha1(password+salt)
+const verifyPassword = (up, rp) => saltPassword(up) === rp
+
+const getUserAccount = (email) => axios.get(`${base_url}/user/get?email=${email}`).then((res) => res.data.length > 0 && res.data[0])
+const createUserAccount = (data) => axios.post(`${base_url}/user/add`, data).then((res) => res.data)
+
 module.exports = () => {
     const router = express.Router()
 
-    passport.serializeUser((user, done) => done(null, user))
-    passport.deserializeUser(async (id, done) =>
+    passport.serializeUser((user, done) => {
+        delete user.password
+        done(null, user)
+    })
+
+    passport.deserializeUser(async (id, done) => {
         done(null, id)
-    )
+    })
 
     if (c[env]['linkedin']) {
         console.log("AUTH: allowing Linkedin Login")
@@ -61,15 +77,16 @@ module.exports = () => {
         new LocalStrategy({
                 usernameField: 'email',
                 passwordField: 'password'
-            }, function login(username, password, done) {
-                const user = {
-                    username,
-                    password
-                }
+            }, async (email, password, done) => {
+                const user = await getUserAccount(email)
 
                 if (!user) {
                     return done(Error('User not found'), null)
                 } else {
+                    if (!verifyPassword(password, user.password)) {
+                        return done(Error(INCORRECT_PASSWORD_MSG), null)
+                    }
+
                     return done(null, user)
                 }
             }
@@ -83,21 +100,53 @@ module.exports = () => {
     router.post('/login', (req, res, next) => {
         passport.authenticate('local', {failWithError: true}, function (err, user, info) {
             if (err) {
-                return res.status(403).send({message: err.message})
+                return res.send({success: false, message: err.message})
             }
 
             if (!user) {
-                return res.status(403).send({message: 'System Error'})
+                return res.send({success: false, message: 'System Error'})
             }
 
             req.logIn(user, err => {
                 if (err) {
-                    return res.status(403).send({message: err.message})
+                    return res.status(403).send({
+                        success: false,
+                        message: err
+                    })
+                } else {
+                    user.type = checkIfAdmin(user.email) ? 'admin' : 'user';
+                    user.hasAccess = true
+                    return res.send({ success: true })
                 }
-
-                return res.redirect('/')
             })
         })(req, res, next)
+    })
+
+    router.post('/signup', async (req, res, next) => {
+        const {email, password} = req.body
+
+        const existUser = await getUserAccount(email)
+        if (existUser) {
+            return res.send({
+                success: false,
+                message: ALREADY_EXIST_MSG
+            })
+        }
+
+        const userData = {
+            email,
+            password: saltPassword(password)
+        }
+        await createUserAccount(userData)
+
+        let user = await getUserAccount(email)
+        req.logIn(user, function(err) {
+            if (err) { return next(err); }
+            user.type = checkIfAdmin(user.email) ? 'admin' : 'user';
+            user.hasAccess = true
+
+            return res.send({ success: true })
+        });
     })
 
     // GOOGLE

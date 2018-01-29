@@ -4,8 +4,8 @@ import { renderField } from '../Forms/Components/Field/Field';
 import FormController from '../Forms/Components/FormController/FormController';
 
 
-const LoginForm = ({ handleSubmit, pristine, reset, submitting, invalid, submitSucceeded, submitFailed }) => (
-    <FormController name="login" handleSubmit={handleSubmit} submitValue={<span>Login</span>} showSubmit={true} btnWrapperClasses={'col-xs-12 col-sm-12'}>
+const SignUpForm = ({ handleSubmit, pristine, reset, submitting, invalid, submitSucceeded, submitFailed }) => (
+    <FormController name="login" handleSubmit={handleSubmit} submitValue={<span>Sign Up</span>} showSubmit={true} btnWrapperClasses={'col-xs-12 col-sm-12'}>
         <Field
             label="Email"
             component={renderField}
@@ -32,5 +32,5 @@ const LoginForm = ({ handleSubmit, pristine, reset, submitting, invalid, submitS
 );
 
 export default reduxForm({
-    form: 'loginForm' // a unique identifier for this form
-})(LoginForm)
+    form: 'signUpForm'
+})(SignUpForm)

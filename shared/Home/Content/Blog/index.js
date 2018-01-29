@@ -16,13 +16,11 @@ import {
 
 const BlogBox = props => {
   const { blogList, getContributor } = props
-  console.log('blogList - homepage', blogList)
   return (
     <div>
       {
         blogList.map(
           (item, index) => {
-            console.log('prettyname', item.prettyname)
             let href = 'blog' + item.prettyname
             const author = getContributor(item)
             return (

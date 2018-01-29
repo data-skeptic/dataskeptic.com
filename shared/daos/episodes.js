@@ -26,7 +26,7 @@ export function convert_items_to_json(items) {
 	})
 	return episodes
 }
-
+/*
 export default function getEpisodes(store) {
 	console.log("Network: retrieving episodes")
 	axios
@@ -52,3 +52,4 @@ export default function getEpisodes(store) {
 		store.dispatch({type: "FETCH_EPISODES_ERROR", playload: err})
 	})			
 }
+*/

@@ -20,6 +20,7 @@ import Home                    from 'components/Home';
 import LightsOut               from 'components/LightsOut';
 import Loading                 from 'Common/Components/Loading.js';
 import Login                   from 'components/Login';
+import SignUp                  from 'components/SignUp';
 import Logout                  from 'components/Logout';
 import Menu                    from 'components/Menu';
 import Membership              from 'components/Membership';
@@ -150,6 +151,10 @@ export default (
 
         <Route path="/login" component={App}>
             <IndexRoute component={Login}/>
+        </Route>
+
+        <Route path="/signup" component={App}>
+            <IndexRoute component={SignUp}/>
         </Route>
 
         <Route path="/questions" component={App}>

@@ -65,7 +65,6 @@ class BlogItem extends React.Component {
 		var guid = blog.guid
 		if (guid) {
 			var episode = undefined
-			console.log(oepisodes)
 			for (var ep of oepisodes.episodes) {
 				if (ep.guid == guid) {
 					episode = ep

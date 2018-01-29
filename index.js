@@ -18,7 +18,6 @@ const app = require('./server').default
 const c = require('./config/config.json')
 console.log('index.js : env = ' + env)
 var aws_accessKeyId = c[env]['aws']['accessKeyId']
-console.log(aws_accessKeyId)
 var aws_secretAccessKey = c[env]['aws']['secretAccessKey']
 var aws_region = c[env]['aws']['region']
 
@@ -69,6 +68,7 @@ var launch_with_ssl = function() {
 		res.end()
 	}).listen(80, '0.0.0.0')
 
+    recordingServer(server)
 	console.log("Attempt to load SSL 3")
 }
 

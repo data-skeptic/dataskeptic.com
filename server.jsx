@@ -18,12 +18,14 @@ import bodyParser                from 'body-parser'
 import compression               from 'compression';
 import {feed_uri}                from 'daos/episodes'
 import {
+    apiMemberFeed,
     loadEpisodes,
     load,
     get_contributors,
     loadCurrentRFC,
     get_bot_status
 }  from 'daos/serverInit'
+import place_order from 'printful/wrapper'
 import { getProducts }           from 'daos/products'
 import express                   from 'express';
 import FileStreamRotator         from 'file-stream-rotator'
@@ -53,7 +55,11 @@ import { get_podcasts_from_cache } from 'utils/redux_loader';
 import redirects_map               from './redirects';
 
 import {reducer as formReducer} from 'redux-form'
-import axios from "axios";
+import axios from "axios"
+
+import tunnel from 'tunnel'
+import http from 'http'
+
 
 console.log("server.jsx : starting")
 
@@ -137,11 +143,12 @@ const doRefresh = (store) => {
 
     console.log("-[Refreshing episodes]-");
     return loadEpisodes(env)
-        .then(function ({episodes_map, episodes_list, episodes_content}, guid) {
+        .then(function ({episodes_map, episodes_list, episodes_content, member_feed}) {
             console.log("-[Refreshing episodes]-");
-            Cache.episodes_map = episodes_map;
-            Cache.episodes_list = episodes_list;
-            Cache.episodes_content = episodes_content;
+            Cache.episodes_map = episodes_map
+            Cache.episodes_list = episodes_list
+            Cache.episodes_content = episodes_content
+            Cache.member_feed = member_feed
             return getProducts(store, env)
         })
         .then((products) => {
@@ -256,6 +263,34 @@ function api_router(req, res) {
         var req = req.body
         join_slack(req, res, slack_key)
         return true
+    } else if (req.url
+        .indexOf('/api/messages') == 0) {
+        console.log(Object.keys(req))
+        var p = req.url
+        var post_data = req.body
+        var pd = JSON.stringify(post_data)
+        var options = {
+            hostname: 'bot.dataskeptic.com',
+            port: 3978,
+            path: req.url,
+            method: 'POST',
+            headers: req.headers
+        };
+        console.log("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
+        var proxy = http.request(options, function (presponse) {
+            presponse.pipe(res, {end: true})
+        })
+        proxy.write(pd)
+        proxy.on('error', function(err) {
+            console.log(err)
+        })
+        console.log("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
+        req.pipe(proxy, {end: true})
+        console.log("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
+        return true
+    } else if (req.url.indexOf('/api/members/feed') == 0) {
+        apiMemberFeed(req, res, Cache.member_feed)
+        return true;
     } else if (req.url.indexOf('/api/v1/proposals/files') == 0) {
         uploadProposalFiles(req, res, aws_proposals_bucket);
         return true;
@@ -272,7 +307,7 @@ function api_router(req, res) {
         getTempFile(req, res, aws_proposals_bucket);
         return true;
     }
-    if (req.url.indexOf('/api/refresh') == 0) {
+    else if (req.url.indexOf('/api/refresh') == 0) {
         doRefresh()
         return res.status(200).end(JSON.stringify({'status': 'ok'}))
     }
@@ -312,6 +347,32 @@ function api_router(req, res) {
     else if (req.url.indexOf('/api/blog/rss') === 0) {
         get_blogs_rss(req, res);
         return true
+    }
+    else if (req.url.indexOf('/api/store/order/add') === 0) {
+        var printful_key = c[env]["printful"]["api"]
+        var payload = req.body
+        var customer = payload['customer']
+        var designId = payload['designId']
+        var size     = payload['size']
+
+        var ok_callback = function(r, info) {
+            var resp = r['data']
+            console.log(resp)
+            var result = {"msg": "ok"}
+            return res.status(200).end(JSON.stringify(result))
+        }
+
+        var error_callback = function(err) {
+            console.log("api error")
+            var jstr = JSON.stringify(err)
+            console.log(jstr)
+            var result = {"msg": "fail"}
+            return res.status(500).end(JSON.stringify(result))
+        }
+
+        var promise = place_order(printful_key, customer, designId, size, ok_callback, error_callback)
+        console.log(typeof(promise))
+        return promise
     }
     else if (req.url.indexOf('/api/store/list') == 0) {
         var products = Cache.products
@@ -442,20 +503,14 @@ async function updateState(store, pathname, req) {
         });
     }
 
-    for (var k of Object.keys(Cache)) {
-        console.log(["Cache", k, typeof(Cache[k])])
-    }
     var bot = Cache.bot
-    console.log(["bot", bot])
     if (bot) {
         store.dispatch({type: "SET_BOT", payload: bot})
     }
     var contributors = Cache.contributors
     if (!contributors || contributors.length == 0) {
-        console.log("server.jsx : Loading contributors")
         var promise = get_contributors()
         promise.then(function(contributors) {
-            console.log(contributors)
             store.dispatch({type: "SET_CONTRIBUTORS", payload: contributors});
         })
     }

@@ -212,6 +212,10 @@ export default function cmsReducer(state = defaultState, action) {
                 dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
                 dispatch({type: "ADD_EPISODES", payload: [episode]})
             })
+            .catch((err) => {
+                console.log("Caught in CmsReducer")
+                console.log(err)
+            })
         break;
   }
   return Immutable.fromJS(nstate)
