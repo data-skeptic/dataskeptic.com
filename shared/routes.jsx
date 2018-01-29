@@ -41,6 +41,7 @@ import ProposalsThankYouPage   from 'Proposals/Routes/ThankYou/ThankYouPage';
 import AudioExample            from 'Proposals/Routes/AudioExample';
 import PrivacyPageContainer    from 'Privacy/Containers/PrivacyPageContainer'
 import QuestionsContainer      from './Questions/Containers/QuestionsContainer'
+import ContributorPage         from './Contributors/Routes/ContributorPage'
 
 import AdminHome               from 'components/admin/AdminHome';
 import AdminCmsPending         from 'components/admin/AdminCmsPending';
@@ -230,6 +231,10 @@ export default (
 
         <Route path="/admin/login" component={App}>
             <IndexRoute component={Login}/>
+        </Route>
+
+        <Route path="/contributors/:contributor" component={App}>
+            <IndexRoute component={ContributorPage}/>
         </Route>
 
         <Route path="/*" component={App} onEnter={loadData}>

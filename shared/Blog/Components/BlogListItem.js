@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import moment from 'moment';
 
 import { redirects_map } from '../../../redirects';
+import AuthorLink from "../../components/AuthorLink";
 
 class BlogListItem extends Component {
     constructor(props) {
@@ -51,7 +52,7 @@ class BlogListItem extends Component {
                         </div>
                         <div className="media-body">
                             <Link className="blog-title media-heading" to={link} onClick={ onClick }>{blog.title}</Link>
-                            <p className="by">by <b>{prettyname}</b></p>
+                            <p className="by">by <b><AuthorLink author={contributor.author}>{prettyname}</AuthorLink></b></p>
                         </div>
                     </div>
 	                <p className="blog-desc">

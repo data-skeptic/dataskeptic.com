@@ -448,6 +448,10 @@ function inject_years(store, my_cache) {
 const getFeaturesAPI = (pageType) => axios.get(`${base_url}/cms${pageType ? '/' + pageType : ''}`)
 const getEpisodeData = (guid) => axios.get(`${base_url}/blog/list?guid=${guid}`).then((res) => res.data[0])
 
+function getContributorPosts(contributor) {
+    return axios.get(`${base_url}/blog/list?contributor=${contributor}`).then((res) => res.data)
+}
+
 async function inject_homepage(store, my_cache, pathname) {
     const res = await getFeaturesAPI("homepage")
     store.dispatch({type: "CMS_INJECT_HOMEPAGE_CONTENT", payload: { data: res.data }})
@@ -474,6 +478,13 @@ function inject_products(store, my_cache, pathname) {
 function inject_podcast(store, my_cache, pathname) {
     var episodes = get_podcasts_from_cache(my_cache, pathname)
     store.dispatch({type: "ADD_EPISODES", payload: episodes})
+}
+
+async function inject_contributor(store, cache, pathanme) {
+    const contributor = pathanme.split('/').pop()
+    const blogs = await getContributorPosts(contributor)
+
+    store.dispatch({type: "SET_CONTRIBUTOR_BLOGS", payload: { contributor, blogs } })
 }
 
 function install_episode(store, episode) {
@@ -525,6 +536,8 @@ async function updateState(store, pathname, req) {
     }
     else if (pathname.indexOf("/podcast") === 0) {
         inject_podcast(store, Cache, pathname)
+    } else if (pathname.indexOf("/contributor") === 0) {
+        await inject_contributor(store, Cache, pathname)
     }
 
     store.dispatch({type: "ADD_FOLDERS", payload: Cache.folders});
