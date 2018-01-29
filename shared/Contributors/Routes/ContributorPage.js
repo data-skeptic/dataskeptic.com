@@ -6,6 +6,7 @@ import {snserror} from "../../SnsUtil";
 import NotFound from "../../NotFound/Components/NotFound";
 import { Link } from 'react-router'
 import moment from "moment/moment";
+import { get_contributor_posts } from "../../utils/redux_loader"
 
 const getContributorInfo = (contributor='', contributors) =>
     contributors && contributors[contributor.toLowerCase()]
@@ -25,6 +26,10 @@ class ContributorPage extends Component {
         } else {
             const { prettyname } = contributor
             title = `${prettyname} | Data Skeptic`
+        }
+
+        if (!contributor.posts) {
+            get_contributor_posts(this.props.dispatch, this.props.params.contributor)
         }
 
         this.props.dispatch(changePageTitle(title))
@@ -59,31 +64,7 @@ class ContributorPage extends Component {
             return <NotFound location={this.props.location}/>
         }
 
-        const { prettyname, img, twitter, linkedin, bio } = contributor
-        const posts = [
-            {
-                "blog_id": 1,
-                "title": "Introduction",
-                "author": "Kyle",
-                "abstract": "The Data Skeptic Podcast features conversations with topics related to data science, statistics, machine learning, artificial intelligence and the like, all from the perspective of applying critical thinking and the scientific method to evaluate the veracity of claims and efficacy of approac",
-                "publish_date": "2014-05-23T00:00:00.000Z",
-                "prettyname": "/episodes/2014/introduction",
-                "src_file": "episodes/2014/introduction.htm",
-                "guid": "80d137c5e4a81e2b34752f33db7c03c0",
-                "related": []
-            },
-            {
-                "blog_id": 2,
-                "title": "Type i / Type ii Errors",
-                "author": "Kyle",
-                "abstract": "In this first mini-episode of the Data Skeptic Podcast, we define and discuss type i and type ii errors (a.k.a. false positives and false negativ",
-                "publish_date": "2014-05-30T00:00:00.000Z",
-                "prettyname": "/episodes/2014/type-i--type-ii-errors",
-                "src_file": "episodes/2014/type_i_type_ii.htm",
-                "guid": "7718fa629f059b09818c365e44b745c1",
-                "related": []
-            }
-        ]
+        const { prettyname, img, twitter, linkedin, bio, posts } = contributor
 
         return (
             <Container>
@@ -95,7 +76,7 @@ class ContributorPage extends Component {
                 <Navigation>
                     <Item line={true}>
                         <Category>Posts</Category>
-                        <Value>{posts.length}</Value>
+                        <Value>{posts ? posts.length : 0}</Value>
                     </Item>
                     <Item line={true}>
                         <Category>Twitter</Category>
@@ -107,7 +88,7 @@ class ContributorPage extends Component {
                     </Item>
                 </Navigation>
                 <Blogs>
-                    {this.renderPosts(posts)}
+                    {posts && this.renderPosts(posts)}
                 </Blogs>
             </Container>
         )
