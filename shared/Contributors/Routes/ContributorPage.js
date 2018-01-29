@@ -24,12 +24,12 @@ class ContributorPage extends Component {
         if (!contributor) {
             this.missing()
         } else {
-            const { prettyname } = contributor
+            const { prettyname, posts } = contributor
             title = `${prettyname} | Data Skeptic`
-        }
 
-        if (!contributor.posts) {
-            get_contributor_posts(this.props.dispatch, this.props.params.contributor)
+            if (!posts) {
+                get_contributor_posts(this.props.dispatch, this.props.params.contributor)
+            }
         }
 
         this.props.dispatch(changePageTitle(title))

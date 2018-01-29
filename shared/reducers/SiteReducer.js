@@ -27,7 +27,9 @@ const init = {
 };
 
 const updateContributor = (contributors, contributor, fn) => {
-    contributors[contributor] = fn(contributors[contributor])
+    if (contributors[contributor]) {
+        contributors[contributor] = fn(contributors[contributor])
+    }
 
     return contributors
 }
