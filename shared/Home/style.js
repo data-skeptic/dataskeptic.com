@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const Banner = styled.div`
-  background: url(/img/svg/ds-banner.svg) no-repeat;
+  background: url(/img/png/ds-banner.png) no-repeat;
   height: 360px;
   background-size: cover;
   background-position: center;
