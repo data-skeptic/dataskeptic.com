@@ -54,7 +54,7 @@ class Header extends React.Component {
 	}
 
 	render() {
-		const {pathname, isMobileMenuVisible, cart, loggedIn} = this.props
+		const {pathname, isMobileMenuVisible, cart, loggedIn, user} = this.props
 		const itemsCount = getCartItemsCount(cart.toJS().cart_items);
 		const classList = this.getClassList({ isMobileMenuVisible });
 
@@ -67,6 +67,7 @@ class Header extends React.Component {
 							pathname={pathname}
 							cartItemsCount={itemsCount}
 							cartClick={this.onCartClick}
+							user={user}
 						/>
 					</div>
 					<div className="cart-menu pull-right">
@@ -104,6 +105,7 @@ class Header extends React.Component {
 
 export default connect(
 	state => ({
+        user: state.auth.getIn(['user']).toJS(),
         loggedIn: state.auth.getIn(['loggedIn']),
 		isMobileMenuVisible: state.layout.getIn(['isMobileMenuVisible']),
 		cart: state.cart

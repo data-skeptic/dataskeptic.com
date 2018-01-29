@@ -3,6 +3,8 @@ import classNames from "classnames";
 import {Link} from "react-router";
 import NavLink from "../../components/NavLink";
 
+const isAdmin = (user) => user && user.type === 'admin'
+
 export default class AccountDropdownMenu extends Component {
 
     constructor() {
@@ -39,7 +41,7 @@ export default class AccountDropdownMenu extends Component {
     }
 
     render() {
-        const {mobile, onClick} = this.props
+        const {mobile, onClick, user} = this.props
         const {show} = this.state
 
         if (mobile) {
@@ -62,6 +64,10 @@ export default class AccountDropdownMenu extends Component {
                 </button>
                 <ul className="dropdown-menu" >
                     <li><Link to="/membershipPortal" onClick={this.itemClick}>Membership Portal</Link></li>
+
+                    {isAdmin(user) &&  <li role="separator" className="divider"/>}
+                    {isAdmin(user) && <li><Link to="/admin" onClick={this.itemClick}>Admin</Link></li>}
+
                     <li role="separator" className="divider"/>
                     <li><Link to="/logout" onClick={this.itemClick}>Logout</Link></li>
                 </ul>
