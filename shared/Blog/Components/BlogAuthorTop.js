@@ -1,6 +1,7 @@
 import React, { PropTypes } from "react"
 import ReactDOM from "react-dom"
 import { connect } from 'react-redux'
+import AuthorLink from "../../components/AuthorLink";
 
 export const BlogAuthorTop = ({ contributor={} }) => {
 	if (contributor == undefined || contributor.prettyname == undefined) {
@@ -26,7 +27,7 @@ export const BlogAuthorTop = ({ contributor={} }) => {
 
 	return (
 		<div className="row blog-author-top">
-			<div className="col-xs-12 col-sm-4"><b>Author:</b> {contributor.prettyname}</div>
+			<div className="col-xs-12 col-sm-4"><b>Author:</b> <AuthorLink author={contributor.author}>{contributor.prettyname}</AuthorLink></div>
 			<div className="col-xs-12 col-sm-4">{twitterimg} {twitterlink}</div>
 			<div className="col-xs-12 col-sm-4">{linkedinimg} {linkedinlink}</div>
 		</div>

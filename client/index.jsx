@@ -78,17 +78,6 @@ store.dispatch({type: "SET_COUNTRY", payload: country})
 store.dispatch({type: "INITIALIZE_PLAYER", payload: player})
 store.dispatch({type: "INITIALIZE_SITE", payload: {dispatch: store.dispatch}})
 
-axios
-    .get("/api/contributors/list")
-    .then(function (resp) {
-        const contributors = resp["data"];
-        store.dispatch({type: "SET_CONTRIBUTORS", payload: contributors})
-    })
-    .catch(function (err) {
-        console.log(err)
-    })
-
-
 setTimeout(function () {
     doRefresh(store, env)
 }, 500)

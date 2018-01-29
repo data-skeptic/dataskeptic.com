@@ -26,6 +26,13 @@ const init = {
   sessionId: randomSessionId()
 };
 
+const updateContributor = (contributors, contributor, fn) => {
+    if (contributors[contributor]) {
+        contributors[contributor] = fn(contributors[contributor])
+    }
+
+    return contributors
+}
 
 const defaultState = Immutable.fromJS(init);
 
@@ -46,6 +53,12 @@ export default function siteReducer(state = defaultState, action) {
       break
     case 'SET_CONTRIBUTORS':
       nstate.contributors = action.payload
+      break
+    case 'SET_CONTRIBUTOR_BLOGS':
+      nstate.contributors = updateContributor(nstate.contributors, action.payload.contributor, (contributor) => ({
+          ...contributor,
+          posts: action.payload.blogs
+      }))
       break
     case 'SET_TITLE':
     	nstate.title = action.payload

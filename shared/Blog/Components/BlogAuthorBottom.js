@@ -2,6 +2,7 @@ import React from "react"
 import ReactDOM from "react-dom"
 import { connect } from 'react-redux'
 import showdown from 'showdown'
+import AuthorLink from "../../components/AuthorLink";
 
 export const BlogAuthorBottom = ({contributor}) => {
 	if (contributor == undefined || contributor.prettyname == undefined) {
@@ -40,7 +41,7 @@ export const BlogAuthorBottom = ({contributor}) => {
 					<img src={contributor.img} />
 				</div>
 				<div className="col-xs-12 col-sm-7 blog-author-main">
-					<p><b>Author:</b> {contributor.prettyname}</p>
+					<p><b>Author:</b> <AuthorLink author={contributor.author}>{contributor.prettyname}</AuthorLink></p>
 					<p><span dangerouslySetInnerHTML={{__html: bio}} /></p>
 					{linkedindiv}
 					{twitterdiv}
