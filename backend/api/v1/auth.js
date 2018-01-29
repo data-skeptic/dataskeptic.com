@@ -6,6 +6,8 @@ const LocalStrategy = require('passport-local').Strategy
 let googleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const LinkedinStrategy = require('../../modules/Auth/LinkedinStrategy').default
 const UserServices = require('../../modules/Users/Services/UserServices');
+const MailServices = require('../../modules/mail/services/MailServices');
+
 let redirectURL;
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
@@ -32,6 +34,17 @@ const verifyPassword = (up, rp) => saltPassword(up) === rp
 
 const getUserAccount = (email) => axios.get(`${base_url}/user/get?email=${email}`).then((res) => res.data.length > 0 && res.data[0])
 const createUserAccount = (data) => axios.post(`${base_url}/user/add`, data).then((res) => res.data)
+
+const notifyOnJoin = ({ email }) => {
+    console.info(`New user ${email} joined the site.`)
+
+    const message = {
+        msg: `Thanks for creating an account on dataskeptic.com. If you have any problems, please reach out to kyle@dataskeptic.com`,
+        to: email
+    }
+
+    return MailServices.sendMail(message)
+}
 
 module.exports = () => {
     const router = express.Router()
@@ -133,13 +146,14 @@ module.exports = () => {
             })
         }
 
-        const userData = {
+        const user = {
             email,
             password: saltPassword(password)
         }
-        await createUserAccount(userData)
 
-        let user = await getUserAccount(email)
+        await createUserAccount(user)
+        notifyOnJoin(user)
+
         req.logIn(user, function(err) {
             if (err) { return next(err); }
             user.type = checkIfAdmin(user.email) ? 'admin' : 'user';
