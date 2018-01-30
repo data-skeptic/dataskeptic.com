@@ -1,5 +1,6 @@
 const BinaryServer = require('binaryjs').BinaryServer;
 const wav = require('wav');
+const isEmpty = require('lodash').isEmpty
 
 const AWS = require("aws-sdk");
 
@@ -45,6 +46,10 @@ const run = (server) => {
         });
 
         client.on('close', () => {
+            if (isEmpty(client.meta)) {
+                return
+            }
+
             const {id, chunkId} = client.meta;
 
             completeRecording(id);
