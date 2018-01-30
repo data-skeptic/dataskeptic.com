@@ -28,6 +28,7 @@ class OpenOrders extends React.Component {
 	}
 
 	render() {
+		const { redirect } = this.props
 		var oadmin = this.props.admin.toJS()
 		var ocart = this.props.cart.toJS()
 	  	if (this.state.orders.length == 0) {
@@ -39,7 +40,7 @@ class OpenOrders extends React.Component {
 				{
 					this.state.orders.map(function(order) {
 						return (<div key={order.id}>
-							<Order order={order} />
+							<Order order={order} redirect={redirect}/>
 						</div>)
 					})
 				}

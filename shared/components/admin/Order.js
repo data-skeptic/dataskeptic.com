@@ -13,6 +13,7 @@ class Order extends React.Component {
   }
   populateOrder(order, e) {
     this.props.dispatch({type: "ORDER_POPULATE", payload: order })
+  	this.props.redirect('/admin/orders/processing');
   }
   fulfill(oid) {
   	var self = this
