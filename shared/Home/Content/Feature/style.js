@@ -63,7 +63,7 @@ export const UserImg = styled.img`
   height: 48px;
 `
 
-export const UserDetail = styled.a`
+export const UserDetail = styled.div`
   padding-left: 20px;
   font-size: 14px;
   color: #4A4A4A;
@@ -77,7 +77,7 @@ export const UserInfo = styled.span`
   display: block
 `
 
-export const UserImgLink = styled.a`
+export const UserImgArea = styled.div`
   border: none;
   :hover {
     border: none;
