@@ -16,6 +16,10 @@ const renderLinkedin = (linkedin) => <a href={linkedin}>LinkedIn</a>
 
 const formatDate = (date) => moment(date).format('MMMM D, Y')
 
+const MAX_POSTS_COUNT = 20
+
+const renderPostsCount = (count) => count > MAX_POSTS_COUNT ? `${MAX_POSTS_COUNT}+` : count
+
 class ContributorPage extends Component {
 
     componentWillMount() {
@@ -48,13 +52,21 @@ class ContributorPage extends Component {
     }
 
     renderPosts(posts) {
-        return posts.map(({title, abstract, prettyname, publish_date}, i) =>
-            <Post key={i} to={`/blog${prettyname}`}>
-                <Date>{formatDate(publish_date)}</Date>
-                <Title>{title}</Title>
-                <Abstract>{abstract}</Abstract>
-            </Post>
-        )
+        return posts.map(({title, abstract, prettyname, publish_date, related}, i) => {
+            const preview = related && (related.filter((r) => r.type === 'homepage-image'))[0]
+            return (
+                <Post key={i} to={`/blog${prettyname}`}>
+                    <Preview>
+                        {preview && <img src={preview.dest} alt={title} />}
+                    </Preview>
+                    <Inner>
+                        <Date>{formatDate(publish_date)}</Date>
+                        <Title>{title}</Title>
+                        <Abstract>{abstract}</Abstract>
+                    </Inner>
+                </Post>
+            )
+        })
     }
 
     render() {
@@ -76,7 +88,7 @@ class ContributorPage extends Component {
                 <Navigation>
                     <Item line={true}>
                         <Category>Posts</Category>
-                        <Value>{posts ? posts.length : 0}</Value>
+                        <Value>{posts ? renderPostsCount(posts.length) : '–'}</Value>
                     </Item>
                     <Item line={true}>
                         <Category>Twitter</Category>
@@ -156,7 +168,8 @@ const Blogs = styled.div`
 `
 
 const Post = styled(Link)`
-    display: block;
+    display: flex;
+    flex-direction: row;
     padding: 25px 0px;
     border-bottom: 1px solid #eee;
     color: #333;
@@ -165,6 +178,33 @@ const Post = styled(Link)`
         color: #000;
         border-bottom-color: #eee;
     }
+    
+    @media (max-width: 768px) {
+       flex-direction: column;
+    }
+`
+
+const Preview = styled.div`
+    min-width: 200px;
+    max-width: 400px;
+    
+    flex-basis: auto;
+    flex-grow: 1;
+    text-align: center;
+    
+    img {
+        margin: 4px 0px;
+        max-width: 80%;
+    }
+    
+    @media (max-width: 768px) {
+       min-width: 400px;
+       max-width: 400px;
+    }
+`
+
+const Inner = styled.div`
+
 `
 
 const Title = styled.h4`

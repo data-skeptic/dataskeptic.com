@@ -449,7 +449,7 @@ const getFeaturesAPI = (pageType) => axios.get(`${base_url}/cms${pageType ? '/' 
 const getEpisodeData = (guid) => axios.get(`${base_url}/blog/list?guid=${guid}`).then((res) => res.data[0])
 
 function getContributorPosts(contributor) {
-    return axios.get(`${base_url}/blog/list?contributor=${contributor}`).then((res) => res.data)
+    return axios.get(`${base_url}/blog/list?contributor=${contributor}&limit=21`).then((res) => res.data)
 }
 
 async function inject_homepage(store, my_cache, pathname) {

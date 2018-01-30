@@ -40,7 +40,7 @@ const notifyOnJoin = ({ email }) => {
 
     const message = {
         msg: `Thanks for creating an account on dataskeptic.com. If you have any problems or questions, please reach out to kyle@dataskeptic.com`,
-        subject: `dataskeptic.com account created`;
+        subject: `dataskeptic.com account created`,
         to: email
     }
 
