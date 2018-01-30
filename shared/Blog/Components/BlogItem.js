@@ -20,7 +20,7 @@ const insertAt = (str, pos, injStr) => str.slice(0, pos) + injStr + str.slice(po
 
 const injectImage = (content, preview) => {
     const injectedImage = `
-			<img src="${preview.dest}" style="float: left;margin: 4px 10px 0px 0px; ">
+			<img src="${preview.dest}" style="float: left;margin: 4px 10px 0px 0px;max-width: 70%;">
 		`
 
     const reg = /<\/p>/g;
