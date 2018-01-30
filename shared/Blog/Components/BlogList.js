@@ -27,7 +27,7 @@ class BlogList extends Component {
         var contributors = osite.contributors
         var me = this
         return (
-            <div className="row blog-list-container">
+            <div className="blog-list-container">
             {
                 blogs.map(function(blog, index) {
                     var contributor = contributors[blog.author.toLowerCase()]

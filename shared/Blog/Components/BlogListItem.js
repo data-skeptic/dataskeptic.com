@@ -40,8 +40,10 @@ class BlogListItem extends Component {
 
         const link = this.formatLink(blog.prettyname);
         const date = isLatest ? moment(blog.publish_date).fromNow() : moment(blog.publish_date).format('MMMM D, YYYY');
+        const preview = blog.related && (blog.related.filter((r) => r.type === 'homepage-image'))[0]
         return (
             <div className="col-xs-12">
+                {preview && <img src={preview.dest} className="preview" />}
 	            <div className="blog-summary" key={blog.uri}>
                     <div>
                         <span className="blog-date">{date}</span>
