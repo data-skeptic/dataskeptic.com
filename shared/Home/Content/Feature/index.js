@@ -38,7 +38,7 @@ class Feature extends Component {
           <Desc>{feature_blog.abstract}</Desc>
           <BlogViewMore to={href}>View More</BlogViewMore>
           { author &&
-            <AuthorLink>
+            <AuthorLink author={author.author}>
               <UserBox author={author.author}>
                 <UserImgArea><UserImg src={author.img} /></UserImgArea>
                 <UserDetail>

@@ -85,6 +85,9 @@ class EpisodePlayer extends Component {
     }
     const date = moment(episode.pubDate).fromNow()
     var link = episode.link
+    if (link == undefined) {
+      link = ""
+    }
     var i = link.indexOf('/blog/')
     link = link.substring(i, link.length)
 
