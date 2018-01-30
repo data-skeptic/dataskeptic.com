@@ -5,6 +5,8 @@ import OpenOrders from "./OpenOrders";
 import Loading from "../../Common/Components/Loading";
 
 class AdminOrdersNew extends Component {
+    redirect = (to) => this.props.history.push(to)
+
 	render() {
 		const { history } = this.props
         const oadmin = this.props.admin.toJS()
@@ -23,8 +25,8 @@ class AdminOrdersNew extends Component {
                 {step}
                 {errorMsg}
 				<hr />
-
-                <OpenOrders />
+                
+                <OpenOrders redirect={this.redirect}/>
             </AdminLayout>
 		)
 	}

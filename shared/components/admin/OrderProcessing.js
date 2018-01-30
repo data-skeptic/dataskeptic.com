@@ -69,8 +69,9 @@ class OrderProcessing extends React.Component {
 							<tr>
 								<td>Size:</td>
 								<td>
-									<select id="size" onChange={this.onSizeChange.bind(this)}>
+									<select id="size" defaultValue={order.size} onChange={this.onSizeChange.bind(this)}>
 										<option value=''>---[Choose]---</option>
+										<option value='XS'>Extra Small</option>
 										<option value='S'>Small</option>
 										<option value='M'>Medium</option>
 										<option value='L'>Large</option>
