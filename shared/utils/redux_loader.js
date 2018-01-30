@@ -123,7 +123,7 @@ export function get_products(dispatch) {
 }
 
 export function get_contributor_posts(dispatch, contributor) {
-	axios.get(`${base_url}/blog/list?contributor=${contributor}`)
+	axios.get(`${base_url}/blog/list?contributor=${contributor}&limit=21`)
 		.then((result) => {
 			const blogs = result["data"]
             dispatch({type: "SET_CONTRIBUTOR_BLOGS", payload: { contributor, blogs } })

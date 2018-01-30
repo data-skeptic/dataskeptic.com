@@ -21,13 +21,11 @@
 .blog-list-container {
   margin: auto;
   clear: both;
-  max-width: 600px;
 }
 
 .blog-top-nav {
   margin: auto;
   clear: both;
-  max-width: 600px;  
 }
 
 .blog-bread-crumbs-item {
@@ -59,14 +57,22 @@
   margin-top: 8px;
 }
 
-.blog-summary {
+.blog-list-item {
   margin: 10px;
   padding-top: 0px;
   padding-bottom: 50px;
-  border-width: 0px 0px 1px 0px;
-  border-color: #979797;
-  border-style: solid;
 
+  border: 0px solid #979797;
+  border-bottom-width: 1px;
+}
+
+.blog-preview {
+  img {
+    max-width: 100%;
+  }
+}
+
+.blog-summary {
   .by {
     padding-top: 4px;
   }
