@@ -56,10 +56,10 @@ class ContributorPage extends Component {
             const preview = related && (related.filter((r) => r.type === 'homepage-image'))[0]
             return (
                 <Post key={i} to={`/blog${prettyname}`}>
-                    <Preview>
-                        {preview && <img src={preview.dest} alt={title} />}
-                    </Preview>
-                    <Inner>
+                    {preview && <Preview>
+                        <img src={preview.dest} alt={title} />
+                    </Preview>}
+                    <Inner indent={!!preview}>
                         <Date>{formatDate(publish_date)}</Date>
                         <Title>{title}</Title>
                         <Abstract>{abstract}</Abstract>
@@ -204,7 +204,7 @@ const Preview = styled.div`
 `
 
 const Inner = styled.div`
-
+    
 `
 
 const Title = styled.h4`
