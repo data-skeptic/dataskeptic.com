@@ -14,6 +14,8 @@ import {
   Name
 } from './style'
 
+import AuthorLink from "../../../components/AuthorLink";
+
 const BlogBox = props => {
   const { blogList, getContributor } = props
   return (
@@ -29,10 +31,14 @@ const BlogBox = props => {
                 <Link to={href}><ItemTitle>{item.title}</ItemTitle></Link>
                 <ItemDesc>{item.abstract}</ItemDesc>
                 <ViewMore to={href}>View More</ViewMore>
-                {author && <Author>
-                  <Avatar src={author.img} />
-                  <Name>{author.prettyname}</Name>
-                </Author>}
+                {author &&
+                  <AuthorLink author={author.author}>
+                    <Author>
+                          <Avatar src={author.img} />
+                          <Name>{author.prettyname}</Name>
+                    </Author>
+                  </AuthorLink>
+                }
               </BlogItem>
             )
           }

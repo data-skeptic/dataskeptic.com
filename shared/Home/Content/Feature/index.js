@@ -13,10 +13,11 @@ import {
   UserDetail,
   UserInfo,
   BlogViewMore,
-  UserImgLink
+  UserImgArea
 } from './style'
 
 import { ArrowRight } from '../Blog/style'
+import AuthorLink from "../../../components/AuthorLink";
 
 class Feature extends Component {
   constructor(props) {
@@ -37,13 +38,15 @@ class Feature extends Component {
           <Desc>{feature_blog.abstract}</Desc>
           <BlogViewMore to={href}>View More</BlogViewMore>
           { author &&
-            <UserBox>
-              <UserImgLink href={'https://twitter.com/' + author.twitter}><UserImg src={author.img} /></UserImgLink>
-              <UserDetail href={'https://twitter.com/' + author.twitter}>
-                <UserInfo>{author.prettyname}</UserInfo>
-                <UserInfo>@{author.twitter}</UserInfo>
-              </UserDetail>
-            </UserBox>
+            <AuthorLink>
+              <UserBox author={author.author}>
+                <UserImgArea><UserImg src={author.img} /></UserImgArea>
+                <UserDetail>
+                  <UserInfo>{author.prettyname}</UserInfo>
+                  <UserInfo>@{author.twitter}</UserInfo>
+                </UserDetail>
+              </UserBox>
+            </AuthorLink>
           }
         </DescBox>
       </Container>
