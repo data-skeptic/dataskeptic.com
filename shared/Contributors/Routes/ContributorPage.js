@@ -16,6 +16,10 @@ const renderLinkedin = (linkedin) => <a href={linkedin}>LinkedIn</a>
 
 const formatDate = (date) => moment(date).format('MMMM D, Y')
 
+const MAX_POSTS_COUNT = 20
+
+const renderPostsCount = (count) => count > MAX_POSTS_COUNT ? `${MAX_POSTS_COUNT}+` : count
+
 class ContributorPage extends Component {
 
     componentWillMount() {
@@ -84,7 +88,7 @@ class ContributorPage extends Component {
                 <Navigation>
                     <Item line={true}>
                         <Category>Posts</Category>
-                        <Value>{posts ? posts.length : 0}</Value>
+                        <Value>{posts ? renderPostsCount(posts.length) : '–'}</Value>
                     </Item>
                     <Item line={true}>
                         <Category>Twitter</Category>
