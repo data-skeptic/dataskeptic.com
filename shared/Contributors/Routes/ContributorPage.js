@@ -90,14 +90,14 @@ class ContributorPage extends Component {
                         <Category>Posts</Category>
                         <Value>{posts ? renderPostsCount(posts.length) : '–'}</Value>
                     </Item>
-                    <Item line={true}>
+                    {twitter && <Item line={true}>
                         <Category>Twitter</Category>
                         <Value>{renderTwitter(twitter)}</Value>
-                    </Item>
-                    <Item>
+                    </Item>}
+                    {linkedin && <Item>
                         <Category>Linkedin</Category>
                         <Value>{renderLinkedin(linkedin)}</Value>
-                    </Item>
+                    </Item>}
                 </Navigation>
                 <Blogs>
                     {posts && this.renderPosts(posts)}
