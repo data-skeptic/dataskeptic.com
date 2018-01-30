@@ -14,6 +14,28 @@ import BlogAuthorBottom from './BlogAuthorBottom'
 import BlogShareBar from './BlogShareBar'
 import Loading from "../../Common/Components/Loading"
 
+const INJECTABLE_PARAGRAPH = 2
+
+const insertAt = (str, pos, injStr) => str.slice(0, pos) + injStr + str.slice(pos)
+
+const injectImage = (content, preview) => {
+    const injectedImage = `
+			<img src="${preview.dest}" style="float: left;margin: 4px 10px 0px 0px; ">
+		`
+
+    const reg = /<\/p>/g;
+    let match = reg.exec(content)
+    for (let i=1;i<INJECTABLE_PARAGRAPH;i++) {
+        match = reg.exec(content)
+    }
+
+    const at = match
+		? match.index + 4
+		: 0
+
+    return insertAt(content, at, injectedImage)
+}
+
 class BlogItem extends React.Component {
 	constructor(props) {
 		super(props)
@@ -102,6 +124,12 @@ class BlogItem extends React.Component {
     	if (!guid && contributor && contributor.img) {
     		exampleImage = contributor.img
     	}
+
+        const preview = related_items && (related_items.filter((r) => r.type === 'homepage-image'))[0]
+		if (preview) {
+			content = injectImage(content, preview)
+        }
+
     	return (
 			<div className="blog-item-wrapper">
 				<BlogBreadCrumbs prettyname={prettyname} exampleImage={exampleImage} />
