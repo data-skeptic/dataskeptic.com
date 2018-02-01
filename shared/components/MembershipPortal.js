@@ -51,8 +51,6 @@ class MembershipPortal extends Component {
             )
         }
 
-        return <code>{JSON.stringify(user)}</code>
-
         if (mode == "loading") {
             return <Loading />
         }

@@ -280,12 +280,7 @@ module.exports = () => {
 
     router.all('/logout', function (req, res, next) {
         req.logout();
-        try {
-            req.session.destroy();            
-        }
-        catch (err) {
-            console.log(err)
-        }
+        req.session && req.session.destroy();
         res.redirect('/');
     })
 

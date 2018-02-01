@@ -40,34 +40,22 @@ class Episode extends React.Component {
         }
     }
 
-    setPlayed = () => {
-        const {email, blogId} = this.props
-        alert('Played')
+    setPlayed = async (played) => {
+        const {userEmail, blogId} = this.props
+        const data = await markAsPlayed(userEmail, blogId, played)
+        this.props.dispatch({ type: 'MARK_AS_PLAYED', payload: { data, played, blogId } })
     }
 
-    setUnplayed = () => {
+    setFavourite = async (favorited) => {
         const {userEmail, blogId} = this.props
-        alert('Unplayed')
+        const data = await markFavorite(userEmail, blogId, favorited)
+        this.props.dispatch({ type: 'MARK_AS_FAVORITE', payload: { data, favorited, blogId } })
     }
 
-    setFavourite = () => {
+    setPlaylisted = async (playlisted) => {
         const {userEmail, blogId} = this.props
-        this.props.dispatch(markFavorite(userEmail, blogId, true))
-    }
-
-    setUnfavourite = () => {
-        const {userEmail, blogId} = this.props
-        this.props.dispatch(markFavorite(userEmail, blogId, false))
-    }
-
-    addToPlaylist() {
-        const {userEmail, blogId} = this.props
-        this.props.dispatch(addPlaylist(userEmail, blogId, true))
-    }
-
-    removeFromPlaylist = () => {
-        const {userEmail, blogId} = this.props
-        this.props.dispatch(addPlaylist(userEmail, blogId, false))
+        const data = await markAsPlayed(userEmail, blogId, playlisted)
+        this.props.dispatch({ type: 'ADD_PLAYLIST', payload: { data, playlisted, blogId } })
     }
 
     render() {
@@ -129,8 +117,8 @@ class Episode extends React.Component {
                     <Title>
                         <Link className="blog-title" to={episodeLink} onClick={this.onEpisodeClick}>{ep.title}</Link>
                         <Stats>
-                            {loggedIn && <PlayButton played={played} onClick={() => played ? this.setUnplayed() : this.setPlayed() }/>}
-                            {loggedIn && <FavouriteButton favourited={favorited} onClick={() => favorited ? this.setFavourite() : this.setUnfavourite() }/>}
+                            {loggedIn && <PlayButton played={played} onClick={() => this.setPlayed(!played) }/>}
+                            {loggedIn && <FavouriteButton favourited={favorited} onClick={() => this.setFavourite(!favorited) }/>}
                         </Stats>
                     </Title>
                     <Buttons>
@@ -144,7 +132,7 @@ class Episode extends React.Component {
                             <DownloadLink href={ep.mp3} download><span>Download</span></DownloadLink>
                         </DownloadEpisode>
 
-                        {loggedIn && <PlaylistButton playlisted={playlisted} onClick={() => playlisted ? this.removeFromPlaylist() : this.addToPlaylist() }>
+                        {loggedIn && <PlaylistButton playlisted={playlisted} onClick={() => this.setPlaylisted(!playlisted) }>
                             <span>{playlisted ? 'Remove from playlist' : 'Add to playlist'}</span>
                         </PlaylistButton>}
 
@@ -286,7 +274,7 @@ const PlayButton = styled.button`
     background-image: url("${props => props.played ? '/img/uiux/played.png' : '/img/uiux/unplayed.png'}");
     
     &:hover {
-          background-image: url("/img/uiux/playlist_hover.png")
+          background-image: url("${props => props.played ? '/img/uiux/played.png' : '/img/uiux/playlist_hover.png'}")
     }
 `
 
@@ -324,7 +312,7 @@ const PlaylistButton = styled.button`
 
 export default connect((state, ownProps) => ({
     loggedIn: state.auth.getIn(['loggedIn']),
-    userEmail: state.auth.getIn(['user', 'eamil']),
+    userEmail: state.auth.getIn(['user', 'email']),
     player: state.player,
     episodes: state.episodes,
     blogs: state.blogs,

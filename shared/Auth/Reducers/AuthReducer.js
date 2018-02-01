@@ -12,6 +12,19 @@ const defaultState = {
 
 const initialState  = fromJS(defaultState);
 
+const addToList = (l, id) => [...l, id]
+const removeFromList = (l, id) => l.filter((i) => i !== id)
+
+const updateList = (state, name, needAdd, id) => {
+    return state.updateIn(['user', 'lists', name], (l =>
+                needAdd
+                    ? addToList(l, id)
+                    : removeFromList(l, id)
+        )
+    )
+}
+
+
 export default function AuthReducer(state = initialState, action) {
     switch (action.type) {
         case 'AUTH_USER_SUCCESS':
@@ -20,16 +33,16 @@ export default function AuthReducer(state = initialState, action) {
             return state;
 
         case 'MARK_AS_PLAYED':
-            console.dir(`MARK_AS_PLAYED`)
-            return;
+            state = updateList(state, 'played', action.payload.played, action.payload.blogId)
+            return state;
 
         case 'MARK_AS_FAVORITE':
-            console.dir(`MARK_AS_FAVORITE`)
-            return;
+            state = updateList(state, 'favorites', action.payload.favorited, action.payload.blogId)
+            return state;
 
         case 'ADD_PLAYLIST':
-            console.dir(`ADD_PLAYLIST`)
-            return;
+            state = updateList(state, 'playlist', action.payload.playlisted, action.payload.blogId)
+            return state;
 
         default:
             return state
@@ -46,7 +59,7 @@ const existAtList = (state, name, id) => {
     return list && list.indexOf(id) > -1
 }
 
-export const markAsPlayed = async (email, blog_id, media, guid, isPlayed) => {
+export const markAsPlayed = (email, blog_id, media, guid, isPlayed) => {
     const data = {
         email,
         blog_id,
@@ -55,34 +68,31 @@ export const markAsPlayed = async (email, blog_id, media, guid, isPlayed) => {
         played: isPlayed ? 1.0 : 0
     }
 
-    const res = await axios.get(`${base_url}/user/played/update`, data)
-    return { type: 'MARK_AS_PLAYED', payload: { features: res.data } }
+    return axios.post(`${base_url}/user/played/update`, data).data
 }
 
 export const isPlayed = (state, id) => existAtList(state, 'played', id)
 
-export const markFavorite = async (email, blog_id, favorited) => {
+export const markFavorite = (email, blog_id, favorited) => {
     const data = {
         email,
         blog_id,
         favorited
     }
 
-    const res = await axios.get(`${base_url}/user/favorite/update`, data)
-    return { type: 'MARK_AS_FAVORITE', payload: { features: res.data } }
+    return axios.post(`${base_url}/user/favorite/update`, data).data
 }
 
 export const isFavorited = (state, id) => existAtList(state, 'favorites', id)
 
-export const addPlaylist = async (email, blog_id, add) => {
+export const addPlaylist = (email, blog_id, add) => {
     const data = {
         email,
         blog_id,
         add
     }
 
-    const res = await axios.get(`${base_url}/user/playlist/update`, data)
-    return { type: 'ADD_PLAYLIST', payload: { features: res.data } }
+    return axios.post(`${base_url}/user/playlist/update`, data).data
 }
 
 export const isPlaylisted = (state, id) => existAtList(state, 'playlist', id)
