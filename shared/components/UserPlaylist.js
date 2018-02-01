@@ -263,19 +263,21 @@ class UserPlaylist extends Component {
 
     renderEpisode = (episode) =>
         <Episode key={episode.blog_id}>
-            <Preview>
-                <Link to={formatLink(episode.link)}>
-                    <img src={episode.img} alt={episode.title}/>
-                </Link>
-            </Preview>
-            <Info>
-                <Date>{renderDate(episode.pubDate)}</Date>
-                <EpisodeTitle to={formatLink(episode.link)}>{episode.title}</EpisodeTitle>
-                <Description>{episode.abstract}</Description>
-            </Info>
-            <Play>
-                <PlayButton onClick={() => this.startPlay(episode)}>{renderPlayedSymbol(this.props.isPlaying, this.props.playerEpisodeGuid, episode.guid)}</PlayButton>
-            </Play>
+            <Inner>
+                <Preview>
+                    <Link to={formatLink(episode.link)}>
+                        <img src={episode.img} alt={episode.title}/>
+                    </Link>
+                </Preview>
+                <Info>
+                    <Date>{renderDate(episode.pubDate)}</Date>
+                    <EpisodeTitle to={formatLink(episode.link)}>{episode.title}</EpisodeTitle>
+                    <Description>{episode.abstract}</Description>
+                </Info>
+                <Play>
+                    <PlayButton onClick={() => this.startPlay(episode)}>{renderPlayedSymbol(this.props.isPlaying, this.props.playerEpisodeGuid, episode.guid)}</PlayButton>
+                </Play>
+            </Inner>
         </Episode>
 
     renderPlaylist(playlist) {
@@ -355,11 +357,14 @@ const ActionButton = styled.button`
 `
 
 const Episode = styled.div`
-    display: flex;
-    flex-direction: columns;
     padding-bottom: 18px;
     margin-bottom: 18px;
     border-bottom: 1px solid #979797;
+`
+
+const Inner = styled.div`
+    display: flex;
+    flex-direction: columns;
 `
 
 const Preview = styled.div`
@@ -415,6 +420,12 @@ const Description = styled.div`
     color: #575959;
     letter-spacing: 0;
     line-height: 24px;
+`
+
+const Actions = styled.div`
+    padding-top: 4px;
+    padding-bottom: 8px;
+    padding-left: ${60+12}px;
 `
 
 export default connect(
