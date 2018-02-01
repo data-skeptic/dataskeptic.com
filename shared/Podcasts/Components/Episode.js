@@ -246,7 +246,7 @@ const Duration = styled.span`
 const DownloadEpisode = styled.div`
     background-color: #fff;
     background-repeat: no-repeat;
-    background-image: url("img/png/dl-arrow.png");
+    background-image: url("/img/png/dl-arrow.png");
     background-size: 20px;
     background-position: 0px 2px;
     
