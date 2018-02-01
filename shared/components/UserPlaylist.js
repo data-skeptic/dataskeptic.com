@@ -147,7 +147,7 @@ const ActionButton = styled.button`
     border: 1px solid #d7d9d9;
     padding: 8px 12px;
     
-    > span {
+    span {
         font-weight: bold;
     }
     
