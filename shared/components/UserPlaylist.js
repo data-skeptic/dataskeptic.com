@@ -230,9 +230,10 @@ const formatLink = (link) => {
     return link;
 }
 
-const renderPlayedSymbol = (playedEpisodeGuid, guid) => playedEpisodeGuid === guid
-    ? <span>&#10073;&#10073;</span>
-    : <span>&#9658;</span>
+const renderPlayedSymbol = (playing, playedEpisodeGuid, guid) =>
+    playing && (playedEpisodeGuid === guid)
+        ? <span>&#10073;&#10073;</span>
+        : <span>&#9658;</span>
 
 class UserPlaylist extends Component {
 
@@ -273,7 +274,7 @@ class UserPlaylist extends Component {
                 <Description>{episode.abstract}</Description>
             </Info>
             <Play>
-                <PlayButton onClick={this.startPlay(episode)}>{renderPlayedSymbol(this.props.playerEpisodeGuid, episode.guid)}</PlayButton>
+                <PlayButton onClick={() => this.startPlay(episode)}>{renderPlayedSymbol(this.props.isPlaying, this.props.playerEpisodeGuid, episode.guid)}</PlayButton>
             </Play>
         </Episode>
 
@@ -326,7 +327,9 @@ const Container = styled.div`
 const PageTitle = styled.h2`
 `
 
-const Section = styled.div``
+const Section = styled.div`
+    padding-top: 12px;
+`
 
 const Buttons = styled.div`
     display: flex;
@@ -362,7 +365,7 @@ const Episode = styled.div`
 const Preview = styled.div`
     width: 60px;
     
-    > img {
+    img {
         max-width: 100%;
     }
 `
@@ -418,6 +421,7 @@ export default connect(
     (state) => ({
         user: state.auth.getIn(['user']).toJS(),
         loggedIn: state.auth.getIn(['loggedIn']),
+        isPlaying: state.player.getIn(['is_playing']),
         playerEpisodeGuid: state.player.getIn(['episode', 'guid'])
     })
 )(UserPlaylist);
