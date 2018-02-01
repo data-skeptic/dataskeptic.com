@@ -20,6 +20,8 @@ const formatLink = (link) => {
     return link;
 }
 
+const CURRENT_YEAR = (new Date().getFullYear().toString().substr(-2))
+
 const renderPlayedSymbol = (playing, playedEpisodeGuid, guid) =>
     playing && (playedEpisodeGuid === guid)
         ? <span>&#10073;&#10073;</span>
@@ -71,7 +73,7 @@ class UserPlaylist extends Component {
                     </Link>
                 </Preview>
                 <Info>
-                    <Date>{renderDate(episode.pubDate)}</Date>
+                    <Time>{renderDate(episode.pubDate)}</Time>
                     <EpisodeTitle to={formatLink(episode.link)}>{episode.title}</EpisodeTitle>
                     <Description>{episode.abstract}</Description>
                 </Info>
@@ -82,6 +84,8 @@ class UserPlaylist extends Component {
         </Episode>
 
     renderPlaylist(playlist = []) {
+        playlist = MOCKED_EPISODES
+
         return (
             <Section>
                 {playlist.map(this.renderEpisode)}
@@ -94,9 +98,9 @@ class UserPlaylist extends Component {
             <Section>
                 <p>You don't have anything in your playlist. Please click one of the buttons below</p>
                 <Buttons>
-                    <ActionButton first={true}>Add all episodes</ActionButton>
-                    <ActionButton>Add all episodes for 20XX</ActionButton>
-                    <ActionButton onClick={this.goToPodcasts} last={true}>Visit podcast page</ActionButton>
+                    <ActionButton first={true}><span>Add all episodes</span></ActionButton>
+                    <ActionButton><span>Add all episodes for <i>20{CURRENT_YEAR}</i></span></ActionButton>
+                    <ActionButton onClick={this.goToPodcasts} last={true}><span>Visit podcast page</span></ActionButton>
                 </Buttons>
             </Section>
         )
@@ -106,7 +110,8 @@ class UserPlaylist extends Component {
         const { user, loggedIn } = this.props
         if (!loggedIn) return <div/>
 
-        const { lists: {playlist}, playlistEpisodes } = user
+        let { lists: {playlist}, playlistEpisodes } = user
+        playlist = []
 
         return (
             <Container>
@@ -141,7 +146,10 @@ const ActionButton = styled.button`
     background: #fff;
     border: 1px solid #d7d9d9;
     padding: 8px 12px;
-    font-weight: bold;
+    
+    > span {
+        font-weight: bold;
+    }
     
     ${props => props.first && `
         border-top-left-radius: 4px;
@@ -179,7 +187,7 @@ const Info = styled.div`
     padding: 0px 12px;    
 `
 
-const Date = styled.div`
+const Time = styled.div`
     font-size: 14px;
     font-weight: bold;
     color: #7D8080;

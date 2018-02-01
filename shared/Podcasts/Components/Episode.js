@@ -291,6 +291,7 @@ const FavouriteButton = styled.button`
 `
 
 const PlaylistButton = styled.button`
+    min-width: 180px;
     height: 25px;
     line-height: 26px;
     padding-left: 32px;
