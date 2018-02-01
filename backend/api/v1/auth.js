@@ -80,8 +80,6 @@ module.exports = () => {
         delete user.password
 
         const data = await getUserData(user.email)
-        console.dir(`getUserData`)
-        console.dir(data)
         user = {
             ...user,
             ...data

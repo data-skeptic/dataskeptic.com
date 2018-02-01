@@ -7,6 +7,10 @@ import styled from 'styled-components'
 import {redirects_map} from '../../../redirects';
 import isCtrlOrCommandKey from '../../utils/isCtrlOrCommandKey';
 import GuestImage from "./GuestImage";
+import {
+    markAsPlayed, markFavorite, addPlaylist,
+    isPlayed, isFavorited, isPlaylisted
+} from "../../Auth/Reducers/AuthReducer";
 
 class Episode extends React.Component {
     constructor(props) {
@@ -36,28 +40,34 @@ class Episode extends React.Component {
         }
     }
 
-    setPlayed() {
+    setPlayed = () => {
+        const {email, blogId} = this.props
         alert('Played')
     }
 
-    setUnplayed() {
+    setUnplayed = () => {
+        const {userEmail, blogId} = this.props
         alert('Unplayed')
     }
 
-    setFavourite() {
-        alert('Favourite')
+    setFavourite = () => {
+        const {userEmail, blogId} = this.props
+        this.props.dispatch(markFavorite(userEmail, blogId, true))
     }
 
-    setUnfavourite() {
-        alert('Unfavourite')
-    }
-
-    removeFromPlaylist() {
-        alert('FromPlaylist')
+    setUnfavourite = () => {
+        const {userEmail, blogId} = this.props
+        this.props.dispatch(markFavorite(userEmail, blogId, false))
     }
 
     addToPlaylist() {
-        alert('ToPlaylist')
+        const {userEmail, blogId} = this.props
+        this.props.dispatch(addPlaylist(userEmail, blogId, true))
+    }
+
+    removeFromPlaylist = () => {
+        const {userEmail, blogId} = this.props
+        this.props.dispatch(addPlaylist(userEmail, blogId, false))
     }
 
     render() {
@@ -99,9 +109,7 @@ class Episode extends React.Component {
         const episodeLink = this.formatLink(ep.link);
         const guests = ep.related && ep.related.filter((r) => r.type === 'person')
 
-        const played = true
-        const playlisted = false
-        const favourited = true
+        const { played, favorited, playlisted } = this.props.states
 
         return (
             <div className="row episode">
@@ -122,7 +130,7 @@ class Episode extends React.Component {
                         <Link className="blog-title" to={episodeLink} onClick={this.onEpisodeClick}>{ep.title}</Link>
                         <Stats>
                             {loggedIn && <PlayButton played={played} onClick={() => played ? this.setUnplayed() : this.setPlayed() }/>}
-                            {loggedIn && <FavouriteButton favourited={favourited} onClick={() => favourited ? this.setFavourite() : this.setUnfavourite() }/>}
+                            {loggedIn && <FavouriteButton favourited={favorited} onClick={() => favorited ? this.setFavourite() : this.setUnfavourite() }/>}
                         </Stats>
                     </Title>
                     <Buttons>
@@ -314,11 +322,17 @@ const PlaylistButton = styled.button`
     }
 `
 
-export default connect(state => ({
+export default connect((state, ownProps) => ({
     loggedIn: state.auth.getIn(['loggedIn']),
-    user: state.auth.getIn(['user']).toJS(),
+    userEmail: state.auth.getIn(['user', 'eamil']),
     player: state.player,
     episodes: state.episodes,
-    blogs: state.blogs
+    blogs: state.blogs,
+    blogId: ownProps.episode.blog_id,
+    states: {
+        played: isPlayed(state, ownProps.episode.blog_id),
+        favorited: isFavorited(state, ownProps.episode.blog_id),
+        playlisted: isPlaylisted(state, ownProps.episode.blog_id)
+    }
 }))(Episode)
 
