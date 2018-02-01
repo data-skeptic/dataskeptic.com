@@ -47,11 +47,46 @@ const notifyOnJoin = ({ email }) => {
     return MailServices.sendMail(message)
 }
 
+
+const joinList = (list, key) =>
+    list.reduce(function(a, curr) {
+        return [...a, curr[key]];
+    }, []);
+
+const getUserList = (email, list, props) => axios.get(`${base_url}/user/${list}/list?email=${email}${props}`).then((res) => joinList(res.data, 'blog_id'))
+
+const getPlayedList = (email) => getUserList(email, 'played', '&limit=20&offset=0')
+const getPlaylistList = (email) => getUserList(email, 'playlist')
+const getFavoritesList = (email) => getUserList(email, 'favorites')
+
+const getUserData = async (email) => {
+    const [ played, playlist, favorites ] = await Promise.all([
+        getPlayedList(email),
+        getPlaylistList(email),
+        getFavoritesList(email)
+    ])
+
+    const lists = { played, playlist, favorites }
+
+    return {
+        lists
+    }
+}
+
 module.exports = () => {
     const router = express.Router()
 
-    passport.serializeUser((user, done) => {
+    passport.serializeUser(async (user, done) => {
         delete user.password
+
+        const data = await getUserData(user.email)
+        console.dir(`getUserData`)
+        console.dir(data)
+        user = {
+            ...user,
+            ...data
+        }
+
         done(null, user)
     })
 
