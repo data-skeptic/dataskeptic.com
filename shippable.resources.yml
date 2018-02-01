@@ -1,9 +1,9 @@
 resources:
   - name: shipdemo-img
     type: image
-    integration: ECR_INT
+    integration: ds-site
     pointer:
-      sourceName: "189353835613.dkr.ecr.us-west-1.amazonaws.com/dataskeptic-rep" # replace with a pointer to your docker image
+      sourceName: "085318171245.dkr.ecr.us-west-1.amazonaws.com/ds" # replace with a pointer to your docker image
       isPull: false
     seed:
       versionName: "latest"  #replace with your image tag on Amazon ECR
@@ -12,13 +12,21 @@ resources:
     type: dockerOptions
     version:
       portMappings:
-        - 3000:3000
-        - 443:443
+        - 0:443
         - 80:80
+        - 9001:9001
+        - 3000:3000
 
   - name: ecs-test-cluster
     type: cluster
-    integration: AWS_INT
+    integration: ds-site
     pointer:
-      sourceName : "dataskeptic-cluster" #replace with name of the cluster to which you are deploying
+      sourceName : "dsci-cluster" #replace with name of the cluster to which you are deploying
       region: "us-west-1" #replace with region of the cluster to which you are deploying
+
+  - name: ecs-master-lb
+    type: loadBalancer
+    pointer:
+      role: ds-lb
+      sourceName: arn:aws:elasticloadbalancing:us-west-1:085318171245:targetgroup/ds-tg/8b6679e86a4a5347
+      method: application

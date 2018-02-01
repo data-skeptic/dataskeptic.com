@@ -25,10 +25,10 @@ build:
     # http://docs.shippable.com/ci/advancedOptions/retry/
     - shippable_retry npm install
     - shippable_retry npm run build
-    - docker build -t dataskeptic-rep .
-    - docker tag dataskeptic-rep:latest 189353835613.dkr.ecr.us-west-1.amazonaws.com/dataskeptic-rep:latest
+    - docker build -t ds .
+    - docker tag ds:latest 085318171245.dkr.ecr.us-west-1.amazonaws.com/ds:latest
   post_ci:
-    - docker push 189353835613.dkr.ecr.us-west-1.amazonaws.com/dataskeptic-rep:latest
+    - docker push 085318171245.dkr.ecr.us-west-1.amazonaws.com/ds:latest
     - echo "versionName=latest" >> $JOB_STATE/shipdemo-img.env
     - echo "buildNumber=$BUILD_NUMBER" >> $JOB_STATE/shipdemo-img.env
 
@@ -36,15 +36,14 @@ build:
 # http://docs.shippable.com/integrations/overview/
 integrations:
   hub:
-    - integrationName: ECR_INT
+    - integrationName: ds-site
       region: us-west-1
-      type: ecr
+      type: amazonKeys
   notifications:
     - integrationName: email
       type: email
       recipients:
-        - gleb@thespoon.co
-        - bogdan@thespoon.co
+        - kyle@dataskeptic.com
       branches:
         only:
           - dev
