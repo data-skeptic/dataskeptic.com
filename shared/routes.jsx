@@ -53,6 +53,8 @@ import AdminEmailsSend         from 'components/admin/AdminEmailsSend';
 import AdminOrdersNew          from 'components/admin/AdminOrdersNew';
 import AdminOrdersProcessing   from 'components/admin/AdminOrdersProcessing';
 
+import UserPlaylist             from 'components/UserPlaylist';
+
 import SnlImpact               from 'components/l/SnlImpact';
 
 const env = (process.env.NODE_ENV === "production") ? 'prod' : 'dev'
@@ -169,6 +171,11 @@ export default (
         <Route path="/membershipPortal" showAds={false} component={App}>
             <IndexRoute component={MembershipPortal}/>
         </Route>
+
+        <Route path="/profile/playlist" showAds={false} component={App}>
+            <IndexRoute component={UserPlaylist}/>
+        </Route>
+
         <Route path="/membership/change" showAds={false} component={App}>
             <IndexRoute component={ChangeMembership}/>
         </Route>
