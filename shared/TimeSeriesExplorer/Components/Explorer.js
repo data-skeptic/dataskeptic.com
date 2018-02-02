@@ -2,14 +2,19 @@ import React from "react";
 import {Link} from 'react-router';
 import {connect} from 'react-redux';
 
+import Options from "./Options";
+import Plot from "./Plot";
+import Tools from "./Tools";
+import QueryConsole from "./QueryConsole";
+
 class Explorer extends React.Component {
     constructor(props) {
         super(props)
     }
 
-    componentWillReceiveProps(props) {
-    	var dispatch = props.dispatch
-    	console.log("dispatch")
+    componentWillMount() {
+    	var dispatch = this.props.dispatch
+    	console.log("dispatch--------------------------------------------")
     	dispatch({type: "INITIALIZE_TIME_SERIES_EXPLORER", payload: {}})
     }
 
@@ -18,7 +23,11 @@ class Explorer extends React.Component {
     	var state = otimeseries.state
         return (
         	<div className="time-series-explorer">
-        		Explorer {state}
+        		Explorer: {state}
+                <Options />
+                <Plot />
+                <Tools />
+                <QueryConsole />
         	</div>
         )
     }
