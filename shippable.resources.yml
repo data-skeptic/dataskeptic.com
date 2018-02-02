@@ -17,7 +17,7 @@ resources:
         - 9001:9001
         - 3000:3000
 
-  - name: ecs-test-cluster
+  - name: ecs-cluster
     type: cluster
     integration: ds-site
     pointer:
