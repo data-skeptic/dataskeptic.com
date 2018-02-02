@@ -640,8 +640,8 @@ function tracking(req) {
     request('http://ipinfo.io/' + ip, function(error, res, body) {
 
       if (influxdb) {
-        var ip = body['ip']
         if (body) {
+            var ip = body['ip']
             var country = body['country'] || "missing"
             var region  = body['region'] || "missing"
             var postal  = body['postal'] || "missing"
