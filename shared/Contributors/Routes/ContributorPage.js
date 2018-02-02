@@ -7,6 +7,7 @@ import NotFound from "../../NotFound/Components/NotFound";
 import { Link } from 'react-router'
 import moment from "moment/moment";
 import { get_contributor_posts } from "../../utils/redux_loader"
+import Loading from "../../Common/Components/Loading";
 
 const getContributorInfo = (contributor='', contributors) =>
     contributors && contributors[contributor.toLowerCase()]
@@ -76,7 +77,7 @@ class ContributorPage extends Component {
             return <NotFound location={this.props.location}/>
         }
 
-        const { prettyname, img, twitter, linkedin, bio, posts } = contributor
+        const { prettyname, img, twitter, linkedin, bio, posts, postsLoaded } = contributor
 
         return (
             <Container>
@@ -100,6 +101,7 @@ class ContributorPage extends Component {
                     </Item>}
                 </Navigation>
                 <Blogs>
+                    {!postsLoaded && <Loading />}
                     {posts && this.renderPosts(posts)}
                 </Blogs>
             </Container>
