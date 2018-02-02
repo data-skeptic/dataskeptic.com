@@ -14,6 +14,7 @@ var base_url = config[env]['base_api'] + env
 
 const init = {
     "home_loaded": false,
+    "featured_blog_state": "",
     "featured_blog": {},
     "featured_blog2": {},
     "featured_blog3": {},
@@ -148,6 +149,7 @@ export default function cmsReducer(state = defaultState, action) {
             })
         break
     case 'CMS_SET_HOMEPAGE_FEATURE':
+        nstate.featured_blog_state = "submit"
         var blog_id = nstate.featured_blog.blog_id
         var featured_2_blog_id = nstate.featured_blog2.blog_id
         var featured_3_blog_id = nstate.featured_blog3.blog_id
@@ -160,6 +162,7 @@ export default function cmsReducer(state = defaultState, action) {
         axios
             .post(url, payload)
             .then(function(result) {
+                action.payload.dispatch({type: 'CMS_SET_HOMEPAGE_FEATURE_SUCCESS'})
                 var le = result['latest_episode']
                 if (le == undefined) {
                     le = {}
@@ -167,10 +170,17 @@ export default function cmsReducer(state = defaultState, action) {
                 }
             })
             .catch((err) => {
+                action.payload.dispatch({type: 'CMS_SET_HOMEPAGE_FEATURE_FAIL'})
                 console.log(err)
                 var errorMsg = JSON.stringify(err)
                 snserror("CMS_SET_HOMEPAGE_FEATURE", errorMsg)
             })
+        break;
+    case 'CMS_SET_HOMEPAGE_FEATURE_SUCCESS':
+        nstate.featured_blog_state = "success"
+        break;
+    case 'CMS_SET_HOMEPAGE_FEATURE_FAIL':
+        nstate.featured_blog_state = "error"
         break;
     case 'CMS_UPDATE_HOMEPAGE_FEATURE':
         var payload = action.payload

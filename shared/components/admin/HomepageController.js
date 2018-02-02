@@ -20,13 +20,14 @@ class HomepageController extends React.Component {
 	}
 
 	save(dispatch) {
-	    dispatch({type: "CMS_SET_HOMEPAGE_FEATURE", payload: {} })
+	    dispatch({type: "CMS_SET_HOMEPAGE_FEATURE", payload: {dispatch} })
 	}
 
 	render() {
 		var dispatch = this.props.dispatch
 		var ocms = this.props.cms.toJS()
 		console.log(ocms)
+		const featured_blog_state = ocms['featured_blog_state']
 		var featured_blog = ocms['featured_blog']
 		var featured_blog2 = ocms['featured_blog2']
 		var featured_blog3 = ocms['featured_blog3']
@@ -63,7 +64,15 @@ class HomepageController extends React.Component {
 					<div classname="col-xs-6 col-sm-5"><input id="featured_blog2" onChange={this.update.bind(this, me, "X")} value={blog_id2} /></div>
 					<div classname="col-xs-12 col-sm-2">3rd position blog_id:</div>
 					<div classname="col-xs-6 col-sm-5"><input id="featured_blog3" onChange={this.update.bind(this, me, "X")} value={blog_id3} /></div>
-					<div classname="col-xs-6 col-sm-5"><button onClick={this.save.bind(this, dispatch)}>Update</button></div>
+					<div classname="col-xs-6 col-sm-5">
+						<button onClick={this.save.bind(this, dispatch)} disabled={featured_blog_state === "submit"}>
+                            Update
+						</button>
+						{'   '}
+                        {featured_blog_state === "submit" && <span className="text-primary">Saving...</span>}
+                        {featured_blog_state === "success" && <span className="text-success">Saved</span>}
+                        {featured_blog_state === "error" && <span className="text-danger">Try again</span>}
+					</div>
 				</div>
 			</div>
 		)
