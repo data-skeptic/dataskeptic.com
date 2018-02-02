@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { map, isEmpty } from 'lodash'
+import { map, isEmpty, orderBy } from 'lodash'
 import marked from "marked"
 
 import {changePageTitle} from '../Layout/Actions/LayoutActions';
@@ -35,6 +35,8 @@ class About extends Component {
 		<div className="contributors-list">
 			{map(contributors, this.renderContributor)}
 		</div>
+
+	sortContributors = (contributors) => orderBy(contributors, 'sort_order')
 
 	render() {
 		const { contributors } = this.props
@@ -73,7 +75,7 @@ class About extends Component {
 
 				<div className="row">
 					<h3>Contributors</h3>
-					{!isEmpty(contributors) && this.renderContributors(contributors)}
+					{!isEmpty(contributors) && this.renderContributors(this.sortContributors(contributors))}
 				</div>
 			</div>
 		)
