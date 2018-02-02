@@ -3,6 +3,20 @@ import {Field, reduxForm} from 'redux-form'
 import {UserInfoBox} from "../../Proposals/Components/UserInfoBox/UserInfoBox";
 import FormController from '../../Forms/Components/FormController/FormController'
 
+const validate = (values) => {
+    let errors = {}
+
+    if (!values.name) {
+        errors.name = `Name can't be blank`
+    }
+
+    if (!values.email) {
+        errors.email = `Email can't be blank`
+    }
+
+    return errors
+}
+
 const QuestionForm = ({
                           children,
                           handleSubmit,
@@ -54,5 +68,6 @@ const QuestionForm = ({
 )
 
 export default reduxForm({
-    form: 'question'
+    form: 'question',
+    validate
 })(QuestionForm)

@@ -214,7 +214,7 @@ class ContactUs extends React.Component {
 					</p>
                     <div>
                         <QuestionForm
-                            allowSubmit={confirmPolicy }
+                            allowSubmit={confirmPolicy}
                             showSubmit={activeStep === 'REVIEW'}
                             initialValues={{
                                 confirmPolicy: true
