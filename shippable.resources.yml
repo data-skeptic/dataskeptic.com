@@ -30,6 +30,3 @@ resources:
       role: ds-lb
       sourceName: arn:aws:elasticloadbalancing:us-west-1:085318171245:targetgroup/ds-tg/8b6679e86a4a5347
       method: application
-
-
-
