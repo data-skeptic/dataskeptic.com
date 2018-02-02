@@ -638,31 +638,38 @@ function tracking(req) {
     }
     console.log("renderPage to " + ip)    
     request('http://ipinfo.io/' + ip, function(error, res, body) {
+
       if (influxdb) {
         var ip = body['ip']
-        var country = body['country'] || "missing"
-        var region  = body['region'] || "missing"
-        var postal  = body['postal'] || "missing"
-        var loc     = body['loc'] || "missing"
-        var arr     = loc.split(",")
-        if (arr.length == 2) {
-            var lat = arr[0]
-            var lng = arr[1]
+        if (body) {
+            var country = body['country'] || "missing"
+            var region  = body['region'] || "missing"
+            var postal  = body['postal'] || "missing"
+            var loc     = body['loc'] || "missing"
+            var arr     = loc.split(",")
+            if (arr.length == 2) {
+                var lat = arr[0]
+                var lng = arr[1]
+            } else {
+                var lat = ""
+                var lng = ""
+            }
+            console.log("influx")
+            influxdb.writePoints([{
+                measurement: "impression",
+                tags: {country, region, postal},
+                fields: {lat, lng}
+            }]).then(function() {
+                console.log("success")
+            }).catch(function (err) {
+                console.error('Error saving data to InfluxDB!')
+                console.log(err)
+            })
         } else {
-            var lat = ""
-            var lng = ""
+            console.log("Some error from ipinfo.io")
+            console.log(body)
+            console.log(error)
         }
-        console.log("influx")
-        influxdb.writePoints([{
-            measurement: "impression",
-            tags: {country, region, postal},
-            fields: {lat, lng}
-        }]).then(function() {
-            console.log("success")
-        }).catch(function (err) {
-            console.error('Error saving data to InfluxDB!')
-            console.log(err)
-        })
       }
     })
 }
