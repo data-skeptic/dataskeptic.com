@@ -195,7 +195,7 @@ class MainView extends React.Component {
 
   render() {
     this.logPageView()
-    const {isMobileMenuVisible, admin, cart, isCartVisible, loggedIn} = this.props;
+    const {isMobileMenuVisible, admin, cart, isCartVisible, loggedIn, user} = this.props;
     const {showAds = true} = this.props.route;
     const {pathname} = this.props.location
     const itemsCount = getCartItemsCount(cart.toJS().cart_items);
@@ -218,6 +218,7 @@ class MainView extends React.Component {
                 cartItemsCount={itemsCount}
                 visible={isMobileMenuVisible}
                 loggedIn={loggedIn}
+                user={user}
             />
 
             <div className="row row-centered">
@@ -245,6 +246,7 @@ export default connect(
       site: state.site,
       isMobileMenuVisible: state.layout.getIn(['isMobileMenuVisible']),
       loggedIn: state.auth.getIn(['loggedIn']),
+      user: state.auth.getIn(['user']).toJS(),
     }),
     dispatch => bindActionCreators({
       toggleMobileMenu,
