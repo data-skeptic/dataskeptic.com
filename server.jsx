@@ -59,7 +59,8 @@ import axios from "axios"
 
 import tunnel from 'tunnel'
 import http from 'http'
-
+import request from 'request'
+var Influx = require('influx');
 
 console.log("server.jsx : starting")
 
@@ -100,6 +101,26 @@ aws.config.update(
         "region": aws_region
     }
 );
+
+var influxdb = undefined
+const influx_config = c[env]['influxdb']
+if (influx_config) {
+    console.log("initializing influxdb")
+    influxdb = new Influx.InfluxDB({
+      protocol: 'https',
+      host:     influx_config['host'],
+      database: influx_config['database'],
+      port:     influx_config['port'],
+      username: influx_config['user'],
+      password: influx_config['password']
+    });
+    //  options: { ca: ca },
+} else {
+    console.log("NOT initializing influxdb")
+}
+
+
+
 
 /*
  * INITIALIZE CACHE
@@ -145,10 +166,14 @@ const doRefresh = (store) => {
     return loadEpisodes(env)
         .then(function ({episodes_map, episodes_list, episodes_content, member_feed}) {
             console.log("-[Refreshing episodes]-");
-            Cache.episodes_map = episodes_map
-            Cache.episodes_list = episodes_list
-            Cache.episodes_content = episodes_content
-            Cache.member_feed = member_feed
+            if (Cache) {
+                Cache.episodes_map = episodes_map
+                Cache.episodes_list = episodes_list
+                Cache.episodes_content = episodes_content
+                Cache.member_feed = member_feed                
+            } else {
+                console.log("Cache is undefined")
+            }
             return getProducts(store, env)
         })
         .then((products) => {
@@ -415,8 +440,24 @@ function api_router(req, res) {
         var chal = b['c']
         challenge_response = chal
         return res.status(200).end(JSON.stringify({"status": chal}))
+    } else if (req.url.indexOf('/api/influx') == 0) {
+        const querystring_dict = req.query
+        if ('q' in querystring_dict) {
+            var query = querystring_dict['q']
+        } else {
+            var query = 'SELECT "lat", time from impression where time > now() - 1m'
+        }
+        if (influxdb) {
+            influxdb.query(
+              query
+            ).then(function(result) {
+              res.status(200).end(JSON.stringify(result))
+            });
+        } else {
+            console.log("No influx")
+        }
+        return true
     }
-
     return false
 }
 
@@ -465,7 +506,6 @@ async function inject_homepage(store, my_cache, pathname) {
         ...episodeData
     }
 
-    store.dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
     store.dispatch({type: "ADD_EPISODES", payload: [episode]})
 }
 
@@ -485,10 +525,6 @@ async function inject_contributor(store, cache, pathanme) {
     const blogs = await getContributorPosts(contributor)
 
     store.dispatch({type: "SET_CONTRIBUTOR_BLOGS", payload: { contributor, blogs } })
-}
-
-function install_episode(store, episode) {
-    store.dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
 }
 
 async function updateState(store, pathname, req) {
@@ -595,7 +631,44 @@ function renderView(store, renderProps, location) {
     };
 }
 
+function tracking(req) {
+    var ip = "not-set"
+    if (req.connection) {
+        ip = req.connection.remoteAddress
+    }
+    console.log("renderPage to " + ip)    
+    request('http://ipinfo.io/' + ip, function(error, res, body) {
+      if (influxdb) {
+        var ip = body['ip']
+        var country = body['country'] || "missing"
+        var region  = body['region'] || "missing"
+        var postal  = body['postal'] || "missing"
+        var loc     = body['loc'] || "missing"
+        var arr     = loc.split(",")
+        if (arr.length == 2) {
+            var lat = arr[0]
+            var lng = arr[1]
+        } else {
+            var lat = ""
+            var lng = ""
+        }
+        console.log("influx")
+        influxdb.writePoints([{
+            measurement: "impression",
+            tags: {country, region, postal},
+            fields: {lat, lng}
+        }]).then(function() {
+            console.log("success")
+        }).catch(function (err) {
+            console.error('Error saving data to InfluxDB!')
+            console.log(err)
+        })
+      }
+    })
+}
+
 const renderPage = (req, res) => {
+    tracking(req)
     if (req.url == '/favicon.ico') {
         return res.redirect(301, 'https://s3.amazonaws.com/dataskeptic.com/favicon.ico')
     }

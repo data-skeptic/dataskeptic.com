@@ -10,7 +10,7 @@ var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
 
 const config = require('../../config/config.json');
 
-var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
+var base_url = config[env]['base_api'] + env
 
 const init = {
     "home_loaded": false,
@@ -32,11 +32,12 @@ const defaultState = Immutable.fromJS(init);
 const s3 = new aws.S3()
 
 const getEpisode = async (guid) => {
+    console.log("h1:" + guid)
     const [episodeContent, episodeData] = await Promise.all([
         axios.get(`/api/episodes/get/${guid}`).then((res) => res.data),
         axios.get(`${base_url}/blog/list?guid=${guid}`).then((res) => res.data[0])
     ])
-
+    console.log("h2")
     return {
         ...episodeContent,
         ...episodeData
@@ -209,7 +210,6 @@ export default function cmsReducer(state = defaultState, action) {
 
         getEpisode(le.guid)
             .then((episode) => {
-                dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
                 dispatch({type: "ADD_EPISODES", payload: [episode]})
             })
             .catch((err) => {
