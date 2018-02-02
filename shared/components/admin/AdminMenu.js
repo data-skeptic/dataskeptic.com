@@ -45,6 +45,16 @@ class AdminMenu extends Component {
                             </div>
                         </div>
                     </li>
+                    <li className="dropdown">
+                        <a>Analytics</a>
+                        <div className="fulldrop">
+                            <div className="column">
+                                <ul>
+                                    <li><Link to="/admin/tse">Time Series Analysis</Link></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
                 </ul>
             </div>
         )

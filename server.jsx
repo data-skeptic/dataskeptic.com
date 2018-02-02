@@ -645,6 +645,7 @@ function tracking(req) {
         var postal  = body['postal'] || "missing"
         var loc     = body['loc'] || "missing"
         var arr     = loc.split(",")
+        console.log(arr)
         if (arr.length == 2) {
             var lat = arr[0]
             var lng = arr[1]
