@@ -5,7 +5,7 @@ jobs:
      - IN: shipdemo-img
      - TASK: managed
 
-  - name: dataskepticcom_runCI
+  - name: dataskeptic_runCI
     type: runCI
     steps:
       - OUT: shipdemo-img
