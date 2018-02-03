@@ -79,6 +79,7 @@
     "react-ga": "^2.1.2",
     "react-howler": "^3.3.0",
     "react-logger": "^1.1.0",
+    "react-modal": "^3.1.11",
     "react-redux": "^4.4.6",
     "react-router": "^1.0.3",
     "react-select": "^1.2.1",

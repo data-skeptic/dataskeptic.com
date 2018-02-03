@@ -19,7 +19,16 @@ const defaultState = {
     field: "lat",
     func: "COUNT",
     range: "-1d",
-    resolution: "15m"
+    resolution: "15m",
+    alert_type: undefined,
+    escalation_policy: undefined,
+    escalation_policies: undefined,
+    contact_methods: [
+        {type: "email", value: ""},
+        {type: "sms", value: ""},
+        {type: "voice_call", value: ""}
+    ],
+    alerts: []
 };
 
 const initialState = fromJS(defaultState);
@@ -60,6 +69,17 @@ export default function TimeSeriesReducer(state=initialState, action) {
                 dispatch({type: "TSE_ERROR", payload: {msg, details}})
                 console.log(details)
             })
+            var url2 = "/api/influx/escalation_policy/list"
+            axios.get(url2).then(function(resp) {
+                var escalation_policies = resp['data']
+                dispatch({type: "TSE_SET_ESCALATION_POLICIES", payload: {escalation_policies, dispatch}})
+            }).catch(function(err) {
+                var details = JSON.stringify(err)
+                var msg = "Error getting escalation_policies"
+                dispatch({type: "TSE_ERROR", payload: {msg, details}})
+                console.log(details)
+            })
+            // TODO: Get Alerts from database
             break;
         case 'TSE_UPDATE_DATABASES':
             var dispatch = action.payload.dispatch
@@ -111,6 +131,17 @@ export default function TimeSeriesReducer(state=initialState, action) {
             var selectedOption = action.payload.selectedOption
             nstate.range = selectedOption.value
             break
+        case 'TSE_SET_ALERT_TYPE':
+            var selectedOption = action.payload.selectedOption
+            nstate.alert_type = selectedOption.value
+        case 'TSE_SET_ESCALATION_POLICY':
+            var id = action.payload.selectedOption
+            for (var policy of nstate.escalation_policies) {
+                if (policy.id == id) {
+                    nstate.escalation_policy = policy                    
+                }
+            }
+            break
         case 'TSE_SEARCH':
             var dispatch = action.payload.dispatch
             // nstate.database?
@@ -128,6 +159,53 @@ GROUP BY time(${resolution})
             console.log(query)
             nstate.query = query
             dbquery(dispatch, nstate)
+            break
+        case 'TSE_SET_ESCALATION_POLICIES':
+            nstate.escalation_policies = action.payload.escalation_policies
+            break
+        case 'TSE_ADD_ESCALATION_POLICY':
+            console.log("TODO: implement persistence of TSE_SET_ESCALATION_POLICIES")
+            var cms = nstate.contact_methods
+            var escalation_policy = {methods:[]}
+            for (var cm of cms) {
+                var type = cm.type
+                var value = cm.value
+                var id = "1001"
+                if (value != "") {
+                    escalation_policy.methods.push({id, type, value})
+                }
+            }
+            nstate.escalation_policy = escalation_policy
+            if (nstate.escalation_policies == undefined) {
+                nstate.escalation_policies = []
+            }
+            nstate.escalation_policies.push(escalation_policy)
+            break
+        case 'TSE_UPDATE_CONTACT_INFO':
+            var payload = action.payload
+            var type = payload.type
+            var value = payload.value
+            var cms = nstate.contact_methods
+            var i = 0
+            for (var cm of cms) {
+                if (cm.type == type) {
+                    nstate.contact_methods[i].value = value
+                }
+                i += 1
+            }
+            break
+        case 'TSE_SAVE_ALERT':
+            var dispatch = action.payload.dispatch
+            var query = nstate.query
+            var database = nstate.database
+            var measurement = nstate.measurement
+            var field = nstate.field
+            var func = nstate.func
+            var range = nstate.range
+            var resolution = nstate.resolution
+            var escalation_policy = nstate.escalation_policy
+            var alert = {query, database, measurement, field, func, range, resolution, escalation_policy}
+            nstate.alerts.push(alert)
             break
         default:
             break

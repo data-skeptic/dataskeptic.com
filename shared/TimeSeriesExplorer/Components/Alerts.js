@@ -16,11 +16,15 @@ class Alerts extends React.Component {
     }
 
     render() {
-    	var otimeseries = this.props.timeseries.toJS()
+        var alerts = this.props.alerts
+        var alert_type = this.props.alert_type
+        var escalation_policy = this.props.escalation_policy
+    	var escalation_policies = this.props.escalation_policies
+        var contact_methods = this.props.contact_methods
         return (
         	<div className="time-series-alerts">
-        		<AlertsAdd />
-                <AlertList />
+        		<AlertsAdd alert_type={alert_type} escalation_policy={escalation_policy} escalation_policies={escalation_policies} contact_methods={contact_methods} />
+                <AlertList alerts={alerts} />
                 <hr />
         	</div>
         )

@@ -40,7 +40,6 @@ class Options extends React.Component {
         var config = this.props.config
         let {databases, measurements, database, measurement, field, func, range, resolution} = config
         var fields = []
-        console.log([range, resolution])
         return (
         	<div className="time-series-options">
                 <div className="row">

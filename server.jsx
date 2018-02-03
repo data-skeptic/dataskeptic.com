@@ -481,8 +481,11 @@ function api_router(req, res) {
             console.log("No influx")
         }
         return true
-    }
-    
+    } else if (req.url.indexOf('/api/influx/escalation_policy/list') == 0) {
+        var escalation_policies = []
+        res.status(200).end(JSON.stringify(escalation_policies))
+        return true
+    }    
     return false
 }
 
@@ -672,6 +675,7 @@ function tracking(req) {
             var postal  = body['postal'] || "missing"
             var loc     = body['loc'] || "missing"
             var arr     = loc.split(",")
+            console.log(body)
             if (arr.length == 2) {
                 var lat = arr[0]
                 var lng = arr[1]
@@ -679,7 +683,7 @@ function tracking(req) {
                 var lat = ""
                 var lng = ""
             }
-            console.log("influx")
+            console.log(["influx", lat, region, country, postal])
             influxdb.writePoints([{
                 measurement: "impression",
                 tags: {country, region, postal},

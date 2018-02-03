@@ -15,18 +15,20 @@ class AlertsList extends React.Component {
     }
 
     render() {
-    	var otimeseries = this.props.timeseries.toJS()
-        var alerts = []
+        var alerts = this.props.alerts || []
+        console.log('alerts.length')
+        console.log(alerts.length)
         if (alerts.length == 0) {
             return (
                 <div className="time-series-alerts-list">
+                    <h4>Active Alerts</h4>
                     <p>No alerts to show.</p>
                 </div>
                 )
         } else {
             return (
                 <div className="time-series-alerts-list">
-                    AlertsList2
+                    <h4>Active Alerts</h4>
                     {alerts.map(alert => (
                       <AlertsListItem alert={alert} />
                     ))}
