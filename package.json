@@ -81,6 +81,7 @@
     "react-logger": "^1.1.0",
     "react-redux": "^4.4.6",
     "react-router": "^1.0.3",
+    "react-select": "^1.2.1",
     "react-share": "^1.19.0",
     "react-slick": "^0.14.5",
     "react-slider": "^0.7.0",
