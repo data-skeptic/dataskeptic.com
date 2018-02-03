@@ -120,10 +120,10 @@ export default function TimeSeriesReducer(state=initialState, action) {
             var range = nstate.range
             var resolution = nstate.resolution
             var query = `
-                SELECT ${func}(${field}) as val 
-                FROM ${measurement} 
-                where time > now() ${range} 
-                GROUP BY time(${resolution})
+SELECT ${func}(${field}) as val 
+FROM ${measurement} 
+where time > now() ${range} 
+GROUP BY time(${resolution})
                 `
             console.log(query)
             nstate.query = query
