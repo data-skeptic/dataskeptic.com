@@ -16,8 +16,6 @@ class AlertsList extends React.Component {
 
     render() {
         var alerts = this.props.alerts || []
-        console.log('alerts.length')
-        console.log(alerts.length)
         if (alerts.length == 0) {
             return (
                 <div className="time-series-alerts-list">

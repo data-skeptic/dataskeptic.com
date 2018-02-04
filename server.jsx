@@ -86,6 +86,7 @@ var itunesId = "xxxx"
 
 const c = require('./config/config.json')
 console.dir('env = ' + env)
+var ipinfo_token = c[env]['ipinfo_token']
 itunesId = c[env]['itunes']
 stripe_key = c[env]['stripe']
 sp_key = c[env]['sp']
@@ -464,6 +465,19 @@ function api_router(req, res) {
             console.log("No influx")
         }
         return true
+    } else if (req.url.indexOf('/api/influx/measurement/impression/tags') == 0) {
+        var measurement = "impression" //req.params.measurement
+        var query = `SHOW TAG KEYS FROM ${measurement}`
+        if (influxdb) {
+            influxdb.query(
+              query
+            ).then(function(result) {
+              res.status(200).end(JSON.stringify(result))
+            });
+        } else {
+            console.log("No influx")
+        }
+        return true
     } else if (req.url.indexOf('/api/influx/query') == 0) {
         const querystring_dict = req.query
         if ('q' in querystring_dict) {
@@ -664,43 +678,44 @@ function tracking(req) {
     if (req.connection) {
         ip = req.connection.remoteAddress
     }
-    console.log("renderPage to " + ip)    
-    request('http://ipinfo.io/' + ip, function(error, res, body) {
-
-      if (influxdb) {
-        if (body) {
-            var ip = body['ip']
-            var country = body['country'] || "missing"
-            var region  = body['region'] || "missing"
-            var postal  = body['postal'] || "missing"
-            var loc     = body['loc'] || "missing"
-            var arr     = loc.split(",")
-            console.log(body)
-            if (arr.length == 2) {
-                var lat = arr[0]
-                var lng = arr[1]
-            } else {
-                var lat = ""
-                var lng = ""
+    if (ipinfo_token) {
+        console.log("renderPage to " + ip)
+        request('http://ipinfo.io/' + ip + '?token=' + ipinfo_token, function(error, res, body) {
+            if (influxdb) {
+                if (body) {
+                    var ip = body['ip']
+                    var country = body['country'] || "missing"
+                    var region  = body['region'] || "missing"
+                    var postal  = body['postal'] || "missing"
+                    var loc     = body['loc'] || "missing"
+                    var arr     = loc.split(",")
+                    console.log(body)
+                    if (arr.length == 2) {
+                        var lat = arr[0]
+                        var lng = arr[1]
+                    } else {
+                        var lat = ""
+                        var lng = ""
+                    }
+                    console.log(["influx", lat, region, country, postal])
+                    influxdb.writePoints([{
+                        measurement: "impression",
+                        tags: {country, region, postal},
+                        fields: {lat, lng}
+                    }]).then(function() {
+                        console.log("success")
+                    }).catch(function (err) {
+                        console.error('Error saving data to InfluxDB!')
+                        console.log(err)
+                    })
+                } else {
+                    console.log("Some error from ipinfo.io")
+                    console.log(body)
+                    console.log(error)
+                }
             }
-            console.log(["influx", lat, region, country, postal])
-            influxdb.writePoints([{
-                measurement: "impression",
-                tags: {country, region, postal},
-                fields: {lat, lng}
-            }]).then(function() {
-                console.log("success")
-            }).catch(function (err) {
-                console.error('Error saving data to InfluxDB!')
-                console.log(err)
-            })
-        } else {
-            console.log("Some error from ipinfo.io")
-            console.log(body)
-            console.log(error)
-        }
-      }
-    })
+        })
+    }
 }
 
 const renderPage = (req, res) => {

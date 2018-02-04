@@ -97,12 +97,32 @@ export default function TimeSeriesReducer(state=initialState, action) {
                 console.log(details)
             })
             break;
+        case 'TSE_GET_TAGS':
+            var payload = action.payload
+            var dispatch = payload.dispatch
+            var measurement = payload.measurement
+            var url = `/api/influx/measurement/${measurement}/tags`
+            console.log(url)
+            axios.get(url).then(function(resp) {
+                var tags = resp['data']
+                dispatch({type: "TSE_UPDATE_TAGS", payload: {tags, dispatch}})
+            }).catch(function(err) {
+                var details = JSON.stringify(err)
+                var msg = "Error getting tags"
+                dispatch({type: "TSE_ERROR", payload: {msg, details}})
+                console.log(details)
+            })
+            break
+        case 'TSE_UPDATE_TAGS':
+            nstate.tags = action.payload.tags
+            break
         case 'TSE_ERROR':
             nstate.state = action.payload.msg
             break
         case 'TSE_UPDATE_MEASUREMENTS':
             var dispatch = action.payload.dispatch
             nstate.measurements = action.payload.measurements
+            dispatch({type: "TSE_GET_TAGS", payload: {measurement, dispatch}})
             nstate.state = 'Loading done'
             break;
         case 'TSE_QUERY':

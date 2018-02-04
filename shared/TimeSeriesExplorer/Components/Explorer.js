@@ -32,6 +32,13 @@ class Explorer extends React.Component {
         var range = otimeseries.range
         var resolution = otimeseries.resolution
         var config = {databases, measurements, database, measurement, field, func, range, resolution}
+
+        var alerts = otimeseries.alerts
+        var alert_type = otimeseries.alert_type
+        var escalation_policies = otimeseries.escalation_policies
+        var escalation_policy = otimeseries.escalation_policy
+        var contact_methods = otimeseries.contact_methods
+
         return (
         	<div className="time-series-explorer">
         		Explorer: {state}
@@ -46,7 +53,7 @@ class Explorer extends React.Component {
                         <Tab disabled>Forecasts</Tab>
                         <Tab disabled>Machine Learning</Tab>
                     </TabList>
-                    <TabPanel><Alerts /></TabPanel>
+                    <TabPanel><Alerts alerts={alerts} alert_type={alert_type} escalation_policy={escalation_policy} escalation_policies={escalation_policies} contact_methods={contact_methods} /></TabPanel>
                     <TabPanel><ScheduledReport /></TabPanel>
                     <TabPanel><QueryConsole /></TabPanel>
                     <TabPanel>Coming soon</TabPanel>
