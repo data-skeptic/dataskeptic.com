@@ -124,6 +124,28 @@ export default function cmsReducer(state = defaultState, action) {
         nstate.recent_blogs_loaded = true
         nstate.loaded_prettyname = prefix
         break
+    case 'CMS_DELETE_BLOG':
+        var payload = action.payload
+        var dispatch = payload.dispatch
+        var url = base_url + "/blog/delete"
+        axios
+            .post(url, payload)
+            .then(function(result) {
+                console.log("success!!!")
+                var data = result['data']
+                var error = data['error']
+                if (error) {
+                    alert("ERROR:  " + JSON.stringify(result))
+                } else {
+                    alert("SUCCESS:  " + JSON.stringify(result))
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+                var errorMsg = JSON.stringify(err)
+                snserror("CMS_DELETE_BLOG", errorMsg)
+            })
+        break
     case 'CMS_UPDATE_BLOG':
         var payload = action.payload
         var dispatch = payload.dispatch
