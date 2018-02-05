@@ -3,23 +3,11 @@ import {connect} from 'react-redux'
 import styled from 'styled-components'
 import { Link } from 'react-router'
 
-import {getPlaylist} from '../utils/redux_loader'
-import {changePageTitle} from '../Layout/Actions/LayoutActions';
-import moment from "moment/moment";
-import {redirects_map} from "../../redirects";
+import {getPlaylist, addEpisodes} from '../utils/redux_loader'
+import {changePageTitle} from '../Layout/Actions/LayoutActions'
+import moment from "moment/moment"
 
 const renderDate = (date) => moment(date).format('MMMM D, YYYY')
-const formatLink = (link) => {
-    link = link.replace('https://dataskeptic.com', '');
-    link = link.replace('http://dataskeptic.com', '');
-
-    if (!!redirects_map[link]) {
-        return redirects_map[link];
-    }
-
-    return link;
-}
-
 const CURRENT_YEAR = (new Date().getFullYear().toString().substr(-2))
 
 const renderPlayedSymbol = (playing, playedEpisodeGuid, guid) =>
@@ -48,8 +36,8 @@ class UserPlaylist extends Component {
     }
 
     fetchPlaylist = async (playlist) => {
-        const res = await getPlaylist(playlist);
-        this.props.dispatch({type: "SET_PLAYLIST", payload: { data: res.data } })
+        const data = await getPlaylist(playlist);
+        this.props.dispatch({type: "SET_PLAYLIST", payload: { data } })
     }
 
     static getPageMeta() {
@@ -68,13 +56,13 @@ class UserPlaylist extends Component {
         <Episode key={episode.blog_id}>
             <Inner>
                 <Preview>
-                    <Link to={formatLink(episode.link)}>
+                    <Link to={episode.prettyname}>
                         <img src={episode.img} alt={episode.title}/>
                     </Link>
                 </Preview>
                 <Info>
                     <Time>{renderDate(episode.pubDate)}</Time>
-                    <EpisodeTitle to={formatLink(episode.link)}>{episode.title}</EpisodeTitle>
+                    <EpisodeTitle to={episode.prettyname}>{episode.title}</EpisodeTitle>
                     <Description>{episode.abstract}</Description>
                 </Info>
                 <Play>
@@ -83,14 +71,16 @@ class UserPlaylist extends Component {
             </Inner>
         </Episode>
 
-    renderPlaylist(playlist = []) {
-        playlist = MOCKED_EPISODES
-
+    renderPlaylist(episodes = []) {
         return (
             <Section>
-                {playlist.map(this.renderEpisode)}
+                {episodes.map(this.renderEpisode)}
             </Section>
         )
+    }
+
+    addEpisodes = (type) => {
+       addEpisodes(type)
     }
 
     renderEmpty() {
@@ -98,8 +88,8 @@ class UserPlaylist extends Component {
             <Section>
                 <p>You don't have anything in your playlist. Please click one of the buttons below</p>
                 <Buttons>
-                    <ActionButton first={true}><span>Add all episodes</span></ActionButton>
-                    <ActionButton><span>Add all episodes for <i>20{CURRENT_YEAR}</i></span></ActionButton>
+                    <ActionButton first={true} onClick={() => this.addEpisodes('all')}><span>Add all episodes</span></ActionButton>
+                    <ActionButton onClick={() => this.addEpisodes(CURRENT_YEAR)}><span>Add all episodes for <i>20{CURRENT_YEAR}</i></span></ActionButton>
                     <ActionButton onClick={this.goToPodcasts} last={true}><span>Visit podcast page</span></ActionButton>
                 </Buttons>
             </Section>
@@ -111,12 +101,11 @@ class UserPlaylist extends Component {
         if (!loggedIn) return <div/>
 
         let { lists: {playlist}, playlistEpisodes } = user
-        playlist = []
 
         return (
             <Container>
                 <PageTitle>My playlist</PageTitle>
-                {playlist && (playlist.length > 0)
+                {playlist && (playlist.length > 0) && playlistEpisodes && (playlistEpisodes.length > 0)
                     ? this.renderPlaylist(playlistEpisodes)
                     : this.renderEmpty()
                 }

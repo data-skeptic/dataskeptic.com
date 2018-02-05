@@ -82,8 +82,20 @@ export function getEpisodesData(episodes) {
 		})
 }
 
+const getEpisode = (blog_id) => axios.get(`${base_url}/blog/list?blog_id=${blog_id}`).then((res) => res.data[0])
+
 export function getPlaylist(playlist) {
-	return Promise.resolve([]) //TODO: fetch playlist episode
+	return Promise.all(playlist.map((blog_id) => getEpisode(blog_id)))
+}
+
+export function addEpisodes(type) {
+	const data = {}
+
+	if (type === 'all') {
+		return axios.post(`${base_url}/user/playlist/add_all`, data).then((res) => res.data[0])
+	} else {
+		return axios.post(`${base_url}/user/playlist/add=${type}`, data).then((res) => res.data[0])
+	}
 }
 
 export function get_podcasts(dispatch, pathname) {
