@@ -34,10 +34,9 @@ def update_one_blog_in_elastic_search(row, html, elastic_search_conn, index_name
     result2 = elastic_search_conn.create(index='search_v1',doc_type='blog',body=doc)   
     return successful_update
 
-def update_elastic_search(mysql_conn, elastic_search_conn, s3):
+def update_elastic_search(mysql_conn, elastic_search_conn, s3, index_name):
     blogs_df = get_blogs_to_update(mysql_conn)
     bucketname = bucketname
-    index_name = 'search_v1'
     html_dict = get_html_from_s3(blogs_df, s3, bucketname)
     return_value = {"errors": 0, "successes": 0}
     for row_num in range(blogs_df.shape[0]):
@@ -56,6 +55,7 @@ def update_elastic_search(mysql_conn, elastic_search_conn, s3):
 if __name__ == '__main__':
     config = json.load(open('git/dataskeptic.com/config/configsql.json', 'r'))
     # TODO: Jing to populate some code from the notebook
+    index_name = 'search_v1'
     user = config['dev']['mysql']['user']
     password = config['dev']['mysql']['password']
     host = config['dev']['mysql']['host']
@@ -64,16 +64,17 @@ if __name__ == '__main__':
     aws_access_key_id=config['dev']['aws']['key']
     aws_secret_access_key=config['dev']['aws']['secret']
     bucketname=config['dev']['bucketname']['bucketname']
+    #endpoint = config['dev']['elasticsearch']
+    endpoint = 'https://search-test-vu2fwve5ykzm5tsjkut5q4idum.us-east-1.es.amazonaws.com'
 
     template = "mysql+pymysql://{user}:{password}@{host}:{port}/{dbname}"
     connection_string = template.format(user=user, password=password, host=host, port=port, dbname=dbname)
     mysql_conn = sqlalchemy.create_engine(connection_string, pool_size=1)
-    endpoint = 'https://search-test-vu2fwve5ykzm5tsjkut5q4idum.us-east-1.es.amazonaws.com'
     elastic_search_conn = ElasticSearch(endpoint, port=443)
 
     s3 = boto3.resource('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
 
-    return_value = update_elastic_search(mysql_conn, elastic_search_conn, s3)
+    return_value = update_elastic_search(mysql_conn, elastic_search_conn, s3, index_name)
     print(return_value)
 
 
