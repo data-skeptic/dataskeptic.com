@@ -23,7 +23,7 @@ const defaultState = Immutable.fromJS(init);
 const searchRequest = (dispatch, query) => {
 	const url = base_url + "/blog/search"
   const payload = {query}
-  alert('SEARCH') // TODO: implement correct response
+	alert('SEARCH') // TODO: implement correct response
 	axios.post(url, payload)
 		.then((result) => {
 			dispatch({

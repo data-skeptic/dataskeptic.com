@@ -56,7 +56,7 @@ class SearchField extends Component {
 		return (
 			<div className="search-field-container-input-wrapper">
 				<input
-					innerRef={this.initRef}
+					ref={this.initRef}
 					value={value}
 					placeholder={placeholder}
 					type="text"
