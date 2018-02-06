@@ -698,11 +698,12 @@ function tracking(req) {
                         var lng = ""
                     }
                     console.log(["influx", lat, region, country, postal])
-                    influxdb.writePoints([{
+                    var pnt = {
                         measurement: "impression",
                         tags: {country, region, postal},
                         fields: {lat, lng}
-                    }]).then(function() {
+                    }
+                    influxdb.writePoints([pnt]).then(function() {
                         console.log("success")
                     }).catch(function (err) {
                         console.error('Error saving data to InfluxDB!')
