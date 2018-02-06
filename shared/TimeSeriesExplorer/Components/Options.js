@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import Alerts from "./Alerts";
 import DatabaseSelector from "./DatabaseSelector";
 import MeasurementSelector from "./MeasurementSelector";
+import TagSelector from "./TagSelector"
 import Select from 'react-select';
 
 class Options extends React.Component {
