@@ -8,7 +8,7 @@ def get_blogs_to_update(mysql_conn):
     blogs_df = pd.read_sql("SELECT * from blog where last_indexed is NULL or last_indexed <= Now()", mysql_conn)
     return blogs_df
 
-def get_html_from_s3(blogs_df, s3, bucketName):
+def get_html_from_s3(blogs_df, s3, bucketname):
     html_dict = {}
     for row_num in range(blogs_df.shape[0]):
         row = blogs_df.iloc[row_num,:]
@@ -24,11 +24,11 @@ def update_one_blog_in_elastic_search(row, html, elastic_search_conn, index_name
     print("Need to handle this result", result)
     doc = {
         'blog_id'      : row['blog_id'],
-        'title'        : ?,
-        'author'       : ?,
-        'abstract'     : ?,
-        'date_created' : ?,
-        'publish_date' : ?,
+        'title'        : row['title'],
+        'author'       : row['author'],
+        'abstract'     : row['abstract'],
+        'date_created' : row['date_created'],
+        'publish_date' : row['publish_date'],
         'content'      : html
     }
     result2 = elastic_search_conn.create(index='search_v1',doc_type='blog',body=doc)   
@@ -36,8 +36,8 @@ def update_one_blog_in_elastic_search(row, html, elastic_search_conn, index_name
 
 def update_elastic_search(mysql_conn, elastic_search_conn, s3):
     blogs_df = get_blogs_to_update(mysql_conn)
-    bucketname = ?
-    index_name = ?
+    bucketname = bucketname
+    index_name = 'search_v1'
     html_dict = get_html_from_s3(blogs_df, s3, bucketname)
     return_value = {"errors": 0, "successes": 0}
     for row_num in range(blogs_df.shape[0]):
@@ -63,12 +63,13 @@ if __name__ == '__main__':
     dbname = config['dev']['mysql']['dbname']
     aws_access_key_id=config['dev']['aws']['key']
     aws_secret_access_key=config['dev']['aws']['secret']
+    bucketname=config['dev']['bucketname']['bucketname']
 
     template = "mysql+pymysql://{user}:{password}@{host}:{port}/{dbname}"
     connection_string = template.format(user=user, password=password, host=host, port=port, dbname=dbname)
     mysql_conn = sqlalchemy.create_engine(connection_string, pool_size=1)
-
-    elastic_search_conn = ?
+    endpoint = 'https://search-test-vu2fwve5ykzm5tsjkut5q4idum.us-east-1.es.amazonaws.com'
+    elastic_search_conn = ElasticSearch(endpoint, port=443)
 
     s3 = boto3.resource('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
 
