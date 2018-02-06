@@ -680,7 +680,6 @@ function tracking(req) {
         ip = req.connection.remoteAddress
     }
     if (ipinfo_token) {
-        ip = "42.60.210.88"
         request('http://ipinfo.io/' + ip + '?token=' + ipinfo_token, function(error, res, body) {
             if (influxdb) {
                 if (body) {
