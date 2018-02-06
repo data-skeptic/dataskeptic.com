@@ -21,12 +21,14 @@ export default function EpisodesReducer(state = defaultState, action) {
         case 'ADD_EPISODES':
             console.log(action.payload)
             var episodes = action.payload
-            console.log('ADD_EPISODES: ' + episodes.length)
+            console.log('ADD_EPISODES :: ' + episodes.length)
             nstate.episodes = episodes
             nstate.ep_map = {}
             for (var episode of episodes) {
                 var guid = episode.guid
-                nstate.ep_map[guid] = episode
+                if (guid) {
+                    nstate.ep_map[guid] = episode
+                }
             }
             nstate.loaded = true
             break

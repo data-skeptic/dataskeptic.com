@@ -537,7 +537,8 @@ function getContributorPosts(contributor) {
 
 async function inject_homepage(store, my_cache, pathname) {
     const res = await getFeaturesAPI("homepage")
-    store.dispatch({type: "CMS_INJECT_HOMEPAGE_CONTENT", payload: { data: res.data }})
+    var dispatch = store.dispatch
+    dispatch({type: "CMS_INJECT_HOMEPAGE_CONTENT", payload: { data: res.data, dispatch }})
 
     const guid = res.data.latest_episode.guid
     const episodeContent = my_cache.episodes_map[guid]
@@ -679,17 +680,17 @@ function tracking(req) {
         ip = req.connection.remoteAddress
     }
     if (ipinfo_token) {
-        console.log("renderPage to " + ip)
+        ip = "42.60.210.88"
         request('http://ipinfo.io/' + ip + '?token=' + ipinfo_token, function(error, res, body) {
             if (influxdb) {
                 if (body) {
+                    body = JSON.parse(body)
                     var ip = body['ip']
-                    var country = body['country'] || "missing"
-                    var region  = body['region'] || "missing"
-                    var postal  = body['postal'] || "missing"
-                    var loc     = body['loc'] || "missing"
+                    var country = body['country'] || "unknown"
+                    var region  = body['region']  || "unknown"
+                    var postal  = body['postal']  || "unknown"
+                    var loc     = body['loc']     || "unknown"
                     var arr     = loc.split(",")
-                    console.log(body)
                     if (arr.length == 2) {
                         var lat = arr[0]
                         var lng = arr[1]
@@ -704,7 +705,6 @@ function tracking(req) {
                         fields: {lat, lng}
                     }
                     influxdb.writePoints([pnt]).then(function() {
-                        console.log("success")
                     }).catch(function (err) {
                         console.error('Error saving data to InfluxDB!')
                         console.log(err)

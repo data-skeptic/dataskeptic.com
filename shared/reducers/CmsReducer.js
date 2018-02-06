@@ -33,14 +33,13 @@ const defaultState = Immutable.fromJS(init);
 const s3 = new aws.S3()
 
 const getEpisode = async (guid) => {
-    console.log("h1:" + guid)
-    const [episodeContent, episodeData] = await Promise.all([
-        axios.get(`/api/episodes/get/${guid}`).then((res) => res.data),
-        axios.get(`${base_url}/blog/list?guid=${guid}`).then((res) => res.data[0])
+    var u2 = `${base_url}/blog/list?guid=${guid}`
+    console.log(["uu", u2])
+    const [episodeData] = await Promise.all([
+        axios.get(u2).then((res) => res.data[0])
     ])
     console.log("h2")
     return {
-        ...episodeContent,
         ...episodeData
     }
 }

@@ -27,7 +27,7 @@ export default class Header extends Component {
                     <ActiveLink href="/services">Services</ActiveLink>
                 </Navs>
                 <Navs>
-                    <ActiveLink href="/members"> Sponsor </ActiveLink>
+                    <ActiveLink href="/members"> Members </ActiveLink>
                     <ActiveLink href="/store"> Store </ActiveLink>
                     <Cart>
                         <Icon>
