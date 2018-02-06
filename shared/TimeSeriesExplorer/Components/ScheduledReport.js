@@ -1,8 +1,10 @@
-import React from "react";
-import {Link} from 'react-router';
-import {connect} from 'react-redux';
+import React from "react"
+import {Link} from 'react-router'
+import {connect} from 'react-redux'
 
-import Alerts from "./Alerts";
+import Alerts from "./Alerts"
+import FrequencySelector from "./FrequencySelector"
+import DateTimeSelector from "./DateTimeSelector"
 
 class ScheduledReport extends React.Component {
     constructor(props) {
@@ -18,8 +20,18 @@ class ScheduledReport extends React.Component {
     	var otimeseries = this.props.timeseries.toJS()
         return (
         	<div className="time-series-schedule-report">
-                Coming soon: Have the current plot you're looking at
-                automatically emailed to you on a schedule.
+                <div className="row">
+                    <div className="col-xs-2  col-sm-1">Every:</div>
+                    <div className="col-xs-10 col-sm-5"><FrequencySelector /></div>
+                    <div className="col-xs-2  col-sm-1">At:</div>
+                    <div className="col-xs-10 col-sm-5"><DateTimeSelector /></div>
+                </div>
+                <div className="row">
+                    <div className="col-xs-12"><select><option>abstract component on other page</option></select></div>
+                </div>
+                <div className="row">
+                    <div className="col-xs-12"><button className="time-series-scheduled-report-save-btn">Save</button></div>
+                </div>
         	</div>
         )
     }

@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import Alerts from "./Alerts";
 import DatabaseSelector from "./DatabaseSelector";
 import MeasurementSelector from "./MeasurementSelector";
+import TagSelector from "./TagSelector"
 import Select from 'react-select';
 
 class Options extends React.Component {
@@ -40,17 +41,20 @@ class Options extends React.Component {
         var config = this.props.config
         let {databases, measurements, database, measurement, field, func, range, resolution} = config
         var fields = []
-        console.log([range, resolution])
+        var tags = ['test1', 'test2']
         return (
         	<div className="time-series-options">
                 <div className="row">
-                    <div className="col-xs-12 col-sm-4">
+                    <div className="col-xs-12 col-sm-3">
                         <DatabaseSelector databases={databases} />
                     </div>
-                    <div className="col-xs-12 col-sm-4">
+                    <div className="col-xs-12 col-sm-3">
                        <MeasurementSelector measurements={measurements} />
                     </div>
-                    <div className="col-xs-12 col-sm-4">
+                    <div className="col-xs-12 col-sm-3">
+                       <TagSelector tags={tags} />
+                    </div>
+                    <div className="col-xs-12 col-sm-3">
                         Field:
                         <select>
                             <option value="lat">lat</option>
@@ -110,7 +114,7 @@ class Options extends React.Component {
                         />
                     </div>
                 </div>
-                <button onClick={this.handleSearch.bind(this)}>Search</button>
+                <button className="time-series-options-search-btn" onClick={this.handleSearch.bind(this)}>Search</button>
         	</div>
         )
     }

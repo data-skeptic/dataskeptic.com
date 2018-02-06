@@ -36,7 +36,7 @@ class About extends Component {
 			{map(contributors, this.renderContributor)}
 		</div>
 
-	sortContributors = (contributors) => orderBy(contributors, 'sort_order')
+	sortContributors = (contributors) => orderBy(contributors, 'sort_rank')
 
 	render() {
 		const { contributors } = this.props

@@ -9,6 +9,7 @@ class AlertsListItem extends React.Component {
 
     render() {
         var alert = this.props.alert
+        console.log(alert)
         if (alert == undefined) {
             return (
                 <div className="time-series-alerts-list-item">
@@ -18,7 +19,7 @@ class AlertsListItem extends React.Component {
         }
         return (
         	<div className="time-series-alerts-list-item">
-        		{alert}
+        		{alert.query}
         	</div>
         )
     }
