@@ -40,10 +40,10 @@ class Store extends React.Component {
 			return <div><Loading /></div>			
 		} else {
 			var products = oproducts.products
-			console.log(products)
 			return (
 				<div className="">
 					<div className="col-md-8 col-sm-12 store-items">
+						<center>For questions about sizes, review our about <a href="https://dataskeptic.com/blog/meta/2018/data-skeptic-t-shirt-sizing">t-shirt sizing measurements</a>.</center>
 						{products.map(function(product) {
 							return <StoreItem key={product.id} product={product} />
 						})}
