@@ -3,6 +3,7 @@ import React from 'react'
 import NavLink from '../../components/NavLink'
 import CartLink from './CartLink'
 import AccountDropdownMenu from "./AccountDropdownMenu";
+import SearchArea from "../../Search/Containers/SearchArea";
 
 export const CartMenu = ({pathname, cartItemsCount, cartClick, cartButton = true, itemClick, mobile, loggedIn, user}) => (
     <div className="nav">
@@ -13,6 +14,7 @@ export const CartMenu = ({pathname, cartItemsCount, cartClick, cartButton = true
 
         <NavLink active={pathname} to="/store" onClick={itemClick}>Store</NavLink>
 
+	      <SearchArea />
         { cartButton ?
         <CartLink itemCount={cartItemsCount} onClick={cartClick} itemCount={cartItemsCount}/>
         : null }
