@@ -16,7 +16,7 @@ class MobileSearchArea extends Component {
 	}
 
 	render() {
-		const {isLoading} = this.props
+		const {isLoading, query} = this.props
 
 		return (
 			<div className="mobile-search-field-container">
@@ -24,6 +24,7 @@ class MobileSearchArea extends Component {
 					autoFocus={true}
 					onChange={this.handleSearchChange}
 					loading={isLoading}
+					value={query}
 				/>
 			</div>
 		)
@@ -32,5 +33,6 @@ class MobileSearchArea extends Component {
 
 
 export default connect(state => ({
-	isLoading: state.layout.getIn(['loading'])
+	isLoading: state.layout.getIn(['loading']),
+	query: state.search.getIn(['query'])
 }))(MobileSearchArea)

@@ -19,7 +19,7 @@ class SearchArea extends Component {
 	}
 
   render() {
-		const {searchAreaVisible, isLoading} = this.props
+		const {searchAreaVisible, isLoading, query} = this.props
 
 	  return (
 		  <div className="navlink-li-btn-container">
@@ -28,6 +28,7 @@ class SearchArea extends Component {
 					  autoFocus={true}
 					  onChange={this.handleSearchChange}
 					  loading={isLoading}
+					  value={query}
 				  />
 			  </div>}
 			  <button className="navlink-btn" onClick={ this.toggleArea }>
@@ -45,5 +46,6 @@ class SearchArea extends Component {
 
 export default connect(state => ({
 	searchAreaVisible: state.layout.getIn(['searchAreaVisible']),
-	isLoading: state.search.getIn(['loading'])
+	isLoading: state.search.getIn(['loading']),
+	query: state.search.getIn(['query'])
 }))(SearchArea)

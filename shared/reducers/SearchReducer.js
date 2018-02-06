@@ -15,6 +15,7 @@ var base_url = config[env]['base_api'] + env
 const init = {
     loading: false,
     loaded: false,
+    query: null,
     result: []
 }
 
@@ -24,23 +25,23 @@ const searchRequest = (dispatch, query) => {
 	const url = base_url + "/blog/search"
   const payload = {query}
 	alert('SEARCH') // TODO: implement correct response
-	axios.post(url, payload)
-		.then((result) => {
-			dispatch({
-        type: 'SEARCH_SUCCESS',
-        payload: {
-            data: result.data
-        }
-      })
-		})
-		.catch((err) => {
-			dispatch({
-				type: 'SEARCH_FAIL',
-				payload: {
-					data: err
-				}
-			})
-		})
+	// axios.post(url, payload)
+	// 	.then((result) => {
+	// 		dispatch({
+   //      type: 'SEARCH_SUCCESS',
+   //      payload: {
+   //          data: result.data
+   //      }
+   //    })
+	// 	})
+	// 	.catch((err) => {
+	// 		dispatch({
+	// 			type: 'SEARCH_FAIL',
+	// 			payload: {
+	// 				data: err
+	// 			}
+	// 		})
+	// 	})
 }
 
 export default function cmsReducer(state = defaultState, action) {
@@ -50,6 +51,7 @@ export default function cmsReducer(state = defaultState, action) {
 	    nstate.loaded = false;
 	    nstate.loading = true;
 	    nstate.erorr = null;
+	    nstate.query = action.payload.query;
 	    nstate.result = []
       searchRequest(action.payload.dispatch, action.payload.query)
 	    break;
