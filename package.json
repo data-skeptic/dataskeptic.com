@@ -34,6 +34,7 @@
     "classnames": "^2.2.5",
     "compression": "^1.6.2",
     "concurrently": "^3.5.0",
+    "cookie-parser": "^1.4.3",
     "cookie-session": "^2.0.0-beta.3",
     "css-loader": "^0.26.2",
     "echarts": "^4.0.2",
