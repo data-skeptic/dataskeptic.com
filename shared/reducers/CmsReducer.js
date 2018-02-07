@@ -34,11 +34,9 @@ const s3 = new aws.S3()
 
 const getEpisode = async (guid) => {
     var u2 = `${base_url}/blog/list?guid=${guid}`
-    console.log(["uu", u2])
     const [episodeData] = await Promise.all([
         axios.get(u2).then((res) => res.data[0])
     ])
-    console.log("h2")
     return {
         ...episodeData
     }
@@ -50,8 +48,10 @@ export default function cmsReducer(state = defaultState, action) {
     case 'CMS_LOAD_BLOG_CONTENT':
         var dispatch = action.payload.dispatch
         var src_file = action.payload.src_file
+        console.log('CMS_LOAD_BLOG_CONTENT ' + src_file)
         var check = nstate.blog_content[src_file]
         if (check == undefined) {
+            console.log("Not in memory, going to get from s3")
             nstate.blog_state = "loading"
             var envp = ""
             if (env != "prod") {
@@ -65,14 +65,15 @@ export default function cmsReducer(state = defaultState, action) {
                     console.log("Can't retrieve blog")
                     console.log(err)
                 } else {
+                    console.log("Success with s3")
                     var content = d.Body.toString('utf-8')
                     var payload = { src_file, content }
                     dispatch({type: "CMS_ADD_BLOG_CONTENT", payload })                    
                 }
             });
         } else {
-            nstate.blog_state = "loaded"
             console.log("Blog already in cache")
+            nstate.blog_state = "loaded"
         }
         break
     case 'CMS_EXPIRE_ALL_CONTENT':
@@ -116,6 +117,7 @@ export default function cmsReducer(state = defaultState, action) {
         load_blogs(prefix, limit, offset, dispatch)
         break
     case 'CMS_SET_RECENT_BLOGS':
+        console.log("CMS_SET_RECENT_BLOGS")
         var blogs = action.payload.blogs
         var prefix = action.payload.prefix
         nstate.blog_state = "loaded"
