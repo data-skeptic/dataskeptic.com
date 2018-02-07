@@ -38,12 +38,15 @@ class SERP extends Component {
 
 	componentWillMount() {
 		const query = getLocationQuery(this.props.location.search)
+		let {title} = SERP.getPageMeta();
+		this.props.dispatch(changePageTitle(title))
+
 		if (query.length === 0) {
 			// redirect to home
 			this.props.history.push('/')
 		}
 
-		const {title} = SERP.getPageMeta();
+		title = `Search - ${query} | Data Skeptic`
 		this.props.dispatch(changePageTitle(title))
 
 		if (!this.props.loaded) {
