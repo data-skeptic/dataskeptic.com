@@ -57,6 +57,7 @@ export default function siteReducer(state = defaultState, action) {
     case 'SET_CONTRIBUTOR_BLOGS':
       nstate.contributors = updateContributor(nstate.contributors, action.payload.contributor, (contributor) => ({
           ...contributor,
+          postsLoaded: true,
           posts: action.payload.blogs
       }))
       break

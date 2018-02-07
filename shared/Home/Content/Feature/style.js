@@ -73,7 +73,7 @@ export const UserDetail = styled.div`
   }
 `
 
-export const UserInfo = styled.span`
+export const UserInfo = styled.a`
   display: block
 `
 

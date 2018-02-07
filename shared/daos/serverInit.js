@@ -132,6 +132,7 @@ export function loadEpisodes(env) {
 }
 
 function xml_to_list(xml) {
+    console.log("xml_to_list")
     var parser = new xml2js.Parser();
     var domain = "dataskeptic.com"
     let latestGuid = ''
@@ -161,8 +162,11 @@ function xml_to_list(xml) {
 }
 
 function get_and_process_feed(replacements, feed_uri) {
+    console.log("Getting " + feed_uri)
     return axios.get(feed_uri)
         .then(function (result) {
+            console.log("request done")
+
             var xml = result["data"]
             var data = xml_to_list(xml)
             var mxml = xml
@@ -176,6 +180,7 @@ function get_and_process_feed(replacements, feed_uri) {
                     console.log("Error: unlinkable GUID: " + guid)
                 }
             }
+            console.log("replacements made")
             data.member_feed = mxml
             /*
              *  We need to tell the server what the latest GUID (Libsyn's unique)

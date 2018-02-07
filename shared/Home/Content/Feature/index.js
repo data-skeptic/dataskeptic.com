@@ -38,15 +38,15 @@ class Feature extends Component {
           <Desc>{feature_blog.abstract}</Desc>
           <BlogViewMore to={href}>View More</BlogViewMore>
           { author &&
-            <AuthorLink author={author.author}>
-              <UserBox author={author.author}>
-                <UserImgArea><UserImg src={author.img} /></UserImgArea>
-                <UserDetail>
-                  <UserInfo>{author.prettyname}</UserInfo>
-                  <UserInfo>@{author.twitter}</UserInfo>
-                </UserDetail>
-              </UserBox>
-            </AuthorLink>
+            <UserBox author={author.author}>
+              <UserImgArea>
+                  <AuthorLink author={author.author}><UserImg src={author.img} /></AuthorLink>
+              </UserImgArea>
+              <UserDetail>
+                <AuthorLink author={author.author}>{author.prettyname}</AuthorLink>
+                <UserInfo href={`https://twitter.com/${author.twitter}`}>@{author.twitter}</UserInfo>
+              </UserDetail>
+            </UserBox>
           }
         </DescBox>
       </Container>

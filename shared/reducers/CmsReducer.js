@@ -10,10 +10,11 @@ var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
 
 const config = require('../../config/config.json');
 
-var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
+var base_url = config[env]['base_api'] + env
 
 const init = {
     "home_loaded": false,
+    "featured_blog_state": "",
     "featured_blog": {},
     "featured_blog2": {},
     "featured_blog3": {},
@@ -32,13 +33,13 @@ const defaultState = Immutable.fromJS(init);
 const s3 = new aws.S3()
 
 const getEpisode = async (guid) => {
-    const [episodeContent, episodeData] = await Promise.all([
-        axios.get(`/api/episodes/get/${guid}`).then((res) => res.data),
-        axios.get(`${base_url}/blog/list?guid=${guid}`).then((res) => res.data[0])
+    var u2 = `${base_url}/blog/list?guid=${guid}`
+    console.log(["uu", u2])
+    const [episodeData] = await Promise.all([
+        axios.get(u2).then((res) => res.data[0])
     ])
-
+    console.log("h2")
     return {
-        ...episodeContent,
         ...episodeData
     }
 }
@@ -122,6 +123,28 @@ export default function cmsReducer(state = defaultState, action) {
         nstate.recent_blogs_loaded = true
         nstate.loaded_prettyname = prefix
         break
+    case 'CMS_DELETE_BLOG':
+        var payload = action.payload
+        var dispatch = payload.dispatch
+        var url = base_url + "/blog/delete"
+        axios
+            .post(url, payload)
+            .then(function(result) {
+                console.log("success!!!")
+                var data = result['data']
+                var error = data['error']
+                if (error) {
+                    alert("ERROR:  " + JSON.stringify(result))
+                } else {
+                    alert("SUCCESS:  " + JSON.stringify(result))
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+                var errorMsg = JSON.stringify(err)
+                snserror("CMS_DELETE_BLOG", errorMsg)
+            })
+        break
     case 'CMS_UPDATE_BLOG':
         var payload = action.payload
         var dispatch = payload.dispatch
@@ -147,6 +170,7 @@ export default function cmsReducer(state = defaultState, action) {
             })
         break
     case 'CMS_SET_HOMEPAGE_FEATURE':
+        nstate.featured_blog_state = "submit"
         var blog_id = nstate.featured_blog.blog_id
         var featured_2_blog_id = nstate.featured_blog2.blog_id
         var featured_3_blog_id = nstate.featured_blog3.blog_id
@@ -159,6 +183,7 @@ export default function cmsReducer(state = defaultState, action) {
         axios
             .post(url, payload)
             .then(function(result) {
+                action.payload.dispatch({type: 'CMS_SET_HOMEPAGE_FEATURE_SUCCESS'})
                 var le = result['latest_episode']
                 if (le == undefined) {
                     le = {}
@@ -166,10 +191,17 @@ export default function cmsReducer(state = defaultState, action) {
                 }
             })
             .catch((err) => {
+                action.payload.dispatch({type: 'CMS_SET_HOMEPAGE_FEATURE_FAIL'})
                 console.log(err)
                 var errorMsg = JSON.stringify(err)
                 snserror("CMS_SET_HOMEPAGE_FEATURE", errorMsg)
             })
+        break;
+    case 'CMS_SET_HOMEPAGE_FEATURE_SUCCESS':
+        nstate.featured_blog_state = "success"
+        break;
+    case 'CMS_SET_HOMEPAGE_FEATURE_FAIL':
+        nstate.featured_blog_state = "error"
         break;
     case 'CMS_UPDATE_HOMEPAGE_FEATURE':
         var payload = action.payload
@@ -209,7 +241,6 @@ export default function cmsReducer(state = defaultState, action) {
 
         getEpisode(le.guid)
             .then((episode) => {
-                dispatch({type: "SET_FOCUS_EPISODE", payload: episode})
                 dispatch({type: "ADD_EPISODES", payload: [episode]})
             })
             .catch((err) => {

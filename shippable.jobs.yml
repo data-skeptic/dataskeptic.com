@@ -16,7 +16,12 @@ jobs:
       - IN: shipdemo-manifest
         force: true
       - IN: shipdemo-img-options
-      - IN: ecs-test-cluster
+      - IN: ecs-cluster
+      - IN: ecs-master-lb
+        applyTo:
+          - manifest: shipdemo-manifest
+            image: shipdemo-img
+            port: 443
       - TASK: managed
-        deployMethod: replace
+        deployMethod: upgrade
         

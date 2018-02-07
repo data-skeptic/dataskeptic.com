@@ -20,7 +20,12 @@ class BlogUpdater extends React.Component {
 
 	save(blog_id, title, abstract, author, publish_date, dispatch) {
 		console.log("save")
-	    dispatch({type: "CMS_UPDATE_BLOG", payload: {blog_id, title, abstract, author, publish_date} })
+	    dispatch({type: "CMS_UPDATE_BLOG", payload: {blog_id, title, abstract, author, publish_date, dispatch} })
+	}
+
+	delete(blog_id, dispatch) {
+		console.log("delete")
+	    dispatch({type: "CMS_DELETE_BLOG", payload: {blog_id, dispatch} })
 	}
 
 	componentDidMount() {
@@ -64,7 +69,8 @@ class BlogUpdater extends React.Component {
 				</div>
 				<div className="row">
 					<div className="col-xs-12 col-sm-2"></div>
-					<div className="col-xs-12 col-sm-10 cms-admin-save-btn"><button className="cms-btn-save" onClick={this.save.bind(this, blog_id, title, abstract, author, publish_date, dispatch)}>Save</button></div>
+					<div className="col-xs-12 col-sm-5 cms-admin-save-btn"><button className="cms-btn-save" onClick={this.save.bind(this, blog_id, title, abstract, author, publish_date, dispatch)}>Save</button></div>
+					<div className="col-xs-12 col-sm-5 cms-admin-save-btn"><button className="cms-btn-save" onClick={this.delete.bind(this, blog_id, dispatch)}>Delete</button></div>
 				</div>
 			</div>
 		)

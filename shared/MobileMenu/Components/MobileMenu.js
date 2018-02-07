@@ -3,13 +3,16 @@ import React from 'react'
 import Menu from '../../components/Menu'
 import NavLink from '../../components/NavLink'
 import CartMenu from '../../Cart/Components/CartMenu'
+import MobileSearchArea from "../../Search/Containers/MobileSearchArea";
 
-export const MobileMenu = ({ pathname, visible = false, itemClick, loggedIn }) => {
+export const MobileMenu = ({ pathname, visible = false, itemClick, loggedIn, user }) => {
     const classList = 'mobile-menu ' + (visible ? 'overlay': '');
 
     return (
         <div className={classList}>
             <div className="first">
+                <MobileSearchArea />
+
                 <Menu pathname={pathname} itemClick={itemClick}>
                     <NavLink active={pathname} to="/" onClick={itemClick}>Home</NavLink>
                 </Menu>
@@ -21,6 +24,7 @@ export const MobileMenu = ({ pathname, visible = false, itemClick, loggedIn }) =
                     cartButton={false}
                     loggedIn={loggedIn}
                     mobile={true}
+                    user={user}
                 />
             </div>
         </div>

@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { map, isEmpty } from 'lodash'
+import { map, isEmpty, orderBy } from 'lodash'
 import marked from "marked"
 
 import {changePageTitle} from '../Layout/Actions/LayoutActions';
+import AuthorLink from "./AuthorLink";
 
 const AVATAR_SIZE = 60
 
@@ -22,10 +23,10 @@ class About extends Component {
     renderContributor = (contributor) =>
         <div className="media" key={contributor.contributor_id}>
             <div className="media-left">
-				<img width={AVATAR_SIZE} height={AVATAR_SIZE} className="media-object img-circle img-thumbnail" src={contributor.img} alt={contributor.prettyname} />
+				<AuthorLink author={contributor.author}><img width={AVATAR_SIZE} height={AVATAR_SIZE} className="media-object img-circle img-thumbnail" src={contributor.img} alt={contributor.prettyname} /></AuthorLink>
             </div>
             <div className="media-body">
-                <h4 className="media-heading">{contributor.prettyname}</h4>
+                <h4 className="media-heading"><AuthorLink author={contributor.author}>{contributor.prettyname}</AuthorLink></h4>
 				<p dangerouslySetInnerHTML={markdown(contributor.bio)} />
             </div>
         </div>
@@ -34,6 +35,8 @@ class About extends Component {
 		<div className="contributors-list">
 			{map(contributors, this.renderContributor)}
 		</div>
+
+	sortContributors = (contributors) => orderBy(contributors, 'sort_rank')
 
 	render() {
 		const { contributors } = this.props
@@ -72,7 +75,7 @@ class About extends Component {
 
 				<div className="row">
 					<h3>Contributors</h3>
-					{!isEmpty(contributors) && this.renderContributors(contributors)}
+					{!isEmpty(contributors) && this.renderContributors(this.sortContributors(contributors))}
 				</div>
 			</div>
 		)
