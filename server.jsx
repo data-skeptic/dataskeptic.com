@@ -760,8 +760,6 @@ async function tracking (req, res) {
         }
     }
 
-    console.log('your ipinfo', ipInfo)
-
 	  if (influxdb) {
 	    return influxdb.writePoints([ipInfo])
         .then(function() {})
