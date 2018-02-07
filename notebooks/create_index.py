@@ -1,11 +1,13 @@
 from elasticsearch import Elasticsearch
 import json
+import requests
+from pyelasticsearch.client import ElasticSearch
 
 search_v1={ 
     'mapping':{
         'blog':{
             'properties':{
-                'blog_id':{'type':'integer'}
+                'blog_id':{'type':'integer'},
                 'title':{'type':'string','analyzer':'english'},
                 'author':{'type':'string','index':'not_analyzed'},
                 'abstract':{'type':'string','analyzer':'english'},
@@ -17,10 +19,10 @@ search_v1={
     }
 }
 
-client.indice.create(index='search_v1',body=search_v1)
+
 
 if __name__ == '__main__':
-    config = json.load(open('git/dataskeptic.com/config/configsql.json', 'r'))
+    config = json.load(open('../config/configsql.json', 'r'))
 	# TODO: Jing to populate some code from the notebook
     user = config['dev']['mysql']['user']
     password = config['dev']['mysql']['password']
@@ -30,3 +32,7 @@ if __name__ == '__main__':
     aws_access_key_id=config['dev']['aws']['key']
     aws_secret_access_key=config['dev']['aws']['secret']
     bucketname=config['dev']['bucketname']['bucketname']
+    endpoint = 'https://search-test-vu2fwve5ykzm5tsjkut5q4idum.us-east-1.es.amazonaws.com'
+    client = Elasticsearch(endpoint, port=443)
+    client.indices.create(index='search_v1')
+
