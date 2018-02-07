@@ -112,7 +112,7 @@ class SERP extends Component {
 		})
 
 	renderResultsBlock = (results) =>
-		<div className="search-results">
+		<div className="row search-results">
 			{results.length === 0
 				? this.renderEmpty()
 				: <div>
@@ -131,7 +131,7 @@ class SERP extends Component {
 
 		return (
 			<div className="center search-page">
-				<div className="search-line">
+				<div className="row search-line">
 					<SearchField
 						transparent={true}
 						autoFocus={false}
