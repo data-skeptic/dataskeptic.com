@@ -2,21 +2,13 @@ import React, { Component } from "react"
 import { connect } from "react-redux";
 import {toggleSearchArea} from "../../Layout/Actions/LayoutActions";
 import SearchField from "../Components/SearchField";
+import redirectToSearch from "../Helpers/redirectToSearch";
 
 class SearchArea extends Component {
 
 	toggleArea = () => this.props.dispatch(toggleSearchArea())
 
-	handleSearchChange = (query) => {
-		const { dispatch } = this.props
-		dispatch({
-			type: 'SEARCH',
-			payload: {
-				query,
-				dispatch
-			}
-		})
-	}
+	handleSearchChange = (query) => redirectToSearch(query)
 
   render() {
 		const {searchAreaVisible, isLoading, query} = this.props

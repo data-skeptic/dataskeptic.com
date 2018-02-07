@@ -74,3 +74,60 @@
     }
   }
 }
+
+.search-page {
+  max-width: 600px;
+  padding-top: 20px;
+
+  .search-results-statistic {
+    line-height: 30px;
+    padding-top: 10px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .search-results-empty {
+    padding-top: 10px;
+    font-size: 90%;
+
+    > h4 {
+      padding: 0px;
+      margin: 0px;
+
+      span {
+        font-weight: bold;
+      }
+    }
+  }
+
+  .search-results-items {
+    padding-top: 10px;
+    min-height: 400px;
+  }
+
+  .search-line {
+
+    .search-field-container-input-wrapper {
+      height: 42px;
+    }
+
+    .search-field-container__input {
+      height: 42px;
+      border: 1px solid #887a9e;
+      padding: 10px 30px 10px 10px;
+      border-radius: 6px;
+      color: #000;
+
+      &:focus,
+      &:hover {
+        color: #2D1454;
+      }
+    }
+
+    .search-field-container__input-loader {
+      position: absolute;
+      right: 8px;
+      top: 8px;
+    }
+
+  }
+}

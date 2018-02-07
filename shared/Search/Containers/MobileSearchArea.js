@@ -1,19 +1,11 @@
 import React, { Component } from "react"
 import { connect } from "react-redux";
 import SearchField from "../Components/SearchField";
+import redirectToSearch from "../Helpers/redirectToSearch";
 
 class MobileSearchArea extends Component {
 
-	handleSearchChange = (query) => {
-		const { dispatch } = this.props
-		dispatch({
-			type: 'SEARCH',
-			payload: {
-				query,
-				dispatch
-			}
-		})
-	}
+	handleSearchChange = (query) => redirectToSearch(query)
 
 	render() {
 		const {isLoading, query} = this.props
