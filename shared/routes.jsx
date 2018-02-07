@@ -54,6 +54,8 @@ import AdminEmailsSend         from 'components/admin/AdminEmailsSend';
 import AdminOrdersNew          from 'components/admin/AdminOrdersNew';
 import AdminOrdersProcessing   from 'components/admin/AdminOrdersProcessing';
 
+import SERP                    from 'Search/Containers/SERP';
+
 import SnlImpact               from 'components/l/SnlImpact';
 
 const env = (process.env.NODE_ENV === "production") ? 'prod' : 'dev'
@@ -240,6 +242,10 @@ export default (
 
         <Route path="/contributors/:contributor" component={App}>
             <IndexRoute component={ContributorPage}/>
+        </Route>
+
+        <Route path="/search" component={App}>
+            <IndexRoute component={SERP}/>
         </Route>
 
         <Route path="/*" component={App} onEnter={loadData}>

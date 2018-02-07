@@ -25,6 +25,8 @@ class SearchField extends Component {
 		if (this.props.autoFocus) {
 			this.props.autoFocus && this.onFocus()
 		}
+
+		this.state.value = this.props.value
 	}
 
 	handleChange = e => {
@@ -46,7 +48,7 @@ class SearchField extends Component {
 
 	renderLoader = () => 
 		<div className="search-field-container__input-loader">
-			<img src="/img/search-spinner.gif"/>
+			<img src={`/img/${this.props.transparent ? 'spinner' : 'search-spinner'}.gif`}/>
 		</div>
 
 	render() {
