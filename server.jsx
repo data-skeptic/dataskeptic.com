@@ -7,6 +7,7 @@ import {get_episodes_by_guid}    from 'backend/get_episodes_by_guid'
 import {get_rfc_metadata}        from 'backend/get_rfc_metadata'
 import {join_slack}              from 'backend/join_slack'
 import {send_email}              from 'backend/send_email'
+import {search_site}             from 'backend/search_site'
 import {get_blogs_rss}           from 'backend/get_blogs_rss'
 import {order_create}            from 'backend/order_create'
 import {add_order}               from 'backend/add_order'
@@ -91,6 +92,7 @@ itunesId = c[env]['itunes']
 stripe_key = c[env]['stripe']
 sp_key = c[env]['sp']
 slack_key = c[env]['slack']
+var elastic_search_endpoint = c[env]['elastic_search_endpoint']
 aws_accessKeyId = c[env]['aws']['accessKeyId']
 aws_secretAccessKey = c[env]['aws']['secretAccessKey']
 aws_region = c[env]['aws']['region']
@@ -337,8 +339,12 @@ function api_router(req, res) {
         doRefresh()
         return res.status(200).end(JSON.stringify({'status': 'ok'}))
     }
+    else if (req.url.indexOf('/api/search') == 0) {
+        search_site(req, res, elastic_search_endpoint)
+        return true
+    }
     else if (req.url.indexOf('/api/email/send') == 0) {
-        send_email(req, res)
+        send_email(req, res, elastic_search)
         return true
     }
     else if (req.url.indexOf('/api/order/create') == 0) {
@@ -683,7 +689,7 @@ function tracking(req) {
         request('http://ipinfo.io/' + ip + '?token=' + ipinfo_token, function(error, res, body) {
             if (influxdb) {
                 if (body) {
-		  try {
+		          try {
                     body = JSON.parse(body)
                     var ip = body['ip']
                     var country = body['country'] || "unknown"
