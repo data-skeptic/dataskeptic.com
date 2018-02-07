@@ -80,6 +80,7 @@
     "react-dom": "^0.14.3",
     "react-dropzone": "^3.13.1",
     "react-ga": "^2.1.2",
+    "react-highlight-words": "^0.10.0",
     "react-howler": "^3.3.0",
     "react-logger": "^1.1.0",
     "react-modal": "^3.1.11",

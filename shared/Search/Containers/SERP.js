@@ -7,6 +7,8 @@ import Loading from "../../Common/Components/Loading";
 import styled from "styled-components";
 import {Link} from "react-router";
 import moment from "moment/moment";
+import Highlighter from "react-highlight-words";
+
 import redirectToSearch from "../Helpers/redirectToSearch";
 
 const formatDate = (date) => moment(date).format('MMMM D, Y')
@@ -19,6 +21,17 @@ const getLocationQuery = (search) => {
 	}
 
 	return query
+}
+
+const highlight = (query='', text='') => {
+	const searchWords = query.split(' ')
+
+	return <Highlighter
+		highlightClassName='matching'
+		searchWords={searchWords}
+		autoEscape={true}
+		textToHighlight={text}
+	/>
 }
 
 class SERP extends Component {
@@ -89,9 +102,8 @@ class SERP extends Component {
 					</Preview>}
 					<Inner indent={!!preview}>
 						<Date>{formatDate(date_created)}</Date>
-						<Title>{title}</Title>
-						{JSON.stringify(abstract)}
-						<Abstract>{abstract}</Abstract>
+						<Title>{highlight(this.props.query, title)}</Title>
+						<Abstract>{highlight(this.props.query, abstract)}</Abstract>
 					</Inner>
 				</Post>
 			)
@@ -183,8 +195,12 @@ const Inner = styled.div`
 `
 
 const Title = styled.h4`
-    font-weight: normal;
     margin: 0px 0px 12px 0px;
+   
+    * {
+      font-size: 19px;
+      font-weight: normal;
+    }
 `
 
 const Date = styled.div`
