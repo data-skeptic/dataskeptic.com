@@ -88,8 +88,7 @@ class SERP extends Component {
 	renderEmpty = () =>
 		<div className="search-results-empty">
 			<h4>Your search <i>“{this.props.query}”</i> did not match any blog.</h4>
-			<p>ake sure that all words are spelled correctly.</p>
-			<p>Try different keywords.</p>
+			<p>Make sure that all words are spelled correctly or try different keywords.</p>
 		</div>
 
 	renderPosts = (posts) =>
