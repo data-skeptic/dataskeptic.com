@@ -29,3 +29,4 @@ if __name__ == '__main__':
     dbname = config['dev']['mysql']['dbname']
     aws_access_key_id=config['dev']['aws']['key']
     aws_secret_access_key=config['dev']['aws']['secret']
+    bucketname=config['dev']['bucketname']['bucketname']
