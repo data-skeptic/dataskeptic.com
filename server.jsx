@@ -683,6 +683,7 @@ function tracking(req) {
         request('http://ipinfo.io/' + ip + '?token=' + ipinfo_token, function(error, res, body) {
             if (influxdb) {
                 if (body) {
+		  try {
                     body = JSON.parse(body)
                     var ip = body['ip']
                     var country = body['country'] || "unknown"
@@ -708,6 +709,10 @@ function tracking(req) {
                         console.error('Error saving data to InfluxDB!')
                         console.log(err)
                     })
+                  } catch(err) {
+                    console.log("problem with tracking")
+                    console.log(err)
+                  }
                 } else {
                     console.log("Some error from ipinfo.io")
                     console.log(body)
