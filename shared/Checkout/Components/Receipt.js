@@ -51,6 +51,8 @@ export default (props) =>
 			<In>Receipt</In>
 		</Heading>
 		<Details>
+			<Line />
+
 			<In>
 				<Info>
 					<Date>{formatDate(props.created)}</Date>
@@ -59,7 +61,6 @@ export default (props) =>
 					<Address>{renderAddress(props.shipping.address)}</Address>
 				</Info>
 			</In>
-
 			<Line />
 
 			<In>
@@ -83,7 +84,7 @@ const Container = styled.div`
 	width: 400px;
 	margin: 0px auto;
 	background: #fff;
-  border-radius: 2px;
+  border-radius: 12px;
   box-shadow: 0 1px 2px rgba(0,0,0,0.07);
 `
 
@@ -100,7 +101,8 @@ const Heading = styled.div`
   padding: 24px 0px;
   color: #ffffff;
   font-weight: 400;
-  line-height: 1.1;   
+  line-height: 1.1;
+  border-radius: 6px 6px 0px 0px;   
 `
 
 const Date = styled.div`
