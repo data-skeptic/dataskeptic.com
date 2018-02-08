@@ -45,6 +45,7 @@ import {Provider}              from 'react-redux';
 import {RoutingContext, match} from 'react-router';
 import isFunction from 'lodash/isFunction';
 import extend from 'lodash/extend';
+import isEmpty from 'lodash/isEmpty';
 import routes                    from 'routes';
 import * as reducers             from 'reducers';
 import {
@@ -585,15 +586,17 @@ async function updateState(store, pathname, req) {
     inject_years(store, Cache)
 
     store.dispatch({type: "PROPOSAL_SET_BUCKET", payload: {aws_proposals_bucket}})
-    if (Cache.contributors != undefined && Cache.contributors != []) {
+    if (!isEmpty(Cache.contributors)) {
         console.log("usingcache")
         store.dispatch({type: "SET_CONTRIBUTORS", payload: Cache.contributors})
     } else {
-        return new Promise(function(resolve, reject) {
+        await new Promise(function(resolve, reject) {
             console.log("Need to load contributors")
-            resolve(get_contributors())
+            resolve()
         }).then(function(contributors) {
             console.log("Got contributors")
+            // save contributors
+	          Cache.contributors = contributors
             store.dispatch({type: "SET_CONTRIBUTORS", payload: contributors})
         }, function(err) {
             console.log("Error getting contributors")
@@ -604,13 +607,6 @@ async function updateState(store, pathname, req) {
     var bot = Cache.bot
     if (bot) {
         store.dispatch({type: "SET_BOT", payload: bot})
-    }
-    var contributors = Cache.contributors
-    if (!contributors || contributors.length == 0) {
-        var promise = get_contributors()
-        promise.then(function(contributors) {
-            store.dispatch({type: "SET_CONTRIBUTORS", payload: contributors});
-        })
     }
     
     if (pathname === "" || pathname === "/") {

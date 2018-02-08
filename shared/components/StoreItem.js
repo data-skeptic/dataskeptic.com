@@ -48,15 +48,15 @@ class Store extends React.Component {
     render() {
         var product = this.props.product
         if (product.active == 1 && product.type != "membership") {
-            var btnId = "add_" + product.id
-            var sizeSelectorId = "ss_" + product.id
+            var btnId = this.props.uniq + "_add_" + product.id
+            var sizeSelectorId = this.props.uniq + "_ss_" + product.id
             var selection = this.state.sizeSelected
             var cls = "add-to-cart"
             if (this.state.wasClicked) {
                 cls = "add-to-cart-clicked"
             }
             return (
-                <div className="col-md-4 col-sm-6 product-item" key={product.id}>
+                <div className="col-md-4 col-sm-6 product-item">
                     <div className="content">
                         <div className="prod-img">
                             <img className="product-image" src={product.img}/>
