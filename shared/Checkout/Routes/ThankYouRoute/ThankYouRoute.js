@@ -6,19 +6,20 @@ import {changePageTitle} from "../../../Layout/Actions/LayoutActions";
 import {loadReceipt} from "../../Actions/CheckoutActions";
 import Receipt from "../../Components/Receipt";
 
-function getParameterByName(name, url) {
-	name = name.replace(/[\[\]]/g, "\\$&");
-	var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-		results = regex.exec(url);
-	if (!results) return null;
-	if (!results[2]) return '';
-	return decodeURIComponent(results[2].replace(/\+/g, " "));
+const getLocationQuery = (search) => {
+	const params = search.replace('?', '').split("=")
+	let query = !!params[1] ? params[1] : ''
+	if (query) {
+		query = decodeURIComponent(query)
+	}
+
+	return query
 }
 
 class ThankYouRoute extends Component {
 
 	componentWillMount() {
-		const id = getParameterByName('num', this.props.location.pathname)
+		const id = getLocationQuery(this.props.location.search)
     if (isEmpty(id)) {
 		  return this.props.history.push('/')
     }

@@ -54,10 +54,15 @@ export function checkout(data, redirect) {
                     .then((successData) => {
                         console.log("success")
                         console.log(successData)
-                        if (successData.status == "ok") {
-                            dispatch(checkoutRequestSuccess(successData, data, redirect))
+                        if (successData.status === "ok") {
+                          setTimeout(() => {
+                            dispatch(clearCart());
+                            redirect(successData)
+                          }, SUCCESS_REDIRECT_DELAY);
+
+                          dispatch(checkoutRequestSuccess(successData, data, redirect))
                         } else {
-                            dispatch(checkoutRequestFailed(successData.msg))
+                          dispatch(checkoutRequestFailed(successData.msg))
                         }
                     })
                     .catch(({message}) => dispatch(checkoutRequestFailed(message)));
@@ -76,34 +81,23 @@ export function checkoutRequestStart(data) {
 }
 
 export function checkoutRequestSuccess(successData, data, redirectClb) {
-    const emailData = {
-        ...data,
-        type: 'checkout',
-        to: data.email,
-        subject: 'Your dataskeptic.com order confirmation'
-    };
-    //
-    // axios.post('/api/v1/mail', emailData)
-    //     .then(() => console.info('Email delivered '))
-    //     .catch((err) => console.error(err))
+	const emailData = {
+		...data,
+		type: 'checkout',
+		to: data.email,
+		subject: 'Your dataskeptic.com order confirmation'
+	};
 
-    return (dispatch) => {
+	axios.post('/api/v1/mail', emailData)
+		.then(() => console.info('Email delivered '))
+		.catch((err) => console.error(err))
 
-        dispatch({
-          type: CHECKOUT_REQUEST_SUCCESS,
-          payload: {
-            message,
-            data: successData.order
-          }
-        })
-
-        setTimeout(() => {
-            dispatch(clearCart());
-            redirectClb(successData)
-        }, SUCCESS_REDIRECT_DELAY);
-
-        dispatch()
-    }
+	return {
+		type: CHECKOUT_REQUEST_SUCCESS,
+		payload: {
+			message
+		}
+	}
 }
 
 export function checkoutRequestFailed(error, data) {
