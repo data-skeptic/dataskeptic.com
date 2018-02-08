@@ -76,8 +76,7 @@ function getEpisodesData(episodes) {
 	return Promise.all(episodes.map(ep => getEpisodeData(ep.guid)))
 		.then((episodesData) => {
 			return episodes.map((ep, index) => ({
-				...ep,
-				...episodesData[index]
+				...ep
 			}))
 		})
 }
@@ -95,6 +94,7 @@ export function get_podcasts(dispatch, pathname) {
 			.get("/api/episodes/list?year=" + year)
 	  		.then((result) => getEpisodesData(result["data"]))
 			.then((episodes) => {
+				console.log(episodes)
                 dispatch({type: "ADD_EPISODES", payload: episodes})
 			})
 			.catch((err) => {

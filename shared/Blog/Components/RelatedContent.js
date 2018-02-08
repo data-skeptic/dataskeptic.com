@@ -27,7 +27,6 @@ class RelatedContent extends React.Component {
 				var title = item.title
 				var body = item.body
 				var type = item.type
-				console.log(item)
 				if (type == "person") {
 					return (
 						<div className="related-content-container row">
