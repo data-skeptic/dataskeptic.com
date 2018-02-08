@@ -24,7 +24,7 @@ export class CheckoutFormContainer extends Component {
         console.log('data.products')
         console.log(data.products)
 
-        this.props.checkout(data);
+        this.props.checkout(data, this.props.redirect);
     }
 
     render() {

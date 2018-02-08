@@ -150,7 +150,7 @@ module.exports = {
                         throw new Error(paymentError);
                     }
                     */
-                    res.status(200).end(JSON.stringify({'status': 'ok', 'msg': ''}))
+                    res.status(200).end(JSON.stringify({'status': 'ok', 'msg': '', order_id: resp['stripe_order_id']}))
                 }).catch(function(err) {
                     console.log('err!!!')
                     console.log(err)
