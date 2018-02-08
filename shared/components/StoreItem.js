@@ -10,6 +10,7 @@ class Store extends React.Component {
         super(props)
 
         this.onSizeSelection = this.onSizeSelection.bind(this)
+        this.onAddToCart = this.onAddToCart.bind(this)
         this.state = {
             sizeSelected: undefined,
             wasClicked: false
@@ -48,7 +49,7 @@ class Store extends React.Component {
     render() {
         var product = this.props.product
         if (product.active == 1 && product.type != "membership") {
-            var btnId = this.props.uniq + "_add_" + product.id
+            var btnId = "add_" + product.id
             var sizeSelectorId = this.props.uniq + "_ss_" + product.id
             var selection = this.state.sizeSelected
             var cls = "add-to-cart"
@@ -73,7 +74,7 @@ class Store extends React.Component {
                                     onChange={this.onSizeSelection}
                                 />
                             </div>
-                            <button className={cls} id={btnId} onClick={this.onAddToCart.bind(this)}>+</button>
+                            <button className={cls} id={btnId} onClick={this.onAddToCart}>+</button>
                         </div>
                     </div>
                 </div>
