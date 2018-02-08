@@ -24,7 +24,7 @@ export function get_contributors() {
             return contributors;
         })
         .catch((err) => {
-            console.log("Could not load products")
+            console.log("Could not load contributors")
             console.log(err)
         })
 }

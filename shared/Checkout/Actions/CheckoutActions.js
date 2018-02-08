@@ -75,7 +75,7 @@ export function checkoutRequestStart(data) {
     }
 }
 
-export function checkoutRequestSuccess(message, data, redirectClb) {
+export function checkoutRequestSuccess(successData, data, redirectClb) {
     const emailData = {
         ...data,
         type: 'checkout',
@@ -88,18 +88,20 @@ export function checkoutRequestSuccess(message, data, redirectClb) {
     //     .catch((err) => console.error(err))
 
     return (dispatch) => {
-        // dispatch(clearCart());
+
         dispatch({
           type: CHECKOUT_REQUEST_SUCCESS,
           payload: {
             message,
-            data
+            data: successData.order
           }
         })
 
         setTimeout(() => {
-	        redirectClb(data)
+            dispatch(clearCart());
+            redirectClb(successData)
         }, SUCCESS_REDIRECT_DELAY);
+
         dispatch()
     }
 }

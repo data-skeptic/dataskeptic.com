@@ -590,19 +590,6 @@ async function updateState(store, pathname, req) {
     if (!isEmpty(Cache.contributors)) {
         console.log("usingcache")
         store.dispatch({type: "SET_CONTRIBUTORS", payload: Cache.contributors})
-    } else {
-        await new Promise(function(resolve, reject) {
-            console.log("Need to load contributors")
-            resolve()
-        }).then(function(contributors) {
-            console.log("Got contributors")
-            // save contributors
-	          Cache.contributors = contributors
-            store.dispatch({type: "SET_CONTRIBUTORS", payload: contributors})
-        }, function(err) {
-            console.log("Error getting contributors")
-            console.log(err)
-        });
     }
 
     var bot = Cache.bot

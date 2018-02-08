@@ -6,20 +6,23 @@ import {changePageTitle} from "../../../Layout/Actions/LayoutActions";
 import {loadReceipt} from "../../Actions/CheckoutActions";
 import Receipt from "../../Components/Receipt";
 
-const getLocationId = (search) => {
-	const params = search.replace('?', '').split("=")
-	let query = !!params[1] ? params[1] : ''
-	if (query) {
-		query = decodeURIComponent(query)
-	}
-
-	return query
+function getParameterByName(name, url) {
+	name = name.replace(/[\[\]]/g, "\\$&");
+	var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+		results = regex.exec(url);
+	if (!results) return null;
+	if (!results[2]) return '';
+	return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
 class ThankYouRoute extends Component {
 
 	componentWillMount() {
-		const id = getLocationId(this.props.location.search)
+		const id = getParameterByName('num', this.props.location.pathname)
+    if (isEmpty(id)) {
+		  return this.props.history.push('/')
+    }
+
 		if (isEmpty(this.props.receipt)) {
 			this.props.dispatch(loadReceipt(id))
     }
@@ -30,21 +33,22 @@ class ThankYouRoute extends Component {
 
 	static getPageMeta() {
 		return {
-			title: `Payment complete | Data Skeptic`
+			title: `Payment Complete | Data Skeptic`
 		}
 	}
 
 	render() {
 	  const {loaded, receipt} = this.props
-    const id = getLocationId(this.props.location.search)
 
 		return (
 			<div className="thank-you">
-        <h1>Thank you!</h1>
-        <p>Payment Complete.</p>
-        <img src="https://s3.amazonaws.com/dataskeptic.com/img/bot/bot-image.png" width="200" />
+        <div>
+          <h1>Thank you!</h1>
+          <p>Payment Complete.</p>
+          <img src="https://s3.amazonaws.com/dataskeptic.com/img/bot/bot-image.png" width="200" />
+        </div>
 
-        {loaded && <Receipt {...receipt}/>}
+        {loaded ? <Receipt {...receipt}/> : <span>Loading...</span> }
 			</div>
 		)
 	}

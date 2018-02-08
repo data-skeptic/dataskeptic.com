@@ -2,107 +2,15 @@ import React from 'react'
 import styled from 'styled-components'
 import moment from "moment/moment";
 
-const mockedReceipt = {
-	"id": "or_1BtHebBqzeANJ3c3Ocb373hI",
-	"object": "order",
-	"amount": 300,
-	"amount_returned": null,
-	"application": null,
-	"application_fee": null,
-	"charge": "ch_1BtHecBqzeANJ3c3iDNUkvw4",
-	"created": 1518104981,
-	"currency": "usd",
-	"customer": null,
-	"email": "123@mail.ru",
-	"items": [
-		{
-			"object": "order_item",
-			"amount": 200,
-			"currency": "usd",
-			"description": "Hex Sticker",
-			"parent": "sku_4",
-			"quantity": 1,
-			"type": "sku"
-		},
-		{
-			"object": "order_item",
-			"amount": 100,
-			"currency": "usd",
-			"description": "shipping",
-			"parent": "shipping",
-			"quantity": 1,
-			"type": "sku"
-		},
-		{
-			"object": "order_item",
-			"amount": 0,
-			"currency": "usd",
-			"description": "Taxes (included)",
-			"parent": null,
-			"quantity": null,
-			"type": "tax"
-		},
-		{
-			"object": "order_item",
-			"amount": 0,
-			"currency": "usd",
-			"description": "Free shipping",
-			"parent": "ship_free-shipping",
-			"quantity": null,
-			"type": "shipping"
-		}
-	],
-	"livemode": false,
-	"metadata": {},
-	"returns": {
-		"object": "list",
-		"data": [],
-		"has_more": false,
-		"total_count": 0,
-		"url": "/v1/order_returns?order=or_1BtHebBqzeANJ3c3Ocb373hI"
-	},
-	"selected_shipping_method": "ship_free-shipping",
-	"shipping": {
-		"address": {
-			"city": "123",
-			"country": "us",
-			"line1": "123",
-			"line2": "1232",
-			"postal_code": "123",
-			"state": "123"
-		},
-		"carrier": null,
-		"name": "123 123",
-		"phone": null,
-		"tracking_number": null
-	},
-	"shipping_methods": [
-		{
-			"id": "ship_free-shipping",
-			"amount": 0,
-			"currency": "usd",
-			"delivery_estimate": null,
-			"description": "Free shipping"
-		}
-	],
-	"status": "paid",
-	"status_transitions": {
-		"canceled": null,
-		"fulfiled": null,
-		"paid": 1518104983,
-		"returned": null
-	},
-	"updated": 1518104983
-}
-
 const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1)
 
 const Dollar = () => <Sign>$</Sign>
 
-const formatMoney = (price) => <span><Dollar />{price}</span>
-const formatDate = (date) => moment(date).format('MMMM D, Y')
+const formatMoney = (price) => <span><Dollar />{(price/100).toFixed(2)}</span>
+const formatDate = (date) => moment(date * 1000).format('MMMM D, Y')
 
-const renderAddress = ({city='', country='', line1='', line2='', postal_code='', state=''}) => `${city}${country}${line1}${line2}${postal_code}${state}`
+const renderAddress = ({city='', country='', line1='', line2='', postal_code='', state=''}) =>
+	`${line1}${' '+line2}, ${city}, ${country.toUpperCase()}, ${state}, ${postal_code}`
 
 const renderProduct = (product, key) =>
 	<Product key={key}>
@@ -137,7 +45,7 @@ const renderStatus = (statuses) => {
 }
 
 
-export default (props = mockedReceipt) =>
+export default (props) =>
 	<Container>
 		<Heading>
 			<In>Receipt</In>
@@ -145,10 +53,10 @@ export default (props = mockedReceipt) =>
 		<Details>
 			<In>
 				<Info>
-					<Date>{formatDate(mockedReceipt.created)}</Date>
-					<Name>{mockedReceipt.shipping.name}</Name>
-					<Email>{mockedReceipt.email}</Email>
-					<Address>{renderAddress(mockedReceipt.shipping)}</Address>
+					<Date>{formatDate(props.created)}</Date>
+					<Name>{props.shipping.name}</Name>
+					<Email>{props.email}</Email>
+					<Address>{renderAddress(props.shipping.address)}</Address>
 				</Info>
 			</In>
 
@@ -156,7 +64,7 @@ export default (props = mockedReceipt) =>
 
 			<In>
 				<Products>
-					{renderProducts(mockedReceipt.items)}
+					{renderProducts(props.items)}
 				</Products>
 			</In>
 
@@ -164,8 +72,8 @@ export default (props = mockedReceipt) =>
 
 			<In>
 				<Total>
-						<Status>{renderStatus(mockedReceipt.status_transitions)}</Status>
-						<Amount>Total:{' '}{formatMoney(mockedReceipt.amount)}</Amount>
+						<Status>{renderStatus(props.status_transitions)}</Status>
+						<Amount>Total:{' '}{formatMoney(props.amount)}</Amount>
 				</Total>
 			</In>
 		</Details>
@@ -183,14 +91,15 @@ const Sign = styled.span`font-size: 80%;`
 
 const In = styled.div`padding: 0px 28px;`
 
+// background: #38383A; # default site active color
 const Heading = styled.div`
 	text-transform: uppercase;
 	text-align: center;
-	background: #38383A;
+	background: #2e1453;
   font-size: 26px;
   padding: 24px 0px;
   color: #ffffff;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.1;   
 `
 
