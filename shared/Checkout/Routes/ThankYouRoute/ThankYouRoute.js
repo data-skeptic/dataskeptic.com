@@ -46,10 +46,10 @@ class ThankYouRoute extends Component {
         <div>
           <h1>Thank you!</h1>
           <p>Payment Complete.</p>
-          <img src="https://s3.amazonaws.com/dataskeptic.com/img/bot/bot-image.png" width="200" />
+          <img src="https://s3.amazonaws.com/dataskeptic.com/img/bot/bot-image.png" width="200" style={{marginBottom: '-45px'}} />
         </div>
 
-        {loaded ? <Receipt {...receipt}/> : <span>Loading...</span> }
+        {loaded ? <Receipt {...receipt}/> : <span className="loading">Processing...</span> }
 			</div>
 		)
 	}
