@@ -30,6 +30,7 @@ def update_one_blog_in_elastic_search(row, html, elastic_search_conn, index_name
     doc = {
         'blog_id'      : blog_id,
         'title'        : row['title'],
+        'prettyname'   : row['prettyname'],
         'author'       : row['author'],
         'abstract'     : row['abstract'],
         'date_created' : row['date_created'],
