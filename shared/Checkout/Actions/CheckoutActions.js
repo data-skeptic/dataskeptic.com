@@ -131,7 +131,7 @@ export function loadReceipt(id) {
 	return (dispatch) => {
         dispatch(loadReceiptStart())
 
-        axios.get(`/api/v1/orders${id}`)
+        axios.get(`/api/v1/orders/${id}`)
           .then((resp) => dispatch(loadReceiptSuccess(resp.data)))
           .catch((err) => dispatch(loadReceiptFailed(err)))
 	}

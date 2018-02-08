@@ -14,7 +14,8 @@ const defaultState = {
     error: '',
     success: '',
     processing: false,
-    receipt: null
+    loaded: false,
+    receipt: {}
 };
 
 const initialState = fromJS(defaultState);
@@ -32,6 +33,7 @@ export default function CheckoutReducer(state=initialState, action) {
             nstate.success = 'Checkout completed! Thanks.';
             nstate.processing = false;
 	          nstate.receipt = action.payload.data
+            nstate.loaded = true
             break;
         case CHECKOUT_REQUEST_FAILED:
             nstate.success = '';
@@ -39,18 +41,19 @@ export default function CheckoutReducer(state=initialState, action) {
             break;
 
         case RECEIPT_REQUEST_START:
-            nstate.error = '';
-            nstate.success = '';
+            nstate.error = null
+            nstate.loaded = false;
             nstate.processing = true;
-	          nstate.receipt = null
+	          nstate.receipt = {}
             break;
         case RECEIPT_REQUEST_SUCCESS:
-            nstate.success = true;
+            nstate.loaded = true;
             nstate.processing = false;
 	          nstate.receipt = action.payload.data
             break;
         case RECEIPT_REQUEST_FAILED:
-            nstate.success = '';
+            nstate.loaded = false;
+	          nstate.receipt = {}
             nstate.error = action.payload.error;
             break;
 

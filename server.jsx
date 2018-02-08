@@ -46,6 +46,7 @@ import {RoutingContext, match} from 'react-router';
 import isFunction from 'lodash/isFunction';
 import extend from 'lodash/extend';
 import isEmpty from 'lodash/isEmpty';
+import clone from 'lodash/clone';
 import routes                    from 'routes';
 import * as reducers             from 'reducers';
 import {
@@ -190,7 +191,7 @@ const doRefresh = (store) => {
             return get_contributors()
         })
         .then((contributors) => {
-            Cache.contributors = contributors
+            Cache.contributors = clone(contributors)
             console.log("-[Refreshing RFC]-");
             return loadCurrentRFC()
         })
