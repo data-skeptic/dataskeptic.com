@@ -36,6 +36,7 @@ class Checkout extends Component {
 	}
 
 	redirectToSuccessPage = ({ stripe_order_id }) => {
+		window.scrollTo(0, 0)
 		return this.props.history.push(`/checkout/thank-you?num=${stripe_order_id}`)
 	}
 

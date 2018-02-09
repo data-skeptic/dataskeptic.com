@@ -55,11 +55,8 @@ export function checkout(data, redirect) {
                         console.log("success")
                         console.log(successData)
                         if (successData.status === "ok") {
-                          setTimeout(() => {
-                            dispatch(clearCart());
-                            redirect(successData)
-                          }, SUCCESS_REDIRECT_DELAY);
-
+                          redirect(successData)
+                          dispatch(clearCart());
                           dispatch(checkoutRequestSuccess(successData, data, redirect))
                         } else {
                           dispatch(checkoutRequestFailed(successData.msg))

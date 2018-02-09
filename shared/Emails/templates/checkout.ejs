@@ -10,11 +10,11 @@
                 <td colspan="3" align="right"><% if (order.customer.last_name > 1) { %> <%= order.customer.first_name %><% } %></td>
             </tr>
             <tr>
-                <td colspan="3" align="right">address</td>
+                <td colspan="3" align="right"><%= order.address %></td>
             </tr>
             <% for (var i = 0; i < order.products.length; i++) { %>
             <tr>
-                <td width="30px"><img src="<%= order.products[i].product.img %>" width="100%"></td>
+                <td width="80px"><img src="<%= order.products[i].product.img %>" width="100%"></td>
                 <td><%= order.products[i].product.title %><% if (!!order.products[i].size) { %> <%= order.products[i].size %> <% } %><% if (order.products[i].quantity > 1) { %>x<%= order.products[i].quantity %><% } %></td>
                 <td width="40px">$<%= (order.products[i].product.price).toFixed(2) %></td>
             </tr>
