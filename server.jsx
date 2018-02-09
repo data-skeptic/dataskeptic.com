@@ -22,6 +22,7 @@ import {feed_uri}                from 'daos/episodes'
 import {
     apiMemberFeed,
     loadEpisodes,
+    loadProducts,
     load,
     get_contributors,
     loadCurrentRFC,
@@ -164,49 +165,44 @@ global.env = env;
 
 const doRefresh = (store) => {
     let env = global.env;
-    if (store != undefined) {
-        var d = store.dispatch
-    }
+    console.log("-[Refreshing Cache]-");
 
-    console.log("-[Refreshing episodes]-");
-    return loadEpisodes(env)
-        .then(function ({episodes_map, episodes_list, episodes_content, member_feed}) {
-            console.log("-[Refreshing episodes]-");
-            if (Cache) {
-                Cache.episodes_map = episodes_map
-                Cache.episodes_list = episodes_list
-                Cache.episodes_content = episodes_content
-                Cache.member_feed = member_feed                
-            } else {
-                console.log("Cache is undefined")
-            }
-            return getProducts(store, env)
-        })
-        .then((products) => {
-            console.log("-[Refreshing products]-");
-            Cache.products = null;
-            Cache.products = {};
-            Cache.products.items = products;
-            console.log("-[Refreshing Contributors]-");
-            return get_contributors()
-        })
-        .then((contributors) => {
-            Cache.contributors = clone(contributors)
-            console.log("-[Refreshing RFC]-");
-            return loadCurrentRFC()
-        })
-        .then((rfc) => {
-            Cache.rfc = rfc
-            console.log("-[Refreshing Bot]-");
-            return get_bot_status(d)
-        })
-        .then((bot) => {
-            Cache.bot = bot
-            console.log("-[Refreshing Complete]-");
-        })
-        .catch((err) => {
-            console.log(err);
-        })
+    return Promise.all([
+    	loadEpisodes(env),
+	    // loadProducts(),
+	    // get_contributors(),
+	    // loadCurrentRFC(),
+	    // get_bot_status()
+		]).then((results) => {
+		    const [ episodes, products, contributors, rfc, bot ] = results
+		    console.log("-[All cache data fetched]-")
+
+        // episodes
+		    const {episodes_map, episodes_list, episodes_content, member_feed} = episodes
+	      Cache.episodes_map = episodes_map
+        Cache.episodes_list = episodes_list
+        Cache.episodes_content = episodes_content
+        Cache.member_feed = member_feed
+
+        // products
+	      Cache.products = null;
+        Cache.products = {};
+        Cache.products.items = clone(products)
+
+        //contributors
+	      Cache.contributors = clone(contributors)
+
+        // RFC
+	      Cache.rfc = rfc
+
+        // bot
+	      Cache.bot = bot
+    })
+      .then(() => console.log("-[Refreshing Complete]-"))
+      .catch((err) => {
+          console.error(`Failed to fetch cache`)
+          console.dir(err)
+      })
 };
 
 setInterval(doRefresh, 60 * 60 * 1000);
@@ -545,7 +541,7 @@ function getContributorPosts(contributor) {
     return axios.get(`${base_url}/blog/list?contributor=${contributor}&limit=21`).then((res) => res.data)
 }
 
-async function inject_homepage(store, my_cache, pathname) {
+async function inject_homepage(store, my_cache) {
     const res = await getFeaturesAPI("homepage")
     var dispatch = store.dispatch
     dispatch({type: "CMS_INJECT_HOMEPAGE_CONTENT", payload: { data: res.data, dispatch }})

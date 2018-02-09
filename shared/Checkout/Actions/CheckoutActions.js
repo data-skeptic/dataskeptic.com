@@ -80,17 +80,24 @@ export function checkoutRequestStart(data) {
     }
 }
 
-export function checkoutRequestSuccess(successData, data, redirectClb) {
+export function checkoutRequestSuccess(successData, data) {
 	const emailData = {
-		...data,
 		type: 'checkout',
 		to: data.email,
-		subject: 'Your dataskeptic.com order confirmation'
+		subject: 'Your dataskeptic.com order confirmation',
+		order: {
+			...successData
+		},
 	};
 
-	axios.post('/api/v1/mail', emailData)
-		.then(() => console.info('Email delivered '))
-		.catch((err) => console.error(err))
+	console.dir(emailData)
+
+	debugger;
+
+	//
+	// axios.post('/api/v1/mail', emailData)
+	// 	.then(() => console.info('Email delivered '))
+	// 	.catch((err) => console.error(err))
 
 	return {
 		type: CHECKOUT_REQUEST_SUCCESS,
@@ -110,6 +117,7 @@ export function checkoutRequestFailed(error, data) {
         to: 'kyle@dataskeptic.com',
         subject: 'Error in Order Processing'
     };
+
 
     axios.post('/api/v1/mail', emailData)
         .then(() => console.info('Email delivered '))
