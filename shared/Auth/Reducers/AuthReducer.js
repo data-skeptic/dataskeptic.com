@@ -77,10 +77,11 @@ export const markAsPlayed = (email, blog_id, media, guid, isPlayed) => {
 
 export const isPlayed = (state, id) => existAtList(state, 'played', id)
 
-export const markFavorite = (email, blog_id, favorited) => {
+export const markFavorite = (email, blog_id, guid, favorited) => {
     const data = {
         email,
         blog_id,
+	      guid,
         favorited
     }
 
@@ -89,10 +90,11 @@ export const markFavorite = (email, blog_id, favorited) => {
 
 export const isFavorited = (state, id) => existAtList(state, 'favorites', id)
 
-export const addPlaylist = (email, blog_id, add) => {
+export const addPlaylist = (email, blog_id, guid, add) => {
     const data = {
         email,
         blog_id,
+	      guid,
         add
     }
 

@@ -42,20 +42,21 @@ class Episode extends React.Component {
     }
 
     setPlayed = async (played) => {
-        const {userEmail, blogId} = this.props
-        const data = await markAsPlayed(userEmail, blogId, played)
+        const {userEmail, blogId, guid, media} = this.props
+        const data = await markAsPlayed(userEmail, blogId, media, guid, played)
         this.props.dispatch({ type: 'MARK_AS_PLAYED', payload: { data, played, blogId } })
     }
 
     setFavourite = async (favorited) => {
-        const {userEmail, blogId} = this.props
-        const data = await markFavorite(userEmail, blogId, favorited)
+        const {userEmail, blogId, guid} = this.props
+        debugger;
+        const data = await markFavorite(userEmail, blogId, guid, favorited)
         this.props.dispatch({ type: 'MARK_AS_FAVORITE', payload: { data, favorited, blogId } })
     }
 
     setPlaylisted = async (playlisted) => {
-        const {userEmail, blogId} = this.props
-        const data = await markAsPlayed(userEmail, blogId, playlisted)
+        const {userEmail, blogId, guid} = this.props
+        const data = await markAsPlayed(userEmail, blogId, guid, playlisted)
         this.props.dispatch({ type: 'ADD_PLAYLIST', payload: { data, playlisted, blogId } })
     }
 
@@ -321,6 +322,8 @@ export default connect((state, ownProps) => ({
     episodes: state.episodes,
     blogs: state.blogs,
     blogId: ownProps.episode.blog_id,
+	  guid: ownProps.episode.guid,
+	  media: ownProps.episode.mp3,
     states: {
         played: isPlayed(state, ownProps.episode.blog_id),
         favorited: isFavorited(state, ownProps.episode.blog_id),

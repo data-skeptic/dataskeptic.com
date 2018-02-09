@@ -76,6 +76,7 @@ export function getEpisodesData(episodes) {
 	return Promise.all(episodes.map(ep => getEpisodeData(ep.guid)))
 		.then((episodesData) => {
 			return episodes.map((ep, index) => ({
+				...episodesData[index],
 				...ep
 			}))
 		})
