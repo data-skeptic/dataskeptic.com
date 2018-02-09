@@ -15,5 +15,18 @@ module.exports = (cache) => {
             })
     });
 
+    router.post('/preview', function (req, res) {
+        const body = req.body
+        let template
+
+        try {
+          template = MailServices.template(body)
+        } catch (e) {
+	        return res.status(400).send(`Email review generation failed. Check the logs.`)
+        }
+
+        res.render('email', {template});
+    })
+
     return router;
 }
