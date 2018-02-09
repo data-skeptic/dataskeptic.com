@@ -167,13 +167,16 @@ const doRefresh = (store) => {
     let env = global.env;
     console.log("-[Refreshing Cache]-");
 
+    // Let node make requests asynchronous
     return Promise.all([
     	loadEpisodes(env),
-	    // loadProducts(),
-	    // get_contributors(),
-	    // loadCurrentRFC(),
-	    // get_bot_status()
+	    loadProducts(),
+	    get_contributors(),
+	    loadCurrentRFC(),
+	    get_bot_status()
 		]).then((results) => {
+		    // but wait until all of them will be done
+
 		    const [ episodes, products, contributors, rfc, bot ] = results
 		    console.log("-[All cache data fetched]-")
 

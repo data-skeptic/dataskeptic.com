@@ -171,9 +171,6 @@ function get_and_process_feed(replacements, feed_uri) {
 
             var xml = result["data"]
             var data = xml_to_list(xml)
-
-            console.dir(data.episodes_map)
-
             var mxml = xml
             for (var replacement of replacements) {
                 var guid = replacement['guid']
@@ -206,7 +203,8 @@ function get_and_process_feed(replacements, feed_uri) {
                     console.log(err)
                 })
             }
-	          return data
+            console.log("Loaded " + data.episodes_list.length + " episodes into map")
+            return data
         })
         .catch((err) => {
             console.log("loadEpisodes error: " + err);
