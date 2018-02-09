@@ -55,7 +55,7 @@ class CartContainer extends React.Component {
         for (var item of cart_items) {
             subtotal += item.product.price * item.quantity
         }
-        if (cart_items.length == 0) {
+        if (!cart_items || cart_items.length == 0) {
             return <EmptyCart />
         } else {
             const items = this.renderCartItems(cart_items);
