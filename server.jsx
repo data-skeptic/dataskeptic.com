@@ -720,7 +720,10 @@ function getIpData(ip) {
                 	resolve(pnt)
 				} catch(err) {
 					console.log("problem with tracking")
-					console.log(err)
+                    console.log(ip)
+                    console.log(ipinfo_token)
+                    console.log(body)
+                    console.log(err)
                     reject(error)
 				}
 			} else {
@@ -747,16 +750,19 @@ async function tracking (req, res) {
     }
 
     if (!ipInfo) {
+        console.log("ipInfo not defined")
         let ipData
         try {
             // wait for ip info request data
             ipData = await getIpData(ip)
-        } catch (err) {}
+        } catch (err) {
+            ipInfo = undefined
+        }
 
         // save to current session if not empty
         if (ipData) {
 	          req.session.ipInfo = ipInfo = ipData
-        }
+          }
     }
 
 	if (ipInfo) {
@@ -828,12 +834,7 @@ const renderPage = async (req, res) => {
         let store = applyMiddleware(thunk, promiseMiddleware)(createStore)(reducer);
         await updateState(store, location.pathname, req);
 
-        /**
-         * I put tracking function after `updateState`.
-         * `updateState` make many requests (to preload state) from the server ip.
-         * I don't see any reason to track "myself".
-         */
-        await tracking(req)
+        await tracking(req, res)
 
 	      fetchComponentData(store.dispatch, renderProps.components, renderProps.params)
             .then(() => renderView(store, renderProps, location))
