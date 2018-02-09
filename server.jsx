@@ -693,45 +693,44 @@ const CURRENT_IP_REQ_VERSION = 0
 function getIpData(ip) {
 	return new Promise((resolve, reject) => {
 		request('http://ipinfo.io/' + ip + '?token=' + ipinfo_token, function(error, res, body) {
-				if (body) {
-					try {
-						body = JSON.parse(body)
-						var ip = body['ip']
-						var country = body['country'] || "unknown"
-						var region  = body['region']  || "unknown"
-						var postal  = body['postal']  || "unknown"
-						var loc     = body['loc']     || "unknown"
-						var arr     = loc.split(",")
-						if (arr.length == 2) {
-							var lat = arr[0]
-							var lng = arr[1]
-						} else {
-							var lat = ""
-							var lng = ""
-						}
-						console.log(["influx", lat, region, country, postal])
+    		if (body) {
+    			try {
+    				body = JSON.parse(body)
+    				var ip = body['ip']
+    				var country = body['country'] || "unknown"
+    				var region  = body['region']  || "unknown"
+    				var postal  = body['postal']  || "unknown"
+    				var loc     = body['loc']     || "unknown"
+    				var arr     = loc.split(",")
+    				if (arr.length == 2) {
+    					var lat = arr[0]
+    					var lng = arr[1]
+    				} else {
+    					var lat = ""
+    					var lng = ""
+    				}
+    				console.log(["influx", lat, region, country, postal])
 
-            var pnt = {
+                    var pnt = {
 							measurement: "impression",
 							tags: {country, region, postal},
 							fields: {lat, lng},
-              version: CURRENT_IP_REQ_VERSION
-						}
-
-						resolve(pnt)
-					} catch(err) {
-						console.log("problem with tracking")
-						console.log(err)
-            reject(error)
+                            version: CURRENT_IP_REQ_VERSION
 					}
-				} else {
-					console.log("Some error from ipinfo.io")
-					console.log(body)
-					console.log(error)
-          reject(error)
+                	resolve(pnt)
+				} catch(err) {
+					console.log("problem with tracking")
+					console.log(err)
+                    reject(error)
 				}
+			} else {
+				console.log("Some error from ipinfo.io")
+				console.log(body)
+				console.log(error)
+                reject(error)
+			}
 		})
-  })
+    })
 }
 
 async function tracking (req, res) {
@@ -742,7 +741,7 @@ async function tracking (req, res) {
         ip = req.connection.remoteAddress
     }
 
-	  let ipInfo = req.session.ipInfo
+	let ipInfo = req.session.ipInfo
     if (ipInfo && ipInfo.version !== CURRENT_IP_REQ_VERSION) {
         ipInfo = null
     }
@@ -760,14 +759,19 @@ async function tracking (req, res) {
         }
     }
 
-	  if (influxdb) {
-	    return influxdb.writePoints([ipInfo])
-        .then(function() {})
-        .catch(function (err) {
-          console.error('Error saving data to InfluxDB!')
-          console.log(err)
-        })
-	  }
+	if (ipInfo) {
+        if (influxdb) {
+            var lst = [ipInfo]
+    	    return influxdb.writePoints(lst)
+            .then(function() {})
+            .catch(function (err) {
+              console.error('Error saving data to InfluxDB!')
+              console.log(err)
+            })
+	    }
+    } else {
+        console.log("ipInfo is undefined")
+    }
 }
 
 const renderPage = async (req, res) => {
