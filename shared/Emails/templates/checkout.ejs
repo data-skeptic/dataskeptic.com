@@ -1,11 +1,38 @@
-<div style="white-space: pre-line">
-    Hi <%= first_name %>,
+<div style="white-space: pre-line; text-align: left">
+    Hi <b><%= order.customer.first_name %><% if (!!order.customer.last_name) { %> <%= order.customer.first_name %><% } %></b>,
 
-    Thank you for supporting Data Skeptic.  Your order has been received and will be processed on our end right away.  Please allow a few weeks for shipping.  If you have any questions or issues with your order, don't hesitate to reach out to me directly.
+    <br/>
+    Thank you for supporting Data Skeptic. Your order has been received and will be processed on our end right away.  Please allow a few weeks for shipping.  If you have any questions or issues with your order, don't hesitate to reach out to me directly.
 
+    <table width="100%">
+        <tbody>
+            <tr>
+                <td colspan="3" align="right"><% if (order.customer.last_name > 1) { %> <%= order.customer.first_name %><% } %></td>
+            </tr>
+            <tr>
+                <td colspan="3" align="right">address</td>
+            </tr>
+            <% for (var i = 0; i < order.products.length; i++) { %>
+            <tr>
+                <td width="30px"><img src="<%= order.products[i].product.img %>" width="100%"></td>
+                <td><%= order.products[i].product.title %><% if (!!order.products[i].size) { %> <%= order.products[i].size %> <% } %><% if (order.products[i].quantity > 1) { %>x<%= order.products[i].quantity %><% } %></td>
+                <td width="40px">$<%= (order.products[i].product.price).toFixed(2) %></td>
+            </tr>
+            <% } %>
+            <tr>
+                <td colspan="3" align="right">Total: </td>
+            </tr>
+            <tr>
+                <td colspan="3" align="right"><b>$<%= (order.total).toFixed(2) %></b></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br/>
     If you purchased a membership, please allow 2-3 days for member portal access.  This is a new project for us and we haven't automated everything yet.
 
-    All the best,
-
+    <br/>
+    All the best,<br/>
     Kyle
+    <br/>
 </div>

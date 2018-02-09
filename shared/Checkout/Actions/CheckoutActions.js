@@ -90,14 +90,9 @@ export function checkoutRequestSuccess(successData, data) {
 		},
 	};
 
-	console.dir(emailData)
-
-	debugger;
-
-	//
-	// axios.post('/api/v1/mail', emailData)
-	// 	.then(() => console.info('Email delivered '))
-	// 	.catch((err) => console.error(err))
+	axios.post('/api/v1/mail', emailData)
+		.then(() => console.info('Email delivered '))
+		.catch((err) => console.error(err))
 
 	return {
 		type: CHECKOUT_REQUEST_SUCCESS,

@@ -1,32 +1,48 @@
-const express = require('express');
-const MailServices = require('../../modules/mail/services/MailServices');
+const express = require("express")
+const MailServices = require("../../modules/mail/services/MailServices")
 
-module.exports = (cache) => {
-    const router = express.Router();
+const formatAddress = ({
+  city = "",
+  country = "",
+  line1 = "",
+  line2 = "",
+  postal_code = "",
+  state = ""
+}) =>
+  `${line1}${" " + line2}, ${city}, ${country.toUpperCase()}, ${state}, ${
+    postal_code
+  }`
 
-    router.post('/', function (req, res) {
-        MailServices
-            .sendMail(req.body)
-            .then((data) => {
-                res.send(data);
-            })
-            .catch((err) => {
-                res.send(err);
-            })
-    });
+module.exports = cache => {
+  const router = express.Router()
 
-    router.post('/preview', function (req, res) {
-        const body = req.body
-        let template
+  router.post("/", function(req, res) {
+    MailServices.sendMail(req.body)
+      .then(data => {
+        res.send(data)
+      })
+      .catch(err => {
+        res.send(err)
+      })
+  })
 
-        try {
-          template = MailServices.template(body)
-        } catch (e) {
-	        return res.status(400).send(`Email review generation failed. Check the logs.`)
-        }
+  router.post("/preview", function(req, res) {
+    const data = req.body
+    data.order.address = formatAddress(data.order.customer)
 
-        res.render('email', {template});
-    })
+    let template
 
-    return router;
+    try {
+      template = MailServices.template(data)
+    } catch (e) {
+      console.log(e)
+      return res
+        .status(400)
+        .send(`Email review generation failed. Check the logs.`)
+    }
+
+    res.send(template)
+  })
+
+  return router
 }
