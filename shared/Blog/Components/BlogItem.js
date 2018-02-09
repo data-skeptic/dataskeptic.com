@@ -67,7 +67,9 @@ class BlogItem extends React.Component {
 		var prettyname = blog.prettyname
 		var src_file = blog.src_file
 		var content = ocms.blog_content[src_file]
-		if (content === undefined || loading) {
+		console.log(loading, src_file, content == undefined)
+		if (content == undefined || loading) {
+			console.log("Waiting for content to load")
 			return <Loading />
 		}
 		var related_items = blog.related

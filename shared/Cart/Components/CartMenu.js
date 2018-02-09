@@ -14,6 +14,8 @@ export const CartMenu = ({pathname, cartItemsCount, cartClick, cartButton = true
 
         <NavLink active={pathname} to="/store" onClick={itemClick}>Store</NavLink>
 
+	      <SearchArea />
+
         { cartButton ?
         <CartLink itemCount={cartItemsCount} onClick={cartClick} itemCount={cartItemsCount}/>
         : null }
@@ -21,8 +23,3 @@ export const CartMenu = ({pathname, cartItemsCount, cartClick, cartButton = true
 );
 
 export default CartMenu;
-
-/*
-put back when jing is ready
-        <SearchArea />
-*/

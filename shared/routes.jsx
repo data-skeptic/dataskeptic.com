@@ -56,6 +56,8 @@ import AdminOrdersProcessing   from 'components/admin/AdminOrdersProcessing';
 
 import UserPlaylist             from 'components/UserPlaylist';
 
+import SERP                    from 'Search/Containers/SERP';
+
 import SnlImpact               from 'components/l/SnlImpact';
 
 const env = (process.env.NODE_ENV === "production") ? 'prod' : 'dev'
@@ -172,11 +174,6 @@ export default (
         <Route path="/membershipPortal" showAds={false} component={App}>
             <IndexRoute component={MembershipPortal}/>
         </Route>
-
-        <Route path="/profile/playlist" showAds={false} component={App}>
-            <IndexRoute component={UserPlaylist}/>
-        </Route>
-
         <Route path="/membership/change" showAds={false} component={App}>
             <IndexRoute component={ChangeMembership}/>
         </Route>
@@ -247,6 +244,10 @@ export default (
 
         <Route path="/contributors/:contributor" component={App}>
             <IndexRoute component={ContributorPage}/>
+        </Route>
+
+        <Route path="/search" component={App}>
+            <IndexRoute component={SERP}/>
         </Route>
 
         <Route path="/*" component={App} onEnter={loadData}>

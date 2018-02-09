@@ -16,32 +16,32 @@ const init = {
     loading: false,
     loaded: false,
     query: null,
-    result: []
+    results: []
 }
 
 const defaultState = Immutable.fromJS(init);
 
-const searchRequest = (dispatch, query) => {
-	const url = base_url + "/blog/search"
-  const payload = {query}
-	alert('SEARCH') // TODO: implement correct response
-	// axios.post(url, payload)
-	// 	.then((result) => {
-	// 		dispatch({
-   //      type: 'SEARCH_SUCCESS',
-   //      payload: {
-   //          data: result.data
-   //      }
-   //    })
-	// 	})
-	// 	.catch((err) => {
-	// 		dispatch({
-	// 			type: 'SEARCH_FAIL',
-	// 			payload: {
-	// 				data: err
-	// 			}
-	// 		})
-	// 	})
+export const searchRequest = (dispatch, query = '') => {
+	// encode query string
+	query = encodeURIComponent(query)
+
+	axios.get(`/api/search?q=${query}`)
+		.then((result) => {
+			dispatch({
+        type: 'SEARCH_SUCCESS',
+        payload: {
+            data: result.data
+        }
+      })
+		})
+		.catch((err) => {
+			dispatch({
+				type: 'SEARCH_FAIL',
+				payload: {
+					data: err
+				}
+			})
+		})
 }
 
 export default function cmsReducer(state = defaultState, action) {
@@ -52,14 +52,14 @@ export default function cmsReducer(state = defaultState, action) {
 	    nstate.loading = true;
 	    nstate.erorr = null;
 	    nstate.query = action.payload.query;
-	    nstate.result = []
+	    nstate.results = []
       searchRequest(action.payload.dispatch, action.payload.query)
 	    break;
 
   case 'SEARCH_SUCCESS':
-	    nstate.loaded = false;
-	    nstate.loading = true;
-	    nstate.result = action.payload.data
+	    nstate.loaded = true;
+	    nstate.loading = false;
+	    nstate.results = action.payload.data
 	    break;
 
   case 'SEARCH_FAIL':

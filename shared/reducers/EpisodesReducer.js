@@ -19,9 +19,7 @@ export default function EpisodesReducer(state = defaultState, action) {
             nstate.loaded = false
             break;
         case 'ADD_EPISODES':
-            console.log(action.payload)
             var episodes = action.payload
-            console.log('ADD_EPISODES :: ' + episodes.length)
             nstate.episodes = episodes
             nstate.ep_map = {}
             for (var episode of episodes) {

@@ -68,10 +68,11 @@ export function get_podcasts_by_guid(dispatch, guid) {
         }
         dispatch({type: "ADD_EPISODES", payload: episodes})
     } else {
-        console.log("Getting episodes")
+        console.log("Getting episodes " + guid)
         axios
             .get("/api/episodes/get/" + guid)
             .then(function(result) {
+                console.log("Return of " + guid)
                 var episode = result["data"]
                 dispatch({type: "ADD_EPISODES", payload: [episode]})
             })
@@ -207,6 +208,11 @@ function get_and_process_feed(replacements, feed_uri) {
         .catch((err) => {
             console.log("loadEpisodes error: " + err);
             console.log(err)
+            var episodes_map = {}
+            var episodes_list = []
+            var episodes_content = {}
+            var member_feed = undefined
+            return {episodes_map, episodes_list, episodes_content, member_feed}
         })
 }
 
