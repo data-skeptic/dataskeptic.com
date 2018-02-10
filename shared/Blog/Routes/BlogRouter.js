@@ -26,7 +26,7 @@ class BlogRouter extends React.Component {
         const dispatch = this.props.dispatch
 		var pname = pathname.substring(5, pathname.length)
     	var ocms = this.props.cms.toJS()
-		var blogs = ocms['recent_blogs']
+		var blogs = ocms['recent_blogs'] || []
 		var exact = undefined
 		for (var blog of blogs) {
 			var pn = blog['prettyname']
@@ -42,6 +42,7 @@ class BlogRouter extends React.Component {
 				var blogs = [exact]
 				var prefix = pname
 				var payload = {blogs, prefix}
+				console.log(['CMS_SET_RECENT_BLOGS', blogs])
 				dispatch({type: "CMS_SET_RECENT_BLOGS", payload: payload })
 			} else if (blogs[0]['blog_id'] != exact['blog_id']) {
 				request_reload = true
@@ -134,7 +135,7 @@ class BlogRouter extends React.Component {
 		var osite = this.props.site.toJS()
 		var contributors = osite.contributors
 		var ocms = this.props.cms.toJS()
-		var blogs = ocms['recent_blogs']
+		var blogs = ocms['recent_blogs'] || []
 		var exact = undefined
 		for (var blog of blogs) {
 			var pn = blog['prettyname']
