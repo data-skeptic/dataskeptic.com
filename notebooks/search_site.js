@@ -38,7 +38,8 @@ module.exports = {
 				var author       = hit['_source']['author']
 				var abstract     = hit['_source']['abstract']
 				var date_created = hit['_source']['date_created']
-				var result = { blog_id, title, author, abstract, date_created }
+				var publish_date = hit['_source']['publish_date']
+				var result = { blog_id, title, author, abstract, prettyname,date_created,publish_date}
 				results.push(result)
 			}
 		    return res.status(200).end(JSON.stringify(results))
