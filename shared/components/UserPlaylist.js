@@ -11,8 +11,10 @@ import {addPlaylist} from "../Auth/Reducers/AuthReducer";
 const renderDate = (date) => moment(date).format('MMMM D, YYYY')
 const CURRENT_YEAR = (new Date().getFullYear().toString().substr(-2))
 
+const isPlayingEpisode = (playing, playedEpisodeGuid, guid) => playing && (playedEpisodeGuid === guid)
+
 const renderPlayedSymbol = (playing, playedEpisodeGuid, guid) =>
-    playing && (playedEpisodeGuid === guid)
+	isPlayingEpisode(playing, playedEpisodeGuid, guid)
         ? <span>&#10073;&#10073;</span>
         : <span>&#9658;</span>
 
@@ -62,26 +64,18 @@ class UserPlaylist extends Component {
     renderEpisode = (episode) =>
         <Episode key={episode.blog_id}>
             <Inner>
-                <Preview>
-                    <Link to={episode.prettyname}>
-                        <img src={episode.img} alt={episode.title}/>
-                    </Link>
+                <Preview onClick={() => this.startPlay(episode)} playing={isPlayingEpisode(this.props.isPlaying, this.props.playerEpisodeGuid, episode.guid)}>
+	                  <img src={episode.img} alt={episode.title}/>
+	                  <PlaySymbol>{renderPlayedSymbol(this.props.isPlaying, this.props.playerEpisodeGuid, episode.guid)}</PlaySymbol>
                 </Preview>
                 <Info>
                     <Time>{renderDate(episode.pubDate)}</Time>
                     <EpisodeTitle to={episode.prettyname}>{episode.title}</EpisodeTitle>
                     <Description>{episode.abstract}</Description>
                 </Info>
-                <Play>
-	                  {/*Hidden until backend will provide dataa*/}
-                    <PlayButton onClick={() => this.startPlay(episode)}>{renderPlayedSymbol(this.props.isPlaying, this.props.playerEpisodeGuid, episode.guid)}</PlayButton>
-                </Play>
-
-	              <RemoveButton
+                <RemoveButton
                   type="button"
-                  onClick={() => {
-                      this.remove(episode)
-                  }}
+                  onClick={() => this.remove(episode)}
                   className="close"
                   aria-label="Remove">
                   <span aria-hidden="true">&times;</span>
@@ -186,16 +180,53 @@ const Episode = styled.div`
 
 const Inner = styled.div`
     display: flex;
-    flex-direction: columns;
+    flex-direction: row;
+    align-items: flex-start;
 `
 
-const Preview = styled.div`
+const Preview = styled.button`
     width: 60px;
+    height: 60px;
+    position: relative;
+    border: none;
+    padding: 0px;
     
     img {
-        max-width: 100%;
+		    position: absolute;
+		    left: 0px;
+		    top: 0px;
+        opacity: 0.8;
+        width: 100%;
+        height: 100%;
+    }
+    
+    &:hover {
+      img {
+        opacity: 1;
+      } 
+    }
+    
+    ${props => props.playing`
+      img {
+        opacity: 1 !important;
+      } 
+    `}
+`
+
+const PlaySymbol = styled.span`
+    position: absolute;
+    left: 30px;
+    top: 30px;
+    z-index: 1;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    
+    span {
+      font-size: 30px;
+      text-shadow: 0px 0px 5px #000000;
     }
 `
+
 const Info = styled.div`
     flex: 2;
     padding: 0px 12px;    
@@ -217,6 +248,7 @@ const EpisodeTitle = styled(Link)`
 
 const Play = styled.div`
     display: flex;
+    padding-right: 10px;
 `
 
 const RemoveButton = styled.button`
@@ -225,7 +257,8 @@ const RemoveButton = styled.button`
     right: 5px;
     color: #888;
     
-    &:focus {
+    &:focus,
+    &:hover {
         color: #000;
     }
 `
