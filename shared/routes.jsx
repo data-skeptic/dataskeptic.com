@@ -184,6 +184,10 @@ export default (
             <IndexRoute component={MembershipAnalytics}/>
         </Route>
 
+        <Route path="/profile/playlist" showAds={false} component={App}>
+          <IndexRoute component={UserPlaylist}/>
+        </Route>
+
         <Route path="/analytics" component={App}>
             <IndexRoute component={Analytics}/>
         </Route>
