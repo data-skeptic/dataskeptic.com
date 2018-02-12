@@ -83,9 +83,22 @@ export function getEpisodesData(episodes) {
 }
 
 const getEpisode = (blog_id) => axios.get(`${base_url}/blog/list?blog_id=${blog_id}`).then((res) => res.data[0])
+const getEpisodeBasic = (guid) => axios.get(`/api/episodes/get/${guid}`).then((res) => res.data)
 
 export function getPlaylist(playlist) {
+	// fetch episode data by lambda api
 	return Promise.all(playlist.map((blog_id) => getEpisode(blog_id)))
+		.then((episodes) => {
+			// fetch episode data from the cache
+			// need for `img` and `link`
+			return Promise.all(episodes.map(ep => getEpisodeBasic(ep.guid)))
+				.then((episodesData) => {
+					return episodes.map((ep, index) => ({
+						...ep,
+						...episodesData[index]
+					}))
+				})
+		})
 }
 
 export function addEpisodes(type) {

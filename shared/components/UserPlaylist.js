@@ -53,10 +53,8 @@ class UserPlaylist extends Component {
 
     remove = async ({blog_id, guid}) => {
       const playlisted = false
-      debugger
       const data = await addPlaylist(blog_id, guid, playlisted)
-      debugger
-      this.props.dispatch({ type: 'ADD_PLAYLIST', payload: { data, playlisted, blogId } })
+      this.props.dispatch({ type: 'ADD_PLAYLIST', payload: { data, playlisted, blogId: blog_id } })
     }
 
     goToPodcasts = () => this.props.history.push('/podcast')
@@ -76,7 +74,7 @@ class UserPlaylist extends Component {
                 </Info>
                 <Play>
 	                  {/*Hidden until backend will provide dataa*/}
-                    {/*<PlayButton onClick={() => this.startPlay(episode)}>{renderPlayedSymbol(this.props.isPlaying, this.props.playerEpisodeGuid, episode.guid)}</PlayButton>*/}
+                    <PlayButton onClick={() => this.startPlay(episode)}>{renderPlayedSymbol(this.props.isPlaying, this.props.playerEpisodeGuid, episode.guid)}</PlayButton>
                 </Play>
 
 	              <RemoveButton
