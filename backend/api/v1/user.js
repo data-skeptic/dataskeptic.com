@@ -5,6 +5,9 @@ const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 const c = require('../../../config/config.json')
 const base_url = c[env]['base_api'] + env
 
+const NOT_EXIST_LIST_ERROR = `Requested list is not exist.`
+const UNAUTHORIZED = 'User not authenticated'
+
 const PLAYED ='played'
 const FAVORITE ='favorites'
 const PLAYLIST ='playlist'
@@ -24,30 +27,49 @@ const listsEndpointMap = {
 const isAcceptedList = list => lists.indexOf(list) > -1
 const getListUpdateEndpoint = list => listsEndpointMap[list]
 
-const NOT_EXIST_LIST_ERROR = `Requested list is not exist.`
 
 const updateUserSessionList = (user, list, blogId, insertMode = false) => {
-    console.log(`updateUserSessionList`)
-    console.log(user.lists)
-    console.log(list)
+    // copy list
+    let listToUpdate = user.lists[list].map(i => i)
+
+    // add / remove item
     if (insertMode) {
-        user.lists[list].push(blogId)
+        // avoid duplications
+        if (listToUpdate.indexOf(blogId) === -1) {
+	        listToUpdate.push(blogId)
+        }
     } else {
-        user.lists[list] = user.list.filter(blogId !== blogId)
+	      listToUpdate = listToUpdate.filter(blogId !== blogId)
     }
+
+    // update user session list
+    user.lists[list] = listToUpdate
 }
 
 const updateUser = (list, data) => {
     const url = `${base_url}/user/${getListUpdateEndpoint(list)}/update`
-
-    console.log(url)
-    console.log(data)
 
 	  return axios.post(url, data).then(res => res.data)
 }
 
 module.exports = () => {
     const router = express.Router()
+
+    router.use((req, res, next) => {
+	    /**
+       * /api/v1/* routes could be only accessible
+       * if user logged in
+	     */
+	    if ( req.isAuthenticated() ) {
+	      // prevent unauthorized access
+		    return next()
+	    }
+
+	    res.setStatus(401).send({
+        success: false,
+        error: UNAUTHORIZED
+	    })
+    })
 
     router.all('/session', (req, res) => {
 	    res.send(req.user)
@@ -70,7 +92,7 @@ module.exports = () => {
         let insertMode = false
         switch (list) {
           case PLAYED:
-              insertMode = item.played
+              insertMode = item.played === 1.0
               break
 
           case FAVORITE:
