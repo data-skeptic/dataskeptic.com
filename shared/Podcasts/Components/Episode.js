@@ -55,7 +55,7 @@ class Episode extends React.Component {
 
     setPlaylisted = async (playlisted) => {
         const {userEmail, blogId, guid} = this.props
-        const data = await markAsPlayed(userEmail, blogId, guid, playlisted)
+        const data = await addPlaylist(userEmail, blogId, guid, playlisted)
         this.props.dispatch({ type: 'ADD_PLAYLIST', payload: { data, playlisted, blogId } })
     }
 
