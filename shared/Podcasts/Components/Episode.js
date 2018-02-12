@@ -3,6 +3,7 @@ import {Link} from 'react-router';
 import {connect} from 'react-redux';
 import moment from 'moment';
 import styled from 'styled-components'
+import Loading from "../../Common/Components/Loading"
 
 import {redirects_map} from '../../../redirects';
 import isCtrlOrCommandKey from '../../utils/isCtrlOrCommandKey';
@@ -41,7 +42,7 @@ class Episode extends React.Component {
         var oplayer = this.props.player.toJS()
         var oblogs = this.props.blogs.toJS()
         var player = oplayer.player
-        var desc = ep.desc
+        var desc = ep.desc || ""
         var i = desc.indexOf("</p>")
         if (i > 0) {
             desc = desc.substring(0, i)
@@ -71,7 +72,8 @@ class Episode extends React.Component {
 
         var transcript = <div></div>
         var tep = undefined
-        const episodeLink = this.formatLink(ep.link);
+        var ep_link = ep.link || "/blog" + ep['prettyname']
+        const episodeLink = this.formatLink(ep_link);
         const guests = ep.related && ep.related.filter((r) => r.type === 'person')
 
         return (

@@ -139,6 +139,7 @@ var redirects_map = {'/epnotes/causal-impact.php':'/blog/episodes/2016/causal-im
 '/epnotes/type_i_type_ii.php':'/blog/episodes/2014/type-i--type-ii-errors',
 '/epnotes/ep001.php':'/blog/episodes/2014/introduction',
 '/trans/ep55_detecting-cheating-in-chess.php':'/blog/transcripts/2015/detecting-cheating-in-chess',
+'/episodes/2017/mutli-agent-diverse-generative-adversarial-networks':'/blog/episodes/2017/multi-agent-diverse-generative-adversarial-networks',
 '/store.php': '/store',
 '/episodes.php':'/podcast',
 '/allepisodes.php':'/podcast',

@@ -69,10 +69,11 @@ export function get_podcasts_by_guid(dispatch, guid) {
         }
         dispatch({type: "ADD_EPISODES", payload: episodes})
     } else {
-        console.log("Getting episodes")
+        console.log("Getting episodes " + guid)
         axios
             .get("/api/episodes/get/" + guid)
             .then(function(result) {
+                console.log("Return of " + guid)
                 var episode = result["data"]
                 dispatch({type: "ADD_EPISODES", payload: [episode]})
             })
@@ -89,12 +90,16 @@ export function load_blogs(prefix, limit, offset, dispatch) {
         .then(function(result) {
             console.log("blog api success")
             var blogs = result['data']
-            var payload = {blogs, prefix}
             var guids = []
             for (var blog of blogs) {
                 if (blog.guid) {
                     guids.push(blog.guid)
                 }
+            }
+            if (blogs.length == 1) {
+                var src_file = blogs[0]['src_file']
+                var payload = {src_file, dispatch}
+                dispatch({type: "CMS_LOAD_BLOG_CONTENT", payload: payload })
             }
             if (guids.length == 1) {
                 var guid = guids[0]
@@ -102,6 +107,7 @@ export function load_blogs(prefix, limit, offset, dispatch) {
             } else if (guids.length > 1) {
                 // TODO: grab them all and do something nice on the blog list page
             }
+            var payload = {blogs, prefix}
             dispatch({type: "CMS_SET_RECENT_BLOGS", payload: payload })
         })
         .catch((err) => {
@@ -209,6 +215,11 @@ function get_and_process_feed(replacements, feed_uri) {
         .catch((err) => {
             console.log("loadEpisodes error: " + err);
             console.log(err)
+            var episodes_map = {}
+            var episodes_list = []
+            var episodes_content = {}
+            var member_feed = undefined
+            return {episodes_map, episodes_list, episodes_content, member_feed}
         })
 }
 

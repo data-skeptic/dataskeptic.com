@@ -51,6 +51,8 @@ export function year_from_path(pathname) {
 }
 
 export function get_podcasts_from_cache(my_cache, pathname) {
+	console.log('get_podcasts_from_cache')
+	console.log(my_cache)
 	var year = year_from_path(pathname)
 	var episodes_list = my_cache.episodes_list
 	var episodes_map = my_cache.episodes_map
@@ -76,25 +78,28 @@ function getEpisodesData(episodes) {
 	return Promise.all(episodes.map(ep => getEpisodeData(ep.guid)))
 		.then((episodesData) => {
 			return episodes.map((ep, index) => ({
-				...ep,
-				...episodesData[index]
+				...ep
 			}))
 		})
 }
 
 export function get_podcasts(dispatch, pathname) {
 	var year = year_from_path(pathname)
+	if (year == -1) {
+		year = (new Date()).getYear()+1900
+	}
 	var my_cache = global.my_cache
 	if (my_cache != undefined) {
 		console.log("get_podcasts with no cache")
 		var episodes = get_podcasts_from_cache(my_cache, pathname)
 	} else {
-		console.log("Getting episodes")
+		console.log(["Getting :: episodes", year])
         dispatch({type: "LOADING_EPISODES"})
 		axios
 			.get("/api/episodes/list?year=" + year)
 	  		.then((result) => getEpisodesData(result["data"]))
 			.then((episodes) => {
+				console.log(episodes)
                 dispatch({type: "ADD_EPISODES", payload: episodes})
 			})
 			.catch((err) => {

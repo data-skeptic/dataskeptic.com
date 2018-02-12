@@ -26,7 +26,7 @@ class BlogRouter extends React.Component {
         const dispatch = this.props.dispatch
 		var pname = pathname.substring(5, pathname.length)
     	var ocms = this.props.cms.toJS()
-		var blogs = ocms['recent_blogs']
+		var blogs = ocms['recent_blogs'] || []
 		var exact = undefined
 		for (var blog of blogs) {
 			var pn = blog['prettyname']
@@ -37,17 +37,21 @@ class BlogRouter extends React.Component {
 		var request_reload = pathname != oldpathname
 		if (exact) {
 			console.log("Exact match")
+			console.log(blogs.length)
 			if (blogs.length != 1) {
 				var blogs = [exact]
 				var prefix = pname
 				var payload = {blogs, prefix}
+				console.log(['CMS_SET_RECENT_BLOGS', blogs])
 				dispatch({type: "CMS_SET_RECENT_BLOGS", payload: payload })
+			} else if (blogs[0]['blog_id'] != exact['blog_id']) {
+				request_reload = true
 			}
 		}
 		if (request_reload) {
+	        console.log("Asking blogs to reload")
 	        var payload = {limit: 10, offset: 0, prefix: pname, dispatch}
 	        var loaded_prettyname = ocms.loaded_prettyname
-	        console.log("Asking blogs to reload")
 	        dispatch({type: "CMS_LOAD_RECENT_BLOGS", payload })
 		}
         //const {title} = BlogRouter.getPageMeta(this.props);
@@ -131,7 +135,7 @@ class BlogRouter extends React.Component {
 		var osite = this.props.site.toJS()
 		var contributors = osite.contributors
 		var ocms = this.props.cms.toJS()
-		var blogs = ocms['recent_blogs']
+		var blogs = ocms['recent_blogs'] || []
 		var exact = undefined
 		for (var blog of blogs) {
 			var pn = blog['prettyname']
@@ -140,10 +144,12 @@ class BlogRouter extends React.Component {
 			}
 		}
 		if (exact != undefined) {
+			console.log("exact match")
 			blogs = [exact]
 		}
 		var blog_state = ocms.blog_state
 		if (blog_state == "" || blog_state == "loading" && blogs.length == 0) {
+			console.log('blog_state', blog_state)
 			return <Loading />
 		}
 		if (blogs.length == 0) {
@@ -152,8 +158,10 @@ class BlogRouter extends React.Component {
 			return <NoBlogs />
 		}
 	    if (blogs.length == 1) {
+	    	console.log("One to show")
 			return <BlogItem blog={blogs[0]} loading={blog_state === "loading"}/>
 		} else {
+	    	console.log("BlogList")
 			return (
 				<div className="center">
 					<BlogTopNav pathname={pathname} blogs={blogs} />
