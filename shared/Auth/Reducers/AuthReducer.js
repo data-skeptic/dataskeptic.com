@@ -65,40 +65,40 @@ const existAtList = (state, name, id) => {
 
 export const markAsPlayed = (email, blog_id, media, guid, isPlayed) => {
     const data = {
-        email,
+        // email,
         blog_id,
         media,
         guid,
         played: isPlayed ? 1.0 : 0
     }
 
-    return axios.post(`${base_url}/user/played/update`, data).data
+    return axios.post(`/api/v1/user/played/update`, data).then(res => res.data)
 }
 
 export const isPlayed = (state, id) => existAtList(state, 'played', id)
 
 export const markFavorite = (email, blog_id, guid, favorited) => {
     const data = {
-        email,
+        // email,
         blog_id,
 	      guid,
         favorited
     }
 
-    return axios.post(`${base_url}/user/favorite/update`, data).data
+    return axios.post(`/api/v1/user/favorites/update`, data).then(res => res.data)
 }
 
 export const isFavorited = (state, id) => existAtList(state, 'favorites', id)
 
 export const addPlaylist = (email, blog_id, guid, add) => {
     const data = {
-        email,
+        // email,
         blog_id,
 	      guid,
         add
     }
 
-    return axios.post(`${base_url}/user/playlist/update`, data).data
+    return axios.post(`/api/v1/user/playlist/update`, data).then(res => res.data)
 }
 
 export const isPlaylisted = (state, id) => existAtList(state, 'playlist', id)

@@ -49,7 +49,6 @@ class Episode extends React.Component {
 
     setFavourite = async (favorited) => {
         const {userEmail, blogId, guid} = this.props
-        debugger;
         const data = await markFavorite(userEmail, blogId, guid, favorited)
         this.props.dispatch({ type: 'MARK_AS_FAVORITE', payload: { data, favorited, blogId } })
     }

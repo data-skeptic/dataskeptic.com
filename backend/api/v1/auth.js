@@ -14,7 +14,7 @@ const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
 const c = require('../../../config/config.json')
 const salt = c[env]['auth']['salt']
-const base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
+const base_url = c[env]['base_api'] + env
 
 const checkIfAdmin = (email) => {
     const email_reg_exp = /^.*@dataskeptic\.com/i;
@@ -79,6 +79,7 @@ module.exports = () => {
     passport.serializeUser(async (user, done) => {
         delete user.password
 
+        console.log(`get user data?`)
         const data = await getUserData(user.email)
         user = {
             ...user,

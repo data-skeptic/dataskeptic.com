@@ -104,6 +104,7 @@ class UserPlaylist extends Component {
 
         return (
             <Container>
+                <code>{JSON.stringify(user.lists)}</code>
                 <PageTitle>My playlist</PageTitle>
                 {playlist && (playlist.length > 0) && playlistEpisodes && (playlistEpisodes.length > 0)
                     ? this.renderPlaylist(playlistEpisodes)

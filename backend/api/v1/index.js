@@ -15,6 +15,7 @@ module.exports = (cache) => {
     router.use('/rfc', require('./rfc')(cache));
     router.use('/refresh', require('./refresh')(cache));
     router.use('/player', require('./player')(cache));
+    router.use('/user', require('./user')(cache));
 
    return router;
 }
