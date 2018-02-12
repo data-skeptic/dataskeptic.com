@@ -89,13 +89,11 @@ export function getPlaylist(playlist) {
 }
 
 export function addEpisodes(type) {
-	const data = {}
-
-	if (type === 'all') {
-		return axios.post(`${base_url}/user/playlist/add_all`, data).then((res) => res.data[0])
-	} else {
-		return axios.post(`${base_url}/user/playlist/add=${type}`, data).then((res) => res.data[0])
+	const data = {
+		type
 	}
+
+	return axios.post(`/api/v1/user/playlist/add_all`, data).then((res) => res.data[0])
 }
 
 export function get_podcasts(dispatch, pathname) {

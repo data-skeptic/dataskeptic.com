@@ -63,9 +63,8 @@ const existAtList = (state, name, id) => {
     return list && list.indexOf(id) > -1
 }
 
-export const markAsPlayed = (email, blog_id, media, guid, isPlayed) => {
+export const markAsPlayed = (blog_id, media, guid, isPlayed) => {
     const data = {
-        // email,
         blog_id,
         media,
         guid,
@@ -77,9 +76,8 @@ export const markAsPlayed = (email, blog_id, media, guid, isPlayed) => {
 
 export const isPlayed = (state, id) => existAtList(state, 'played', id)
 
-export const markFavorite = (email, blog_id, guid, favorited) => {
+export const markFavorite = (blog_id, guid, favorited) => {
     const data = {
-        // email,
         blog_id,
 	      guid,
         favorited
@@ -90,9 +88,8 @@ export const markFavorite = (email, blog_id, guid, favorited) => {
 
 export const isFavorited = (state, id) => existAtList(state, 'favorites', id)
 
-export const addPlaylist = (email, blog_id, guid, add) => {
+export const addPlaylist = (blog_id, guid, add) => {
     const data = {
-        // email,
         blog_id,
 	      guid,
         add

@@ -6,6 +6,7 @@ import { Link } from 'react-router'
 import {getPlaylist, addEpisodes} from '../utils/redux_loader'
 import {changePageTitle} from '../Layout/Actions/LayoutActions'
 import moment from "moment/moment"
+import {addPlaylist} from "../Auth/Reducers/AuthReducer";
 
 const renderDate = (date) => moment(date).format('MMMM D, YYYY')
 const CURRENT_YEAR = (new Date().getFullYear().toString().substr(-2))
@@ -50,6 +51,14 @@ class UserPlaylist extends Component {
         this.props.dispatch({type: "PLAY_EPISODE", payload: episode})
     }
 
+    remove = async ({blog_id, guid}) => {
+      const playlisted = false
+      debugger
+      const data = await addPlaylist(blog_id, guid, playlisted)
+      debugger
+      this.props.dispatch({ type: 'ADD_PLAYLIST', payload: { data, playlisted, blogId } })
+    }
+
     goToPodcasts = () => this.props.history.push('/podcast')
 
     renderEpisode = (episode) =>
@@ -66,8 +75,19 @@ class UserPlaylist extends Component {
                     <Description>{episode.abstract}</Description>
                 </Info>
                 <Play>
-                    <PlayButton onClick={() => this.startPlay(episode)}>{renderPlayedSymbol(this.props.isPlaying, this.props.playerEpisodeGuid, episode.guid)}</PlayButton>
+	                  {/*Hidden until backend will provide dataa*/}
+                    {/*<PlayButton onClick={() => this.startPlay(episode)}>{renderPlayedSymbol(this.props.isPlaying, this.props.playerEpisodeGuid, episode.guid)}</PlayButton>*/}
                 </Play>
+
+	              <RemoveButton
+                  type="button"
+                  onClick={() => {
+                      this.remove(episode)
+                  }}
+                  className="close"
+                  aria-label="Remove">
+                  <span aria-hidden="true">&times;</span>
+                </RemoveButton>
             </Inner>
         </Episode>
 
@@ -79,8 +99,14 @@ class UserPlaylist extends Component {
         )
     }
 
-    addEpisodes = (type) => {
-       addEpisodes(type)
+    addEpisodes = async (type) => {
+        // update new playlist
+        const {success, playlist, error} = addEpisodes(type)
+        if (success) {
+	          this.props.dispatch({type: "SET_PLAYLIST", payload: { data: playlist } })
+        } else {
+            console.error(error)
+        }
     }
 
     renderEmpty() {
@@ -154,6 +180,7 @@ const ActionButton = styled.button`
 `
 
 const Episode = styled.div`
+    position: relative;
     padding-bottom: 18px;
     margin-bottom: 18px;
     border-bottom: 1px solid #979797;
@@ -192,6 +219,17 @@ const EpisodeTitle = styled(Link)`
 
 const Play = styled.div`
     display: flex;
+`
+
+const RemoveButton = styled.button`
+    position: absolute;
+    right: 5px;
+    right: 5px;
+    color: #888;
+    
+    &:focus {
+        color: #000;
+    }
 `
 
 const PlayButton = styled.button`

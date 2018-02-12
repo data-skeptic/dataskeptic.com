@@ -25,8 +25,8 @@ const listsEndpointMap = {
 }
 
 const isAcceptedList = list => lists.indexOf(list) > -1
-const getListUpdateEndpoint = list => listsEndpointMap[list]
 
+const getListUpdateEndpoint = list => listsEndpointMap[list]
 
 const updateUserSessionList = (user, list, blogId, insertMode = false) => {
     // copy list
@@ -45,6 +45,15 @@ const updateUserSessionList = (user, list, blogId, insertMode = false) => {
     // update user session list
     user.lists[list] = listToUpdate
 }
+
+const joinList = (list, key) =>
+	list.reduce(function(a, curr) {
+		return [...a, curr[key]];
+	}, []);
+
+const getUserPlaylist = (email, list, props) => axios.get(`${base_url}/user/playlist/list?email=${email}$`).then((res) => joinList(res.data, 'blog_id'))
+
+const addUserPlaylist = (data) => axios.post(`${base_url}/user/playlist/add_all`, data).then(res => res.data)
 
 const updateUser = (list, data) => {
     const url = `${base_url}/user/${getListUpdateEndpoint(list)}/update`
@@ -74,6 +83,29 @@ module.exports = () => {
     router.all('/session', (req, res) => {
 	    res.send(req.user)
     })
+
+		router.post('/playlist/add_all', async (req, res, next) => {
+			const result = await addUserPlaylist({
+				...req.body,
+				email: req.user.email
+			})
+
+			getUserPlaylist(req.user.email)
+				.then((playlist) => {
+						req.user.lists[playlist] = playlist
+
+						return res.send({
+							success: true,
+							playlist
+						})
+				})
+				.catch(error => {
+					return res.send({
+						success: false,
+						error: error
+					})
+				})
+		})
 
     router.post('/:list/update', (req, res) => {
         const {list} = req.params
@@ -126,7 +158,7 @@ module.exports = () => {
 		          error: error
 	          })
           })
-    });
+    })
 
     return router
 }
