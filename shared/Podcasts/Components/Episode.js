@@ -41,22 +41,22 @@ class Episode extends React.Component {
         }
     }
 
-    setPlayed = async (played) => {
+    setPlayed = (played) => {
         const {blogId, guid, media} = this.props
-        const data = await markAsPlayed(blogId, media, guid, played)
-        this.props.dispatch({ type: 'MARK_AS_PLAYED', payload: { data, played, blogId } })
+        this.props.dispatch({ type: 'MARK_AS_PLAYED', payload: { played, blogId } })
+        markAsPlayed(blogId, media, guid, played)
     }
 
-    setFavourite = async (favorited) => {
+    setFavourite = (favorited) => {
         const {blogId, guid} = this.props
-        const data = await markFavorite(blogId, guid, favorited)
-        this.props.dispatch({ type: 'MARK_AS_FAVORITE', payload: { data, favorited, blogId } })
+        this.props.dispatch({ type: 'MARK_AS_FAVORITE', payload: { favorited, blogId } })
+        markFavorite(blogId, guid, favorited)
     }
 
     setPlaylisted = async (playlisted) => {
         const {blogId, guid} = this.props
-        const data = await addPlaylist(blogId, guid, playlisted)
-        this.props.dispatch({ type: 'ADD_PLAYLIST', payload: { data, playlisted, blogId } })
+        this.props.dispatch({ type: 'ADD_PLAYLIST', payload: { playlisted, blogId } })
+        addPlaylist(blogId, guid, playlisted)
     }
 
     render() {

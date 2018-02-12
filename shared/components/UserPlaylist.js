@@ -39,6 +39,8 @@ class UserPlaylist extends Component {
     }
 
     fetchPlaylist = async (playlist) => {
+        // clear playlist for first
+	      this.props.dispatch({type: "SET_PLAYLIST", payload: { data: [] } })
         const data = await getPlaylist(playlist);
         this.props.dispatch({type: "SET_PLAYLIST", payload: { data } })
     }
@@ -53,10 +55,10 @@ class UserPlaylist extends Component {
         this.props.dispatch({type: "PLAY_EPISODE", payload: episode})
     }
 
-    remove = async ({blog_id, guid}) => {
+    remove = ({blog_id, guid}) => {
       const playlisted = false
-      const data = await addPlaylist(blog_id, guid, playlisted)
-      this.props.dispatch({ type: 'ADD_PLAYLIST', payload: { data, playlisted, blogId: blog_id } })
+      this.props.dispatch({ type: 'ADD_PLAYLIST', payload: { playlisted, blogId: blog_id } })
+      addPlaylist(blog_id, guid, playlisted)
     }
 
     goToPodcasts = () => this.props.history.push('/podcast')
@@ -206,7 +208,7 @@ const Preview = styled.button`
       } 
     }
     
-    ${props => props.playing`
+    ${props => props.playing && `
       img {
         opacity: 1 !important;
       } 
