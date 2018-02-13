@@ -89,12 +89,16 @@ export function load_blogs(prefix, limit, offset, dispatch) {
         .then(function(result) {
             console.log("blog api success")
             var blogs = result['data']
-            var payload = {blogs, prefix}
             var guids = []
             for (var blog of blogs) {
                 if (blog.guid) {
                     guids.push(blog.guid)
                 }
+            }
+            if (blogs.length == 1) {
+                var src_file = blogs[0]['src_file']
+                var payload = {src_file, dispatch}
+                dispatch({type: "CMS_LOAD_BLOG_CONTENT", payload: payload })
             }
             if (guids.length == 1) {
                 var guid = guids[0]
@@ -102,6 +106,7 @@ export function load_blogs(prefix, limit, offset, dispatch) {
             } else if (guids.length > 1) {
                 // TODO: grab them all and do something nice on the blog list page
             }
+            var payload = {blogs, prefix}
             dispatch({type: "CMS_SET_RECENT_BLOGS", payload: payload })
         })
         .catch((err) => {

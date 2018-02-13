@@ -103,7 +103,7 @@ class SERP extends Component {
 						<img src={preview.dest} alt={title} />
 					</Preview>}
 					<Inner indent={!!preview}>
-						<Date>{formatDate(date_created)}</Date>
+						{date_created && <Date>{formatDate(date_created)}</Date>}
 						<Title>{highlight(this.props.query, title)}</Title>
 						<Abstract>{highlight(this.props.query, abstract)}</Abstract>
 					</Inner>
