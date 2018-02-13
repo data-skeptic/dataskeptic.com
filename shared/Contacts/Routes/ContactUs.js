@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import axios from 'axios';
+import styled from 'styled-components'
 
 import ContactFormContainer from '../Containers/ContactFormContainer/ContactFormContainer';
 import {changePageTitle} from '../../Layout/Actions/LayoutActions';
@@ -22,6 +23,7 @@ import {RECORDING} from "../../Proposals/Constants/CommentTypes";
 import Recorder, {steps} from '../../Recorder';
 import QuestionForm from "../../Questions/Forms/QuestionForm";
 import {submitCommentForm} from "../../Proposals/Actions/CommentBoxFormActions";
+import SectionBlock from "../Components/SectionBlock/SectionBlock";
 
 class ContactUs extends React.Component {
     constructor(props) {
@@ -88,7 +90,7 @@ class ContactUs extends React.Component {
         }
     }
 
-	onChangeEmail(event) {
+	onChangeEmail = (event) => {
 		console.log(event)
 		var i = event.target
 		var email = i.value
@@ -99,7 +101,7 @@ class ContactUs extends React.Component {
 		dispatch({type: "UPDATE_ADDRESS", payload: {cls, val} })
 	}
 
-	onClick(event) {
+	onClick = (event) => {
 		var ocart = this.props.cart.toJS()
 		var address = ocart.address
 		var email = address.email
@@ -129,6 +131,112 @@ class ContactUs extends React.Component {
 	}
 
 	render() {
+			const {confirmPolicy,activeStep,errorMessage} = this.props;
+			const { submittedUrl } = this.state
+
+			const osite = this.props.site.toJS()
+			const ocart = this.props.cart.toJS()
+			let email = ""
+			const address = ocart.address
+			if (address != undefined) {
+				email = address.email
+			}
+
+			const slackstatus = (
+				<div className="slack-status">{osite.slackstatus}</div>
+			)
+
+    	return (
+		    <Container>
+			    <Title>Contact Us</Title>
+					<Text>We hope to respond to all inquiries, but sometimes the volume of incoming questions can cause our queue to explode.  We prioritize responses to Data Skeptic members first, and to those who ask questions in a public forum like Twitter, our Facebook wall (not Facebook direct message), or Slack.  Many people can benefit from responses in public places.</Text>
+
+			    <Socials>
+						<SocialBlock icon={'twitter'} order={1}>
+							You can find us on Twitter via @DataSkeptic
+						</SocialBlock>
+				    <SocialBlock icon={'facebook'} order={3}>
+					    We are on Facebook via
+					    https://www.facebook.com/dataskeptic
+						</SocialBlock>
+				    <SocialBlock icon={'slack'} order={2}>
+					    <input onChange={this.onChangeEmail} className='slack-email' value={email} />
+					    <button className="slack-button" onClick={this.onClick}>Join dataskeptic.slack.com</button>
+						</SocialBlock>
+				    <SocialBlock icon={'twitter'} order={4}>
+							email
+						</SocialBlock>
+			    </Socials>
+
+			    <Sections>
+						<SectionBlock title="For Members">
+							members
+						</SectionBlock>
+
+				    <SectionBlock title="For Orders">
+							orders
+						</SectionBlock>
+
+				    <SectionBlock title="For Advertisers">
+							advertise
+						</SectionBlock>
+
+				    <SectionBlock title="For Listeners">
+							listeners
+						</SectionBlock>
+
+				    <SectionBlock title="For Media Inquiries">
+							media
+						</SectionBlock>
+
+				    <SectionBlock title="For PR Firms">
+							pr
+						</SectionBlock>
+
+				    <SectionBlock title="For General">
+					    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+				    </SectionBlock>
+			    </Sections>
+
+			    {/*<ListenerArea>*/}
+				    {/*<Title>Listener Questions</Title>*/}
+				    {/*<Text>*/}
+					    {/*We love hearing from our listeners!*/}
+					    {/*If you have a question about one of our episodes or a general question that's relevant to Data*/}
+					    {/*Skeptic, please ask via the in-browser recording system below.*/}
+					    {/*Try to keep your question to 30 seconds or less and make sure your question is a question.*/}
+				    {/*</Text>*/}
+				    {/*<Form>*/}
+					    {/*<QuestionForm*/}
+						    {/*allowSubmit={confirmPolicy}*/}
+						    {/*showSubmit={activeStep === 'REVIEW'}*/}
+						    {/*initialValues={{*/}
+							    {/*confirmPolicy: true*/}
+						    {/*}}*/}
+						    {/*onSubmit={this.questionSubmit}*/}
+					    {/*>*/}
+						    {/*<Recorder*/}
+							    {/*activeStep={activeStep}*/}
+							    {/*errorMessage={errorMessage}*/}
+							    {/*ready={this.recordingReady}*/}
+							    {/*recording={this.recorderRecording}*/}
+							    {/*stop={this.recorderStop}*/}
+							    {/*review={this.recorderReview}*/}
+							    {/*submit={this.recorderSubmit}*/}
+							    {/*complete={this.recorderComplete}*/}
+							    {/*error={this.recorderError}*/}
+							    {/*submittedUrl={submittedUrl}*/}
+							    {/*reset={this.reset}*/}
+						    {/*/>*/}
+						    {/*{activeStep === 'COMPLETE' && <p>Thanks for your question!</p>}*/}
+					    {/*</QuestionForm>*/}
+				    {/*</Form>*/}
+			    {/*</ListenerArea>*/}
+		    </Container>
+	    )
+	}
+
+	renderOld() {
 		var osite = this.props.site.toJS()
 		var ocart = this.props.cart.toJS()
 		var email = ""
@@ -152,7 +260,7 @@ class ContactUs extends React.Component {
 				<div className="row contact-page">
 					<div className="col-xs-12"><h2>Contact Us</h2></div>
 					<div className="col-xs-12">
-						<p>We hope to respond to all inquiries, but sometimes the volume of incoming questions can cause our queue to explode.  We prioritize responses to Data Skeptic members first, and to those who ask questions in a public forum like Twitter, our Facebook wall (not Facebook direct message), or Slack.  Many people can benefit from responses in public places.</p>
+						<p></p>
 						<div className="row">
 							<div className="col-xs-12 col-sm-4 contact-person-out">
 								<div className="contact-person">
@@ -213,29 +321,7 @@ class ContactUs extends React.Component {
                         Try to keep your question to 30 seconds or less and make sure your question is a question.
 					</p>
                     <div>
-                        <QuestionForm
-                            allowSubmit={confirmPolicy}
-                            showSubmit={activeStep === 'REVIEW'}
-                            initialValues={{
-                                confirmPolicy: true
-                            }}
-                            onSubmit={this.questionSubmit}
-                        >
-                            <Recorder
-                                activeStep={activeStep}
-                                errorMessage={errorMessage}
-                                ready={this.recordingReady}
-                                recording={this.recorderRecording}
-                                stop={this.recorderStop}
-                                review={this.recorderReview}
-                                submit={this.recorderSubmit}
-                                complete={this.recorderComplete}
-                                error={this.recorderError}
-                                submittedUrl={submittedUrl}
-                                reset={this.reset}
-                            />
-                            {activeStep === 'COMPLETE' && <p>Thanks for your question!</p>}
-                        </QuestionForm>
+
                     </div>
 
 				</div>
@@ -244,6 +330,60 @@ class ContactUs extends React.Component {
 	}
 }
 
+
+const SocialBlock = ({left, children, order}) =>
+	<Social order={order}>
+		<SocialIcon>{left}</SocialIcon>
+		{children}
+	</Social>
+
+const Container = styled.div`
+  max-width: 960px;
+  margin: 0px auto;
+  padding: 15px;
+`
+
+const Title = styled.h2`
+
+`
+
+const Text = styled.p`
+
+`
+
+const Socials = styled.div`
+	justify-content: space-between;
+	display: flex;
+	flex-wrap: wrap;
+`
+
+const Social = styled.div`
+	width: 50%;
+	order: ${props => props.order};
+	dispatch: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+`
+
+const SocialIcon = styled.div`
+	width: 32px;
+	height: 32px;
+	margin-right: 7px;
+`
+
+const Sections = styled.div`
+	margin-top: 24px;
+`
+
+
+const ListenerArea = styled.div`
+	
+`
+const Form = styled.div``
 
 const selector = formValueSelector('question');
 export default connect(
