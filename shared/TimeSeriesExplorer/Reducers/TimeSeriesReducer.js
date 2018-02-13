@@ -185,7 +185,8 @@ export default function TimeSeriesReducer(state=initialState, action) {
             // nstate.database?
             var func = nstate.func
             var field = nstate.field
-            var measurement = nstate.measurement
+            var measurement = nstate.measurement['name']
+            console.log(measurement)
             var range = nstate.range
             var resolution = nstate.resolution
             var query = `
