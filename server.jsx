@@ -727,8 +727,7 @@ function getIpData(ip) {
                     console.log(ip)
                     console.log(ipinfo_token)
                     console.log(body)
-                    console.log(err)
-                    reject(error)
+                    reject(err)
 				}
 			} else {
 				console.log("Some error from ipinfo.io")
