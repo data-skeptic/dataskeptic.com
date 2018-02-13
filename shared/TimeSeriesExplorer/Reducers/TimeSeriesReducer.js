@@ -51,6 +51,25 @@ function dbquery(dispatch, nstate) {
     })
 }
 
+function tse_get_tags(payload) {
+    var dispatch = payload.dispatch
+    var measuremento = payload.measurement
+    console.log(measuremento)
+    var measurement = measuremento['name']
+    console.log(measurement)
+    var url = `/api/influx/measurement/${measurement}/tags`
+    console.log(url)
+    axios.get(url).then(function(resp) {
+        var tags = resp['data']
+        dispatch({type: "TSE_UPDATE_TAGS", payload: {tags, dispatch}})
+    }).catch(function(err) {
+        var details = JSON.stringify(err)
+        var msg = "Error getting tags"
+        dispatch({type: "TSE_ERROR", payload: {msg, details}})
+        console.log(details)
+    })
+}
+
 export default function TimeSeriesReducer(state=initialState, action) {
     let nstate = state.toJS();
 
@@ -88,41 +107,40 @@ export default function TimeSeriesReducer(state=initialState, action) {
             var url = "/api/influx/measurements/list"
             console.log(url)
             axios.get(url).then(function(resp) {
+                console.log('resp')
+                console.log(resp)
                 var measurements = resp['data']
+                console.log(measurements)
                 dispatch({type: "TSE_UPDATE_MEASUREMENTS", payload: {measurements, dispatch}})
-            }).catch(function(err) {
-                var details = JSON.stringify(err)
-                var msg = "Error getting databases"
-                dispatch({type: "TSE_ERROR", payload: {msg, details}})
-                console.log(details)
             })
             break;
         case 'TSE_GET_TAGS':
+            console.log('TSE_GET_TAGS')
             var payload = action.payload
-            var dispatch = payload.dispatch
-            var measurement = payload.measurement
-            var url = `/api/influx/measurement/${measurement}/tags`
-            console.log(url)
-            axios.get(url).then(function(resp) {
-                var tags = resp['data']
-                dispatch({type: "TSE_UPDATE_TAGS", payload: {tags, dispatch}})
-            }).catch(function(err) {
-                var details = JSON.stringify(err)
-                var msg = "Error getting tags"
-                dispatch({type: "TSE_ERROR", payload: {msg, details}})
-                console.log(details)
-            })
+            tse_get_tags(payload)
             break
         case 'TSE_UPDATE_TAGS':
-            nstate.tags = action.payload.tags
+            var tags = []
+            for (var tag of action.payload.tags) {
+                tags.push(tag['tagKey'])
+            }
+            nstate.tags = tags
             break
         case 'TSE_ERROR':
             nstate.state = action.payload.msg
             break
         case 'TSE_UPDATE_MEASUREMENTS':
+            console.log('TSE_UPDATE_MEASUREMENTS')
             var dispatch = action.payload.dispatch
             nstate.measurements = action.payload.measurements
-            dispatch({type: "TSE_GET_TAGS", payload: {measurement, dispatch}})
+            if (nstate.measurements != undefined && nstate.measurements.length > 0) {
+                var measurement = nstate.measurements[0]
+                nstate.measurement = measurement
+                console.log('TSE_UPDATE_MEASUREMENTS2')
+                var payload = {measurement, dispatch}
+                tse_get_tags(payload)
+                console.log('TSE_UPDATE_MEASUREMENTS3')
+            }
             nstate.state = 'Loading done'
             break;
         case 'TSE_QUERY':

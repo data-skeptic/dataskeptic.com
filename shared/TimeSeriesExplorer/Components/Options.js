@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import Alerts from "./Alerts";
 import DatabaseSelector from "./DatabaseSelector";
 import MeasurementSelector from "./MeasurementSelector";
+import FieldSelector from "./FieldSelector";
 import TagSelector from "./TagSelector"
 import Select from 'react-select';
 
@@ -39,9 +40,7 @@ class Options extends React.Component {
 
     render() {
         var config = this.props.config
-        let {databases, measurements, database, measurement, field, func, range, resolution} = config
-        var fields = []
-        var tags = ['test1', 'test2']
+        let {databases, measurements, database, measurement, field, fields, tag, tags, func, range, resolution} = config
         return (
         	<div className="time-series-options">
                 <div className="row">
@@ -49,16 +48,13 @@ class Options extends React.Component {
                         <DatabaseSelector databases={databases} />
                     </div>
                     <div className="col-xs-12 col-sm-3">
-                       <MeasurementSelector measurements={measurements} />
+                       <MeasurementSelector measurements={measurements} measurement={measurement} />
                     </div>
                     <div className="col-xs-12 col-sm-3">
-                       <TagSelector tags={tags} />
+                       <TagSelector tags={tags} tag={tag} />
                     </div>
                     <div className="col-xs-12 col-sm-3">
-                        Field:
-                        <select>
-                            <option value="lat">lat</option>
-                        </select>
+                        <FieldSelector fields={fields} field={field} />
                     </div>
                 </div>
                 <div className="row">

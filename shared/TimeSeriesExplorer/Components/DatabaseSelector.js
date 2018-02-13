@@ -22,7 +22,7 @@ class DatabaseSelector extends React.Component {
         return (
    			<div className="database-selector">
                 Database:
-                <select>
+                <select className="tse-selector">
                 {databases.map(database => (
                   <option>{database.name}</option>
                 ))}

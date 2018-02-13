@@ -22,7 +22,7 @@ class MeasurementSelector extends React.Component {
         return (
    			<div className="measurement-selector">
                 Measurement:
-                <select>
+                <select className="tse-selector">
                 {measurements.map(measurement => (
                   <option>{measurement.name}</option>
                 ))}
