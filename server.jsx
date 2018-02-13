@@ -474,8 +474,10 @@ function api_router(req, res) {
             console.log("No influx")
         }
         return true
-    } else if (req.url.indexOf('/api/influx/measurement/impression/tags') == 0) {
-        var measurement = "impression" //req.params.measurement
+    } else if (req.url.indexOf('/api/influx/measurement/') == 0 && req.url.indexOf('/tags') > 0) {
+        var arr = req.url.split('/')
+        console.log(arr)
+        var measurement = arr[4]
         var query = `SHOW TAG KEYS FROM ${measurement}`
         if (influxdb) {
             influxdb.query(
