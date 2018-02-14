@@ -18,19 +18,43 @@ class Options extends React.Component {
     	//dispatch({type: "INITIALIZE_TIME_SERIES_EXPLORER", payload: {}})
     }
 
+    handleDatabaseChange() {
+        var dispatch = this.props.dispatch
+        dispatch({type: "TSE_SET_DATABASE", payload: {dispatch}})
+    }
+
+    handleMeasurementChange(selectedOption) {
+        var dispatch = this.props.dispatch
+        dispatch({type: "TSE_SET_MEASUREMENT", payload: {dispatch, selectedOption}})
+    }
+
+    handleTagChange(selectedOption) {
+        console.log(selectedOption)
+        var tag = selectedOption.target.value
+        var dispatch = this.props.dispatch
+        dispatch({type: "TSE_SET_TAG", payload: {dispatch, tag}})
+    }
+
+    handleFieldChange(selectedOption) {
+        console.log(selectedOption)
+        var field = selectedOption.target.value
+        var dispatch = this.props.dispatch
+        dispatch({type: "TSE_SET_FIELD", payload: {dispatch, field}})
+    }
+
     handleFunctionChange(selectedOption) {
         var dispatch = this.props.dispatch
         dispatch({type: "TSE_SET_FUNC", payload: {selectedOption}})
     }
 
-    handleResolutionChange(selectedOption) {
-        var dispatch = this.props.dispatch
-        dispatch({type: "TSE_SET_RESOLUTION", payload: {selectedOption}})
-    }
-
     handleRangeChange(selectedOption) {
         var dispatch = this.props.dispatch
         dispatch({type: "TSE_SET_RANGE", payload: {selectedOption}})
+    }
+
+    handleResolutionChange(selectedOption) {
+        var dispatch = this.props.dispatch
+        dispatch({type: "TSE_SET_RESOLUTION", payload: {selectedOption}})
     }
 
     handleSearch() {
@@ -45,16 +69,16 @@ class Options extends React.Component {
         	<div className="time-series-options">
                 <div className="row">
                     <div className="col-xs-12 col-sm-3">
-                        <DatabaseSelector databases={databases} />
+                        <DatabaseSelector databases={databases} onChange={this.handleDatabaseChange.bind(this)} />
                     </div>
                     <div className="col-xs-12 col-sm-3">
-                       <MeasurementSelector measurements={measurements} measurement={measurement} />
+                       <MeasurementSelector measurements={measurements} measurement={measurement} onChange={this.handleMeasurementChange.bind(this)} />
                     </div>
                     <div className="col-xs-12 col-sm-3">
-                       <TagSelector tags={tags} tag={tag} />
+                       <TagSelector tags={tags} tag={tag} onChange={this.handleTagChange.bind(this)} />
                     </div>
                     <div className="col-xs-12 col-sm-3">
-                        <FieldSelector fields={fields} field={field} />
+                        <FieldSelector fields={fields} field={field} onChange={this.handleFieldChange.bind(this)} />
                     </div>
                 </div>
                 <div className="row">

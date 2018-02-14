@@ -9,6 +9,7 @@ class MeasurementSelector extends React.Component {
 
     render() {
     	var measurements = this.props.measurements
+        var onChange = this.props.onChange
     	if (measurements == undefined) {
     		measurements = []
     	}
@@ -21,8 +22,8 @@ class MeasurementSelector extends React.Component {
     	}
         return (
    			<div className="measurement-selector">
-                Measurement:
-                <select className="tse-selector">
+                Measurement:<br/>
+                <select className="tse-selector" onChange={onChange}>
                 {measurements.map(measurement => (
                   <option>{measurement.name}</option>
                 ))}

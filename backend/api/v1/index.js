@@ -17,7 +17,7 @@ module.exports = (cache) => {
     router.use('/player', require('./player')(cache));
 
     // lets map to the start of url request
-    router.use('/measurement', require('./measurement')(cache));
+    router.use('/tse', require('./tse')(cache));
 
    return router;
 }

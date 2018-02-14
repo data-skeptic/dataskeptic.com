@@ -8,11 +8,14 @@ class FieldSelector extends React.Component {
     }
 
     render() {
+        var fields = this.props.fields
         return (
-            <div>
-                Fields:
-                <select className="tse-selector">
-                    <option value="lat">lat</option>
+            <div className="fields-selector">
+                Fields:<br/>
+                <select className="tse-selector" onChange={this.props.onChange}>
+                    {fields.map(field => (
+                      <option>{field}</option>
+                    ))}
                 </select>
             </div>
         )

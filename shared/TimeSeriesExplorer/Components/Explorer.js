@@ -43,7 +43,7 @@ class Explorer extends React.Component {
         var escalation_policies = otimeseries.escalation_policies
         var escalation_policy = otimeseries.escalation_policy
         var contact_methods = otimeseries.contact_methods
-
+        
         return (
         	<div className="time-series-explorer">
         		Explorer: {state}

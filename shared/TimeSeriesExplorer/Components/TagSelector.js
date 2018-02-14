@@ -24,7 +24,7 @@ class TagSelector extends React.Component {
     	var value = this.props.tag
     	return (
             <div>
-                Tags:
+                Tags:<br/>
             	<Select
                     name="escalation_policy"
                     value={value}

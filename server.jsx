@@ -450,66 +450,6 @@ function api_router(req, res) {
         var chal = b['c']
         challenge_response = chal
         return res.status(200).end(JSON.stringify({"status": chal}))
-    } else if (req.url.indexOf('/api/influx/databases/list') == 0) {
-        var query = "SHOW DATABASES"
-        if (influxdb) {
-            influxdb.query(
-              query
-            ).then(function(result) {
-              res.status(200).end(JSON.stringify(result))
-            });
-        } else {
-            console.log("No influx")
-        }
-        return true
-    } else if (req.url.indexOf('/api/influx/measurements/list') == 0) {
-        var query = "SHOW MEASUREMENTS"
-        if (influxdb) {
-            influxdb.query(
-              query
-            ).then(function(result) {
-              res.status(200).end(JSON.stringify(result))
-            });
-        } else {
-            console.log("No influx")
-        }
-        return true
-    } else if (req.url.indexOf('/api/influx/measurement/') == 0 && req.url.indexOf('/tags') > 0) {
-        var arr = req.url.split('/')
-        console.log(arr)
-        var measurement = arr[4]
-        var query = `SHOW TAG KEYS FROM ${measurement}`
-        if (influxdb) {
-            influxdb.query(
-              query
-            ).then(function(result) {
-              res.status(200).end(JSON.stringify(result))
-            });
-        } else {
-            console.log("No influx")
-        }
-        return true
-    } else if (req.url.indexOf('/api/influx/query') == 0) {
-        const querystring_dict = req.query
-        if ('q' in querystring_dict) {
-            var query = querystring_dict['q']
-        } else {
-            var query = 'SELECT "lat", time from impression where time > now() - 1m'
-        }
-        if (influxdb) {
-            influxdb.query(
-              query
-            ).then(function(result) {
-              res.status(200).end(JSON.stringify(result))
-            });
-        } else {
-            console.log("No influx")
-        }
-        return true
-    } else if (req.url.indexOf('/api/influx/escalation_policy/list') == 0) {
-        var escalation_policies = []
-        res.status(200).end(JSON.stringify(escalation_policies))
-        return true
     }    
     return false
 }
