@@ -152,86 +152,108 @@ class ContactUs extends React.Component {
 					<Text>We hope to respond to all inquiries, but sometimes the volume of incoming questions can cause our queue to explode.  We prioritize responses to Data Skeptic members first, and to those who ask questions in a public forum like Twitter, our Facebook wall (not Facebook direct message), or Slack.  Many people can benefit from responses in public places.</Text>
 
 			    <Socials>
-						<SocialBlock icon={'twitter'} order={1}>
-							You can find us on Twitter via @DataSkeptic
+						<SocialBlock order={1}>
+							<SocialIcon src={"/img/png/contacts_slack.png"} />
+							<p>You can find us on Twitter via <TwitterLink href="https://twitter.com/dataskeptic">@DataSkeptic</TwitterLink></p>
 						</SocialBlock>
-				    <SocialBlock icon={'facebook'} order={3}>
-					    We are on Facebook via
-					    https://www.facebook.com/dataskeptic
+				    <SocialBlock order={3}>
+					    <SocialIcon src={"/img/png/contacts_slack.png"} />
+					    <p>We are on Facebook via <FacebookLink href="https://www.facebook.com/dataskeptic">https://www.facebook.com/dataskeptic</FacebookLink></p>
 						</SocialBlock>
-				    <SocialBlock icon={'slack'} order={2}>
-					    <input onChange={this.onChangeEmail} className='slack-email' value={email} />
-					    <button className="slack-button" onClick={this.onClick}>Join dataskeptic.slack.com</button>
+				    <SocialBlock order={2}>
+					    <SocialForm>
+						    <SocialIcon src={"/img/png/contacts_slack.png"} />
+					      <input onChange={this.onChangeEmail} className='slack-email' value={email} />
+					      <button type="submit" className="slack-button" onClick={this.onClick}>Join Slack</button>
+					    </SocialForm>
 						</SocialBlock>
-				    <SocialBlock icon={'twitter'} order={4}>
-							email
+				    <SocialBlock order={4}>
+					    <SocialForm onSubmit={() => console.log(e)}>
+						    <SocialIcon src={"/img/png/contacts_slack.png"} />
+						    <input  />
+						    <button type="submit"  className="slack-button" onClick={this.onClick}>Join Mailing List</button>
+					    </SocialForm>
 						</SocialBlock>
 			    </Socials>
 
 			    <Sections>
 						<SectionBlock title="For Members">
-							members
+							<Text>members</Text>
+
+							<ContactFormContainer type/>
 						</SectionBlock>
 
 				    <SectionBlock title="For Orders">
-							orders
+							<Text>orders</Text>
+
+					    <ContactFormContainer type="orders"/>
 						</SectionBlock>
 
 				    <SectionBlock title="For Advertisers">
-							advertise
+					    <Text>advertise</Text>
+
+					    <ContactFormContainer type/>
 						</SectionBlock>
 
 				    <SectionBlock title="For Listeners">
-							listeners
+					    <Text>listeners</Text>
+
+					    <ContactFormContainer type/>
 						</SectionBlock>
 
 				    <SectionBlock title="For Media Inquiries">
-							media
+					    <Text>media</Text>
+
+					    <ContactFormContainer type/>
 						</SectionBlock>
 
 				    <SectionBlock title="For PR Firms">
-							pr
+					    <Text>pr</Text>
+
+					    <ContactFormContainer type/>
 						</SectionBlock>
 
 				    <SectionBlock title="For General">
-					    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+					    <Text> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</Text>
+
+					    <ContactFormContainer type/>
 				    </SectionBlock>
 			    </Sections>
 
-			    {/*<ListenerArea>*/}
-				    {/*<Title>Listener Questions</Title>*/}
-				    {/*<Text>*/}
-					    {/*We love hearing from our listeners!*/}
-					    {/*If you have a question about one of our episodes or a general question that's relevant to Data*/}
-					    {/*Skeptic, please ask via the in-browser recording system below.*/}
-					    {/*Try to keep your question to 30 seconds or less and make sure your question is a question.*/}
-				    {/*</Text>*/}
-				    {/*<Form>*/}
-					    {/*<QuestionForm*/}
-						    {/*allowSubmit={confirmPolicy}*/}
-						    {/*showSubmit={activeStep === 'REVIEW'}*/}
-						    {/*initialValues={{*/}
-							    {/*confirmPolicy: true*/}
-						    {/*}}*/}
-						    {/*onSubmit={this.questionSubmit}*/}
-					    {/*>*/}
-						    {/*<Recorder*/}
-							    {/*activeStep={activeStep}*/}
-							    {/*errorMessage={errorMessage}*/}
-							    {/*ready={this.recordingReady}*/}
-							    {/*recording={this.recorderRecording}*/}
-							    {/*stop={this.recorderStop}*/}
-							    {/*review={this.recorderReview}*/}
-							    {/*submit={this.recorderSubmit}*/}
-							    {/*complete={this.recorderComplete}*/}
-							    {/*error={this.recorderError}*/}
-							    {/*submittedUrl={submittedUrl}*/}
-							    {/*reset={this.reset}*/}
-						    {/*/>*/}
-						    {/*{activeStep === 'COMPLETE' && <p>Thanks for your question!</p>}*/}
-					    {/*</QuestionForm>*/}
-				    {/*</Form>*/}
-			    {/*</ListenerArea>*/}
+			    <ListenerArea>
+				    <Title>Listener Questions</Title>
+				    <Text>
+					    We love hearing from our listeners!
+					    If you have a question about one of our episodes or a general question that's relevant to Data
+					    Skeptic, please ask via the in-browser recording system below.
+					    Try to keep your question to 30 seconds or less and make sure your question is a question.
+				    </Text>
+				    <QuestionFormWrapper>
+					    <QuestionForm
+						    allowSubmit={confirmPolicy}
+						    showSubmit={activeStep === 'REVIEW'}
+						    initialValues={{
+							    confirmPolicy: true
+						    }}
+						    onSubmit={this.questionSubmit}
+					    >
+						    <Recorder
+							    activeStep={activeStep}
+							    errorMessage={errorMessage}
+							    ready={this.recordingReady}
+							    recording={this.recorderRecording}
+							    stop={this.recorderStop}
+							    review={this.recorderReview}
+							    submit={this.recorderSubmit}
+							    complete={this.recorderComplete}
+							    error={this.recorderError}
+							    submittedUrl={submittedUrl}
+							    reset={this.reset}
+						    />
+						    {activeStep === 'COMPLETE' && <p>Thanks for your question!</p>}
+					    </QuestionForm>
+				    </QuestionFormWrapper>
+			    </ListenerArea>
 		    </Container>
 	    )
 	}
@@ -298,9 +320,9 @@ class ContactUs extends React.Component {
 							</div>
 							<div className="col-xs-12 col-sm-6">
 								<br/>
-		 						<p>You can find us on Twitter via <a href="https://twitter.com/dataskeptic">@DataSkeptic</a></p>
+		 						<p>You can find us on Twitter via <TwitterLink href="https://twitter.com/dataskeptic">@DataSkeptic</TwitterLink></p>
 								<br/>
-								<p>We are on Facebook via <a href="https://www.facebook.com/dataskeptic">https://www.facebook.com/dataskeptic</a>.</p>
+								<p>We are on Facebook via <FacebookLink href="https://www.facebook.com/dataskeptic">https://www.facebook.com/dataskeptic</FacebookLink>.</p>
 							</div>
 						</div>
 						<br/>
@@ -330,12 +352,17 @@ class ContactUs extends React.Component {
 	}
 }
 
-
 const SocialBlock = ({left, children, order}) =>
 	<Social order={order}>
-		<SocialIcon>{left}</SocialIcon>
 		{children}
 	</Social>
+
+const Link = styled.a``
+
+const TwitterLink = Link.extend`color: #1DA1F3`
+
+const FacebookLink = Link.extend`color: #3B5998`
+
 
 const Container = styled.div`
   max-width: 960px;
@@ -358,32 +385,100 @@ const Socials = styled.div`
 `
 
 const Social = styled.div`
+	display: flex;
 	width: 50%;
 	order: ${props => props.order};
-	dispatch: flex;
   align-items: center;
   margin-bottom: 20px;
+  min-height: 40px;
+  align-items: center;
   
   @media (max-width: 768px) {
     width: 100%;
+    margin-bottom: 32px;
+    order: initial;
+  }
+  
+  p {
+    padding: 0px;
+    margin: 0px;
   }
 `
 
-const SocialIcon = styled.div`
+const SocialIcon = styled.img`
 	width: 32px;
 	height: 32px;
 	margin-right: 7px;
 `
 
 const Sections = styled.div`
+	display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
 	margin-top: 24px;
+	
+	> div {
+		width: 48.9%;
+	}
+	
+	@media (max-width: 768px) {
+    >div {
+      width: 100%;
+      margin-top: 0px;
+      padding-bottom: 0px;
+    }
+  }
 `
 
 
 const ListenerArea = styled.div`
 	
 `
-const Form = styled.div``
+
+const SocialForm = styled.form`
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding-top: 10px
+	background: red;
+	
+	input {
+		flex-grow: 1;
+		background: #F9FAF9;
+		border: 1px solid #E1E3E2;
+		margin-right: 12px;
+		border-radius: 5px;
+		padding: 0px 20px;
+    line-height: 38px;
+	}
+	
+	button {
+		width: 160px;
+		height: 40px;
+		background: #F0D943;
+		font-size: 16px;
+		color: #333333;
+		border: none;
+		border-radius: 5px;
+	}
+	
+	@media (max-width: 768px) {
+		flex-wrap: wrap;
+		
+		input {
+			margin-right: 0px;
+		}
+		
+    button {
+      margin-top: 13px;
+      width: 100%;
+    }
+  }
+`
+
+const QuestionFormWrapper = styled.div``
 
 const selector = formValueSelector('question');
 export default connect(

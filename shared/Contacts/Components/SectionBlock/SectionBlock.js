@@ -24,7 +24,7 @@ export default class SectionBlock extends Component {
 			<Block>
 				<Head onClick={this.toggle}  open={open}>
 					<BlockTitle>{title}</BlockTitle>
-					<Arrow down={open}/>
+					<Arrow down={!open}/>
 				</Head>
 				{open && <BlockContent>{children}</BlockContent>}
 			</Block>
@@ -61,4 +61,9 @@ const BlockTitle = styled.div`
 
 const BlockContent = styled.div`
   padding: 10px 20px 20px 20px;
+  
+  .field-label ,
+  .field-input {
+    padding: 0px;
+  }
 `
