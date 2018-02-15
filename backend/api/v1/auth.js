@@ -130,7 +130,7 @@ module.exports = () => {
                 } else {
                     user.type = checkIfAdmin(user.email) ? 'admin' : 'user';
                     user.hasAccess = true
-                    return res.send({ success: true })
+                    return res.send({ user, success: true })
                 }
             })
         })(req, res, next)

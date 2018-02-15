@@ -15,6 +15,11 @@ export default function AuthReducer(state = initialState, action) {
             state = state.setIn(['user'], fromJS(action.payload.data))
             return state;
 
+        case 'LOGOUT':
+            state = state.setIn(['loggedIn'], false)
+            state = state.setIn(['user'], fromJS({}))
+            return state;
+
         default:
             return state
     }
