@@ -30,9 +30,18 @@ class ContactUs extends React.Component {
         super(props)
 
         this.state = {
-            submittedUrl: ''
+            submittedUrl: '',
+	          openSection: ''
         }
     }
+
+    isSectionOpen = section => section === this.state.openSection
+
+		toggleSection = section => {
+    	this.setState(prevState => ({
+    		openSection: (prevState.openSection === section) ? '' : section
+	    }))
+		}
 
     recordingReady = (noDelay) => {
         this.props.dispatch(ready(noDelay))
@@ -90,25 +99,17 @@ class ContactUs extends React.Component {
         }
     }
 
-	onChangeEmail = (event) => {
-		console.log(event)
-		var i = event.target
-		var email = i.value
-		var target = event.target
-		var cls = "email"
-		var val = target.value
-		var dispatch = this.props.dispatch
-		dispatch({type: "UPDATE_ADDRESS", payload: {cls, val} })
-	}
+	subscribeSlack = (e) => {
+    e.preventDefault()
+		const email = e.target.email.value
+		const ocart = this.props.cart.toJS()
+		const dispatch = this.props.dispatch
+		const token = ""
+		const req = {email: email, token: token, set_active: true}
 
-	onClick = (event) => {
-		var ocart = this.props.cart.toJS()
-		var address = ocart.address
-		var email = address.email
-		var dispatch = this.props.dispatch
-		var token = ""
-		var req = {email: email, token: token, set_active: true}
+		dispatch({type: "UPDATE_ADDRESS", payload: {cls: "email", val: email} })
 		dispatch({type: "SLACK_UPDATE", payload: {msg: "Sending..."} })
+
 		var config = {}
 		axios
 			.post("/api/slack/join", req, config)
@@ -135,15 +136,9 @@ class ContactUs extends React.Component {
 			const { submittedUrl } = this.state
 
 			const osite = this.props.site.toJS()
-			const ocart = this.props.cart.toJS()
-			let email = ""
-			const address = ocart.address
-			if (address != undefined) {
-				email = address.email
-			}
 
 			const slackstatus = (
-				<div className="slack-status">{osite.slackstatus}</div>
+				<SlackStatus>{osite.slackstatus}</SlackStatus>
 			)
 
     	return (
@@ -161,59 +156,61 @@ class ContactUs extends React.Component {
 					    <p>We are on Facebook via <FacebookLink href="https://www.facebook.com/dataskeptic">https://www.facebook.com/dataskeptic</FacebookLink></p>
 						</SocialBlock>
 				    <SocialBlock order={2}>
-					    <SocialForm>
+					    <SocialForm onSubmit={this.subscribeSlack}>
 						    <SocialIcon src={"/img/png/contacts_slack.png"} />
-					      <input onChange={this.onChangeEmail} className='slack-email' value={email} />
+					      <input name="email" id="email"/>
 					      <button type="submit" className="slack-button" onClick={this.onClick}>Join Slack</button>
+						    {slackstatus}
 					    </SocialForm>
 						</SocialBlock>
 				    <SocialBlock order={4}>
-					    <SocialForm onSubmit={() => console.log(e)}>
+					    <SocialForm  action="//dataskeptic.us9.list-manage.com/subscribe/post?u=65e63d6f84f1d87759105d133&amp;id=dc60d554db" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" className="validate" target="_blank" noValidate>
 						    <SocialIcon src={"/img/png/contacts_slack.png"} />
-						    <input  />
-						    <button type="submit"  className="slack-button" onClick={this.onClick}>Join Mailing List</button>
+						    <div id="mc_embed_signup_scroll" />
+						    <input name="EMAIL" className="email" id="mce-EMAIL" placeholder="Email address" required />
+						    <button type="submit" onClick={this.onClick}  id="mc-embedded-subscribe">Join Mailing List</button>
 					    </SocialForm>
 						</SocialBlock>
 			    </Socials>
 
 			    <Sections>
-						<SectionBlock title="For Members">
+						<SectionBlock title="For Members" open={this.isSectionOpen('members')} onToggle={() => this.toggleSection('members')}>
 							<Text>members</Text>
 
 							<ContactFormContainer type/>
 						</SectionBlock>
 
-				    <SectionBlock title="For Orders">
+				    <SectionBlock title="For Orders" open={this.isSectionOpen('orders')} onToggle={() => this.toggleSection('orders')}>
 							<Text>orders</Text>
 
 					    <ContactFormContainer type="orders"/>
 						</SectionBlock>
 
-				    <SectionBlock title="For Advertisers">
+				    <SectionBlock title="For Advertisers" open={this.isSectionOpen('advertise')} onToggle={() => this.toggleSection('advertise')}>
 					    <Text>advertise</Text>
 
 					    <ContactFormContainer type/>
 						</SectionBlock>
 
-				    <SectionBlock title="For Listeners">
+				    <SectionBlock title="For Listeners" open={this.isSectionOpen('listeners')} onToggle={() => this.toggleSection('listeners')}>
 					    <Text>listeners</Text>
 
 					    <ContactFormContainer type/>
 						</SectionBlock>
 
-				    <SectionBlock title="For Media Inquiries">
+				    <SectionBlock title="For Media Inquiries" open={this.isSectionOpen('media')} onToggle={() => this.toggleSection('media')}>
 					    <Text>media</Text>
 
 					    <ContactFormContainer type/>
 						</SectionBlock>
 
-				    <SectionBlock title="For PR Firms">
+				    <SectionBlock title="For PR Firms" open={this.isSectionOpen('pr')} onToggle={() => this.toggleSection('pr')}>
 					    <Text>pr</Text>
 
 					    <ContactFormContainer type/>
 						</SectionBlock>
 
-				    <SectionBlock title="For General">
+				    <SectionBlock title="For General" open={this.isSectionOpen('general')} onToggle={() => this.toggleSection('general')}>
 					    <Text> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</Text>
 
 					    <ContactFormContainer type/>
@@ -257,99 +254,6 @@ class ContactUs extends React.Component {
 		    </Container>
 	    )
 	}
-
-	renderOld() {
-		var osite = this.props.site.toJS()
-		var ocart = this.props.cart.toJS()
-		var email = ""
-		var address = ocart.address
-		if (address != undefined) {
-			email = address.email
-		}
-		var slackstatus = (
-			<div className="slack-status">{osite.slackstatus}</div>
-		)
-		/* Had to comment this out because there was a breaking change introduced that removes the submit button
-					<ContactFormContainer />
-
-		*/
-
-        const {confirmPolicy,activeStep,errorMessage} = this.props;
-        const { submittedUrl } = this.state
-
-		return (
-	    	<div className="center">
-				<div className="row contact-page">
-					<div className="col-xs-12"><h2>Contact Us</h2></div>
-					<div className="col-xs-12">
-						<p></p>
-						<div className="row">
-							<div className="col-xs-12 col-sm-4 contact-person-out">
-								<div className="contact-person">
-									<a href="mailto:orders@dataskeptic.com"><img src="img/png/email-icon.png" /></a>
-									<span className="vcenter"><p>For inquiries related to a purchase of any kind, including membership, please contact <a href="mailto:orders@dataskeptic.com">orders@dataskeptic.com</a> for prioritized service.</p></span>
-									</div>
-							</div>
-							<div className="col-xs-12 col-sm-4 contact-person-out">
-								<div className="contact-person">
-									<a href="mailto:advertising@dataskeptic.com"><img src="img/png/email-icon.png" /></a>
-									<span className="vcenter"><p>For advertising related questions or issues, contact <a href="advertising@dataskeptic.com">advertising@dataskeptic.com</a>.</p></span>
-									</div>
-							</div>
-							<div className="col-xs-12 col-sm-4 contact-person-out">
-								<div className="contact-person">
-									<a href="mailto:kyle@dataskeptic.com"><img src="img/png/email-icon.png" /></a>
-									<span className="vcenter"><p>If you're looking to mail us something like a review copy of a book, please contact <a href="mailto:kyle@dataskeptic.com">kyle@dataskeptic.com</a>.</p></span>
-								</div>
-							</div>
-						</div>
-						<br/>
-						<div className="row">
-							<div className="col-xs-12 col-sm-6">
-								<div className="slack-join row">
-									<div className="col-xs-12 col-sm-3 slack-join-left">
-										<img src="/img/png/slack-icon.png" />
-									</div>
-									<div className="col-xs-12 col-sm-9 slack-join-right">
-											<p>To join our Slack channel, enter your email in the box below.</p>
-				 						<input onChange={this.onChangeEmail.bind(this)} className='slack-email' value={email} />
-				 						<button className="slack-button" onClick={this.onClick.bind(this)}>Join dataskeptic.slack.com</button>
-				 						{slackstatus}
-				 					</div>
-			 					</div>
-							</div>
-							<div className="col-xs-12 col-sm-6">
-								<br/>
-		 						<p>You can find us on Twitter via <TwitterLink href="https://twitter.com/dataskeptic">@DataSkeptic</TwitterLink></p>
-								<br/>
-								<p>We are on Facebook via <FacebookLink href="https://www.facebook.com/dataskeptic">https://www.facebook.com/dataskeptic</FacebookLink>.</p>
-							</div>
-						</div>
-						<br/>
-						<p>You can also reach us via the contact form below.</p>
-						<p>Please note, we often reply via the Data Skeptic blog and may share a link to our reply if its something many readers may enjoy.  If so, we refer to people via firstname only.  If that's an issue, let us know.</p>
-					</div>
-					&nbsp;
-					<br/>
-			        <h2>Send us a message</h2>
-					<ContactFormContainer/>
-
-                    <br/>
-                    <h2>Listener Questions</h2>
-                    <p>
-						We love hearing from our listeners!
-                        If you have a question about one of our episodes or a general question that's relevant to Data
-                        Skeptic, please ask via the in-browser recording system below.
-                        Try to keep your question to 30 seconds or less and make sure your question is a question.
-					</p>
-                    <div>
-
-                    </div>
-
-				</div>
-			</div>
-		)
-	}
 }
 
 const SocialBlock = ({left, children, order}) =>
@@ -392,6 +296,7 @@ const Social = styled.div`
   margin-bottom: 20px;
   min-height: 40px;
   align-items: center;
+  position: relative;
   
   @media (max-width: 768px) {
     width: 100%;
@@ -479,6 +384,15 @@ const SocialForm = styled.form`
 `
 
 const QuestionFormWrapper = styled.div``
+
+const SlackStatus = styled.span`
+  position: absolute;
+  padding-left: 40px;
+  padding-right: 40px;
+  font-size: 12px;
+  margin-top: 28px;
+  color: #2D1454;
+`
 
 const selector = formValueSelector('question');
 export default connect(

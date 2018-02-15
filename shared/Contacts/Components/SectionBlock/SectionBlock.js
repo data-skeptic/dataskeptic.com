@@ -7,19 +7,10 @@ const Arrow = ({down}) =>
 
 export default class SectionBlock extends Component {
 
-	constructor() {
-		super()
-
-		this.state = {
-			open: false
-		}
-	}
-
-	toggle = () => this.setState(prevState => ({open: !prevState.open}))
+	toggle = () => this.props.onToggle()
 
 	render() {
-		const {open} = this.state
-		const {title, children} = this.props
+		const {title, children, open} = this.props
 		return (
 			<Block>
 				<Head onClick={this.toggle}  open={open}>
