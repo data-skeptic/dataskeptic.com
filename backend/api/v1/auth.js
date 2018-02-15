@@ -183,12 +183,22 @@ module.exports = () => {
     });
 
     router.get('/google/callback', (req, res, next) => {
-        passport.authenticate('google', {failWithError: true}, function (err, user, info) {
+        passport.authenticate('google', {failWithError: true}, async (err, user, info) => {
             if (err) {
                 return res.status(403).send({message: err.message})
             }
             if (!user) {
                 return res.status(403).send({message: 'System Error'})
+            }
+
+            const userAccount = await getUserAccount(user.email)
+            if (!userAccount) {
+                const userData = {
+                  email: user.email
+                }
+
+	              await createUserAccount(userData)
+	              notifyOnJoin(user)
             }
 
             req.logIn(user, err => {
