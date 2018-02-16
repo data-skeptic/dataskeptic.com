@@ -5,7 +5,6 @@ var base_url = c[env]['base_api'] + env
 
 function create_items_list(stripe, customer, products) {
     var items = []
-    console.log(products)
     for (var product of products) {
         var p = product.product
         var size = ''
@@ -50,6 +49,103 @@ function create_items_list(stripe, customer, products) {
     return items
 }
 
+function create_stripe_customer(stripe, email, token) {
+    return stripe.customers.create({
+        description: 'Customer for ' + email,
+        email: email,
+        source: token
+    })
+}
+
+function create_stripe_order(stripe, customer, products, name, address, email) {
+    var items = create_items_list(stripe, customer, products)
+    return stripe.orders.create({
+      currency: 'usd',
+      items: items,
+      shipping: {
+        name,
+        address
+      },
+      email
+    })
+}
+
+function update_stripe_order(stripe, items, stripe_order_id, shipping) {
+    /*
+    var item = {
+        "amount": shipping,
+        "currency": "usd",
+        "description": "shipping",
+        "type": "shipping"
+    }
+    items.push(item)
+    */
+    var shipping_methods = [{
+        //id: 'ship_free-shipping',
+        amount: shipping,
+        currency: 'usd',
+        delivery_estimate: null,
+        description: 'Free shipping'
+    }]
+    return stripe.orders.update({
+        id: stripe_order_id,
+        shipping_methods
+    })
+}
+
+function save_order_to_database(order, stripe_order_id) {
+    console.log("Saving order to the database")
+    var url = base_url + '/store/order/add'
+    console.log(url)
+    return axios
+        .post(url, JSON.stringify(result))
+        .then(function(resp) {
+            return {resp, order, stripe_order_id}
+        })
+}
+
+function finalize_order_with_stripe(db_result) {
+    var stripe_order_id = db_result.stripe_order_id
+    var customer = db_result.customer.id // customer: customer.id
+    stripe.orders.pay(stripe_order_id, { customer }, function(err, order) {
+        return {order, stripe_order_id}
+    });
+}
+
+function do_order(stripe, token, customer, products, shipping, name, address, email, res) {
+    console.log("Beginning order processing")
+    // TODO: provide user with more transparency by giving progress bar that updates at each step
+    return create_stripe_customer(stripe, email, token)
+        .then(function(customer) {
+            console.log("Created Stripe Customer")
+            console.log(customer)
+            return create_stripe_order(stripe, customer, products, name, address, email)
+        })
+        .then(function(order_result) {
+            console.log("Updating Stripe Order")
+            console.log(order_result)
+            var stripe_order_id = order_result.id
+            console.log('stripe_order_id=' + stripe_order_id)
+            var items = order_result.items
+            return update_stripe_order(stripe, items, stripe_order_id, shipping)
+        })
+        .then(function(stripe_result) {
+            console.log("Saving order to the database")
+            console.log(stripe_result)
+            return save_order_to_database(stripe_result)
+        }).then(function(db_result) {
+            console.log("Finalizing order")
+            console.log(db_result)
+            return finalize_order_with_stripe(db_result)
+        }).then(function(db_result, stripe_order_id) {
+            console.log(stripe_order_id)
+            console.log(db_result)
+            var order = db_result.order
+            var resp = {'status': 'ok', 'msg': '', order, stripe_order_id }
+            return resp
+        })
+}
+
 module.exports = {
     add_order: function(req, res, stripe_key) {
         var stripe = require("stripe")(stripe_key)
@@ -59,10 +155,10 @@ module.exports = {
         var customer = order['customer']
         var products = order['products']
         var shipping = order['shipping']
-        var country  = order['country'] 
-
-        var name    = customer['first_name'] + ' ' + customer['last_name'] 
-        var stripe = require("stripe")(c[env]['stripe']);
+        console.log(["add_order shipping", shipping])
+        var country  = order['country']
+        var name    = customer['first_name'] + ' ' + customer['last_name']
+        var stripe = require("stripe")(c[env]['stripe'])
         var address = {
             line1: customer.street_1,
             line2: customer.street_2,
@@ -71,93 +167,13 @@ module.exports = {
             country: country,
             postal_code: customer.zip
         }
-        console.log("Go go stripe!")
-        let promise = new Promise(function (resolve, reject) {
-            stripe.customers.create({
-                description: 'Customer for ' + email,
-                email: email,
-                source: token
-            }, function(err, customer) {
-                if (err) {
-                    console.log("error: " + err)
-                    return reject(err)
-                }
-                console.log("Stripe customer ready")
-                var items = create_items_list(stripe, customer, products)
-                if (items.length > 0) {
-                    var item = {
-                        "amount": shipping,
-                        "currency": "usd",
-                        "description": "shipping",
-                        "parent": "shipping",
-                        "type": "sku",
-                        "quantity": 1
-                    }
-                    items.push(item)
-                    stripe.orders.create({
-                      currency: 'usd',
-                      items: items,
-                      shipping: {
-                        name,
-                        address
-                      },
-                      email
-                    }, function(err, stripe_order) {
-                        if (err) {
-                            console.log("error stripe.orders.create " + err)
-                            return reject(err)
-                        }
-                        var stripe_order_id = stripe_order.id
-                        console.log('stripe_order_id=' + stripe_order_id)
-                        return stripe.orders.pay(stripe_order_id, {
-                            customer: customer.id
-                        }, function(err, order2) {
-                            if (err) {
-                                console.log(err)
-                                reject(err)
-                            }
-                            resolve({order, stripe_order_id})
-                        });
-                    });
-                }
-            });
-        })
-        promise.then(function(result) {
-            console.log("STEP 2.")
-            var url = base_url + '/store/order/add'
-            console.log(url)
-            console.log(JSON.stringify(result))
-            axios
-                .post(url, JSON.stringify(result))
-                .then(function(resp) {
-                    console.log('resp')
-                    console.log(resp)
-                    /*
-                    const result = resp.data;
-                    let paymentComplete = false;
-                    let paymentError = '';
-                    if (result.msg !== 'ok') {
-                        paymentComplete = false;
-                        paymentError = result.msg || result.errorMessage || "";
-                    } else {
-                        paymentComplete = true
-                    }
-                    if (paymentComplete) {
-                        console.log("ok")
-                        res.status(200).end(JSON.stringify({'status': 'ok', 'msg': ''}))
-                        return result;
-                    } else {
-                        throw new Error(paymentError);
-                    }
-                    */
-                    res.status(200).end(JSON.stringify({'status': 'ok', 'msg': '', order: result.order, stripe_order_id: result.stripe_order_id }))
-                }).catch(function(err) {
-                    console.log('err!!!')
-                    console.log(err)
-                })
-        }).catch(function(err) {
+        try {
+            do_order(stripe, token, customer, products, shipping, name, address, email).then(function (resp) {
+                res.status(200).end(JSON.stringify(resp))
+            })
+        } catch (err) {
             var e = JSON.stringify(err)
             res.status(500).end(JSON.stringify({'status': 'failure', 'msg': e}))
-        })
+        }
     }
 }
