@@ -168,13 +168,14 @@ const doRefresh = (store) => {
 
     console.log("-[Refreshing episodes]-");
     return loadEpisodes(env)
-        .then(function ({episodes_map, episodes_list, episodes_content, member_feed}) {
+        .then(function (result) {
             console.log("-[Refreshing episodes]-");
+            console.log(result)
             if (Cache) {
-                Cache.episodes_map = episodes_map
-                Cache.episodes_list = episodes_list
-                Cache.episodes_content = episodes_content
-                Cache.member_feed = member_feed                
+                Cache.episodes_map = result.episodes_map
+                Cache.episodes_list = result.episodes_list
+                Cache.episodes_content = result.episodes_content
+                Cache.member_feed = result.member_feed                
             } else {
                 console.log("Cache is undefined")
             }
@@ -567,6 +568,7 @@ function inject_products(store, my_cache, pathname) {
 }
 
 function inject_podcast(store, my_cache, pathname) {
+    console.log(my_cache)
     var episodes = get_podcasts_from_cache(my_cache, pathname)
     store.dispatch({type: "ADD_EPISODES", payload: episodes})
 }

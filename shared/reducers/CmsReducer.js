@@ -82,6 +82,7 @@ export default function cmsReducer(state = defaultState, action) {
     case 'CMS_ADD_BLOG_CONTENT':
         var src_file = action.payload.src_file
         var content = action.payload.content
+        console.log(["adding to blog_content", src_file, content == undefined])
         nstate.blog_content[src_file] = content
         nstate.blog_state = "loaded"
         break
@@ -117,9 +118,9 @@ export default function cmsReducer(state = defaultState, action) {
         load_blogs(prefix, limit, offset, dispatch)
         break
     case 'CMS_SET_RECENT_BLOGS':
-        console.log("CMS_SET_RECENT_BLOGS")
         var blogs = action.payload.blogs
         var prefix = action.payload.prefix
+        console.log(["CMS_SET_RECENT_BLOGS", prefix])
         nstate.blog_state = "loaded"
         nstate.recent_blogs = blogs
         nstate.recent_blogs_loaded = true

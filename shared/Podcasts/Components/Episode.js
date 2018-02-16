@@ -73,7 +73,6 @@ class Episode extends React.Component {
         var transcript = <div></div>
         var tep = undefined
         var ep_link = ep.link || "/blog" + ep['prettyname']
-        console.log(ep_link)
         const episodeLink = this.formatLink(ep_link);
         const guests = ep.related && ep.related.filter((r) => r.type === 'person')
 

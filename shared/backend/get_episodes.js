@@ -7,6 +7,7 @@ module.exports = {
     var limit = parseInt(query['limit']) || 52 + 5 // We sometimes release more than once a week :)
     var year = query['year'] || -2
     var s = limit
+    console.log(["eps", episodes_list.length])
     for (var i=offset; i < episodes_list.length && s > 0; i++) {
         var guid = episodes_list[i]
         var episode = episodes_map[guid]
