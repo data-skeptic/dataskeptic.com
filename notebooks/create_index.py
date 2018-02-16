@@ -33,6 +33,44 @@ if __name__ == '__main__':
     aws_secret_access_key=config['dev']['aws']['secret']
     bucketname=config['dev']['bucketname']['bucketname']
     endpoint = 'https://search-test-vu2fwve5ykzm5tsjkut5q4idum.us-east-1.es.amazonaws.com'
-    client = Elasticsearch(endpoint, port=443)
-    client.indices.create(index='search_v1')
+    elastic_search_conn = Elasticsearch(endpoint, port=443)
+    elastic_search_conn.indices.create(index='search_v1')
+
+
+
+
+
+es.search(index='search_v1', query={
+    "query": {
+        "multi_match": {
+            "query": "Bayesian Updating",
+            "fields": ["title", "abstract"]
+        }
+    },
+    "_source": {
+        "includes": [ "blog_id", "title", "prettyname" ]
+      }
+})
+
+
+
+es.search(index='search_v1', query={
+    "query": {
+        "multi_match": {
+            "query": "Bayesian Updating",
+            "fields": ["title", "abstract"]
+        }
+    }
+})
+
+
+es.search(index='search_v1', query={"query": {"multi_match": {"query": "Bayesian","fields": ["title", "abstract"]}}})
+
+
+
+
+
+
+
+
 
