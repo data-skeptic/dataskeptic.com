@@ -2,6 +2,7 @@ import React from "react"
 import ReactDOM from "react-dom"
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Link } from 'react-router'
 
 import axios from 'axios';
 import styled from 'styled-components'
@@ -148,11 +149,9 @@ class ContactUs extends React.Component {
 
 			    <Socials>
 						<SocialBlock order={1}>
-							<SocialIcon src={"/img/png/contacts_slack.png"} />
 							<p>You can find us on Twitter via <TwitterLink href="https://twitter.com/dataskeptic">@DataSkeptic</TwitterLink></p>
 						</SocialBlock>
 				    <SocialBlock order={3}>
-					    <SocialIcon src={"/img/png/contacts_slack.png"} />
 					    <p>We are on Facebook via <FacebookLink href="https://www.facebook.com/dataskeptic">https://www.facebook.com/dataskeptic</FacebookLink></p>
 						</SocialBlock>
 				    <SocialBlock order={2}>
@@ -165,57 +164,12 @@ class ContactUs extends React.Component {
 						</SocialBlock>
 				    <SocialBlock order={4}>
 					    <SocialForm  action="//dataskeptic.us9.list-manage.com/subscribe/post?u=65e63d6f84f1d87759105d133&amp;id=dc60d554db" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" className="validate" target="_blank" noValidate>
-						    <SocialIcon src={"/img/png/contacts_slack.png"} />
 						    <div id="mc_embed_signup_scroll" />
 						    <input name="EMAIL" className="email" id="mce-EMAIL" placeholder="Email address" required />
 						    <button type="submit" onClick={this.onClick}  id="mc-embedded-subscribe">Join Mailing List</button>
 					    </SocialForm>
 						</SocialBlock>
 			    </Socials>
-
-			    <Sections>
-						<SectionBlock title="For Members" open={this.isSectionOpen('members')} onToggle={() => this.toggleSection('members')}>
-							<Text>members</Text>
-
-							<ContactFormContainer type/>
-						</SectionBlock>
-
-				    <SectionBlock title="For Orders" open={this.isSectionOpen('orders')} onToggle={() => this.toggleSection('orders')}>
-							<Text>orders</Text>
-
-					    <ContactFormContainer type="orders"/>
-						</SectionBlock>
-
-				    <SectionBlock title="For Advertisers" open={this.isSectionOpen('advertise')} onToggle={() => this.toggleSection('advertise')}>
-					    <Text>advertise</Text>
-
-					    <ContactFormContainer type/>
-						</SectionBlock>
-
-				    <SectionBlock title="For Listeners" open={this.isSectionOpen('listeners')} onToggle={() => this.toggleSection('listeners')}>
-					    <Text>listeners</Text>
-
-					    <ContactFormContainer type/>
-						</SectionBlock>
-
-				    <SectionBlock title="For Media Inquiries" open={this.isSectionOpen('media')} onToggle={() => this.toggleSection('media')}>
-					    <Text>media</Text>
-
-					    <ContactFormContainer type/>
-						</SectionBlock>
-
-				    <SectionBlock title="For PR Firms" open={this.isSectionOpen('pr')} onToggle={() => this.toggleSection('pr')}>
-					    <Text>pr</Text>
-
-					    <ContactFormContainer type/>
-						</SectionBlock>
-
-				    <SectionBlock title="For General" open={this.isSectionOpen('general')} onToggle={() => this.toggleSection('general')}>
-					    <Text> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</Text>
-
-					    <ContactFormContainer type/>
-				    </SectionBlock>
-			    </Sections>
 
 			    <ListenerArea>
 				    <Title>Listener Questions</Title>
@@ -251,21 +205,57 @@ class ContactUs extends React.Component {
 					    </QuestionForm>
 				    </QuestionFormWrapper>
 			    </ListenerArea>
+
+			    <hr/>
+
+			    <Sections>
+				    <SectionBlock title="General Inquiries" open={this.isSectionOpen('general')} onToggle={() => this.toggleSection('general')}>
+					    <Text>We can no longer reply to every message we get.  If your inquiry is a question that you'd like us to answer, your best bet is to use the Listener Questions section on this page or ask publically via Twitter.  Alternatively, we do have the contact form below available.</Text>
+					    <ContactFormContainer type/>
+				    </SectionBlock>
+
+					<SectionBlock title="For Members" open={this.isSectionOpen('members')} onToggle={() => this.toggleSection('members')}>
+						<Text>Login to the Members' Portal <Link to="/login">here</Link> or send us a quick message via the form below.</Text>
+						<ContactFormContainer type/>
+					</SectionBlock>
+
+				    <SectionBlock title="Store / Orders" open={this.isSectionOpen('orders')} onToggle={() => this.toggleSection('orders')}>
+						<Text>If you have any issues with your order from our store, please contact <a href="mailto:orders@dataskeptic.com">orders@dataskeptic.com</a>.</Text>
+					</SectionBlock>
+
+				    <SectionBlock title="For Advertisers" open={this.isSectionOpen('advertise')} onToggle={() => this.toggleSection('advertise')}>
+					    <Text>Data Skeptic currently accepts one (1) advertising slot per show.  We are often booked months in advance.  For a rate sheet, please contact <a href="mailto:advertising@dataskeptic.com">advertising@dataskeptic.com</a>.</Text>
+					</SectionBlock>
+
+				    <SectionBlock title="For Media Inquiries" open={this.isSectionOpen('media')} onToggle={() => this.toggleSection('media')}>
+					    <Text>Kyle is available for comment to the media.  Please send a direct email to <a href="mailto:kyle@dataskeptic.com">kyle@dataskeptic.com</a> to make first contact.  After connecting, we have a Calendly link to share that will allow you to book a time that suits your schedule.</Text>
+					</SectionBlock>
+
+			    </Sections>
+
 		    </Container>
 	    )
 	}
 }
+
+/*
+				    <SectionBlock title="For PR Firms" open={this.isSectionOpen('pr')} onToggle={() => this.toggleSection('pr')}>
+					    <Text>pr</Text>
+
+					    <ContactFormContainer type/>
+						</SectionBlock>
+*/
 
 const SocialBlock = ({left, children, order}) =>
 	<Social order={order}>
 		{children}
 	</Social>
 
-const Link = styled.a``
+const Linkx = styled.a``
 
-const TwitterLink = Link.extend`color: #1DA1F3`
+const TwitterLink = Linkx.extend`color: #1DA1F3`
 
-const FacebookLink = Link.extend`color: #3B5998`
+const FacebookLink = Linkx.extend`color: #3B5998`
 
 
 const Container = styled.div`
