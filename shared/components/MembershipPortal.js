@@ -21,7 +21,7 @@ class MembershipPortal extends Component {
     componentDidMount() {
         var dispatch = this.props.dispatch
         if (!this.props.loggedIn) {
-            window.location.href = '/login'
+	        return this.props.history.push('/login')
         }
         var user = this.props.user
         var p = {dispatch, user}
@@ -62,7 +62,7 @@ class MembershipPortal extends Component {
                         <p>We are unable to connect the account you logged in with ({user.email}) to an active membership account.  There are two possible reasons for this:</p>
                         <p><b>A)</b> You are not a Data Skeptic Member.  Easy solution: <a href="https://dataskeptic.com/members">sign up here</a>.</p>
                         <p><b>B)</b> Our database does not have your login account linked to your membership account.  In this case, please email <a href="mailto:orders@dataskeptic.com">orders@dataskeptic.com</a> and let us know what email account we should link you to.</p>
-                        <a href="/logout">Logout.</a>
+                        <Link to="/logout">Logout.</Link>
                     </div>
                 </div>
             )            
