@@ -25,6 +25,10 @@ function return_influx_result(query, res) {
     if (influxdb) {
         influxdb.query(query).then(function(result) {
             res.status(200).end(JSON.stringify(result))
+        }).catch(function(err) {
+            console.log(err)
+            console.log(Object.keys(err))
+            res.status(500).end(JSON.stringify({"error": "bad result"}))            
         });
     } else {
         console.log("No influx")
@@ -50,6 +54,7 @@ module.exports = (cache) => {
         } else {
             var query = 'SELECT "lat", time from impression where time > now() - 1m'
         }
+        console.log(query)
         return_influx_result(query, res)
     })
 

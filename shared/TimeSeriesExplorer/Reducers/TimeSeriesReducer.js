@@ -39,6 +39,7 @@ function dbquery(dispatch, nstate) {
     var q = nstate.query
     // Render results
     var url = "/api/v1/tse/query?q=" + q
+    console.log(url)
     axios.get(url).then(function(resp) {
         var data = resp['data']
         var result = JSON.stringify(data)
