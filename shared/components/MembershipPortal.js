@@ -21,7 +21,7 @@ class MembershipPortal extends Component {
     componentDidMount() {
         var dispatch = this.props.dispatch
         if (!this.props.loggedIn) {
-            window.location.href = '/login'
+	        return this.props.history.push('/login')
         }
         var user = this.props.user
         var p = {dispatch, user}
@@ -63,7 +63,7 @@ class MembershipPortal extends Component {
                         <p>We are unable to connect the account you logged in with ({user.email}) to an active membership account.  There are two possible reasons for this:</p>
                         <p><b>A)</b> You are not a Data Skeptic Member.  Easy solution: <a href="https://dataskeptic.com/members">sign up here</a>.</p>
                         <p><b>B)</b> Our database does not have your login account linked to your membership account.  In this case, please email <a href="mailto:orders@dataskeptic.com">orders@dataskeptic.com</a> and let us know what email account we should link you to.</p>
-                        <a href="/logout">Logout.</a>
+                        <Link to="/logout">Logout.</Link>
                     </div>
                 </div>
             )            
@@ -80,11 +80,17 @@ class MembershipPortal extends Component {
                             <i>Kyle Polich, executive producer</i>
                         </div>
                         <h4>Member's notes</h4>
-                        <p>Happy 2018 and thank you for your support of Data Skeptic!</p>
-                        <p>This humble page you're viewing now is a work in progress, but one that we'll be making considerable improvements to in the coming months.  We're waiting on all your member surveys to be returned to help us set priorities.  I'm going to leave this "Member's Corner" section at the top of your login and provide small updates and behind-the-scenes details.  If you're interested in that, check back here often for updates.</p>
+                        <p>Welcome to the Members' Portal</p>
+                        <p>This humble page you're viewing now is a work in progress, but one that we'll be making considerable improvements to in the coming months.</p>
                         <p>As we launch today, there's two useful features in your Member Portal:</p>
                         <p><b>Change membership</b> - Change membership level or cancel (gasp!)</p>
                         <p><b>Podcast Analytics</b> - A few details about which blog posts have been popular recently.</p>
+                        <p>Upcoming features planned for 2018:</p>
+                        <ul>
+                          <li>Review dataskeptic.com search logs</li>
+                          <li>Ad-free members only feed</li>
+                          <li>Early access to some extra AI related content</li>
+                        </ul>
                     </div>
                 </div>
             </div>

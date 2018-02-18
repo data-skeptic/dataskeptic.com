@@ -43,7 +43,11 @@ class Login extends Component {
         this.setState({error: ''})
         axios.post(LOGIN_ENDPOINT, data).then((result) => {
             if (result.data.success) {
-                window.location.href = '/login'
+                this.props.dispatch({
+                  type: 'AUTH_USER_SUCCESS',
+                  payload: { data: result.data.user }
+                })
+	              return this.props.history.push('/membershipPortal')
             } else {
                 this.setState({error: result.data.message})
             }

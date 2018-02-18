@@ -23,7 +23,7 @@ class SignUp extends Component {
 
     componentDidMount() {
         if (this.props.loggedIn) {
-            window.location.href = '/membershipPortal'
+	        return this.props.history.push('/membershipPortal')
         }
     }
 
@@ -37,7 +37,7 @@ class SignUp extends Component {
         this.setState({error: ''})
         axios.post(SIGNUP_ENDPOINT, data).then((result) => {
             if (result.data.success) {
-                window.location.href = '/login'
+	              return this.props.history.push('/login')
             } else {
                 this.setState({error: result.data.message})
             }
