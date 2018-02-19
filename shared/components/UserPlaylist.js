@@ -33,17 +33,15 @@ class UserPlaylist extends Component {
         }
 
         const playlist = this.props.user && this.props.user.lists && this.props.user.lists.playlist
-
         if (playlist) {
             this.fetchPlaylist(playlist)
         }
     }
 
     fetchPlaylist = async (playlist) => {
-        // clear playlist for first
-	      this.props.dispatch({type: "FETCH_PLAYLIST_START" })
+        this.props.dispatch({type: "FETCH_PLAYLIST_START" })
         const data = await getPlaylistEpisodes(playlist);
-        this.props.dispatch({type: "SET_PLAYLIST", payload: { data } })
+        this.props.dispatch({type: "SET_PLAYLIST_EPISODE", payload: { data } })
     }
 
     static getPageMeta() {
@@ -94,15 +92,20 @@ class UserPlaylist extends Component {
         )
     }
 
-    addEpisodes = async (type) => {
-        // update new playlist
-        const {success, playlistEpisodes, error} = addEpisodes(type)
-        if (success) {
-            debugger;
-	          this.props.dispatch({type: "SET_PLAYLIST", payload: { data: playlistEpisodes } })
-        } else {
+    addEpisodesByType(type)  {
+	      this.props.dispatch({type: "FETCH_PLAYLIST_START" })
+        addEpisodes(type).then((data) => {
+            const {success, playlist, error} = data
+            if (!success) {
+                return console.error(error)
+            }
+
+            this.props.dispatch({type: 'SET_PLAYLIST', payload: { playlist }})
+            this.fetchPlaylist(playlist)
+        })
+        .catch((err) => {
             console.error(error)
-        }
+        })
     }
 
     renderEmpty() {
@@ -110,35 +113,36 @@ class UserPlaylist extends Component {
             <Section>
                 <p>You don't have anything in your playlist. Please click one of the buttons below</p>
                 <Buttons>
-                    <ActionButton first={true} onClick={() => this.addEpisodes('all')}><span>Add all episodes</span></ActionButton>
-                    <ActionButton onClick={() => this.addEpisodes(CURRENT_YEAR)}><span>Add all episodes for <i>20{CURRENT_YEAR}</i></span></ActionButton>
+                    <ActionButton first={true} onClick={() => this.addEpisodesByType('all')}><span>Add all episodes</span></ActionButton>
+                    <ActionButton onClick={() => this.addEpisodesByType(CURRENT_YEAR)}><span>Add all episodes for <i>20{CURRENT_YEAR}</i></span></ActionButton>
                     <ActionButton onClick={this.goToPodcasts} last={true}><span>Visit podcast page</span></ActionButton>
                 </Buttons>
             </Section>
         )
     }
 
+    renderContent() {
+	    const { user, playlistLoaded } = this.props
+
+	    if (!playlistLoaded) {
+		    return <Loading />
+	    }
+
+	    let { playlistEpisodes } = user
+
+	    return (playlistEpisodes.length > 0)
+		    ? this.renderPlaylist(playlistEpisodes)
+		    : this.renderEmpty()
+    }
+
     render() {
         const { user, loggedIn, playlistLoaded } = this.props
         if (!loggedIn) return <div/>
 
-        let { lists: {playlist}, playlistEpisodes } = user
-
-        if (!playlistLoaded) {
-            return (
-                <Container>
-                    <Loading />
-                </Container>
-            )
-        }
-
         return (
             <Container>
                 <PageTitle>My playlist</PageTitle>
-                {playlistLoaded && (playlistEpisodes.length > 0)
-                    ? this.renderPlaylist(playlistEpisodes)
-                    : this.renderEmpty()
-                }
+                {this.renderContent()}
             </Container>
         )
     }

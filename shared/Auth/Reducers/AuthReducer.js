@@ -57,12 +57,17 @@ export default function AuthReducer(state = initialState, action) {
             return state;
 
         case 'FETCH_PLAYLIST_START':
-            state = state.setIn(['user', 'playlist', 'loaded'], false)
+            state = state.setIn(['user', 'playlistLoaded'], false)
             return state
 
         case 'SET_PLAYLIST':
+            debugger;
+	          state = state.setIn(['user', 'lists', 'playlist'], fromJS(action.payload.playlist))
+            return state;
+
+        case 'SET_PLAYLIST_EPISODE':
             state = state.setIn(['user', 'playlistEpisodes'], fromJS(action.payload.data))
-            state = state.setIn(['user', 'playlist', 'loaded'], true)
+	          state = state.setIn(['user', 'playlistLoaded'], true)
             return state;
 
         default:
@@ -76,7 +81,7 @@ export const getUserList = (state, name) =>
           && state.auth.getIn(['user', 'lists', name])
 
 export const isPlaylistLoaded = (state) =>
-  state && state.auth && state.auth.getIn(['user', 'playlist', 'loaded'])
+  state && state.auth && state.auth.getIn(['user', 'playlistLoaded'])
 
 const existAtList = (state, name, id) => {
     const list = getUserList(state, name)

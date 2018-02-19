@@ -53,9 +53,9 @@ const joinList = (list, key) =>
         return [...a, curr[key]];
     }, []);
 
-const getUserList = (email, list, props) => axios.get(`${base_url}/user/${list}/list?email=${email}${props}`).then((res) => joinList(res.data, 'blog_id'))
+const getUserList = (email, list, props = '') => axios.get(`${base_url}/user/${list}/list?email=${email}${props}`).then((res) => joinList(res.data, 'blog_id'))
 
-const getPlayedList = (email) => getUserList(email, 'played', '&limit=20&offset=0')
+const getPlayedList = (email) => getUserList(email, 'played')///, '&limit=20&offset=0')
 const getPlaylistList = (email) => getUserList(email, 'playlist')
 const getFavoritesList = (email) => getUserList(email, 'favorites')
 

@@ -52,12 +52,15 @@ const joinList = (list, key) =>
 		return [...a, curr[key]];
 	}, []);
 
-const getUserPlaylist = (email) => axios.get(`${base_url}/user/playlist/list?email=${email}$`).then((res) => joinList(res.data, 'blog_id'))
+const getUserPlaylist = (email) => axios.get(`${base_url}/user/playlist/list?email=${email}`).then((res) => joinList(res.data, 'blog_id'))
 
 const addUserPlaylist = (data) => axios.post(`${base_url}/user/playlist/add_all`, data).then(res => res.data)
 
 const updateUser = (list, data) => {
     const url = `${base_url}/user/${getListUpdateEndpoint(list)}/update`
+
+		console.log(url)
+		console.data(data)
 
 	  return axios.post(url, data).then(res => res.data)
 }
@@ -86,30 +89,26 @@ module.exports = () => {
     })
 
 		router.post('/playlist/add_all', async (req, res, next) => {
-			const result = await addUserPlaylist({
+			const data = {
 				...req.body,
 				email: req.user.email
-			})
+			}
 
-			setInterval(() => {
-				getUserPlaylist(req.user.email)
-					.then((playlist) => {
-						req.user.lists[playlist] = playlist
-						return getPlaylistEpisodes(playlist)
+			addUserPlaylist(data)
+				.then(() => getUserPlaylist(req.user.email))
+				.then((playlist) => {
+					req.user.lists.playlist = playlist
+					return res.send({
+						success: true,
+						playlist
 					})
-					.then((playlistEpisodes) => {
-						return res.send({
-							success: true,
-							playlistEpisodes
-						})
+				})
+				.catch(error => {
+					return res.send({
+						success: false,
+						error: error
 					})
-					.catch(error => {
-						return res.send({
-							success: false,
-							error: error
-						})
-					})
-			}, 2000)
+				})
 		})
 
     router.post('/:list/update', (req, res) => {
@@ -153,8 +152,7 @@ module.exports = () => {
             }
 
 	          res.send({
-		          success,
-		          result: req.user
+		          success
 	          })
           })
           .catch(error => {
