@@ -3,6 +3,7 @@ import { ContentContainer, BlogContainer, PodContainer } from './style'
 import Feature from './Feature'
 import Blog from './Blog'
 import Podcast from './Podcast'
+import JobListing from './JobListing'
 import { connect } from 'react-redux'
 
 class Content extends Component {
@@ -19,6 +20,7 @@ class Content extends Component {
           <Blog blogList={blogList} getContributor={this.getContributor}/>
         </BlogContainer>
         <PodContainer className="col-xs-12 col-sm-12 col-md-5">
+	        <JobListing />
           <Podcast latest_episode={latest_episode} getContributor={this.getContributor}/>
         </PodContainer>
       </ContentContainer>
