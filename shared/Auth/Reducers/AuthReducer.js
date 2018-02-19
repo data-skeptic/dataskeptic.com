@@ -61,7 +61,6 @@ export default function AuthReducer(state = initialState, action) {
             return state
 
         case 'SET_PLAYLIST':
-            debugger;
 	          state = state.setIn(['user', 'lists', 'playlist'], fromJS(action.payload.playlist))
             return state;
 

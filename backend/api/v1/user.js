@@ -59,9 +59,6 @@ const addUserPlaylist = (data) => axios.post(`${base_url}/user/playlist/add_all`
 const updateUser = (list, data) => {
     const url = `${base_url}/user/${getListUpdateEndpoint(list)}/update`
 
-		console.log(url)
-		console.data(data)
-
 	  return axios.post(url, data).then(res => res.data)
 }
 
