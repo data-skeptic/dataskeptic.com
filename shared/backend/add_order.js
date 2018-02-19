@@ -1,7 +1,4 @@
 var axios = require('axios')
-const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const c = require('../../config/config.json')
-var base_url = c[env]['base_api'] + env
 
 function create_items_list(stripe, customer, products) {
     var items = []
@@ -71,7 +68,6 @@ function create_stripe_order(stripe, customer, products, name, address, email) {
 }
 
 function update_stripe_order(stripe, items, stripe_order_id, shipping) {
-    /*
     var item = {
         "amount": shipping,
         "currency": "usd",
@@ -79,7 +75,6 @@ function update_stripe_order(stripe, items, stripe_order_id, shipping) {
         "type": "shipping"
     }
     items.push(item)
-    */
     var shipping_methods = [{
         //id: 'ship_free-shipping',
         amount: shipping,
@@ -93,87 +88,107 @@ function update_stripe_order(stripe, items, stripe_order_id, shipping) {
     })
 }
 
-function save_order_to_database(order, stripe_order_id) {
-    console.log("Saving order to the database")
+function save_order_to_database(base_url, stripe_order_id, customer, customer_id, products, shipping, total, token) {
     var url = base_url + '/store/order/add'
-    console.log(url)
+    var order = {customer, token, shipping, total, products}
+    var req = {stripe_order_id, order}
     return axios
-        .post(url, JSON.stringify(result))
+        .post(url, JSON.stringify(req))
         .then(function(resp) {
-            return {resp, order, stripe_order_id}
+            var data = resp.data
+            var order_id = JSON.parse(data)
+            return { order_id, stripe_order_id, customer_id}
         })
 }
 
-function finalize_order_with_stripe(db_result) {
-    var stripe_order_id = db_result.stripe_order_id
-    var customer = db_result.customer.id // customer: customer.id
-    stripe.orders.pay(stripe_order_id, { customer }, function(err, order) {
-        return {order, stripe_order_id}
-    });
+function finalize_order_with_stripe(stripe, stripe_order_id, customer_id) {
+    var req = { customer: customer_id }
+    return stripe.orders.pay(stripe_order_id, req)
 }
 
-function do_order(stripe, token, customer, products, shipping, name, address, email, res) {
+function do_order(base_url, stripe, token, customer, products, shipping, name, address, email, res) {
     console.log("Beginning order processing")
-    // TODO: provide user with more transparency by giving progress bar that updates at each step
+    var total = shipping
+    for (var product of products) {
+        total += product.product['price'] * (product.product['quantity'] || 1)
+    }
+    var product = {
+        quantity: 1,
+        product: {
+            "amount": shipping,
+            "currency": "usd",
+            "sku": "shipping",
+            "description": "shipping",
+            "type": "shipping"
+        }
+    }
     return create_stripe_customer(stripe, email, token)
         .then(function(customer) {
-            console.log("Created Stripe Customer")
-            console.log(customer)
-            return create_stripe_order(stripe, customer, products, name, address, email)
+            var customer_id = customer.id
+            console.log("Created Stripe Customer: " + customer_id)
+            return create_stripe_order(stripe, customer, products, name, address, email).then(function(sorder) {
+                console.log("Created Stripe Order: " + sorder['id'])
+                sorder['customer_id'] = customer_id
+                return sorder
+            })
         })
-        .then(function(order_result) {
-            console.log("Updating Stripe Order")
-            console.log(order_result)
-            var stripe_order_id = order_result.id
-            console.log('stripe_order_id=' + stripe_order_id)
-            var items = order_result.items
-            return update_stripe_order(stripe, items, stripe_order_id, shipping)
+        .then(function(resp) {
+            console.log("----[Tests]---------------------------------------------------------")
+            console.log("Total    (should be 2 + 4 = $6): " + resp['amount'])
+            console.log("Shipping (should be 4):          " + resp['shipping_methods'][0]['amount'])
+            var stripe_order_id = resp.id
+            var customer_id = resp.customer_id
+            return {stripe_order_id, customer_id}
         })
-        .then(function(stripe_result) {
+        .then(function(resp) {
             console.log("Saving order to the database")
-            console.log(stripe_result)
-            return save_order_to_database(stripe_result)
+            var stripe_order_id = resp.stripe_order_id
+            var customer_id = resp.customer_id
+            return save_order_to_database(base_url, stripe_order_id, customer, customer_id, products, shipping, total, token)
         }).then(function(db_result) {
             console.log("Finalizing order")
-            console.log(db_result)
-            return finalize_order_with_stripe(db_result)
-        }).then(function(db_result, stripe_order_id) {
-            console.log(stripe_order_id)
-            console.log(db_result)
-            var order = db_result.order
-            var resp = {'status': 'ok', 'msg': '', order, stripe_order_id }
+            var customer_id = db_result.customer_id
+            var stripe_order_id = db_result.stripe_order_id
+            return finalize_order_with_stripe(stripe, stripe_order_id, customer_id)
+        }).then(function(final_result) {
+            console.log("Finishing up")
+            var order = final_result.order
+            var stripe_order_id = final_result.id
+            var charge = final_result.charge
+            var email = final_result.email
+            var stripe_status = final_result.status
+            var resp = {'status': 'ok', 'msg': '', email, stripe_status, charge, stripe_order_id }
             return resp
         })
 }
 
-module.exports = {
-    add_order: function(req, res, stripe_key) {
-        var stripe = require("stripe")(stripe_key)
-        var order = req.body
-        var email    = order['customer']['email']
-        var token    = order['token']
-        var customer = order['customer']
-        var products = order['products']
-        var shipping = order['shipping']
-        console.log(["add_order shipping", shipping])
-        var country  = order['country']
-        var name    = customer['first_name'] + ' ' + customer['last_name']
-        var stripe = require("stripe")(c[env]['stripe'])
-        var address = {
-            line1: customer.street_1,
-            line2: customer.street_2,
-            city: customer.city,
-            state: customer.state,
-            country: country,
-            postal_code: customer.zip
-        }
-        try {
-            do_order(stripe, token, customer, products, shipping, name, address, email).then(function (resp) {
-                res.status(200).end(JSON.stringify(resp))
-            })
-        } catch (err) {
-            var e = JSON.stringify(err)
-            res.status(500).end(JSON.stringify({'status': 'failure', 'msg': e}))
-        }
+function add_order(req, res, base_url, stripe_key) {
+    var stripe = require("stripe")(stripe_key)
+    var order = req.body
+    var email    = order['customer']['email']
+    var token    = order['token']
+    var customer = order['customer']
+    var products = order['products']
+    var shipping = order['shipping']
+    var country  = order['country']
+    var name    = customer['first_name'] + ' ' + customer['last_name']
+    var stripe = require("stripe")(c[env]['stripe'])
+    var address = {
+        line1: customer.street_1,
+        line2: customer.street_2,
+        city: customer.city,
+        state: customer.state,
+        country: country,
+        postal_code: customer.zip
+    }
+    try {
+        do_order(base_url, stripe, token, customer, products, shipping, name, address, email).then(function (resp) {
+            res.status(200).end(JSON.stringify(resp))
+        })
+    } catch (err) {
+        var e = JSON.stringify(err)
+        res.status(500).end(JSON.stringify({'status': 'failure', 'msg': e}))
     }
 }
+
+module.exports = { add_order, do_order }
