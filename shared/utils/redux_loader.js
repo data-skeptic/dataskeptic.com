@@ -87,7 +87,7 @@ export function getEpisodesData(episodes) {
 const getEpisode = (blog_id) => axios.get(`${base_url}/blog/list?blog_id=${blog_id}`).then((res) => res.data[0])
 const getEpisodeBasic = (guid) => axios.get(`/api/episodes/get/${guid}`).then((res) => res.data)
 
-export function getPlaylist(playlist) {
+export function getPlaylistEpisodes(playlist) {
 	// fetch episode data by lambda api
 	return Promise.all(playlist.map((blog_id) => getEpisode(blog_id)))
 		.then((episodes) => {

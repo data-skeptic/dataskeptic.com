@@ -1,5 +1,6 @@
 import express from 'express'
 import axios from "axios";
+import {getPlaylistEpisodes} from "../../../shared/utils/redux_loader";
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 const c = require('../../../config/config.json')
@@ -30,7 +31,7 @@ const getListUpdateEndpoint = list => listsEndpointMap[list]
 
 const updateUserSessionList = (user, list, blogId, insertMode = false) => {
     // copy list
-    let listToUpdate = user.lists[list].map(i => i)
+    let listToUpdate = [...user.lists[list]]
 
     // add / remove item
     if (insertMode) {
@@ -39,7 +40,7 @@ const updateUserSessionList = (user, list, blogId, insertMode = false) => {
 	        listToUpdate.push(blogId)
         }
     } else {
-	      listToUpdate = listToUpdate.filter(blogId !== blogId)
+	      listToUpdate = listToUpdate.filter(i => i !== blogId)
     }
 
     // update user session list
@@ -51,7 +52,7 @@ const joinList = (list, key) =>
 		return [...a, curr[key]];
 	}, []);
 
-const getUserPlaylist = (email, list, props) => axios.get(`${base_url}/user/playlist/list?email=${email}$`).then((res) => joinList(res.data, 'blog_id'))
+const getUserPlaylist = (email) => axios.get(`${base_url}/user/playlist/list?email=${email}$`).then((res) => joinList(res.data, 'blog_id'))
 
 const addUserPlaylist = (data) => axios.post(`${base_url}/user/playlist/add_all`, data).then(res => res.data)
 
@@ -90,21 +91,25 @@ module.exports = () => {
 				email: req.user.email
 			})
 
-			getUserPlaylist(req.user.email)
-				.then((playlist) => {
+			setInterval(() => {
+				getUserPlaylist(req.user.email)
+					.then((playlist) => {
 						req.user.lists[playlist] = playlist
-
+						return getPlaylistEpisodes(playlist)
+					})
+					.then((playlistEpisodes) => {
 						return res.send({
 							success: true,
-							playlist
+							playlistEpisodes
 						})
-				})
-				.catch(error => {
-					return res.send({
-						success: false,
-						error: error
 					})
-				})
+					.catch(error => {
+						return res.send({
+							success: false,
+							error: error
+						})
+					})
+			}, 2000)
 		})
 
     router.post('/:list/update', (req, res) => {
@@ -149,10 +154,11 @@ module.exports = () => {
 
 	          res.send({
 		          success,
-		          result
+		          result: req.user
 	          })
           })
           .catch(error => {
+          	console.dir(error)
 	          return res.send({
 		          success: false,
 		          error: error

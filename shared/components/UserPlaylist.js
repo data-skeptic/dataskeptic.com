@@ -3,10 +3,11 @@ import {connect} from 'react-redux'
 import styled from 'styled-components'
 import { Link } from 'react-router'
 
-import {getPlaylist, addEpisodes} from '../utils/redux_loader'
+import {getPlaylistEpisodes, addEpisodes} from '../utils/redux_loader'
 import {changePageTitle} from '../Layout/Actions/LayoutActions'
 import moment from "moment/moment"
-import {addPlaylist} from "../Auth/Reducers/AuthReducer";
+import {addPlaylist, isPlaylistLoaded} from "../Auth/Reducers/AuthReducer";
+import Loading from "../Common/Components/Loading";
 
 const renderDate = (date) => moment(date).format('MMMM D, YYYY')
 const CURRENT_YEAR = (new Date().getFullYear().toString().substr(-2))
@@ -40,8 +41,8 @@ class UserPlaylist extends Component {
 
     fetchPlaylist = async (playlist) => {
         // clear playlist for first
-	      this.props.dispatch({type: "SET_PLAYLIST", payload: { data: [] } })
-        const data = await getPlaylist(playlist);
+	      this.props.dispatch({type: "FETCH_PLAYLIST_START" })
+        const data = await getPlaylistEpisodes(playlist);
         this.props.dispatch({type: "SET_PLAYLIST", payload: { data } })
     }
 
@@ -57,8 +58,8 @@ class UserPlaylist extends Component {
 
     remove = ({blog_id, guid}) => {
       const playlisted = false
-      this.props.dispatch({ type: 'ADD_PLAYLIST', payload: { playlisted, blogId: blog_id } })
-      addPlaylist(blog_id, guid, playlisted)
+	    this.props.dispatch({ type: 'ADD_PLAYLIST', payload: { playlisted, blogId: blog_id } })
+	    addPlaylist(blog_id, guid, playlisted)
     }
 
     goToPodcasts = () => this.props.history.push('/podcast')
@@ -95,9 +96,10 @@ class UserPlaylist extends Component {
 
     addEpisodes = async (type) => {
         // update new playlist
-        const {success, playlist, error} = addEpisodes(type)
+        const {success, playlistEpisodes, error} = addEpisodes(type)
         if (success) {
-	          this.props.dispatch({type: "SET_PLAYLIST", payload: { data: playlist } })
+            debugger;
+	          this.props.dispatch({type: "SET_PLAYLIST", payload: { data: playlistEpisodes } })
         } else {
             console.error(error)
         }
@@ -117,15 +119,23 @@ class UserPlaylist extends Component {
     }
 
     render() {
-        const { user, loggedIn } = this.props
+        const { user, loggedIn, playlistLoaded } = this.props
         if (!loggedIn) return <div/>
 
         let { lists: {playlist}, playlistEpisodes } = user
 
+        if (!playlistLoaded) {
+            return (
+                <Container>
+                    <Loading />
+                </Container>
+            )
+        }
+
         return (
             <Container>
                 <PageTitle>My playlist</PageTitle>
-                {playlist && (playlist.length > 0) && playlistEpisodes && (playlistEpisodes.length > 0)
+                {playlistLoaded && (playlistEpisodes.length > 0)
                     ? this.renderPlaylist(playlistEpisodes)
                     : this.renderEmpty()
                 }
@@ -133,6 +143,17 @@ class UserPlaylist extends Component {
         )
     }
 }
+
+export default connect(
+	(state) => ({
+		user: state.auth.getIn(['user']).toJS(),
+		loggedIn: state.auth.getIn(['loggedIn']),
+		isPlaying: state.player.getIn(['is_playing']),
+		playerEpisodeGuid: state.player.getIn(['episode', 'guid']),
+		playlistLoaded: isPlaylistLoaded(state)
+	})
+)(UserPlaylist);
+
 
 const Container = styled.div`
     margin: 25px auto;
@@ -295,12 +316,3 @@ const Actions = styled.div`
     padding-bottom: 8px;
     padding-left: ${60+12}px;
 `
-
-export default connect(
-    (state) => ({
-        user: state.auth.getIn(['user']).toJS(),
-        loggedIn: state.auth.getIn(['loggedIn']),
-        isPlaying: state.player.getIn(['is_playing']),
-        playerEpisodeGuid: state.player.getIn(['episode', 'guid'])
-    })
-)(UserPlaylist);

@@ -24,6 +24,12 @@ const updateList = (state, name, needAdd, id) => {
     )
 }
 
+const removeEpisode = (state, blog_id) => {
+	return state.updateIn(['user', 'playlistEpisodes'], (l =>
+			l.filter(episode => episode.get('blog_id') !== blog_id)
+		)
+	)
+}
 
 export default function AuthReducer(state = initialState, action) {
     switch (action.type) {
@@ -47,10 +53,16 @@ export default function AuthReducer(state = initialState, action) {
 
         case 'ADD_PLAYLIST':
             state = updateList(state, 'playlist', action.payload.playlisted, action.payload.blogId)
+            state = removeEpisode(state, action.payload.blogId)
             return state;
+
+        case 'FETCH_PLAYLIST_START':
+            state = state.setIn(['user', 'playlist', 'loaded'], false)
+            return state
 
         case 'SET_PLAYLIST':
             state = state.setIn(['user', 'playlistEpisodes'], fromJS(action.payload.data))
+            state = state.setIn(['user', 'playlist', 'loaded'], true)
             return state;
 
         default:
@@ -59,9 +71,12 @@ export default function AuthReducer(state = initialState, action) {
 
 }
 
-const getUserList = (state, name) =>
+export const getUserList = (state, name) =>
     state && state.auth
           && state.auth.getIn(['user', 'lists', name])
+
+export const isPlaylistLoaded = (state) =>
+  state && state.auth && state.auth.getIn(['user', 'playlist', 'loaded'])
 
 const existAtList = (state, name, id) => {
     const list = getUserList(state, name)
