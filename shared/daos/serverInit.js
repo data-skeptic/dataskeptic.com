@@ -161,6 +161,7 @@ function xml_to_list(xml) {
             if (episode.img) {
                 episode.img = episode.img.replace("http://", "https://");
             }
+            episode.mp3 = episode.mp3.replace("http://", "https://")
             episodes_list.push(episode.guid)
         }
     })
