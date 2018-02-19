@@ -215,14 +215,12 @@ class PlayerContainer extends Component {
     capture(type, meta = {}) {
         const {isAuthorized, loggedIn} = this.props;
         const uid = v4();
-        //
-        // if (isAuthorized) {
-        //     const metaId = `${uid}_playerMeta`;
-        //     localStorage.setItem(metaId, JSON.stringify(meta));
-        //     axios.post(URL, {type, meta}).then((data) => {}).catch((err) => console.error(err))
-        // }
 
-
+        if (isAuthorized) {
+            const metaId = `${uid}_playerMeta`;
+            localStorage.setItem(metaId, JSON.stringify(meta));
+            axios.post(URL, {type, meta}).then((data) => {}).catch((err) => console.error(err))
+        }
 
         if (loggedIn && type === CAPTURE_TYPES.POS) {
             console.dir(meta)
