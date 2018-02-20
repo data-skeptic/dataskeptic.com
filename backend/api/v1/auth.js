@@ -14,7 +14,7 @@ const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
 const c = require('../../../config/config.json')
 const salt = c[env]['auth']['salt']
-const base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
+const base_url = c[env]['base_api'] + env
 
 const checkIfAdmin = (email) => {
     const email_reg_exp = /^.*@dataskeptic\.com/i;
@@ -47,11 +47,45 @@ const notifyOnJoin = ({ email }) => {
     return MailServices.sendMail(message)
 }
 
+
+const joinList = (list, key) =>
+    list.reduce(function(a, curr) {
+        return [...a, curr[key]];
+    }, []);
+
+const getUserList = (email, list, props = '') => axios.get(`${base_url}/user/${list}/list?email=${email}${props}`).then((res) => joinList(res.data, 'blog_id'))
+
+const getPlayedList = (email) => getUserList(email, 'played')///, '&limit=20&offset=0')
+const getPlaylistList = (email) => getUserList(email, 'playlist')
+const getFavoritesList = (email) => getUserList(email, 'favorites')
+
+const getUserData = async (email) => {
+    const [ played, playlist, favorites ] = await Promise.all([
+        getPlayedList(email),
+        getPlaylistList(email),
+        getFavoritesList(email)
+    ])
+
+    const lists = { played, playlist, favorites }
+
+    return {
+        lists
+    }
+}
+
 module.exports = () => {
     const router = express.Router()
 
-    passport.serializeUser((user, done) => {
+    passport.serializeUser(async (user, done) => {
         delete user.password
+
+        console.log(`get user data?`)
+        const data = await getUserData(user.email)
+        user = {
+            ...user,
+            ...data
+        }
+
         done(null, user)
     })
 

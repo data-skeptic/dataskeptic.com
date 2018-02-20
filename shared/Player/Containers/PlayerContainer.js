@@ -8,6 +8,7 @@ import {connect} from 'react-redux'
 
 import MiniPlayer from '../Components/MiniPlayer'
 import VolumeBarContainer from './VolumeBarContainer'
+import {isPlayed, markAsPlayed} from "../../Auth/Reducers/AuthReducer";
 
 const URL = '/api/v1/player';
 
@@ -212,13 +213,28 @@ class PlayerContainer extends Component {
     }
 
     capture(type, meta = {}) {
-        const {isAuthorized} = this.props;
+        const {isAuthorized, loggedIn} = this.props;
         const uid = v4();
 
         if (isAuthorized) {
             const metaId = `${uid}_playerMeta`;
             localStorage.setItem(metaId, JSON.stringify(meta));
             axios.post(URL, {type, meta}).then((data) => {}).catch((err) => console.error(err))
+        }
+
+        if (loggedIn && type === CAPTURE_TYPES.POS) {
+            console.dir(meta)
+            const { position } = meta
+
+            if (position >= 90 && !this.props.played) {
+                console.dir('mark as played')
+                const episode = this.props.oepisode.toJS()
+                const {blog_id, guid, media} = episode
+                const played = true;
+                this.props.dispatch({ type: 'MARK_AS_PLAYED', payload: { played, blogId: blog_id } })
+
+                markAsPlayed(blog_id, media, guid, played)
+            }
         }
     }
 
@@ -409,7 +425,9 @@ class PlayerContainer extends Component {
 export default connect(
     state => ({
         isAuthorized: state.site.getIn(['sessionId']),
+        loggedIn: state.auth.get('loggedIn'),
         player: state.player.toJS(),
-        oepisode: state.player.getIn(['episode'])
+        oepisode: state.player.getIn(['episode']),
+	      played: isPlayed(state, state.player.getIn(['episode', 'blog_id'])),
     })
 )(PlayerContainer)
