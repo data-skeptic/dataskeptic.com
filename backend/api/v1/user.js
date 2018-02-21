@@ -52,7 +52,7 @@ const joinList = (list, key) =>
 		return [...a, curr[key]];
 	}, []);
 
-const getUserPlaylist = (email) => axios.get(`${base_url}/user/playlist/list?email=${email}`).then((res) => joinList(res.data, 'blog_id'))
+const getUserPlaylist = (email) => axios.get(`${base_url}/user/playlist/list?email=${email}&limit=1000&offset=0`).then((res) => joinList(res.data, 'blog_id'))
 
 const addUserPlaylist = (data) => axios.post(`${base_url}/user/playlist/add_all`, data).then(res => res.data)
 
