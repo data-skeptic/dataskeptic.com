@@ -17,18 +17,16 @@ class JobListing extends Component {
   toggleViewMore = () => this.setState(prevState => ({ viewMore: !prevState.viewMore }))
 
   renderJobBox = (job, viewMore) => {
-    const {title, location, type, description, url, company, company_logo, company_url } = job
+    const {title, location, type, description, url, company, company_url } = job
 	  return (
 		  <Box>
-			  <Company href={company_url}>
-				  <CompanyLogo src={company_logo} height="18"/>
-				  <CompanyName>{company}</CompanyName>
-			  </Company>
 			  <Title>{title}</Title>
 			  <Types>
 				  <Type>{type}</Type>
 				  <Space>{'|'}</Space>
 				  <Location>{location}</Location>
+				  <Space>{'|'}</Space>
+				  <CompanyName><a href={company_url} target="_blank">{company}</a></CompanyName>
 			  </Types>
 			  <Description>
 				  {!viewMore
@@ -53,8 +51,6 @@ class JobListing extends Component {
 
     return (
       <Container>
-        <JobsListingTitle>Jobs</JobsListingTitle>
-        
         {loaded
           ? this.renderJobBox(jobs[0], viewMore)
           : <span>...</span>
@@ -101,30 +97,21 @@ const Description = styled.div`
 
 `
 
-const Company = styled.a`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  text-decoration: none;
-  border: 0px;
-  
-  &:hover {
-    border: 0px;
-  }
-`
-
-const CompanyLogo = styled.img`
-  height: 18px;
-  margin-right: 7px;
-`
-
 const CompanyName = styled.span`
   flex-grow: 1;
   border: 0px;
   margin-right: 12px;
   font-weight: bold;
+  
+  > a {
+	  text-decoration: none;
+	  border: 0px;
+	  
+	  &:hover {
+	    border: 0px;
+	  }
+  }
 `
-
 
 const ViewMore = styled.span`
   cursor: pointer;

@@ -20,8 +20,8 @@ class Content extends Component {
           <Blog blogList={blogList} getContributor={this.getContributor}/>
         </BlogContainer>
         <PodContainer className="col-xs-12 col-sm-12 col-md-5">
-	        <JobListing />
           <Podcast latest_episode={latest_episode} getContributor={this.getContributor}/>
+	        <JobListing />
         </PodContainer>
       </ContentContainer>
     )

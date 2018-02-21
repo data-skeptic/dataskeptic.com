@@ -7,8 +7,6 @@ export const JobsListingTitle = Title.extend`
   }
 `
 export const Container = styled.div`
-  border-top: 1px solid #979797;
-  padding: 48px 0;
   @media (max-width: 768px) {
     border: 0;
     padding: 0;

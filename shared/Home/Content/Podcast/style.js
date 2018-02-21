@@ -8,7 +8,8 @@ export const PostTitle = Title.extend`
 `
 export const Container = styled.div`
   border-top: 1px solid #979797;
-  padding: 48px 0;
+  padding: 48px 0 0px 0px;
+  
   @media (max-width: 768px) {
     border: 0;
     padding: 0;
