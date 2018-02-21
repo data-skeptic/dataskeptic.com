@@ -23,9 +23,12 @@ if (influx_config) {
 
 function return_influx_result(query, res) {
     if (influxdb) {
+        console.log("querying influxdb")
         influxdb.query(query).then(function(result) {
+            console.log("done")
             res.status(200).end(JSON.stringify(result))
         }).catch(function(err) {
+            console.log("fail")
             console.log(err)
             console.log(Object.keys(err))
             res.status(500).end(JSON.stringify({"error": "bad result"}))            
@@ -60,6 +63,7 @@ module.exports = (cache) => {
 
     router.get('/databases', function (req, res) {
         const query = "SHOW DATABASES"
+        console.log(query)
         return_influx_result(query, res)
     })
 
