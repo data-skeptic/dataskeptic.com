@@ -680,8 +680,10 @@ function getIpData(ip) {
     			try {
     				body = JSON.parse(body)
     				var ip = body['ip']
+
     				var country = body['country'] || "unknown"
-    				var region  = body['region']  || "unknown"
+                    var city    = body['city']    || "unknown"
+                    var region  = body['region']  || "unknown"
     				var postal  = body['postal']  || "unknown"
     				var loc     = body['loc']     || "unknown"
     				var arr     = loc.split(",")
