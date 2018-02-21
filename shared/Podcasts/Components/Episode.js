@@ -86,7 +86,7 @@ class Episode extends React.Component {
                     </LinkArea>
 
                     <Guests>
-                        {guests && guests.map((g, i) => <GuestImage key={i} {...g} />)}
+                        {guests && guests.map((g, i) => <GuestImage key={i} {...g} index={guests.length - i}/>)}
                     </Guests>
                 </div>
                 <div className="col-xs-12 col-sm-8 episode-middle">
@@ -120,11 +120,15 @@ const LinkArea = styled.div`
 `
 
 const Guests = styled.div`
-    padding: 4px 0px;
+    padding: 15px 0px 4px 10px;
     display: flex;
     flex-flow: row wrap;
-    justify-content: space-between;
+    justify-content: start;
     clear: both;
+    
+    > * {
+        border-color: #fff;
+    }
 `
 
 export default connect(state => ({player: state.player, episodes: state.episodes, blogs: state.blogs}))(Episode)

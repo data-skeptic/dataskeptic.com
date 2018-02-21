@@ -19,7 +19,8 @@ import {
   ItemDesc
  } from '../../shared/Home/Content/Blog/style'
 
-import GuestImage from "./GuestImage"
+
+import GuestImage from '../Podcasts/Components/GuestImage'
 
 class EpisodePlayer extends Component {
   constructor(props) {
@@ -113,11 +114,15 @@ class EpisodePlayer extends Component {
 }
 
 const Guests = styled.div`
-  padding: 8px 0px;
+  padding: 15px 0px 4px 10px;
   display: flex;
   flex-flow: row wrap;
-  justify-content: flex-start;
+  justify-content: start;
   clear: both;
+  
+  > * {
+      border-color: #F4F4F4;
+  }
 `
 
 export default connect(state => ({
