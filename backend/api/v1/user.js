@@ -1,6 +1,5 @@
 import express from 'express'
 import axios from "axios";
-import {getPlaylistEpisodes} from "../../../shared/utils/redux_loader";
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 const c = require('../../../config/config.json')

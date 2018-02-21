@@ -280,9 +280,6 @@ app.all("/.well-known/acme-challenge/:id", function(req, res) {
     res.status(200).send(`${req.params.id}.${challenge_response}`); 
 });
 
-const api = require('./backend/api/v1');
-app.use('/api/v1/', api(() => Cache));
-
 /*
  * SETUP API
  */
@@ -781,6 +778,15 @@ async function tracking (req, res) {
         console.log("ipInfo is undefined")
     }
 }
+
+
+const api = require('./backend/api/v1');
+app.use('/api/v1', async (req, res, next) => {
+    await tracking(req, res)
+    next()
+})
+
+app.use('/api/v1/', api(() => Cache));
 
 const renderPage = async (req, res) => {
     if (req.url == '/favicon.ico') {
