@@ -687,7 +687,7 @@ function renderView(store, renderProps, location) {
  * Please update this key to
  * have latest request response data in the user session
  */
-const CURRENT_IP_REQ_VERSION = 4
+const CURRENT_IP_REQ_VERSION = 5
 const localIPs = ['127.0.0.1', '::1']
 
 function getIpData(ip) {
@@ -751,7 +751,7 @@ async function tracking (req, res) {
 
         // save to current session if not empty
         if (!!ipData) {
-            console.dir('save to current session if not empty')
+            console.log('save to current session if not empty')
 	          req.session.ipInfo = ipInfo = ipData
         }
     }
