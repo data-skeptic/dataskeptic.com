@@ -355,7 +355,7 @@ function api_router(req, res) {
         return true
     }
     else if (req.url.indexOf('/api/order/add') == 0) {
-        add_order(req, res, stripe_key)
+        add_order(req, res, base_url, stripe_key)
         return true
     }
     else if (req.url.indexOf('/api/order/fulfill') == 0) {

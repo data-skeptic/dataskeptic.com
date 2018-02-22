@@ -133,12 +133,15 @@ function do_order(base_url, stripe, token, customer, products, shipping, name, a
             var charge = final_result.charge
             var email = final_result.email
             var stripe_status = final_result.status
-            var resp = {'status': 'ok', 'msg': '', email, stripe_status, charge, stripe_order_id }
+            var resp = {'status': 'ok', 'msg': '', email, total, customer, products, stripe_status, charge, stripe_order_id }
             return resp
         })
 }
 
 function add_order(req, res, base_url, stripe_key) {
+    console.log("Begin add_order")
+    console.log(base_url)
+    console.log(stripe_key)
     var stripe = require("stripe")(stripe_key)
     var order = req.body
     var email    = order['customer']['email']
@@ -148,7 +151,6 @@ function add_order(req, res, base_url, stripe_key) {
     var shipping = order['shipping']
     var country  = order['country']
     var name    = customer['first_name'] + ' ' + customer['last_name']
-    var stripe = require("stripe")(c[env]['stripe'])
     var address = {
         line1: customer.street_1,
         line2: customer.street_2,

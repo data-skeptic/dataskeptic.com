@@ -21,6 +21,7 @@ var base_url = c[env] + env
 
 export function checkout(data, redirect) {
     return (dispatch, getState) => {
+        console.log("Starting checkout")
         dispatch(checkoutRequestStart(data));
 
         const prod = getState().cart.get('prod');
