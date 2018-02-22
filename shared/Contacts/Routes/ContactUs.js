@@ -75,10 +75,8 @@ class ContactUs extends React.Component {
     }
 
     questionSubmit = (data) => {
-        data.recording = this.state.submittedUrl;
+      data.recording = this.state.submittedUrl;
     	data.type = RECORDING;
-        console.log(`question submit`)
-        console.dir(data)
     	this.props.dispatch(submitCommentForm(data))
     }
 
@@ -378,10 +376,16 @@ const QuestionFormWrapper = styled.div``
 const SlackStatus = styled.span`
   position: absolute;
   padding-left: 40px;
-  padding-right: 40px;
   font-size: 12px;
   margin-top: 28px;
   color: #2D1454;
+  
+  @media (max-width: 768px) {
+    position: relative;
+    font-size: 13px;
+    margin-top: 4px;
+    padding: 0px;
+  }
 `
 
 const selector = formValueSelector('question');
