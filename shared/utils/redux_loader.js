@@ -74,10 +74,11 @@ export function get_podcasts_from_cache(my_cache, pathname) {
 
 const getEpisodeData = (guid) => axios.get(`${base_url}/blog/list?guid=${guid}`).then((res) => res.data[0])
 
-function getEpisodesData(episodes) {
+export function getEpisodesData(episodes) {
 	return Promise.all(episodes.map(ep => getEpisodeData(ep.guid)))
 		.then((episodesData) => {
 			return episodes.map((ep, index) => ({
+				...episodesData[index],
 				...ep
 			}))
 		})
