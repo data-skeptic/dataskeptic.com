@@ -7,6 +7,10 @@ export const CHECKOUT_REQUEST_START = 'CHECKOUT_REQUEST_START';
 export const CHECKOUT_REQUEST_SUCCESS = 'CHECKOUT_REQUEST_SUCCESS';
 export const CHECKOUT_REQUEST_FAILED = 'CHECKOUT_REQUEST_FAILED';
 
+export const RECEIPT_REQUEST_START = 'RECEIPT_REQUEST_START';
+export const RECEIPT_REQUEST_SUCCESS = 'RECEIPT_REQUEST_SUCCESS';
+export const RECEIPT_REQUEST_FAILED = 'RECEIPT_REQUEST_FAILED';
+
 export const CHECKOUT_MAKE_ORDER = 'CHECKOUT_MAKE_ORDER';
 
 const SUCCESS_REDIRECT_DELAY = 1000;
@@ -15,12 +19,9 @@ const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 const c = require('../../../config/config.json')
 var base_url = c[env] + env
 
-function redirectToThankYouPage() {
-    window.location.href = '/thank-you';
-}
-
-export function checkout(data) {
+export function checkout(data, redirect) {
     return (dispatch, getState) => {
+        console.log("Starting checkout")
         dispatch(checkoutRequestStart(data));
 
         const prod = getState().cart.get('prod');
@@ -53,15 +54,13 @@ export function checkout(data) {
                 checkoutMakeOrder(data, token, prod)
                     .then((successData) => {
                         console.log("success")
-                        if (successData.status == "ok") {
-                            dispatch(checkoutRequestSuccess(successData, data))
-                            setTimeout(() => {
-                                dispatch(clearCart());
-                                // react-redux-router push doesn't work
-                                redirectToThankYouPage();
-                            }, SUCCESS_REDIRECT_DELAY);
+                        console.log(successData)
+                        if (successData.status === "ok") {
+                          redirect(successData)
+                          dispatch(clearCart());
+                          dispatch(checkoutRequestSuccess(successData, data, redirect))
                         } else {
-                            dispatch(checkoutRequestFailed(successData.msg))
+                          dispatch(checkoutRequestFailed(successData.msg))
                         }
                     })
                     .catch(({message}) => dispatch(checkoutRequestFailed(message)));
@@ -79,25 +78,26 @@ export function checkoutRequestStart(data) {
     }
 }
 
-export function checkoutRequestSuccess(message, data) {
-    const emailData = {
-        ...data,
-        type: 'checkout',
-        to: data.email,
-        subject: 'Your dataskeptic.com order confirmation'
-    };
+export function checkoutRequestSuccess(successData, data) {
+	const emailData = {
+		type: 'checkout',
+		to: data.email,
+		subject: 'Your dataskeptic.com order confirmation',
+		order: {
+			...successData
+		},
+	};
 
-    axios.post('/api/v1/mail', emailData)
-        .then(() => console.info('Email delivered '))
-        .catch((err) => console.error(err))
+	axios.post('/api/v1/mail', emailData)
+		.then(() => console.info('Email delivered '))
+		.catch((err) => console.error(err))
 
-
-    return {
-        type: CHECKOUT_REQUEST_SUCCESS,
-        payload: {
-            message
-        }
-    }
+	return {
+		type: CHECKOUT_REQUEST_SUCCESS,
+		payload: {
+			message
+		}
+	}
 }
 
 export function checkoutRequestFailed(error, data) {
@@ -111,6 +111,7 @@ export function checkoutRequestFailed(error, data) {
         subject: 'Error in Order Processing'
     };
 
+
     axios.post('/api/v1/mail', emailData)
         .then(() => console.info('Email delivered '))
         .catch((err) => console.error(err))
@@ -121,6 +122,41 @@ export function checkoutRequestFailed(error, data) {
             error: `Cannot process your transaction: '${error}'`
         }
     }
+}
+
+export function loadReceipt(id) {
+	return (dispatch) => {
+        dispatch(loadReceiptStart())
+
+        axios.get(`/api/v1/orders/${id}`)
+          .then((resp) => dispatch(loadReceiptSuccess(resp.data)))
+          .catch((err) => dispatch(loadReceiptFailed(err)))
+	}
+}
+
+
+export function loadReceiptStart() {
+	return {
+		type: RECEIPT_REQUEST_START,
+	}
+}
+
+export function loadReceiptSuccess(data) {
+	return {
+		type: RECEIPT_REQUEST_SUCCESS,
+		payload: {
+			data
+		}
+	}
+}
+
+export function loadReceiptFailed(error) {
+	return {
+		type: RECEIPT_REQUEST_FAILED,
+		payload: {
+			error
+		}
+	}
 }
 
 export function checkoutMakeOrder(data, token, prod) {

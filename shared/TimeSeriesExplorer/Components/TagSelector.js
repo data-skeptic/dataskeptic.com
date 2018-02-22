@@ -14,21 +14,24 @@ class TagSelector extends React.Component {
     }
 
     render() {
-    	var values = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    	var values = this.props.tags //["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     	var options = []
     	for (var value of values) {
     		var label = value
 	        var option = {value, label}
 	        options.push(option)    		
     	}
-    	var value = this.props.frequency || values[1]
+    	var value = this.props.tag
     	return (
-        	<Select
-                name="escalation_policy"
-                value={value}
-                onChange={this.handleFrequencyChoice.bind(this)}
-                options={options}
-            />
+            <div>
+                Tags:<br/>
+            	<Select
+                    name="escalation_policy"
+                    value={value}
+                    onChange={this.handleFrequencyChoice.bind(this)}
+                    options={options}
+                />
+            </div>
         )
     }
 }

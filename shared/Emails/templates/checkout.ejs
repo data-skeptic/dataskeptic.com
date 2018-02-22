@@ -1,11 +1,33 @@
-<div style="white-space: pre-line">
-    Hi <%= first_name %>,
+<div style="white-space: pre-line; text-align: left">
+    Hi <b><%= order.customer.first_name %><% if (!!order.customer.last_name) { %> <%= order.customer.last_name %><% } %></b>,
+    <br/>
+    Thank you for supporting Data Skeptic. Your order has been received and is now being processed.  Please allow a 2-3 weeks for delivery.  If you have any questions or issues with your order, don't hesitate to reach out to us at <a href="mailto:orders@dataskeptic.com">orders@dataskeptic.com</a> directly.
+    <br/>
+    Items on the way:
+    </br/>
 
-    Thank you for supporting Data Skeptic.  Your order has been received and will be processed on our end right away.  Please allow a few weeks for shipping.  If you have any questions or issues with your order, don't hesitate to reach out to me directly.
+    <table width="100%">
+        <tbody>
+            <tr>
+                <td colspan="3" align="right"><% if (order.customer.last_name > 1) { %> <%= order.customer.first_name %><% } %></td>
+            </tr>
+            <tr>
+                <td colspan="3" align="right"><%= order.address %></td>
+            </tr>
+            <% for (var i = 0; i < order.products.length; i++) { %>
+            <tr>
+                <td width="80px"><img src="<%= order.products[i].product.img %>" width="100%"></td>
+                <td><%= order.products[i].product.title %><% if (!!order.products[i].size) { %> <%= order.products[i].size %> <% } %><% if (order.products[i].quantity > 1) { %>x<%= order.products[i].quantity %><% } %></td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
 
+    <br/>
     If you purchased a membership, please allow 2-3 days for member portal access.  This is a new project for us and we haven't automated everything yet.
 
-    All the best,
-
+    <br/>
+    All the best,<br/>
     Kyle
+    <br/>
 </div>

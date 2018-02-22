@@ -1,7 +1,7 @@
 var PrintfulClient = require('./printfulclient')
 
 function place_order(printful_key, customer, designId, size, ok_callback, error_callback) {
-    var confirm = 0
+    var confirm = 1
     // https://www.printful.com/docs/orders
     var variantMap = {
                   "S": 474

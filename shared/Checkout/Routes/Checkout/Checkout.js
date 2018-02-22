@@ -35,6 +35,11 @@ class Checkout extends Component {
 		console.log("onScriptError")
 	}
 
+	redirectToSuccessPage = ({ stripe_order_id }) => {
+		window.scrollTo(0, 0)
+		return this.props.history.push(`/checkout/thank-you?num=${stripe_order_id}`)
+	}
+
 	render() {
 		const ocart = this.props.cart.toJS();
 		const cart_items = ocart.cart_items;
@@ -66,7 +71,7 @@ class Checkout extends Component {
 					<div className="inner">
 						<h2>Checkout</h2>
 
-						<CheckoutFormContainer />
+						<CheckoutFormContainer redirect={this.redirectToSuccessPage}/>
 					</div>
 				</div>
 			</div>
