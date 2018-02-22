@@ -72,17 +72,6 @@ export function get_podcasts_from_cache(my_cache, pathname) {
 	return episodes
 }
 
-const getEpisodeData = (guid) => axios.get(`${base_url}/blog/list?guid=${guid}`).then((res) => res.data[0])
-
-function getEpisodesData(episodes) {
-	return Promise.all(episodes.map(ep => getEpisodeData(ep.guid)))
-		.then((episodesData) => {
-			return episodes.map((ep, index) => ({
-				...ep
-			}))
-		})
-}
-
 export function get_podcasts(dispatch, pathname) {
 	var year = year_from_path(pathname)
 	if (year == -1) {
@@ -97,7 +86,7 @@ export function get_podcasts(dispatch, pathname) {
         dispatch({type: "LOADING_EPISODES"})
 		axios
 			.get("/api/episodes/list?year=" + year)
-	  		.then((result) => getEpisodesData(result["data"]))
+      .then((result) => result.data)
 			.then((episodes) => {
 				console.log(episodes)
                 dispatch({type: "ADD_EPISODES", payload: episodes})

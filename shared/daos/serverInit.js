@@ -129,7 +129,7 @@ function get_member_feed_replacements() {
 
 export function loadEpisodes(env) {
     console.log("loadEpisodes")
-    var feed_uri = "http://dataskeptic.libsyn.com/rss"
+    var feed_uri = "https://dataskeptic.libsyn.com/rss"
     var promise = get_member_feed_replacements()
     return promise.then(function(replacements) {
         console.log("Got replacements")
@@ -158,14 +158,16 @@ function xml_to_list(xml) {
             guid_to_media_link[guid] = link
             episodes_map[guid] = episode
             episodes_content[prettyname] = episode
-            if (episode.img) {
-                episode.img = episode.img.replace("http://", "https://");
-            }
-            episode.mp3 = episode.mp3.replace("http://", "https://")
             episodes_list.push(episode.guid)
         }
     })
     return { episodes_map , episodes_content , episodes_list , member_feed , guid_to_media_link}
+}
+
+const getEpisodesData = (guids) => {
+    const uri = base_api + "/podcast/episodes/get_by_guids"
+    console.dir()
+    return axios.post(uri, { guids }).then(res => res.data)
 }
 
 function get_and_process_feed(replacements, feed_uri) {
@@ -210,6 +212,18 @@ function get_and_process_feed(replacements, feed_uri) {
             }
             console.log("Loaded " + data.episodes_list.length + " episodes into map")
             return data
+        })
+        .then((data) => {
+	          return getEpisodesData(data.episodes_list)
+              .then((episodesData) => {
+	              episodesData.forEach(episodeData =>
+		              data.episodes_map[episodeData.guid] = {
+			              ...data.episodes_map[episodeData.guid],
+			              ...episodeData
+		              }
+	              )
+              })
+              .then(() => data)
         })
         .catch((err) => {
             console.log("loadEpisodes error: " + err);
