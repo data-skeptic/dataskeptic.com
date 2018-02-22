@@ -33,7 +33,7 @@ stripe.tokens.create({card: cardData}, (status, response) => {
 	    phone: '312-1791-0752'
 	}
 	var country = 'us'
-	var shipping = 4
+	var shipping = 1
 	var name    = customer['first_name'] + ' ' + customer['last_name']
 	var address = {
 	    line1: customer.street_1,

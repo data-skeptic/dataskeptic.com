@@ -67,27 +67,6 @@ function create_stripe_order(stripe, customer, products, name, address, email) {
     })
 }
 
-function update_stripe_order(stripe, items, stripe_order_id, shipping) {
-    var item = {
-        "amount": shipping,
-        "currency": "usd",
-        "description": "shipping",
-        "type": "shipping"
-    }
-    items.push(item)
-    var shipping_methods = [{
-        //id: 'ship_free-shipping',
-        amount: shipping,
-        currency: 'usd',
-        delivery_estimate: null,
-        description: 'Free shipping'
-    }]
-    return stripe.orders.update({
-        id: stripe_order_id,
-        shipping_methods
-    })
-}
-
 function save_order_to_database(base_url, stripe_order_id, customer, customer_id, products, shipping, total, token) {
     var url = base_url + '/store/order/add'
     var order = {customer, token, shipping, total, products}
@@ -133,9 +112,6 @@ function do_order(base_url, stripe, token, customer, products, shipping, name, a
             })
         })
         .then(function(resp) {
-            console.log("----[Tests]---------------------------------------------------------")
-            console.log("Total    (should be 2 + 4 = $6): " + resp['amount'])
-            console.log("Shipping (should be 4):          " + resp['shipping_methods'][0]['amount'])
             var stripe_order_id = resp.id
             var customer_id = resp.customer_id
             return {stripe_order_id, customer_id}
