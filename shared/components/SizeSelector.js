@@ -8,8 +8,8 @@ const SizeSelector = props => {
 			<div>
 				<select id={props.id} value={props.value} onChange={props.onChange}>
 					<option key="default" value="default"> -- Please select size -- </option>
-					{props.sizes.map(function(size) {
-						return <option key={size} value={size}>{size}</option>
+					{props.sizes.map(function(size, i) {
+						return <option key={i} value={size}>{size}</option>
 					})}
 				</select>
 			</div>

@@ -1,6 +1,7 @@
 import Immutable from 'immutable'
 import { fromJS } from 'immutable'
 import {v4} from 'uuid';
+import {clone} from 'lodash'
 
 /**
  * Whenever some reducer initial state have been changed update current schema version
@@ -52,7 +53,7 @@ export default function siteReducer(state = defaultState, action) {
       nstate.contact_form.send = "no"
       break
     case 'SET_CONTRIBUTORS':
-      nstate.contributors = action.payload
+      nstate.contributors = clone(action.payload)
       break
     case 'SET_CONTRIBUTOR_BLOGS':
       nstate.contributors = updateContributor(nstate.contributors, action.payload.contributor, (contributor) => ({
