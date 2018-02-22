@@ -30,17 +30,19 @@ module.exports = (cache) => {
                 res.send(err);
             })
     });
-/*
-    router.post('/create', function (req, res) {
-        OrdersServices.createOrder(req.body, sp_key)
-            .then((data) => {
-                res.send(data);
-            })
-            .catch((err) => {
-                res.send(err);
-            })
-    });
-*/
+
+    router.get('/:id', function (req, res) {
+        const id = req.params.id
+
+	      OrdersServices.single(id, stripe_key, global.env)
+		      .then((data) => {
+			      res.send(data);
+		      })
+		      .catch((err) => {
+			      res.send(err);
+		      })
+    })
+
     router.put('/fulfill', function (req, res) {
         OrdersServices.fulFillOrder(sp_key, req.body)
             .then((data) => {

@@ -41,6 +41,20 @@ function list(limit, stripe_key) {
     })
 }
 
+export function single(id, stripe_key) {
+    const stripe = require("stripe")(stripe_key);
+
+    return new Promise((res, rej) => {
+        stripe.orders.retrieve(id, (err, orders) => {
+	          if (err) {
+		          rej(err)
+	          } else {
+		          res(orders)
+	          }
+        })
+    })
+}
+
 export const getAll = (url, stripe_key, offset, limit, env, exclude = ['/orders', '/transcripts']) => {
     return list(limit, stripe_key)
         .then((orders_list) => {

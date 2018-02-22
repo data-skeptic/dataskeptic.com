@@ -16,6 +16,7 @@ var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
 var base_api = c[env]['base_api'] + env
 
 export function get_contributors() {
+	  console.log("-[Refreshing Contributors]-");
     const uri = base_api + "/blog/contributors/list"
     return axios
         .get(uri)
@@ -24,7 +25,7 @@ export function get_contributors() {
             return contributors;
         })
         .catch((err) => {
-            console.log("Could not load products")
+            console.log("Could not load contributors")
             console.log(err)
         })
 }
@@ -128,8 +129,8 @@ function get_member_feed_replacements() {
 }
 
 export function loadEpisodes(env) {
-    console.log("loadEpisodes")
-    var feed_uri = "http://dataskeptic.libsyn.com/rss"
+	  console.log("-[Refreshing episodes]-");
+    var feed_uri = "https://dataskeptic.libsyn.com/rss"
     var promise = get_member_feed_replacements()
     return promise.then(function(replacements) {
         console.log("Got replacements")
@@ -141,7 +142,7 @@ function xml_to_list(xml) {
     console.log("xml_to_list")
     var parser = new xml2js.Parser();
     var domain = "dataskeptic.com"
-    let latestGuid = ''
+
     var episodes_map = {}
     var episodes_content = {}
     var episodes_list = []
@@ -158,13 +159,17 @@ function xml_to_list(xml) {
             guid_to_media_link[guid] = link
             episodes_map[guid] = episode
             episodes_content[prettyname] = episode
-            if (episode.img) {
-                episode.img = episode.img.replace("http://", "https://");
-            }
             episodes_list.push(episode.guid)
         }
     })
-    return { episodes_map , episodes_content , episodes_list , member_feed , guid_to_media_link}
+
+    return ({ episodes_map , episodes_content , episodes_list , member_feed , guid_to_media_link})
+}
+
+const getEpisodesData = (guids) => {
+    const uri = base_api + "/podcast/episodes/get_by_guids"
+    console.dir()
+    return axios.post(uri, { guids }).then(res => res.data)
 }
 
 function get_and_process_feed(replacements, feed_uri) {
@@ -210,6 +215,18 @@ function get_and_process_feed(replacements, feed_uri) {
             console.log("Loaded " + data.episodes_list.length + " episodes into map")
             return data
         })
+        .then((data) => {
+	          return getEpisodesData(data.episodes_list)
+              .then((episodesData) => {
+	              episodesData.forEach(episodeData =>
+		              data.episodes_map[episodeData.guid] = {
+			              ...data.episodes_map[episodeData.guid],
+			              ...episodeData
+		              }
+	              )
+              })
+              .then(() => data)
+        })
         .catch((err) => {
             console.log("loadEpisodes error: " + err);
             console.log(err)
@@ -225,6 +242,7 @@ const RFC_TABLE_NAME = 'rfc';
 const LATEST_RFC_ID = 'test-request';
 
 export function loadCurrentRFC() {
+	  console.log("-[Refreshing RFC]-");
     const params = {
         TableName: RFC_TABLE_NAME,
         Key: {
@@ -235,7 +253,8 @@ export function loadCurrentRFC() {
     return new Promise((res, rej) => {
         proposalsDocs.get(params, function(err, data) {
             if (err) {
-                rej(err);
+                console.error(err)
+                res({})
             } else {
                 res(data['Item']);
             }
@@ -243,26 +262,38 @@ export function loadCurrentRFC() {
     });
 }
 
+export function loadProducts() {
+	console.log("-[Refreshing products]-");
+	var url = base_api + "/store/products/list"
+
+  return axios
+		.get(url)
+		.then(function(result) {
+			var products = result["data"]["Items"]
+
+			return products
+		})
+		.catch((err) => {
+		    console.error(err)
+		})
+}
+
 export function apiMemberFeed(req, res, feed) {
     console.log(feed.length)
     res.status(200).end(feed)
 }
 
-export function get_bot_status(dispatch) {
+export function get_bot_status() {
+    console.log("-[Refreshing Bot]-");
     var url = base_api + '/bot/status'
+
     return axios
         .get(url)
         .then(function(result) {
             var resp = result.data
-            if (dispatch) {
-                dispatch({type: "SET_BOT", payload: resp })
-            } else {
-                console.log("Can't update because dispatch not set.")
-            }
             return resp
         })
         .catch((err) => {
             console.log(err)
         })
-
 }

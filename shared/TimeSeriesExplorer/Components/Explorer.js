@@ -27,18 +27,21 @@ class Explorer extends React.Component {
         var measurements = otimeseries.measurements
         var database = otimeseries.database
         var measurement = otimeseries.measurement
-        var field = otimeseries.field
         var func = otimeseries.func
         var range = otimeseries.range
         var resolution = otimeseries.resolution
-        var config = {databases, measurements, database, measurement, field, func, range, resolution}
+        var fields = otimeseries.fields
+        var field = otimeseries.field
+        var tags = otimeseries.tags
+        var tag = otimeseries.tag
+        var config = {databases, measurements, database, measurement, field, fields, tag, tags, func, range, resolution}
 
         var alerts = otimeseries.alerts
         var alert_type = otimeseries.alert_type
         var escalation_policies = otimeseries.escalation_policies
         var escalation_policy = otimeseries.escalation_policy
         var contact_methods = otimeseries.contact_methods
-
+        
         return (
         	<div className="time-series-explorer">
         		Explorer: {state}

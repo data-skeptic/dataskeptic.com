@@ -16,7 +16,7 @@ const defaultState = {
     range: [],
     database: "defaultdb",
     measurement: "impression",
-    field: "lat",
+    field: "",
     func: "COUNT",
     range: "-1d",
     resolution: "15m",
@@ -38,7 +38,7 @@ function dbquery(dispatch, nstate) {
     nstate.query_results = 'Loading...'
     var q = nstate.query
     // Render results
-    var url = "/api/influx/query?q=" + q
+    var url = "/api/v1/tse/query?q=" + q
     console.log(url)
     axios.get(url).then(function(resp) {
         var data = resp['data']
@@ -51,93 +51,119 @@ function dbquery(dispatch, nstate) {
     })
 }
 
+function get_databases(dispatch) {
+    var url = "/api/v1/tse/databases"
+    axios.get(url).then(function(resp) {
+        var databases = resp['data']
+        dispatch({type: "TSE_UPDATE_DATABASES", payload: {databases, dispatch}})
+    })
+}
+
+function get_measurements(dispatch) {
+    var url = "/api/v1/tse/measurements"
+    console.log(url)
+    axios.get(url).then(function(resp) {
+        console.log('resp')
+        console.log(resp)
+        var measurements = resp['data']
+        dispatch({type: "TSE_UPDATE_MEASUREMENTS", payload: {measurements, dispatch}})
+    })
+}
+
+function get_tags(dispatch, measurement) {
+    var url = `/api/v1/tse/measurement/${measurement}/tags`
+    axios.get(url).then(function(resp) {
+        var arr = resp['data']
+        var tags = []
+        for (var item of arr) {
+            var tagKey = item['tagKey']
+            var tagType = item['tagType']
+            tags.push(tagKey)
+        }
+        dispatch({type: "TSE_UPDATE_TAGS", payload: {tags, dispatch}})
+    })
+}
+
+function get_fields(dispatch, measurement) {
+    var url = `/api/v1/tse/measurement/${measurement}/fields`
+    axios.get(url).then(function(resp) {
+        var arr = resp['data']
+        var fields = []
+        for (var item of arr) {
+            var fieldKey = item['fieldKey']
+            var fieldType = item['fieldType']
+            fields.push(fieldKey)
+        }
+        dispatch({type: "TSE_UPDATE_FIELDS", payload: {fields, dispatch}})
+    })
+}
+
+
 export default function TimeSeriesReducer(state=initialState, action) {
     let nstate = state.toJS();
 
     switch (action.type) {
         case 'INITIALIZE_TIME_SERIES_EXPLORER':
             var dispatch = action.payload.dispatch
-            // Get indexes, tags, fields, function, resolution
             nstate.state = 'Loading databases'
-            var url = "/api/influx/databases/list"
-            axios.get(url).then(function(resp) {
-                var databases = resp['data']
-                dispatch({type: "TSE_UPDATE_DATABASES", payload: {databases, dispatch}})
-            }).catch(function(err) {
-                var details = JSON.stringify(err)
-                var msg = "Error getting databases"
-                dispatch({type: "TSE_ERROR", payload: {msg, details}})
-                console.log(details)
-            })
-            var url2 = "/api/influx/escalation_policy/list"
-            axios.get(url2).then(function(resp) {
-                var escalation_policies = resp['data']
-                dispatch({type: "TSE_SET_ESCALATION_POLICIES", payload: {escalation_policies, dispatch}})
-            }).catch(function(err) {
-                var details = JSON.stringify(err)
-                var msg = "Error getting escalation_policies"
-                dispatch({type: "TSE_ERROR", payload: {msg, details}})
-                console.log(details)
-            })
-            // TODO: Get Alerts from database
+            get_databases(dispatch)
             break;
         case 'TSE_UPDATE_DATABASES':
             var dispatch = action.payload.dispatch
             nstate.databases = action.payload.databases
             nstate.state = 'Loading measurements'
-            var url = "/api/influx/measurements/list"
-            console.log(url)
-            axios.get(url).then(function(resp) {
-                var measurements = resp['data']
-                dispatch({type: "TSE_UPDATE_MEASUREMENTS", payload: {measurements, dispatch}})
-            }).catch(function(err) {
-                var details = JSON.stringify(err)
-                var msg = "Error getting databases"
-                dispatch({type: "TSE_ERROR", payload: {msg, details}})
-                console.log(details)
-            })
+            get_measurements(dispatch)
             break;
-        case 'TSE_GET_TAGS':
-            var payload = action.payload
-            var dispatch = payload.dispatch
-            var measurement = payload.measurement
-            var url = `/api/influx/measurement/${measurement}/tags`
-            console.log(url)
-            axios.get(url).then(function(resp) {
-                var tags = resp['data']
-                dispatch({type: "TSE_UPDATE_TAGS", payload: {tags, dispatch}})
-            }).catch(function(err) {
-                var details = JSON.stringify(err)
-                var msg = "Error getting tags"
-                dispatch({type: "TSE_ERROR", payload: {msg, details}})
-                console.log(details)
-            })
-            break
-        case 'TSE_UPDATE_TAGS':
-            nstate.tags = action.payload.tags
-            break
-        case 'TSE_ERROR':
-            nstate.state = action.payload.msg
-            break
         case 'TSE_UPDATE_MEASUREMENTS':
             var dispatch = action.payload.dispatch
             nstate.measurements = action.payload.measurements
-            dispatch({type: "TSE_GET_TAGS", payload: {measurement, dispatch}})
-            nstate.state = 'Loading done'
+            if (nstate.measurements != undefined && nstate.measurements.length > 0) {
+                nstate.state = 'Loading tags and fields'
+                var measurement = nstate.measurements[0]['name']
+                console.log(measurement)
+                var payload = {measurement, dispatch}
+                nstate.measurement = payload.measurement
+                get_tags(dispatch, measurement)
+                get_fields(dispatch, measurement)
+            }
+            break;
+        case 'TSE_UPDATE_TAGS':
+            var dispatch = action.payload.dispatch
+            nstate.tags = action.payload.tags
+            break;
+        case 'TSE_UPDATE_FIELDS':
+            var dispatch = action.payload.dispatch
+            nstate.fields = action.payload.fields
+            if (nstate.fields.length > 0) {
+                nstate.field = nstate.fields[0]
+            }
             break;
         case 'TSE_QUERY':
             var dispatch = action.payload.dispatch
             dbquery(dispatch, nstate)
             break;
-        case 'TSE_UPDATE_PLOT_DATA':
-            nstate.plot_data = action.payload.data
+
+
+
+        case 'TSE_SET_DATABASE':
+            console.log("Not implemented")
             break
-        case 'TSE_UPDATE_RESULT':
-            var result = action.payload.result
-            nstate.query_results = result
-            break;
-        case 'TSE_UPDATE_QUERY':
-            nstate.query = action.payload.q
+        case 'TSE_SET_MEASUREMENT':
+            var payload = action.payload
+            var dispatch = payload.dispatch
+            var selectedOption = payload.selectedOption
+            var measurement = selectedOption.target.value
+            nstate.measurement = measurement
+            get_tags(dispatch, measurement)
+            get_fields(dispatch, measurement)
+            break
+        case 'TSE_SET_TAG':
+            nstate.tag = action.payload.tag
+            console.log(nstate.tag)
+            break
+        case 'TSE_SET_FIELD':
+            nstate.field = action.payload.field
+            console.log(nstate.field)
             break
         case 'TSE_SET_FUNC':
             var selectedOption = action.payload.selectedOption
@@ -151,6 +177,20 @@ export default function TimeSeriesReducer(state=initialState, action) {
             var selectedOption = action.payload.selectedOption
             nstate.range = selectedOption.value
             break
+
+
+
+        case 'TSE_UPDATE_PLOT_DATA':
+            nstate.plot_data = action.payload.data
+            break
+        case 'TSE_UPDATE_RESULT':
+            var result = action.payload.result
+            nstate.query_results = result
+            break;
+        case 'TSE_UPDATE_QUERY':
+            nstate.query = action.payload.q
+            break
+
         case 'TSE_SET_ALERT_TYPE':
             var selectedOption = action.payload.selectedOption
             nstate.alert_type = selectedOption.value
@@ -161,24 +201,6 @@ export default function TimeSeriesReducer(state=initialState, action) {
                     nstate.escalation_policy = policy                    
                 }
             }
-            break
-        case 'TSE_SEARCH':
-            var dispatch = action.payload.dispatch
-            // nstate.database?
-            var func = nstate.func
-            var field = nstate.field
-            var measurement = nstate.measurement
-            var range = nstate.range
-            var resolution = nstate.resolution
-            var query = `
-SELECT ${func}(${field}) as val 
-FROM ${measurement} 
-where time > now() ${range} 
-GROUP BY time(${resolution})
-                `
-            console.log(query)
-            nstate.query = query
-            dbquery(dispatch, nstate)
             break
         case 'TSE_SET_ESCALATION_POLICIES':
             nstate.escalation_policies = action.payload.escalation_policies
@@ -226,6 +248,24 @@ GROUP BY time(${resolution})
             var escalation_policy = nstate.escalation_policy
             var alert = {query, database, measurement, field, func, range, resolution, escalation_policy}
             nstate.alerts.push(alert)
+            break
+        case 'TSE_SEARCH':
+            var dispatch = action.payload.dispatch
+            // nstate.database?
+            var func = nstate.func
+            var field = nstate.field
+            var measurement = nstate.measurement
+            var range = nstate.range
+            var resolution = nstate.resolution
+            var query = `
+SELECT ${func}(${field}) as val 
+FROM ${measurement} 
+where time > now() ${range} 
+GROUP BY time(${resolution})
+                `
+            console.log(query)
+            nstate.query = query
+            dbquery(dispatch, nstate)
             break
         default:
             break

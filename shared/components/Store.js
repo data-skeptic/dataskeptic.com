@@ -12,16 +12,14 @@ import {changePageTitle} from '../Layout/Actions/LayoutActions';
 
 class Store extends React.Component {
 
-	componentWillMount() {
-		var oproducts = this.props.products.toJS()
-		if (oproducts.products.length == 0) {
-			get_products(this.props.dispatch)			
-		}
-
-        const {dispatch} = this.props;
-        const {title} = Store.getPageMeta();
-
-        dispatch(changePageTitle(title));
+		componentWillMount() {
+			const {dispatch} = this.props;
+			const loaded = this.props.products.get('products_loaded')
+			if (!loaded) {
+				get_products(dispatch)
+			}
+      const {title} = Store.getPageMeta();
+      dispatch(changePageTitle(title));
     }
 
     static getPageMeta() {
@@ -36,16 +34,17 @@ class Store extends React.Component {
 		if (products_loaded == undefined) {
 			products_loaded = 0
 		}
-		if (products_loaded == 0) {
+
+		if (products_loaded === 0) {
 			return <div><Loading /></div>			
 		} else {
-			var products = oproducts.products
+			var products = oproducts.products || []
 			return (
 				<div className="">
 					<div className="col-md-8 col-sm-12 store-items">
 						<center>For questions about sizes, review our about <a href="https://dataskeptic.com/blog/meta/2018/data-skeptic-t-shirt-sizing">t-shirt sizing measurements</a>.</center>
-						{products.map(function(product) {
-							return <StoreItem key={product.id} product={product} />
+						{products.map(function(product, index) {
+							return <StoreItem key={index} uniq={index} product={product} />
 						})}
 					</div>
 					<div className="col-md-4 col-sm-12">

@@ -22,6 +22,7 @@ import {feed_uri}                from 'daos/episodes'
 import {
     apiMemberFeed,
     loadEpisodes,
+    loadProducts,
     load,
     get_contributors,
     loadCurrentRFC,
@@ -45,6 +46,8 @@ import {Provider}              from 'react-redux';
 import {RoutingContext, match} from 'react-router';
 import isFunction from 'lodash/isFunction';
 import extend from 'lodash/extend';
+import isEmpty from 'lodash/isEmpty';
+import clone from 'lodash/clone';
 import routes                    from 'routes';
 import * as reducers             from 'reducers';
 import {
@@ -162,50 +165,47 @@ global.env = env;
 
 const doRefresh = (store) => {
     let env = global.env;
-    if (store != undefined) {
-        var d = store.dispatch
-    }
+    console.log("-[Refreshing Cache]-");
 
-    console.log("-[Refreshing episodes]-");
-    return loadEpisodes(env)
-        .then(function (result) {
-            console.log("-[Refreshing episodes]-");
-            console.log(result)
-            if (Cache) {
-                Cache.episodes_map = result.episodes_map
-                Cache.episodes_list = result.episodes_list
-                Cache.episodes_content = result.episodes_content
-                Cache.member_feed = result.member_feed                
-            } else {
-                console.log("Cache is undefined")
-            }
-            return getProducts(store, env)
-        })
-        .then((products) => {
-            console.log("-[Refreshing products]-");
-            Cache.products = null;
-            Cache.products = {};
-            Cache.products.items = products;
-            console.log("-[Refreshing Contributors]-");
-            return get_contributors()
-        })
-        .then((contributors) => {
-            Cache.contributors = contributors
-            console.log("-[Refreshing RFC]-");
-            return loadCurrentRFC()
-        })
-        .then((rfc) => {
-            Cache.rfc = rfc
-            console.log("-[Refreshing Bot]-");
-            return get_bot_status(d)
-        })
-        .then((bot) => {
-            Cache.bot = bot
-            console.log("-[Refreshing Complete]-");
-        })
-        .catch((err) => {
-            console.log(err);
-        })
+    // Let node make requests asynchronous
+    return Promise.all([
+    	loadEpisodes(env),
+	    loadProducts(),
+	    get_contributors(),
+	    loadCurrentRFC(),
+	    get_bot_status()
+		]).then((results) => {
+		    // but wait until all of them will be done
+
+		    const [ episodes, products, contributors, rfc, bot ] = results
+		    console.log("-[All cache data fetched]-")
+
+        // episodes
+		    const {episodes_map, episodes_list, episodes_content, member_feed} = episodes
+	      Cache.episodes_map = episodes_map
+        Cache.episodes_list = episodes_list
+        Cache.episodes_content = episodes_content
+        Cache.member_feed = member_feed
+
+        // products
+	      Cache.products = null;
+        Cache.products = {};
+        Cache.products.items = clone(products)
+
+        //contributors
+	      Cache.contributors = clone(contributors)
+
+        // RFC
+	      Cache.rfc = rfc
+
+        // bot
+	      Cache.bot = bot
+    })
+      .then(() => console.log("-[Refreshing Complete]-"))
+      .catch((err) => {
+          console.error(`Failed to fetch cache`)
+          console.dir(err)
+      })
 };
 
 setInterval(doRefresh, 60 * 60 * 1000);
@@ -355,7 +355,7 @@ function api_router(req, res) {
         return true
     }
     else if (req.url.indexOf('/api/order/add') == 0) {
-        add_order(req, res, stripe_key)
+        add_order(req, res, base_url, stripe_key)
         return true
     }
     else if (req.url.indexOf('/api/order/fulfill') == 0) {
@@ -450,64 +450,6 @@ function api_router(req, res) {
         var chal = b['c']
         challenge_response = chal
         return res.status(200).end(JSON.stringify({"status": chal}))
-    } else if (req.url.indexOf('/api/influx/databases/list') == 0) {
-        var query = "SHOW DATABASES"
-        if (influxdb) {
-            influxdb.query(
-              query
-            ).then(function(result) {
-              res.status(200).end(JSON.stringify(result))
-            });
-        } else {
-            console.log("No influx")
-        }
-        return true
-    } else if (req.url.indexOf('/api/influx/measurements/list') == 0) {
-        var query = "SHOW MEASUREMENTS"
-        if (influxdb) {
-            influxdb.query(
-              query
-            ).then(function(result) {
-              res.status(200).end(JSON.stringify(result))
-            });
-        } else {
-            console.log("No influx")
-        }
-        return true
-    } else if (req.url.indexOf('/api/influx/measurement/impression/tags') == 0) {
-        var measurement = "impression" //req.params.measurement
-        var query = `SHOW TAG KEYS FROM ${measurement}`
-        if (influxdb) {
-            influxdb.query(
-              query
-            ).then(function(result) {
-              res.status(200).end(JSON.stringify(result))
-            });
-        } else {
-            console.log("No influx")
-        }
-        return true
-    } else if (req.url.indexOf('/api/influx/query') == 0) {
-        const querystring_dict = req.query
-        if ('q' in querystring_dict) {
-            var query = querystring_dict['q']
-        } else {
-            var query = 'SELECT "lat", time from impression where time > now() - 1m'
-        }
-        if (influxdb) {
-            influxdb.query(
-              query
-            ).then(function(result) {
-              res.status(200).end(JSON.stringify(result))
-            });
-        } else {
-            console.log("No influx")
-        }
-        return true
-    } else if (req.url.indexOf('/api/influx/escalation_policy/list') == 0) {
-        var escalation_policies = []
-        res.status(200).end(JSON.stringify(escalation_policies))
-        return true
     }    
     return false
 }
@@ -538,25 +480,18 @@ function inject_years(store, my_cache) {
 }
 
 const getFeaturesAPI = (pageType) => axios.get(`${base_url}/cms${pageType ? '/' + pageType : ''}`)
-const getEpisodeData = (guid) => axios.get(`${base_url}/blog/list?guid=${guid}`).then((res) => res.data[0])
 
 function getContributorPosts(contributor) {
     return axios.get(`${base_url}/blog/list?contributor=${contributor}&limit=21`).then((res) => res.data)
 }
 
-async function inject_homepage(store, my_cache, pathname) {
+async function inject_homepage(store, my_cache) {
     const res = await getFeaturesAPI("homepage")
     var dispatch = store.dispatch
     dispatch({type: "CMS_INJECT_HOMEPAGE_CONTENT", payload: { data: res.data, dispatch }})
 
     const guid = res.data.latest_episode.guid
-    const episodeContent = my_cache.episodes_map[guid]
-    const episodeData = await getEpisodeData(guid)
-
-    const episode = {
-        ...episodeContent,
-        ...episodeData
-    }
+    const episode = my_cache.episodes_map[guid]
 
     store.dispatch({type: "ADD_EPISODES", payload: [episode]})
 }
@@ -568,7 +503,6 @@ function inject_products(store, my_cache, pathname) {
 }
 
 function inject_podcast(store, my_cache, pathname) {
-    console.log(my_cache)
     var episodes = get_podcasts_from_cache(my_cache, pathname)
     store.dispatch({type: "ADD_EPISODES", payload: episodes})
 }
@@ -587,32 +521,14 @@ async function updateState(store, pathname, req) {
     inject_years(store, Cache)
 
     store.dispatch({type: "PROPOSAL_SET_BUCKET", payload: {aws_proposals_bucket}})
-    if (Cache.contributors != undefined && Cache.contributors != []) {
+    if (!isEmpty(Cache.contributors)) {
         console.log("usingcache")
         store.dispatch({type: "SET_CONTRIBUTORS", payload: Cache.contributors})
-    } else {
-        return new Promise(function(resolve, reject) {
-            console.log("Need to load contributors")
-            resolve(get_contributors())
-        }).then(function(contributors) {
-            console.log("Got contributors")
-            store.dispatch({type: "SET_CONTRIBUTORS", payload: contributors})
-        }, function(err) {
-            console.log("Error getting contributors")
-            console.log(err)
-        });
     }
 
     var bot = Cache.bot
     if (bot) {
         store.dispatch({type: "SET_BOT", payload: bot})
-    }
-    var contributors = Cache.contributors
-    if (!contributors || contributors.length == 0) {
-        var promise = get_contributors()
-        promise.then(function(contributors) {
-            store.dispatch({type: "SET_CONTRIBUTORS", payload: contributors});
-        })
     }
     
     if (pathname === "" || pathname === "/") {
@@ -699,8 +615,10 @@ function getIpData(ip) {
     			try {
     				body = JSON.parse(body)
     				var ip = body['ip']
+
     				var country = body['country'] || "unknown"
-    				var region  = body['region']  || "unknown"
+                    var city    = body['city']    || "unknown"
+                    var region  = body['region']  || "unknown"
     				var postal  = body['postal']  || "unknown"
     				var loc     = body['loc']     || "unknown"
     				var arr     = loc.split(",")
@@ -725,8 +643,7 @@ function getIpData(ip) {
                     console.log(ip)
                     console.log(ipinfo_token)
                     console.log(body)
-                    console.log(err)
-                    reject(error)
+                    reject(err)
 				}
 			} else {
 				console.log("Some error from ipinfo.io")

@@ -23,6 +23,13 @@ class QueryConsole extends React.Component {
     	//dispatch({type: "INITIALIZE_TIME_SERIES_EXPLORER", payload: {}})
     }
 
+    handleKeyPress = (event) => {
+        if(event.key == 'Enter'){
+            console.log('enter press here! ')
+            console.log(event.key)
+        }
+    }
+
     render() {
     	var otimeseries = this.props.timeseries.toJS()
         var query = otimeseries['query']
@@ -30,7 +37,7 @@ class QueryConsole extends React.Component {
         console.log(query_results)
         return (
         	<div className="time-series-alerts-query-console">
-                <textarea className="query-console-input" onChange={this.handleChange.bind(this)} value={query} />
+                <textarea className="query-console-input" onChange={this.handleChange.bind(this)} value={query} onKeyPress={this.handleKeyPress} />
                 <button onClick={this.query.bind(this)} className="query-console-btn">Query</button>
                 <h4>Output</h4>
                 <textarea className="query-console-output" value={query_results} disabled />                

@@ -3,6 +3,13 @@ const {getEmail} = require('../../../../shared/Emails/template')
 const config = require('../../../../config/config.json')
 const env = process.env.NODE_ENV === 'production' ? 'prod' : 'dev'
 
+export const template = (obj) => {
+	  const type = obj['type'] || 'default';
+	  const body = getEmail(obj, type)
+
+    return body
+}
+
 export const sendMail = (obj) => {
     console.log(obj)
     var msg = obj['msg']
@@ -10,10 +17,11 @@ export const sendMail = (obj) => {
     var toa = [to]
     var ses = new AWS.SES({apiVersion: '2010-12-01'});
     var from = "kyle@dataskeptic.com";
-    var type = obj['type'] || 'default';
+
     var subject = obj['subject'] || "dataskeptic.com msg"
     var resp = {status: 200, msg: "ok"}
-    var body = getEmail(obj, type)
+
+    const body = template(obj)
     var email_request = {
         Source: from,
         Destination: {ToAddresses: toa, BccAddresses: [from]},
@@ -29,7 +37,6 @@ export const sendMail = (obj) => {
         }
     };
     return new Promise((resolve, reject) => {
-
         ses.sendEmail(email_request, function (err, data) {
             if (err !== null) {
 
