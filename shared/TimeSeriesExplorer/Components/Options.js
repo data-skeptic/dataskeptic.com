@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import Alerts from "./Alerts";
 import DatabaseSelector from "./DatabaseSelector";
 import MeasurementSelector from "./MeasurementSelector";
+import FieldSelector from "./FieldSelector";
 import TagSelector from "./TagSelector"
 import Select from 'react-select';
 
@@ -17,19 +18,43 @@ class Options extends React.Component {
     	//dispatch({type: "INITIALIZE_TIME_SERIES_EXPLORER", payload: {}})
     }
 
+    handleDatabaseChange() {
+        var dispatch = this.props.dispatch
+        dispatch({type: "TSE_SET_DATABASE", payload: {dispatch}})
+    }
+
+    handleMeasurementChange(selectedOption) {
+        var dispatch = this.props.dispatch
+        dispatch({type: "TSE_SET_MEASUREMENT", payload: {dispatch, selectedOption}})
+    }
+
+    handleTagChange(selectedOption) {
+        console.log(selectedOption)
+        var tag = selectedOption.target.value
+        var dispatch = this.props.dispatch
+        dispatch({type: "TSE_SET_TAG", payload: {dispatch, tag}})
+    }
+
+    handleFieldChange(selectedOption) {
+        console.log(selectedOption)
+        var field = selectedOption.target.value
+        var dispatch = this.props.dispatch
+        dispatch({type: "TSE_SET_FIELD", payload: {dispatch, field}})
+    }
+
     handleFunctionChange(selectedOption) {
         var dispatch = this.props.dispatch
         dispatch({type: "TSE_SET_FUNC", payload: {selectedOption}})
     }
 
-    handleResolutionChange(selectedOption) {
-        var dispatch = this.props.dispatch
-        dispatch({type: "TSE_SET_RESOLUTION", payload: {selectedOption}})
-    }
-
     handleRangeChange(selectedOption) {
         var dispatch = this.props.dispatch
         dispatch({type: "TSE_SET_RANGE", payload: {selectedOption}})
+    }
+
+    handleResolutionChange(selectedOption) {
+        var dispatch = this.props.dispatch
+        dispatch({type: "TSE_SET_RESOLUTION", payload: {selectedOption}})
     }
 
     handleSearch() {
@@ -39,26 +64,21 @@ class Options extends React.Component {
 
     render() {
         var config = this.props.config
-        let {databases, measurements, database, measurement, field, func, range, resolution} = config
-        var fields = []
-        var tags = ['test1', 'test2']
+        let {databases, measurements, database, measurement, field, fields, tag, tags, func, range, resolution} = config
         return (
         	<div className="time-series-options">
                 <div className="row">
                     <div className="col-xs-12 col-sm-3">
-                        <DatabaseSelector databases={databases} />
+                        <DatabaseSelector databases={databases} onChange={this.handleDatabaseChange.bind(this)} />
                     </div>
                     <div className="col-xs-12 col-sm-3">
-                       <MeasurementSelector measurements={measurements} />
+                       <MeasurementSelector measurements={measurements} measurement={measurement} onChange={this.handleMeasurementChange.bind(this)} />
                     </div>
                     <div className="col-xs-12 col-sm-3">
-                       <TagSelector tags={tags} />
+                       <TagSelector tags={tags} tag={tag} onChange={this.handleTagChange.bind(this)} />
                     </div>
                     <div className="col-xs-12 col-sm-3">
-                        Field:
-                        <select>
-                            <option value="lat">lat</option>
-                        </select>
+                        <FieldSelector fields={fields} field={field} onChange={this.handleFieldChange.bind(this)} />
                     </div>
                 </div>
                 <div className="row">
