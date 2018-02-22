@@ -2,8 +2,10 @@ import React from "react"
 import ReactDOM from "react-dom"
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Link } from 'react-router'
 
 import axios from 'axios';
+import styled from 'styled-components'
 
 import ContactFormContainer from '../Containers/ContactFormContainer/ContactFormContainer';
 import {changePageTitle} from '../../Layout/Actions/LayoutActions';
@@ -22,15 +24,25 @@ import {RECORDING} from "../../Proposals/Constants/CommentTypes";
 import Recorder, {steps} from '../../Recorder';
 import QuestionForm from "../../Questions/Forms/QuestionForm";
 import {submitCommentForm} from "../../Proposals/Actions/CommentBoxFormActions";
+import SectionBlock from "../Components/SectionBlock/SectionBlock";
 
 class ContactUs extends React.Component {
     constructor(props) {
         super(props)
 
         this.state = {
-            submittedUrl: ''
+            submittedUrl: '',
+	          openSection: ''
         }
     }
+
+    isSectionOpen = section => section === this.state.openSection
+
+		toggleSection = section => {
+    	this.setState(prevState => ({
+    		openSection: (prevState.openSection === section) ? '' : section
+	    }))
+		}
 
     recordingReady = (noDelay) => {
         this.props.dispatch(ready(noDelay))
@@ -88,25 +100,17 @@ class ContactUs extends React.Component {
         }
     }
 
-	onChangeEmail(event) {
-		console.log(event)
-		var i = event.target
-		var email = i.value
-		var target = event.target
-		var cls = "email"
-		var val = target.value
-		var dispatch = this.props.dispatch
-		dispatch({type: "UPDATE_ADDRESS", payload: {cls, val} })
-	}
+	subscribeSlack = (e) => {
+    e.preventDefault()
+		const email = e.target.email.value
+		const ocart = this.props.cart.toJS()
+		const dispatch = this.props.dispatch
+		const token = ""
+		const req = {email: email, token: token, set_active: true}
 
-	onClick(event) {
-		var ocart = this.props.cart.toJS()
-		var address = ocart.address
-		var email = address.email
-		var dispatch = this.props.dispatch
-		var token = ""
-		var req = {email: email, token: token, set_active: true}
+		dispatch({type: "UPDATE_ADDRESS", payload: {cls: "email", val: email} })
 		dispatch({type: "SLACK_UPDATE", payload: {msg: "Sending..."} })
+
 		var config = {}
 		axios
 			.post("/api/slack/join", req, config)
@@ -129,121 +133,256 @@ class ContactUs extends React.Component {
 	}
 
 	render() {
-		var osite = this.props.site.toJS()
-		var ocart = this.props.cart.toJS()
-		var email = ""
-		var address = ocart.address
-		if (address != undefined) {
-			email = address.email
-		}
-		var slackstatus = (
-			<div className="slack-status">{osite.slackstatus}</div>
-		)
-		/* Had to comment this out because there was a breaking change introduced that removes the submit button
-					<ContactFormContainer />
+			const {confirmPolicy,activeStep,errorMessage} = this.props;
+			const { submittedUrl } = this.state
 
-		*/
+			const osite = this.props.site.toJS()
 
-        const {confirmPolicy,activeStep,errorMessage} = this.props;
-        const { submittedUrl } = this.state
+			const slackstatus = (
+				<SlackStatus>{osite.slackstatus}</SlackStatus>
+			)
 
-		return (
-	    	<div className="center">
-				<div className="row contact-page">
-					<div className="col-xs-12"><h2>Contact Us</h2></div>
-					<div className="col-xs-12">
-						<p>We hope to respond to all inquiries, but sometimes the volume of incoming questions can cause our queue to explode.  We prioritize responses to Data Skeptic members first, and to those who ask questions in a public forum like Twitter, our Facebook wall (not Facebook direct message), or Slack.  Many people can benefit from responses in public places.</p>
-						<div className="row">
-							<div className="col-xs-12 col-sm-4 contact-person-out">
-								<div className="contact-person">
-									<a href="mailto:orders@dataskeptic.com"><img src="img/png/email-icon.png" /></a>
-									<span className="vcenter"><p>For inquiries related to a purchase of any kind, including membership, please contact <a href="mailto:orders@dataskeptic.com">orders@dataskeptic.com</a> for prioritized service.</p></span>
-									</div>
-							</div>
-							<div className="col-xs-12 col-sm-4 contact-person-out">
-								<div className="contact-person">
-									<a href="mailto:advertising@dataskeptic.com"><img src="img/png/email-icon.png" /></a>
-									<span className="vcenter"><p>For advertising related questions or issues, contact <a href="advertising@dataskeptic.com">advertising@dataskeptic.com</a>.</p></span>
-									</div>
-							</div>
-							<div className="col-xs-12 col-sm-4 contact-person-out">
-								<div className="contact-person">
-									<a href="mailto:kyle@dataskeptic.com"><img src="img/png/email-icon.png" /></a>
-									<span className="vcenter"><p>If you're looking to mail us something like a review copy of a book, please contact <a href="mailto:kyle@dataskeptic.com">kyle@dataskeptic.com</a>.</p></span>
-								</div>
-							</div>
-						</div>
-						<br/>
-						<div className="row">
-							<div className="col-xs-12 col-sm-6">
-								<div className="slack-join row">
-									<div className="col-xs-12 col-sm-3 slack-join-left">
-										<img src="/img/png/slack-icon.png" />
-									</div>
-									<div className="col-xs-12 col-sm-9 slack-join-right">
-											<p>To join our Slack channel, enter your email in the box below.</p>
-				 						<input onChange={this.onChangeEmail.bind(this)} className='slack-email' value={email} />
-				 						<button className="slack-button" onClick={this.onClick.bind(this)}>Join dataskeptic.slack.com</button>
-				 						{slackstatus}
-				 					</div>
-			 					</div>
-							</div>
-							<div className="col-xs-12 col-sm-6">
-								<br/>
-		 						<p>You can find us on Twitter via <a href="https://twitter.com/dataskeptic">@DataSkeptic</a></p>
-								<br/>
-								<p>We are on Facebook via <a href="https://www.facebook.com/dataskeptic">https://www.facebook.com/dataskeptic</a>.</p>
-							</div>
-						</div>
-						<br/>
-						<p>You can also reach us via the contact form below.</p>
-						<p>Please note, we often reply via the Data Skeptic blog and may share a link to our reply if its something many readers may enjoy.  If so, we refer to people via firstname only.  If that's an issue, let us know.</p>
-					</div>
-					&nbsp;
-					<br/>
-			        <h2>Send us a message</h2>
-					<ContactFormContainer/>
+    	return (
+		    <Container>
+			    <Title>Contact Us</Title>
+					<Text>We hope to respond to all inquiries, but sometimes the volume of incoming questions can cause our queue to explode.  We prioritize responses to Data Skeptic members first, and to those who ask questions in a public forum like Twitter, our Facebook wall (not Facebook direct message), or Slack.  Many people can benefit from responses in public places.</Text>
 
-                    <br/>
-                    <h2>Listener Questions</h2>
-                    <p>
-						We love hearing from our listeners!
-                        If you have a question about one of our episodes or a general question that's relevant to Data
-                        Skeptic, please ask via the in-browser recording system below.
-                        Try to keep your question to 30 seconds or less and make sure your question is a question.
-					</p>
-                    <div>
-                        <QuestionForm
-                            allowSubmit={confirmPolicy}
-                            showSubmit={activeStep === 'REVIEW'}
-                            initialValues={{
-                                confirmPolicy: true
-                            }}
-                            onSubmit={this.questionSubmit}
-                        >
-                            <Recorder
-                                activeStep={activeStep}
-                                errorMessage={errorMessage}
-                                ready={this.recordingReady}
-                                recording={this.recorderRecording}
-                                stop={this.recorderStop}
-                                review={this.recorderReview}
-                                submit={this.recorderSubmit}
-                                complete={this.recorderComplete}
-                                error={this.recorderError}
-                                submittedUrl={submittedUrl}
-                                reset={this.reset}
-                            />
-                            {activeStep === 'COMPLETE' && <p>Thanks for your question!</p>}
-                        </QuestionForm>
-                    </div>
+			    <Socials>
+						<SocialBlock order={1}>
+							<p>You can find us on Twitter via <TwitterLink href="https://twitter.com/dataskeptic">@DataSkeptic</TwitterLink></p>
+						</SocialBlock>
+				    <SocialBlock order={3}>
+					    <p>We are on Facebook via <FacebookLink href="https://www.facebook.com/dataskeptic">https://www.facebook.com/dataskeptic</FacebookLink></p>
+						</SocialBlock>
+				    <SocialBlock order={2}>
+					    <SocialForm onSubmit={this.subscribeSlack}>
+						    <SocialIcon src={"/img/png/contacts_slack.png"} />
+					      <input name="email" id="email"/>
+					      <button type="submit" className="slack-button" onClick={this.onClick}>Join Slack</button>
+						    {slackstatus}
+					    </SocialForm>
+						</SocialBlock>
+				    <SocialBlock order={4}>
+					    <SocialForm  action="//dataskeptic.us9.list-manage.com/subscribe/post?u=65e63d6f84f1d87759105d133&amp;id=dc60d554db" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" className="validate" target="_blank" noValidate>
+						    <div id="mc_embed_signup_scroll" />
+						    <input name="EMAIL" className="email" id="mce-EMAIL" placeholder="Email address" required />
+						    <button type="submit" onClick={this.onClick}  id="mc-embedded-subscribe">Join Mailing List</button>
+					    </SocialForm>
+						</SocialBlock>
+			    </Socials>
 
-				</div>
-			</div>
-		)
+			    <ListenerArea>
+				    <Title>Listener Questions</Title>
+				    <Text>
+					    We love hearing from our listeners!
+					    If you have a question about one of our episodes or a general question that's relevant to Data
+					    Skeptic, please ask via the in-browser recording system below.
+					    Try to keep your question to 30 seconds or less and make sure your question is a question.
+				    </Text>
+				    <QuestionFormWrapper>
+					    <QuestionForm
+						    allowSubmit={confirmPolicy}
+						    showSubmit={activeStep === 'REVIEW'}
+						    initialValues={{
+							    confirmPolicy: true
+						    }}
+						    onSubmit={this.questionSubmit}
+					    >
+						    <Recorder
+							    activeStep={activeStep}
+							    errorMessage={errorMessage}
+							    ready={this.recordingReady}
+							    recording={this.recorderRecording}
+							    stop={this.recorderStop}
+							    review={this.recorderReview}
+							    submit={this.recorderSubmit}
+							    complete={this.recorderComplete}
+							    error={this.recorderError}
+							    submittedUrl={submittedUrl}
+							    reset={this.reset}
+						    />
+						    {activeStep === 'COMPLETE' && <p>Thanks for your question!</p>}
+					    </QuestionForm>
+				    </QuestionFormWrapper>
+			    </ListenerArea>
+
+			    <hr/>
+
+			    <Sections>
+				    <SectionBlock title="General Inquiries" open={this.isSectionOpen('general')} onToggle={() => this.toggleSection('general')}>
+					    <Text>We can no longer reply to every message we get.  If your inquiry is a question that you'd like us to answer, your best bet is to use the Listener Questions section on this page or ask publically via Twitter.  Alternatively, we do have the contact form below available.</Text>
+					    <ContactFormContainer type/>
+				    </SectionBlock>
+
+					<SectionBlock title="For Members" open={this.isSectionOpen('members')} onToggle={() => this.toggleSection('members')}>
+						<Text>Login to the Members' Portal <Link to="/login">here</Link> or send us a quick message via the form below.</Text>
+						<ContactFormContainer type/>
+					</SectionBlock>
+
+				    <SectionBlock title="Store / Orders" open={this.isSectionOpen('orders')} onToggle={() => this.toggleSection('orders')}>
+						<Text>If you have any issues with your order from our store, please contact <a href="mailto:orders@dataskeptic.com">orders@dataskeptic.com</a>.</Text>
+					</SectionBlock>
+
+				    <SectionBlock title="For Advertisers" open={this.isSectionOpen('advertise')} onToggle={() => this.toggleSection('advertise')}>
+					    <Text>Data Skeptic currently accepts one (1) advertising slot per show.  We are often booked months in advance.  For a rate sheet, please contact <a href="mailto:advertising@dataskeptic.com">advertising@dataskeptic.com</a>.</Text>
+					</SectionBlock>
+
+				    <SectionBlock title="For Media Inquiries" open={this.isSectionOpen('media')} onToggle={() => this.toggleSection('media')}>
+					    <Text>Kyle is available for comment to the media.  Please send a direct email to <a href="mailto:kyle@dataskeptic.com">kyle@dataskeptic.com</a> to make first contact.  After connecting, we have a Calendly link to share that will allow you to book a time that suits your schedule.</Text>
+					</SectionBlock>
+
+			    </Sections>
+
+		    </Container>
+	    )
 	}
 }
 
+/*
+				    <SectionBlock title="For PR Firms" open={this.isSectionOpen('pr')} onToggle={() => this.toggleSection('pr')}>
+					    <Text>pr</Text>
+
+					    <ContactFormContainer type/>
+						</SectionBlock>
+*/
+
+const SocialBlock = ({left, children, order}) =>
+	<Social order={order}>
+		{children}
+	</Social>
+
+const Linkx = styled.a``
+
+const TwitterLink = Linkx.extend`color: #1DA1F3`
+
+const FacebookLink = Linkx.extend`color: #3B5998`
+
+
+const Container = styled.div`
+  max-width: 960px;
+  margin: 0px auto;
+  padding: 15px;
+`
+
+const Title = styled.h2`
+
+`
+
+const Text = styled.p`
+
+`
+
+const Socials = styled.div`
+	justify-content: space-between;
+	display: flex;
+	flex-wrap: wrap;
+`
+
+const Social = styled.div`
+	display: flex;
+	width: 50%;
+	order: ${props => props.order};
+  align-items: center;
+  margin-bottom: 20px;
+  min-height: 40px;
+  align-items: center;
+  position: relative;
+  
+  @media (max-width: 768px) {
+    width: 100%;
+    margin-bottom: 32px;
+    order: initial;
+  }
+  
+  p {
+    padding: 0px;
+    margin: 0px;
+  }
+`
+
+const SocialIcon = styled.img`
+	width: 32px;
+	height: 32px;
+	margin-right: 7px;
+`
+
+const Sections = styled.div`
+	display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+	margin-top: 24px;
+	
+	> div {
+		width: 48.9%;
+	}
+	
+	@media (max-width: 768px) {
+    >div {
+      width: 100%;
+      margin-top: 0px;
+      padding-bottom: 0px;
+    }
+  }
+`
+
+
+const ListenerArea = styled.div`
+	
+`
+
+const SocialForm = styled.form`
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding-top: 10px
+	background: red;
+	
+	input {
+		flex-grow: 1;
+		background: #F9FAF9;
+		border: 1px solid #E1E3E2;
+		margin-right: 12px;
+		border-radius: 5px;
+		padding: 0px 20px;
+    line-height: 38px;
+	}
+	
+	button {
+		width: 160px;
+		height: 40px;
+		background: #F0D943;
+		font-size: 16px;
+		color: #333333;
+		border: none;
+		border-radius: 5px;
+	}
+	
+	@media (max-width: 768px) {
+		flex-wrap: wrap;
+		
+		input {
+			margin-right: 0px;
+		}
+		
+    button {
+      margin-top: 13px;
+      width: 100%;
+    }
+  }
+`
+
+const QuestionFormWrapper = styled.div``
+
+const SlackStatus = styled.span`
+  position: absolute;
+  padding-left: 40px;
+  padding-right: 40px;
+  font-size: 12px;
+  margin-top: 28px;
+  color: #2D1454;
+`
 
 const selector = formValueSelector('question');
 export default connect(
