@@ -37,7 +37,6 @@ class JobListing extends Component {
 	}
 
 	trackApply = (id) => {
-		console.log('track', id, this.impression_id)
 		click(id, this.impression_id)
 	}
 
@@ -81,7 +80,7 @@ class JobListing extends Component {
       <Container>
         {loaded
           ? this.renderJobBox(jobs[0], viewMore)
-          : <span>...</span>
+          : <span />
         }
       </Container>
     )

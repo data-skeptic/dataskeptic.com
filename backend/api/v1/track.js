@@ -16,7 +16,7 @@ module.exports = cache => {
     }
 
     axios
-      .post(`${base_url}/tracking/jobs/impression `, data)
+      .post(`${base_url}/tracking/jobs/impression`, data)
       .then(result => res.send(result.data))
       .catch(err => res.send(err))
   })
@@ -30,7 +30,7 @@ module.exports = cache => {
     }
 
     axios
-      .post(`${base_url}/tracking/jobs/click `, data)
+      .post(`${base_url}/tracking/jobs/click`, data)
       .then(result => res.send(result.data))
       .catch(err => res.send(err))
   })
