@@ -18,9 +18,6 @@ module.exports = cache => {
 			...req.session.ipInfo
 		}
 
-		console.log(`${base_url}/tracking/search/result`)
-		console.dir(data)
-
 		axios
 			.post(`${base_url}/tracking/search/result`, data)
 			.then(result => res.send(result.data))
