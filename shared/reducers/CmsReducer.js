@@ -65,7 +65,6 @@ export default function cmsReducer(state = defaultState, action) {
                     console.log("Can't retrieve blog")
                     console.log(err)
                 } else {
-                    console.log("Success with s3")
                     var content = d.Body.toString('utf-8')
                     var payload = { src_file, content }
                     dispatch({type: "CMS_ADD_BLOG_CONTENT", payload })                    
@@ -133,7 +132,6 @@ export default function cmsReducer(state = defaultState, action) {
         axios
             .post(url, payload)
             .then(function(result) {
-                console.log("success!!!")
                 var data = result['data']
                 var error = data['error']
                 if (error) {
@@ -157,7 +155,6 @@ export default function cmsReducer(state = defaultState, action) {
         axios
             .post(url, payload)
             .then(function(result) {
-                console.log("success!!!")
                 var data = result['data']
                 var error = data['error']
                 if (error) {
@@ -229,27 +226,33 @@ export default function cmsReducer(state = defaultState, action) {
             })
         break;
     case 'CMS_INJECT_HOMEPAGE_CONTENT':
+        console.log('CMS_INJECT_HOMEPAGE_CONTENT')
         var payload = action.payload
         var data = payload.data
         var dispatch = payload.dispatch
         var le = data['latest_episode']
-        var fb = data['featured_blog']
-        var fb2 = data['featured_2']
-        var fb3 = data['featured_3']
-        nstate.latest_episode = le
-        nstate.featured_blog = fb
-        nstate.featured_blog2 = fb2
-        nstate.featured_blog3 = fb3
-        nstate.home_loaded = true
-
-        getEpisode(le.guid)
-            .then((episode) => {
-                dispatch({type: "ADD_EPISODES", payload: [episode]})
-            })
-            .catch((err) => {
-                console.log("Caught in CmsReducer")
-                console.log(err)
-            })
+        if (le == undefined) {
+            console.log("=============== ERROR LOADING HOMEPAGE ===============")
+            console.log(data)
+        } else {
+            var fb = data['featured_blog']
+            var fb2 = data['featured_2']
+            var fb3 = data['featured_3']
+            nstate.latest_episode = le
+            nstate.featured_blog = fb
+            nstate.featured_blog2 = fb2
+            nstate.featured_blog3 = fb3
+            nstate.home_loaded = true
+            console.log(le.guid)
+            getEpisode(le.guid)
+                .then((episode) => {
+                    dispatch({type: "ADD_EPISODES", payload: [episode]})
+                })
+                .catch((err) => {
+                    console.log("Caught in CmsReducer")
+                    console.log(err)
+                })
+        }
         break;
   }
   return Immutable.fromJS(nstate)

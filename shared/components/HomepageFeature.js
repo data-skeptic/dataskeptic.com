@@ -12,7 +12,6 @@ class HomepageFeature extends React.Component {
 
 	render() {
 		var ocms = this.props.cms.toJS()
-		console.log(ocms)
 		var featured_blog = ocms.featured_blog
 		if (featured_blog == {} || featured_blog == undefined) {
 			return <Loading />
