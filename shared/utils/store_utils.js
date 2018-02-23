@@ -33,8 +33,6 @@ export function calculateShipping(items, short) {
 			}
 		}
 	}
-	console.log("Calculated shipping of:")
-	console.log(shipping)
 	return shipping
 }
 
