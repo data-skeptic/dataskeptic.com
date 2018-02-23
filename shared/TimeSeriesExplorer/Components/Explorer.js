@@ -9,8 +9,6 @@ import Alerts from "./Alerts"
 import QueryConsole from "./QueryConsole"
 import ScheduledReport from "./ScheduledReport"
 
-var keypress = require('keypress');
-
 class Explorer extends React.Component {
     constructor(props) {
         super(props)
