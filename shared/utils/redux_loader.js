@@ -5,7 +5,7 @@ const base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
 
 export function getPlaylistEpisodes(playlist) {
-	return axios.post(`/api/v1/episodes/multiple`, playlist).then((res) => res.data[0])
+	return axios.post(`/api/v1/episodes/multiple`, playlist).then((res) => res.data)
 }
 
 export function addEpisodes(type) {

@@ -104,7 +104,7 @@ class UserPlaylist extends Component {
             this.fetchPlaylist(playlist)
         })
         .catch((err) => {
-            console.error(error)
+            console.error(err)
         })
     }
 
@@ -136,7 +136,7 @@ class UserPlaylist extends Component {
     }
 
     render() {
-        const { user, loggedIn, playlistLoaded } = this.props
+        const { loggedIn } = this.props
         if (!loggedIn) return <div/>
 
         return (
