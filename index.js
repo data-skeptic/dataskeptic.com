@@ -15,6 +15,11 @@ const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 const recordingServer = require('./recordingServer').default
 const app = require('./server').default
 
+if (process.env.NODE_ENV === 'dev') {
+	console.log('wepback.dev')
+	require('./webpack.dev').default(app);
+}
+
 const c = require('./config/config.json')
 console.log('index.js : env = ' + env)
 var aws_accessKeyId = c[env]['aws']['accessKeyId']
@@ -144,8 +149,3 @@ if (env == 'prod') {
 	console.log("Loading as dev")
 	launch_without_ssl()		
 }
-
-if (process.env.NODE_ENV === 'dev') {
-    require('./webpack.dev').default(app);
-}
-
