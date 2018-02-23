@@ -7,30 +7,16 @@ const exec = require('child_process').exec;
 
 const AWS = require("aws-sdk");
 
-//=========== CONFIG
-const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-
-const c = require('./config/config.json')
-const aws_accessKeyId = c[env]['aws']['accessKeyId']
-const aws_secretAccessKey = c[env]['aws']['secretAccessKey']
-const aws_region = c[env]['aws']['region']
-const recordingConfig = c[env]['recording']
-
 AWS.config.update(
     {
-        "accessKeyId": aws_accessKeyId,
-        "secretAccessKey": aws_secretAccessKey,
-        "region": aws_region
+        "accessKeyId": process.env.AWS_KEY_ID,
+        "secretAccessKey": process.env.AWS_SECRET_ACCESS_KEY,
+        "region": process.env.AWS_REGION
     }
 );
 //=========== CONFIG
 
-
-const LOCKED_FILE_NAME = recordingConfig.locked_file_name;
-const AWS_RECORDS_BUCKET = recordingConfig.aws_proposals_bucket;
-const BASE_RECORDS_PATH = path.join(__dirname, recordingConfig.source);
-
-export const generateRecordPath = (recordId) => path.join(BASE_RECORDS_PATH, recordId);
+export const generateRecordPath = (recordId) => path.join(process.env.RECORDING_SOURCE, recordId);
 export const generateChunkPath = (recordId, chunkId) => path.join(generateRecordPath(recordId), `${chunkId}.wav`);
 
 export const startRecording = (recordId) => {
@@ -63,14 +49,14 @@ export const completeRecording = (recordId) => {
 
 export const lockRecording = (recordId) => {
     const recordingPath = generateRecordPath(recordId);
-    const lockFile = path.join(recordingPath, LOCKED_FILE_NAME);
+    const lockFile = path.join(recordingPath, process.env.RECORDING_LOCKED_FILE_NAME);
 
     fse.outputFileSync(lockFile, 'complete')
 };
 
 export const unlockRecording = (recordId) => {
     const recordingPath = generateRecordPath(recordId);
-    const lockFile = path.join(recordingPath, LOCKED_FILE_NAME);
+    const lockFile = path.join(recordingPath, process.env.RECORDING_LOCKED_FILE_NAME);
 
     fse.removeSync(lockFile);
 };
@@ -107,11 +93,11 @@ export const mergeFiles = (files, output) => {
 
 export const uploadToS3 = (filePath, id, clb) => {
     console.log('Uploading to s3', filePath);
-    console.dir(AWS_RECORDS_BUCKET)
+    console.dir(process.env.RECORDING_AWS_PROPOSAL_BUCKET)
 
     fs.readFile(filePath, (err, data) => {
         if (err) throw err; // Something went wrong!
-        const s3bucket = new AWS.S3({params: {Bucket: AWS_RECORDS_BUCKET}});
+        const s3bucket = new AWS.S3({params: {Bucket: process.env.RECORDING_AWS_PROPOSAL_BUCKET}});
         s3bucket.createBucket(() => {
             const params = {
                 Key: id + '.wav',

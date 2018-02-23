@@ -4,32 +4,19 @@ const multer = require('multer');
 const mime = require('mime');
 const moment = require('moment');
 
+require('dotenv').config()
+
 const uuid = require('uuid').v4;
 const aws = require("aws-sdk");
 const send = require('../modules/emails').send;
 
 const proposalsDocs = new aws.DynamoDB.DocumentClient();
 
-const PROPOSALS_TABLE_NAME = 'proposals';
-
-const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-
-//=========== CONFIG
-const c = require('../../../config/config.json')
-const aws_accessKeyId = c[env]['aws']['accessKeyId']
-const aws_secretAccessKey = c[env]['aws']['secretAccessKey']
-const aws_region = c[env]['aws']['region']
-const AWS_FILES_BUCKET = c[env]['recording']['aws_files_bucket']
-const AWS_RECORDS_BUCKET = c[env]['recording']['aws_proposals_bucket']
-
-const temp_files = c[env]['recording']['temp_files']
-const EMAIL_ADDRESS = c[env]['recording']['emails']['admin']
-
 aws.config.update(
     {
-        "accessKeyId": aws_accessKeyId,
-        "secretAccessKey": aws_secretAccessKey,
-        "region": aws_region
+        "accessKeyId": process.env.AWS_KEY_ID,
+        "secretAccessKey": process.env.AWS_SECRET_ACCESS_KEY,
+        "region": process.env.AWS_REGION
     }
 );
 
@@ -45,7 +32,7 @@ function saveProposal(proposal, id) {
     proposal.id = id;
 
     const params = {
-        TableName: PROPOSALS_TABLE_NAME,
+        TableName: process.env.PROPOSALS_TABLE_NAME,
         Item: proposal
     };
 
@@ -60,9 +47,9 @@ function saveProposal(proposal, id) {
     });
 }
 
-function uploadProposalFile(file, aws_files_bucket) {
+function uploadProposalFile(file) {
     console.log('[PROPOSALS] upload proposal file');
-    const filesBucket = new aws.S3({params: {Bucket: AWS_FILES_BUCKET}});
+    const filesBucket = new aws.S3({params: {Bucket: process.env.RECORDING_AWS_FILES_BUCKET}});
     console.dir(file);
 
     return new Promise((res, rej) => {
@@ -98,7 +85,7 @@ function uploadFilesS3Async(files, aws_files_bucket) {
 
 function getProposalById(recordingId){
   const params = {
-      TableName: PROPOSALS_TABLE_NAME,
+      TableName: process.env.PROPOSALS_TABLE_NAME,
       Key: {
           recording: recordingId
       }
@@ -124,7 +111,7 @@ function getProposalById(recordingId){
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, path.resolve(__dirname, '../../../', temp_files))
+        cb(null, path.resolve(__dirname, '../../../', process.env.RECORDING_TMP_FILES))
     },
     filename: function (req, file, cb) {
         cb(null, file.fieldname + '-' + Date.now() + '.' + mime.extension(file.mimetype))
@@ -139,11 +126,11 @@ const generateUrserDataBlock = (userData) => {
 };
 
 const awsFileLink = (filename) => {
-    return `https://s3.amazonaws.com/${AWS_FILES_BUCKET}/${filename}`
+    return `https://s3.amazonaws.com/${process.env.RECORDING_AWS_FILES_BUCKET}/${filename}`
 };
 
 const awsRecordLink = (recordId) => {
-    return `https://s3.amazonaws.com/${AWS_RECORDS_BUCKET}/${recordId}`
+    return `https://s3.amazonaws.com/${process.env.RECORDING_AWS_PROPOSAL_BUCKET}/${recordId}`
 };
 
 const generateProposalBody = (type, proposal) => {
@@ -251,7 +238,7 @@ module.exports = {
 
         flow.then(() => saveProposal(userData, fileName))
             .then((proposal) => {
-                const destination = EMAIL_ADDRESS;
+                const destination = process.env.RECORDING_EMAILS_ADMIN;
                 const subject = '[Notification] New recording';
 
                 let message = generateProposalBody(req.body.type, userData);

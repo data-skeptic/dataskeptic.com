@@ -1,12 +1,9 @@
 const express = require('express');
 const Influx = require('influx');
 
-const c = require('../../../config/config.json')
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
 var elasticsearch = require('elasticsearch')
-
-var elastic_search_endpoint = c[env]['elastic_search_endpoint']
 
 module.exports = (cache) => {
     const router = express.Router();
@@ -16,7 +13,7 @@ module.exports = (cache) => {
 		var q = "data"
 		console.log("JSEARCH: " + q)
 		var client = new elasticsearch.Client({
-			host: elastic_search_endpoint,
+			host: process.env.ELASTIC_SEARCH_ENDPOINT,
 			log: 'trace'
 		});
 		var es_query = {

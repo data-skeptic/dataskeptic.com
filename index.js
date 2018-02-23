@@ -15,27 +15,16 @@ const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 const recordingServer = require('./recordingServer').default
 const app = require('./server').default
 
-if (process.env.NODE_ENV === 'dev') {
-	console.log('wepback.dev')
-	require('./webpack.dev').default(app);
-}
-
-const c = require('./config/config.json')
-console.log('index.js : env = ' + env)
-var aws_accessKeyId = c[env]['aws']['accessKeyId']
-var aws_secretAccessKey = c[env]['aws']['secretAccessKey']
-var aws_region = c[env]['aws']['region']
-
 aws.config.update(
     {
-        "accessKeyId": aws_accessKeyId,
-        "secretAccessKey": aws_secretAccessKey,
-        "region": aws_region
+        "accessKeyId": process.env.AWS_KEY_ID,
+        "secretAccessKey": process.env.AWS_SECRET_ACCESS_KEY,
+        "region": process.env.cAWS_REGION
     }
 );
 const s3 = new aws.S3();
 
-if (env == "prod") {
+if (env === "prod") {
 	snsalert((new Date()).toString(), "rebooting production")
 }
 

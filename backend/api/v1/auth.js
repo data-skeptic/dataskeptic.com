@@ -12,10 +12,6 @@ let redirectURL;
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
-const c = require('../../../config/config.json')
-const salt = c[env]['auth']['salt']
-const base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
-
 const checkIfAdmin = (email) => {
     const email_reg_exp = /^.*@dataskeptic\.com/i;
     return email_reg_exp.test(email);
@@ -32,8 +28,8 @@ const INCORRECT_PASSWORD_MSG = `Incorrect login id or password`
 const saltPassword = (password) => sha1(password+salt)
 const verifyPassword = (up, rp) => saltPassword(up) === rp
 
-const getUserAccount = (email) => axios.get(`${base_url}/user/get?email=${email}`).then((res) => res.data.length > 0 && res.data[0])
-const createUserAccount = (data) => axios.post(`${base_url}/user/add`, data).then((res) => res.data)
+const getUserAccount = (email) => axios.get(`${process.env.BASE_API}/user/get?email=${email}`).then((res) => res.data.length > 0 && res.data[0])
+const createUserAccount = (data) => axios.post(`${process.env.BASE_API}/user/add`, data).then((res) => res.data)
 
 const notifyOnJoin = ({ email }) => {
     console.info(`New user ${email} joined the site.`)
@@ -59,18 +55,18 @@ module.exports = () => {
         done(null, id)
     })
 
-    if (c[env]['linkedin']) {
+	  if (JSON.parse(process.env.LINKEDIN_ON)) {
         console.log("AUTH: allowing Linkedin Login")
         passport.use(LinkedinStrategy(global.env))
     }
-    var gp = c[env]['googlePassport']
-    if (gp) {
+
+    if (JSON.parse(process.env.GOOGLE_ON)) {
         console.log("AUTH: allowing Google Login")
             passport.use(new googleStrategy({
-                clientID: gp.clientId,
-                clientSecret: gp.clientSecret,
-                callbackURL: '/api/v1/auth/google/callback',
-                passReqToCallback:true
+                clientID: process.env.GOOGLE_CLIENT_ID,
+                clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+                callbackURL: process.env.GOOGLE_CALLBACK_URL,
+                passReqToCallback: true
             },
             function (req, accessToken, refreshToken, profile, done){
                 let user ={};
@@ -149,7 +145,7 @@ module.exports = () => {
 
         const user = {
             email,
-            password: saltPassword(password)
+            password: process.env.AUTH_SALTPassword(password)
         }
 
         await createUserAccount(user)

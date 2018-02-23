@@ -1,16 +1,8 @@
 import Immutable from 'immutable';
-import { fromJS } from 'immutable';
-import querystring from 'querystring'
 import axios from "axios"
 import snserror from '../SnsUtil'
 import { load_blogs } from '../daos/serverInit'
 const aws = require('aws-sdk')
-
-var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
-
-const config = require('../../config/config.json');
-
-var base_url = config[env]['base_api'] + env
 
 const init = {
     "home_loaded": false,
@@ -33,7 +25,7 @@ const defaultState = Immutable.fromJS(init);
 const s3 = new aws.S3()
 
 const getEpisode = async (guid) => {
-    var u2 = `${base_url}/blog/list?guid=${guid}`
+    var u2 = `${process.env.BASE_API}/blog/list?guid=${guid}`
     const [episodeData] = await Promise.all([
         axios.get(u2).then((res) => res.data[0])
     ])
@@ -87,7 +79,7 @@ export default function cmsReducer(state = defaultState, action) {
         nstate.blog_state = "loaded"
         break
     case 'CMS_LOAD_PENDING_BLOGS':
-        var url = base_url + "/blog/pending"
+        var url = process.env.BASE_API + "/blog/pending"
         var dispatch = action.payload.dispatch
         nstate.pending_blogs_loaded = false
         axios
@@ -129,7 +121,7 @@ export default function cmsReducer(state = defaultState, action) {
     case 'CMS_DELETE_BLOG':
         var payload = action.payload
         var dispatch = payload.dispatch
-        var url = base_url + "/blog/delete"
+        var url = process.env.BASE_API + "/blog/delete"
         axios
             .post(url, payload)
             .then(function(result) {
@@ -153,7 +145,7 @@ export default function cmsReducer(state = defaultState, action) {
         var dispatch = payload.dispatch
         //payload['title'] = payload['title']
         //payload['abstract'] = payload['abstract']
-        var url = base_url + "/blog/update"
+        var url = process.env.BASE_API + "/blog/update"
         axios
             .post(url, payload)
             .then(function(result) {
@@ -182,7 +174,7 @@ export default function cmsReducer(state = defaultState, action) {
             featured_2_blog_id,
             featured_3_blog_id
         }
-        var url = base_url + "/cms/homepage"
+        var url = process.env.BASE_API + "/cms/homepage"
         axios
             .post(url, payload)
             .then(function(result) {
@@ -215,7 +207,7 @@ export default function cmsReducer(state = defaultState, action) {
     case 'CMS_GET_HOMEPAGE_CONTENT':
         var payload = action.payload
         var dispatch = payload.dispatch
-        var url = base_url + "/cms/homepage"
+        var url = process.env.BASE_API + "/cms/homepage"
         axios
             .get(url, payload)
             .then(function(result) {

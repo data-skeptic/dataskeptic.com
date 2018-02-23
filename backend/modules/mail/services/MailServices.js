@@ -1,7 +1,5 @@
 const AWS = require("aws-sdk");
 const {getEmail} = require('../../../../shared/Emails/template')
-const config = require('../../../../config/config.json')
-const env = process.env.NODE_ENV === 'production' ? 'prod' : 'dev'
 
 export const template = (obj) => {
 	  const type = obj['type'] || 'default';
@@ -16,7 +14,7 @@ export const sendMail = (obj) => {
     var to = obj['to']
     var toa = [to]
     var ses = new AWS.SES({apiVersion: '2010-12-01'});
-    var from = "kyle@dataskeptic.com";
+    var from = process.env.ADMIN_EMAIL;
 
     var subject = obj['subject'] || "dataskeptic.com msg"
     var resp = {status: 200, msg: "ok"}

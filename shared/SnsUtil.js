@@ -1,9 +1,4 @@
 const aws = require('aws-sdk')
-
-var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
-
-var sns = new aws.SNS()
-
 /*
 Member signup		ds-new-mbr
 Member login		ds-mem-log
@@ -13,16 +8,11 @@ New episode posted	ds-new-epi
 New blog posted		ds-newblog
 */
 
-const c = require('../config/config.json')
-var aws_accessKeyId = c[env]['aws']['accessKeyId']
-var aws_secretAccessKey = c[env]['aws']['secretAccessKey']
-var aws_region = c[env]['aws']['region']
-
 aws.config.update(
     {
-        "accessKeyId": aws_accessKeyId,
-        "secretAccessKey": aws_secretAccessKey,
-        "region": aws_region
+        "accessKeyId": process.env.AWS_KEY_ID,
+        "secretAccessKey": process.env.AWS_SECRET_ACCESS_KEY,
+        "region": process.env.AWS_REGION
     }
 );
 

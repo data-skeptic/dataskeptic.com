@@ -5,12 +5,6 @@ const map = require('lodash/map');
 const each = require('lodash/each');
 const filter= require('lodash/filter');
 
-const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const c = require('../../config/config.json')
-
-const BASE_URL = 'https://dataskeptic.com/';
-var api_url = c[env]['base_api'] + env
-
 const BlogItemModel = ({ title, publish_date, prettyname, desc, author, guid }) => (
     {
         title: title,
@@ -27,14 +21,14 @@ const BlogItemModel = ({ title, publish_date, prettyname, desc, author, guid }) 
 module.exports = {
     get_blogs_rss: function (req, res) {
         // TODO: setup caching here instead
-        var url = api_url + "/blog/all"
+        var url = process.env.BASE_API + "/blog/all"
         axios.get(url).then(function(data) {
             var blogs = data.data
             let feed = new RSS({
                 title: 'Data Skeptic',
                 description: 'Data Skeptic is your source for a perspective of scientific skepticism on topics in statistics, machine learning, big data, artificial intelligence, and data science. Our weekly podcast and blog bring you stories and tutorials to help understand our data-driven world.',
-                feed_url: `${BASE_URL}/api/blog/rss`,
-                site_url: BASE_URL,
+                feed_url: `${process.env.BASE_URL}/api/blog/rss`,
+                site_url: process.env.BASE_URL,
                 managingEditor: 'Kyle',
                 language: 'en'
             });
