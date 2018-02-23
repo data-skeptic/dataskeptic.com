@@ -50,6 +50,7 @@ class MembershipPortal extends Component {
                 </div>
             )
         }
+
         if (mode == "loading") {
             return <Loading />
         }

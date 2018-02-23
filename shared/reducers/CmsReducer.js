@@ -14,6 +14,10 @@ var base_url = config[env]['base_api'] + env
 
 const init = {
     "home_loaded": false,
+    "jobListing": {
+        loaded: false,
+        jobs: {}
+    },
     "featured_blog_state": "",
     "featured_blog": {},
     "featured_blog2": {},
@@ -251,6 +255,28 @@ export default function cmsReducer(state = defaultState, action) {
                 console.log(err)
             })
         break;
+
+	  case 'CMS_GET_HOMEPAGE_JOB_LISTING':
+		  var payload = action.payload
+		  var dispatch = payload.dispatch
+		  var url = base_url + "/cms/homepage/geo"
+		  axios
+			  .get(url, payload)
+			  .then(function(result) {
+				  var data = result['data']
+				  dispatch({type: "CMS_INJECT_HOMEPAGE_JOB_LISTING", payload: {data} })
+			  })
+			  .catch((err) => {
+				  console.log(err)
+				  var errorMsg = JSON.stringify(err)
+				  snserror("CMS_GET_HOMEPAGE_JOB_LISTING", errorMsg)
+			  })
+		  break;
+
+    case 'CMS_INJECT_HOMEPAGE_JOB_LISTING':
+      nstate.jobListing.loaded = true
+      nstate.jobListing.jobs = action.payload.data
+		  break;
   }
   return Immutable.fromJS(nstate)
 }

@@ -54,6 +54,8 @@ import AdminEmailsSend         from 'components/admin/AdminEmailsSend';
 import AdminOrdersNew          from 'components/admin/AdminOrdersNew';
 import AdminOrdersProcessing   from 'components/admin/AdminOrdersProcessing';
 
+import UserPlaylist             from 'components/UserPlaylist';
+
 import SERP                    from 'Search/Containers/SERP';
 
 import SnlImpact               from 'components/l/SnlImpact';
@@ -180,6 +182,10 @@ export default (
         </Route>
         <Route path="/membership/analytics" showAds={false} component={App}>
             <IndexRoute component={MembershipAnalytics}/>
+        </Route>
+
+        <Route path="/profile/playlist" showAds={false} component={App}>
+          <IndexRoute component={UserPlaylist}/>
         </Route>
 
         <Route path="/analytics" component={App}>

@@ -599,7 +599,7 @@ function renderView(store, renderProps, location) {
  * Please update this key to
  * have latest request response data in the user session
  */
-const CURRENT_IP_REQ_VERSION = 2
+const CURRENT_IP_REQ_VERSION = 5
 const localIPs = ['127.0.0.1', '::1']
 
 function getIpData(ip) {
@@ -646,12 +646,11 @@ async function tracking (req, res) {
         ip = req.connection.remoteAddress
     }
 
-	  let ipInfo = req.session.ipInfo
+	let ipInfo = req.session.ipInfo
     if (isEmpty(ipInfo)) ipInfo = null
-
-	  if (!isEmpty(ipInfo) && ipInfo.version !== CURRENT_IP_REQ_VERSION) {
+    if (ipInfo && ipInfo.version !== CURRENT_IP_REQ_VERSION) {
         ipInfo = null
-	  }
+	}
 
     if (!ipInfo) {
         console.log("ipInfo not defined")
@@ -697,7 +696,6 @@ async function tracking (req, res) {
 
 const api = require('./backend/api/v1');
 app.use('/api/v1', async (req, res, next) => {
-    console.log('wow')
     await tracking(req, res)
     next()
 })
