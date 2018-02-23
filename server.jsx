@@ -389,7 +389,6 @@ function api_router(req, res) {
 
         var ok_callback = function(r, info) {
             var resp = r['data']
-            console.log(resp)
             var result = {"msg": "ok"}
             return res.status(200).end(JSON.stringify(result))
         }
@@ -403,7 +402,6 @@ function api_router(req, res) {
         }
 
         var promise = place_order(printful_key, customer, designId, size, ok_callback, error_callback)
-        console.log(typeof(promise))
         return promise
     }
     else if (req.url.indexOf('/api/store/list') == 0) {
@@ -486,7 +484,6 @@ async function inject_homepage(store, my_cache) {
     const res = await getFeaturesAPI("homepage")
     var dispatch = store.dispatch
     dispatch({type: "CMS_INJECT_HOMEPAGE_CONTENT", payload: { data: res.data, dispatch }})
-
     const guid = res.data.latest_episode.guid
     const episode = my_cache.episodes_map[guid]
 
@@ -519,15 +516,14 @@ async function updateState(store, pathname, req) {
 
     store.dispatch({type: "PROPOSAL_SET_BUCKET", payload: {aws_proposals_bucket}})
     if (!isEmpty(Cache.contributors)) {
-        console.log("usingcache")
+        console.log("using cache for contributors")
         store.dispatch({type: "SET_CONTRIBUTORS", payload: Cache.contributors})
     }
-
+    console.log("on to bot")
     var bot = Cache.bot
     if (bot) {
         store.dispatch({type: "SET_BOT", payload: bot})
     }
-    
     if (pathname === "" || pathname === "/") {
         await inject_homepage(store, Cache, pathname)
     }
