@@ -13,7 +13,7 @@ export function addEpisodes(type) {
 		type
 	}
 
-	return axios.post(`/api/v1/user/playlist/add_all`, data).then((res) => res.data[0])
+	return axios.post(`/api/v1/user/playlist/add_all`, data).then((res) => res.data)
 }
 
 

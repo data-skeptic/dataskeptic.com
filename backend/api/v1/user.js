@@ -30,6 +30,7 @@ const isAcceptedList = list => lists.indexOf(list) > -1
 const getListUpdateEndpoint = list => listsEndpointMap[list]
 
 const updateUserSessionList = (user, list, blogId, insertMode = false) => {
+		console.log(list, blogId, insertMode)
     // copy list
     let listToUpdate = [...user.lists[list]]
 
@@ -44,7 +45,7 @@ const updateUserSessionList = (user, list, blogId, insertMode = false) => {
     }
 
     // update user session list
-    user.lists[list] = listToUpdate
+    return listToUpdate
 }
 
 const joinList = (list, key) =>
@@ -75,7 +76,7 @@ module.exports = () => {
 		    return next()
 	    }
 
-	    res.setStatus(401).send({
+	    res.status(401).send({
         success: false,
         error: UNAUTHORIZED
 	    })
@@ -138,27 +139,47 @@ module.exports = () => {
         }
 
 
-        // trigger lambda backend
-        updateUser(list, item)
-          .then(result => {
-            const success = result.status === "ok"
+	      // trigger lambda backend
+	      updateUser(list, item)
+			    .then(result => {
+				    const success = result.status === "ok"
 
-            if (success) {
-	            // sync session data
-	            updateUserSessionList(req.user, list, item.blog_id, insertMode)
-            }
+				    if (success) {
+					    // race condition part ===>
+					    req.user.operations.push({
+						    list,
+						    blog_id:
+						    item.blog_id,
+						    insertMode
+					    })
+				    } else {
+					    console.log('user list update error')
+					    console.error(result)
+				    }
 
-	          res.send({
-		          success
-	          })
-          })
-          .catch(error => {
-          	console.dir(error)
-	          return res.send({
-		          success: false,
-		          error: error
-	          })
-          })
+				    // <==== race condition part
+				    process.nextTick(() => {
+					    req.user.operations.forEach((op) => {
+						    req.user.lists[list] = updateUserSessionList(req.user, list, item.blog_id, insertMode)
+
+						    op.done = true
+					    })
+
+					    req.user.operations = req.user.operations.filter(op => !op.done)
+				    })
+				    // <==== race condition part
+
+				    res.send({
+					    success
+				    })
+			    })
+			    .catch(error => {
+				    console.dir(error)
+				    return res.send({
+					    success: false,
+					    error: error
+				    })
+			    })
     })
 
     return router

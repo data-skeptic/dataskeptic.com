@@ -83,7 +83,8 @@ module.exports = () => {
         const data = await getUserData(user.email)
         user = {
             ...user,
-            ...data
+            ...data,
+            operations: []
         }
 
         done(null, user)
