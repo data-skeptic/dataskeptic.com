@@ -23,13 +23,12 @@ const init = {
 const defaultState = Immutable.fromJS(init);
 
 export const searchRequest = (dispatch, query = '') => {
+	track(query)
 	// encode query string
 	query = encodeURIComponent(query)
 
 	axios.get(`/api/search?q=${query}`)
 		.then((result) => {
-			track()
-
 			dispatch({
         type: 'SEARCH_SUCCESS',
         payload: {

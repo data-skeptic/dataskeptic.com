@@ -9,12 +9,17 @@ module.exports = cache => {
 	const router = express.Router()
 
 	router.post("/search/result", function(req, res) {
+		const {q} = req.body
 		const user_agent = req.get('User-Agent');
 
 		const data = {
+			q,
 			user_agent,
 			...req.session.ipInfo
 		}
+
+		console.log(`${base_url}/tracking/search/result`)
+		console.dir(data)
 
 		axios
 			.post(`${base_url}/tracking/search/result`, data)
