@@ -2,6 +2,7 @@ import React from "react"
 import ReactDOM from "react-dom"
 import querystring from 'querystring'
 import { connect } from 'react-redux'
+import BlogSearchSelect from "./BlogSearchSelect";
 
 class RelatedContent extends React.Component {
   constructor(props) {
@@ -44,6 +45,12 @@ class RelatedContent extends React.Component {
     dispatch({type: "RELATED_CONTENT_ADD", payload: {data: this.state, dispatch} })
   }
 
+	changeBlog = (id, val) => {
+	  this.setState({
+		  [id]: val
+    })
+  }
+
   render() {
     var oadmin = this.props.admin.toJS()
     var add_related_msg = oadmin['add_related_msg']
@@ -57,12 +64,26 @@ class RelatedContent extends React.Component {
         <div className="center">
           <div className="row">
             <div className="col-xs-3"><p>Source blog_id:</p></div>
-            <div className="col-xs-9"><input width="100%" onChange={this.update.bind(this, me, "source")} value={this.state.source} /></div>
+            <div className="col-xs-9">
+	            <BlogSearchSelect
+		            id="source"
+		            onChange={this.changeBlog}
+	            />
+              {/*<input width="100%" onChange={this.update.bind(this, me, "source")} value={this.state.source} />*/}
+            </div>
           </div>
 
           <div className="row">
             <div className="col-xs-3"><p>{this.state.lbl2}:</p></div>
-            <div className="col-xs-9"><input onChange={this.update.bind(this, me, "dest")} value={this.state.dest} /></div>
+            <div className="col-xs-9">
+	            {(this.state.type === "internal-link")
+                ? <BlogSearchSelect
+                  id="dest"
+                  onChange={this.changeBlog}
+                />
+                : <input onChange={this.update.bind(this, me, "dest")} value={this.state.dest} />
+	            }
+            </div>
           </div>
 
           <div className="row">

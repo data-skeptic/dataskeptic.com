@@ -8,7 +8,6 @@ class YearNav extends React.Component {
 	onClick() {
 		var dispatch = this.props.dispatch
 		var year = this.props.year
-		console.log(year)
 		var pathname = "/podcast/" + year
 		get_podcasts(dispatch, pathname)
 	}

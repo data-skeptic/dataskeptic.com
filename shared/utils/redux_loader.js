@@ -52,7 +52,6 @@ export function year_from_path(pathname) {
 
 export function get_podcasts_from_cache(my_cache, pathname) {
 	console.log('get_podcasts_from_cache')
-	console.log(my_cache)
 	var year = year_from_path(pathname)
 	var episodes_list = my_cache.episodes_list
 	var episodes_map = my_cache.episodes_map
@@ -127,7 +126,7 @@ export function get_podcasts(dispatch, pathname) {
 			.get("/api/episodes/list?year=" + year)
       .then((result) => result.data)
 			.then((episodes) => {
-				console.log(episodes)
+				console.log('got episodes')
                 dispatch({type: "ADD_EPISODES", payload: episodes})
 			})
 			.catch((err) => {
