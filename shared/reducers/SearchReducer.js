@@ -4,6 +4,7 @@ import querystring from 'querystring'
 import axios from "axios"
 import snserror from '../SnsUtil'
 import { load_blogs } from '../daos/serverInit'
+import {track} from "../Tracking/Search";
 const aws = require('aws-sdk')
 
 var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
@@ -27,6 +28,8 @@ export const searchRequest = (dispatch, query = '') => {
 
 	axios.get(`/api/search?q=${query}`)
 		.then((result) => {
+			track()
+
 			dispatch({
         type: 'SEARCH_SUCCESS',
         payload: {
