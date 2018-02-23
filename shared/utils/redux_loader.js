@@ -1,8 +1,20 @@
 import axios from "axios"
-import contact_form_send from '../daos/contact_form_send'
 
 var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
 const base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
+
+
+export function getPlaylistEpisodes(playlist) {
+	return axios.post(`/api/v1/episodes/multiple`, playlist).then((res) => res.data[0])
+}
+
+export function addEpisodes(type) {
+	const data = {
+		type
+	}
+
+	return axios.post(`/api/v1/user/playlist/add_all`, data).then((res) => res.data[0])
+}
 
 
 export function clearEpisode(dispatch) {

@@ -144,6 +144,7 @@ function xml_to_list(xml) {
     var domain = "dataskeptic.com"
 
     var episodes_map = {}
+    var episodes_blog_map = {}
     var episodes_content = {}
     var episodes_list = []
     var member_feed = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\" xmlns:cc=\"http://web.resource.org/cc/\" xmlns:itunes=\"http://www.itunes.com/dtds/podcast-1.0.dtd\" xmlns:media=\"http://search.yahoo.com/mrss/\" xmlns:content=\"http://purl.org/rss/1.0/modules/content/\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"></rss>"
@@ -163,7 +164,7 @@ function xml_to_list(xml) {
         }
     })
 
-    return ({ episodes_map , episodes_content , episodes_list , member_feed , guid_to_media_link})
+    return ({ episodes_map , episodes_blog_map, episodes_content , episodes_list , member_feed , guid_to_media_link})
 }
 
 const getEpisodesData = (guids) => {
@@ -218,12 +219,15 @@ function get_and_process_feed(replacements, feed_uri) {
         .then((data) => {
 	          return getEpisodesData(data.episodes_list)
               .then((episodesData) => {
-	              episodesData.forEach(episodeData =>
-		              data.episodes_map[episodeData.guid] = {
-			              ...data.episodes_map[episodeData.guid],
-			              ...episodeData
-		              }
-	              )
+	              episodesData.forEach(episodeData => {
+	                const episode = {
+		                ...data.episodes_map[episodeData.guid],
+		                ...episodeData
+	                }
+
+		              data.episodes_map[episodeData.guid] = episode
+		              data.episodes_blog_map[episodeData.blog_id] = episode
+                })
               })
               .then(() => data)
         })
@@ -231,10 +235,11 @@ function get_and_process_feed(replacements, feed_uri) {
             console.log("loadEpisodes error: " + err);
             console.log(err)
             var episodes_map = {}
+            var episodes_blog_map = {}
             var episodes_list = []
             var episodes_content = {}
             var member_feed = undefined
-            return {episodes_map, episodes_list, episodes_content, member_feed}
+            return {episodes_map, episodes_blog_map, episodes_list, episodes_content, member_feed}
         })
 }
 
