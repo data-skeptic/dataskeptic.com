@@ -2,6 +2,8 @@ import React from "react"
 import ReactDOM from "react-dom"
 import querystring from 'querystring'
 import { connect } from 'react-redux'
+import BlogSearchSelect from "./BlogSearchSelect";
+
 
 class HomepageController extends React.Component {
 	constructor(props) {
@@ -21,6 +23,10 @@ class HomepageController extends React.Component {
 
 	save(dispatch) {
 	    dispatch({type: "CMS_SET_HOMEPAGE_FEATURE", payload: {dispatch} })
+	}
+
+	change = (f, val) => {
+		this.props.dispatch({type: "CMS_UPDATE_HOMEPAGE_FEATURE", payload: {f, val} })
 	}
 
 	render() {
@@ -59,11 +65,29 @@ class HomepageController extends React.Component {
 				<h3>Homepage content</h3>
 				<div className="row">
 					<div classname="col-xs-12 col-sm-2">Feature of the week blog_id:</div>
-					<div classname="col-xs-6 col-sm-5"><input id="featured_blog" onChange={this.update.bind(this, me, "X")} value={blog_id} /></div>
+					<div classname="col-xs-3 col-sm-3">
+						<BlogSearchSelect
+							id="featured_blog"
+							value={featured_blog}
+							onChange={this.change}
+						/>
+					</div>
 					<div classname="col-xs-12 col-sm-2">2nd position blog_id:</div>
-					<div classname="col-xs-6 col-sm-5"><input id="featured_blog2" onChange={this.update.bind(this, me, "X")} value={blog_id2} /></div>
+					<div classname="col-xs-3 col-sm3">
+						<BlogSearchSelect
+							id="featured_blog2"
+							value={featured_blog2}
+							onChange={this.change}
+						/>
+					</div>
 					<div classname="col-xs-12 col-sm-2">3rd position blog_id:</div>
-					<div classname="col-xs-6 col-sm-5"><input id="featured_blog3" onChange={this.update.bind(this, me, "X")} value={blog_id3} /></div>
+					<div classname="col-xs-3 col-sm-3">
+						<BlogSearchSelect
+							id="featured_blog3"
+							value={featured_blog3}
+							onChange={this.change}
+						/>
+					</div>
 					<div classname="col-xs-6 col-sm-5">
 						<button onClick={this.save.bind(this, dispatch)} disabled={featured_blog_state === "submit"}>
                             Update

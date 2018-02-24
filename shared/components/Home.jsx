@@ -23,6 +23,8 @@ class Home extends Component {
       if (!this.props.cms.get('home_loaded')) {
           dispatch({type: "CMS_GET_HOMEPAGE_CONTENT", payload: {dispatch}})
       }
+
+      dispatch({type: "CMS_GET_HOMEPAGE_JOB_LISTING", payload: {dispatch}})
   }
 
   static getPageMeta() {

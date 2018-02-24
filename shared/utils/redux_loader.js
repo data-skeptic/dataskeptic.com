@@ -4,10 +4,6 @@ var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
 const base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
 
-export function getPlaylistEpisodes(playlist) {
-	return axios.post(`/api/v1/episodes/multiple`, playlist).then((res) => res.data)
-}
-
 export function addEpisodes(type) {
 	const data = {
 		type
@@ -15,7 +11,6 @@ export function addEpisodes(type) {
 
 	return axios.post(`/api/v1/user/playlist/add_all`, data).then((res) => res.data)
 }
-
 
 export function clearEpisode(dispatch) {
 	dispatch({type: "CLEAR_FOCUS_EPISODE"})
@@ -62,9 +57,33 @@ export function year_from_path(pathname) {
 	return year
 }
 
+export function get_podcasts(dispatch, pathname) {
+	var year = year_from_path(pathname)
+	if (year == -1) {
+		year = (new Date()).getYear()+1900
+	}
+	var my_cache = global.my_cache
+	if (my_cache != undefined) {
+		console.log("get_podcasts with no cache")
+		var episodes = get_podcasts_from_cache(my_cache, pathname)
+	} else {
+		console.log(["Getting :: episodes", year])
+        dispatch({type: "LOADING_EPISODES"})
+		axios
+			.get("/api/episodes/list?year=" + year)
+      .then((result) => result.data)
+			.then((episodes) => {
+				console.log('got episodes')
+                dispatch({type: "ADD_EPISODES", payload: episodes})
+			})
+			.catch((err) => {
+				console.log(err)
+			})			
+	}
+}
+
 export function get_podcasts_from_cache(my_cache, pathname) {
 	console.log('get_podcasts_from_cache')
-	console.log(my_cache)
 	var year = year_from_path(pathname)
 	var episodes_list = my_cache.episodes_list
 	var episodes_map = my_cache.episodes_map
@@ -84,30 +103,37 @@ export function get_podcasts_from_cache(my_cache, pathname) {
 	return episodes
 }
 
-export function get_podcasts(dispatch, pathname) {
-	var year = year_from_path(pathname)
-	if (year == -1) {
-		year = (new Date()).getYear()+1900
-	}
-	var my_cache = global.my_cache
-	if (my_cache != undefined) {
-		console.log("get_podcasts with no cache")
-		var episodes = get_podcasts_from_cache(my_cache, pathname)
-	} else {
-		console.log(["Getting :: episodes", year])
-        dispatch({type: "LOADING_EPISODES"})
-		axios
-			.get("/api/episodes/list?year=" + year)
-      .then((result) => result.data)
-			.then((episodes) => {
-				console.log(episodes)
-                dispatch({type: "ADD_EPISODES", payload: episodes})
-			})
-			.catch((err) => {
-				console.log(err)
-			})			
-	}
+const getEpisodeData = (guid) => axios.get(`${base_url}/blog/list?guid=${guid}`).then((res) => res.data[0])
+
+export function getEpisodesData(episodes) {
+	return Promise.all(episodes.map(ep => getEpisodeData(ep.guid)))
+		.then((episodesData) => {
+			return episodes.map((ep, index) => ({
+				...episodesData[index],
+				...ep
+			}))
+		})
 }
+
+const getEpisode = (blog_id) => axios.get(`${base_url}/blog/list?blog_id=${blog_id}`).then((res) => res.data[0])
+const getEpisodeBasic = (guid) => axios.get(`/api/episodes/get/${guid}`).then((res) => res.data)
+
+export function getPlaylistEpisodes(playlist) {
+	// fetch episode data by lambda api
+	return Promise.all(playlist.map((blog_id) => getEpisode(blog_id)))
+		.then((episodes) => {
+			// fetch episode data from the cache
+			// need for `img` and `link`
+			return Promise.all(episodes.map(ep => getEpisodeBasic(ep.guid)))
+				.then((episodesData) => {
+					return episodes.map((ep, index) => ({
+						...ep,
+						...episodesData[index]
+					}))
+				})
+		})
+}
+
 
 export function get_products(dispatch) {
        var my_cache = global.my_cache

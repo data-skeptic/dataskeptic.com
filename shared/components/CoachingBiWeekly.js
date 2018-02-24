@@ -19,7 +19,6 @@ class CoachingBiWeekly extends Component {
 	}
 	render() {
 		var oproducts = this.props.products.toJS()
-		console.log(oproducts)
 		return (
 			<div className="center">
 				<h2>Professional development coaching</h2>
