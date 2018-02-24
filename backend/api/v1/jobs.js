@@ -1,5 +1,9 @@
 const express = require('express');
 const Influx = require('influx');
+const sanitizeHtml = require('sanitize-html');
+const truncate = require('truncate');
+
+const jobs_util = require('./jobs_util')
 
 const c = require('../../../config/config.json')
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
@@ -13,57 +17,20 @@ module.exports = (cache) => {
 
     router.get('/', function (req, res) {
 		const query = req.query
+		console.log(query)
+
 		var q = "data"
-		console.log("JSEARCH: " + q)
+		var location = query.location || "don't match"
+
 		var client = new elasticsearch.Client({
 			host: elastic_search_endpoint,
-			log: 'trace'
+			log: 'warning'
 		});
-		var es_query = {
-			index: 'github_jobs',
-			type: 'jobs',
-			body: {
-				query: {
-					multi_match: {
-						"query": q,
-						"fields": ["title", "description"]
-					}
-					//location????
-				},
-				_source: {
-					includes: [
-						"id",
-						"title",
-						"created_at",
-						"location",
-						"type",
-						"description",
-						"company",
-						"company_url",
-						"company_logo",
-						"url"
-					]
-				}
-			}
-		}
-		console.log(es_query)
+
+		var es_query = jobs_util.get_jobs_query(q, location)
 		client.search(es_query).then(function (resp) {
 			var hits = resp['hits']['hits']
-			var results = []
-			for (var hit of hits) {
-				var id           = hit['_id']
-				var title        = hit['_source']['title']
-				var created_at   = hit['_source']['created_at']
-				var location     = hit['_source']['location']
-				var type         = hit['_source']['type']
-				var description  = hit['_source']['description']
-				var company      = hit['_source']['company']
-				var company_url  = hit['_source']['company_url']
-				var company_logo = hit['_source']['company_logo']
-				var url          = hit['_source']['url']
-				var result = { id, title, created_at, location, type, description, company, company_url, company_logo, url }
-				results.push(result)
-			}
+			var results = jobs_util.format_results(hits)
 		    return res.status(200).end(JSON.stringify(results))
 		}, function (err) {
 		    return res.status(500).end(JSON.stringify(err.message))

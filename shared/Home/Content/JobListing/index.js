@@ -43,7 +43,8 @@ class JobListing extends Component {
   toggleViewMore = () => this.setState(prevState => ({ viewMore: !prevState.viewMore }))
 
   renderJobBox = (job, viewMore) => {
-    const {id, title, location, type, description, url, company, company_url } = job
+    const {id, title, location, type, description, full_description, url, company, company_url } = job
+    console.log(full_description)
 	  return (
 		  <Box>
 			  <Title>{title}</Title>
@@ -57,11 +58,10 @@ class JobListing extends Component {
 			  <Description>
 				  {!viewMore
 					  ? <span>
-                {/*<Text text={description.substring(0, 120)+'...'} />*/}
-                <Text text={description} />
+                <Text text={description.substring(0, 120)+'...'} />
                 <ViewMore onClick={this.toggleViewMore}>View More</ViewMore>
               </span>
-					  : <Text text={description} />
+					  : <Text text={full_description} />
 				  }
 			  </Description>
 			  <Apply href={url} target="_blank" onClick={() => this.trackApply(id)}>Apply now</Apply>

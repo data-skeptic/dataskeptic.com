@@ -262,18 +262,22 @@ export default function cmsReducer(state = defaultState, action) {
 	  case 'CMS_GET_HOMEPAGE_JOB_LISTING':
 		  var payload = action.payload
 		  var dispatch = payload.dispatch
-		  var url = base_url + "/cms/homepage/geo"
-		  axios
-			  .get(url, payload)
-			  .then(function(result) {
-				  var data = result['data']
-				  dispatch({type: "CMS_INJECT_HOMEPAGE_JOB_LISTING", payload: {data} })
-			  })
-			  .catch((err) => {
-				  console.log(err)
-				  var errorMsg = JSON.stringify(err)
-				  snserror("CMS_GET_HOMEPAGE_JOB_LISTING", errorMsg)
-			  })
+          var location = "Get it from ipinfo"
+          if (location) {
+              var url = "/api/v1/jobs?location=" + location
+              console.log(url)
+              axios
+                  .get(url, payload)
+                  .then(function(result) {
+                      var data = result['data']
+                      dispatch({type: "CMS_INJECT_HOMEPAGE_JOB_LISTING", payload: {data} })
+                  })
+                  .catch((err) => {
+                      console.log(err)
+                      var errorMsg = JSON.stringify(err)
+                      snserror("CMS_GET_HOMEPAGE_JOB_LISTING", errorMsg)
+                  })                
+          }
 		  break;
 
     case 'CMS_INJECT_HOMEPAGE_JOB_LISTING':
