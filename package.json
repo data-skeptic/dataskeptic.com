@@ -109,7 +109,7 @@
     "style-loader": "^0.13.2",
     "styled-components": "^2.4.0",
     "tls": "0.0.1",
-    "truncate": "^2.0.0",
+    "truncate": "^2.0.1",
     "tunnel": "0.0.5",
     "uuid": "^3.0.1",
     "wav": "^1.0.1",
