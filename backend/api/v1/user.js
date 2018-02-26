@@ -74,7 +74,7 @@ module.exports = () => {
 		    return next()
 	    }
 
-	    res.setStatus(401).send({
+	    res.status(401).send({
         success: false,
         error: UNAUTHORIZED
 	    })

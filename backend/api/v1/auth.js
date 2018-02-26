@@ -79,12 +79,14 @@ module.exports = () => {
     passport.serializeUser(async (user, done) => {
         delete user.password
 
-        console.log(`get user data?`)
         const data = await getUserData(user.email)
         user = {
             ...user,
-            ...data
+            ...data,
         }
+
+	      user.type = checkIfAdmin(user.email) ? 'admin' : 'user';
+	      user.hasAccess = true
 
         done(null, user)
     })
@@ -162,8 +164,6 @@ module.exports = () => {
                         message: err
                     })
                 } else {
-                    user.type = checkIfAdmin(user.email) ? 'admin' : 'user';
-                    user.hasAccess = true
                     return res.send({ user, success: true })
                 }
             })
@@ -191,8 +191,6 @@ module.exports = () => {
 
         req.logIn(user, function(err) {
             if (err) { return next(err); }
-            user.type = checkIfAdmin(user.email) ? 'admin' : 'user';
-            user.hasAccess = true
 
             return res.send({ success: true })
         });
@@ -242,15 +240,10 @@ module.exports = () => {
                         message: err
                     })
                 } else {
-                    user.type = checkIfAdmin(user.email) ? 'admin' : 'user';
-                    user.hasAccess = true
                     if(checkRoute(redirectURL)){
                         if(checkIfAdmin(user.email)) {
                             redirectURL = redirectURL.replace('/login', '');
                         }
-                    }
-                    else{
-                        //redirectURL = redirectURL + '/auth?user=' + JSON.stringify(user);
                     }
                     return res.redirect(redirectURL)
                 }
