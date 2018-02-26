@@ -48,6 +48,7 @@ export default class AccountDropdownMenu extends Component {
             return (
                 <div>
                     <NavLink to="/membership" onClick={onClick}>Membership Portal</NavLink>
+                    <NavLink to="/membership/downloads" onClick={onClick}>Downloads</NavLink>
                     <NavLink to="/profile/playlist" onClick={onClick}>Playlist</NavLink>
                     <NavLink to="/logout" onClick={onClick}>Logout</NavLink>
                 </div>
@@ -65,6 +66,7 @@ export default class AccountDropdownMenu extends Component {
                 </button>
                 <ul className="dropdown-menu" >
                     <li><Link to="/membership" onClick={this.itemClick}>Membership Portal</Link></li>
+                    <li><Link to="/membership/downloads" onClick={this.itemClick}>Downloads</Link></li>
 	                  <li><Link to="/profile/playlist" onClick={this.itemClick}>Playlist</Link></li>
 
                     {isAdmin(user) &&  <li role="separator" className="divider"/>}

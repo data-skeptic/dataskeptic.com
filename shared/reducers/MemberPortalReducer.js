@@ -9,7 +9,7 @@ var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
 var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
 const init = {
-	mode: "loading",
+	  mode: "loading",
     "analytics": [],
     "details": {
         "email": "",
@@ -22,7 +22,12 @@ const init = {
         "country": ""
     },
     update_member_msg: "",
-    address_msg: ""
+    address_msg: "",
+	  downloads: {
+	    loaded: false,
+	    loading: false,
+      list: []
+    }
 }
 
 const defaultState = Immutable.fromJS(init);
@@ -161,6 +166,23 @@ export default function memberPortalReducer(state = defaultState, action) {
         var val = action.payload.val
         nstate.details[field] = val
         break
+    case 'LOAD_MEMBER_DOWNLOADS':
+        nstate.downloads.loaded = false
+        nstate.downloads.loading = true
+	      nstate.downloads.list = []
+        axios
+          .get("/api/v1/user/downloads", address)
+          .then(({ data }) => dispatch({type: "LOAD_MEMBER_DOWNLOADS_SUCCESS", payload: data }))
+          .catch((err) => {
+            console.log(err)
+            snserror("LOAD_MEMBER_DOWNLOADS", "Failed!  Please email kyle@dataskeptic.com to get assistance.")
+          })
+        break
+    case 'LOAD_MEMBER_DOWNLOADS_SUCCESS':
+	      nstate.downloads.loaded = true
+	      nstate.downloads.loading = false
+	      nstate.downloads.list = data
+        break;
   }
   return Immutable.fromJS(nstate)
 }

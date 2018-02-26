@@ -6,13 +6,16 @@ class MembershipDownloads extends Component {
       if (!this.props.loggedIn) {
         return this.props.history.push('/login')
       }
+
+      this.props.dispatch({ type: 'LOAD_MEMBER_DOWNLOADS' })
     }
 
     render() {
-        const { user, loggedIn } = this.props
+        const { downloads } = this.props
+        const { loaded, loading, list } = downloads
         return (
             <div className="member-portal-container">
-              downloads
+              {JSON.stringify(downloads)}
             </div>
         )
     }
@@ -20,8 +23,7 @@ class MembershipDownloads extends Component {
 
 export default connect(
     (state) => ({
-        user: state.auth.getIn(['user']).toJS(),
         loggedIn: state.auth.getIn(['loggedIn']),
-        memberportal: state.memberportal,
+        downloads: state.memberportal.get('downloads').toJS()
     })
 )(MembershipDownloads);
