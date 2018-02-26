@@ -16,11 +16,11 @@ module.exports = cache => {
   const router = express.Router()
 
   router.get("/", function(req, res) {
-    const query = req.query
-    console.log(query)
-
     var q = "data"
-    var location = query.location || "don't match"
+    const city = req.session.ipInfo.city
+
+    let location = req.query.location || city || "don't match"
+    location = location.toLowerCase()
 
     var client = new elasticsearch.Client({
       host: elastic_search_endpoint,

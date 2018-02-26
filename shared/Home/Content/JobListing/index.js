@@ -6,7 +6,7 @@ import {
   Container,
   Box
 } from './style'
-import {click, getImpressionId, impression} from "../../../Tracking/Jobs";
+import {click, impression} from "../../../Tracking/Jobs";
 
 const Text = ({text}) => <span dangerouslySetInnerHTML={{__html: text}}/>
 

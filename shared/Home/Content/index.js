@@ -13,7 +13,6 @@ class Content extends Component {
   render () {
     const { featured_2, featured_3, featured_blog, latest_episode } = this.props
     const blogList = [featured_2, featured_3]
-    const location = "boston"
     return (
       <ContentContainer>
         <Feature feature_blog={featured_blog} author={this.getContributor(featured_blog)}/>
@@ -22,7 +21,7 @@ class Content extends Component {
         </BlogContainer>
         <PodContainer className="col-xs-12 col-sm-12 col-md-5">
           <Podcast latest_episode={latest_episode} getContributor={this.getContributor}/>
-	        <JobListing location={location} />
+	        <JobListing />
         </PodContainer>
       </ContentContainer>
     )
