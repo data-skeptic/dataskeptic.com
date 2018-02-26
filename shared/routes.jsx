@@ -29,6 +29,7 @@ import MembershipPortal        from 'components/MembershipPortal';
 import ChangeMembership        from 'components/membership/ChangeMembership';
 import MembershipInbox         from 'components/membership/MembershipInbox';
 import MembershipAnalytics     from 'components/membership/MembershipAnalytics';
+import MembershipDownloads     from 'components/membership/MembershipDownloads';
 import Analytics               from 'components/Analytics';
 import NotFound                from 'NotFound/Components/NotFound';
 import Podcast                 from 'Podcasts/Routes/Podcast';
@@ -171,7 +172,7 @@ export default (
             <IndexRoute component={Logout}/>
         </Route>
 
-        <Route path="/membershipPortal" showAds={false} component={App}>
+        <Route path="/membership" showAds={false} component={App}>
             <IndexRoute component={MembershipPortal}/>
         </Route>
         <Route path="/membership/change" showAds={false} component={App}>
@@ -182,6 +183,9 @@ export default (
         </Route>
         <Route path="/membership/analytics" showAds={false} component={App}>
             <IndexRoute component={MembershipAnalytics}/>
+        </Route>
+        <Route path="/membership/downloads" showAds={false} component={App}>
+            <IndexRoute component={MembershipDownloads}/>
         </Route>
 
         <Route path="/profile/playlist" showAds={false} component={App}>
