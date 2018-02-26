@@ -25,8 +25,7 @@ const isAcceptedList = list => lists.indexOf(list) > -1
 const getListUpdateEndpoint = list => listsEndpointMap[list]
 
 const updateUserSessionList = (user, list, blogId, insertMode = false) => {
-  console.log(list, blogId, insertMode)
-  let listToUpdate = user.lists[list]
+  let listToUpdate =[...user.lists[list]]
 
   // add / remove item
   if (insertMode) {
@@ -38,7 +37,6 @@ const updateUserSessionList = (user, list, blogId, insertMode = false) => {
     listToUpdate = listToUpdate.filter(i => i !== blogId)
   }
 
-  // update user session list
   return listToUpdate
 }
 
@@ -136,48 +134,28 @@ module.exports = () => {
         break
     }
 
-	  req.user.lists[list] = updateUserSessionList(
-		  req.user,
-		  list,
-		  item.blog_id,
-		  insertMode
-	  )
+    req.user.lists[list] = updateUserSessionList(
+      req.user,
+      list,
+      item.blog_id,
+      insertMode
+    )
 
-    // trigger lambda backend
-    new Promise((resolve, reject) => {
-      req.login(req.user, function(err) {
-        if (err) return reject(err)
+    // trigger async lambda backend
+	  updateUser(list, item)
 
-        return resolve()
-      })
-    })
-      .then(() => updateUser(list, item))
-      .then(result => {
-        const success = result.status === "ok"
+	  req.login(req.user, function(err) {
+		  if (err) {
+			  return res.send({
+				  success: false,
+				  error: error
+			  })
+      }
 
-        if (success) {
-          // race condition part ===>
-        } else {
-          console.log("user list update error")
-          console.error(result)
-        }
-      })
-      .then(() => {
-      	req.login(req, user, (err) => {
-      		if (err) throw err
-
-		      res.send({
-			      success: true
-		      })
-	      })
-      })
-      .catch(error => {
-        console.dir(error)
-        return res.send({
-          success: false,
-          error: error
-        })
-      })
+		  res.send({
+			  success: true
+		  })
+	  })
   })
 
   return router
