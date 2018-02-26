@@ -27,8 +27,6 @@ export const ContactFormValidator = values => {
         }
     }
 
-    console.dir(errors);
-
     return errors;
 };
 
