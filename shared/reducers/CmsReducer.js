@@ -37,13 +37,8 @@ const defaultState = Immutable.fromJS(init);
 const s3 = new aws.S3()
 
 const getEpisode = async (guid) => {
-    var u2 = `${base_url}/blog/list?guid=${guid}`
-    const [episodeData] = await Promise.all([
-        axios.get(u2).then((res) => res.data[0])
-    ])
-    return {
-        ...episodeData
-    }
+    var uri = `/api/episodes/get/${guid}`
+    return await axios.get(uri).then((res) => res.data)
 }
 
 export default function cmsReducer(state = defaultState, action) {
