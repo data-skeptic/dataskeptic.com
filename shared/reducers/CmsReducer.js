@@ -257,9 +257,10 @@ export default function cmsReducer(state = defaultState, action) {
 	  case 'CMS_GET_HOMEPAGE_JOB_LISTING':
 		  var payload = action.payload
 		  var dispatch = payload.dispatch
-		  var url = base_url + "/cms/homepage/geo"
+		  let location = payload.location ? `?location=${payload.location}` : ''
+		  var url = "/api/v1/jobs" + location
 		  axios
-			  .get(url, payload)
+			  .get(url)
 			  .then(function(result) {
 				  var data = result['data']
 				  dispatch({type: "CMS_INJECT_HOMEPAGE_JOB_LISTING", payload: {data} })

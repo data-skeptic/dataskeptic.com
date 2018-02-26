@@ -1,17 +1,11 @@
 import React, { Component , PropTypes }   from 'react';
-import { bindActionCreators } from 'redux';
 import { connect }            from 'react-redux';
-
-import Episode from "../Podcasts/Components/Episode"
 import MailingList from "../Common/Components/MailingList"
-import EpisodePlayer from "./EpisodePlayer"
-import HomepageFeature from "./HomepageFeature"
-import BlogContainer from 'Blog/Routes/BlogContainer'
 
-import {changePageTitle} from '../Layout/Actions/LayoutActions';
-import {get_homepage_content} from '../utils/redux_loader'
+import {changePageTitle} from '../Layout/Actions/LayoutActions'
 
 import HomeContainer from '../../shared/Home'
+import {parseQuery} from "../utils/parseQuery";
 
 class Home extends Component {
 
@@ -24,7 +18,9 @@ class Home extends Component {
           dispatch({type: "CMS_GET_HOMEPAGE_CONTENT", payload: {dispatch}})
       }
 
-      dispatch({type: "CMS_GET_HOMEPAGE_JOB_LISTING", payload: {dispatch}})
+      const query = parseQuery(this.props.location.search)
+      const location = query.location
+      dispatch({type: "CMS_GET_HOMEPAGE_JOB_LISTING", payload: {dispatch, location}})
   }
 
   static getPageMeta() {

@@ -6,7 +6,7 @@ import {
   Container,
   Box
 } from './style'
-import {click, getImpressionId, impression} from "../../../Tracking/Jobs";
+import {click, impression} from "../../../Tracking/Jobs";
 
 const Text = ({text}) => <span dangerouslySetInnerHTML={{__html: text}}/>
 
@@ -30,10 +30,7 @@ class JobListing extends Component {
 		if (!jobs[0]) return
 
 		const jobId = jobs[0].id
-		this.impression_id = getImpressionId(jobId)
-		if (!this.impression_id) {
-			this.impression_id = await impression(jobId)
-		}
+		this.impression_id = await impression(jobId)
 	}
 
 	trackApply = (id) => {
@@ -43,7 +40,8 @@ class JobListing extends Component {
   toggleViewMore = () => this.setState(prevState => ({ viewMore: !prevState.viewMore }))
 
   renderJobBox = (job, viewMore) => {
-    const {id, title, location, type, description, url, company, company_url } = job
+    const {id, title, location, type, description, full_description, url, company, company_url } = job
+    console.log(full_description)
 	  return (
 		  <Box>
 			  <Title>{title}</Title>
@@ -57,11 +55,10 @@ class JobListing extends Component {
 			  <Description>
 				  {!viewMore
 					  ? <span>
-                {/*<Text text={description.substring(0, 120)+'...'} />*/}
-                <Text text={description} />
+                <Text text={description.substring(0, 120)+'...'} />
                 <ViewMore onClick={this.toggleViewMore}>View More</ViewMore>
               </span>
-					  : <Text text={description} />
+					  : <Text text={full_description} />
 				  }
 			  </Description>
 			  <Apply href={url} target="_blank" onClick={() => this.trackApply(id)}>Apply now</Apply>
