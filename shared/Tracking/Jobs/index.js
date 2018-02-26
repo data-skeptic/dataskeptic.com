@@ -9,7 +9,6 @@ export const getImpressionId = job_id => {
 
 export const impression = async job_id => {
   const key = formatKey(job_id, "impression")
-  if (exists(key)) return
 
   const { impression_id } = await axios
     .post("/api/v1/track/jobs/impression", { job_id })

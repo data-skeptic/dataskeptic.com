@@ -30,10 +30,7 @@ class JobListing extends Component {
 		if (!jobs[0]) return
 
 		const jobId = jobs[0].id
-		this.impression_id = getImpressionId(jobId)
-		if (!this.impression_id) {
-			this.impression_id = await impression(jobId)
-		}
+		this.impression_id = await impression(jobId)
 	}
 
 	trackApply = (id) => {
