@@ -73,18 +73,24 @@ const getUserData = async (email) => {
     }
 }
 
+export const SCHEMA_VER = 1
+
 module.exports = () => {
     const router = express.Router()
 
     passport.serializeUser(async (user, done) => {
         delete user.password
 
-        console.log(`get user data?`)
-        const data = await getUserData(user.email)
-        user = {
-            ...user,
-            ...data,
-            operations: []
+        if (!user.firstInit) {
+	        console.log(`get user data?`)
+	        const data = await getUserData(user.email)
+	        user = {
+		        ...user,
+		        ...data,
+		        operations: [],
+            firstInit: true,
+		        schema: SCHEMA_VER
+	        }
         }
 
         done(null, user)
