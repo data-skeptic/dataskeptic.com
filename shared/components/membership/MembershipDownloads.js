@@ -3,6 +3,8 @@ import {connect} from 'react-redux'
 import styled from "styled-components"
 import Loading from "../../Common/Components/Loading";
 
+const formatLink = (bucket, s3key) => `/api/v1/download?bucket=${bucket}&path=${s3key}`
+
 class MembershipDownloads extends Component {
     componentDidMount() {
       if (!this.props.loggedIn) {
@@ -13,9 +15,13 @@ class MembershipDownloads extends Component {
       this.props.dispatch({ type: 'LOAD_MEMBER_DOWNLOADS', payload:{ dispatch } })
     }
 
-    renderFile = (file) =>
-      <File>
-        {JSON.stringify(file)}
+    renderFile = ({title, abstract, bucket, s3key}, index) =>
+      <File href={formatLink(bucket, s3key)} target="_blank" key={index}>
+        <Info>
+          <Title>{title}</Title>
+          <Abstract>{abstract}</Abstract>
+        </Info>
+        <DownloadIcon className="glyphicon glyphicon-cloud-download"/>
       </File>
 
 	  renderFiles = (files) =>
@@ -43,6 +49,7 @@ class MembershipDownloads extends Component {
 	      if (!loggedIn) return <div/>
         return (
             <Container>
+              <PageTitle>Downloads</PageTitle>
               {this.renderContent()}
             </Container>
         )
@@ -62,11 +69,62 @@ const Container = styled.div`
     max-width: 675px;
 `
 
-const Files = styled.div`
+const PageTitle = styled.h4`
+  font-size: 32px;
+  line-height: 40px;
+  color: #3A3B3B;
+  display: block;
+  padding-bottom: 8px;
 `
 
-const File = styled.div`
+const Files = styled.div`
+ 
+`
 
+const DownloadIcon = styled.div`
+  color: #565858;
+  width: 40px;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: hidden;
+`
+
+const File = styled.a`
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid #979797;
+  padding: 12px 0px;
+  
+  opacity: 0.8;
+  &:hover {
+    border-bottom: 1px solid #979797;
+    opacity: 1;
+    
+    ${DownloadIcon} {
+      visibility: visible;
+    }
+  }
+`
+
+const Info = styled.div`
+  flex: 1;
+`
+
+const Title = styled.div`
+  color: #3A3B3B;
+  font-size: 16px;
+  text-transform: uppercase;
+  line-height: 20px;
+  font-weight: bold;
+`
+
+const Abstract = styled.div`
+  padding-top: 12px;
+  font-size: 14px;
+  line-height: 24px;
+  color: #575959;
 `
 
 const Empty = styled.div``
