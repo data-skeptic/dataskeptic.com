@@ -167,6 +167,7 @@ export default function memberPortalReducer(state = defaultState, action) {
         nstate.details[field] = val
         break
     case 'LOAD_MEMBER_DOWNLOADS':
+	      var dispatch = action.payload.dispatch
         nstate.downloads.loaded = false
         nstate.downloads.loading = true
 	      nstate.downloads.list = []
@@ -181,7 +182,7 @@ export default function memberPortalReducer(state = defaultState, action) {
     case 'LOAD_MEMBER_DOWNLOADS_SUCCESS':
 	      nstate.downloads.loaded = true
 	      nstate.downloads.loading = false
-	      nstate.downloads.list = data
+	      nstate.downloads.list = action.payload.data
         break;
   }
   return Immutable.fromJS(nstate)

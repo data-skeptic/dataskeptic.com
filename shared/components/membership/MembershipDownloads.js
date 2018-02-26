@@ -1,22 +1,40 @@
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
+import styled from "styled-components"
+import Loading from "../../Common/Components/Loading";
 
 class MembershipDownloads extends Component {
+	  renderFiles = (files) =>
+      <div>{JSON.stringify(files)}</div>
+
     componentDidMount() {
       if (!this.props.loggedIn) {
         return this.props.history.push('/login')
       }
 
-      this.props.dispatch({ type: 'LOAD_MEMBER_DOWNLOADS' })
+	    const { dispatch } = this.props
+      this.props.dispatch({ type: 'LOAD_MEMBER_DOWNLOADS', payload:{ dispatch } })
+    }
+
+    renderContent() {
+      const { downloads: { loaded, list } } = this.props
+
+      if (!loaded) {
+        return <Loading />
+      }
+      return (list.length > 0)
+        ? this.renderFiles(list)
+        : this.renderEmpty()
     }
 
     render() {
-        const { downloads } = this.props
-        const { loaded, loading, list } = downloads
+        const { loggedIn } = this.props
+
+	      if (!loggedIn) return <div/>
         return (
-            <div className="member-portal-container">
-              {JSON.stringify(downloads)}
-            </div>
+            <Container>
+              {this.renderContent()}
+            </Container>
         )
     }
 }
@@ -27,3 +45,12 @@ export default connect(
         downloads: state.memberportal.get('downloads').toJS()
     })
 )(MembershipDownloads);
+
+const Container = styled.div`
+    margin: 25px auto;
+    clear: both;
+    max-width: 675px;
+`
+
+const PageTitle = styled.h2`
+`
