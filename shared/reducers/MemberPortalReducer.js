@@ -173,7 +173,9 @@ export default function memberPortalReducer(state = defaultState, action) {
 	      nstate.downloads.list = []
         axios
           .get("/api/v1/user/downloads", address)
-          .then(({ data }) => dispatch({type: "LOAD_MEMBER_DOWNLOADS_SUCCESS", payload: data }))
+          .then((result) => {
+            dispatch({type: "LOAD_MEMBER_DOWNLOADS_SUCCESS", payload: {data: result.data} })
+          })
           .catch((err) => {
             console.log(err)
             snserror("LOAD_MEMBER_DOWNLOADS", "Failed!  Please email kyle@dataskeptic.com to get assistance.")

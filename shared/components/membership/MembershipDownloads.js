@@ -4,9 +4,6 @@ import styled from "styled-components"
 import Loading from "../../Common/Components/Loading";
 
 class MembershipDownloads extends Component {
-	  renderFiles = (files) =>
-      <div>{JSON.stringify(files)}</div>
-
     componentDidMount() {
       if (!this.props.loggedIn) {
         return this.props.history.push('/login')
@@ -15,6 +12,19 @@ class MembershipDownloads extends Component {
 	    const { dispatch } = this.props
       this.props.dispatch({ type: 'LOAD_MEMBER_DOWNLOADS', payload:{ dispatch } })
     }
+
+    renderFile = (file) =>
+      <File>
+        {JSON.stringify(file)}
+      </File>
+
+	  renderFiles = (files) =>
+      <Files>
+        {files.map(this.renderFile)}
+      </Files>
+
+	  renderEmpty = () =>
+      <Empty>Empty?</Empty>
 
     renderContent() {
       const { downloads: { loaded, list } } = this.props
@@ -52,5 +62,11 @@ const Container = styled.div`
     max-width: 675px;
 `
 
-const PageTitle = styled.h2`
+const Files = styled.div`
 `
+
+const File = styled.div`
+
+`
+
+const Empty = styled.div``
