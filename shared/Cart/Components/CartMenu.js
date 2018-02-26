@@ -14,11 +14,13 @@ export const CartMenu = ({pathname, cartItemsCount, cartClick, cartButton = true
 
         <NavLink active={pathname} to="/store" onClick={itemClick}>Store</NavLink>
 
+	      { !mobile &&
 	      <SearchArea />
+	      }
 
-        { cartButton ?
-        <CartLink itemCount={cartItemsCount} onClick={cartClick} itemCount={cartItemsCount}/>
-        : null }
+        { cartButton &&
+        <CartLink itemCount={cartItemsCount} onClick={cartClick} />
+        }
     </div>
 );
 
