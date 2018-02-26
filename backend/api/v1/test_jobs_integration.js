@@ -1,7 +1,8 @@
 var elasticsearch = require('elasticsearch')
 
 const c = require('../../../config/config.json')
-const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const env = 'dev'
+console.log(c[env])
 var elastic_search_endpoint = c[env]['elastic_search_endpoint']
 const jobs_util = require('./jobs_util.js')
 
