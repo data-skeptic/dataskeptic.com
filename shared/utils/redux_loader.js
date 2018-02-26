@@ -4,6 +4,10 @@ var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
 const base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
 
+export function getPlaylistEpisodes(playlist) {
+	return axios.post(`/api/v1/episodes/multiple`, playlist).then((res) => res.data)
+}
+
 export function addEpisodes(type) {
 	const data = {
 		type
@@ -102,38 +106,6 @@ export function get_podcasts_from_cache(my_cache, pathname) {
 	}
 	return episodes
 }
-
-const getEpisodeData = (guid) => axios.get(`${base_url}/blog/list?guid=${guid}`).then((res) => res.data[0])
-
-export function getEpisodesData(episodes) {
-	return Promise.all(episodes.map(ep => getEpisodeData(ep.guid)))
-		.then((episodesData) => {
-			return episodes.map((ep, index) => ({
-				...episodesData[index],
-				...ep
-			}))
-		})
-}
-
-const getEpisode = (blog_id) => axios.get(`${base_url}/blog/list?blog_id=${blog_id}`).then((res) => res.data[0])
-const getEpisodeBasic = (guid) => axios.get(`/api/episodes/get/${guid}`).then((res) => res.data)
-
-export function getPlaylistEpisodes(playlist) {
-	// fetch episode data by lambda api
-	return Promise.all(playlist.map((blog_id) => getEpisode(blog_id)))
-		.then((episodes) => {
-			// fetch episode data from the cache
-			// need for `img` and `link`
-			return Promise.all(episodes.map(ep => getEpisodeBasic(ep.guid)))
-				.then((episodesData) => {
-					return episodes.map((ep, index) => ({
-						...ep,
-						...episodesData[index]
-					}))
-				})
-		})
-}
-
 
 export function get_products(dispatch) {
        var my_cache = global.my_cache

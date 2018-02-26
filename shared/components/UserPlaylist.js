@@ -11,6 +11,7 @@ import Loading from "../Common/Components/Loading";
 
 const renderDate = (date) => moment(date).format('MMMM D, YYYY')
 const CURRENT_YEAR = (new Date().getFullYear().toString().substr(-2))
+const debounce = 1300
 
 const isPlayingEpisode = (playing, playedEpisodeGuid, guid) => playing && (playedEpisodeGuid === guid)
 
@@ -57,7 +58,10 @@ class UserPlaylist extends Component {
     remove = ({blog_id, guid}) => {
       const playlisted = false
 	    this.props.dispatch({ type: 'ADD_PLAYLIST', payload: { playlisted, blogId: blog_id } })
-	    addPlaylist(blog_id, guid, playlisted)
+
+	    setTimeout(() => {
+	      addPlaylist(blog_id, guid, playlisted)
+	    }, debounce)
     }
 
     goToPodcasts = () => this.props.history.push('/podcast')
