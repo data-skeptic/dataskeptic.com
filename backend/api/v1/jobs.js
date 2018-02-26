@@ -1,41 +1,44 @@
-const express = require('express');
-const Influx = require('influx');
-const sanitizeHtml = require('sanitize-html');
-const truncate = require('truncate');
+const express = require("express")
+const Influx = require("influx")
+const sanitizeHtml = require("sanitize-html")
+const truncate = require("truncate")
 
-const jobs_util = require('./jobs_util')
+const jobs_util = require("./jobs_util")
 
-const c = require('../../../config/config.json')
-const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const c = require("../../../config/config.json")
+const env = process.env.NODE_ENV === "dev" ? "dev" : "prod"
 
-var elasticsearch = require('elasticsearch')
+var elasticsearch = require("elasticsearch")
 
-var elastic_search_endpoint = c[env]['elastic_search_endpoint']
+var elastic_search_endpoint = c[env]["elastic_search_endpoint"]
 
-module.exports = (cache) => {
-    const router = express.Router();
+module.exports = cache => {
+  const router = express.Router()
 
-    router.get('/', function (req, res) {
-		const query = req.query
-		console.log(query)
+  router.get("/", function(req, res) {
+    const query = req.query
+    console.log(query)
 
-		var q = "data"
-		var location = query.location || "don't match"
+    var q = "data"
+    var location = query.location || "don't match"
 
-		var client = new elasticsearch.Client({
-			host: elastic_search_endpoint,
-			log: 'warning'
-		});
+    var client = new elasticsearch.Client({
+      host: elastic_search_endpoint,
+      log: "warning"
+    })
 
-		var es_query = jobs_util.get_jobs_query(q, location)
-		client.search(es_query).then(function (resp) {
-			var hits = resp['hits']['hits']
-			var results = jobs_util.format_results(hits)
-		    return res.status(200).end(JSON.stringify(results))
-		}, function (err) {
-		    return res.status(500).end(JSON.stringify(err.message))
-		});
-    });
+    var es_query = jobs_util.get_jobs_query(q, location)
+    client.search(es_query).then(
+      function(resp) {
+        var hits = resp["hits"]["hits"]
+        var results = jobs_util.format_results(hits)
+        return res.status(200).end(JSON.stringify(results))
+      },
+      function(err) {
+        return res.status(500).end(JSON.stringify(err.message))
+      }
+    )
+  })
 
-    return router;
+  return router
 }
