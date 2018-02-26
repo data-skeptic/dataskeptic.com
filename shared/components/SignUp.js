@@ -23,7 +23,7 @@ class SignUp extends Component {
 
     componentDidMount() {
         if (this.props.loggedIn) {
-	        return this.props.history.push('/membershipPortal')
+	        return this.props.history.push('/membership')
         }
     }
 
