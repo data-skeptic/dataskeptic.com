@@ -121,24 +121,32 @@ export function load_blogs(prefix, limit, offset, dispatch) {
 
 function get_member_feed_replacements() {
     var url = base_api + "/members/feedreplacements/list"
+    console.log('get_member_feed_replacements')
+    console.log(url)
+
     return axios.get(url).then(function(result) {
         var replacements = result["data"]
         return replacements
+    }).catch((err) => {
+        console.log(`get_member_feed_replacements ERROR:`)
+        console.error(err)
     })
 }
 
 export function loadEpisodes(env) {
     console.log("-[Refreshing episodes]-");
     var feed_uri = "http://dataskeptic.libsyn.com/rss"
-    // var promise = get_member_feed_replacements()
-    // return promise.then(function(replacements) {
-    //     return get_and_process_feed(replacements, feed_uri)
-    // }).catch(function (err) {
-    //     console.log("Got replacements error")
+    var promise = get_member_feed_replacements()
+    return promise.then(function(replacements) {
+        console.log('replacements')
+        console.dir(replacements)
+        return get_and_process_feed(replacements, feed_uri)
+    }).catch(function (err) {
+        console.log("Got replacements error")
+          console.dir(err)
         var replacements = []
         return get_and_process_feed(replacements, feed_uri)
-
-    // })
+    })
 }
 
 function xml_to_list(xml) {
