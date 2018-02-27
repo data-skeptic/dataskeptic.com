@@ -19,7 +19,7 @@ class MembershipHeader extends Component {
                 </div>
                 <br/>
                 <div className="membership-menu">
-                    <Link to="/membershipPortal">Members home</Link>
+                    <Link to="/membership">Members home</Link>
                     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
                     <Link to="/membership/change">Change Membership</Link>
                     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;

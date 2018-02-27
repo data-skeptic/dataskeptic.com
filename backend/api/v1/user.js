@@ -59,6 +59,8 @@ const updateUser = (list, data) => {
   return axios.post(url, data).then(res => res.data)
 }
 
+const getUserDownloads = (email) => axios.get(`${base_url}/members/downloads?email=${email}`).then(res => res.data)
+
 module.exports = () => {
   const router = express.Router()
 
@@ -157,6 +159,20 @@ module.exports = () => {
 		  })
 	  })
   })
+
+	router.get('/downloads', (req,res) => {
+		const userEmail = req.user.email
+
+		getUserDownloads(userEmail)
+			.then((data) => res.send(data))
+			.catch(error => {
+				console.dir(error)
+				return res.send({
+					success: false,
+					error: error
+				})
+			})
+	})
 
   return router
 }

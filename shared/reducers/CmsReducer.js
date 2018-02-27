@@ -37,13 +37,8 @@ const defaultState = Immutable.fromJS(init);
 const s3 = new aws.S3()
 
 const getEpisode = async (guid) => {
-    var u2 = `${base_url}/blog/list?guid=${guid}`
-    const [episodeData] = await Promise.all([
-        axios.get(u2).then((res) => res.data[0])
-    ])
-    return {
-        ...episodeData
-    }
+    var uri = `/api/episodes/get/${guid}`
+    return await axios.get(uri).then((res) => res.data)
 }
 
 export default function cmsReducer(state = defaultState, action) {
@@ -262,9 +257,10 @@ export default function cmsReducer(state = defaultState, action) {
 	  case 'CMS_GET_HOMEPAGE_JOB_LISTING':
 		  var payload = action.payload
 		  var dispatch = payload.dispatch
-		  var url = base_url + "/cms/homepage/geo"
+		  let location = payload.location ? `?location=${payload.location}` : ''
+		  var url = "/api/v1/jobs" + location
 		  axios
-			  .get(url, payload)
+			  .get(url)
 			  .then(function(result) {
 				  var data = result['data']
 				  dispatch({type: "CMS_INJECT_HOMEPAGE_JOB_LISTING", payload: {data} })
