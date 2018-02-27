@@ -143,6 +143,7 @@ export function loadEpisodes(env) {
         return get_and_process_feed(replacements, feed_uri)
     }).catch(function (err) {
         console.log("Got replacements error")
+          console.dir(err)
         var replacements = []
         return get_and_process_feed(replacements, feed_uri)
     })
