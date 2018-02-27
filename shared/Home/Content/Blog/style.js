@@ -88,8 +88,12 @@ export const Author = styled.div`
 
 export const Avatar = styled.img`
   border-radius: 50%;
-  width: 48px;
-  height: 48px;
+  width: 60px;
+  height: 60px;
+  
+  padding: 4px;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
 `
 
 export const Name = styled.div`

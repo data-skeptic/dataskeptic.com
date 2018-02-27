@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
 import axios from "axios"
+import {track} from "../Tracking/Search";
 
 const init = {
     loading: false,
@@ -11,6 +12,7 @@ const init = {
 const defaultState = Immutable.fromJS(init);
 
 export const searchRequest = (dispatch, query = '') => {
+	track(query)
 	// encode query string
 	query = encodeURIComponent(query)
 

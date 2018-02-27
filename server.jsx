@@ -259,9 +259,6 @@ app.all("/.well-known/acme-challenge/:id", function(req, res) {
     res.status(200).send(`${req.params.id}.${challenge_response}`); 
 });
 
-const api = require('./backend/api/v1');
-app.use('/api/v1/', api(() => Cache));
-
 /*
  * SETUP API
  */
@@ -371,7 +368,6 @@ function api_router(req, res) {
 
         var ok_callback = function(r, info) {
             var resp = r['data']
-            console.log(resp)
             var result = {"msg": "ok"}
             return res.status(200).end(JSON.stringify(result))
         }
@@ -385,7 +381,6 @@ function api_router(req, res) {
         }
 
         var promise = place_order(printful_key, customer, designId, size, ok_callback, error_callback)
-        console.log(typeof(promise))
         return promise
     }
     else if (req.url.indexOf('/api/store/list') == 0) {
@@ -468,7 +463,6 @@ async function inject_homepage(store, my_cache) {
     const res = await getFeaturesAPI("homepage")
     var dispatch = store.dispatch
     dispatch({type: "CMS_INJECT_HOMEPAGE_CONTENT", payload: { data: res.data, dispatch }})
-
     const guid = res.data.latest_episode.guid
     const episode = my_cache.episodes_map[guid]
 
@@ -501,15 +495,14 @@ async function updateState(store, pathname, req) {
 
     store.dispatch({type: "PROPOSAL_SET_BUCKET", payload: {aws_proposals_bucket: process.env.RECORDING_AWS_PROPOSAL_BUCKET}})
     if (!isEmpty(Cache.contributors)) {
-        console.log("usingcache")
+        console.log("using cache for contributors")
         store.dispatch({type: "SET_CONTRIBUTORS", payload: Cache.contributors})
     }
-
+    console.log("on to bot")
     var bot = Cache.bot
     if (bot) {
         store.dispatch({type: "SET_BOT", payload: bot})
     }
-    
     if (pathname === "" || pathname === "/") {
         await inject_homepage(store, Cache, pathname)
     }
@@ -585,53 +578,43 @@ function renderView(store, renderProps, location) {
  * Please update this key to
  * have latest request response data in the user session
  */
-const CURRENT_IP_REQ_VERSION = 0
+const CURRENT_IP_REQ_VERSION = 5
+const localIPs = ['127.0.0.1', '::1']
 
 function getIpData(ip) {
-	return new Promise((resolve, reject) => {
-		request('http://ipinfo.io/' + ip + '?token=' + process.env.IPINFO_TOKEN, function(error, res, body) {
-    		if (body) {
-    			try {
-    				body = JSON.parse(body)
-    				var ip = body['ip']
+		const localIP = localIPs.indexOf(ip) > -1
+		if (localIP) {
+			ip = ''
+		}
 
-    				var country = body['country'] || "unknown"
-                    var city    = body['city']    || "unknown"
-                    var region  = body['region']  || "unknown"
-    				var postal  = body['postal']  || "unknown"
-    				var loc     = body['loc']     || "unknown"
-    				var arr     = loc.split(",")
-    				if (arr.length == 2) {
-    					var lat = arr[0]
-    					var lng = arr[1]
-    				} else {
-    					var lat = ""
-    					var lng = ""
-    				}
-    				console.log(["influx", lat, region, country, postal])
+		const url = `https://ipinfo.io${ip && `/${ip}`}/json`
 
-                    var pnt = {
-							measurement: "impression",
-							tags: {country, region, postal},
-							fields: {lat, lng},
-                            version: CURRENT_IP_REQ_VERSION
-					}
-                	resolve(pnt)
-				} catch(err) {
-					console.log("problem with tracking")
-                    console.log(ip)
-                    console.log(process.env.IPINFO_TOKEN)
-                    console.log(body)
-                    reject(err)
-				}
-			} else {
-				console.log("Some error from ipinfo.io")
-				console.log(body)
-				console.log(error)
-                reject(error)
-			}
-		})
-    })
+    const safe = str => str.replace(/'/g , '"');
+
+    return axios.get(url)
+      .then((res) => res.data)
+      .then((data) => {
+        const {ip, city, region, country, loc, org, postal} = data
+        const [lat, lng] = loc.split(',')
+
+        return {
+            ip,
+	          city: safe(city),
+            region: safe(region),
+            country: safe(country),
+            lat,
+	          lng,
+            org,
+            postal,
+            version: CURRENT_IP_REQ_VERSION
+        }
+      })
+      .catch((error) => {
+	      console.log("problem with tracking")
+	      console.log(ip)
+	      console.log(ipinfo_token)
+	      console.log(error)
+      })
 }
 
 async function tracking (req, res) {
@@ -643,9 +626,10 @@ async function tracking (req, res) {
     }
 
 	let ipInfo = req.session.ipInfo
+    if (isEmpty(ipInfo)) ipInfo = null
     if (ipInfo && ipInfo.version !== CURRENT_IP_REQ_VERSION) {
         ipInfo = null
-    }
+	}
 
     if (!ipInfo) {
         console.log("ipInfo not defined")
@@ -658,25 +642,44 @@ async function tracking (req, res) {
         }
 
         // save to current session if not empty
-        if (ipData) {
+        if (!!ipData) {
+            console.log('save to current session if not empty')
 	          req.session.ipInfo = ipInfo = ipData
-          }
+        }
     }
 
-	if (ipInfo) {
+    if (ipInfo) {
         if (influxdb) {
-            var lst = [ipInfo]
-    	    return influxdb.writePoints(lst)
-            .then(function() {})
-            .catch(function (err) {
-              console.error('Error saving data to InfluxDB!')
-              console.log(err)
-            })
-	    }
+            const {country, region, postal, lat, lng} = ipInfo
+
+            const pnt = {
+              measurement: "impression",
+              tags: {country, region, postal},
+              fields: {lat, lng},
+              version: CURRENT_IP_REQ_VERSION
+            }
+
+            var lst = [pnt]
+            return influxdb.writePoints(lst)
+                .then(function() {})
+                .catch(function (err) {
+                    console.error('Error saving data to InfluxDB!')
+                    console.log(err)
+                })
+        }
     } else {
         console.log("ipInfo is undefined")
     }
 }
+
+
+const api = require('./backend/api/v1');
+app.use('/api/v1', async (req, res, next) => {
+    await tracking(req, res)
+    next()
+})
+
+app.use('/api/v1/', api(() => Cache));
 
 const renderPage = async (req, res) => {
     if (req.url == '/favicon.ico') {

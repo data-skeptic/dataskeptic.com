@@ -52,7 +52,6 @@ export function year_from_path(pathname) {
 
 export function get_podcasts_from_cache(my_cache, pathname) {
 	console.log('get_podcasts_from_cache')
-	console.log(my_cache)
 	var year = year_from_path(pathname)
 	var episodes_list = my_cache.episodes_list
 	var episodes_map = my_cache.episodes_map
@@ -72,6 +71,45 @@ export function get_podcasts_from_cache(my_cache, pathname) {
 	return episodes
 }
 
+const getEpisodeData = (guid) => axios.get(`${base_url}/blog/list?guid=${guid}`).then((res) => res.data[0])
+
+export function getEpisodesData(episodes) {
+	return Promise.all(episodes.map(ep => getEpisodeData(ep.guid)))
+		.then((episodesData) => {
+			return episodes.map((ep, index) => ({
+				...episodesData[index],
+				...ep
+			}))
+		})
+}
+
+const getEpisode = (blog_id) => axios.get(`${base_url}/blog/list?blog_id=${blog_id}`).then((res) => res.data[0])
+const getEpisodeBasic = (guid) => axios.get(`/api/episodes/get/${guid}`).then((res) => res.data)
+
+export function getPlaylistEpisodes(playlist) {
+	// fetch episode data by lambda api
+	return Promise.all(playlist.map((blog_id) => getEpisode(blog_id)))
+		.then((episodes) => {
+			// fetch episode data from the cache
+			// need for `img` and `link`
+			return Promise.all(episodes.map(ep => getEpisodeBasic(ep.guid)))
+				.then((episodesData) => {
+					return episodes.map((ep, index) => ({
+						...ep,
+						...episodesData[index]
+					}))
+				})
+		})
+}
+
+export function addEpisodes(type) {
+	const data = {
+		type
+	}
+
+	return axios.post(`/api/v1/user/playlist/add_all`, data).then((res) => res.data)
+}
+
 export function get_podcasts(dispatch, pathname) {
 	var year = year_from_path(pathname)
 	if (year == -1) {
@@ -88,7 +126,7 @@ export function get_podcasts(dispatch, pathname) {
 			.get("/api/episodes/list?year=" + year)
       .then((result) => result.data)
 			.then((episodes) => {
-				console.log(episodes)
+				console.log('got episodes')
                 dispatch({type: "ADD_EPISODES", payload: episodes})
 			})
 			.catch((err) => {

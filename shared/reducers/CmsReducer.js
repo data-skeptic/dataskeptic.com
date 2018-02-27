@@ -6,6 +6,10 @@ const aws = require('aws-sdk')
 
 const init = {
     "home_loaded": false,
+    "jobListing": {
+        loaded: false,
+        jobs: {}
+    },
     "featured_blog_state": "",
     "featured_blog": {},
     "featured_blog2": {},
@@ -25,13 +29,8 @@ const defaultState = Immutable.fromJS(init);
 const s3 = new aws.S3()
 
 const getEpisode = async (guid) => {
-    var u2 = `${process.env.BASE_API}/blog/list?guid=${guid}`
-    const [episodeData] = await Promise.all([
-        axios.get(u2).then((res) => res.data[0])
-    ])
-    return {
-        ...episodeData
-    }
+    var uri = `/api/episodes/get/${guid}`
+    return await axios.get(uri).then((res) => res.data)
 }
 
 export default function cmsReducer(state = defaultState, action) {
@@ -57,7 +56,6 @@ export default function cmsReducer(state = defaultState, action) {
                     console.log("Can't retrieve blog")
                     console.log(err)
                 } else {
-                    console.log("Success with s3")
                     var content = d.Body.toString('utf-8')
                     var payload = { src_file, content }
                     dispatch({type: "CMS_ADD_BLOG_CONTENT", payload })                    
@@ -125,7 +123,6 @@ export default function cmsReducer(state = defaultState, action) {
         axios
             .post(url, payload)
             .then(function(result) {
-                console.log("success!!!")
                 var data = result['data']
                 var error = data['error']
                 if (error) {
@@ -149,7 +146,6 @@ export default function cmsReducer(state = defaultState, action) {
         axios
             .post(url, payload)
             .then(function(result) {
-                console.log("success!!!")
                 var data = result['data']
                 var error = data['error']
                 if (error) {
@@ -221,28 +217,57 @@ export default function cmsReducer(state = defaultState, action) {
             })
         break;
     case 'CMS_INJECT_HOMEPAGE_CONTENT':
+        console.log('CMS_INJECT_HOMEPAGE_CONTENT')
         var payload = action.payload
         var data = payload.data
         var dispatch = payload.dispatch
         var le = data['latest_episode']
-        var fb = data['featured_blog']
-        var fb2 = data['featured_2']
-        var fb3 = data['featured_3']
-        nstate.latest_episode = le
-        nstate.featured_blog = fb
-        nstate.featured_blog2 = fb2
-        nstate.featured_blog3 = fb3
-        nstate.home_loaded = true
-
-        getEpisode(le.guid)
-            .then((episode) => {
-                dispatch({type: "ADD_EPISODES", payload: [episode]})
-            })
-            .catch((err) => {
-                console.log("Caught in CmsReducer")
-                console.log(err)
-            })
+        if (le == undefined) {
+            console.log("=============== ERROR LOADING HOMEPAGE ===============")
+            console.log(data)
+        } else {
+            var fb = data['featured_blog']
+            var fb2 = data['featured_2']
+            var fb3 = data['featured_3']
+            nstate.latest_episode = le
+            nstate.featured_blog = fb
+            nstate.featured_blog2 = fb2
+            nstate.featured_blog3 = fb3
+            nstate.home_loaded = true
+            console.log(le.guid)
+            getEpisode(le.guid)
+                .then((episode) => {
+                    dispatch({type: "ADD_EPISODES", payload: [episode]})
+                })
+                .catch((err) => {
+                    console.log("Caught in CmsReducer")
+                    console.log(err)
+                })
+        }
         break;
+
+	  case 'CMS_GET_HOMEPAGE_JOB_LISTING':
+		  var payload = action.payload
+		  var dispatch = payload.dispatch
+		  let location = payload.location ? `?location=${payload.location}` : ''
+		  var url = "/api/v1/jobs" + location
+		  axios
+			  .get(url)
+			  .then(function(result) {
+				  var data = result['data']
+				  dispatch({type: "CMS_INJECT_HOMEPAGE_JOB_LISTING", payload: {data} })
+			  })
+			  .catch((err) => {
+				  console.log(err)
+				  var errorMsg = JSON.stringify(err)
+				  snserror("CMS_GET_HOMEPAGE_JOB_LISTING", errorMsg)
+			  })
+		  break;
+
+    case 'CMS_INJECT_HOMEPAGE_JOB_LISTING':
+      nstate.jobListing.loaded = true
+      nstate.jobListing.jobs = action.payload.data
+		  break;
   }
   return Immutable.fromJS(nstate)
 }

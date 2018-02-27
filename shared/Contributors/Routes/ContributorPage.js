@@ -127,7 +127,12 @@ const Name = styled.h2`
     padding: 10px 20px;
 `
 
-const Avatar = styled.img`border-radius: 50%;`
+const Avatar = styled.img`
+    border-radius: 50%;
+    padding: 4px;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+`
 
 const Bio = styled.p`
     padding: 15px;

@@ -29,6 +29,7 @@ import MembershipPortal        from 'components/MembershipPortal';
 import ChangeMembership        from 'components/membership/ChangeMembership';
 import MembershipInbox         from 'components/membership/MembershipInbox';
 import MembershipAnalytics     from 'components/membership/MembershipAnalytics';
+import MembershipDownloads     from 'components/membership/MembershipDownloads';
 import Analytics               from 'components/Analytics';
 import NotFound                from 'NotFound/Components/NotFound';
 import Podcast                 from 'Podcasts/Routes/Podcast';
@@ -53,6 +54,8 @@ import AdminCmsRecentRelated   from 'components/admin/AdminCmsRecentRelated';
 import AdminEmailsSend         from 'components/admin/AdminEmailsSend';
 import AdminOrdersNew          from 'components/admin/AdminOrdersNew';
 import AdminOrdersProcessing   from 'components/admin/AdminOrdersProcessing';
+
+import UserPlaylist             from 'components/UserPlaylist';
 
 import SERP                    from 'Search/Containers/SERP';
 
@@ -169,7 +172,7 @@ export default (
             <IndexRoute component={Logout}/>
         </Route>
 
-        <Route path="/membershipPortal" showAds={false} component={App}>
+        <Route path="/membership" showAds={false} component={App}>
             <IndexRoute component={MembershipPortal}/>
         </Route>
         <Route path="/membership/change" showAds={false} component={App}>
@@ -180,6 +183,13 @@ export default (
         </Route>
         <Route path="/membership/analytics" showAds={false} component={App}>
             <IndexRoute component={MembershipAnalytics}/>
+        </Route>
+        <Route path="/membership/downloads" showAds={false} component={App}>
+            <IndexRoute component={MembershipDownloads}/>
+        </Route>
+
+        <Route path="/profile/playlist" showAds={false} component={App}>
+          <IndexRoute component={UserPlaylist}/>
         </Route>
 
         <Route path="/analytics" component={App}>

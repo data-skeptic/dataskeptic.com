@@ -47,7 +47,7 @@ export function checkout(data, redirect) {
                     .then((successData) => {
                         console.log("success")
                         console.log(successData)
-                        if (successData.status === "ok") {
+                        if (successData.status !== "failure") {
                           redirect(successData)
                           dispatch(clearCart());
                           dispatch(checkoutRequestSuccess(successData, data, redirect))

@@ -10,8 +10,6 @@ const MailServices = require('../../modules/mail/services/MailServices');
 
 let redirectURL;
 
-const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-
 const checkIfAdmin = (email) => {
     const email_reg_exp = /^.*@dataskeptic\.com/i;
     return email_reg_exp.test(email);
@@ -43,11 +41,47 @@ const notifyOnJoin = ({ email }) => {
     return MailServices.sendMail(message)
 }
 
+
+const joinList = (list, key) =>
+    list.reduce(function(a, curr) {
+        return [...a, curr[key]];
+    }, []);
+
+const getUserList = (email, list, props = '') => axios.get(`${base_url}/user/${list}/list?email=${email}${props}`).then((res) => joinList(res.data, 'blog_id'))
+
+const getPlayedList = (email) => getUserList(email, 'played')///, '&limit=20&offset=0')
+const getPlaylistList = (email) => getUserList(email, 'playlist')
+const getFavoritesList = (email) => getUserList(email, 'favorites')
+
+const getUserData = async (email) => {
+    const [ played, playlist, favorites ] = await Promise.all([
+        getPlayedList(email),
+        getPlaylistList(email),
+        getFavoritesList(email)
+    ])
+
+    const lists = { played, playlist, favorites }
+
+    return {
+        lists
+    }
+}
+
 module.exports = () => {
     const router = express.Router()
 
-    passport.serializeUser((user, done) => {
+    passport.serializeUser(async (user, done) => {
         delete user.password
+
+        const data = await getUserData(user.email)
+        user = {
+            ...user,
+            ...data,
+        }
+
+	      user.type = checkIfAdmin(user.email) ? 'admin' : 'user';
+	      user.hasAccess = true
+
         done(null, user)
     })
 
@@ -124,8 +158,6 @@ module.exports = () => {
                         message: err
                     })
                 } else {
-                    user.type = checkIfAdmin(user.email) ? 'admin' : 'user';
-                    user.hasAccess = true
                     return res.send({ user, success: true })
                 }
             })
@@ -145,7 +177,7 @@ module.exports = () => {
 
         const user = {
             email,
-            password: process.env.AUTH_SALTPassword(password)
+            password: saltPassword(password)
         }
 
         await createUserAccount(user)
@@ -153,8 +185,6 @@ module.exports = () => {
 
         req.logIn(user, function(err) {
             if (err) { return next(err); }
-            user.type = checkIfAdmin(user.email) ? 'admin' : 'user';
-            user.hasAccess = true
 
             return res.send({ success: true })
         });
@@ -204,15 +234,10 @@ module.exports = () => {
                         message: err
                     })
                 } else {
-                    user.type = checkIfAdmin(user.email) ? 'admin' : 'user';
-                    user.hasAccess = true
                     if(checkRoute(redirectURL)){
                         if(checkIfAdmin(user.email)) {
                             redirectURL = redirectURL.replace('/login', '');
                         }
-                    }
-                    else{
-                        //redirectURL = redirectURL + '/auth?user=' + JSON.stringify(user);
                     }
                     return res.redirect(redirectURL)
                 }
