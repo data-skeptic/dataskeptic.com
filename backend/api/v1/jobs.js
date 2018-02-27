@@ -15,7 +15,7 @@ module.exports = cache => {
 
   router.get("/", function(req, res) {
     var q = "data"
-    const city = req.session.ipInfo.city
+    const city = req.session.ipInfo && req.session.ipInfo.city
 
     let location = req.query.location || city || "don't match"
     location = location.toLowerCase()
