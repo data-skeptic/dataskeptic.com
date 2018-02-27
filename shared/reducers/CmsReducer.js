@@ -24,6 +24,8 @@ const init = {
     "blog_content": {}
 }
 
+const env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
+
 const defaultState = Immutable.fromJS(init);
 
 const s3 = new aws.S3()

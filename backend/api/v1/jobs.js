@@ -1,12 +1,5 @@
 const express = require("express")
-const Influx = require("influx")
-const sanitizeHtml = require("sanitize-html")
-const truncate = require("truncate")
-
 const jobs_util = require("./jobs_util")
-
-const c = require("../../../config/config.json")
-const env = process.env.NODE_ENV === "dev" ? "dev" : "prod"
 
 var elasticsearch = require("elasticsearch")
 
