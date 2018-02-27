@@ -121,9 +121,6 @@ export function load_blogs(prefix, limit, offset, dispatch) {
 
 function get_member_feed_replacements() {
     var url = base_api + "/members/feedreplacements/list"
-    console.log('get_member_feed_replacements')
-    console.log(url)
-
     return axios.get(url).then(function(result) {
         var replacements = result["data"]
         return replacements
@@ -138,12 +135,9 @@ export function loadEpisodes(env) {
     var feed_uri = "http://dataskeptic.libsyn.com/rss"
     var promise = get_member_feed_replacements()
     return promise.then(function(replacements) {
-        console.log('replacements')
-        console.dir(replacements)
         return get_and_process_feed(replacements, feed_uri)
     }).catch(function (err) {
         console.log("Got replacements error")
-          console.dir(err)
         var replacements = []
         return get_and_process_feed(replacements, feed_uri)
     })
@@ -192,16 +186,17 @@ function get_and_process_feed(replacements, feed_uri) {
             var xml = result["data"]
             var data = xml_to_list(xml)
             var mxml = xml
-            for (var replacement of replacements) {
-                var guid = replacement['guid']
-                var member_link = replacement['member_link']
-                if (guid in data.guid_to_media_link) {
-                    var pub = data.guid_to_media_link[guid]
-                    mxml = mxml.replace(pub, member_link)
-                } else {
-                    console.log("Error: unlinkable GUID: " + guid)
-                }
-            }
+            console.log('do not apply replacements')
+            // for (var replacement of replacements) {
+            //     var guid = replacement['guid']
+            //     var member_link = replacement['member_link']
+            //     if (guid in data.guid_to_media_link) {
+            //         var pub = data.guid_to_media_link[guid]
+            //         mxml = mxml.replace(pub, member_link)
+            //     } else {
+            //         console.log("Error: unlinkable GUID: " + guid)
+            //     }
+            // }
             console.log("replacements made")
             data.member_feed = mxml
             /*
