@@ -129,16 +129,16 @@ function get_member_feed_replacements() {
 
 export function loadEpisodes(env) {
     console.log("-[Refreshing episodes]-");
-    var feed_uri = "https://dataskeptic.libsyn.com/rss"
-    var promise = get_member_feed_replacements()
-    return promise.then(function(replacements) {
-        return get_and_process_feed(replacements, feed_uri)
-    }).catch(function (err) {
-        console.log("Got replacements error")
+    var feed_uri = "http://dataskeptic.libsyn.com/rss"
+    // var promise = get_member_feed_replacements()
+    // return promise.then(function(replacements) {
+    //     return get_and_process_feed(replacements, feed_uri)
+    // }).catch(function (err) {
+    //     console.log("Got replacements error")
         var replacements = []
         return get_and_process_feed(replacements, feed_uri)
 
-    })
+    // })
 }
 
 function xml_to_list(xml) {
@@ -218,19 +218,20 @@ function get_and_process_feed(replacements, feed_uri) {
             console.log("Loaded " + data.episodes_list.length + " episodes into map")
             return data
         })
-        .then((data) => {
-	          return getEpisodesData(data.episodes_list)
-              .then((episodesData) => {
-	              episodesData.forEach(episodeData =>
-		              data.episodes_map[episodeData.guid] = {
-			              ...data.episodes_map[episodeData.guid],
-			              ...episodeData
-		              }
-	              )
-              })
-              .then(() => data)
-        })
+        // .then((data) => {
+	       //    return getEpisodesData(data.episodes_list)
+        //       .then((episodesData) => {
+	       //        episodesData.forEach(episodeData =>
+		     //          data.episodes_map[episodeData.guid] = {
+			   //            ...data.episodes_map[episodeData.guid],
+			   //            ...episodeData
+		     //          }
+	       //        )
+        //       })
+        //       .then(() => data)
+        // })
         .catch((err) => {
+            console.log('ERROR fetching RSS feed')
             console.log("loadEpisodes error: " + err);
             console.log(err)
             var episodes_map = {}
