@@ -129,7 +129,7 @@ function get_member_feed_replacements() {
 
 export function loadEpisodes(env) {
     console.log("-[Refreshing episodes]-");
-    var feed_uri = "https://dataskeptic.libsyn.com/rss"
+    var feed_uri = "http://dataskeptic.libsyn.com/rss"
     var promise = get_member_feed_replacements()
     return promise.then(function(replacements) {
         return get_and_process_feed(replacements, feed_uri)
