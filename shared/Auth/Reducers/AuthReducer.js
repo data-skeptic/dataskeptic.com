@@ -1,6 +1,6 @@
 import Immutable from 'immutable'
 import axios from "axios"
-import {fromJS} from 'immutable'
+import {fromJS, List} from 'immutable'
 
 const env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
 const base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
@@ -25,7 +25,7 @@ const updateList = (state, name, needAdd, id) => {
 }
 
 const removeEpisode = (state, blog_id) => {
-	return state.updateIn(['user', 'playlistEpisodes'], (l =>
+	return state.updateIn(['user', 'playlistEpisodes'], ((l = List()) =>
 			l.filter(episode => episode.get('blog_id') !== blog_id)
 		)
 	)

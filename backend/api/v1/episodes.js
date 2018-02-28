@@ -33,8 +33,6 @@ module.exports = (cache) => {
     });
 
     router.get('/get/:guid', function (req, res) {
-
-
         EpisodesServices.getEpisode(cache().episodes_map, req.params.guid)
             .then((episodes) => {
                 res.send(episodes);
@@ -43,6 +41,13 @@ module.exports = (cache) => {
                 res.send(err);
             })
     });
+
+    router.post('/multiple', (req, res) => {
+	      const guids = req.body
+        const episodes_blog_map = cache().episodes_blog_map
+        const episodes = guids.map((guid) => episodes_blog_map[guid])
+        res.send(episodes)
+    })
 
     return router
 

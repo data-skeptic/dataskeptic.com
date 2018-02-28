@@ -143,6 +143,7 @@ const resetCache = () => {
         , content_map: {}       // `uri`             -? {s3 blog content}
         , folders: []
         , episodes_map: {}      // `guid` | 'latest' -> {episode}
+        , episodes_blog_map: {} // `blog_id` -> {episode}
         , episodes_list: []     // guids
         , episodes_content: []     // pn
         , products: {}
@@ -180,10 +181,11 @@ const doRefresh = () => {
 		    console.log("-[All cache data fetched]-")
 
         // episodes
-		    const {episodes_map, episodes_list, episodes_content, member_feed} = episodes
+		    const {episodes_map, episodes_blog_map, episodes_list, episodes_content, member_feed} = episodes
 	      Cache.episodes_map = episodes_map
         Cache.episodes_list = episodes_list
         Cache.episodes_content = episodes_content
+        Cache.episodes_blog_map = episodes_blog_map
         Cache.member_feed = member_feed
 
         // products
@@ -265,6 +267,8 @@ app.use(
     session({
         name: 'session',
         keys: ['datas', 'member'],
+        // resave: false,
+        // saveUninitialized: false,
 
         // Cookie Options
         maxAge: 24 * 60 * 60 * 1000 // 24 hours
