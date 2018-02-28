@@ -25,16 +25,19 @@ import Recorder, {steps} from '../../Recorder';
 import QuestionForm from "../../Questions/Forms/QuestionForm";
 import {submitCommentForm} from "../../Proposals/Actions/CommentBoxFormActions";
 import SectionBlock from "../Components/SectionBlock/SectionBlock";
+import Launcher from "../../Chat/Containers/Launcher";
 
 class ContactUs extends React.Component {
-    constructor(props) {
-        super(props)
+	onMessage = (message) => {
+		this.addMessage(message)
 
-        this.state = {
-            submittedUrl: '',
-	          openSection: ''
-        }
-    }
+		// reply logic here
+		if (message.text.toLowerCase().indexOf('kyle') > -1) {
+			this.reply({
+				text: 'What?'
+			}, 'kyle')
+		}
+	}
 
     isSectionOpen = section => section === this.state.openSection
 
@@ -129,6 +132,28 @@ class ContactUs extends React.Component {
 				console.log(err)
 			})
 	}
+	addMessage = (message) => this.setState(prevState => ({
+		messages: [...prevState.messages, message]
+	}))
+	reply = (message, author = 'bot') => {
+		this.addMessage({
+			...message,
+			author
+		})
+	}
+
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            submittedUrl: '',
+	          openSection: '',
+	          messages: [
+		          {type: 'text', author: 'kyle', text: 'Welcome to Data Skeptic!'},
+		          {type: 'text', author: 'bot', text: 'How can i help you?'}
+	          ]
+        }
+    }
 
 	render() {
 			const {confirmPolicy,activeStep,errorMessage} = this.props;
@@ -142,6 +167,11 @@ class ContactUs extends React.Component {
 
     	return (
 		    <Container>
+			    <Launcher
+				    onMessage={this.onMessage}
+				    messages={this.state.messages}
+			    />
+
 			    <Title>Contact Us</Title>
 					<Text>We hope to respond to all inquiries, but sometimes the volume of incoming questions can cause our queue to explode.  We prioritize responses to Data Skeptic members first, and to those who ask questions in a public forum like Twitter, our Facebook wall (not Facebook direct message), or Slack.  Many people can benefit from responses in public places.</Text>
 

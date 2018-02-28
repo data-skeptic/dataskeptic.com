@@ -208,6 +208,7 @@ class MainView extends React.Component {
     if (!oadmin['bot']) {
       cbc = <div></div>
     }
+    cbc = <div></div>
 
     return (
         <div className={ classNames('site', {'no-scroll' : isMobileMenuVisible}) }>
