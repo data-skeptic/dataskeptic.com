@@ -130,17 +130,16 @@ function get_member_feed_replacements() {
     })
 }
 
-export function loadEpisodes(env) {
+export async function loadEpisodes() {
     console.log("-[Refreshing episodes]-");
-    var feed_uri = "http://dataskeptic.libsyn.com/rss"
-    var promise = get_member_feed_replacements()
-    return promise.then(function(replacements) {
-        return get_and_process_feed(replacements, feed_uri)
-    }).catch(function (err) {
-        console.log("Got replacements error")
-        var replacements = []
-        return get_and_process_feed(replacements, feed_uri)
-    })
+    var feed_uri = "https://dataskeptic.libsyn.com/rss"
+    var replacements = []
+
+    try {
+        replacements = await get_member_feed_replacements()
+    } catch (err) {}
+
+    return get_and_process_feed(replacements, feed_uri)
 }
 
 function xml_to_list(xml) {
