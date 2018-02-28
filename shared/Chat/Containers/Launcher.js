@@ -10,9 +10,13 @@ export default class Launcher extends Component {
     messages: [],
     onMessage: () => {}
   }
+
   state = {
     open: true
   }
+
+  close = () => this.setState({ open: false })
+
   toggle = () =>
     this.setState(prevState => ({
       open: !prevState.open
@@ -27,7 +31,7 @@ export default class Launcher extends Component {
         <Chat inactive={!open}>
           <Header>
             {header}
-            <Close />
+            <Close onClick={this.close}/>
           </Header>
           <Messages messages={messages} />
           <UserInput placeholder={placeholder} onSubmit={onMessage} />
@@ -87,7 +91,7 @@ const Close = styled.button`
   position: absolute;
   right: 26px;
   top: 16px;
-  
+
   background-image: url(/img/chat/close.svg);
   width: 20px;
   height: 20px;

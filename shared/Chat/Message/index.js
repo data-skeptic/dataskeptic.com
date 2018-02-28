@@ -16,9 +16,11 @@ export default class Message extends Component {
     const { text, author, sent } = this.props
 
     return (
-      <Container>
-        {author && <Author src={getAuthorImage(author)} bot={author==='bot'}/>}
-        <Text sent={sent}>{text}</Text>
+      <Container sent={sent}>
+        {author && (
+          <Author src={getAuthorImage(author)} bot={author === "bot"} />
+        )}
+        <Text  sent={sent}>{text}</Text>
       </Container>
     )
   }
@@ -27,6 +29,15 @@ export default class Message extends Component {
 const Container = styled.div`
   display: flex;
   margin-bottom: 12px;
+
+  ${props =>
+    props.sent
+      ? `
+			justify-content: flex-end;
+			`
+      : `
+	    justify-content: flex-start;
+			`};
 `
 
 const Author = styled.img`
@@ -34,27 +45,25 @@ const Author = styled.img`
   height: 32px;
   margin-right: 15px;
   margin-top: 6px;
-  
-  ${props => !props.bot && `
-    border-radius: 50%;  
-  `}
-`
-
-const Text = styled.div`
-  flex: 1;
-  
-  border-radius: 5px;
-  padding: 12px;
 
   ${props =>
-		props.sent
-			? `
-			justify-content: flex-end;
+    !props.bot &&
+    `
+    border-radius: 50%;  
+  `};
+`
+
+const Text = styled.span`
+  border-radius: 5px;
+  padding: 12px;
+  display: inline-block;
+
+  ${props =>
+	props.sent
+		? `
 	    background: rgba(240, 217, 67, 0.1);
 			`
-			: `
-	    justify-content: flex-start;
+		: `
 			background: #F9FAF9;
-			`
-	};
+	`};
 `

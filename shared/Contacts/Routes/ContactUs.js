@@ -132,28 +132,31 @@ class ContactUs extends React.Component {
 				console.log(err)
 			})
 	}
+
+	constructor(props) {
+		super(props)
+
+		this.state = {
+			submittedUrl: '',
+			openSection: '',
+			messages: [
+				{type: 'text', author: 'kyle', text: 'Welcome to Data Skeptic!'},
+				{type: 'text', author: 'bot', text: 'I wanna know how i can help you.'},
+				{type: 'text', sent: true, text: 'Cool!'}
+			]
+		}
+	}
+
 	addMessage = (message) => this.setState(prevState => ({
 		messages: [...prevState.messages, message]
 	}))
+
 	reply = (message, author = 'bot') => {
 		this.addMessage({
 			...message,
 			author
 		})
 	}
-
-    constructor(props) {
-        super(props)
-
-        this.state = {
-            submittedUrl: '',
-	          openSection: '',
-	          messages: [
-		          {type: 'text', author: 'kyle', text: 'Welcome to Data Skeptic!'},
-		          {type: 'text', author: 'bot', text: 'How can i help you?'}
-	          ]
-        }
-    }
 
 	render() {
 			const {confirmPolicy,activeStep,errorMessage} = this.props;

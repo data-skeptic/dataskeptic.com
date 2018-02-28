@@ -33,7 +33,6 @@ export default class UserInput extends Component {
   onKeyDown = event => {
     if (event.keyCode === 13) {
       this.handleSubmit(event)
-	    this.clear()
     }
   }
 
@@ -47,6 +46,7 @@ export default class UserInput extends Component {
 	    text: this.state.value
     }
 
+	  this.clear()
     onSubmit(data)
   }
 

@@ -7,12 +7,12 @@ export default class Messages extends Component {
     messages: []
   }
 
-	componentDidUpdate = () => this.list.scrollTop = this.list.scrollHeight
+  componentDidUpdate = () => this.list.scrollTop = this.list.scrollHeight
 
   render() {
     const { messages } = this.props
     return (
-      <Wrapper ref={el => this.list = el}>
+      <Wrapper innerRef={el => (this.list = el)}>
         {messages.map((m, index) => <Message key={index} {...m} />)}
       </Wrapper>
     )
@@ -21,6 +21,6 @@ export default class Messages extends Component {
 
 const Wrapper = styled.div`
   padding: 20px 30px 0px;
-  overflow-y: scroll;
+  overflow-y: auto;
   flex: 1;
 `
