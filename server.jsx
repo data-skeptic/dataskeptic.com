@@ -62,9 +62,8 @@ import redirects_map               from './redirects';
 import {reducer as formReducer} from 'redux-form'
 import axios from "axios"
 
-import tunnel from 'tunnel'
+import Rollbar from 'rollbar'
 import http from 'http'
-import request from 'request'
 var Influx = require('influx');
 
 console.log("server.jsx : starting")
@@ -701,6 +700,17 @@ app.use('/api/v1', async (req, res, next) => {
 })
 
 app.use('/api/v1/', api(() => Cache));
+
+const rollbar = Rollbar.init({
+	accessToken: "4555957947d347a69caf6e017ea72f51",
+	handleUncaughtExceptions: true,
+	verbose: false,
+	payload: {
+		environment: env
+	}
+});
+
+app.use(rollbar.errorHandler());
 
 const renderPage = async (req, res) => {
     if (req.url == '/favicon.ico') {
