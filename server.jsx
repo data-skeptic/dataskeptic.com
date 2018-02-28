@@ -164,13 +164,12 @@ global.env = env;
  * REFRESH
  */
 
-const doRefresh = (store) => {
-    let env = global.env;
+const doRefresh = () => {
     console.log("-[Refreshing Cache]-");
 
     // Let node make requests asynchronous
     return Promise.all([
-    	loadEpisodes(env),
+    	loadEpisodes(),
 	    loadProducts(),
 	    get_contributors(),
 	    loadCurrentRFC(),

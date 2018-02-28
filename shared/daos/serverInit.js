@@ -130,17 +130,16 @@ function get_member_feed_replacements() {
     })
 }
 
-export function loadEpisodes(env) {
+export async function loadEpisodes() {
     console.log("-[Refreshing episodes]-");
     var feed_uri = "https://dataskeptic.libsyn.com/rss"
-    var promise = get_member_feed_replacements()
-    return promise.then(function(replacements) {
-        return get_and_process_feed(replacements, feed_uri)
-    }).catch(function (err) {
-        console.log("Got replacements error")
-        var replacements = []
-        return get_and_process_feed(replacements, feed_uri)
-    })
+    var replacements = []
+
+    try {
+        replacements = await get_member_feed_replacements()
+    } catch (err) {}
+
+    return get_and_process_feed(replacements, feed_uri)
 }
 
 function xml_to_list(xml) {
@@ -187,16 +186,16 @@ function get_and_process_feed(replacements, feed_uri) {
             var data = xml_to_list(xml)
             var mxml = xml
             console.log('do not apply replacements')
-            // for (var replacement of replacements) {
-            //     var guid = replacement['guid']
-            //     var member_link = replacement['member_link']
-            //     if (guid in data.guid_to_media_link) {
-            //         var pub = data.guid_to_media_link[guid]
-            //         mxml = mxml.replace(pub, member_link)
-            //     } else {
-            //         console.log("Error: unlinkable GUID: " + guid)
-            //     }
-            // }
+            for (var replacement of replacements) {
+                var guid = replacement['guid']
+                var member_link = replacement['member_link']
+                if (guid in data.guid_to_media_link) {
+                    var pub = data.guid_to_media_link[guid]
+                    mxml = mxml.replace(pub, member_link)
+                } else {
+                    console.log("Error: unlinkable GUID: " + guid)
+                }
+            }
             console.log("replacements made")
             data.member_feed = mxml
             /*
@@ -221,18 +220,18 @@ function get_and_process_feed(replacements, feed_uri) {
             console.log("Loaded " + data.episodes_list.length + " episodes into map")
             return data
         })
-        // .then((data) => {
-	       //    return getEpisodesData(data.episodes_list)
-        //       .then((episodesData) => {
-	       //        episodesData.forEach(episodeData =>
-		     //          data.episodes_map[episodeData.guid] = {
-			   //            ...data.episodes_map[episodeData.guid],
-			   //            ...episodeData
-		     //          }
-	       //        )
-        //       })
-        //       .then(() => data)
-        // })
+        .then((data) => {
+	          return getEpisodesData(data.episodes_list)
+              .then((episodesData) => {
+	              episodesData.forEach(episodeData =>
+		              data.episodes_map[episodeData.guid] = {
+			              ...data.episodes_map[episodeData.guid],
+			              ...episodeData
+		              }
+	              )
+              })
+              .then(() => data)
+        })
         .catch((err) => {
             console.log('ERROR fetching RSS feed')
             console.log("loadEpisodes error: " + err);
