@@ -12,7 +12,7 @@ export default class Launcher extends Component {
   }
 
   state = {
-    open: true
+    open: false
   }
 
   close = () => this.setState({ open: false })
