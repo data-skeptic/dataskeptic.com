@@ -36,6 +36,10 @@ class ContactUs extends React.Component {
 			this.reply({
 				text: 'What?'
 			}, 'kyle')
+		} else {
+			this.reply({
+				text: 'Go on...'
+			}, 'bot')
 		}
 	}
 
