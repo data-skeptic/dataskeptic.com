@@ -18,6 +18,7 @@ import {write as writeProposal, upload as uploadProposalFiles, getRecording}  fr
 import bodyParser                from 'body-parser'
 import cookieParser              from 'cookie-parser'
 import compression               from 'compression';
+import { getJobs, extractLocation } from './backend/api/v1/jobs_util'
 import {feed_uri}                from 'daos/episodes'
 import {
     apiMemberFeed,
@@ -480,14 +481,17 @@ function getContributorPosts(contributor) {
     return axios.get(`${base_url}/blog/list?contributor=${contributor}&limit=21`).then((res) => res.data)
 }
 
-async function inject_homepage(store, my_cache) {
+async function inject_homepage(store, my_cache, location) {
     const res = await getFeaturesAPI("homepage")
-    var dispatch = store.dispatch
-    dispatch({type: "CMS_INJECT_HOMEPAGE_CONTENT", payload: { data: res.data, dispatch }})
+	  store.dispatch({type: "CMS_INJECT_HOMEPAGE_CONTENT", payload: { data: res.data }})
+
     const guid = res.data.latest_episode.guid
     const episode = my_cache.episodes_map[guid]
-
     store.dispatch({type: "ADD_EPISODES", payload: [episode]})
+
+    const q = "data"
+    const jobs = await getJobs(q, location)
+    store.dispatch({type: "CMS_INJECT_HOMEPAGE_JOB_LISTING", payload: { data: jobs }})
 }
 
 function inject_products(store, my_cache, pathname) {
@@ -525,7 +529,8 @@ async function updateState(store, pathname, req) {
         store.dispatch({type: "SET_BOT", payload: bot})
     }
     if (pathname === "" || pathname === "/") {
-        await inject_homepage(store, Cache, pathname)
+        const location = extractLocation(req)
+        await inject_homepage(store, Cache, location)
     }
     if (pathname.indexOf('/blog') === 0) {
     }
