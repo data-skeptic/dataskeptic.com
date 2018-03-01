@@ -51,7 +51,7 @@ function get_jobs_query(q, location) {
 		          "must": [
 		            {
 		              "multi_match": {
-		                "query": "data",
+		                "query": q,
 		                "fields": [
 		                  "title",
 		                  "description"
@@ -60,9 +60,9 @@ function get_jobs_query(q, location) {
 		            },
 		            {
 		              "multi_match": {
-		                "query": "new york",
+		                "query": location,
 		                "fields": [
-		                  "location"
+		                  "location*"
 		                ]
 		              }
 		            }
@@ -70,7 +70,7 @@ function get_jobs_query(q, location) {
 		          "filter": {
 		            "range": {
 		              "created_at": {
-		                "gte": "2018-02-01"
+		                "gte": "now-30d/d"
 		              }
 		            }
 		          }
