@@ -132,7 +132,7 @@ function get_member_feed_replacements() {
 
 export async function loadEpisodes() {
     console.log("-[Refreshing episodes]-");
-    var feed_uri = "https://dataskeptic.libsyn.com/rss"
+    var feed_uri = "http://dataskeptic.libsyn.com/rss"
     var replacements = []
 
     try {
@@ -158,6 +158,8 @@ function xml_to_list(xml) {
         var episodes = convert_items_to_json(items)
         for (var i = 0; i < episodes.length; i++) {
             var episode = episodes[i]
+            episode.img = episode.img.replace("http://", "https://");
+            episode.mp3 = episode.mp3.replace("http://", "https://");
             var link = episode['link']
             var prettyname = link.replace("http://" + domain, "").replace("https://" + domain, '').replace('.php', '').replace('/blog/', '/')
             var guid = episode.guid
@@ -173,7 +175,7 @@ function xml_to_list(xml) {
 
 const getEpisodesData = (guids) => {
     const uri = base_api + "/podcast/episodes/get_by_guids"
-    console.dir()
+    console.log(uri)
     return axios.post(uri, { guids }).then(res => res.data)
 }
 
