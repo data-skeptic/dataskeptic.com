@@ -45,48 +45,55 @@ function get_jobs_query(q, location) {
 		from: (pageNum - 1) * perPage,
 		size: 10,
 		body: {
-			"query": {
-			    "function_score": {
-			      "query": {
-			        "bool": {
-			          "must": [
-			            {
-			              "multi_match": {
-			                "query": "data",
-			                "fields": [
-			                  "title",
-			                  "description"
-			                ]
-			              }
-			            },
-			            {
-			              "multi_match": {
-			                "query": "new york",
-			                "fields": [
-			                  "location"
-			                ]
-			              }
-			            }
-			          ]
-			        }
-			      },
-			      "functions": [
-			        {
-			          "gauss": {
-			            "created_at": {
-			              "origin": "now-3d/d",
-			              "scale": "3d",
-			              "offset": "3d",
-			              "decay": 0.3
-			            }
-			          }
-			        }
-			      ]
-			    }
-			}
+		  "query": {
+		    "function_score": {
+		      "query": {
+		        "bool": {
+		          "must": [
+		            {
+		              "multi_match": {
+		                "query": "data",
+		                "fields": [
+		                  "title",
+		                  "description"
+		                ]
+		              }
+		            },
+		            {
+		              "multi_match": {
+		                "query": "new york",
+		                "fields": [
+		                  "location"
+		                ]
+		              }
+		            }
+		          ],
+		          "filter": {
+		            "range": {
+		              "created_at": {
+		                "gte": "2018-02-01"
+		              }
+		            }
+		          }
+		        }
+		      },
+		      "functions": [
+		        {
+		          "gauss": {
+		            "created_at": {
+		              "origin": "now-3d/d",
+		              "scale": "3d",
+		              "offset": "3d",
+		              "decay": 0.1
+		            }
+		          }
+		        }
+		      ]
+		    }
+		  }
 		}
 	}
 	return es_query
 }
 
-module.exports = {format_results, get_jobs_query}
+		module.exports = {format_results, get_jobs_query}
