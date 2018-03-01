@@ -23,10 +23,19 @@ class Login extends Component {
         this.props.dispatch(changePageTitle(title))
     }
 
-    componentDidMount() {
-        if (this.props.loggedIn) {
-            window.location.href = '/membershipPortal'
-        }
+    login = (data) => {
+        this.setState({error: ''})
+        axios.post(LOGIN_ENDPOINT, data).then((result) => {
+            if (result.data.success) {
+                this.props.dispatch({
+                  type: 'AUTH_USER_SUCCESS',
+                  payload: { data: result.data.user }
+                })
+	              return this.props.history.push('/membership')
+            } else {
+                this.setState({error: result.data.message})
+            }
+        })
     }
 
     static getPageMeta() {
@@ -39,19 +48,10 @@ class Login extends Component {
         window.location.href = '/api/v1/auth/login/google/'
     }
 
-    login = (data) => {
-        this.setState({error: ''})
-        axios.post(LOGIN_ENDPOINT, data).then((result) => {
-            if (result.data.success) {
-                this.props.dispatch({
-                  type: 'AUTH_USER_SUCCESS',
-                  payload: { data: result.data.user }
-                })
-	              return this.props.history.push('/membershipPortal')
-            } else {
-                this.setState({error: result.data.message})
-            }
-        })
+    componentDidMount() {
+        if (this.props.loggedIn) {
+            window.location.href = '/membership'
+        }
     }
 
     render() {

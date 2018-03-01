@@ -59,18 +59,27 @@ export const UserBox = styled.div`
 
 export const UserImg = styled.img`
   border-radius: 50%;
-  width: 48px;
-  height: 48px;
+  width: 60px;
+  height: 60px;
+  
+  padding: 4px;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
 `
 
 export const UserDetail = styled.div`
-  padding-left: 20px;
+  padding-left: 12px;
   font-size: 14px;
   color: #4A4A4A;
-  border: none;
-  :hover {
-    border: none;
-  }
+  
+  a {
+	  border: none;
+	  :hover {
+	    border: none;
+	  }
+	}
+  
+  padding-top: 8px;
 `
 
 export const UserInfo = styled.a`
@@ -78,8 +87,10 @@ export const UserInfo = styled.a`
 `
 
 export const UserImgArea = styled.div`
-  border: none;
-  :hover {
-    border: none;
+  a {
+	  border: none;
+	  :hover {
+	    border: none;
+	  }
   }
 `

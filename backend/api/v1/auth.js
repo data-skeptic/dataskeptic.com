@@ -55,7 +55,7 @@ const joinList = (list, key) =>
 
 const getUserList = (email, list, props = '') => axios.get(`${base_url}/user/${list}/list?email=${email}${props}`).then((res) => joinList(res.data, 'blog_id'))
 
-const getPlayedList = (email) => getUserList(email, 'played')///, '&limit=20&offset=0')
+const getPlayedList = (email) => getUserList(email, 'played', '&limit=1000&offset=0')
 const getPlaylistList = (email) => getUserList(email, 'playlist')
 const getFavoritesList = (email) => getUserList(email, 'favorites')
 
@@ -73,20 +73,27 @@ const getUserData = async (email) => {
     }
 }
 
+export const SCHEMA_VER = 1
+
 module.exports = () => {
     const router = express.Router()
 
     passport.serializeUser(async (user, done) => {
         delete user.password
 
-        const data = await getUserData(user.email)
-        user = {
-            ...user,
-            ...data,
+        if (!user.firstInit) {
+	        console.log(`get user data?`)
+	        const data = await getUserData(user.email)
+	        user = {
+		        ...user,
+		        ...data,
+		        operations: [],
+            firstInit: true,
+		        schema: SCHEMA_VER,
+		        type: checkIfAdmin(user.email) ? 'admin' : 'user',
+            hasAccess: true
+	        }
         }
-
-	      user.type = checkIfAdmin(user.email) ? 'admin' : 'user';
-	      user.hasAccess = true
 
         done(null, user)
     })

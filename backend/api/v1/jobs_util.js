@@ -9,7 +9,6 @@ const c = require('../../../config/config.json')
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
 var elasticsearch = require('elasticsearch')
-
 var elastic_search_endpoint = c[env]['elastic_search_endpoint']
 
 function format_results(hits) {
@@ -96,4 +95,37 @@ function get_jobs_query(q, location) {
 	return es_query
 }
 
-		module.exports = {format_results, get_jobs_query}
+export async function getJobs(q, location) {
+	return new Promise((resolve, reject) => {
+		const client = new elasticsearch.Client({
+			host: elastic_search_endpoint,
+			log: "warning"
+		})
+
+		const es_query = get_jobs_query(q, location)
+		client.search(es_query).then(
+			function(resp) {
+				var hits = resp["hits"]["hits"]
+				var results = format_results(hits)
+				return resolve(results)
+			},
+			function(err) {
+				return reject(err)
+			}
+		)
+	})
+}
+
+const extractLocation = (req) => {
+	const city = req.session.ipInfo && req.session.ipInfo.city
+
+	let location = req.query.location || city || "don't match"
+
+	return location.toLowerCase()
+}
+
+module.exports = {
+	getJobs,
+	extractLocation
+}
+v

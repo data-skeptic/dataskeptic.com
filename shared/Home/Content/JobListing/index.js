@@ -2,7 +2,6 @@ import React, { Component }  from 'react'
 import {connect} from 'react-redux';
 import styled from 'styled-components'
 import {
-	JobsListingTitle,
   Container,
   Box
 } from './style'
@@ -41,7 +40,6 @@ class JobListing extends Component {
 
   renderJobBox = (job, viewMore) => {
     const {id, title, location, type, description, full_description, url, company, company_url } = job
-    console.log(full_description)
 	  return (
 		  <Box>
 			  <Title>{title}</Title>
@@ -71,7 +69,7 @@ class JobListing extends Component {
     const { viewMore } = this.state
     const { loaded, jobs } = jobListing
 
-    if (!loaded) return <div>...</div>
+    if (!loaded || jobs.length === 0) return <div/>
 
     return (
       <Container>
