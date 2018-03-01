@@ -37,13 +37,8 @@ const defaultState = Immutable.fromJS(init);
 const s3 = new aws.S3()
 
 const getEpisode = async (guid) => {
-    var u2 = `${base_url}/blog/list?guid=${guid}`
-    const [episodeData] = await Promise.all([
-        axios.get(u2).then((res) => res.data[0])
-    ])
-    return {
-        ...episodeData
-    }
+    var uri = `/api/episodes/get/${guid}`
+    return await axios.get(uri).then((res) => res.data)
 }
 
 export default function cmsReducer(state = defaultState, action) {
@@ -222,6 +217,16 @@ export default function cmsReducer(state = defaultState, action) {
             .then(function(result) {
                 var data = result['data']
                 dispatch({type: "CMS_INJECT_HOMEPAGE_CONTENT", payload: {data, dispatch} })
+
+	              var le = data['latest_episode']
+                getEpisode(le.guid)
+                    .then((episode) => {
+                        dispatch({type: "ADD_EPISODES", payload: [episode]})
+                    })
+                    .catch((err) => {
+                        console.log("Caught in CmsReducer")
+                        console.log(err)
+                    })
             })
             .catch((err) => {
                 console.log(err)
@@ -233,7 +238,6 @@ export default function cmsReducer(state = defaultState, action) {
         console.log('CMS_INJECT_HOMEPAGE_CONTENT')
         var payload = action.payload
         var data = payload.data
-        var dispatch = payload.dispatch
         var le = data['latest_episode']
         if (le == undefined) {
             console.log("=============== ERROR LOADING HOMEPAGE ===============")
@@ -247,24 +251,16 @@ export default function cmsReducer(state = defaultState, action) {
             nstate.featured_blog2 = fb2
             nstate.featured_blog3 = fb3
             nstate.home_loaded = true
-            console.log(le.guid)
-            getEpisode(le.guid)
-                .then((episode) => {
-                    dispatch({type: "ADD_EPISODES", payload: [episode]})
-                })
-                .catch((err) => {
-                    console.log("Caught in CmsReducer")
-                    console.log(err)
-                })
         }
         break;
 
 	  case 'CMS_GET_HOMEPAGE_JOB_LISTING':
 		  var payload = action.payload
 		  var dispatch = payload.dispatch
-		  var url = base_url + "/cms/homepage/geo"
+		  let location = payload.location ? `?location=${payload.location}` : ''
+		  var url = "/api/v1/jobs" + location
 		  axios
-			  .get(url, payload)
+			  .get(url)
 			  .then(function(result) {
 				  var data = result['data']
 				  dispatch({type: "CMS_INJECT_HOMEPAGE_JOB_LISTING", payload: {data} })

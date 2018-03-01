@@ -20,12 +20,18 @@ export default function EpisodesReducer(state = defaultState, action) {
             break;
         case 'ADD_EPISODES':
             var episodes = action.payload
+            //console.log("episodes")
+            //console.log(episodes)
             nstate.episodes = episodes
             nstate.ep_map = {}
             for (var episode of episodes) {
-                var guid = episode.guid
-                if (guid) {
-                    nstate.ep_map[guid] = episode
+                if (episode) {
+                    var guid = episode.guid
+                    if (guid) {
+                        nstate.ep_map[guid] = episode
+                    }                    
+                } else {
+                    console.log("ERROR: got undefined episode")
                 }
             }
             nstate.loaded = true

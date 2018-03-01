@@ -124,21 +124,22 @@ function get_member_feed_replacements() {
     return axios.get(url).then(function(result) {
         var replacements = result["data"]
         return replacements
+    }).catch((err) => {
+        console.log(`get_member_feed_replacements ERROR:`)
+        console.error(err)
     })
 }
 
-export function loadEpisodes(env) {
+export async function loadEpisodes() {
     console.log("-[Refreshing episodes]-");
     var feed_uri = "https://dataskeptic.libsyn.com/rss"
-    var promise = get_member_feed_replacements()
-    return promise.then(function(replacements) {
-        return get_and_process_feed(replacements, feed_uri)
-    }).catch(function (err) {
-        console.log("Got replacements error")
-        var replacements = []
-        return get_and_process_feed(replacements, feed_uri)
+    var replacements = []
 
-    })
+    try {
+        replacements = await get_member_feed_replacements()
+    } catch (err) {}
+
+    return get_and_process_feed(replacements, feed_uri)
 }
 
 function xml_to_list(xml) {
@@ -147,6 +148,7 @@ function xml_to_list(xml) {
     var domain = "dataskeptic.com"
 
     var episodes_map = {}
+    var episodes_blog_map = {}
     var episodes_content = {}
     var episodes_list = []
     var member_feed = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\" xmlns:cc=\"http://web.resource.org/cc/\" xmlns:itunes=\"http://www.itunes.com/dtds/podcast-1.0.dtd\" xmlns:media=\"http://search.yahoo.com/mrss/\" xmlns:content=\"http://purl.org/rss/1.0/modules/content/\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"></rss>"
@@ -166,7 +168,7 @@ function xml_to_list(xml) {
         }
     })
 
-    return ({ episodes_map , episodes_content , episodes_list , member_feed , guid_to_media_link})
+    return ({ episodes_map , episodes_blog_map, episodes_content , episodes_list , member_feed , guid_to_media_link})
 }
 
 const getEpisodesData = (guids) => {
@@ -184,6 +186,7 @@ function get_and_process_feed(replacements, feed_uri) {
             var xml = result["data"]
             var data = xml_to_list(xml)
             var mxml = xml
+            console.log('do not apply replacements')
             for (var replacement of replacements) {
                 var guid = replacement['guid']
                 var member_link = replacement['member_link']
@@ -221,23 +224,28 @@ function get_and_process_feed(replacements, feed_uri) {
         .then((data) => {
 	          return getEpisodesData(data.episodes_list)
               .then((episodesData) => {
-	              episodesData.forEach(episodeData =>
-		              data.episodes_map[episodeData.guid] = {
-			              ...data.episodes_map[episodeData.guid],
-			              ...episodeData
-		              }
-	              )
+	              episodesData.forEach(episodeData => {
+	                const episode = {
+		                ...data.episodes_map[episodeData.guid],
+		                ...episodeData
+	                }
+
+		              data.episodes_map[episodeData.guid] = episode
+		              data.episodes_blog_map[episodeData.blog_id] = episode
+                })
               })
               .then(() => data)
         })
         .catch((err) => {
+            console.log('ERROR fetching RSS feed')
             console.log("loadEpisodes error: " + err);
             console.log(err)
             var episodes_map = {}
+            var episodes_blog_map = {}
             var episodes_list = []
             var episodes_content = {}
             var member_feed = undefined
-            return {episodes_map, episodes_list, episodes_content, member_feed}
+            return {episodes_map, episodes_blog_map, episodes_list, episodes_content, member_feed}
         })
 }
 

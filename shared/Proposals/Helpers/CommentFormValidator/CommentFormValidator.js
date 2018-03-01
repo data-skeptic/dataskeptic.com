@@ -7,8 +7,6 @@ export const ProposalFormValidator = (values) => {
     const errors = {};
     const {type} = values;
 
-    console.log('ProposalFormValidator');
-    console.dir(values);
 
     switch (type) {
         case TEXT:
@@ -45,8 +43,6 @@ export const ProposalFormValidator = (values) => {
             errors.email = 'Please provide a valid email address.';
         }
     }
-
-    console.error(errors);
 
     return errors;
 };

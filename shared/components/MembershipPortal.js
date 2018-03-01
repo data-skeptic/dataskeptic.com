@@ -26,7 +26,14 @@ class MembershipPortal extends Component {
         var user = this.props.user
         var p = {dispatch, user}
         console.log("DISPATCHING")
-        dispatch({type: "CHECK_MEMBERSHIP", payload: p })      
+        dispatch({type: "CHECK_MEMBERSHIP", payload: p })
+        
+        const script = document.createElement("script");
+        script.type='text/javascript'
+        script.async = true
+        script['data-cfasync'] = false
+        script.innerHTML = "window.purechatApi = { l: [], t: [], on: function () { this.l.push(arguments); } }; (function () { var done = false; var script = document.createElement('script'); script.async = true; script.type = 'text/javascript'; script.src = 'https://app.purechat.com/VisitorWidget/WidgetScript'; document.getElementsByTagName('HEAD').item(0).appendChild(script); script.onreadystatechange = script.onload = function (e) { if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) { var w = new PCWidget({c: 'dddd526a-c56a-4f86-8985-6e36310b9b21', f: true }); done = true; } }; })();"
+        document.body.appendChild(script)
     }
 
     static getPageMeta() {
