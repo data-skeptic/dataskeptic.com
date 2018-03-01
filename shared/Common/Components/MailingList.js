@@ -15,10 +15,11 @@ export default class MailingList extends React.Component {
 	}
 	
 	render() {
+		const { heading='Subscribe to our mailing list' } = this.props
 		return (
 			<Wrapper>
 				<Form action="//dataskeptic.us9.list-manage.com/subscribe/post?u=65e63d6f84f1d87759105d133&amp;id=dc60d554db" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" className="validate" target="_blank">
-					<Heading htmlFor="mce-EMAIL">Subscribe to our mailing list</Heading>
+					<Heading htmlFor="mce-EMAIL">{heading}</Heading>
 					<Inner>
 						<Input type="input" value={this.state.email} onChange={this.onChange} name="EMAIL" id="mce-EMAIL" placeholder="Email address" required />
 						<Submit type="submit" name="subscribe" id="mc-embedded-subscribe">Subscribe</Submit>

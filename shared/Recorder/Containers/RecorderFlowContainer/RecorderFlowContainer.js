@@ -436,15 +436,19 @@ class RecorderFlowContainer extends Component {
                             info={this.getInfoMessage()}
                         />
 
-                        <br />
+                        {activeStep === RECORDING &&
+                          <div>
+	                          <br />
 
-                        <AudioVolumeIndicator
-                            audioInput={this.audioInput}
-                            audioContext={this.audioContext}
+	                          <AudioVolumeIndicator
+		                          audioInput={this.audioInput}
+		                          audioContext={this.audioContext}
 
-                            width={400}
-                            height={220}
-                        />
+		                          width={400}
+		                          height={220}
+	                          />
+                          </div>
+                        }
                     </div>
 
                     <div key={UPLOADING} className="uploading-step">
