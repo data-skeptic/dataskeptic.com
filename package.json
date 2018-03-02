@@ -93,6 +93,7 @@
     "react-slider": "^0.7.0",
     "react-tabs": "^2.2.1",
     "react-thunk": "^1.0.0",
+    "react-zipcode": "^1.0.0",
     "redis": "^2.7.1",
     "redux": "^3.0.5",
     "redux-form": "^6.5.0",
