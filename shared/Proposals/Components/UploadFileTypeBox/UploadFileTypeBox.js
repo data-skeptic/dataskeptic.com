@@ -3,12 +3,10 @@ import Dropzone from 'react-dropzone';
 
 import FilePreview from '../FilePreview/FilePreview';
 
-import Debug from '../../../Debug';
-
-const UploadFileTypeBox = ({onDrop, onRemove, files}) => (
-    <div className="upload-file-type-box">
-        <Dropzone onDrop={onDrop} className="dropzone" activeClassName="active">
-            <div>Try dropping some files here, or click to select files to upload.</div>
+const UploadFileTypeBox = ({wrapperClass='', multiple=true, onDrop, onRemove, files = []}) => (
+    <div className={`upload-file-type-box ${wrapperClass}`}>
+        <Dropzone onDrop={onDrop} className="dropzone" activeClassName="active" multiple={multiple}>
+          <div>Try dropping some files here, or click to select files to upload.</div>
         </Dropzone>
 
         <div className="upload-files-preview row">
