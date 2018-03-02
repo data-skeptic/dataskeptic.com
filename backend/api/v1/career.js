@@ -4,7 +4,7 @@ module.exports = (cache) => {
     const router = express.Router();
 
     router.post('/', (req, res) => {
-       res.send()
+       res.send(req.body)
     });
 
     return router;

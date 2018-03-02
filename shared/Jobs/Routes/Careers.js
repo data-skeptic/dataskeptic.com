@@ -28,6 +28,10 @@ class Careers extends Component {
   onResumeUpload = data => {
     const value = data[0]
     this.setResume(value)
+	  this.props.dispatch({
+      type: "UPLOAD_RESUME",
+      payload: data
+    })
   }
 
   onResumeRemove = () => {

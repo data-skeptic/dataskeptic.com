@@ -1,10 +1,11 @@
 import Immutable from "immutable"
-import axios from 'axios'
+import Request from "../Request"
 
 const init = {
   resume: {
     submitted: false,
-    error: true
+    error: true,
+    files: null
   }
 }
 
@@ -12,6 +13,10 @@ const defaultState = Immutable.fromJS(init)
 
 export default function jobReducer(state = defaultState, action) {
   switch (action.type) {
+    case "UPLOAD_RESUME":
+      state = state.setIn(["resume", "files"], action.payload)
+      break
+
     case "SUBMIT_RESUME":
       state = state.setIn(["resume", "submitted"], false)
       state = state.setIn(["resume", "error"], false)
@@ -32,8 +37,13 @@ export default function jobReducer(state = defaultState, action) {
 }
 
 export const submitResume = (dispatch, data) => {
-  axios
-    .post("/api/v1/career", data)
+  const files = [data.resume]
+  Request.upload("/api/v1/proposals/files", files)
+    .then((res) => {
+      data.resume = res.data.files[0]
+
+      return Request.post("/api/v1/career", data)
+    })
     .then(res =>
       dispatch({
         type: "SUBMIT_RESUME_SUCCESS",
