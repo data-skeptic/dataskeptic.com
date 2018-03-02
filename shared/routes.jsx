@@ -54,6 +54,7 @@ import AdminCmsRecentRelated   from 'components/admin/AdminCmsRecentRelated';
 import AdminEmailsSend         from 'components/admin/AdminEmailsSend';
 import AdminOrdersNew          from 'components/admin/AdminOrdersNew';
 import AdminOrdersProcessing   from 'components/admin/AdminOrdersProcessing';
+import AdminAddJob          from 'components/admin/AdminAddJob';
 
 import UserPlaylist             from 'components/UserPlaylist';
 
@@ -240,6 +241,10 @@ export default (
 
         <Route path="/admin/emails/send" component={App}>
             <IndexRoute component={AdminEmailsSend}  />
+        </Route>
+
+        <Route path="/admin/job/add" component={App}>
+            <IndexRoute component={AdminAddJob}  />
         </Route>
 
         <Route path="/admin/login" component={App}>
