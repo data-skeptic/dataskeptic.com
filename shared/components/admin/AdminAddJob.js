@@ -16,7 +16,7 @@ class AdminAddJob extends Component {
       <AdminLayout history={history}>
         <h3>Add job</h3>
 
-				<AddJob onSubmit={this.add} showSubmit={true} allowSubmit={true}/>
+				<AddJob onSubmit={this.add} showSubmit={true} allowSubmit={true} submitValue={'Add'}/>
       </AdminLayout>
     )
   }
