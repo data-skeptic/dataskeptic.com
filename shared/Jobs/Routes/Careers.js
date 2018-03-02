@@ -1,10 +1,16 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import { change, formValueSelector } from "redux-form"
-import styled  from "styled-components"
+import styled from "styled-components"
 import { changePageTitle } from "../../Layout/Actions/LayoutActions"
 import UploadFileTypeBox from "../../Proposals/Components/UploadFileTypeBox/UploadFileTypeBox"
-import UploadResume, { KEY, RESUME_FIELD, NOTIFY_FIELD } from "../Forms/UploadResume"
+import UploadResume, {
+  KEY,
+  RESUME_FIELD,
+  NOTIFY_FIELD
+} from "../Forms/UploadResume"
+
+import { submitResume } from "../../reducers/JobsReducer"
 
 class Careers extends Component {
   static getPageMeta() {
@@ -33,11 +39,11 @@ class Careers extends Component {
   }
 
   submit = data => {
-    console.log(data)
+    submitResume(this.props.dispatch, data)
   }
 
   render() {
-    const { resume, notify } = this.props
+    const { resume, notify, submitted, error } = this.props
     const files = resume ? [resume] : []
 
     return (
@@ -53,15 +59,27 @@ class Careers extends Component {
           information from PDF you upload.
         </Text>
 
-        <UploadResume showSubmit={true} onSubmit={this.submit} showEmail={notify}>
-          <UploadBox
-	          wrapperClass="resume_upload"
-            multiple={false}
-            files={files}
-            onDrop={this.onResumeUpload}
-            onRemove={this.onResumeRemove}
-          />
-        </UploadResume>
+        {!submitted ? (
+          <UploadResume
+            showSubmit={true}
+            onSubmit={this.submit}
+            customError={error}
+            showEmail={notify}
+          >
+            <UploadBox
+              wrapperClass="resume_upload"
+              multiple={false}
+              files={files}
+              onDrop={this.onResumeUpload}
+              onRemove={this.onResumeRemove}
+            />
+          </UploadResume>
+        ) : (
+          <Success>
+            <i className="glyphicon glyphicon-ok"/>{' '}
+            Thanks!
+          </Success>
+        )}
       </Container>
     )
   }
@@ -77,6 +95,8 @@ const Title = styled.h2``
 
 const Text = styled.p``
 
+const Success = styled.p``
+
 const UploadBox = styled(UploadFileTypeBox)`
   background: black;
 `
@@ -84,5 +104,7 @@ const UploadBox = styled(UploadFileTypeBox)`
 const selector = formValueSelector(KEY)
 export default connect(state => ({
   resume: selector(state, RESUME_FIELD),
-  notify: selector(state, NOTIFY_FIELD)
+  notify: selector(state, NOTIFY_FIELD),
+  submitted: state.jobs.getIn(["resume", "submitted"]),
+	error: state.jobs.getIn(["resume", "error"])
 }))(Careers)
