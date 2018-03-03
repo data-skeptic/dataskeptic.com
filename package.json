@@ -11,8 +11,8 @@
     "prod": "webpack --progress --color -p --config webpack.prod.config.js",
     "build": "webpack --progress --color -p --config webpack.prod.config.js",
     "postinstall": ". build/fixes.sh",
-    "prettier-src": "prettier --write '{backend,client,components,shared}/**/*.{js,jsx}'",
-    "prettier-root": "prettier --write ./*.{js,jsx}",
+    "prettier-src": "prettier --no-semi --write '{backend,client,components,shared}/**/*.{js,jsx}'",
+    "prettier-root": "prettier --no-semi --write ./*.{js,jsx}",
     "prettier": "npm run prettier-src && npm run prettier-root",
     "precommit": "npm run prettier"
   },
