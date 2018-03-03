@@ -1,6 +1,6 @@
 var chatter = require("./chatter")
 
-function get_opening_remark(dispatch) {
+function get_opening_remark(dispatch, reply, cstate) {
 	return "Whose profile would you like to see?"
 }
 function handler(dispatch, reply, cstate, message) {
@@ -20,6 +20,14 @@ function handler(dispatch, reply, cstate, message) {
 		twitter: "@dataskeptic",
 		linkedin: "https://www.linkedin.com/in/kyle-polich-5047193",
 		bio: "Kyle studied computer science and focused on artificial intelligence in grad school. His general interests range from obvious areas like statistics, machine learning, data viz, and optimization to data provenance, data governance, econometrics, and metrology."
+	}
+	contributors_dict['kyle'] = {
+		prettyname: "Linh Da Tran",
+		author: "linhda",
+		img: "https://s3.amazonaws.com/dataskeptic.com/contributors/linh-da-tran.jpg",
+		twitter: "",
+		linkedin: "",
+		bio: "Originally from North Carolina, Linhda graduated undergrad from UNC-Chapel Hill (Tarheels!) and promptly moved to the Golden Coast when she heard of sunnier days, fewer mosquitos and a long coastline of beaches. When she is not on the podcast, she enjoys commuting to work via bike, spending time with Yoshi, cooking then eating, lots of sleep and occasional yoga and making small-batch artisan ice cream. Her short stature and below average bike size has deterred many a LA bike thieves-- evidence that it pay off to be short."
 	}
 
 	if (lmsg in contributors_dict) {

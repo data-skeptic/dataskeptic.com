@@ -1,9 +1,9 @@
 var chatter = require("./chatter")
 
-function get_opening_remark(dispatch) {
+function get_opening_remark(dispatch, reply, cstate) {
 	var msg = chatter.get_message("SURVEY>WELCOME")
 	var payload = {}
-	dispatch({type: "START_SURVEY", payload })
+	dispatch({type: "START_SURVEY", payload, reply })
 	return msg
 }
 

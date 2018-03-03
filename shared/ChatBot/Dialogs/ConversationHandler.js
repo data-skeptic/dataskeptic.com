@@ -1,11 +1,13 @@
 import React from 'react';
 
 var help      = require("./help")      // Done!
-var store     = require("./store")     //
+var store     = require("./store")     // Done!
 var episode   = require("./episodes")  // Done!
-var survey    = require("./survey")    //
+var survey    = require("./survey")    // IMPLEMENT
 var profile   = require("./profile")   // 1/2
-var reminders = require("./reminders") // Done???
+var reminders = require("./reminders") // GET TIME FROM STRING
+
+// Error: User `arn:aws:iam::085318171245:user/gleb' is not authorized to perform `ses:SendEmail' on resource `arn:aws:ses:us-east-1:085318171245:identity/orders@dataskeptic.com'
 
 var dialogs = [help, store, episode, survey, profile, reminders]
 
@@ -36,7 +38,7 @@ function get_reply(dispatch, reply, cstate, message) {
 		for (var dialog of dialogs) {
 			if (dialog.can_handle(message)) {
 				handler = dialog.handler
-				msg = dialog.get_opening_remark(dispatch)
+				msg = dialog.get_opening_remark(dispatch, reply)
 				console.log([handler, msg])
 				resp = {handler, msg, responder}				
 			}
@@ -76,6 +78,21 @@ function get_reply(dispatch, reply, cstate, message) {
 		msg = 'Sorry, something has gone wrong'
 		resp = {handler, msg, responder}
 	}
+	var p = Math.random()
+	if (p < .05) {
+		if (!cstate.saw_yoshi) {
+			setTimeout(function() {
+				reply({text: "Tweet, tweet!  I'm Yoshi the bird."}, 'yoshi')
+				dispatch({type: "SAW_YOSHI"})
+			}, 5000)
+		}
+	}
+	/*
+	setTimeout(function() {
+		reply({text: "Still there?  Let me know what you think of the bot by DMing me on Slack!  I would appreciate your candid feedback"}, 'kyle')
+		// still there?
+	}, 1000 * 30)
+	*/
 }
 
 module.exports = {get_reply}

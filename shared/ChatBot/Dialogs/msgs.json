@@ -72,7 +72,7 @@
 	},
 	"SURVEY":{
 		"FINISHED_BEFORE":["Our records show you already participated in the survey.  Thanks for your responses."],
-		"WELCOME":["Let's get started with the survey."],
+		"WELCOME":["Let's get started with the survey.  Give me a moment to grab a pen and I'll be right with you..."],
 		"FINISH":["Thank you for taking our survey.  Your input is very valuable to us."]
 	},
 	"GA":{

@@ -3,7 +3,7 @@ var chatter = require("./chatter")
 var AWS = require('aws-sdk');
 var ses = new AWS.SES({apiVersion: '2010-12-01'});
 
-function get_opening_remark(dispatch) {
+function get_opening_remark(dispatch, reply, cstate) {
 	return "Ok, how can I help you related to our store?"
 }
 

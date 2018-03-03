@@ -13,6 +13,7 @@ const init = {
     email: undefined,
     reminder_time: undefined,
     store_issue: undefined,
+    saw_yoshi: false,
     payload: {obj: undefined, note: undefined}
 }
 
@@ -172,6 +173,9 @@ export default function ChatbotReducer(state = defaultState, action) {
             // TODO: bot in pain image
             var responder = 'bot'
             reply({text: msg}, responder)
+            break
+        case 'SAW_YOSHI':
+            nstate.saw_yoshi = true
             break
     }
     return Immutable.fromJS(nstate)

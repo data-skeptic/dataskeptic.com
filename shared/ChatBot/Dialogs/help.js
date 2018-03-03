@@ -13,7 +13,7 @@ var help_menu = [
 	{label: "profiles", handler: profiles.handler, get_opening_remark: profiles.get_opening_remark}
 ]
 
-function get_opening_remark(dispatch) {
+function get_opening_remark(dispatch, reply, cstate) {
 	var msg = chatter.get_message("HELP>TRY_CHOICES")
 	var first = true
 	for (var item of module.exports.help_menu) {

@@ -1,5 +1,7 @@
 import axios from "axios"
 
+var chrono = require('chrono-node')
+
 var chatter = require("./chatter")
 
 var e164 = require('e164')
@@ -9,7 +11,7 @@ var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
 const config = require('../../../config/config.json');
 var base_url = config[env]['base_api'] + env + "/"
 
-function get_opening_remark(dispatch) {
+function get_opening_remark(dispatch, reply, cstate) {
 	return "Ok, reminders.  When would you like to get the reminder?"
 }
 
@@ -18,8 +20,12 @@ function handler(dispatch, reply, cstate, message) {
     var msg = ""
     var got_time = false
     console.log(lmsg)
-    // TODO: interpret
-    var dt = "2018-01-01 00:00:00"
+    var dt = chrono.parseDate(lmsg) 
+    if (dt == null) {
+        msg = "I'm not sure when you mean.  Can you say it another way?  Maybe try 'tomorrow morning'.  Or say 'exit'"
+        return {msg, handler}
+    }
+    console.log(['dt', dt])
     dispatch({type: "SET_REMINDER_TIME", dt})
     var got_time = true
     if (got_time) {

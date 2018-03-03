@@ -2,7 +2,7 @@ var chatter = require("./chatter")
 
 var reminders = require("./reminders")
 
-function get_opening_remark(dispatch) {
+function get_opening_remark(dispatch, reply, cstate) {
 	return "What sort of topics are you interested in?"
 }
 function handler(dispatch, reply, cstate, message) {
