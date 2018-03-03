@@ -12,6 +12,7 @@ const init = {
     phone: undefined,
     email: undefined,
     reminder_time: undefined,
+    store_issue: undefined,
     payload: {obj: undefined, note: undefined}
 }
 
@@ -106,6 +107,9 @@ export default function ChatbotReducer(state = defaultState, action) {
             break
         case 'SAVE_EMAIL':
             nstate.email = action.email
+            break
+        case 'SAVE_STORE_ISSUE':
+            nstate.store_issue = action.store_issue
             break
         case 'GET_EP_RECOMMENDATION':
             var reply = action.reply
