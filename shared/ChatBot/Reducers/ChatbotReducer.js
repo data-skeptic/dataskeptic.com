@@ -103,8 +103,7 @@ export default function ChatbotReducer(state = defaultState, action) {
                 .get(url)
                 .then(function(result) {
                     var blogs = result['data']
-                    console.log(blogs)
-                    // Move below into episodes
+                    // TODO: Move below into episodes
                     var resp = undefined
                     if (blogs.length > 0) {
                         var blog = undefined
@@ -126,8 +125,10 @@ export default function ChatbotReducer(state = defaultState, action) {
                     }
                     var msg = resp.msg
                     var responder = 'bot'
-                    console.log('reply')
-                    console.log(reply)
+                    var payload = resp.payload
+                    if (payload) {
+                        dispatch({type: 'SET_PAYLOAD', payload})
+                    }
                     reply({text: msg}, responder)
                     var handler = resp.handler
                     dispatch({type: 'SET_HANDLER', handler})
@@ -138,6 +139,9 @@ export default function ChatbotReducer(state = defaultState, action) {
                 })
             break
         case 'SET_PAYLOAD':
+            console.log('SET_PAYLOAD')
+            var payload = action.payload
+            console.log(payload)
             nstate.payload = payload
             break
         case 'BOT_FAILURE':

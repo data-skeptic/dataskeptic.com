@@ -15,7 +15,9 @@ function get_reply(dispatch, reply, cstate, message) {
 	var responder = 'bot'
 	var lmsg = message.text.toLowerCase()
 	if (handler) {
+		console.log("using handler")
 		resp = handler(dispatch, reply, cstate, message)
+		console.log("using handler end")
 	} else if (lmsg.indexOf('logo') > -1) {
 		msg = 'Please implement support for markdown so that bot can reply with images ![Our logo alt text](https://s3.amazonaws.com/dataskeptic.com/img/primary-logo-400.jpg)'
 		resp = {handler, msg, responder}
@@ -50,6 +52,8 @@ function get_reply(dispatch, reply, cstate, message) {
 		}
 		var payload = resp.payload
 		if (payload) {
+			console.log('payload')
+			console.log(payload)
 			var note = payload.note
 			var obj  = payload.obj
 			if (note == undefined || obj == undefined) {

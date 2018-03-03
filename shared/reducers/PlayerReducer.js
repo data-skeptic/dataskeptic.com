@@ -1,6 +1,7 @@
 import Immutable from 'immutable';
 import {fromJS} from 'immutable';
 import isEmpty from 'lodash/isEmpty'
+import axios  from 'axios'
 
 const init = {
     is_playing: false,
@@ -11,11 +12,45 @@ const init = {
     episode: {}
 }
 
+var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
+const config = require('../../config/config.json');
+var base_url = config[env]['base_api'] + env
+
 const defaultState = Immutable.fromJS(init);
 
 export default function PlayerReducer(state = defaultState, action) {
     var nstate = state.toJS()
     switch (action.type) {
+        case 'PLAY_EPISODE_FROM_GUID':
+            // This is used by the bot
+            console.log('PLAY_EPISODE_FROM_GUID')
+            console.log(action)
+            var dispatch = action.dispatch
+            var guid = action.guid
+            var my_cache = global.my_cache
+            if (my_cache != undefined) {
+                var my_episode = undefined
+                var episodes = []
+                var allepisodes = get_podcasts_from_cache(my_cache, pathname)
+                for (var episode of allepisodes) {
+                    if (episode.guid == guid) {
+                        dispatch({type: "PLAY_EPISODE", payload: episode})
+                    }
+                }
+            } else {
+                console.log("Getting episodes " + guid)
+                axios
+                    .get("/api/episodes/get/" + guid)
+                    .then(function(result) {
+                        console.log("Return of " + guid)
+                        var episode = result["data"]
+                        dispatch({type: "PLAY_EPISODE", payload: episode})
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+            }
+            break
         case 'PLAY_EPISODE':
             var episode = action.payload
             if (isEmpty(episode)) {

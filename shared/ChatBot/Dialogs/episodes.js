@@ -28,14 +28,26 @@ function can_handle(message) {
 }
 
 function make_recommendation_handler(dispatch, reply, cstate, message) {
+	console.log('make_recommendation_handler')
 	var blog = message.blog
-	var title = blog.title
-	var msg = `How about the episode "${title}"?  You can say 'play it', 'remind me', 'exit', or say another topic.`
-    var handler = module.exports.recommendation_action_handler
-    var note = "make_recommendation_handler"
-    var obj = blog
-    var payload = {note, obj}
-    return {msg, handler, payload}
+	if (blog == undefined) {
+		blog = verify_payload_is_blog(cstate.payload, dispatch, reply)
+	}
+	if (blog != undefined) {
+		var title = blog.title
+		var msg = `How about the episode "${title}"?  You can say 'play it', 'remind me', 'exit', or say another topic.`
+	    var handler = module.exports.recommendation_action_handler
+	    var note = "make_recommendation_handler"
+	    var obj = blog
+	    var payload = {note, obj}
+	    console.log("returning")
+	    return {msg, handler, payload}
+	} else {
+		dispatch({type: "BOT_FAILURE", reply, error_code: 5 })
+		var msg = undefined
+		var handler = undefined
+		return {msg, handler}
+	}
 }
 
 function verify_payload_is_blog(payload, dispatch, reply) {
@@ -54,21 +66,27 @@ function verify_payload_is_blog(payload, dispatch, reply) {
 		return undefined
 	}
 	// Confirmed
-	return payload
+	return obj
 }
 
 function recommendation_action_handler(dispatch, reply, cstate, message) {
+	console.log('recommendation_action_handler')
 	var lmsg = message.text.toLowerCase()
 	var msg = "You can say 'play it', 'remind me', 'exit', or say another topic."
 	var handler = module.exports.recommendation_action_handler
 	if (lmsg == 'play it') {
+		console.log('play it')
+		console.log(cstate.payload)
 		var blog = verify_payload_is_blog(cstate.payload, dispatch, reply)
 		if (blog) {
+			console.log('ok')
+			console.log(blog)
 			msg = "Ok, I'll play that now for you."
 			handler = undefined
-			var blog_id = blog.blog_id
-			dispatch({type: "PLAY_EPISODE_FROM_BLOG_ID", blog_id})
+			var guid = blog.guid
+			dispatch({type: "PLAY_EPISODE_FROM_GUID", guid, dispatch})
 		} else {
+			console.log('fail')
 			msg = "Uh oh!"
 			handler = undefined
 		}
