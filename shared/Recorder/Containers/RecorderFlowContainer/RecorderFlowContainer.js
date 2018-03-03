@@ -109,8 +109,6 @@ class RecorderFlowContainer extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('[RECORDER FLOW CONTAINER] will receive props');
-
         if (this.isStepChanged(this.props.activeStep, nextProps.activeStep)) {
             this.controlFlow(nextProps)
         }
@@ -125,15 +123,10 @@ class RecorderFlowContainer extends Component {
     }
 
     nextFlowStep(nextStep) {
-        console.log('[RECORDER FLOW CONTAINER] next flow step');
-        console.dir(nextStep);
-
         this.stepsActionHandlers[nextStep]();
     }
 
     onInit() {
-        console.log('onInit()');
-
         if (this.isBrowserSupportRecording()) {
             this.props.ready();
         } else {
