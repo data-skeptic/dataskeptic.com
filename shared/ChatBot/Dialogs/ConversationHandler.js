@@ -1,18 +1,17 @@
 import React from 'react';
-
-var help      = require("./help")      // Done!
-var store     = require("./store")     // Done!
-var episode   = require("./episodes")  // Done!
-var survey    = require("./survey")    // IMPLEMENT
-var profile   = require("./profile")   // 1/2
-var reminders = require("./reminders") // GET TIME FROM STRING
-
-// Error: User `arn:aws:iam::085318171245:user/gleb' is not authorized to perform `ses:SendEmail' on resource `arn:aws:ses:us-east-1:085318171245:identity/orders@dataskeptic.com'
+var help      = require("./help")
+var store     = require("./store")
+var episode   = require("./episodes")
+var survey    = require("./survey")
+var profile   = require("./profile")
+var reminders = require("./reminders")
 
 var dialogs = [help, store, episode, survey, profile, reminders]
 
 // ga
 // free sticker
+// TODO: reminder backend
+// TODO: survey
 
 
 function get_reply(dispatch, reply, cstate, message) {
