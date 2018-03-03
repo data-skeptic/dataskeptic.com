@@ -105,6 +105,7 @@
     "sha1": "^1.1.1",
     "showdown": "^1.6.0",
     "source-map-loader": "^0.1.5",
+    "string-similarity": "^1.2.0",
     "stripe": "^5.4.0",
     "striptags": "^3.0.0",
     "style-loader": "^0.13.2",

@@ -26,21 +26,29 @@ import QuestionForm from "../../Questions/Forms/QuestionForm";
 import {submitCommentForm} from "../../Proposals/Actions/CommentBoxFormActions";
 import SectionBlock from "../Components/SectionBlock/SectionBlock";
 import Launcher from "../../Chat/Containers/Launcher";
+import ConversationHandler from "../../ChatBot/Dialogs/ConversationHandler"
 
 class ContactUs extends React.Component {
+
+	constructor(props) {
+		super(props)
+
+		this.state = {
+			submittedUrl: '',
+			openSection: '',
+			messages: [
+				{type: 'text', author: 'kyle', text: 'Welcome to Data Skeptic!'},
+				{type: 'text', author: 'bot', text: 'I wanna know how i can help you.'},
+				{type: 'text', sent: true, text: 'Cool!'}
+			]
+		}
+	}
+
 	onMessage = (message) => {
 		this.addMessage(message)
-
-		// reply logic here
-		if (message.text.toLowerCase().indexOf('kyle') > -1) {
-			this.reply({
-				text: 'What?'
-			}, 'kyle')
-		} else {
-			this.reply({
-				text: 'Go on...'
-			}, 'bot')
-		}
+		var cstate = this.props.chatbot.toJS()
+		var dispatch = this.props.dispatch
+		ConversationHandler.get_reply(dispatch, this.reply, cstate, message)
 	}
 
     isSectionOpen = section => section === this.state.openSection
@@ -135,20 +143,6 @@ class ContactUs extends React.Component {
 				dispatch({type: "SLACK_UPDATE", payload: {msg} })
 				console.log(err)
 			})
-	}
-
-	constructor(props) {
-		super(props)
-
-		this.state = {
-			submittedUrl: '',
-			openSection: '',
-			messages: [
-				{type: 'text', author: 'kyle', text: 'Welcome to Data Skeptic!'},
-				{type: 'text', author: 'bot', text: 'I wanna know how i can help you.'},
-				{type: 'text', sent: true, text: 'Cool!'}
-			]
-		}
 	}
 
 	addMessage = (message) => this.setState(prevState => ({
@@ -429,6 +423,7 @@ const selector = formValueSelector('question');
 export default connect(
 	state => ({
 		cart: state.cart,
+		chatbot: state.chatbot,
 		site: state.site,
         confirmPolicy: selector(state, 'confirmPolicy'),
         activeStep: state.questions.getIn(['form', 'step']),
