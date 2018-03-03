@@ -12,8 +12,9 @@ function handler(dispatch, reply, cstate, message) {
 	}
 	var msg = "I'm sorry, I'm not sure who you mean.  My string matching is very poorly implemented in this regard.  You'd think Kyle would have done a better job programming me.  That guy, geez.  Can you simplify?  Let's try first name only, lower case as if this was implemented in the worst possible way.  To give up, type 'exit'"
 	var handler = module.exports.handler
+
 	if (lmsg.indexOf("kyle") != -1) {
-		// TODO: cache of contributors
+		// TODO: cache of contributors, /blog/contributors/list
 		msg = "Not implemented yet.  Eventually, you'll get the picture and bio."
 		handler = undefined
 	}

@@ -1,23 +1,30 @@
 import React from 'react';
 
-var help      = require("./help")
-var store     = require("./store")
-var episode   = require("./episodes")
-var survey    = require("./survey")
-var profile   = require("./profile")
-var reminders = require("./reminders")
+var help      = require("./help")      // Done!
+var store     = require("./store")     //
+var episode   = require("./episodes")  // Done!
+var survey    = require("./survey")    //
+var profile   = require("./profile")   // 1/2
+var reminders = require("./reminders") // Done???
 
 var dialogs = [help, store, episode, survey, profile, reminders]
+
+// ga
+// free sticker
+
 
 function get_reply(dispatch, reply, cstate, message) {
 	var handler = cstate.handler
 	var resp = undefined
 	var responder = 'bot'
 	var lmsg = message.text.toLowerCase()
-	if (handler) {
-		console.log("using handler")
+	if (lmsg == 'exit') {
+		msg = "Ok, let's talk about something new."
+		handler = undefined
+		responder = 'bot'
+		resp = {msg, handler, responder}
+	} else if (handler) {
 		resp = handler(dispatch, reply, cstate, message)
-		console.log("using handler end")
 	} else if (lmsg.indexOf('logo') > -1) {
 		msg = 'Please implement support for markdown so that bot can reply with images ![Our logo alt text](https://s3.amazonaws.com/dataskeptic.com/img/primary-logo-400.jpg)'
 		resp = {handler, msg, responder}

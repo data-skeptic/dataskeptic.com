@@ -1,14 +1,35 @@
+import axios from "axios"
+
 var chatter = require("./chatter")
 
+var e164 = require('e164')
+var assert = require('assert')
+
+var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
+const config = require('../../../config/config.json');
+var base_url = config[env]['base_api'] + env + "/"
+
 function get_opening_remark(dispatch) {
-	return "Ok, reminders"
+	return "Ok, reminders.  When would you like to get the reminder?"
 }
+
 function handler(dispatch, reply, cstate, message) {
-	var msg = "Under construction reminders!"
-    var payload = cstate.payload
-    // TODO: check if the payload is a blog (has blog_id), if so, its a podcast recommendation
-	var handler = undefined
-	return {msg, handler}
+    var lmsg = message.text.toLowerCase()
+    var msg = ""
+    var got_time = false
+    console.log(lmsg)
+    // TODO: interpret
+    var dt = "2018-01-01 00:00:00"
+    dispatch({type: "SET_REMINDER_TIME", dt})
+    var got_time = true
+    if (got_time) {
+        msg = "Would you like a reminder via email or SMS?"
+        handler = module.exports.channel_handler
+    } else {
+        msg = "I don't know how to interpret that.  Maybe say 'tomorrow'."
+        handler = module.exports.handler
+    }
+    return {msg, handler}
 }
 
 function can_handle(message) {
@@ -20,241 +41,141 @@ function can_handle(message) {
 	}
 }
 
-module.exports = {handler, get_opening_remark, can_handle}
-
-
-/*
-"use strict"
-
-var builder = require('botbuilder');
-var axios = require('axios');
-var AWS = require("aws-sdk");
-
-var chatter = require("../chatter")
-
-var url                    = "http://0.0.0.0:3500/"
-var microsoft_app_id       = process.env.MICROSOFT_APP_ID
-var microsoft_app_password = process.env.MICROSOFT_APP_PASSWORD
-var aws_accessKeyId        = process.env.AWS_ACCESS_KEY_ID
-var aws_secretAccessKey    = process.env.AWS_ACCESS_SECRET_KEY
-var aws_region             = process.env.AWS_REGION
-AWS.config.update(
-    {
-        "accessKeyId": aws_accessKeyId,
-        "secretAccessKey": aws_secretAccessKey,
-        "region": aws_region
+// TODO: remove this duplicate from here and episodes.js : one copy
+function verify_payload_is_blog(payload, dispatch, reply) {
+    if (payload == undefined) {
+        dispatch({type: "BOT_FAILURE", reply, error_code: 2 })
+        return undefined
     }
-);
-
-var e164 = require('e164'), assert = require('assert');
-
-AWS.config.update(
-    {
-        "accessKeyId": aws_accessKeyId,
-        "secretAccessKey": aws_secretAccessKey,
-        "region": aws_region
+    var obj = payload.obj
+    if (obj == undefined) {
+        dispatch({type: "BOT_FAILURE", reply, error_code: 3 })
+        return undefined
     }
-);
-var params = {
-    TableName: "dsbot-phrase-lookup"
-};
+    var blog_id = obj.blog_id
+    if (blog_id == undefined) {
+        dispatch({type: "BOT_FAILURE", reply, error_code: 4 })
+        return undefined
+    }
+    // Confirmed
+    return obj
+}
 
-// var ses = new AWS.SES({apiVersion: '2010-12-01'});
-// const c = require('../config/config.json')
-// var url = c['api'] 
-// let send_reminder = function(contact_type, contact_account, reminder_time,  episode_title = null, episode_link = null) {
-//     // console.log("In send_reminder function, what is the input episode_title? ", episode_title)
-//     return new Promise(function(resolve, reject) {
-//         axios.post(url +'listener_reminder', 
-//         {"contact_type": contact_type, 
-//          "contact_account": contact_account,
-//          "reminder_time": reminder_time, 
-//          "episode_link":episode_link,
-//          "episode_title":episode_title
-//         }
-//         ) 
-//         .then(function(result) {
-//                 console.log('** successful in calling sending message.')
-//                 resolve(result.data)
-//             })
-//             .catch(function(err) {
-//                     console.log("** something is wrong in calling record_answer_to_database and "+ err)
-//                     reject(err)
-//             });
-//         })
-// };
+function channel_handler(dispatch, reply, cstate, message) {
+    console.log('channel_handler')
+    var lmsg = message.text.toLowerCase()
+    var msg = "You can say 'email', 'sms', or 'exit'"
+    var payload = cstate.payload
+    var handler = module.exports.handler
+    var blog = verify_payload_is_blog(cstate.payload, dispatch, reply)
+    if (blog) {
+        if (lmsg == 'email') {
+            msg = "What is your email address?"
+            handler = module.exports.email_handler
+        }
+        else if (lmsg == 'sms') {
+            msg = "What is your phone number?"
+            handler = module.exports.sms_handler
+        }
+        else if (lmsg == 'exit') {
+            msg = "Ok.  What should we talk about next?"
+            handler = undefined
+        }
+    } else {
+        dispatch({type: "BOT_FAILURE", reply, error_code: 6 })
+        msg = "Darn!"
+        handler = undefined
+        return {msg, handler}
+    }
+    return {msg, handler}
+}
 
-let send_reminder2 = function(contact_type, contact_account, reminder_time,  episode_titles = null, episode_links = null) {
-    // console.log("In send_reminder function, what is the input episode_title? ", episode_title)
-    return new Promise(function(resolve, reject) {
-        axios.post(url +'listener_reminder', 
-        {
-            "contact_type": contact_type, 
-            "contact_account": contact_account,
-            "reminder_time": reminder_time, 
-            "episode_links":episode_links,
-            "episode_titles":episode_titles
-        })
+function email_handler(dispatch, reply, cstate, message) {
+    var lmsg = message.text.toLowerCase()
+    if (lmsg == 'exit') {
+        msg = "Ok, let's move on to something new"
+        var handler = undefined
+        return {msg, handler}
+    }
+    var email = undefined
+    if (lmsg.includes('@')) {
+        email = lmsg
+        msg = "Ok, give me one moment to record that."
+        dispatch({type: "SAVE_EMAIL", email})
+        var contact_type = "Email"
+        var contact_account = email
+        var message2 = {contact_type, contact_account}
+        return save_handler(dispatch, reply, cstate, message2)
+    }
+    var msg = "That address is invalid.  Please enter another or say 'exit'."
+    var handler = module.exports.email_handler
+    return {msg, handler}
+}
+
+function sms_handler(dispatch, reply, cstate, message) {
+    var lmsg = message.text.toLowerCase()
+    if (lmsg == 'exit') {
+        msg = "Ok, let's move on to something new"
+        handler = undefined
+        return {msg, handler}
+    }
+    var phone_num = lmsg.replace(/[^0-9]/g, "");
+    if(phone_num[0] != 1) {
+        phone_num = "1" + phone_num
+    }
+    console.log(phone_num)
+    try {
+        assert.deepEqual({country: "United States", code: "US"}, e164.lookup(phone_num)); 
+        phone_num = "+" + phone_num
+        dispatch({type: "SAVE_PHONE_NUM", phone_num})
+        var contact_type = "SMS" // "Email"
+        var contact_account = phone_num // email
+        var message2 = {contact_type, contact_account}
+        return save_handler(dispatch, reply, cstate, message2)
+    } 
+    catch(err){
+        // Error handled below
+    }
+    var msg = "That phone number seems to be invalid.  Please try again or say 'exit'"
+    var handler = module.exports.sms_handler
+    return {msg, handler}
+}
+
+function save_handler(dispatch, reply, cstate, message) {
+    console.log('save_hander')
+    var contact_type = message.contact_type
+    var contact_account = message.contact_account
+    var reminder_time = cstate.reminder_time
+    var episode_link = ''
+    var episode_title = ''
+    var payload = cstate.payload
+    var blog = verify_payload_is_blog(payload, dispatch, reply)
+    if (blog) {
+        episode_link = "https://dataskeptic.com/blog" + blog.prettyname
+        episode_title = blog.title
+    }
+    
+    var url = base_url + "bot/reminders/save"
+    var data = {
+        "contact_type": contact_type, 
+        "contact_account": contact_account,
+        "reminder_time": reminder_time,
+        "episode_link": episode_link,
+        "episode_title": episode_title
+    }
+    console.log(url)
+    axios
+        .post(url, data)
         .then(function(result) {
             console.log('Seeming success setting listener reminder.')
-            resolve(result)
+            reply({text: "Ok, recorded"}, 'bot')
         })
         .catch(function(err) {
-            console.log("**listener_reminder.js:  something is wrong in calling record_answer_to_database and "+ err)
-            reject(err)
+            reply({text: "Darn, I wasn't able to save that.  Sorry!  You found a bug!"}, 'bot')
         });
-    })
-};
+    var msg = "Ok, give me one moment to record that."
+    var handler = undefined
+    return {msg, handler}
+}
 
-var listener_reminder = {}
-var with_episode = true
-var waterfall = [
-	function (session, results, next) {
-        console.log("data when enter the reminder session is ",results)
-        if (results != undefined && results.title != undefined && results.link != undefined){
-            listener_reminder.title = results.title
-            listener_reminder.link = results.link
-            // if (listener_reminder.title.length == 1){
-            //     var resp2 = chatter.get_message("REMINDER>START1") + results.title[0] + "?"
-            // }else{
-            //     var resp2 = chatter.get_message("REMINDER>START1") + results.title[0] + " and " + results.title[1] + "?"
-            // }
-            // builder.Prompts.confirm(session, resp2);
-            with_episode = true
-            next()
-        } else{
-            with_episode = false
-            var resp1 = chatter.get_message("REMINDER>START0")
-            listener_reminder = {}
-            //console.log('when no episode, the var episode_title is ', results.title)
-            builder.Prompts.confirm(session, resp1);
-        }
-    },
-    function (session, results, next) {
-        if (with_episode){
-            var resp = chatter.get_message("REMINDER>ASK_TIME")
-            builder.Prompts.time(session, resp)
-        } else{
-            if (results.response) {
-                var resp = chatter.get_message("REMINDER>ASK_TIME")
-                builder.Prompts.time(session, resp)
-            } else {
-                var resp = chatter.get_message("REMINDER>ENDREMINDER")
-                session.endConversation(resp)
-            }
-        }
-        
-    },
-    function (session, results, next){
-    	var temp_time = builder.EntityRecognizer.resolveTime([results.response])
-    	listener_reminder.time = temp_time //+ session.userData.listener_reminder.diff
-        // console.log("listener_reminder.time is ", listener_reminder.time)
-    	var resp = chatter.get_message("REMINDER>ASK_METHOD")
-        builder.Prompts.choice(session, resp, ["Email", "SMS"], builder.ListStyle.button)
-    },
-    function (session, result, next){
-    	var c = result.response.entity
-        listener_reminder.contact_type = c
-		if (c == 'Email' ) {
-			var resp = chatter.get_message("REMINDER>ASK_EMAIL")
-			builder.Prompts.text(session, resp)
-		} else if (c == 'SMS') {
-			resp = chatter.get_message("REMINDER>ASK_PHONE")
-			builder.Prompts.text(session, resp)
-        } 
-    },
-    function (session, results) {
-        // email case
-        listener_reminder.contact_account = undefined
-        if (results.response.includes('@')){
-            var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            if(re.test(results.response)){
-                listener_reminder.contact_account = results.response
-            }else{
-                console.log("listener_reminder.js: the format of email is invalid.")
-                // session.send(chatter.get_message("REMINDER>FAILURE"))
-                // session.replaceDialog('/', { reprompt: true});
-            }
-        } else { 
-            // non-email case
-            // check whether it is a phone number
-            // 1.Remove any characters which are not digits. For example, users may type 123-233-4444
-            // 2.If number doesn't start with 1, add a 1
-            // 3.add a + in front of the number
-            // 4.Save this transformed version
-            var phone_num = results.response.replace(/[^0-9]/g, "");
-            if(phone_num[0] != 1){
-                phone_num = "1" + phone_num
-            }
-            console.log(phone_num)
-            try{
-                assert.deepEqual({country: "United States", code: "US"}, e164.lookup(phone_num)); 
-                phone_num = "+" + phone_num
-                listener_reminder.contact_account = phone_num
-                console.log('listener_reminder.js: phone number is ', phone_num)  
-            } 
-            catch(err){
-                console.log('listener_reminder.js: The phone number is invalid')
-            }
-
-        }
-        console.log('listener_reminder.js: listener_reminder.contact_account is ', listener_reminder.contact_account)
-        if(listener_reminder.contact_account != undefined){
-            var reminder_sent = send_reminder2(listener_reminder.contact_type, 
-                listener_reminder.contact_account, 
-                listener_reminder.time,
-                listener_reminder.title,
-                listener_reminder.link
-            )
-            reminder_sent.then(function(result) {
-                if (result) {
-                    console.log("listener_reminder.js: result is ", result)
-                    session.send(chatter.get_message("REMINDER>SUCCESS"))
-                    var after_dialog = chatter.get_message("AFTER_SUBDIALOG")
-                    session.endConversation(after_dialog)                    
-                } else {
-                    console.log("err0:" + err)
-                    session.endConversation("Oh no, I've encountered a bug.  Let's start over.")                    
-                }
-               
-            }).catch(function(err) {
-                console.log("err:" + err)
-                session.endConversation("Oh no, I've encountered a bug.  Let's start over.")
-            })
-
-        } else {
-            console.log('listener_reminder.js: contact info is not defined.')
-            session.send(chatter.get_message("REMINDER>FAILURE"))
-            var after_dialog = chatter.get_message("AFTER_SUBDIALOG")
-            session.endConversation(after_dialog)
-            
-            //session.replaceDialog('/', { reprompt: true});
-        }
-        
-        // if (/^\+[1-9]\d{1,14}$/.test(String(results.response)) || results.response.includes("@")){
-        //     listener_reminder.contact_account = results.response
-        //     // console.log('contact info is ', listener_reminder.contact_account)
-        //     // console.log("listener_reminder info is ", listener_reminder)
-        //     // session.send( "I will send you a reminder to " + listener_reminder.contact_account) //+ " at " + String(listener_reminder.time) + ".")
-        //     // console.log("what is listener_reminder.title? ", listener_reminder.title)
-        //     var reminder_sent = Promise.resolve(send_reminder(listener_reminder.contact_type, 
-        //                                                       listener_reminder.contact_account, 
-        //                                                       listener_reminder.time,
-        //                                                       listener_reminder.title,
-        //                                                       listener_reminder.link))
-        //     reminder_sent.then(function(result){
-        //         console.log(result)
-        //         session.send(chatter.get_message("REMINDER>SUCCESS"))
-        //         session.endDialog()
-        //         }
-        //     )           
-        // } else {
-        //     session.send(chatter.get_message("REMINDER>FAILURE"))
-        //     session.replaceDialog('/', { reprompt: true});
-        // } 
-    }
-]
-
-exports.waterfall = waterfall
-
-*/
+module.exports = {handler, get_opening_remark, can_handle, sms_handler, email_handler, channel_handler, save_handler}

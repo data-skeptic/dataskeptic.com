@@ -16,7 +16,7 @@
   "license": "MIT",
   "dependencies": {
     "autoprefixer-loader": "^3.1.0",
-    "aws-sdk": "^2.204.0",
+    "aws-sdk": "^2.205.0",
     "axios": "^0.8.1",
     "babel-core": "^6.3.21",
     "babel-loader": "^6.2.0",
@@ -37,6 +37,7 @@
     "cookie-parser": "^1.4.3",
     "cookie-session": "^2.0.0-beta.3",
     "css-loader": "^0.26.2",
+    "e164": "0.0.5",
     "echarts": "^4.0.4",
     "echarts-for-react": "^2.0.7",
     "ejs": "^2.5.6",

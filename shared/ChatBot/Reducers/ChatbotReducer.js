@@ -9,19 +9,26 @@ const init = {
     did_survey: false,
     survey: undefined,
     thinking: false,
+    phone: undefined,
+    email: undefined,
+    reminder_time: undefined,
     payload: {obj: undefined, note: undefined}
 }
 
 const defaultState = Immutable.fromJS(init);
 
+var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
+const config = require('../../../config/config.json');
+var base_url = config[env]['base_api'] + env
+
 //?var url = c['api']
 //?var url2 = c['api2'] + c['env'] + '/'
-var url = "http://0.0.0.0:3500/"
-var url2 = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/dev/"
+//var url = "http://0.0.0.0:3500/"
+//var url2 = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/dev/"
 
 let start_survey = function() {
     return new Promise(function(resolve, reject) {
-        var u = url2 + 'bot/survey/response/start'
+        var u = base_url + 'bot/survey/response/start'
         console.log(u)
         axios.post(u, {})
         .then(function(result) {
@@ -94,6 +101,12 @@ export default function ChatbotReducer(state = defaultState, action) {
         case 'SURVEY_COMPLETE':
             nstate.did_survey = true
             break
+        case 'SAVE_PHONE_NUM':
+            nstate.phone = action.phone_num
+            break
+        case 'SAVE_EMAIL':
+            nstate.email = action.email
+            break
         case 'GET_EP_RECOMMENDATION':
             var reply = action.reply
             var query = action.query
@@ -143,6 +156,10 @@ export default function ChatbotReducer(state = defaultState, action) {
             var payload = action.payload
             console.log(payload)
             nstate.payload = payload
+            break
+        case 'SET_REMINDER_TIME':
+            var dt = action.dt
+            nstate.reminder_time = dt
             break
         case 'BOT_FAILURE':
             var error_code = action.error_code

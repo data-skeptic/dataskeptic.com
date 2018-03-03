@@ -94,7 +94,7 @@ function recommendation_action_handler(dispatch, reply, cstate, message) {
 	else if (lmsg == 'remind me') {
 		var blog = verify_payload_is_blog(cstate.payload, dispatch, reply)
 		if (blog) {
-			msg = "Alright, I'll remind you to listen to this later."
+			msg = reminders.get_opening_remark(dispatch)
 			handler = reminders.handler
 		} else {
 			msg = "Uh oh!"
@@ -116,4 +116,4 @@ function no_results_handler(dispatch, reply, cstate, message) {
 	return {msg, handler}
 }
 
-module.exports = {handler, get_opening_remark, can_handle, make_recommendation_handler, recommendation_action_handler, no_results_handler}
+module.exports = {handler, get_opening_remark, can_handle, make_recommendation_handler, verify_payload_is_blog, recommendation_action_handler, no_results_handler}
