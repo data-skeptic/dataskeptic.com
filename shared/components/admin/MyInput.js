@@ -2,7 +2,7 @@ import React from "react"
 import ReactDOM from "react-dom"
 import {Editor, EditorState} from 'draft-js'
 
-MyInput.jsclass MyInput extends React.Component {
+class MyInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {value: ''};
