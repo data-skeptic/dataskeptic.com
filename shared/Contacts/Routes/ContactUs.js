@@ -37,9 +37,7 @@ class ContactUs extends React.Component {
 			submittedUrl: '',
 			openSection: '',
 			messages: [
-				{type: 'text', author: 'kyle', text: 'Welcome to Data Skeptic!'},
-				{type: 'text', author: 'bot', text: 'I wanna know how i can help you.'},
-				{type: 'text', sent: true, text: 'Cool!'}
+				{type: 'text', author: 'bot', text: 'What would you like to talk about?'}
 			]
 		}
 	}
