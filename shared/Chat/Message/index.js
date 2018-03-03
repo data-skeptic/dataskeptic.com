@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import styled from "styled-components"
+import marked from "marked"
 
 const getAuthorImage = author => {
   author = author.toLowerCase()
@@ -11,6 +12,11 @@ const getAuthorImage = author => {
   }
 }
 
+const getMarkdown = text => {
+  const rawMarkup = marked(text, { sanitize: true })
+  return { __html: rawMarkup }
+}
+
 export default class Message extends Component {
   render() {
     const { text, author, sent } = this.props
@@ -20,7 +26,10 @@ export default class Message extends Component {
         {author && (
           <Author src={getAuthorImage(author)} bot={author === "bot"} />
         )}
-        <Text  sent={sent}>{text}</Text>
+        <Text
+          sent={sent}
+          dangerouslySetInnerHTML={getMarkdown(text)}
+        />
       </Container>
     )
   }
@@ -57,13 +66,22 @@ const Text = styled.span`
   border-radius: 5px;
   padding: 12px;
   display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+	word-wrap: break-word;
+
+	* {
+		margin: 0px;
+		padding: 0px;
+		max-width: 100%;
+	}
 
   ${props =>
-	props.sent
-		? `
+    props.sent
+      ? `
 	    background: rgba(240, 217, 67, 0.1);
 			`
-		: `
+      : `
 			background: #F9FAF9;
 	`};
 `

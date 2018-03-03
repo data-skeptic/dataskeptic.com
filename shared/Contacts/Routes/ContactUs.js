@@ -39,7 +39,8 @@ class ContactUs extends React.Component {
 			messages: [
 				{type: 'text', author: 'kyle', text: 'Welcome to Data Skeptic!'},
 				{type: 'text', author: 'bot', text: 'I wanna know how i can help you.'},
-				{type: 'text', sent: true, text: 'Cool!'}
+				{type: 'text', sent: true, text: 'Cool!'},
+				{type: 'text', sent: true, text: 'Please implement support for markdown so that bot can reply with images ![Our logo alt text](https://s3.amazonaws.com/dataskeptic.com/img/primary-logo-400.jpg)'}
 			]
 		}
 	}
