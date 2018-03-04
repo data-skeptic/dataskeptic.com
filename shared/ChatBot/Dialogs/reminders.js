@@ -38,7 +38,7 @@ function handler(dispatch, reply, cstate, message) {
     return {msg, handler}
 }
 
-function can_handle(message) {
+function can_handle(message, cstate, reply) {
 	var lmsg = message.text.toLowerCase()
 	if (lmsg.indexOf('reminder') != -1) {
 		return true

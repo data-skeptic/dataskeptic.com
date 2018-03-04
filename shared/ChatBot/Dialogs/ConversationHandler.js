@@ -5,6 +5,7 @@ var episode   = require("./episodes")
 var survey    = require("./survey")
 var profile   = require("./profile")
 var reminders = require("./reminders")
+var yoshi     = require("./yoshi")
 
 var dialogs = [help, store, episode, survey, profile, reminders]
 
@@ -35,7 +36,7 @@ function get_reply(dispatch, reply, cstate, message) {
 		resp = {handler, msg, responder}
 	} else {
 		for (var dialog of dialogs) {
-			if (dialog.can_handle(message)) {
+			if (dialog.can_handle(message, cstate, reply)) {
 				handler = dialog.handler
 				msg = dialog.get_opening_remark(dispatch, reply)
 				console.log([handler, msg])

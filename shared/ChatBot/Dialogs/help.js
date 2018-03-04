@@ -27,7 +27,7 @@ function get_opening_remark(dispatch, reply, cstate) {
 	return msg
 }
 
-function can_handle(message) {
+function can_handle(message, cstate, reply) {
 	var lmsg = message.text.toLowerCase()
 	if (lmsg.indexOf('help') != -1) {
 		return true

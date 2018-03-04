@@ -1,33 +1,35 @@
+import axios from "axios"
+
 var chatter = require("./chatter")
+
+var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
+const config = require('../../../config/config.json');
+var base_url = config[env]['base_api'] + env + '/'
 
 function get_opening_remark(dispatch, reply, cstate) {
 	var msg = chatter.get_message("SURVEY>WELCOME")
-	var payload = {}
-	dispatch({type: "START_SURVEY", payload, reply })
+	dispatch({type: "START_SURVEY", dispatch, reply })
 	return msg
 }
 
 function handler(dispatch, reply, cstate, message) {
-	if (cstate.did_survey) {
+	if (cstate.survey.did_survey) {
 		var msg = chatter.get_message("SURVEY>FINISHED_BEFORE")
 		var handler = undefined
 		return {msg, handler}
 	}
-
-	var survey = cstate.survey
-	var question_id = survey.nextQuestionId
-
-	if (survey.surveyStart == 0) {
-		dispatch({type: "SURVEY_QUESTION", dispatch, reply})
-		return {msg, handler}
-	} else {
-		var msg = "Working survey!"
-		var handler = undefined
-		return {msg, handler}		
-	}
+	dispatch({type: "ASK_QUESTION", dispatch, reply})
+	var msg = undefined
+	var handler = module.exports.answer_question_handler
+	return {msg, handler}
 }
 
-function can_handle(message) {
+function can_handle(message, cstate, reply) {
+	if (cstate.survey.did_survey) {
+		var msg = chatter.get_message("SURVEY>FINISHED_BEFORE")
+		reply({text: msg}, 'bot')
+		return false
+	}
 	var lmsg = message.text.toLowerCase()
 	if (lmsg.indexOf('survey') != -1) {
 		return true
@@ -36,62 +38,35 @@ function can_handle(message) {
 	}
 }
 
-module.exports = {handler, get_opening_remark, can_handle}
-/*
+function answer_question_handler(dispatch, reply, cstate, message) {
+	dispatch({type: "ANSWER_AND_ASK_NEXT_QUESTION", message, dispatch, reply})
+	var msg = undefined
+	var handler = undefined
+	return {msg, handler}
+}
 
+function save_answer(dispatch, reply, cstate, message) {
+	return new Promise(function(resolve, reject) {
+		var question_id = cstate.survey.nextQuestionId
+		var answer_text = message.text
+		var response_id = cstate.survey.responseId
+		var question_order = cstate.survey.questionOrder
+		var u = base_url + 'bot/survey/response/update'
+		var req = { question_id, answer_text, question_order, response_id }
+		axios.post(u, req)
+			.then(function(result) {
+			    if ('error' in result.data) {
+			    	reject(result.data.error)
+			    }
+			    var next_question_id = result.data.next_question_id
+			    var magic_text = result.data.magic_text
+		        resolve(result.data)
+		    })
+		    .catch(function(err) {
+		  			console.log("** something is wrong in calling record_answer_to_database and "+ err)
+		            reject(err)
+		    });
+	})
+}
 
-			else if (userHasProvidedAResponse && (session.userData.survey.surveyStart == 1)) {
-				console.log('Handling response.')// for testing
-				var next_question_id = session.userData.survey.nextQuestionId
-				var magic_text = "";
-	            var response_id = session.userData.survey.responseId
-				var question_order = session.userData.survey.questionOrder
-				console.log('** next_question_id is '+ next_question_id)
-				console.log('** question_order is ' + question_order)
-				console.log('** response_id is', response_id)
-				console.log('** answer_text is', answer_text)
-
-				if (question_id != -1) {
-					var result_from_post = record_answer_to_database(response_id, next_question_id, question_order, answer_text)
-					result_from_post.then(function(result) { 
-						magic_text = result.magic_text
-						next_question_id = result.next_question_id
-						session.userData.survey.responseId = result.response_id
-						if (magic_text) {
-						    session.send(magic_text)
-						}
-					    return next_question_id
-	                }).then(function(next_question_id) {   
-	        	        session.userData.survey.nextQuestionId = next_question_id
-						session.userData.survey.questionOrder += 1
-
-						var surveyIsComplete = false
-
-						if (session.userData.survey.nextQuestionId == -1) {
-							surveyIsComplete = true
-							console.log('** the survey is complete, since the next question id is -1.')// for testing.
-						}
-						if (surveyIsComplete) {
-							var resp = chatter.get_message('SURVEY>FINISH')
-							session.userData.survey.surveyIsComplete = true
-							session.send(resp)
-							var after_dialog = chatter.get_message("AFTER_SUBDIALOG")
-							session.endConversation(after_dialog)
-							// TODO: update `response_end_time`
-						} else {
-							console.log('** The next_question_id is '+String(session.userData.survey.nextQuestionId))
-					        var promise = get_question_text(session.userData.survey.nextQuestionId)
-					        var question_text = Promise.resolve(promise)
-					        promise.then(function(result) { 
-					            resp = result 
-						        session.send(result) // send the current question to user 
-						    })							
-						}
-					}).catch(function(err) {
-						console.log(err)
-						session.userData.survey = undefined
-						session.endConversation("Arg, something has failed in my codebase.  Please excuse me.  I'll try to get debugged soon.")
-					})
-				}
-			}
-		*/
+module.exports = {handler, get_opening_remark, can_handle, answer_question_handler, save_answer}

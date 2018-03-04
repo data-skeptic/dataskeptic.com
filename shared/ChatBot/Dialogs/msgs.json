@@ -75,6 +75,9 @@
 		"WELCOME":["Let's get started with the survey.  Give me a moment to grab a pen and I'll be right with you..."],
 		"FINISH":["Thank you for taking our survey.  Your input is very valuable to us."]
 	},
+	"YOSHI": {
+		"GREETING": ["I'm a good girl", "I love you", "HIIII!", "Linhdy!", "You're a good girl Yoshi.", "Go on!", "🎵 La la la la la 🎵 "]
+	},
 	"GA":{
 		"ASK_PASSWORD":["What is the password?"],
 		"WELCOME":["Great.  I can connect to the Google Analytics API and answer general questions about your site's traffic."],
