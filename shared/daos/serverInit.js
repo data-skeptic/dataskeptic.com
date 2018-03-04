@@ -168,13 +168,7 @@ function xml_to_list(xml) {
 }
 
 const getEpisodesData = (guids) => {
-<<<<<<< HEAD
     const uri = process.env.BASE_API + "/podcast/episodes/get_by_guids"
-    console.dir()
-=======
-    const uri = base_api + "/podcast/episodes/get_by_guids"
-    console.log(uri)
->>>>>>> dev
     return axios.post(uri, { guids }).then(res => res.data)
 }
 
