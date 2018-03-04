@@ -1,9 +1,10 @@
 import express from 'express'
 import axios from "axios";
 
+
+
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const c = require('../../../config/config.json')
-const base_url = c[env]['base_api'] + env
+const base_url = process.env.BASE_API + env
 
 const NOT_EXIST_LIST_ERROR = `Requested list is not exist.`
 const UNAUTHORIZED = 'User not authenticated'
