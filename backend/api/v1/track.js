@@ -2,8 +2,7 @@ import axios from "axios"
 const express = require("express")
 
 const env = process.env.NODE_ENV === "dev" ? "dev" : "prod"
-const c = require("../../../config/config.json")
-const base_url = c[env]["base_api"] + env
+const base_url = process.env.BASE_URL + env
 
 module.exports = cache => {
 

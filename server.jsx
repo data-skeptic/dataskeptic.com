@@ -18,6 +18,7 @@ import {write as writeProposal, upload as uploadProposalFiles, getRecording}  fr
 import bodyParser                from 'body-parser'
 import cookieParser              from 'cookie-parser'
 import compression               from 'compression';
+import { getJobs, extractLocation } from './backend/api/v1/jobs_util'
 import {feed_uri}                from 'daos/episodes'
 import {
     apiMemberFeed,
@@ -62,9 +63,8 @@ import redirects_map               from './redirects';
 import {reducer as formReducer} from 'redux-form'
 import axios from "axios"
 
-import tunnel from 'tunnel'
+import Rollbar from 'rollbar'
 import http from 'http'
-import request from 'request'
 var Influx = require('influx');
 
 console.log("server.jsx : starting")
@@ -122,6 +122,7 @@ const resetCache = () => {
         , content_map: {}       // `uri`             -? {s3 blog content}
         , folders: []
         , episodes_map: {}      // `guid` | 'latest' -> {episode}
+        , episodes_blog_map: {} // `blog_id` -> {episode}
         , episodes_list: []     // guids
         , episodes_content: []     // pn
         , products: {}
@@ -142,13 +143,12 @@ global.env = env;
  * REFRESH
  */
 
-const doRefresh = (store) => {
-    let env = global.env;
+const doRefresh = () => {
     console.log("-[Refreshing Cache]-");
 
     // Let node make requests asynchronous
     return Promise.all([
-    	loadEpisodes(env),
+    	loadEpisodes(),
 	    loadProducts(),
 	    get_contributors(),
 	    loadCurrentRFC(),
@@ -160,10 +160,11 @@ const doRefresh = (store) => {
 		    console.log("-[All cache data fetched]-")
 
         // episodes
-		    const {episodes_map, episodes_list, episodes_content, member_feed} = episodes
+		    const {episodes_map, episodes_blog_map, episodes_list, episodes_content, member_feed} = episodes
 	      Cache.episodes_map = episodes_map
         Cache.episodes_list = episodes_list
         Cache.episodes_content = episodes_content
+        Cache.episodes_blog_map = episodes_blog_map
         Cache.member_feed = member_feed
 
         // products
@@ -245,6 +246,8 @@ app.use(
     session({
         name: 'session',
         keys: ['datas', 'member'],
+        // resave: false,
+        // saveUninitialized: false,
 
         // Cookie Options
         maxAge: 24 * 60 * 60 * 1000 // 24 hours
@@ -459,14 +462,17 @@ function getContributorPosts(contributor) {
     return axios.get(`${base_url}/blog/list?contributor=${contributor}&limit=21`).then((res) => res.data)
 }
 
-async function inject_homepage(store, my_cache) {
+async function inject_homepage(store, my_cache, location) {
     const res = await getFeaturesAPI("homepage")
-    var dispatch = store.dispatch
-    dispatch({type: "CMS_INJECT_HOMEPAGE_CONTENT", payload: { data: res.data, dispatch }})
+	  store.dispatch({type: "CMS_INJECT_HOMEPAGE_CONTENT", payload: { data: res.data }})
+
     const guid = res.data.latest_episode.guid
     const episode = my_cache.episodes_map[guid]
-
     store.dispatch({type: "ADD_EPISODES", payload: [episode]})
+
+    const q = "data"
+    const jobs = await getJobs(q, location)
+    store.dispatch({type: "CMS_INJECT_HOMEPAGE_JOB_LISTING", payload: { data: jobs }})
 }
 
 function inject_products(store, my_cache, pathname) {
@@ -504,7 +510,8 @@ async function updateState(store, pathname, req) {
         store.dispatch({type: "SET_BOT", payload: bot})
     }
     if (pathname === "" || pathname === "/") {
-        await inject_homepage(store, Cache, pathname)
+        const location = extractLocation(req)
+        await inject_homepage(store, Cache, location)
     }
     if (pathname.indexOf('/blog') === 0) {
     }
@@ -680,6 +687,17 @@ app.use('/api/v1', async (req, res, next) => {
 })
 
 app.use('/api/v1/', api(() => Cache));
+
+const rollbar = Rollbar.init({
+	accessToken: "4555957947d347a69caf6e017ea72f51",
+	handleUncaughtExceptions: true,
+	verbose: false,
+	payload: {
+		environment: env
+	}
+});
+
+app.use(rollbar.errorHandler());
 
 const renderPage = async (req, res) => {
     if (req.url == '/favicon.ico') {

@@ -45,9 +45,12 @@ if __name__ == '__main__':
     connection_string = template.format(user=user, password=password, host=host, port=port, dbname=dbname)
     mysql_conn = sqlalchemy.create_engine(connection_string, pool_size=1)
     elastic_search_conn = Elasticsearch(endpoint, port=443)
+    #elastic_search_conn.indices.delete(index='github_jobs', ignore=[400, 404])
     crawls = get_crawls(mysql_conn)
     jobs = get_jobs(mysql_conn, crawls)
     for job in jobs:
+        ca = pd.to_datetime(job['created_at'])
+        job['created_at'] = ca
         result2 = elastic_search_conn.index(index_name, 'jobs', job, id=job['id'])  
         if result2['_shards']['successful']!=1:
             print("Failed to insert")
