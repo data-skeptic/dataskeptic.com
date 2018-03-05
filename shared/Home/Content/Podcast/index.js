@@ -1,13 +1,10 @@
-import React, { Component }  from 'react'
-import {connect} from 'react-redux';
-import {
-  PostTitle,
-  Container,
-} from './style'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { PostTitle, Container } from './style'
 import EpisodePlayer from '../../../components/EpisodePlayer'
 
 class Podcast extends Component {
-  render () {
+  render() {
     var ocms = this.props.cms.toJS()
     var latest_episode_blog = ocms.latest_episode
     var guid = latest_episode_blog['guid']
@@ -18,13 +15,16 @@ class Podcast extends Component {
     return (
       <Container>
         <PostTitle>LATEST PODCAST</PostTitle>
-        <EpisodePlayer episode={old_latest_episode} desc={latest_episode.abstract}/>
+        <EpisodePlayer
+          episode={old_latest_episode}
+          desc={latest_episode.abstract}
+        />
       </Container>
     )
   }
 }
 
 export default connect(state => ({
-    episodes: state.episodes, 
-    cms: state.cms
+  episodes: state.episodes,
+  cms: state.cms
 }))(Podcast)

@@ -30,7 +30,7 @@ export const DescBox = styled.div`
 `
 
 export const Title = styled.span`
-  color: #5736E1;
+  color: #5736e1;
   font-size: 16px;
   text-transform: uppercase;
   line-height: 20px;
@@ -38,17 +38,17 @@ export const Title = styled.span`
 `
 
 export const SubTitle = styled.p`
-  color: #3A3B3B;
+  color: #3a3b3b;
   font-size: 40px;
 `
 
 export const Desc = styled.span`
-  color: #3A3B3B;
+  color: #3a3b3b;
   font-size: 20px;
 `
 
 export const BlogViewMore = ViewMore.extend`
-  color: #3A3B3B;
+  color: #3a3b3b;
   font-size: 20px;
 `
 
@@ -61,7 +61,7 @@ export const UserImg = styled.img`
   border-radius: 50%;
   width: 60px;
   height: 60px;
-  
+
   padding: 4px;
   background-color: #ffffff;
   border: 1px solid #dddddd;
@@ -70,27 +70,27 @@ export const UserImg = styled.img`
 export const UserDetail = styled.div`
   padding-left: 12px;
   font-size: 14px;
-  color: #4A4A4A;
-  
+  color: #4a4a4a;
+
   a {
-	  border: none;
-	  :hover {
-	    border: none;
-	  }
-	}
-  
+    border: none;
+    :hover {
+      border: none;
+    }
+  }
+
   padding-top: 8px;
 `
 
 export const UserInfo = styled.a`
-  display: block
+  display: block;
 `
 
 export const UserImgArea = styled.div`
   a {
-	  border: none;
-	  :hover {
-	    border: none;
-	  }
+    border: none;
+    :hover {
+      border: none;
+    }
   }
 `

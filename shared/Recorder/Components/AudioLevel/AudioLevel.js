@@ -1,13 +1,9 @@
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react'
 
-export const AudioLevel = ({children}) => (
-    <div>
-        {children}
-    </div>
-);
+export const AudioLevel = ({ children }) => <div>{children}</div>
 
 AudioLevel.propTypes = {
-    children: PropTypes.node
-};
+  children: PropTypes.node
+}
 
-export default AudioLevel;
+export default AudioLevel

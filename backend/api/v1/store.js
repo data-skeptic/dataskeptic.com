@@ -1,19 +1,18 @@
-const express = require('express');
+const express = require('express')
 
-const StoreServices = require('../../modules/store/services/StoreServices');
+const StoreServices = require('../../modules/store/services/StoreServices')
 
-module.exports = (cache) => {
+module.exports = cache => {
+  const router = express.Router()
 
-    const router = express.Router();
-
-    router.get('/', function (req, res) {
-        StoreServices.storeList(cache().products)
-            .then((contributors) => {
-                res.send(contributors);
-            })
-            .catch((err) => {
-                res.send(err);
-            })
-    });
-    return router;
+  router.get('/', function(req, res) {
+    StoreServices.storeList(cache().products)
+      .then(contributors => {
+        res.send(contributors)
+      })
+      .catch(err => {
+        res.send(err)
+      })
+  })
+  return router
 }

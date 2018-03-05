@@ -10,7 +10,11 @@
     "dev": "NODE_ENV=dev NODE_PATH=$NODE_PATH:./shared babel-node --presets es2015,stage-2 --harmony .",
     "prod": "webpack --progress --color -p --config webpack.prod.config.js",
     "build": "webpack --progress --color -p --config webpack.prod.config.js",
-    "postinstall": ". build/fixes.sh"
+    "postinstall": ". build/fixes.sh",
+    "prettier-src": "prettier --no-semi --write '{backend,client,components,shared}/**/*.{js,jsx}'",
+    "prettier-root": "prettier --no-semi --write ./*.{js,jsx}",
+    "prettier": "npm run prettier-src && npm run prettier-root",
+    "precommit": "npm run prettier"
   },
   "author": "kyle@dataskeptic.com",
   "license": "MIT",

@@ -1,22 +1,21 @@
-const express = require("express")
-const MailServices = require("../../modules/mail/services/MailServices")
+const express = require('express')
+const MailServices = require('../../modules/mail/services/MailServices')
 
 const formatAddress = ({
-  city = "",
-  country = "",
-  line1 = "",
-  line2 = "",
-  postal_code = "",
-  state = ""
+  city = '',
+  country = '',
+  line1 = '',
+  line2 = '',
+  postal_code = '',
+  state = ''
 }) =>
-  `${line1}${" " + line2}, ${city}, ${country.toUpperCase()}, ${state}, ${
-    postal_code
-  }`
+  `${line1}${' ' +
+    line2}, ${city}, ${country.toUpperCase()}, ${state}, ${postal_code}`
 
 module.exports = cache => {
   const router = express.Router()
 
-  router.post("/", function(req, res) {
+  router.post('/', function(req, res) {
     MailServices.sendMail(req.body)
       .then(data => {
         res.send(data)
@@ -26,7 +25,7 @@ module.exports = cache => {
       })
   })
 
-  router.post("/preview", function(req, res) {
+  router.post('/preview', function(req, res) {
     const data = req.body
     data.order.address = formatAddress(data.order.customer)
 

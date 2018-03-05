@@ -9,7 +9,7 @@ export const PostTitle = Title.extend`
 export const Container = styled.div`
   border-top: 1px solid #979797;
   padding: 48px 0 0px 0px;
-  
+
   @media (max-width: 768px) {
     border: 0;
     padding: 0;
@@ -17,7 +17,7 @@ export const Container = styled.div`
 `
 
 export const PodcastBox = styled.div`
-  background-color: #F4F4F4;
+  background-color: #f4f4f4;
   padding: 32px;
   margin-top: 24px;
   @media (max-width: 414px) {
@@ -35,7 +35,7 @@ export const PlayBox = styled.div`
   display: flex;
   cursor: pointer;
   :hover {
-    opacity: .7;
+    opacity: 0.7;
   }
 `
 
@@ -43,7 +43,7 @@ export const Arrow = styled.div`
   padding-right: 11px;
   color: white;
   cursor: pointer;
-  
+
   > img {
     vertical-align: baseline;
   }
@@ -68,7 +68,8 @@ export const PodViewMore = styled.a`
   position: relative;
   padding-right: 20px;
 
-  :before, :after {
+  :before,
+  :after {
     border-right: 2px solid;
     content: '';
     display: block;

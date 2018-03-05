@@ -1,22 +1,20 @@
-import React, { Component }  from 'react'
+import React, { Component } from 'react'
 import Content from './Content'
 import { Banner } from './style'
 
-const pageType = "homepage"
+const pageType = 'homepage'
 
 class HomeContainer extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-
-    }
+    this.state = {}
   }
 
-  render () {
+  render() {
     return (
       <div>
         <Banner />
-        <Content pageType={pageType}/>
+        <Content pageType={pageType} />
       </div>
     )
   }

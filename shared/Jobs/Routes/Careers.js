@@ -1,22 +1,25 @@
-import React, { Component } from "react"
-import { connect } from "react-redux"
-import { change, formValueSelector } from "redux-form"
-import styled from "styled-components"
-import { changePageTitle } from "../../Layout/Actions/LayoutActions"
-import UploadFileTypeBox from "../../Proposals/Components/UploadFileTypeBox/UploadFileTypeBox"
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { change, formValueSelector } from 'redux-form'
+import styled from 'styled-components'
+import { changePageTitle } from '../../Layout/Actions/LayoutActions'
+import UploadFileTypeBox from '../../Proposals/Components/UploadFileTypeBox/UploadFileTypeBox'
 import UploadResume, {
   KEY,
   RESUME_FIELD,
   NOTIFY_FIELD
-} from "../Forms/UploadResume"
+} from '../Forms/UploadResume'
 
-import { submitResume } from "../../reducers/JobsReducer"
+import { submitResume } from '../../reducers/JobsReducer'
 
 class Careers extends Component {
-  static getPageMeta() {
-    return {
-      title: "Careers | Data Skeptic"
-    }
+  onResumeUpload = data => {
+    const value = data[0]
+    this.setResume(value)
+    this.props.dispatch({
+      type: 'UPLOAD_RESUME',
+      payload: data
+    })
   }
 
   componentDidMount() {
@@ -25,13 +28,10 @@ class Careers extends Component {
     dispatch(changePageTitle(title))
   }
 
-  onResumeUpload = data => {
-    const value = data[0]
-    this.setResume(value)
-	  this.props.dispatch({
-      type: "UPLOAD_RESUME",
-      payload: data
-    })
+  static getPageMeta() {
+    return {
+      title: 'Careers | Data Skeptic'
+    }
   }
 
   onResumeRemove = () => {
@@ -80,8 +80,7 @@ class Careers extends Component {
           </UploadResume>
         ) : (
           <Success>
-            <i className="glyphicon glyphicon-ok"/>{' '}
-            Thanks!
+            <i className="glyphicon glyphicon-ok" /> Thanks!
           </Success>
         )}
       </Container>
@@ -109,6 +108,6 @@ const selector = formValueSelector(KEY)
 export default connect(state => ({
   resume: selector(state, RESUME_FIELD),
   notify: selector(state, NOTIFY_FIELD),
-  submitted: state.jobs.getIn(["resume", "submitted"]),
-	error: state.jobs.getIn(["resume", "error"])
+  submitted: state.jobs.getIn(['resume', 'submitted']),
+  error: state.jobs.getIn(['resume', 'error'])
 }))(Careers)
