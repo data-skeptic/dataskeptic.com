@@ -1,22 +1,43 @@
 import React, { Component } from "react"
 import styled from "styled-components"
 
+const animationDuration = 300
+
 export default class UserInput extends Component {
-	static defaultProps = {
-		onSubmit: () => {}
-	}
+  static defaultProps = {
+    onSubmit: () => {},
+	  focused: false
+  }
   state = {
     value: "",
     focus: false
   }
+
   clear = () => {
-	  this.ref.scrollTop = this.ref.scrollHeight
-  	this.setState({ value: "" })
+    this.ref.scrollTop = this.ref.scrollHeight
+    this.setState({ value: "" })
   }
 
-	isEmpty = () => this.state.value === ""
+  isEmpty = () => this.state.value === ""
 
-	saveRef = ref => (this.ref = ref)
+  saveRef = ref => (this.ref = ref)
+  handleSubmit = event => {
+    event && event.preventDefault()
+    const { onSubmit } = this.props
+
+    const data = {
+      sent: true,
+      type: "text",
+      text: this.state.value
+    }
+
+    this.clear()
+    onSubmit(data)
+  }
+
+  focus() {
+	  this.ref.focus()
+  }
 
   onFocus = () => {
     this.setState({ focus: true })
@@ -36,18 +57,13 @@ export default class UserInput extends Component {
     }
   }
 
-  handleSubmit = event => {
-    event && event.preventDefault()
-    const { onSubmit } = this.props
-
-    const data = {
-	    sent: true,
-    	type: 'text',
-	    text: this.state.value
+  componentDidUpdate(prevProps) {
+    if (!prevProps.focused && this.props.focused) {
+      this.onFocus()
+      setTimeout(() => {
+        this.focus()
+      }, animationDuration)
     }
-
-	  this.clear()
-    onSubmit(data)
   }
 
   render() {

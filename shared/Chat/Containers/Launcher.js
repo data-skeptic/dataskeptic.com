@@ -33,8 +33,8 @@ export default class Launcher extends Component {
             {header}
             <Close onClick={this.close}/>
           </Header>
-          <Messages messages={messages} />
-          <UserInput placeholder={placeholder} onSubmit={onMessage} />
+	        <Messages messages={messages} />
+          <UserInput placeholder={placeholder} onSubmit={onMessage} focused={open}/>
         </Chat>
 
         <Button onClick={this.toggle}>
