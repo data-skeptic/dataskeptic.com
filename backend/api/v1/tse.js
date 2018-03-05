@@ -1,20 +1,16 @@
 const express = require('express');
 const Influx = require('influx');
 
-const c = require('../../../config/config.json')
-const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-
 var influxdb = undefined
-const influx_config = c[env]['influxdb']
-if (influx_config) {
+if (JSON.parse(process.env.INFLUXDB_ON)) {
     console.log("initializing influxdb")
     influxdb = new Influx.InfluxDB({
-      protocol: 'https',
-      host:     influx_config['host'],
-      database: influx_config['database'],
-      port:     influx_config['port'],
-      username: influx_config['user'],
-      password: influx_config['password']
+	    protocol: 'https',
+	    host:     process.env.INFLUXDB_HOST,
+	    database: process.env.INFLUXDB_DATABASE,
+	    port:     process.env.INFLUXDB_PORT,
+	    username: process.env.INFLUXDB_USER,
+	    password: process.env.INFLUXDB_PASSWORD
     });
     //  options: { ca: ca },
 } else {

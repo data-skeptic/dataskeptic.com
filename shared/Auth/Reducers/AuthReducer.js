@@ -3,7 +3,7 @@ import axios from "axios"
 import {fromJS, List} from 'immutable'
 
 const env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
-const base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
+const base_url = process.env.BASE_URL
 
 const defaultState = {
     loggedIn: false,

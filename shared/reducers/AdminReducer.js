@@ -1,17 +1,6 @@
 import Immutable from 'immutable';
-import { fromJS } from 'immutable';
-import querystring from 'querystring'
 import axios from "axios"
 import snserror from '../SnsUtil'
-import PrintfulClient from '../printful/printfulclient'
-
-var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
-
-const config = require('../../config/config.json');
-
-var printful_key = config[env]["printful"]["api"]
-
-var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
 
 const init = {
     "bot": false,
@@ -240,7 +229,7 @@ export default function adminReducer(state = defaultState, action) {
     case 'RELATED_CONTENT_ADD':
         var payload = action.payload
         var dispatch = payload['dispatch']
-        var url = base_url + "/blog/relatedcontent/add"
+        var url = process.env.BASE_API + "/blog/relatedcontent/add"
         nstate.add_related_msg = "Saving..."
         axios
             .post(url, payload['data'])
@@ -258,7 +247,7 @@ export default function adminReducer(state = defaultState, action) {
         if (action.payload.add_related_msg != undefined) {
             nstate.add_related_msg = action.payload.add_related_msg
         }
-        var url = base_url + "/blog/relatedcontent/list"
+        var url = process.env.BASE_API + "/blog/relatedcontent/list"
         axios
             .get(url)
             .then(function(result) {
@@ -288,7 +277,7 @@ export default function adminReducer(state = defaultState, action) {
             i+=1
         }
         nstate.relatedcontent = nlist
-        var url = base_url + "/blog/relatedcontent/delete"
+        var url = process.env.BASE_API + "/blog/relatedcontent/delete"
         axios
             .post(url, payload)
             .then(function(result) {

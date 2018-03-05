@@ -1,8 +1,7 @@
 import axios from "axios"
 
 var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
-const base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
-
+const base_api = process.env.BASE_API
 
 export function getPlaylistEpisodes(playlist) {
 	return axios.post(`/api/v1/episodes/multiple`, playlist).then((res) => res.data)
@@ -127,7 +126,7 @@ export function get_products(dispatch) {
 }
 
 export function get_contributor_posts(dispatch, contributor) {
-	axios.get(`${base_url}/blog/list?contributor=${contributor}&limit=21`)
+	axios.get(`${base_api}/blog/list?contributor=${contributor}&limit=21`)
 		.then((result) => {
 			const blogs = result["data"]
             dispatch({type: "SET_CONTRIBUTOR_BLOGS", payload: { contributor, blogs } })

@@ -70,58 +70,37 @@ var Influx = require('influx');
 console.log("server.jsx : starting")
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
+const base_api = process.env.BASE_API
 
 const app = express()
-
 /*
  * CONFIGURATION
  */
+if (process.env.NODE_ENV === 'dev') {
+	console.log('wepback.dev')
+	require('./webpack.dev').default(app);
+}
 
-var aws_accessKeyId = ""
-var aws_secretAccessKey = ""
-var aws_region = ""
-var stripe_key = "sk_test_81PZIV6UfHDlapSAkn18bmQi"
-var sp_key = "test_Z_gOWbE8iwjhXf4y4vqizQ"
-var slack_key = ""
-var aws_proposals_bucket = ""
-var rfc_table_name = "rfc"
-var latest_rfc_id = "test-request"
-var itunesId = "xxxx"
-
-const c = require('./config/config.json')
 console.dir('env = ' + env)
-var ipinfo_token = c[env]['ipinfo_token']
-itunesId = c[env]['itunes']
-stripe_key = c[env]['stripe']
-sp_key = c[env]['sp']
-slack_key = c[env]['slack']
-var elastic_search_endpoint = c[env]['elastic_search_endpoint']
-aws_accessKeyId = c[env]['aws']['accessKeyId']
-aws_secretAccessKey = c[env]['aws']['secretAccessKey']
-aws_region = c[env]['aws']['region']
-aws_proposals_bucket = c[env]['recording']['aws_proposals_bucket']
 aws.config.update(
     {
-        "accessKeyId": aws_accessKeyId,
-        "secretAccessKey": aws_secretAccessKey,
-        "region": aws_region
+        "accessKeyId": process.env.AWS_KEY_ID,
+        "secretAccessKey": process.env.AWS_SECRET_ACCESS_KEY,
+        "region": process.env.AWS_REGION
     }
 );
 
 var influxdb = undefined
-const influx_config = c[env]['influxdb']
-if (influx_config) {
+if (JSON.parse(process.env.INFLUXDB_ON)) {
     console.log("initializing influxdb")
     influxdb = new Influx.InfluxDB({
       protocol: 'https',
-      host:     influx_config['host'],
-      database: influx_config['database'],
-      port:     influx_config['port'],
-      username: influx_config['user'],
-      password: influx_config['password']
+      host:     process.env.INFLUXDB_HOST,
+      database: process.env.INFLUXDB_DATABASE,
+      port:     process.env.INFLUXDB_PORT,
+      username: process.env.INFLUXDB_USER,
+      password: process.env.INFLUXDB_PASSWORD
     });
-    //  options: { ca: ca },
 } else {
     console.log("NOT initializing influxdb")
 }
@@ -292,7 +271,7 @@ const docClient = new aws.DynamoDB.DocumentClient();
 function api_router(req, res) {
     if (req.url.indexOf('/api/slack/join') == 0) {
         var req = req.body
-        join_slack(req, res, slack_key)
+        join_slack(req, res, process.env.SLACK)
         return true
     } else if (req.url
         .indexOf('/api/messages') == 0) {
@@ -323,7 +302,7 @@ function api_router(req, res) {
         apiMemberFeed(req, res, Cache.member_feed)
         return true;
     } else if (req.url.indexOf('/api/v1/proposals/files') == 0) {
-        uploadProposalFiles(req, res, aws_proposals_bucket);
+        uploadProposalFiles(req, res, process.env.RECORDING_AWS_PROPOSAL_BUCKET);
         return true;
     } else if (req.url.indexOf('/api/v1/proposals/recording') == 0) {
         getRecording(req, res);
@@ -332,10 +311,10 @@ function api_router(req, res) {
         writeProposal(req, res);
         return true;
     } else if (req.url.indexOf('/api/v1/recording/ready') == 0) {
-        ready(req, res, aws_proposals_bucket);
+        ready(req, res, process.env.RECORDING_AWS_PROPOSAL_BUCKET);
         return true;
     } else if (req.url.indexOf('/api/v1/recording/get') == 0) {
-        getTempFile(req, res, aws_proposals_bucket);
+        getTempFile(req, res, process.env.RECORDING_AWS_PROPOSAL_BUCKET);
         return true;
     }
     else if (req.url.indexOf('/api/refresh') == 0) {
@@ -343,7 +322,7 @@ function api_router(req, res) {
         return res.status(200).end(JSON.stringify({'status': 'ok'}))
     }
     else if (req.url.indexOf('/api/search') == 0) {
-        search_site(req, res, elastic_search_endpoint)
+        search_site(req, res, process.env.ELASTIC_SEARCH_ENDPOINT)
         return true
     }
     else if (req.url.indexOf('/api/email/send') == 0) {
@@ -351,19 +330,19 @@ function api_router(req, res) {
         return true
     }
     else if (req.url.indexOf('/api/order/create') == 0) {
-        order_create(req, res, stripe_key)
+        order_create(req, res, process.env.STRIPE)
         return true
     }
     else if (req.url.indexOf('/api/order/add') == 0) {
-        add_order(req, res, base_url, stripe_key)
+        add_order(req, res, base_api, process.env.STRIPE)
         return true
     }
     else if (req.url.indexOf('/api/order/fulfill') == 0) {
-        order_fulfill(req, res, stripe_key)
+        order_fulfill(req, res, process.env.STRIPE)
         return true
     }
     else if (req.url.indexOf('/api/order/list') == 0) {
-        order_list(req, res, stripe_key)
+        order_list(req, res, process.env.STRIPE)
         return true
     }
     else if (req.url.indexOf('/api/contributors/list') == 0) {
@@ -477,10 +456,10 @@ function inject_years(store, my_cache) {
     store.dispatch({type: "SET_YEARS", payload: years})
 }
 
-const getFeaturesAPI = (pageType) => axios.get(`${base_url}/cms${pageType ? '/' + pageType : ''}`)
+const getFeaturesAPI = (pageType) => axios.get(`${base_api}/cms${pageType ? '/' + pageType : ''}`)
 
 function getContributorPosts(contributor) {
-    return axios.get(`${base_url}/blog/list?contributor=${contributor}&limit=21`).then((res) => res.data)
+    return axios.get(`${base_api}/blog/list?contributor=${contributor}&limit=21`).then((res) => res.data)
 }
 
 async function inject_homepage(store, my_cache, location) {
@@ -520,7 +499,7 @@ async function updateState(store, pathname, req) {
     inject_folders(store, Cache)
     inject_years(store, Cache)
 
-    store.dispatch({type: "PROPOSAL_SET_BUCKET", payload: {aws_proposals_bucket}})
+    store.dispatch({type: "PROPOSAL_SET_BUCKET", payload: {aws_proposals_bucket: process.env.RECORDING_AWS_PROPOSAL_BUCKET}})
     if (!isEmpty(Cache.contributors)) {
         console.log("using cache for contributors")
         store.dispatch({type: "SET_CONTRIBUTORS", payload: Cache.contributors})
@@ -531,7 +510,9 @@ async function updateState(store, pathname, req) {
         store.dispatch({type: "SET_BOT", payload: bot})
     }
     if (pathname === "" || pathname === "/") {
+        console.log('location')
         const location = extractLocation(req)
+        console.log(location)
         await inject_homepage(store, Cache, location)
     }
     if (pathname.indexOf('/blog') === 0) {
@@ -646,7 +627,7 @@ function getIpData(ip) {
 }
 
 async function tracking (req, res) {
-    if (!ipinfo_token) return
+    if (!process.env.IPINFO_TOKEN) return
 
     let ip = "not-set"
     if (req.connection) {
@@ -785,7 +766,7 @@ const renderPage = async (req, res) => {
                         initialState: state,
                         meta,
                         env,
-                        itunesId
+                        itunesId: process.env.ITUNES_ID
                     });
                 }
 
@@ -794,7 +775,7 @@ const renderPage = async (req, res) => {
                     initialState: state,
                     meta,
                     env,
-                    itunesId
+                    itunesId: process.env.ITUNES_ID
                 });
             })
             .catch(err => {

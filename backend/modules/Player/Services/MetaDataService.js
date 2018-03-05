@@ -1,22 +1,17 @@
-import fs from 'fs'
-const config = require('../../../../config/config.json');
 const AWS = require('aws-sdk');
 const uuidV4 = require('uuid/v4');
 const moment = require('moment');
 const docClient = new AWS.DynamoDB.DocumentClient();
 
 
-
 var env = process.env.NODE_ENV === "production" ? "prod" : "dev"
-
-var tablename = config[env]['player_metadata']['player_metadata']
 console.log(env)
-console.log(config[env]['player_metadata'])
-console.log("TB: " + tablename)
+console.log(process.env.PLAYER_PLAY_METADATA)
+console.log("TB: " + process.env.PLAYER_PLAY_METADATA)
 
 export const getMeta = () => {
     const params = {
-        TableName : tablename
+        TableName : process.env.PLAYER_PLAY_METADATA
     };
     return new Promise((resolve, reject) => {
         docClient.scan(params, function (err, data) {
@@ -33,7 +28,7 @@ export const getMeta = () => {
 
 export const getMetaById = (id) => {
     const params = {
-        TableName: tablename,
+        TableName: process.env.PLAYER_PLAY_METADATA,
         KeyConditionExpression: "#idd = :idd",
         ExpressionAttributeNames: {
             "#idd": "id"
@@ -60,7 +55,7 @@ export const insertMeta = (data) => {
     data.meta.timestamp = moment().unix();
     const idOfNewElement = uuidV4();
     const params = {
-        TableName: tablename,
+        TableName: process.env.PLAYER_PLAY_METADATA,
         Item: {
             "id": idOfNewElement,
             "meta": data.meta,
@@ -71,7 +66,7 @@ export const insertMeta = (data) => {
     return new Promise((resolve, reject) => {
         docClient.put(params, function (err, data) {
             if (err) {
-                console.log(tablename)
+                console.log(process.env.PLAYER_PLAY_METADATA)
                 console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
                 return reject(err);
             } else {
@@ -84,7 +79,7 @@ export const insertMeta = (data) => {
 
 export const deleteMeta = (id) => {
     const params = {
-        TableName: tablename,
+        TableName: process.env.PLAYER_PLAY_METADATA,
         Key: {
             "id": id.toString()
         }
@@ -105,7 +100,7 @@ export const deleteMeta = (id) => {
 export const updateMeta = (id, data) => {
 
     const params = {
-        TableName: tablename,
+        TableName: process.env.PLAYER_PLAY_METADATA,
         Key: {
             "id": id
         },

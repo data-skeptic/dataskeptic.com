@@ -5,11 +5,11 @@ const truncate = require('truncate');
 
 const jobs_util = require('./jobs_util')
 
-const c = require('../../../config/config.json')
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
 var elasticsearch = require('elasticsearch')
-var elastic_search_endpoint = c[env]['elastic_search_endpoint']
+
+var elastic_search_endpoint = process.env.ELASTIC_SEARCH_ENDPOINT
 
 function format_results(hits) {
 	var results = []
