@@ -23,6 +23,7 @@ module.exports = {
 					includes: [
 						"blog_id",
 						"title",
+						"guid",
 						"abstract",
 						"prettyname",
 						"publish_date"
@@ -37,11 +38,12 @@ module.exports = {
 			for (var hit of hits) {
 				var blog_id      = hit['_id']
 				var title        = hit['_source']['title']
+				var guid         = hit['_source']['guid']
 				var prettyname   = hit['_source']['prettyname']
 				var author       = hit['_source']['author']
 				var abstract     = hit['_source']['abstract']
 				var date_created = hit['_source']['date_created']
-				var result = { blog_id, title, author, abstract, prettyname, date_created }
+				var result = { blog_id, title, author, abstract, prettyname, guid, date_created }
 				results.push(result)
 			}
 		    return res.status(200).end(JSON.stringify(results))

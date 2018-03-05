@@ -25,16 +25,29 @@ import Recorder, {steps} from '../../Recorder';
 import QuestionForm from "../../Questions/Forms/QuestionForm";
 import {submitCommentForm} from "../../Proposals/Actions/CommentBoxFormActions";
 import SectionBlock from "../Components/SectionBlock/SectionBlock";
+import Launcher from "../../Chat/Containers/Launcher";
+import ConversationHandler from "../../ChatBot/Dialogs/ConversationHandler"
 
 class ContactUs extends React.Component {
-    constructor(props) {
-        super(props)
 
-        this.state = {
-            submittedUrl: '',
-	          openSection: ''
-        }
-    }
+	constructor(props) {
+		super(props)
+
+		this.state = {
+			submittedUrl: '',
+			openSection: '',
+			messages: [
+				{type: 'text', author: 'bot', text: 'What would you like to talk about?'}
+			]
+		}
+	}
+
+	onMessage = (message) => {
+		this.addMessage(message)
+		var cstate = this.props.chatbot.toJS()
+		var dispatch = this.props.dispatch
+		ConversationHandler.get_reply(dispatch, this.reply, cstate, message)
+	}
 
     isSectionOpen = section => section === this.state.openSection
 
@@ -130,6 +143,17 @@ class ContactUs extends React.Component {
 			})
 	}
 
+	addMessage = (message) => this.setState(prevState => ({
+		messages: [...prevState.messages, message]
+	}))
+
+	reply = (message, author = 'bot') => {
+		this.addMessage({
+			...message,
+			author
+		})
+	}
+
 	render() {
 			const {confirmPolicy,activeStep,errorMessage} = this.props;
 			const { submittedUrl } = this.state
@@ -142,6 +166,11 @@ class ContactUs extends React.Component {
 
     	return (
 		    <Container>
+			    <Launcher
+				    onMessage={this.onMessage}
+				    messages={this.state.messages}
+			    />
+
 			    <Title>Contact Us</Title>
 					<Text>We hope to respond to all inquiries, but sometimes the volume of incoming questions can cause our queue to explode.  We prioritize responses to Data Skeptic members first, and to those who ask questions in a public forum like Twitter, our Facebook wall (not Facebook direct message), or Slack.  Many people can benefit from responses in public places.</Text>
 
@@ -392,6 +421,7 @@ const selector = formValueSelector('question');
 export default connect(
 	state => ({
 		cart: state.cart,
+		chatbot: state.chatbot,
 		site: state.site,
         confirmPolicy: selector(state, 'confirmPolicy'),
         activeStep: state.questions.getIn(['form', 'step']),
