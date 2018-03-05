@@ -1,26 +1,25 @@
 import React, { Component } from "react"
 import styled from "styled-components"
 import marked from "marked"
-import {BOT_ID} from '../Constants'
+import { BOT_ID } from "../../Constants/index"
 
 const getMarkdown = text => {
   const rawMarkup = marked(text)
   return { __html: rawMarkup }
 }
 
+const renderText = text => (
+  <Text sent={sent} dangerouslySetInnerHTML={getMarkdown(text)} />
+)
+
 export default class Message extends Component {
   render() {
-    const { text, author, sent } = this.props
+    const { text, children, author, sent } = this.props
 
     return (
       <Container sent={sent}>
-        {author && (
-          <Author src={author.img} bot={author.author === BOT_ID} />
-        )}
-        <Text
-          sent={sent}
-          dangerouslySetInnerHTML={getMarkdown(text)}
-        />
+        {author && <Author src={author.img} bot={author.author === BOT_ID} />}
+        <Bubble sent={sent}>{children ? children : renderText(text)}</Bubble>
       </Container>
     )
   }
@@ -53,19 +52,19 @@ const Author = styled.img`
   `};
 `
 
-const Text = styled.span`
+const Bubble = styled.div`
   border-radius: 5px;
   padding: 12px;
   display: inline-block;
   max-width: 100%;
   overflow: hidden;
-	word-wrap: break-word;
+  word-wrap: break-word;
 
-	* {
-		margin: 0px;
-		padding: 0px;
-		max-width: 100%;
-	}
+  * {
+    margin: 0px;
+    padding: 0px;
+    max-width: 100%;
+  }
 
   ${props =>
     props.sent
@@ -75,4 +74,8 @@ const Text = styled.span`
       : `
 			background: #F9FAF9;
 	`};
+`
+
+const Text = styled.span`
+
 `

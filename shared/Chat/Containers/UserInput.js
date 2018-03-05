@@ -3,6 +3,8 @@ import styled from "styled-components"
 
 const animationDuration = 300
 
+const normalize = val => val.toLowerCase().trim()
+
 export default class UserInput extends Component {
   static defaultProps = {
     onSubmit: () => {},
@@ -24,11 +26,13 @@ export default class UserInput extends Component {
   handleSubmit = event => {
     event && event.preventDefault()
     const { onSubmit } = this.props
+    const text = this.state.value
 
     const data = {
       sent: true,
       type: "text",
-      text: this.state.value
+      text,
+      plainText: normalize(text)
     }
 
     this.clear()

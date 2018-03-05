@@ -27,7 +27,7 @@ import {submitCommentForm} from "../../Proposals/Actions/CommentBoxFormActions";
 import SectionBlock from "../Components/SectionBlock/SectionBlock";
 import Launcher from "../../Chat/Containers/Launcher";
 import ConversationHandler from "../../ChatBot/Dialogs/ConversationHandler"
-import {BOT_ID} from "../../Chat/Constants";
+import {BOT_ID, THINKING_MESSAGE} from "../../Chat/Constants";
 
 class ContactUs extends React.Component {
 
@@ -159,10 +159,11 @@ class ContactUs extends React.Component {
         dispatch(changePageTitle(title));
 
 	      this.reply({ text: 'What would you like to talk about?'}, BOT_ID)
+	      this.reply({ type: THINKING_MESSAGE }, BOT_ID)
     }
 
 	render() {
-			const {confirmPolicy,activeStep,errorMessage, contributors} = this.props;
+			const {confirmPolicy,activeStep,errorMessage, contributors, chatbot} = this.props;
 			const { submittedUrl } = this.state
 
 			const osite = this.props.site.toJS()
@@ -171,10 +172,14 @@ class ContactUs extends React.Component {
 				<SlackStatus>{osite.slackstatus}</SlackStatus>
 			)
 
+
+			const thinking = chatbot.get('thinking')
+
     	return (
 		    <Container>
 			    <Launcher
 				    onMessage={this.onMessage}
+				    thinking={thinking}
 				    messages={this.state.messages}
 			    />
 

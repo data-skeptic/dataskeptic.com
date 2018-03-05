@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import styled from "styled-components"
 import UserInput from "./UserInput"
 import Messages from "./Messages"
+import {REGULAR_MESSAGE, THINKING_MESSAGE} from "../Constants";
 
 export {BOT_AUTHOR, BOT_ID} from '../Constants'
 
@@ -24,9 +25,24 @@ export default class Launcher extends Component {
       open: !prevState.open
     }))
 
+	handleMessage = (message) => {
+    const {onMessage} = this.props
+
+		onMessage({
+      ...message,
+      type: REGULAR_MESSAGE
+    })
+  }
+
   render() {
     const { open } = this.state
-    const { placeholder, header, messages, onMessage } = this.props
+    const { placeholder, header } = this.props
+    let { messages } = this.props
+    const thinking = true
+
+    if (thinking) {
+      messages = [...messages, {type: THINKING_MESSAGE}]
+    }
 
     return (
       <Container>
@@ -36,7 +52,7 @@ export default class Launcher extends Component {
             <Close onClick={this.close}/>
           </Header>
 	        <Messages messages={messages} />
-          <UserInput placeholder={placeholder} onSubmit={onMessage} focused={open}/>
+          <UserInput placeholder={placeholder} onSubmit={this.handleMessage} focused={open}/>
         </Chat>
 
         <Button onClick={this.toggle}>

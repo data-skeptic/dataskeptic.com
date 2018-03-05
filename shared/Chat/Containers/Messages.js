@@ -1,6 +1,9 @@
 import React, { Component } from "react"
 import styled from "styled-components"
-import Message from "../Message"
+
+import {THINKING_MESSAGE} from "../Constants";
+import Message from "../Components/Message"
+import Thinking from "../Components/Thinking";
 
 export default class Messages extends Component {
   static defaultProps = {
@@ -9,11 +12,26 @@ export default class Messages extends Component {
 
   componentDidUpdate = () => this.list.scrollTop = this.list.scrollHeight
 
+  renderMessage = (message, index) => {
+    let Renderer
+
+    switch (message.type) {
+      case THINKING_MESSAGE:
+        Renderer = Thinking
+        break
+
+      default:
+	      Renderer = Message
+    }
+
+	  return <Renderer key={index} {...message} />
+  }
+
   render() {
     const { messages } = this.props
     return (
       <Wrapper innerRef={el => (this.list = el)}>
-        {messages.map((m, index) => <Message key={index} {...m} />)}
+        {messages.map(this.renderMessage)}
       </Wrapper>
     )
   }
