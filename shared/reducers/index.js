@@ -6,6 +6,7 @@ export { default as products } from './ProductsReducer';
 export { default as player } from './PlayerReducer';
 export { default as site } from './SiteReducer';
 export { default as search } from './SearchReducer';
+export { default as jobs } from './JobsReducer'
 
 // TODO: migrate these to /shared/reducers folder
 export { default as auth} from '../Auth/Reducers/AuthReducer'
