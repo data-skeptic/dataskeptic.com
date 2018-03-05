@@ -3,6 +3,8 @@ import styled from "styled-components"
 import UserInput from "./UserInput"
 import Messages from "./Messages"
 
+export {BOT_AUTHOR, BOT_ID} from '../Constants'
+
 export default class Launcher extends Component {
   static defaultProps = {
     placeholder: "Send a message...",
@@ -53,6 +55,7 @@ const Chat = styled.div`
   z-index: 2147482999;
   width: 370px;
   height: calc(100% - 120px);
+  min-height: 120px;
   max-height: 590px;
   position: fixed;
   right: 25px;

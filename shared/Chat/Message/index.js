@@ -1,16 +1,7 @@
 import React, { Component } from "react"
 import styled from "styled-components"
 import marked from "marked"
-
-const getAuthorImage = author => {
-  author = author.toLowerCase()
-  switch (author) {
-    case "kyle":
-      return "https://s3.amazonaws.com/dataskeptic.com/contributors/kyle-polich.jpg"
-    default:
-      return "/img/chat/bot.png"
-  }
-}
+import {BOT_ID} from '../Constants'
 
 const getMarkdown = text => {
   const rawMarkup = marked(text, { sanitize: true })
@@ -24,7 +15,7 @@ export default class Message extends Component {
     return (
       <Container sent={sent}>
         {author && (
-          <Author src={getAuthorImage(author)} bot={author === "bot"} />
+          <Author src={author.img} bot={author.author === BOT_ID} />
         )}
         <Text
           sent={sent}

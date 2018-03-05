@@ -27,6 +27,7 @@ import {submitCommentForm} from "../../Proposals/Actions/CommentBoxFormActions";
 import SectionBlock from "../Components/SectionBlock/SectionBlock";
 import Launcher from "../../Chat/Containers/Launcher";
 import ConversationHandler from "../../ChatBot/Dialogs/ConversationHandler"
+import {BOT_ID} from "../../Chat/Constants";
 
 class ContactUs extends React.Component {
 
@@ -37,7 +38,6 @@ class ContactUs extends React.Component {
 			submittedUrl: '',
 			openSection: '',
 			messages: [
-				{type: 'text', author: 'bot', text: 'What would you like to talk about?'}
 			]
 		}
 	}
@@ -98,11 +98,15 @@ class ContactUs extends React.Component {
     	this.props.dispatch(reset(`question`))
 	}
 
-    componentDidMount() {
-        const {dispatch} = this.props;
-        const {title} = ContactUs.getPageMeta(this.props);
-        dispatch(changePageTitle(title));
-    }
+	reply = (message, authorId) => {
+		authorId = !!this.props.contributors[authorId] ? authorId : BOT_ID
+		const author = this.props.contributors[authorId]
+
+		this.addMessage({
+			...message,
+			author
+		})
+	}
 
     static getPageMeta() {
         return {
@@ -147,15 +151,16 @@ class ContactUs extends React.Component {
 		messages: [...prevState.messages, message]
 	}))
 
-	reply = (message, author = 'bot') => {
-		this.addMessage({
-			...message,
-			author
-		})
-	}
+    componentDidMount() {
+        const {dispatch} = this.props;
+        const {title} = ContactUs.getPageMeta(this.props);
+        dispatch(changePageTitle(title));
+
+	      this.reply({ text: 'What would you like to talk about?'}, BOT_ID)
+    }
 
 	render() {
-			const {confirmPolicy,activeStep,errorMessage} = this.props;
+			const {confirmPolicy,activeStep,errorMessage, contributors} = this.props;
 			const { submittedUrl } = this.state
 
 			const osite = this.props.site.toJS()
@@ -422,6 +427,7 @@ export default connect(
 	state => ({
 		cart: state.cart,
 		chatbot: state.chatbot,
+		contributors: state.site.get('contributors').toJS(),
 		site: state.site,
         confirmPolicy: selector(state, 'confirmPolicy'),
         activeStep: state.questions.getIn(['form', 'step']),
