@@ -139,4 +139,3 @@ module.exports = {
   getJobs,
   extractLocation
 }
-v
