@@ -38,7 +38,7 @@ export const BlogAuthorBottom = ({ contributor }) => {
     <div className="blog-author-bottom">
       <div className="row">
         <div className="col-xs-12 col-sm-5 blog-author-img">
-          <img src={contributor.img} />
+          <img src={contributor.img} className="img-responsive"/>
         </div>
         <div className="col-xs-12 col-sm-7 blog-author-main">
           <p>
