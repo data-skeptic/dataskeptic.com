@@ -1,36 +1,31 @@
-import React from "react";
-import {Link} from 'react-router';
-import {connect} from 'react-redux';
+import React from 'react'
+import { Link } from 'react-router'
+import { connect } from 'react-redux'
 
 class DatabaseSelector extends React.Component {
-    constructor(props) {
-        super(props)
-    }
+  constructor(props) {
+    super(props)
+  }
 
-    render() {
-    	var databases = this.props.databases
-    	if (databases == undefined) {
-    		databases = []
-    	}
-    	if (databases.length == 0) {
-    		return (
-    			<div className="database-selector">
-    				Loading...
-    			</div>
-    		)
-    	}
-        return (
-   			<div className="database-selector">
-                Database:<br/>
-                <select className="tse-selector">
-                {databases.map(database => (
-                  <option>{database.name}</option>
-                ))}
-                </select>
-        	</div>
-        )
+  render() {
+    var databases = this.props.databases
+    if (databases == undefined) {
+      databases = []
     }
+    if (databases.length == 0) {
+      return <div className="database-selector">Loading...</div>
+    }
+    return (
+      <div className="database-selector">
+        Database:<br />
+        <select className="tse-selector">
+          {databases.map(database => <option>{database.name}</option>)}
+        </select>
+      </div>
+    )
+  }
 }
 
-export default connect(state => ({timeseries: state.timeseries}))(DatabaseSelector)
-
+export default connect(state => ({ timeseries: state.timeseries }))(
+  DatabaseSelector
+)

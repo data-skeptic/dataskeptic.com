@@ -1,9 +1,9 @@
-import list from "../constants/list"
+import list from '../constants/list'
 
-export const getRelatedByURI = (name) => {
-    return  Promise.resolve(list[name]);
-};
+export const getRelatedByURI = name => {
+  return Promise.resolve(list[name])
+}
 
 export const getAll = () => {
-    return Promise.resolve(list);
-};
+  return Promise.resolve(list)
+}

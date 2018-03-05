@@ -8,7 +8,7 @@ export const Container = styled.div`
     border: 0;
     padding: 0;
   }
-  
+
   @media (max-width: 414px) {
     padding: 0 5px;
   }
@@ -19,7 +19,7 @@ export const BlogItem = styled.div`
 `
 
 export const Title = styled.div`
-  color: #2D1454;
+  color: #2d1454;
   font-size: 24px;
   line-height: 31px;
   font-weight: bold;
@@ -29,7 +29,7 @@ export const Title = styled.div`
 export const ItemDate = styled.span`
   font-size: 14px;
   line-height: 18px;
-  color: #7D8080;
+  color: #7d8080;
   display: block;
   padding-bottom: 8px;
 `
@@ -37,7 +37,7 @@ export const ItemDate = styled.span`
 export const ItemTitle = styled.span`
   font-size: 32px;
   line-height: 40px;
-  color: #3A3B3B;
+  color: #3a3b3b;
   display: block;
   padding-bottom: 8px;
 `
@@ -60,7 +60,8 @@ export const ViewMore = styled(Link)`
   position: relative;
   padding-right: 20px;
 
-  :before, :after {
+  :before,
+  :after {
     border-right: 2px solid;
     content: '';
     display: block;
@@ -90,7 +91,7 @@ export const Avatar = styled.img`
   border-radius: 50%;
   width: 60px;
   height: 60px;
-  
+
   padding: 4px;
   background-color: #ffffff;
   border: 1px solid #dddddd;

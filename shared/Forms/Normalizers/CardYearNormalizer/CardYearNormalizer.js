@@ -7,13 +7,13 @@
  * @return {string}
  */
 const CardYearNormalizer = (value, previousValue) => {
-    if (!value) {
-        return value
-    }
+  if (!value) {
+    return value
+  }
 
-    const onlyNums = value.replace(/[^\d]/g, '');
+  const onlyNums = value.replace(/[^\d]/g, '')
 
-    return onlyNums.slice(0, 4);
-};
+  return onlyNums.slice(0, 4)
+}
 
-export default CardYearNormalizer;
+export default CardYearNormalizer
