@@ -159,7 +159,6 @@ class ContactUs extends React.Component {
         dispatch(changePageTitle(title));
 
 	      this.reply({ text: 'What would you like to talk about?'}, BOT_ID)
-	      this.reply({ type: THINKING_MESSAGE }, BOT_ID)
     }
 
 	render() {
@@ -178,6 +177,7 @@ class ContactUs extends React.Component {
     	return (
 		    <Container>
 			    <Launcher
+				    defaultBot={contributors[BOT_ID]}
 				    onMessage={this.onMessage}
 				    thinking={thinking}
 				    messages={this.state.messages}

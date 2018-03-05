@@ -9,7 +9,7 @@ const getMarkdown = text => {
 }
 
 const renderText = text => (
-  <Text sent={sent} dangerouslySetInnerHTML={getMarkdown(text)} />
+  <Text dangerouslySetInnerHTML={getMarkdown(text)} />
 )
 
 export default class Message extends Component {

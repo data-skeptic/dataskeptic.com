@@ -2,16 +2,17 @@ import React, { Component } from "react"
 import styled from "styled-components"
 import UserInput from "./UserInput"
 import Messages from "./Messages"
-import {REGULAR_MESSAGE, THINKING_MESSAGE} from "../Constants";
+import { REGULAR_MESSAGE, THINKING_MESSAGE } from "../Constants"
 
-export {BOT_AUTHOR, BOT_ID} from '../Constants'
+export { BOT_AUTHOR, BOT_ID } from "../Constants"
 
 export default class Launcher extends Component {
   static defaultProps = {
     placeholder: "Send a message...",
     header: "DataSkeptic Bot",
     messages: [],
-    onMessage: () => {}
+    onMessage: () => {},
+	  defaultBot: {}
   }
 
   state = {
@@ -25,23 +26,26 @@ export default class Launcher extends Component {
       open: !prevState.open
     }))
 
-	handleMessage = (message) => {
-    const {onMessage} = this.props
+  handleMessage = message => {
+    const { onMessage } = this.props
 
-		onMessage({
+    onMessage({
       ...message,
       type: REGULAR_MESSAGE
     })
   }
 
+  getThinkingMessage() {
+    return { type: THINKING_MESSAGE, author: this.props.defaultBot }
+  }
+
   render() {
     const { open } = this.state
-    const { placeholder, header } = this.props
+    const { placeholder, header, thinking } = this.props
     let { messages } = this.props
-    const thinking = true
 
     if (thinking) {
-      messages = [...messages, {type: THINKING_MESSAGE}]
+      messages = [...messages, this.getThinkingMessage()]
     }
 
     return (
@@ -49,10 +53,14 @@ export default class Launcher extends Component {
         <Chat inactive={!open}>
           <Header>
             {header}
-            <Close onClick={this.close}/>
+            <Close onClick={this.close} />
           </Header>
-	        <Messages messages={messages} />
-          <UserInput placeholder={placeholder} onSubmit={this.handleMessage} focused={open}/>
+          <Messages messages={messages} />
+          <UserInput
+            placeholder={placeholder}
+            onSubmit={this.handleMessage}
+            focused={open}
+          />
         </Chat>
 
         <Button onClick={this.toggle}>
