@@ -17,7 +17,7 @@ var s3 = new AWS.S3()
 const bucket = config['bucket']
 const s3path = config['s3path']
 
-var pdf_filename = 'Allen_Lee_Resume.pdf'
+var pdf_filename = '00a7d5ee.pdf'
 var s3key = s3path + pdf_filename
 
 var params = { 
