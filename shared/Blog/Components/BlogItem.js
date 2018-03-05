@@ -98,10 +98,6 @@ class BlogItem extends React.Component {
     var title = blog['title']
     var top = <div />
     var bot = <div />
-    if (contributor != undefined) {
-      top = <BlogAuthorTop contributor={contributor} />
-      bot = <BlogAuthorBottom contributor={contributor} />
-    }
     var guid = blog.guid
     if (guid) {
       var episode = undefined
@@ -150,14 +146,15 @@ class BlogItem extends React.Component {
     }
     
     const multipleContributors = blog.contributors && blog.contributors.length > 0
-    if (multipleContributors) {
-      blog.contributors = []
+    if (!multipleContributors && contributor) {
+      blog.contributors = [contributor]
     }
     
     return (
       <div className="blog-item-wrapper">
         <BlogBreadCrumbs prettyname={prettyname} exampleImage={exampleImage} />
-        {multipleContributors ? renderTopContributors(blog.contributors) : top}
+        {renderTopContributors(blog.contributors)}
+        {top}
         <div
           className="content"
           dangerouslySetInnerHTML={{ __html: content }}
@@ -168,7 +165,8 @@ class BlogItem extends React.Component {
           title={title}
           exampleImage={exampleImage}
         />
-        {multipleContributors ? renderBottomContributors(blog.contributors) : bot}
+        {renderBottomContributors(blog.contributors)}
+        {bot}
         <MailingListBlogFooter />
         <ReactDisqusComments
           shortname={disqus_username}
