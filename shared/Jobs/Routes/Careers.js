@@ -61,9 +61,7 @@ class Careers extends Component {
           If you're concerned about privacy, feel free to remove your contact
           information from PDF you upload.
         </Text>
-
-        <code>{JSON.stringify(error)}</code>
-
+        
         {!submitted ? (
           <UploadResume
             showSubmit={true}
@@ -89,13 +87,6 @@ class Careers extends Component {
             />
           </Success>
         )}
-
-        {error && (
-          <Error>
-            <i className="glyphicon glyphicon-warning-sign" />
-            Server error, please contact kyle@dataskeptic.com for support
-          </Error>
-        )}
       </Container>
     )
   }
@@ -116,10 +107,6 @@ const Success = styled.div`
   justify-content: center;
   flex-direction: column;
   align-items: center;
-`
-
-const Error = styled.div`
-  color: red;
 `
 
 const UploadBox = styled(UploadFileTypeBox)`
