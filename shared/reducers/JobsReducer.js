@@ -28,7 +28,7 @@ export default function jobReducer(state = defaultState, action) {
       break
 
     case 'SUBMIT_RESUME_FAIL':
-      state = state.setIn(['resume', 'submitted'], true)
+      state = state.setIn(['resume', 'submitted'], false)
       state = state.setIn(['resume', 'error'], action.payload.error)
       break
   }
@@ -38,8 +38,12 @@ export default function jobReducer(state = defaultState, action) {
 
 export const submitResume = (dispatch, data) => {
   const files = [data.resume]
-  Request.upload('/api/v1/proposals/files', files)
+  Request.upload('/api/v1/career/upload', files)
     .then(res => {
+      if (!res.success) {
+        throw Error(res.error)
+      }
+      
       data.resume = res.data.files[0]
 
       return Request.post('/api/v1/career', data)
@@ -54,7 +58,7 @@ export const submitResume = (dispatch, data) => {
     )
     .catch(error =>
       dispatch({
-        type: 'SUBMIT_RESUME_SUCCESS',
+        type: 'SUBMIT_RESUME_FAIL',
         payload: {
           error
         }

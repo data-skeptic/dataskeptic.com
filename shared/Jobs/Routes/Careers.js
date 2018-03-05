@@ -1,23 +1,23 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { change, formValueSelector } from 'redux-form'
-import styled from 'styled-components'
-import { changePageTitle } from '../../Layout/Actions/LayoutActions'
-import UploadFileTypeBox from '../../Proposals/Components/UploadFileTypeBox/UploadFileTypeBox'
+import React, { Component } from "react"
+import { connect } from "react-redux"
+import { change, formValueSelector } from "redux-form"
+import styled from "styled-components"
+import { changePageTitle } from "../../Layout/Actions/LayoutActions"
+import UploadFileTypeBox from "../../Proposals/Components/UploadFileTypeBox/UploadFileTypeBox"
 import UploadResume, {
   KEY,
   RESUME_FIELD,
   NOTIFY_FIELD
-} from '../Forms/UploadResume'
+} from "../Forms/UploadResume"
 
-import { submitResume } from '../../reducers/JobsReducer'
+import { submitResume } from "../../reducers/JobsReducer"
 
 class Careers extends Component {
   onResumeUpload = data => {
     const value = data[0]
     this.setResume(value)
     this.props.dispatch({
-      type: 'UPLOAD_RESUME',
+      type: "UPLOAD_RESUME",
       payload: data
     })
   }
@@ -27,11 +27,8 @@ class Careers extends Component {
     const { title } = Careers.getPageMeta(this.props)
     dispatch(changePageTitle(title))
   }
-
-  static getPageMeta() {
-    return {
-      title: 'Careers | Data Skeptic'
-    }
+  submit = data => {
+    return submitResume(this.props.dispatch, data)
   }
 
   onResumeRemove = () => {
@@ -42,8 +39,10 @@ class Careers extends Component {
     this.props.dispatch(change(KEY, RESUME_FIELD, value))
   }
 
-  submit = data => {
-    submitResume(this.props.dispatch, data)
+  static getPageMeta() {
+    return {
+      title: "Careers | Data Skeptic"
+    }
   }
 
   render() {
@@ -63,6 +62,8 @@ class Careers extends Component {
           information from PDF you upload.
         </Text>
 
+        <code>{JSON.stringify(error)}</code>
+
         {!submitted ? (
           <UploadResume
             showSubmit={true}
@@ -80,8 +81,20 @@ class Careers extends Component {
           </UploadResume>
         ) : (
           <Success>
-            <i className="glyphicon glyphicon-ok" /> Thanks!
+            <h1>Thank you!</h1>
+            <p>Resume Uploaded.</p>
+            <img
+              src="https://s3.amazonaws.com/dataskeptic.com/img/bot/bot-image.png"
+              width="200"
+            />
           </Success>
+        )}
+
+        {error && (
+          <Error>
+            <i className="glyphicon glyphicon-warning-sign" />
+            Server error, please contact kyle@dataskeptic.com for support
+          </Error>
         )}
       </Container>
     )
@@ -98,7 +111,16 @@ const Title = styled.h2``
 
 const Text = styled.p``
 
-const Success = styled.p``
+const Success = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+`
+
+const Error = styled.div`
+  color: red;
+`
 
 const UploadBox = styled(UploadFileTypeBox)`
   background: black;
@@ -108,6 +130,6 @@ const selector = formValueSelector(KEY)
 export default connect(state => ({
   resume: selector(state, RESUME_FIELD),
   notify: selector(state, NOTIFY_FIELD),
-  submitted: state.jobs.getIn(['resume', 'submitted']),
-  error: state.jobs.getIn(['resume', 'error'])
+  submitted: state.jobs.getIn(["resume", "submitted"]),
+  error: state.jobs.getIn(["resume", "error"])
 }))(Careers)
