@@ -1,12 +1,30 @@
 import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
+import ReactDOM from "react/lib/ReactDOM";
+
+function isElementInViewport (el) {
+  const rect = el.getBoundingClientRect()
+  return (
+    rect.top >= 0 &&
+    rect.left >= 0 &&
+    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && 
+    rect.right <= (window.innerWidth || document.documentElement.clientWidth) 
+  );
+}
 
 export default (ComposedComponent) => {
   class WrapperComponent extends Component {
-    constructor() {
-      super()
-      debugger;
-      this.el = ReactDOM.getNode(ComposedComponent)
+
+    state = {
+      reveal: false
+    }
+    saveRef = ref => this.el = ReactDOM.findDOMNode(ref)
+    handleScroll = () => {
+      if (!this.el) return
+      const visible = isElementInViewport(ReactDOM.findDOMNode(this.el))
+      if (visible) {
+        this.setState({reveal: true})
+        this.disableScroll()
+      }
     }
     
     componentDidMount(){
@@ -21,13 +39,14 @@ export default (ComposedComponent) => {
       window.removeEventListener('scroll', this.handleScroll)
     }
 
-    handleScroll() {
-      
+    constructor() {
+      super()
+
+      this.handleScroll = _.debounce(this.handleScroll, 300)
     }
-    
 
     render(){
-      return <ComposedComponent {...this.props} />
+      return <ComposedComponent {...this.props} ref={this.saveRef} reveal={this.state.reveal}/>
     }
   }
   return WrapperComponent;
