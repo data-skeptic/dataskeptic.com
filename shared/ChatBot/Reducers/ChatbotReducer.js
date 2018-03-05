@@ -1,7 +1,5 @@
 import axios from "axios"
 import Immutable from 'immutable';
-import {fromJS} from 'immutable';
-import {BOT_ID, THINKING_MESSAGE} from "../../Chat/Constants";
 
 var episodes = require("../Dialogs/episodes")
 var surveyDialog = require("../Dialogs/survey")
@@ -242,3 +240,4 @@ export default function ChatbotReducer(state = defaultState, action) {
     }
     return Immutable.fromJS(nstate)
 }
+

@@ -12,11 +12,31 @@ export default class Launcher extends Component {
     header: "DataSkeptic Bot",
     messages: [],
     onMessage: () => {},
-	  defaultBot: {}
+    onInactivity: () => {},
+	  defaultBot: {},
+	  inactivityDelay: 3000
   }
 
   state = {
     open: false
+  }
+	triggerInactivity = () => {
+		this.props.onInactivity()
+  }
+  handleMessage = message => {
+    this.resetInactivityTimer()
+    const { onMessage } = this.props
+
+    onMessage({
+      ...message,
+      type: REGULAR_MESSAGE
+    })
+  }
+
+  constructor() {
+    super()
+
+    this.timer = null
   }
 
   close = () => this.setState({ open: false })
@@ -26,13 +46,13 @@ export default class Launcher extends Component {
       open: !prevState.open
     }))
 
-  handleMessage = message => {
-    const { onMessage } = this.props
+  resetInactivityTimer() {
+    if (this.timer) {
+	    clearTimeout(this.timer)
+      this.timer = null
+    }
 
-    onMessage({
-      ...message,
-      type: REGULAR_MESSAGE
-    })
+    setTimeout(this.triggerInactivity, this.props.inactivityDelay);
   }
 
   getThinkingMessage() {

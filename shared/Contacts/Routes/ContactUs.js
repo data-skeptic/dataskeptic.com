@@ -153,12 +153,16 @@ class ContactUs extends React.Component {
 		messages: [...prevState.messages, message]
 	}))
 
+  onInactivity = () => {
+	  this.reply({ text: 'Still there?  Let me know what you think of the bot by DMing me on Slack!  I would appreciate your candid feedback'}, 'kyle')
+  }
+
     componentDidMount() {
         const {dispatch} = this.props;
         const {title} = ContactUs.getPageMeta(this.props);
         dispatch(changePageTitle(title));
 
-	      this.reply({ text: 'What would you like to talk about?'}, BOT_ID)
+	      this.reply({ text: 'What would you like to talk about?'})
     }
 
 	render() {
@@ -171,16 +175,17 @@ class ContactUs extends React.Component {
 				<SlackStatus>{osite.slackstatus}</SlackStatus>
 			)
 
-
 			const thinking = chatbot.get('thinking')
 
     	return (
 		    <Container>
 			    <Launcher
 				    defaultBot={contributors[BOT_ID]}
-				    onMessage={this.onMessage}
 				    thinking={thinking}
 				    messages={this.state.messages}
+				    onMessage={this.onMessage}
+				    onInactivity={this.onInactivity}
+				    inactivityDelay={1000 * 1}
 			    />
 
 			    <Title>Contact Us</Title>
