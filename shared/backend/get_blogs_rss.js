@@ -28,7 +28,7 @@ module.exports = {
                 title: 'Data Skeptic',
                 description: 'Data Skeptic is your source for a perspective of scientific skepticism on topics in statistics, machine learning, big data, artificial intelligence, and data science. Our weekly podcast and blog bring you stories and tutorials to help understand our data-driven world.',
                 feed_url: `${process.env.BASE_URL}/api/blog/rss`,
-                site_url: process.env.BASE_URL,
+                site_url: "https://dataskeptic.com/",
                 managingEditor: 'Kyle',
                 language: 'en'
             });

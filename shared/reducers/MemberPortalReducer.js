@@ -6,7 +6,7 @@ import snserror from '../SnsUtil'
 
 var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
 
-var base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
+var base_api = process.env.BASE_API
 
 const init = {
 	  mode: "loading",
@@ -38,7 +38,7 @@ export default function memberPortalReducer(state = defaultState, action) {
     case 'LOAD_MEMBER':
         var dispatch = action.payload.dispatch
         var email = action.payload.email
-        var url = base_url + "/member?email=" + email
+        var url = base_api + "/member?email=" + email
         axios
             .get(url)
             .then(function(result) {
@@ -61,7 +61,7 @@ export default function memberPortalReducer(state = defaultState, action) {
         var user = action.payload.user
     	var data = {email}
     	var dispatch = action.payload.dispatch
-    	var uri = base_url + '/members/check'
+    	var uri = base_api + '/members/check'
         axios
             .post(uri, data)
             .then(function(result) {
@@ -98,7 +98,7 @@ export default function memberPortalReducer(state = defaultState, action) {
         nstate.update_member_msg = "Processing..."
         var email = action.payload.email
         var dispatch = action.payload.dispatch
-        var uri = base_url + '/members/change'
+        var uri = base_api + '/members/change'
         axios
             .post(uri, {email})
             .then(function(result) {
@@ -120,7 +120,7 @@ export default function memberPortalReducer(state = defaultState, action) {
         break
     case 'LOAD_MEMBER_ANALYTICS':
         var dispatch = action.payload.dispatch
-        var url = base_url + "/members/analytics/list"
+        var url = base_api + "/members/analytics/list"
         axios
             .get(url)
             .then(function(result) {
@@ -143,7 +143,7 @@ export default function memberPortalReducer(state = defaultState, action) {
         var address = nstate.details
         var user = action.payload.user
         address['email'] = user.email
-        var url = base_url + "/members/address/update"
+        var url = base_api + "/members/address/update"
         nstate.address_msg = "Saving..."
         axios
             .post(url, address)

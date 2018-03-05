@@ -70,7 +70,7 @@ var Influx = require('influx');
 console.log("server.jsx : starting")
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const base_url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/" + env
+const base_api = process.env.BASE_API
 
 const app = express()
 /*
@@ -334,7 +334,7 @@ function api_router(req, res) {
         return true
     }
     else if (req.url.indexOf('/api/order/add') == 0) {
-        add_order(req, res, base_url, process.env.STRIPE)
+        add_order(req, res, base_api, process.env.STRIPE)
         return true
     }
     else if (req.url.indexOf('/api/order/fulfill') == 0) {
@@ -456,10 +456,10 @@ function inject_years(store, my_cache) {
     store.dispatch({type: "SET_YEARS", payload: years})
 }
 
-const getFeaturesAPI = (pageType) => axios.get(`${base_url}/cms${pageType ? '/' + pageType : ''}`)
+const getFeaturesAPI = (pageType) => axios.get(`${base_api}/cms${pageType ? '/' + pageType : ''}`)
 
 function getContributorPosts(contributor) {
-    return axios.get(`${base_url}/blog/list?contributor=${contributor}&limit=21`).then((res) => res.data)
+    return axios.get(`${base_api}/blog/list?contributor=${contributor}&limit=21`).then((res) => res.data)
 }
 
 async function inject_homepage(store, my_cache, location) {
@@ -510,7 +510,9 @@ async function updateState(store, pathname, req) {
         store.dispatch({type: "SET_BOT", payload: bot})
     }
     if (pathname === "" || pathname === "/") {
+        console.log('location')
         const location = extractLocation(req)
+        console.log(location)
         await inject_homepage(store, Cache, location)
     }
     if (pathname.indexOf('/blog') === 0) {
