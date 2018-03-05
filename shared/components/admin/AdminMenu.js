@@ -55,6 +55,16 @@ class AdminMenu extends Component {
                             </div>
                         </div>
                     </li>
+                  <li className="dropdown">
+                        <a>Careers</a>
+                        <div className="fulldrop">
+                            <div className="column">
+                                <ul>
+                                    <li><Link to="/admin/job/add">Add Job</Link></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
                 </ul>
             </div>
         )
