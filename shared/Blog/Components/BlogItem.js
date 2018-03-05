@@ -37,6 +37,18 @@ const injectImage = (content, preview) => {
   return insertAt(content, at, injectedImage)
 }
 
+const renderTopContributors = (contributors = []) => {
+  return <div>
+    {contributors.map(contributor => <BlogAuthorTop contributor={contributor} key={contributor.contributor_id}/>)}
+  </div>
+}
+
+const renderBottomContributors = (contributors = []) => {
+  return <div>
+    {contributors.map(contributor => <BlogAuthorBottom contributor={contributor} key={contributor.contributor_id}/>)}
+  </div>
+}
+
 class BlogItem extends React.Component {
   constructor(props) {
     super(props)
@@ -59,7 +71,7 @@ class BlogItem extends React.Component {
     console.log(comment.text)
     snserror('Blog comment', comment.text, 'ds-newblog')
   }
-
+  
   render() {
     var osite = this.props.site.toJS()
     var ocms = this.props.cms.toJS()
@@ -136,11 +148,16 @@ class BlogItem extends React.Component {
     if (preview) {
       content = injectImage(content, preview)
     }
-
+    
+    const multipleContributors = blog.contributors && blog.contributors.length > 0
+    if (multipleContributors) {
+      blog.contributors = []
+    }
+    
     return (
       <div className="blog-item-wrapper">
         <BlogBreadCrumbs prettyname={prettyname} exampleImage={exampleImage} />
-        {top}
+        {multipleContributors ? renderTopContributors(blog.contributors) : top}
         <div
           className="content"
           dangerouslySetInnerHTML={{ __html: content }}
@@ -151,7 +168,7 @@ class BlogItem extends React.Component {
           title={title}
           exampleImage={exampleImage}
         />
-        {bot}
+        {multipleContributors ? renderBottomContributors(blog.contributors) : bot}
         <MailingListBlogFooter />
         <ReactDisqusComments
           shortname={disqus_username}
