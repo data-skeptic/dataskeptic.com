@@ -4,7 +4,7 @@ import marked from "marked"
 import {BOT_ID} from '../Constants'
 
 const getMarkdown = text => {
-  const rawMarkup = marked(text, { sanitize: true })
+  const rawMarkup = marked(text)
   return { __html: rawMarkup }
 }
 

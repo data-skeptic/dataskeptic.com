@@ -44,8 +44,10 @@ class ContactUs extends React.Component {
 
 	onMessage = (message) => {
 		this.addMessage(message)
-		var cstate = this.props.chatbot.toJS()
-		var dispatch = this.props.dispatch
+		let cstate = this.props.chatbot.toJS()
+		const dispatch = this.props.dispatch
+		cstate.contributors = this.props.contributors
+
 		ConversationHandler.get_reply(dispatch, this.reply, cstate, message)
 	}
 
@@ -98,9 +100,9 @@ class ContactUs extends React.Component {
     	this.props.dispatch(reset(`question`))
 	}
 
-	reply = (message, authorId) => {
-		authorId = !!this.props.contributors[authorId] ? authorId : BOT_ID
-		const author = this.props.contributors[authorId]
+	reply = (message, operatorId) => {
+		operatorId = !!this.props.contributors[operatorId] ? operatorId : BOT_ID
+		const author = this.props.contributors[operatorId]
 
 		this.addMessage({
 			...message,
