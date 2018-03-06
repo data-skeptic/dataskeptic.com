@@ -26,12 +26,7 @@ const validate = values => {
 const Form = ({
   handleSubmit,
   children,
-  ristine,
-  reset,
-  submitting,
-  invalid,
-  submitSucceeded,
-  submitFailed,
+  customError,
   showEmail
 }) => (
   <FormController
@@ -39,6 +34,7 @@ const Form = ({
     handleSubmit={handleSubmit}
     submitValue={<span>Submit</span>}
     showSubmit={true}
+    customError={customError}
     btnWrapperClasses={'submit-wrapper'}
   >
     {children}
