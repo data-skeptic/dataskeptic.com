@@ -93,5 +93,8 @@
 		"MISS_START":["What is the start date?"],
 		"MISS_END":["What is the end date?"],
 		"STILL_MISSING":[ "At least one of dates is still missing. Let's start from the beginning by typing 'ga'."]
+	},
+	"ROOT": {
+		"GENERAL": ["Huh?", "If you'd be willing to take our survey, say 'survey'", "I can make episode recommendations for you.  Just ask for a recommendation.", "I have some limited abilities to handle customer service issues at the store, can I help you there?", "Try typing 'help' to learn about my functionality."]
 	}
 }

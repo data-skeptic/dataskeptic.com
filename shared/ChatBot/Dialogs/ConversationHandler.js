@@ -6,6 +6,7 @@ var survey    = require("./survey")
 var profile   = require("./profile")
 var reminders = require("./reminders")
 var yoshi     = require("./yoshi")
+var chatter   = require("./chatter")
 
 var dialogs = [help, store, episode, survey, profile, reminders]
 
@@ -28,7 +29,7 @@ function get_reply(dispatch, reply, cstate, message) {
 	} else if (handler) {
 		resp = handler(dispatch, reply, cstate, message)
 	} else if (lmsg.indexOf('logo') > -1) {
-		msg = 'Please implement support for markdown so that bot can reply with images ![Our logo alt text](https://s3.amazonaws.com/dataskeptic.com/img/primary-logo-400.jpg)'
+		msg = 'Here's our logo ![Data Skeptic](https://s3.amazonaws.com/dataskeptic.com/img/primary-logo-400.jpg)'
 		resp = {handler, msg, responder}
 	} else if (lmsg.indexOf('what would kyle say') > -1) {
 		msg = "I'll need to give it some thought and get back to you."
@@ -44,7 +45,7 @@ function get_reply(dispatch, reply, cstate, message) {
 			}
 		}
 		if (resp == undefined) {
-			msg = 'Huh?'
+			var msg = chatter.get_message("ROOT>GENERAL")
 			resp = {handler, msg, responder}
 		}
 	}
