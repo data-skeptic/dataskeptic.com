@@ -97,6 +97,17 @@ export const Avatar = styled.img`
   border: 1px solid #dddddd;
 `
 
-export const Name = styled.div`
+export const Details = styled.div`
+  display: flex;
+  flex-direction: column;
   padding-left: 12px;
+`
+
+
+export const Name = styled.span`
+`
+
+export const Contribution = styled.span`
+  font-size: 90%;
+  color: #7d8080;
 `

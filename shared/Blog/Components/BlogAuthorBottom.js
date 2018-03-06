@@ -2,8 +2,6 @@ import React from "react"
 import styled from "styled-components"
 import { Link } from "react-router"
 
-const DEFAULT_CONTRIBUTION = "Author"
-
 const Bio = ({ bio }) => <Text dangerouslySetInnerHTML={{ __html: bio }} />
 
 const formatLink = id => `/contributors/${id}`
@@ -20,7 +18,7 @@ export const BlogAuthorBottom = ({
   bio,
   twitter,
   linkedin,
-  contribution = DEFAULT_CONTRIBUTION
+  contribution
 }) => (
   <Container>
     <AuthorBox>
@@ -31,7 +29,7 @@ export const BlogAuthorBottom = ({
       </Photo>
       <About>
         <Author>
-          <Contribution to={formatLink(author)}>{contribution}</Contribution>
+          {contribution && <Contribution to={formatLink(author)}>{contribution}</Contribution>}
           <Name to={formatLink(author)}>{prettyname}</Name>
         </Author>
 
