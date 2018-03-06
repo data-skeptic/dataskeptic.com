@@ -1,10 +1,7 @@
 export default (receivedMessage, reply) => {
-  console.dir(receivedMessage)
-  
   const message = {
-    text: 'Hi there!'
+    text: `You said "${receivedMessage.message.text}".`
   }
   
   return reply(message)
-  
 }

@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=production NODE_PATH=$NODE_PATH:./shared nodemon --exec babel-node --presets es2015,stage-2 --harmony .",
-    "chat-server": "NODE_PATH=$NODE_PATH:./shared nodemon --exec babel-node --presets es2015,stage-2 --harmony ./chatbot/server/index.js",
+    "chat-server": "NODE_PATH=$NODE_PATH:./shared nodemon --exec babel-node --presets es2015,stage-2 --harmony ./chatbotServer.js",
     "recording-server": "NODE_PATH=$NODE_PATH:./shared nodemon --exec babel-node --presets es2015,stage-2 --harmony ./recordingServer.js",
     "dev": "NODE_ENV=dev NODE_PATH=$NODE_PATH:./shared babel-node --presets es2015,stage-2 --harmony .",
     "prod": "webpack --progress --color -p --config webpack.prod.config.js",

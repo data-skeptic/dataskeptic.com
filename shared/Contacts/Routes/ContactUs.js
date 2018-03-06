@@ -9,7 +9,7 @@ import styled from 'styled-components'
 
 import ContactFormContainer from '../Containers/ContactFormContainer/ContactFormContainer'
 import { changePageTitle } from '../../Layout/Actions/LayoutActions'
-import { formValueSelector, reset } from 'redux-form'
+import { formValueSelector, reduxForm, reset } from 'redux-form'
 import {
   init,
   ready,
@@ -27,9 +27,20 @@ import { submitCommentForm } from '../../Proposals/Actions/CommentBoxFormActions
 import SectionBlock from '../Components/SectionBlock/SectionBlock'
 
 import Launcher, {
+  reduxChatBot,
   BOT_ID,
-  actions as chatBot
+  actions as chatBotActions
 } from '../../../chatbot/client'
+
+const ChatBotLauncher = reduxChatBot({
+  publicKey: 'datas_chatbot',
+  placeholder: 'Send a message...',
+  header: 'DataSkeptic Bot',
+  initialProps: {
+    operators: [],
+    history: []
+  }
+})(Launcher)
 
 class ContactUs extends React.Component {
   toggleSection = section => {
@@ -91,9 +102,9 @@ class ContactUs extends React.Component {
       author
     })
   }
-  
+
   handleMessage = message => {
-    this.props.dispatch(chatBot.sendMessage(message))
+    this.props.dispatch(chatBotActions.sendMessage(message))
 
     this.setState(prevState => ({
       messages: [...prevState.messages, message]
@@ -155,13 +166,6 @@ class ContactUs extends React.Component {
     const { dispatch } = this.props
     const { title } = ContactUs.getPageMeta(this.props)
     dispatch(changePageTitle(title))
-
-    // dispatch ready state
-    this.props.dispatch(chatBot.init())
-  }
-
-  componentWillUnmount() {
-    this.props.dispatch(chatBot.destroy())
   }
 
   render() {
@@ -181,10 +185,10 @@ class ContactUs extends React.Component {
     return (
       <Container>
         <code>{JSON.stringify(this.state.messages)}</code>
-        <Launcher
+
+        <ChatBotLauncher
           defaultBot={contributors[BOT_ID]}
           thinking={thinking}
-          messages={this.state.messages}
           onMessage={this.handleMessage}
           onInactivity={this.handleInactivity}
           inactivityDelay={1000 * 1}

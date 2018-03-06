@@ -2,19 +2,15 @@ import React, { Component } from "react"
 import styled from "styled-components"
 import UserInput from "./UserInput"
 import Messages from "./Messages"
-import { REGULAR_MESSAGE, THINKING_MESSAGE } from "../constants"
 
+import defaultConfig from '../../shared/config'
+
+import { REGULAR_MESSAGE, THINKING_MESSAGE } from "../constants"
 export { BOT_AUTHOR, BOT_ID } from "../constants"
 
 export default class Launcher extends Component {
   static defaultProps = {
-    placeholder: "Send a message...",
-    header: "DataSkeptic Bot",
-    messages: [],
-    onMessage: () => {},
-    onInactivity: () => {},
-	  defaultBot: {},
-	  inactivityDelay: 3000
+    ...defaultConfig
   }
 
   state = {
@@ -62,10 +58,10 @@ export default class Launcher extends Component {
   render() {
     const { open } = this.state
     const { placeholder, header, thinking } = this.props
-    let { messages } = this.props
+    let { history } = this.props
 
     if (thinking) {
-      messages = [...messages, this.getThinkingMessage()]
+      history = [...history, this.getThinkingMessage()]
     }
 
     return (
@@ -75,7 +71,8 @@ export default class Launcher extends Component {
             {header}
             <Close onClick={this.close} />
           </Header>
-          <Messages messages={messages} />
+          <code>{JSON.stringify(this.props)}</code>
+          <Messages messages={history} />
           <UserInput
             placeholder={placeholder}
             onSubmit={this.handleMessage}
