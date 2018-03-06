@@ -249,6 +249,10 @@ if (env == "prod") {
     });
     app.use(recordingServerProxy);
 
+    const chatServerProxy = proxy('/socket.io', {
+	    target: 'ws://127.0.0.1:9001',
+    });
+	  app.use(chatServerProxy);
     // TODO: add chatbot
 }
 

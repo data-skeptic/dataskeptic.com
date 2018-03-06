@@ -8,9 +8,9 @@ var surveyDialog = require("../Dialogs/survey")
 /**
  * Action types
  */
-export const READY = 'READY'
-export const DESTROY = 'DESTROY'
-export const ADD_MESSAGE = 'ADD_MESSAGE'
+export const READY = 'CHATBOT//READY'
+export const DESTROY = 'CHATBOT//DESTROY'
+export const ADD_MESSAGE = 'CHATBOT//ADD_MESSAGE'
 
 const init = {
     handler: undefined,
@@ -268,7 +268,7 @@ let socket = null
  */
 export const ready = (email) => {
     const userId = email ? email : nexRandomId() // TODO::
-      socket = io('http://localhost');
+      socket = io();
       socket.on('connect', function(){});
       socket.on('event', function(data){});
       socket.on('disconnect', function(){});

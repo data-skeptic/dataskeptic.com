@@ -28,7 +28,7 @@ import SectionBlock from "../Components/SectionBlock/SectionBlock";
 import Launcher from "../../Chat/Containers/Launcher";
 import ConversationHandler from "../../ChatBot/Dialogs/ConversationHandler"
 import {BOT_ID} from "../../Chat/Constants";
-import {addMessage, destroy} from "../../ChatBot/Reducers/ChatbotReducer";
+import {addMessage, destroy, ready as chatReady} from "../../ChatBot/Reducers/ChatbotReducer";
 
 class ContactUs extends React.Component {
 
@@ -167,7 +167,8 @@ class ContactUs extends React.Component {
         const {title} = ContactUs.getPageMeta(this.props);
         dispatch(changePageTitle(title));
 
-	      this.props.dispatch(ready())
+        debugger
+	      this.props.dispatch(chatReady())
 
 	      this.reply({ text: 'What would you like to talk about?'})
     }
