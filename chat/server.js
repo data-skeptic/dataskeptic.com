@@ -1,6 +1,5 @@
 const run = server => {
 	const io = require('socket.io')(server);
-
 	console.log(`Waiting for new chat connections`)
 
 	io.on('connection', function(socket){
@@ -9,7 +8,17 @@ const run = server => {
 }
 
 if (!module.parent) {
-  run()
+
+  console.log(`Waiting for new chat connections`)
+  const PORT = process.env.CHAT_PORT || 9002
+  const app = require('http').createServer((req, res) => {
+    res.writeHead(200);
+    res.end(JSON.stringify({ success: true }));
+  })
+
+  console.log('[CHATBOT]', `Server listening on :${PORT}`)
+  app.listen(PORT)
+  run(app)
 }
 
 export default run

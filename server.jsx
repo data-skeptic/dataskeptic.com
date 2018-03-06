@@ -240,7 +240,7 @@ if (env == "prod") {
 } else {
   require("./webpack.dev").default(app)
   const proxy = require("http-proxy-middleware")
-  const wsProxy = proxy("/recording", {
+  const recordingServerProxy = proxy("/recording", {
     target: "ws://127.0.0.1:9001",
     // pathRewrite: {
     //  '^/websocket' : '/socket',          // rewrite path.
@@ -250,7 +250,19 @@ if (env == "prod") {
     ws: true, // enable websocket proxy
     logLevel: "debug"
   })
-  app.use(wsProxy)
+  app.use(recordingServerProxy)
+
+  const chatBotServerProxy = proxy("/socket.io", {
+    target: "ws://127.0.0.1:9002",
+    // pathRewrite: {
+    //  '^/websocket' : '/socket',          // rewrite path.
+    //  '^/removepath' : ''                 // remove path.
+    // },
+    changeOrigin: true, // for vhosted sites, changes host header to match to target's host
+    ws: true, // enable websocket proxy
+    logLevel: "debug"
+  })
+  app.use(chatBotServerProxy)
 }
 
 /*
