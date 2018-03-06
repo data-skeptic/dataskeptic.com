@@ -9,6 +9,7 @@ import {
   ItemTitle,
   ItemDesc,
   ViewMore,
+  Authors,
   Author,
   Details,
   Avatar,
@@ -18,6 +19,24 @@ import {
 
 import AuthorLink from "../../../components/AuthorLink"
 
+const renderAuthor = ({
+  author,
+  img,
+  prettyname,
+  contribution,
+  contributor_id
+}) => (
+  <AuthorLink author={author} key={contributor_id}>
+    <Author>
+      <Avatar src={img} />
+      <Details>
+        <Name>{prettyname}</Name>
+        {contribution && <Contribution>{contribution}</Contribution>}
+      </Details>
+    </Author>
+  </AuthorLink>
+)
+
 const BlogBox = props => {
   const { blogList, getContributor } = props
   return (
@@ -25,6 +44,14 @@ const BlogBox = props => {
       {blogList.map((item, index) => {
         let href = "blog" + item.prettyname
         const author = getContributor(item)
+
+        const multipleContributors =
+          item.contributors && item.contributors.length > 0
+
+        if (!multipleContributors && contributor) {
+          item.contributors = [author]
+        }
+
         return (
           <BlogItem key={index}>
             <ItemDate>{moment(item.publish_date).format("MMMM D, Y")}</ItemDate>
@@ -33,19 +60,7 @@ const BlogBox = props => {
             </Link>
             <ItemDesc>{item.abstract}</ItemDesc>
             <ViewMore to={href}>View More</ViewMore>
-            {author && (
-              <AuthorLink author={author.author}>
-                <Author>
-                  <Avatar src={author.img} />
-                  <Details>
-                    <Name>{author.prettyname}</Name>
-                    {author.contribution && (
-                      <Contribution>{author.contribution}</Contribution>
-                    )}
-                  </Details>
-                </Author>
-              </AuthorLink>
-            )}
+            <Authors>{item.contributors.map(renderAuthor)}</Authors>
           </BlogItem>
         )
       })}
