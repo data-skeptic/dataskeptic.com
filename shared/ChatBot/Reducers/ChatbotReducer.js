@@ -286,7 +286,7 @@ export const destroy = () => {
 
 export const addMessage = ({ message, sent, author } ) => {
     const data = { message, sent, author }
-    axios.post('/api/v1/message', data)
+    debugger
 
     return ({
 	    type: ADD_MESSAGE

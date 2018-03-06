@@ -34,8 +34,8 @@ import {
   destroy,
   ready as chatReady
 } from '../../ChatBot/Reducers/ChatbotReducer'
-import { BOT_ID } from '../../Chat/Constants'
-import Launcher from "../../Chat/Containers/Launcher";
+import {BOT_ID, THINKING_MESSAGE} from '../../Chat/Constants'
+import Launcher from '../../Chat/Containers/Launcher'
 
 class ContactUs extends React.Component {
   toggleSection = section => {
@@ -87,7 +87,19 @@ class ContactUs extends React.Component {
   }
 
   isSectionOpen = section => section === this.state.openSection
-  addMessage = message => {
+
+  reply = (message, operatorId) => {
+    operatorId = !!this.props.contributors[operatorId] ? operatorId : BOT_ID
+    const author = this.props.contributors[operatorId]
+
+    this.handleMessage({
+      ...message,
+      author
+    })
+  }
+  
+  handleMessage = message => {
+    debugger
     this.props.dispatch(addMessage(message))
 
     this.setState(prevState => ({
@@ -95,12 +107,15 @@ class ContactUs extends React.Component {
     }))
   }
 
+  handleInactivity = () => {}
+
   constructor(props) {
     super(props)
 
     this.state = {
       submittedUrl: '',
-      openSection: ''
+      openSection: '',
+      messages: []
     }
   }
 
@@ -150,6 +165,7 @@ class ContactUs extends React.Component {
 
     // dispatch ready state
     this.props.dispatch(chatReady())
+    this.reply({ text: 'What would you like to talk about?'}, BOT_ID)
   }
 
   componentWillUnmount() {
@@ -172,12 +188,13 @@ class ContactUs extends React.Component {
 
     return (
       <Container>
+        <code>{JSON.stringify(this.state.messages)}</code>
         <Launcher
           defaultBot={contributors[BOT_ID]}
           thinking={thinking}
           messages={this.state.messages}
-          onMessage={this.onMessage}
-          onInactivity={this.onInactivity}
+          onMessage={this.handleMessage}
+          onInactivity={this.handleInactivity}
           inactivityDelay={1000 * 1}
         />
 
