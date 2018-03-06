@@ -25,11 +25,13 @@ export const BlogAuthorBottom = ({
   <Container>
     <AuthorBox>
       <Photo>
-        <img src={img} alt={prettyname} />
+        <Link to={formatLink(author)}>
+          <img src={img} alt={prettyname} />
+        </Link>
       </Photo>
       <About>
         <Author>
-          <Contribution>{contribution}</Contribution>
+          <Contribution to={formatLink(author)}>{contribution}</Contribution>
           <Name to={formatLink(author)}>{prettyname}</Name>
         </Author>
 
@@ -92,11 +94,15 @@ const Author = styled.div`
   padding-bottom: 12px;
 `
 
-const Contribution = styled.span`
+const Contribution = styled(Link)`
   font-size: 18px;
   line-height: 20px;
   color: #7d8080;
   display: block;
+  
+  &:hover {
+    color: #7d8080;
+  }
 `
 
 const Name = styled(Link)`
