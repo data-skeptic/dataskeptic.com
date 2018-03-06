@@ -7,7 +7,6 @@ import trackable from "../../../Tracking/hoc/trackable";
 
 const Text = ({ text }) => <span dangerouslySetInnerHTML={{ __html: text }} />
 
-@trackable
 class JobListing extends Component {
   state = {
     viewMore: false
@@ -108,7 +107,7 @@ class JobListing extends Component {
 
 export default connect(state => ({
   jobListing: state.cms.get('jobListing').toJS()
-}))(JobListing)
+}))(trackable(JobListing))
 
 const Title = styled.div`
   display: inline-block;

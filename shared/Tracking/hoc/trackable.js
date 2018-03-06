@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import _ from 'lodash'
 import ReactDOM from "react/lib/ReactDOM";
 
 function isElementInViewport (el) {
