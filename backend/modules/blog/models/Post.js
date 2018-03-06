@@ -1,26 +1,25 @@
-const Post = (data) => ({
-    id: data.hash,
-    apiUrl: `/api/v1/blog${data['prettyname']}`,
+const Post = data => ({
+  id: data.hash,
+  apiUrl: `/api/v1/blog${data['prettyname']}`,
 
-    prettyname: data['prettyname'],
-    url: data['prettyname'],
-    title: data['title'],
-    content: data['content'] || '',
+  prettyname: data['prettyname'],
+  url: data['prettyname'],
+  title: data['title'],
+  content: data['content'] || '',
 
-    isEpisode: data['isEpisode'] || false,
+  isEpisode: data['isEpisode'] || false,
 
-    contributor: data['contributor'],
-    related: data['related'],
+  contributor: data['contributor'],
+  related: data['related'],
 
-    rendered: data['src_file'],
+  rendered: data['src_file'],
 
-    renderedAt: data['last_rendered'],
-    publishedAt: data['publish_date'],
+  renderedAt: data['last_rendered'],
+  publishedAt: data['publish_date'],
 
-    author: data['author'],
+  author: data['author'],
 
-    env: data['env']
+  env: data['env']
+})
 
-});
-
-export default Post;
+export default Post

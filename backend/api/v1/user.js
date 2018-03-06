@@ -1,23 +1,23 @@
-import express from "express"
-import axios from "axios"
+import express from 'express'
+import axios from 'axios'
 
-const env = process.env.NODE_ENV === "dev" ? "dev" : "prod"
-const c = require("../../../config/config.json")
-const base_url = c[env]["base_api"] + env
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const c = require('../../../config/config.json')
+const base_url = c[env]['base_api'] + env
 
 const NOT_EXIST_LIST_ERROR = `Requested list is not exist.`
-const UNAUTHORIZED = "User not authenticated"
+const UNAUTHORIZED = 'User not authenticated'
 
-const PLAYED = "played"
-const FAVORITE = "favorites"
-const PLAYLIST = "playlist"
+const PLAYED = 'played'
+const FAVORITE = 'favorites'
+const PLAYLIST = 'playlist'
 
 const lists = [PLAYED, FAVORITE, PLAYLIST]
 
 const listsEndpointMap = {
-  [PLAYED]: "played",
-  [FAVORITE]: "favorite",
-  [PLAYLIST]: "playlist"
+  [PLAYED]: 'played',
+  [FAVORITE]: 'favorite',
+  [PLAYLIST]: 'playlist'
 }
 
 const isAcceptedList = list => lists.indexOf(list) > -1
@@ -25,7 +25,7 @@ const isAcceptedList = list => lists.indexOf(list) > -1
 const getListUpdateEndpoint = list => listsEndpointMap[list]
 
 const updateUserSessionList = (user, list, blogId, insertMode = false) => {
-  let listToUpdate =[...user.lists[list]]
+  let listToUpdate = [...user.lists[list]]
 
   // add / remove item
   if (insertMode) {
@@ -48,7 +48,7 @@ const joinList = (list, key) =>
 const getUserPlaylist = email =>
   axios
     .get(`${base_url}/user/playlist/list?email=${email}&limit=1000&offset=0`)
-    .then(res => joinList(res.data, "blog_id"))
+    .then(res => joinList(res.data, 'blog_id'))
 
 const addUserPlaylist = data =>
   axios.post(`${base_url}/user/playlist/add_all`, data).then(res => res.data)
@@ -59,7 +59,10 @@ const updateUser = (list, data) => {
   return axios.post(url, data).then(res => res.data)
 }
 
-const getUserDownloads = (email) => axios.get(`${base_url}/members/downloads?email=${email}`).then(res => res.data)
+const getUserDownloads = email =>
+  axios
+    .get(`${base_url}/members/downloads?email=${email}`)
+    .then(res => res.data)
 
 module.exports = () => {
   const router = express.Router()
@@ -80,11 +83,11 @@ module.exports = () => {
     })
   })
 
-  router.all("/session", (req, res) => {
+  router.all('/session', (req, res) => {
     res.send(req.user)
   })
 
-  router.post("/playlist/add_all", async (req, res, next) => {
+  router.post('/playlist/add_all', async (req, res, next) => {
     const data = {
       ...req.body,
       email: req.user.email
@@ -107,7 +110,7 @@ module.exports = () => {
       })
   })
 
-  router.post("/:list/update", (req, res) => {
+  router.post('/:list/update', (req, res) => {
     const { list } = req.params
     if (!isAcceptedList(list)) {
       return res.send({
@@ -144,35 +147,35 @@ module.exports = () => {
     )
 
     // trigger async lambda backend
-	  updateUser(list, item)
+    updateUser(list, item)
 
-	  req.login(req.user, function(err) {
-		  if (err) {
-			  return res.send({
-				  success: false,
-				  error: error
-			  })
+    req.login(req.user, function(err) {
+      if (err) {
+        return res.send({
+          success: false,
+          error: error
+        })
       }
 
-		  res.send({
-			  success: true
-		  })
-	  })
+      res.send({
+        success: true
+      })
+    })
   })
 
-	router.get('/downloads', (req,res) => {
-		const userEmail = req.user.email
+  router.get('/downloads', (req, res) => {
+    const userEmail = req.user.email
 
-		getUserDownloads(userEmail)
-			.then((data) => res.send(data))
-			.catch(error => {
-				console.dir(error)
-				return res.send({
-					success: false,
-					error: error
-				})
-			})
-	})
+    getUserDownloads(userEmail)
+      .then(data => res.send(data))
+      .catch(error => {
+        console.dir(error)
+        return res.send({
+          success: false,
+          error: error
+        })
+      })
+  })
 
   return router
 }

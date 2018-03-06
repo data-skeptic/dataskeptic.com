@@ -1,10 +1,9 @@
 export default function fetchComponentData(dispatch, components, params) {
-  const needs = components.reduce( (prev, current) => {
+  const needs = components.reduce((prev, current) => {
+    return current ? (current.needs || []).concat(prev) : prev
+  }, [])
 
-    return current ? (current.needs || []).concat(prev) : prev;
-  }, []);
+  const promises = needs.map(need => dispatch(need(params)))
 
-  const promises = needs.map(need => dispatch(need(params)));
-
-  return Promise.all(promises);
+  return Promise.all(promises)
 }

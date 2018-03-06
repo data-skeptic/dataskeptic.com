@@ -1,12 +1,12 @@
-const Category = (obj) => ({
-    title: '',
-    content: '',
+const Category = obj => ({
+  title: '',
+  content: '',
 
-    categoryId: '',
-    isEpisode: false,
+  categoryId: '',
+  isEpisode: false,
 
-    contributor: null,
-    relative: []
-});
+  contributor: null,
+  relative: []
+})
 
-export default Category;
+export default Category

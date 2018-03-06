@@ -14,7 +14,7 @@ export const Container = styled.div`
 `
 
 export const Box = styled.div`
-  background-color: #F4F4F4;
+  background-color: #f4f4f4;
   padding: 32px;
   margin-top: 24px;
   @media (max-width: 414px) {

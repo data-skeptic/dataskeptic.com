@@ -1,89 +1,113 @@
-import React, { Component }  from 'react'
-import {connect} from 'react-redux';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
-import {
-  Container,
-  Box
-} from './style'
-import {click, impression} from "../../../Tracking/Jobs";
+import { Container, Box } from './style'
+import { click, impression } from '../../../Tracking/Jobs'
+import trackable from "../../../Tracking/hoc/trackable";
 
-const Text = ({text}) => <span dangerouslySetInnerHTML={{__html: text}}/>
+const Text = ({ text }) => <span dangerouslySetInnerHTML={{ __html: text }} />
 
+@trackable
 class JobListing extends Component {
+  state = {
+    viewMore: false
+  }
+  
+  componentWillReceiveProps = async nextProps => {
+    if (nextProps.reveal) {
+      return this.onReveal(nextProps)
+    }
+  }
+  isJobLoaded = props => {
+    return !!this.getJobId(props)
+  }
+  onReveal = async (nextProps) => {
+    if (!this.isJobLoaded(nextProps)) return
+    const jobId = this.getJobId(nextProps)
+    this.impression_id = await impression(jobId)
+  }
 
-	state = {
-		viewMore: false,
-	}
+  getJobId(props) {
+    const { jobListing } = props
+    if (!jobListing) return
+    const { loaded, jobs } = jobListing
+    if (!loaded) return
+    if (!jobs[0]) return
 
-	constructor(props) {
-		super(props)
-
-		this.impression_id = null
-	}
-
-	componentWillReceiveProps = async (nextProps) => {
-		const { jobListing } = nextProps
-		if (!jobListing) return
-		const { loaded, jobs } = jobListing
-		if (!loaded) return
-		if (!jobs[0]) return
-
-		const jobId = jobs[0].id
-		this.impression_id = await impression(jobId)
-	}
-
-	trackApply = (id) => {
-		click(id, this.impression_id)
-	}
-
-  toggleViewMore = () => this.setState(prevState => ({ viewMore: !prevState.viewMore }))
-
+    return jobs[0].id
+  }
+  
+  trackApply = id => {
+    click(id, this.impression_id)
+  }
+  toggleViewMore = () =>
+    this.setState(prevState => ({ viewMore: !prevState.viewMore }))
   renderJobBox = (job, viewMore) => {
-    const {id, title, location, type, description, full_description, url, company, company_url } = job
-	  return (
-		  <Box>
-			  <Title>{title}</Title>
-			  <Types>
-				  <Type>{type}</Type>
-				  <Space>{'|'}</Space>
-				  <Location>{location}</Location>
-				  <Space>{'|'}</Space>
-				  <CompanyName><a href={company_url} target="_blank">{company}</a></CompanyName>
-			  </Types>
-			  <Description>
-				  {!viewMore
-					  ? <span>
-                <Text text={description.substring(0, 120)+'...'} />
-                <ViewMore onClick={this.toggleViewMore}>View More</ViewMore>
-              </span>
-					  : <Text text={full_description} />
-				  }
-			  </Description>
-			  <Apply href={url} target="_blank" onClick={() => this.trackApply(id)}>Apply now</Apply>
-		  </Box>
+    const {
+      id,
+      title,
+      location,
+      type,
+      description,
+      full_description,
+      url,
+      company,
+      company_url
+    } = job
+    return (
+      <Box>
+        <Title>{title}</Title>
+        <Types>
+          <Type>{type}</Type>
+          <Space>{'|'}</Space>
+          <Location>{location}</Location>
+          <Space>{'|'}</Space>
+          <CompanyName>
+            <a href={company_url} target="_blank">
+              {company}
+            </a>
+          </CompanyName>
+        </Types>
+        <Description>
+          {!viewMore ? (
+            <span>
+              <Text text={description.substring(0, 120) + '...'} />
+              <ViewMore onClick={this.toggleViewMore}>View More</ViewMore>
+            </span>
+          ) : (
+            <Text text={full_description} />
+          )}
+        </Description>
+        <Apply href={url} target="_blank" onClick={() => this.trackApply(id)}>
+          Apply now
+        </Apply>
+      </Box>
     )
   }
 
-  render () {
+  constructor(props) {
+    super(props)
+
+    this.impression_id = null
+  }
+
+  render() {
     const { jobListing } = this.props
     const { viewMore } = this.state
     const { loaded, jobs } = jobListing
 
-    if (!loaded || jobs.length === 0) return <div/>
+    if (!loaded || jobs.length === 0) return <div />
 
     return (
       <Container>
-        {loaded
-          ? this.renderJobBox(jobs[0], viewMore)
-          : <span />
-        }
+        {loaded ? this.renderJobBox(jobs[0], viewMore) : <span />}
       </Container>
     )
   }
 }
 
 export default connect(state => ({
-	  jobListing: state.cms.get('jobListing').toJS()
+  jobListing: state.cms.get('jobListing').toJS()
 }))(JobListing)
 
 const Title = styled.div`
@@ -107,31 +131,25 @@ const Space = styled.span`
   padding: 0px 4px;
 `
 
-const Location = styled.span`
-  
-`
+const Location = styled.span``
 
-const Type = styled.span`
-  
-`
+const Type = styled.span``
 
-const Description = styled.div`
-
-`
+const Description = styled.div``
 
 const CompanyName = styled.span`
   flex-grow: 1;
   border: 0px;
   margin-right: 12px;
   font-weight: bold;
-  
+
   > a {
-	  text-decoration: none;
-	  border: 0px;
-	  
-	  &:hover {
-	    border: 0px;
-	  }
+    text-decoration: none;
+    border: 0px;
+
+    &:hover {
+      border: 0px;
+    }
   }
 `
 
@@ -148,7 +166,8 @@ const ViewMore = styled.span`
   position: relative;
   padding-right: 20px;
 
-  :before, :after {
+  :before,
+  :after {
     border-right: 2px solid;
     content: '';
     display: block;
@@ -175,12 +194,12 @@ const Apply = styled.a`
   height: 40px;
   line-height: 40px;
   text-align: center;
-  background: #F0D943;
+  background: #f0d943;
   font-size: 16px;
   color: #333333;
   border: none;
   border-radius: 5px;
-  
+
   &:hover {
     border: none;
   }

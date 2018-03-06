@@ -1,4 +1,4 @@
-import React, { Component }  from 'react'
+import React, { Component } from 'react'
 import { ContentContainer, BlogContainer, PodContainer } from './style'
 import Feature from './Feature'
 import Blog from './Blog'
@@ -7,33 +7,38 @@ import JobListing from './JobListing'
 import { connect } from 'react-redux'
 
 class Content extends Component {
+  getContributor = ({ author = '' }) =>
+    this.props.contributors && this.props.contributors[author.toLowerCase()]
 
-  getContributor = ({ author='' }) => this.props.contributors && this.props.contributors[author.toLowerCase()]
-
-  render () {
+  render() {
     const { featured_2, featured_3, featured_blog, latest_episode } = this.props
     const blogList = [featured_2, featured_3]
     return (
       <ContentContainer>
-        <Feature feature_blog={featured_blog} author={this.getContributor(featured_blog)}/>
+        <Feature
+          feature_blog={featured_blog}
+          author={this.getContributor(featured_blog)}
+        />
         <BlogContainer className="col-xs-12 col-sm-12 col-md-7">
-          <Blog blogList={blogList} getContributor={this.getContributor}/>
+          <Blog blogList={blogList} getContributor={this.getContributor} />
         </BlogContainer>
         <PodContainer className="col-xs-12 col-sm-12 col-md-5">
-          <Podcast latest_episode={latest_episode} getContributor={this.getContributor}/>
-	        <JobListing />
+          <Podcast
+            latest_episode={latest_episode}
+            getContributor={this.getContributor}
+          />
+          <JobListing />
         </PodContainer>
       </ContentContainer>
     )
   }
-
 }
 
-export default connect((state) => ({
-    home_loaded: state.cms.get('home_loaded'),
-    featured_blog: state.cms.get('featured_blog').toJS(),
-    featured_2: state.cms.get('featured_blog2').toJS(),
-    featured_3: state.cms.get('featured_blog3').toJS(),
-    latest_episode: state.cms.get('latest_episode').toJS(),
-    contributors: state.site.get('contributors').toJS()
+export default connect(state => ({
+  home_loaded: state.cms.get('home_loaded'),
+  featured_blog: state.cms.get('featured_blog').toJS(),
+  featured_2: state.cms.get('featured_blog2').toJS(),
+  featured_3: state.cms.get('featured_blog3').toJS(),
+  latest_episode: state.cms.get('latest_episode').toJS(),
+  contributors: state.site.get('contributors').toJS()
 }))(Content)

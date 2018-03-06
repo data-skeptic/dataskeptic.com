@@ -1,11 +1,7 @@
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react'
 
-export const RecordingTimeTracker = ({duration}) => (
-    <div>{duration}</div>
-);
+export const RecordingTimeTracker = ({ duration }) => <div>{duration}</div>
 
-RecordingTimeTracker.propTypes = {
+RecordingTimeTracker.propTypes = {}
 
-};
-
-export default RecordingTimeTracker;
+export default RecordingTimeTracker

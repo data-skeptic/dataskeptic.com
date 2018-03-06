@@ -1,50 +1,55 @@
-import isEmpty from 'lodash/isEmpty';
+import isEmpty from 'lodash/isEmpty'
 
-import { cvv, cardMonth, cardYear, cardNumber, phone, email, numbers } from '../../../Forms/Validators';
-import {TEXT, UPLOAD, RECORDING} from '../../Constants/CommentTypes';
+import {
+  cvv,
+  cardMonth,
+  cardYear,
+  cardNumber,
+  phone,
+  email,
+  numbers
+} from '../../../Forms/Validators'
+import { TEXT, UPLOAD, RECORDING } from '../../Constants/CommentTypes'
 
-export const ProposalFormValidator = (values) => {
-    const errors = {};
-    const {type} = values;
+export const ProposalFormValidator = values => {
+  const errors = {}
+  const { type } = values
 
+  switch (type) {
+    case TEXT:
+      if (!values.comment) {
+        errors.comment = 'Required'
+      } else {
+      }
+      break
 
-    switch (type) {
-        case TEXT:
-            if (!values.comment) {
-                errors.comment = 'Required';
-            } else {
+    case UPLOAD:
+      if (values.files.length === 0) {
+        errors.files = 'Please upload some files'
+      }
+      break
 
-            }
-            break;
+    case RECORDING:
+      if (!values.recording.id) {
+        errors.recording = 'Please some upload files'
+      }
+      break
+  }
 
-        case UPLOAD:
-            if (values.files.length === 0) {
-                errors.files = 'Please upload some files';
-            }
-            break;
+  if (!values.name) {
+    errors.name = 'Please provide your name.'
+  } else {
+  }
 
-        case RECORDING:
-            if (!values.recording.id) {
-                errors.recording = 'Please some upload files';
-            }
-            break;
+  if (!values.email) {
+    errors.email = 'Please provide your email address.'
+  } else {
+    if (!email(values.email)) {
+      errors.email = 'Please provide a valid email address.'
     }
+  }
 
-    if (!values.name) {
-        errors.name = 'Please provide your name.';
-    } else {
+  return errors
+}
 
-    }
-
-    if (!values.email) {
-        errors.email = 'Please provide your email address.';
-    } else {
-        if (!email(values.email)) {
-            errors.email = 'Please provide a valid email address.';
-        }
-    }
-
-    return errors;
-};
-
-export default ProposalFormValidator;
+export default ProposalFormValidator
