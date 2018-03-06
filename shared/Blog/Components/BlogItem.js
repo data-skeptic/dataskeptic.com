@@ -51,18 +51,18 @@ const renderTopContributors = (contributors = []) => (
   </By>
 )
 
-const renderBottomContributors = (contributors = []) => {
-  return (
+const renderBottomContributors = (contributors = []) => 
+  (
     <div>
       {contributors.map(contributor => (
         <BlogAuthorBottom
-          contributor={contributor}
+          {...contributor}
           key={contributor.contributor_id}
         />
       ))}
     </div>
   )
-}
+
 
 class BlogItem extends React.Component {
   constructor(props) {

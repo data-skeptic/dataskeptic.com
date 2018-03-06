@@ -2,17 +2,9 @@ import React, { PropTypes } from "react"
 import styled from "styled-components"
 import { Link } from "react-router"
 
-const DEFAULT_CONTRIBUTION = "Author"
 const formatLink = id => `/contributors/${id}`
 
-export const BlogAuthorTop = ({
-  author,
-  prettyname,
-  img,
-  isFirst,
-  isLast,
-  contribution = DEFAULT_CONTRIBUTION
-}) => (
+export const BlogAuthorTop = ({ author, prettyname, img, isFirst, isLast }) => (
   <Wrapper to={formatLink(author)} isFirst={isFirst} isLast={isLast}>
     <Avatar src={img} />
     <Name>{prettyname}</Name>
@@ -27,9 +19,11 @@ const Wrapper = styled(Link)`
   border: none;
 
   &:after {
-    ${props => !props.isLast && `
+    ${props =>
+      !props.isLast &&
+      `
       content: ",";
-    `}
+    `};
   }
 
   &:hover {
