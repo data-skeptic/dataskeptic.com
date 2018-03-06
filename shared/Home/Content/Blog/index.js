@@ -25,7 +25,6 @@ const BlogBox = props => {
       {blogList.map((item, index) => {
         let href = "blog" + item.prettyname
         const author = getContributor(item)
-        author.contribution = 'Co-producer'
         return (
           <BlogItem key={index}>
             <ItemDate>{moment(item.publish_date).format("MMMM D, Y")}</ItemDate>
