@@ -1,8 +1,7 @@
 // regular
-export const CONNECTED = 'connected'
-export const DISCONNECtED = 'disconnected'
+export const ON_CONNECTED = 'connected'
+export const ON_DISCONNECtED = 'disconnected'
 
 // messages
-export const MESSAGE_SENT = 'message:sent'
-export const MESSAGE_RECIEVED = 'message:received'
-export const MESSAGE_UPDATE = 'message:update'
+export const ON_MESSAGE_SENT = 'message:sent'
+export const ON_MESSAGE_REPLY = 'message:reply'

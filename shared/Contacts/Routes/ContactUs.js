@@ -157,9 +157,7 @@ class ContactUs extends React.Component {
     dispatch(changePageTitle(title))
 
     // dispatch ready state
-    debugger;
     this.props.dispatch(chatBot.init())
-    this.reply({ text: 'What would you like to talk about?'}, BOT_ID)
   }
 
   componentWillUnmount() {

@@ -1,6 +1,5 @@
 import initialState from './init'
 import uuidV4 from 'uuid/v4'
-import io from 'socket.io-client'
 
 // Action Types
 export const INIT = 'CHATBOT//INIT'
@@ -17,14 +16,11 @@ const updateMessage = (messages, id, updater) =>
 const removeMessage = (messages, id) =>
   messages.filter(message => message.id !== id)
 
-const nexRandomId = () => uuidV4()
+const nextRandomId = () => uuidV4()
 
 // Reducer
 export default (state = initialState, action) => {
   switch (action.type) {
-    case MESSAGE_SENT:
-      return state
-
     case MESSAGE_RECEIVED:
       return state
 
@@ -36,69 +32,52 @@ export default (state = initialState, action) => {
 /**
  * Shared data
  */
-let socket = null
-
-/**
- * Initialize connection with chatbot server
- * 
- * @param userId unique user session identificator 
- */
-function initServerConnection({ userId }) {
-  socket = io()
-
-  socket.on('connect', function() {})
-  socket.on('event', function(data) {})
-  socket.on('disconnect', function() {})
-
-  socket.on('messages:received', function() {
-    console.log('reply')
-  })
-}
-
-/**
- * Close connection with chatbot server
- */
-function destroyServerConnection() {
-  if (socket) {
-    socket.disconnect(true)
-    socket = null
-  }
-}
 
 // Actions
 
 /**
  * Initialize chatbot instance
- * @returns {{type: string}}
  */
-export const init = () => {
-  const userId = nexRandomId()
-
-  initServerConnection({
-    userId
-  })
+export const init = email => {
+  const userId = email ? email : nextRandomId()
 
   return {
-    type: INIT
+    type: INIT,
+    payload: {
+      userId
+    }
   }
 }
 
 /**
- * Deconstructing chatbot instance  
+ * Deconstructing chatbot instance
  */
 export const destroy = () => {
-  destroyServerConnection()
-
   return {
     type: DESTROY
   }
 }
 
 /**
- * Send message event to the chatbot server 
+ * Send message event to the chatbot server
  */
-export const sendMessage = () => {
+export const sendMessage = (message) => {
   return {
-    type: MESSAGE_SENT
+    type: MESSAGE_SENT,
+    payload: {
+      message
+    }
+  }
+}
+
+/**
+ * Send message event to the chatbot server
+ */
+export const replyMessage = (message) => {
+  return {
+    type: MESSAGE_RECEIVED,
+    payload: {
+      message
+    }
   }
 }

@@ -89,7 +89,7 @@ function get_reply(dispatch, reply, cstate, message) {
 	}
 	/*
 	setTimeout(function() {
-		reply({text: "Still there?  Let me know what you think of the bot by DMing me on Slack!  I would appreciate your candid feedback"}, 'kyle')
+		replyMessage({text: "Still there?  Let me know what you think of the bot by DMing me on Slack!  I would appreciate your candid feedback"}, 'kyle')
 		// still there?
 	}, 1000 * 30)
 	*/

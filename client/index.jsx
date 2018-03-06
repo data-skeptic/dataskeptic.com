@@ -22,6 +22,10 @@ import { SCHEMA_VER } from "../shared/reducers/SiteReducer"
 
 import initCart from "../shared/Cart/Helpers/initCart"
 import persistCart from "../shared/Cart/Helpers/persistCart"
+import {
+  reducer as chatBotReducer,
+  middleware as chatBotMiddleware
+} from "../chatbot/client";
 
 /**
  * Validate cached store schema version
@@ -45,10 +49,11 @@ const history = createBrowserHistory()
 
 const reducer = combineReducers({
   form: formReducer,
+  chat: chatBotReducer,
   ...reducers
 })
 
-const store = applyMiddleware(thunk, promiseMiddleware)(createStore)(
+const store = applyMiddleware(thunk, promiseMiddleware, chatBotMiddleware)(createStore)(
   reducer,
   initialState,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()

@@ -151,8 +151,7 @@ const resetCache = () => {
 
 const reducer = combineReducers({
   ...reducers,
-  form: formReducer,
-  chat: chatBotReducer
+  form: formReducer
 })
 
 global.my_cache = Cache = resetCache()
@@ -255,7 +254,7 @@ if (env == "prod") {
   app.use(recordingServerProxy)
 
   const chatBotServerProxy = proxy("/socket.io", {
-    target: "ws://127.0.0.1:9002",
+    target: "ws://127.0.0.1:9004",
     // pathRewrite: {
     //  '^/websocket' : '/socket',          // rewrite path.
     //  '^/removepath' : ''                 // remove path.
