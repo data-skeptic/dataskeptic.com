@@ -27,7 +27,8 @@ import {submitCommentForm} from "../../Proposals/Actions/CommentBoxFormActions";
 import SectionBlock from "../Components/SectionBlock/SectionBlock";
 import Launcher from "../../Chat/Containers/Launcher";
 import ConversationHandler from "../../ChatBot/Dialogs/ConversationHandler"
-import {BOT_ID, THINKING_MESSAGE} from "../../Chat/Constants";
+import {BOT_ID} from "../../Chat/Constants";
+import {addMessage, destroy} from "../../ChatBot/Reducers/ChatbotReducer";
 
 class ContactUs extends React.Component {
 
@@ -149,9 +150,13 @@ class ContactUs extends React.Component {
 			})
 	}
 
-	addMessage = (message) => this.setState(prevState => ({
-		messages: [...prevState.messages, message]
-	}))
+	addMessage = (message) => {
+		this.props.dispatch(addMessage(message))
+
+		this.setState(prevState => ({
+			messages: [...prevState.messages, message]
+		}))
+	}
 
   onInactivity = () => {
 	  this.reply({ text: 'Still there?  Let me know what you think of the bot by DMing me on Slack!  I would appreciate your candid feedback'}, 'kyle')
@@ -162,7 +167,13 @@ class ContactUs extends React.Component {
         const {title} = ContactUs.getPageMeta(this.props);
         dispatch(changePageTitle(title));
 
+	      this.props.dispatch(ready())
+
 	      this.reply({ text: 'What would you like to talk about?'})
+    }
+
+    componentWillUnmount() {
+	    this.props.dispatch(destroy())
     }
 
 	render() {

@@ -1,8 +1,16 @@
 import axios from "axios"
 import Immutable from 'immutable';
+import io from 'socket.io-client';
 
 var episodes = require("../Dialogs/episodes")
 var surveyDialog = require("../Dialogs/survey")
+
+/**
+ * Action types
+ */
+export const READY = 'READY'
+export const DESTROY = 'DESTROY'
+export const ADD_MESSAGE = 'ADD_MESSAGE'
 
 const init = {
     handler: undefined,
@@ -56,6 +64,9 @@ let get_question = function(question_id) {
         })
 };
 
+/**
+ * Reducer
+ */
 export default function ChatbotReducer(state = defaultState, action) {
     var nstate = state.toJS()
     switch (action.type) {
@@ -197,7 +208,7 @@ export default function ChatbotReducer(state = defaultState, action) {
                             if (blog == undefined) {
                                 if (b.prettyname.indexOf('/episodes/') == 0) {
                                     blog = b
-                                }                                
+                                }
                             }
                         }
                         if (blog) {
@@ -237,7 +248,47 @@ export default function ChatbotReducer(state = defaultState, action) {
         case 'SAW_YOSHI':
             nstate.saw_yoshi = true
             break
+
+        case READY:
+            break;
+        case ADD_MESSAGE:
+            break;
     }
     return Immutable.fromJS(nstate)
 }
 
+/***
+ * Utils
+ */
+const nexRandomId = () => 1
+let socket = null
+
+/**
+ * Actions
+ */
+export const ready = (email) => {
+    const userId = email ? email : nexRandomId() // TODO::
+      socket = io('http://localhost');
+      socket.on('connect', function(){});
+      socket.on('event', function(data){});
+      socket.on('disconnect', function(){});
+
+    return ({
+	    type: READY
+    })
+}
+
+export const destroy = () => {
+	return ({
+		type: DESTROY
+	})
+}
+
+export const addMessage = ({ message, sent, author } ) => {
+    const data = { message, sent, author }
+    axios.post('/api/v1/message', data)
+
+    return ({
+	    type: ADD_MESSAGE
+    })
+}

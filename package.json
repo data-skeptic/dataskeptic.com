@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=production NODE_PATH=$NODE_PATH:./shared nodemon --exec babel-node --presets es2015,stage-2 --harmony .",
+    "chat-server": "NODE_PATH=$NODE_PATH:./shared nodemon --exec babel-node --presets es2015,stage-2 --harmony ./chat/server.js",
     "recording-server": "NODE_PATH=$NODE_PATH:./shared nodemon --exec babel-node --presets es2015,stage-2 --harmony ./recordingServer.js",
     "dev": "NODE_ENV=dev NODE_PATH=$NODE_PATH:./shared babel-node --presets es2015,stage-2 --harmony .",
     "prod": "webpack --progress --color -p --config webpack.prod.config.js",
@@ -106,6 +107,8 @@
     "sanitize-html": "^1.18.2",
     "sha1": "^1.1.1",
     "showdown": "^1.6.0",
+    "socket.io": "^2.0.4",
+    "socket.io-client": "^2.0.4",
     "source-map-loader": "^0.1.5",
     "string-similarity": "^1.2.0",
     "stripe": "^5.4.0",
