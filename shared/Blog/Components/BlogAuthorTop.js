@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import AuthorLink from '../../components/AuthorLink'
 
+const DEFAULT_CONTRIBUTION = 'Author'
+
 export const BlogAuthorTop = ({ contributor = {} }) => {
   if (contributor == undefined || contributor.prettyname == undefined) {
     return <div />
@@ -12,10 +14,10 @@ export const BlogAuthorTop = ({ contributor = {} }) => {
   let linkedinimg = ''
   let linkedinlink = ''
 
-  const { twitter, linkedin } = contributor
+  const { twitter, linkedin, contribution = DEFAULT_CONTRIBUTION } = contributor
 
   if (twitter) {
-    const twitterurl = 'https://twitter.com/' + twitter
+    const twitterurl = "https://twitter.com/" + twitter
     twitterimg = (
       <a href={twitterurl}>
         <img src="/img/png/twitter.png" />
@@ -36,7 +38,7 @@ export const BlogAuthorTop = ({ contributor = {} }) => {
   return (
     <div className="row blog-author-top">
       <div className="col-xs-12 col-sm-4">
-        <b>Author:</b>{' '}
+        <b>{contribution}:</b>{" "}
         <AuthorLink author={contributor.author}>
           {contributor.prettyname}
         </AuthorLink>
