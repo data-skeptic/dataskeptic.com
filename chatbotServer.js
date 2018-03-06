@@ -1,4 +1,4 @@
-import chatbotServer from './chatbot/server/index'
+import chatbotServer from './chatbot/server'
 
 const PORT = process.env.CHAT_PORT || 9004
 const app = require('http').createServer((req, res) => {
@@ -13,4 +13,21 @@ app.listen(PORT).on('error', e => {
   console.error(e.message)
 })
 
-chatbotServer(app)
+/**
+ * Conversations handlers
+ */
+const dialogs = []
+
+const privateKey = 'DATAS'
+
+const greeting = (session, reply) => {
+  reply({
+    text: `What would you like to talk about?`
+  })
+}
+
+chatbotServer(app, {
+  dialogs,
+  privateKey,
+  greeting
+})

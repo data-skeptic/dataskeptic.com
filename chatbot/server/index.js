@@ -1,22 +1,57 @@
-import dialogHandler from './dialog' 
-import {ON_MESSAGE_REPLY, ON_MESSAGE_SENT} from "../shared/events";
-import {replyMessage} from "../client/reducer";
+import uuidV4 from 'uuid/v4'
 
-const handleLogic = (socket) => {
-  const reply = (message) => {
-    socket.emit(ON_MESSAGE_REPLY, replyMessage(message))
-  }
-  
-  socket.on(ON_MESSAGE_SENT, (data) => dialogHandler(data, reply))
+import dialogHandler from './dialog'
+import {
+  INIT,
+  INIT_SUCCESS,
+  MESSAGE_RECEIVED,
+  MESSAGE_SENT
+} from '../shared/actionTypes'
+import { initSuccess, receiveMessage } from '../client/reducer'
+import Agent from './Agent'
+
+const generateUserId = () => uuidV4()
+
+const handleLogic = (agent, reply, greeting) => {
+  agent.on(INIT, data => {
+    // initialize session
+    const { publicKey, bot } = data
+    const userId = generateUserId()
+    const sessionData = {
+      publicKey,
+      bot,
+      userId
+    }
+    agent.saveSession(sessionData)
+    
+    // notify agent about success
+    agent.triggerAction(initSuccess({ id: userId }))
+    // greeting user on connection
+    greeting(agent.getSession(), reply)
+  })
+
+  agent.on(MESSAGE_SENT, data => dialogHandler(data, reply))
 }
 
-const run = server => {
+const run = (server, { dialogs = [], greeting = () => {} }) => {
+  if (!server) {
+    throw Error('Server is specified.')
+  }
+
   const io = require('socket.io')(server)
   console.log(`Waiting for new chat connections`)
 
   io.on('connection', function(socket) {
-    console.log('a user connected')
-    handleLogic(socket)
+    console.log('User connected')
+
+    const agent = Agent(socket)
+    
+    // handle dialogs logic
+    handleLogic(agent, (message, author) => {
+      const { bot } = agent.getSession()
+      message.author = author || bot
+      agent.triggerAction(receiveMessage(message))
+    }, greeting)
   })
 }
 

@@ -41,7 +41,7 @@ const init = {
       name: 'Coaching renewing',
       subject: 'dataskeptic.com - reminder of upcoming charge',
       body:
-        'Hi {name},\n\nWe wanted to let you know that your monthly coaching plan will recur on {date}.  If you have any questions or want to pause on our collaboration, you can reply to this email or reach out to Kyle directly.  No action is needed on your part to continue.\n\nThanks!'
+        'Hi {name},\n\nWe wanted to let you know that your monthly coaching plan will recur on {date}.  If you have any questions or want to pause on our collaboration, you can triggerAction to this email or reach out to Kyle directly.  No action is needed on your part to continue.\n\nThanks!'
     }
   ],
   order: {

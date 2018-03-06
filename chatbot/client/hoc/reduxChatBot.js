@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import defaultConfig from '../../shared/config'
+import defaultProps from '../../shared/props'
 import { init, destroy, sendMessage } from '../reducer'
 import getState from '../getState'
 
 export default launcherConfig => Launcher => {
   class WrappedLauncher extends Component {
-    
     /**
      * Handle message input
      *
@@ -25,25 +25,26 @@ export default launcherConfig => Launcher => {
     }
 
     /**
-     * Build initial state and props from pushed props and config
+     * Build initial state and props from provided props and config
      */
     initState(props) {
-      const { initialProps, ...initialConfig } = launcherConfig
-      
-      // remove unnecessary props 
-      const {
-        dispatch,
-        ...safeProps
-      } = props
-      
+      // remove unnecessary props
+      const { dispatch, bot, history, operators, ...safeProps } = props
+
       return {
         props: {
-          ...initialProps,
-          ...safeProps
+          ...defaultProps,
+          ...safeProps,
+          history
         },
         config: {
           ...defaultConfig,
-          ...initialConfig
+          ...launcherConfig
+        },
+        initialProps: {
+          bot,
+          history,
+          operators
         }
       }
     }
@@ -52,9 +53,20 @@ export default launcherConfig => Launcher => {
      * Initialize Chatbot with provided public key
      */
     componentDidMount() {
-      const { publicKey } = launcherConfig
-      this.props.dispatch(init(publicKey))
+      const {
+        initialProps,
+        config: { publicKey }
+      } = this.state
+
+      const initConfig = {
+        ...initialProps,
+        publicKey
+      }
+
+      this.props.dispatch(init(initConfig))
     }
+
+    //TODO: handle email changes with component will receive props
 
     /**
      * Deinitialize current chatbot
@@ -75,17 +87,9 @@ export default launcherConfig => Launcher => {
      */
     render() {
       const { props, config } = this.state
-
-      console.dir('update launcher')
-      return (
-        <Launcher
-          {...config}
-          {...props}
-          onMessage={this.handleMessage}
-        />
-      )
+      return <Launcher {...config} {...props} onMessage={this.handleMessage} />
     }
   }
 
-  return connect(state => getState(state))(WrappedLauncher)
+  return connect(state => getState(state.bot))(WrappedLauncher)
 }

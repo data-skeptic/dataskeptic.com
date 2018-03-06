@@ -1,19 +1,8 @@
 import io from 'socket.io-client'
-import {
-  ON_MESSAGE_SENT,
-  ON_MESSAGE_REPLY
-} from '../shared/events'
+import actions from '../shared/actionTypes'
 
 const isDev = process.env.NODE_ENV === 'dev'
 const log = ({...args}) => isDev && console.log('[CHATBOT]', ...args)
-
-/**
- * List of events which should be rethrown to redux 
- */
-const handledEvents = [
-  ON_MESSAGE_SENT,
-  ON_MESSAGE_REPLY
-]
 
 /**
  * Connector handle and process socket connection with chatbot server
@@ -47,7 +36,7 @@ export default class Connector {
    * Attach handlers for socket events
    */
   initEvents() {
-    handledEvents.forEach(e => this.socket.on(e, this.handleAction))
+    actions.forEach(e => this.socket.on(e, this.handleAction))
   }
 
   /**

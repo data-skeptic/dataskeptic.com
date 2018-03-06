@@ -28,7 +28,7 @@ function get_reply(dispatch, reply, cstate, message) {
 	} else if (handler) {
 		resp = handler(dispatch, reply, cstate, message)
 	} else if (lmsg.indexOf('logo') > -1) {
-		msg = 'Please implement support for markdown so that bot can reply with images ![Our logo alt text](https://s3.amazonaws.com/dataskeptic.com/img/primary-logo-400.jpg)'
+		msg = 'Please implement support for markdown so that bot can triggerAction with images ![Our logo alt text](https://s3.amazonaws.com/dataskeptic.com/img/primary-logo-400.jpg)'
 		resp = {handler, msg, responder}
 	} else if (lmsg.indexOf('what would kyle say') > -1) {
 		msg = "I'll need to give it some thought and get back to you."
@@ -89,7 +89,7 @@ function get_reply(dispatch, reply, cstate, message) {
 	}
 	/*
 	setTimeout(function() {
-		replyMessage({text: "Still there?  Let me know what you think of the bot by DMing me on Slack!  I would appreciate your candid feedback"}, 'kyle')
+		recieveMessage({text: "Still there?  Let me know what you think of the bot by DMing me on Slack!  I would appreciate your candid feedback"}, 'kyle')
 		// still there?
 	}, 1000 * 30)
 	*/

@@ -1,36 +1,32 @@
 import Connector from './Connector'
-import { default as chatBotActionTypes } from './actionTypes'
-import {INIT, DESTROY, MESSAGE_SENT} from "./reducer";
-import {ON_MESSAGE_SENT} from "../shared/events";
+import actionTypes, {
+  INIT, INIT_SUCCESS, DESTROY, MESSAGE_SENT, MESSAGE_RECEIVED
+} from '../shared/actionTypes'
 
-const isChatBotAction = type => ~chatBotActionTypes.indexOf(type)
+const isChatBotAction = type => ~actionTypes.indexOf(type)
 
 const handleAction = (next, state, action, connector) => {
   let returnValue = next(action)
   const payload = returnValue.payload
-  const userId = 1
-  
+
   switch (action.type) {
     case INIT:
-      connector.init(userId, payload)
-      break
-    
-    case MESSAGE_SENT:
-      connector.emit(ON_MESSAGE_SENT, payload)
+      connector.init(payload)
       break;
-      
+
     case DESTROY:
       connector.deinit()
       break
   }
-  
+
+  connector.emit(action.type, payload)
   return returnValue
 }
 
 export default function createConnector({ getState, dispatch }) {
   // initialize new connection handler
   const connector = new Connector(dispatch)
-  
+
   return next => action => {
     const actionType = String(action.type)
 

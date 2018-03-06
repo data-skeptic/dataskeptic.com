@@ -70,7 +70,7 @@ export default function ChatbotReducer(state = defaultState, action) {
         case 'START_SURVEY':
             // initialize and ask first question
             var dispatch = action.dispatch
-            var reply = action.reply
+            var reply = action.triggerAction
             nstate.survey = {}
             nstate.survey.nextQuestionId = 1
             nstate.survey.questionOrder = 1
@@ -91,7 +91,7 @@ export default function ChatbotReducer(state = defaultState, action) {
             break
         case 'ASK_QUESTION':
             var dispatch = action.dispatch
-            var reply = action.reply
+            var reply = action.triggerAction
             var next_question_id = action.next_question_id
             if (next_question_id != undefined) {
                 nstate.survey.nextQuestionId = next_question_id
@@ -122,7 +122,7 @@ export default function ChatbotReducer(state = defaultState, action) {
             var dispatch = action.dispatch
             nstate.thinking = false
             var error_code = action.error_code
-            var reply = action.reply
+            var reply = action.triggerAction
             var msg = "Oh my.  I don't feel so well.  Could we not talk about this?  It hurts when the conversation comes to this point.  It's quite unpleasant to have an error_code " + error_code + ".  Be a pal and change the subject, ok?"
             // TODO: bot in pain image
             var responder = 'bot'
@@ -131,7 +131,7 @@ export default function ChatbotReducer(state = defaultState, action) {
         case 'ANSWER_AND_ASK_NEXT_QUESTION':
             var message = action.message
             var dispatch = action.dispatch
-            var reply = action.reply
+            var reply = action.triggerAction
             var text = message.text
             nstate.thinking = true
             nstate.survey.questionOrder += 1
@@ -167,11 +167,11 @@ export default function ChatbotReducer(state = defaultState, action) {
             nstate.thinking = false
             var responder = 'bot'
             var msg = action.msg
-            var reply = action.reply
+            var reply = action.triggerAction
             reply({text: msg, responder})
             break
         case 'SURVEY_COMPLETE':
-            action.reply({text: "That's the end of the survey.  Thank you for your input!"}, 'bot')
+            action.triggerAction({text: "That's the end of the survey.  Thank you for your input!"}, 'bot')
             nstate.survey.did_survey = true
             nstate.handler = undefined
             break
@@ -185,7 +185,7 @@ export default function ChatbotReducer(state = defaultState, action) {
             nstate.store_issue = action.store_issue
             break
         case 'GET_EP_RECOMMENDATION':
-            var reply = action.reply
+            var reply = action.triggerAction
             var query = action.query
             var dispatch = action.dispatch
             var url = "/api/search?q=" + query

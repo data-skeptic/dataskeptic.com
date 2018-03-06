@@ -33,13 +33,7 @@ import Launcher, {
 } from '../../../chatbot/client'
 
 const ChatBotLauncher = reduxChatBot({
-  publicKey: 'datas_chatbot',
-  placeholder: 'Send a message...',
-  header: 'DataSkeptic Bot',
-  initialProps: {
-    operators: [],
-    history: []
-  }
+  publicKey: 'datas_chatbot'
 })(Launcher)
 
 class ContactUs extends React.Component {
@@ -105,10 +99,6 @@ class ContactUs extends React.Component {
 
   handleMessage = message => {
     this.props.dispatch(chatBotActions.sendMessage(message))
-
-    this.setState(prevState => ({
-      messages: [...prevState.messages, message]
-    }))
   }
 
   handleInactivity = () => {}
@@ -118,8 +108,7 @@ class ContactUs extends React.Component {
 
     this.state = {
       submittedUrl: '',
-      openSection: '',
-      messages: []
+      openSection: ''
     }
   }
 
@@ -187,11 +176,12 @@ class ContactUs extends React.Component {
         <code>{JSON.stringify(this.state.messages)}</code>
 
         <ChatBotLauncher
-          defaultBot={contributors[BOT_ID]}
           thinking={thinking}
           onMessage={this.handleMessage}
           onInactivity={this.handleInactivity}
           inactivityDelay={1000 * 1}
+          bot="bot"
+          operators={contributors}
         />
 
         <Title>Contact Us</Title>
@@ -528,10 +518,11 @@ export default connect(state => ({
   cart: state.cart,
   site: state.site,
   chatbot: state.chatbot,
-  contributors: state.site.get('contributors'),
-  thinking: state.chatbot.get('thinking'),
   confirmPolicy: selector(state, 'confirmPolicy'),
   activeStep: state.questions.getIn(['form', 'step']),
   errorMessage: state.questions.getIn(['form', 'error']),
-  aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket'])
+  aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket']),
+  // chatbot
+  contributors: state.site.get('contributors').toJS(),
+  thinking: state.chatbot.get('thinking')
 }))(ContactUs)

@@ -1,24 +1,26 @@
-import React, { Component } from "react"
-import styled from "styled-components"
-import UserInput from "./UserInput"
-import Messages from "./Messages"
+import React, { Component } from 'react'
+import styled from 'styled-components'
+import UserInput from './UserInput'
+import Messages from './Messages'
 
-import defaultConfig from '../../shared/config'
+import defaultBotProps from '../../shared/props'
 
-import { REGULAR_MESSAGE, THINKING_MESSAGE } from "../constants"
-export { BOT_AUTHOR, BOT_ID } from "../constants"
+import { REGULAR_MESSAGE, THINKING_MESSAGE } from '../constants'
+export { BOT_ID } from '../constants'
 
 export default class Launcher extends Component {
   static defaultProps = {
-    ...defaultConfig
+    ...defaultBotProps
   }
 
   state = {
     open: false
   }
-	triggerInactivity = () => {
-		this.props.onInactivity()
+
+  triggerInactivity = () => {
+    this.props.onInactivity()
   }
+
   handleMessage = message => {
     this.resetInactivityTimer()
     const { onMessage } = this.props
@@ -44,15 +46,15 @@ export default class Launcher extends Component {
 
   resetInactivityTimer() {
     if (this.timer) {
-	    clearTimeout(this.timer)
+      clearTimeout(this.timer)
       this.timer = null
     }
 
-    setTimeout(this.triggerInactivity, this.props.inactivityDelay);
+    setTimeout(this.triggerInactivity, this.props.inactivityDelay)
   }
 
   getThinkingMessage() {
-    return { type: THINKING_MESSAGE, author: this.props.defaultBot }
+    return { type: THINKING_MESSAGE, author: this.props.bot }
   }
 
   render() {
@@ -71,7 +73,6 @@ export default class Launcher extends Component {
             {header}
             <Close onClick={this.close} />
           </Header>
-          <code>{JSON.stringify(this.props)}</code>
           <Messages messages={history} />
           <UserInput
             placeholder={placeholder}

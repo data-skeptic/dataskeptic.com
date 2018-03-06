@@ -1,8 +1,8 @@
 import initialState from './init'
-import uuidV4 from 'uuid/v4'
 
 // Action Types
 export const INIT = 'CHATBOT//INIT'
+export const INIT_SUCCESS = 'CHATBOT//INIT_SUCCESS'
 export const DESTROY = 'CHATBOT//DESTROY'
 export const MESSAGE_SENT = 'CHATBOT//MESSAGE_SENT'
 export const MESSAGE_RECEIVED = 'CHATBOT//MESSAGE_RECEIVED'
@@ -16,16 +16,31 @@ const updateMessage = (history, id, updater) =>
 const removeMessage = (history, id) =>
   history.filter(message => message.id !== id)
 
-const nextRandomId = () => uuidV4()
-
 const isImmutable = val => !!val.toJS
 
 // Reducer
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case '@@INIT':
-      debugger
       return isImmutable(state) ? state.toJS() : state
+
+    case INIT:
+      return {
+        ...state,
+        ready: true,
+        email: action.payload.email,
+        publicKey: action.payload.publicKey,
+        bot: action.payload.bot,
+        history: [...action.payload.history],
+        operators: { ...action.payload.operators }
+      }
+
+    case INIT_SUCCESS:
+      return {
+        ...state,
+        connected: true,
+        id: action.payload.id
+      }
 
     case MESSAGE_SENT:
       return {
@@ -36,7 +51,10 @@ const reducer = (state = initialState, action) => {
     case MESSAGE_RECEIVED:
       return {
         ...state,
-        history: addMessage(state.history, action.payload.message)
+        history: addMessage(state.history, {
+          ...action.payload.message,
+          author: getOperator(state, action.payload.message.author)
+        })
       }
 
     default:
@@ -55,14 +73,20 @@ export default reducer
 /**
  * Initialize chatbot instance
  */
-export const init = email => {
-  const userId = email ? email : nextRandomId()
-
+export const init = config => {
   return {
     type: INIT,
-    payload: {
-      userId
-    }
+    payload: config
+  }
+}
+
+/**
+ * Trigger success connection setup callback
+ */
+export const initSuccess = data => {
+  return {
+    type: INIT_SUCCESS,
+    payload: data
   }
 }
 
@@ -90,7 +114,7 @@ export const sendMessage = message => {
 /**
  * Send message event to the chatbot server
  */
-export const replyMessage = message => {
+export const receiveMessage = message => {
   return {
     type: MESSAGE_RECEIVED,
     payload: {
@@ -100,4 +124,9 @@ export const replyMessage = message => {
 }
 
 // Getters
-export const getHistory = state => state.bot && state.bot.history
+export const getHistory = state => state.history
+
+export const getOperators = state => state.operators
+
+export const getOperator = (state, operator) =>
+  state.operators && state.operators[operator]
