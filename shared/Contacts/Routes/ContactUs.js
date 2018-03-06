@@ -26,16 +26,10 @@ import QuestionForm from '../../Questions/Forms/QuestionForm'
 import { submitCommentForm } from '../../Proposals/Actions/CommentBoxFormActions'
 import SectionBlock from '../Components/SectionBlock/SectionBlock'
 
-/**
- * Chatbot Client
- */
-import {
-  addMessage,
-  destroy,
-  ready as chatReady
-} from '../../ChatBot/Reducers/ChatbotReducer'
-import {BOT_ID, THINKING_MESSAGE} from '../../Chat/Constants'
-import Launcher from '../../Chat/Containers/Launcher'
+import Launcher, {
+  BOT_ID,
+  actions as chatBot
+} from '../../../chatbot/client'
 
 class ContactUs extends React.Component {
   toggleSection = section => {
@@ -99,8 +93,7 @@ class ContactUs extends React.Component {
   }
   
   handleMessage = message => {
-    debugger
-    this.props.dispatch(addMessage(message))
+    this.props.dispatch(chatBot.sendMessage(message))
 
     this.setState(prevState => ({
       messages: [...prevState.messages, message]
@@ -164,12 +157,13 @@ class ContactUs extends React.Component {
     dispatch(changePageTitle(title))
 
     // dispatch ready state
-    this.props.dispatch(chatReady())
+    debugger;
+    this.props.dispatch(chatBot.init())
     this.reply({ text: 'What would you like to talk about?'}, BOT_ID)
   }
 
   componentWillUnmount() {
-    this.props.dispatch(destroy())
+    this.props.dispatch(chatBot.destroy())
   }
 
   render() {

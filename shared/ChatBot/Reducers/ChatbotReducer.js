@@ -5,13 +5,6 @@ import io from 'socket.io-client';
 var episodes = require("../Dialogs/episodes")
 var surveyDialog = require("../Dialogs/survey")
 
-/**
- * Action types
- */
-export const READY = 'CHATBOT//READY'
-export const DESTROY = 'CHATBOT//DESTROY'
-export const ADD_MESSAGE = 'CHATBOT//ADD_MESSAGE'
-
 const init = {
     handler: undefined,
     survey: {did_survey: false, nextQuestionId: -1, questionOrder: 0, surveyStart: 0, responseId: -1},
@@ -247,48 +240,7 @@ export default function ChatbotReducer(state = defaultState, action) {
             break
         case 'SAW_YOSHI':
             nstate.saw_yoshi = true
-            break
-
-        case READY:
-            break;
-        case ADD_MESSAGE:
             break;
     }
     return Immutable.fromJS(nstate)
-}
-
-/***
- * Utils
- */
-const nexRandomId = () => 1
-let socket = null
-
-/**
- * Actions
- */
-export const ready = (email) => {
-    const userId = email ? email : nexRandomId() // TODO::
-      socket = io();
-      socket.on('connect', function(){});
-      socket.on('event', function(data){});
-      socket.on('disconnect', function(){});
-
-    return ({
-	    type: READY
-    })
-}
-
-export const destroy = () => {
-	return ({
-		type: DESTROY
-	})
-}
-
-export const addMessage = ({ message, sent, author } ) => {
-    const data = { message, sent, author }
-    debugger
-
-    return ({
-	    type: ADD_MESSAGE
-    })
 }

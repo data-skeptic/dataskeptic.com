@@ -1,9 +1,18 @@
+const handleLogic = (socket) => {
+  socket.on('messages:sent', () => {
+    socket.emit('messages:sent', { my: 'data' });
+  })
+  
+}
+
+
 const run = server => {
   const io = require('socket.io')(server)
   console.log(`Waiting for new chat connections`)
 
   io.on('connection', function(socket) {
     console.log('a user connected')
+    handleLogic(socket)
   })
 }
 

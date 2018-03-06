@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import styled, { keyframes } from "styled-components"
-import Message from "../Message"
+import Message from "../Message/index"
 
 export default class Thinking extends Component {
   renderState() {

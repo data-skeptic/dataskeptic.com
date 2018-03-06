@@ -64,6 +64,7 @@ import { get_podcasts_from_cache } from "utils/redux_loader"
 import redirects_map from "./redirects"
 
 import { reducer as formReducer } from "redux-form"
+import { reducer as chatBotReducer } from "./chatbot/client"
 import axios from "axios"
 
 import Rollbar from "rollbar"
@@ -150,7 +151,8 @@ const resetCache = () => {
 
 const reducer = combineReducers({
   ...reducers,
-  form: formReducer
+  form: formReducer,
+  chat: chatBotReducer
 })
 
 global.my_cache = Cache = resetCache()
