@@ -27,13 +27,6 @@ export default function get_reply(dispatch, reply, cstate, message) {
 		resp = {msg, handler, responder}
 	} else if (handler) {
 		resp = handler(dispatch, reply, cstate, message)
-	} else if (lmsg.indexOf('logo') > -1) {
-		msg = 'Please implement support for markdown so that bot can triggerAction with images ![Our logo alt text](https://s3.amazonaws.com/dataskeptic.com/img/primary-logo-400.jpg)'
-		resp = {handler, msg, responder}
-	} else if (lmsg.indexOf('what would kyle say') > -1) {
-		msg = "I'll need to give it some thought and get back to you."
-		responder = 'kyle'
-		resp = {handler, msg, responder}
 	} else {
 		for (var dialog of dialogs) {
 			if (dialog.can_handle(message, cstate, reply)) {
@@ -42,10 +35,6 @@ export default function get_reply(dispatch, reply, cstate, message) {
 				console.log([handler, msg])
 				resp = {handler, msg, responder}				
 			}
-		}
-		if (resp == undefined) {
-			msg = 'Huh?'
-			resp = {handler, msg, responder}
 		}
 	}
 	if (resp) {

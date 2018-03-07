@@ -4,9 +4,8 @@
  */
 const chainify = dialogs => {
   dialogs.forEach((dialog, index, arr) => {
-    console.log('chain')
-    if (index < arr.length - 1) {
-      console.log('set next!')
+    const hasNext = index < arr.length - 1
+    if (hasNext) {
       const nextDialog = arr[index + 1]
       dialog.setNext(nextDialog)
     }

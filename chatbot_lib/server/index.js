@@ -58,9 +58,10 @@ const run = (server, { dialogs = [], greeting = () => {} }) => {
     handleLogic(
       agent,
       dialogs,
-      (message, author) => {
-        const { bot } = agent.getSession()
-        message.author = author || bot
+      (message) => {
+        const bot = agent.getSession().get('bot')
+        message.author = message.author || bot
+        
         agent.triggerAction(receiveMessage(message))
       },
       greeting

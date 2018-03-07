@@ -1,11 +1,12 @@
-// TODO:: rewrite as class
+import { fromJS, empty } from './Session'
 
-export default (socket) => ({
+// TODO:: rewrite as class
+export default socket => ({
   getSession() {
-    return socket.session || {}
+    return socket.session || empty
   },
   saveSession(data) {
-    socket.session = data
+    socket.session = fromJS(data)
   },
   on(event, fn) {
     socket.on(event, fn)
@@ -19,7 +20,7 @@ export default (socket) => ({
     this.reply(action)
   },
   triggerAction(action) {
-    const {type} = action
+    const { type } = action
     socket.emit(type, action)
   }
 })

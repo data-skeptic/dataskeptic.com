@@ -9,7 +9,6 @@ export default class HelperDialog extends Dialog {
   }
 
   canHandle(receivedMessage, session) {
-    console.dir('canHandle Helper')
     const { plainText } = receivedMessage
     
     return plainText.indexOf('help') > -1
