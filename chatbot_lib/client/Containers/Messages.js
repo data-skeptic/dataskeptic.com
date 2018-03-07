@@ -1,9 +1,10 @@
 import React, { Component } from "react"
 import styled from "styled-components"
 
-import {THINKING_MESSAGE} from "../constants";
+import {THINKING_MESSAGE, MENU_ITEMS_MESSAGE} from "../../shared/messageTypes";
 import Message from "../Components/Message"
-import Thinking from "../Components/Thinking";
+import Thinking from "../Components/Thinking"
+import Menu from "../Components/Menu"
 
 export default class Messages extends Component {
   static defaultProps = {
@@ -18,6 +19,10 @@ export default class Messages extends Component {
     switch (message.type) {
       case THINKING_MESSAGE:
         Renderer = Thinking
+        break
+      
+      case MENU_ITEMS_MESSAGE:
+        Renderer = Menu
         break
 
       default:

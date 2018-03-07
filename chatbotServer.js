@@ -3,9 +3,9 @@ import HelperDialog from './shared/ChatBotNext/_Dialogs/HelperDialog'
 import SiteDialog from './shared/ChatBotNext/_Dialogs/SiteDialog'
 import SmallTalkDialog from './shared/ChatBotNext/_Dialogs/SmallTalkDialog'
 import KyleDialog from './shared/ChatBotNext/_Dialogs/KyleDialog'
-import ExitDialog from './shared/ChatBotNext/_Dialogs/ExitDialog'
-import EpisodesDialog from "./shared/ChatBotNext/_Dialogs/Episodes/EpisodesDialog";
-import ProfileDialog from "./shared/ChatBotNext/_Dialogs/ProfileDialog";
+import EpisodesDialog from './shared/ChatBotNext/_Dialogs/Episodes/EpisodesDialog'
+import ProfileDialog from './shared/ChatBotNext/_Dialogs/ProfileDialog'
+import YoshiDialog from './shared/ChatBotNext/_Dialogs/YoshiDialog'
 
 const PORT = process.env.CHAT_PORT || 9004
 const app = require('http').createServer((req, res) => {
@@ -28,19 +28,19 @@ const privateKey = 'DATAS'
 
 const greeting = (session, reply) => {
   reply({
-    text: `What would you like to talk about?`
+    text: ` 👋 What would you like to talk about?`
   })
 }
 
 const helper = new HelperDialog()
 const site = new SiteDialog()
 const kyle = new KyleDialog()
-const exit = new ExitDialog()
+const yoshi = new YoshiDialog()
 const smalltalk = new SmallTalkDialog()
 const episode = new EpisodesDialog()
 const profile = new ProfileDialog()
 
-const dialogs = [helper, site, kyle, episode, profile, exit, smalltalk]
+const dialogs = [helper, site, kyle, yoshi, episode, profile, smalltalk]
 
 chatbotServer(app, {
   dialogs,

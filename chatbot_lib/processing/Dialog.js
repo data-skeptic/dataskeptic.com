@@ -63,16 +63,6 @@ export default class Dialog {
   }
 
   /**
-   *
-   *
-   * @param receivedMessage user input meta data
-   * @param receivedMessage.text user input
-   * @param receivedMessage.plainText normalized message
-   * @param context agent session state
-   */
-  getOpeningRemark(receivedMessage, context) {}
-
-  /**
    * Returns unique dialog identifier
    */
   getId() {

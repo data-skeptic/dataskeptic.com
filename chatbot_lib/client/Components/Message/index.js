@@ -1,16 +1,14 @@
-import React, { Component } from "react"
-import styled from "styled-components"
-import marked from "marked"
-import { BOT_ID } from "../../constants"
+import React, { Component } from 'react'
+import styled, { css } from 'styled-components'
+import marked from 'marked'
+import { BOT_ID } from '../../constants'
 
 const getMarkdown = text => {
   const rawMarkup = marked(text)
   return { __html: rawMarkup }
 }
 
-const renderText = text => (
-  <Text dangerouslySetInnerHTML={getMarkdown(text)} />
-)
+const renderText = text => <Text dangerouslySetInnerHTML={getMarkdown(text)} />
 
 export default class Message extends Component {
   render() {
@@ -19,7 +17,12 @@ export default class Message extends Component {
     return (
       <Container sent={sent}>
         {author && <Author src={author.img} bot={author.author === BOT_ID} />}
-        <Bubble sent={sent}>{children ? children : renderText(text)}</Bubble>
+        
+        <Content>
+          {text && <Bubble sent={sent}>{renderText(text)}</Bubble>}
+          {(text && children) && <Spacer />  }
+          {children}
+        </Content>
       </Container>
     )
   }
@@ -51,13 +54,25 @@ const Author = styled.img`
   `};
 `
 
-const Bubble = styled.div`
+const content = css`
   margin-left: 15px;
-  border-radius: 5px;
-  padding: 12px;
   display: inline-block;
   max-width: 100%;
+  min-width: 40px;
   overflow: hidden;
+`
+
+const Content = styled.div`
+  ${content};
+`
+
+const Spacer = styled.div`
+  margin-top: 12px;
+`
+
+const Bubble = styled.div`
+  border-radius: 5px;
+  padding: 12px;
   word-wrap: break-word;
 
   * {
@@ -65,6 +80,14 @@ const Bubble = styled.div`
     padding: 0px;
     max-width: 100%;
   }
+  
+  mark[type=exit] {
+    border: 1px solid #d7d9d9;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 4px;
+    padding: 1px 4px;
+  }
+    
 
   ${props =>
     props.sent
@@ -76,6 +99,4 @@ const Bubble = styled.div`
 	`};
 `
 
-const Text = styled.span`
-
-`
+const Text = styled.span``

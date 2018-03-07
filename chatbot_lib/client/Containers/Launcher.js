@@ -5,7 +5,7 @@ import Messages from './Messages'
 
 import defaultBotProps from '../../shared/props'
 
-import { REGULAR_MESSAGE, THINKING_MESSAGE } from '../constants'
+import { REGULAR_MESSAGE, THINKING_MESSAGE } from '../../shared/messageTypes'
 export { BOT_ID } from '../constants'
 
 export default class Launcher extends Component {

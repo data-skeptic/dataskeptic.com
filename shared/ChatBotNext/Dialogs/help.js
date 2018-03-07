@@ -34,16 +34,7 @@ function handler(dispatch, reply, cstate, message) {
 		var handler = undefined
 		return {msg, handler}
 	}
-	for (var item of module.exports.help_menu) {
-		var label = item['label']
-		var similarity = stringSimilarity.compareTwoStrings(imsg, label)
-		if (similarity > .5) {
-			msg = item.get_opening_remark()
-			handler = item['handler']
-			return {msg, handler}
-		}
-	}
-	var msg = "I didn't understand you.  Please try again or say 'exit' to give up on help."
+	
 	var handler = module.exports.help2
 	return {msg, handler}
 }
