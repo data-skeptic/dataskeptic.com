@@ -1,11 +1,14 @@
-// export default (dialogs, receivedMessage, reply, trigger) => {
-//   const message = {
-//     text: `You said "${receivedMessage.message.text}".`
-//   }
-//  
-//   return reply(message)
-// }
-
+/**
+ * Process user input .
+ * In fact apply dialogs and implements machine state logic for each dialog
+ * 
+ * @param dialogs array of registered dialogs
+ * @param receivedMessage user input meta data 
+ * @param receivedMessage.text user input
+ * @param receivedMessage.plainText normalized message
+ * @param reply bot message reply callback 
+ * @param trigger redux store action trigger 
+ */
 export default (dialogs, receivedMessage, reply, trigger) => {
   // session?
   const cstate = {
@@ -35,7 +38,7 @@ export default (dialogs, receivedMessage, reply, trigger) => {
     resp = {handler, msg, responder}
   } else {
     for (var dialog of dialogs) {
-      if (dialog.can_handle(lmsg, cstate, reply)) {
+      if (dialog.can_handle(receivedMessage, cstate, reply)) {
         handler = dialog.handler
         msg = dialog.get_opening_remark(trigger, reply)
         console.log([handler, msg])

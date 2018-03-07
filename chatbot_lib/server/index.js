@@ -1,6 +1,6 @@
 import uuidV4 from 'uuid/v4'
 
-import dialogHandler from './dialog'
+import dialogHandler from './ConversationHandler'
 import {
   INIT,
   INIT_SUCCESS,
