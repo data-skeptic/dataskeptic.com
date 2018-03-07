@@ -1,11 +1,12 @@
 import React from "react"
-import { Field, reduxForm } from "redux-form"
+import {Field, FieldArray, reduxForm} from "redux-form"
 import FormController from "../../Forms/Components/FormController/FormController"
 import {
   renderField,
   renderSelect,
   renderZip
 } from "../../Forms/Components/Field"
+import {renderRelated} from "./BlogRelatedFields";
 
 export const FORM_KEY = 'blogUpdate'
 
@@ -76,6 +77,12 @@ const BlogUpdateForm = ({
       required
     />
 
+    <FieldArray
+      name="related"
+      component={renderRelated}
+      rerenderOnEveryChange={true}
+    />
+    
   </FormController>
 )
 

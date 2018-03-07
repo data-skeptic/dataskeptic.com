@@ -5,7 +5,8 @@ import styled from "styled-components"
 import moment from "moment"
 
 import BlogUpdateForm, { FORM_KEY } from "./BlogUpdateForm"
-import BlogRelatedForm from "./BlogRelatedForm"
+import BlogRelatedForm from "./BlogRelatedFields"
+
 import BlogListItem from "../../Blog/Components/BlogListItem"
 import RelatedContent from "../../Blog/Components/RelatedContent"
 
@@ -94,8 +95,12 @@ class BlogUpdater extends Component {
               ID: <ID>{blog_id}</ID>
             </Label>
             <Value>
-              {!edit && (
+              {!edit ? (
                 <EditButton onClick={this.startEditing}>Edit</EditButton>
+              ) : (
+                <CancelButton onClick={this.finishEditing}>
+                  <span>Cancel</span>
+                </CancelButton>
               )}
             </Value>
           </Heading>
@@ -127,13 +132,6 @@ class BlogUpdater extends Component {
                 <DeleteButton onClick={this.delete}>Delete</DeleteButton>
                 <SaveButton onClick={this.save}>Save</SaveButton>
               </Buttons>
-
-              <RelatedForm
-                showSubmit={false}
-                allowSubmit={true}
-                initialValues={blog.related}
-                onSubmit={this.onRelatedUpdate}
-              />
             </Editing>
           ) : (
             this.renderPreview()
@@ -200,11 +198,6 @@ const RelatedList = styled.div``
 const RelatedItem = styled.div``
 
 const BlogForm = styled(BlogUpdateForm)`
-  display: flex;
-  flex-direction: column;
-`
-
-const RelatedForm = styled(BlogRelatedForm)`
   display: flex;
   flex-direction: column;
 `
