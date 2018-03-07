@@ -85,7 +85,7 @@ class BlogListItem extends Component {
           <p className="blog-desc">
             {blog.abstract}
             <br />
-            <Link className="blog-view-more" to={link}>
+            <Link className="blog-view-more" to={link} onClick={onClick}>
               View More &gt;
             </Link>
           </p>
