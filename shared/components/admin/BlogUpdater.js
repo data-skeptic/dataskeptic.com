@@ -36,22 +36,48 @@ class BlogUpdater extends Component {
     this.finishEditing()
   }
 
-  onSave = data => {
-    const { blog_id, title, abstract, author, publish_date } = data
+  saveRelated = related => {
+    const created = related
+      .filter(item => item.created)
+      .map(item => this.addRelatedItem(item))
+
+    const remove = related
+      .filter(item => item.remove)
+      .map(item => this.deleteRelatedItem(item))
+
+    return Promise.all(created.concat(remove))
+  }
+
+  onSave = async data => {
+    const {
+      blog_id,
+      title,
+      abstract,
+      author,
+      publish_date,
+      related = []
+    } = data
 
     const { dispatch } = this.props
 
-    dispatch({
-      type: "CMS_UPDATE_BLOG",
-      payload: {
-        blog_id,
-        title,
-        abstract,
-        author,
-        publish_date,
-        dispatch
-      }
-    })
+    const blogRelated = related.map(item => ({
+      ...item,
+      blog_id
+    }))
+    
+    return this.saveRelated(blogRelated).then(() =>
+      dispatch({
+        type: "CMS_UPDATE_BLOG",
+        payload: {
+          blog_id,
+          title,
+          abstract,
+          author,
+          publish_date,
+          dispatch
+        }
+      })
+    )
   }
 
   onRelatedUpdate = data => {
@@ -64,16 +90,34 @@ class BlogUpdater extends Component {
     dispatch({ type: "CMS_DELETE_BLOG", payload: { blog_id, dispatch } })
   }
 
-  getAuthor = author =>
+  addRelatedItem = data => {
+    const { dispatch } = this.props
+
+    dispatch({
+      type: "RELATED_CONTENT_ADD",
+      payload: { data, dispatch }
+    })
+  }
+
+  deleteRelatedItem = ({ content_id }) => {
+    return this.props.dispatch({
+      type: "RELATED_CONTENT_DELETE",
+      payload: { content_id }
+    })
+  }
+
+  getAuthor = (author = "") =>
     this.props.contributors.filter(
       contributor =>
-        contributor.prettyname.toLowerCase().trim() ===
-        author.toLowerCase().trim()
+        contributor
+          .get("author")
+          .toLowerCase()
+          .trim() === author.toLowerCase().trim()
     )[0]
 
   renderPreview() {
     const { blog } = this.props
-    const contributor = this.getAuthor(blog) || {}
+    const contributor = this.getAuthor(blog.author) || {}
 
     return (
       <Preview>

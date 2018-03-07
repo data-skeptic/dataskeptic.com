@@ -23,13 +23,17 @@ const validate = values => {
   return errors
 }
 
+const EMPTY_RELATED_ITEM = {
+  created: true
+}
+
 const renderInternalLinkFields = member => (
   <div>
     <Field
       label="Related Blog"
       component={renderField}
       customComponent={BlogSearchSelect}
-      name="dest"
+      name={`${member}.dest`}
       type="text"
       required
     />
@@ -37,7 +41,7 @@ const renderInternalLinkFields = member => (
     <Field
       label="Link Anchor Text"
       component={renderField}
-      name="title"
+      name={`${member}.title`}
       type="url"
       required
     />
@@ -45,7 +49,7 @@ const renderInternalLinkFields = member => (
     <Field
       label="Comment"
       component={renderField}
-      name="body"
+      name={`${member}.body`}
       textarea
       required
     />
@@ -258,7 +262,7 @@ export const renderRelated = ({ fields, meta: { error, submitFailed } }) => (
       </RelatedEntry>
     ))}
 
-    <RelatedAddButton type="button" onClick={() => fields.push({})}>
+    <RelatedAddButton type="button" onClick={() => fields.push(EMPTY_RELATED_ITEM)}>
       + Add Related
     </RelatedAddButton>
   </RelatedEntries>

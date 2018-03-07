@@ -8,15 +8,15 @@ export default class BlogSearchSelect extends Component {
   state = {
     firstInit: false,
     query: "",
-    selectedOption: this.props.value
+    selectedOption: this.props.input.value
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.value !== nextProps.value) {
+    if (this.props.input.value !== nextProps.input.value) {
       if (this.state.firstInit) return
 
       this.setState({
-        selectedOption: nextProps.value,
+        selectedOption: nextProps.input.value,
         firstInit: true
       })
     }
