@@ -5,9 +5,9 @@
  * @return {Number}
  */
 export function getItemsCount(items) {
-    items = items || []
-    
-    return items.reduce((mem, item) => {
-         return mem + item.quantity
-    }, 0);
+  items = items || []
+
+  return items.reduce((mem, item) => {
+    return mem + item.quantity
+  }, 0)
 }

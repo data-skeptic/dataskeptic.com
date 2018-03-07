@@ -1,10 +1,10 @@
-import webpack              from 'webpack';
-import assign               from 'object-assign';
-import webpackDevMiddleware from 'webpack-dev-middleware';
-import webpackHotMiddleware from 'webpack-hot-middleware';
-import prodCfg              from './webpack.prod.config.js';
+import webpack from 'webpack'
+import assign from 'object-assign'
+import webpackDevMiddleware from 'webpack-dev-middleware'
+import webpackHotMiddleware from 'webpack-hot-middleware'
+import prodCfg from './webpack.prod.config.js'
 
-Object.assign = assign;
+Object.assign = assign
 
 const BABEL_QUERY = {
   presets: ['react', 'es2015', 'stage-0'],
@@ -18,37 +18,34 @@ const BABEL_QUERY = {
         transforms: [
           {
             transform: 'react-transform-hmr',
-            imports:    ['react'],
-            locals:     ['module']
+            imports: ['react'],
+            locals: ['module']
           }
         ]
       }
     ]
   ]
-};
+}
 
 export default function(app) {
   const config = Object.assign(prodCfg, {
     devtool: 'inline-source-map',
-    entry:   [
-      'babel-polyfill',
-      'webpack-hot-middleware/client',
-      './client'
-    ],
+    entry: ['babel-polyfill', 'webpack-hot-middleware/client', './client'],
     module: {
       loaders: [
         {
-          test:    /\.jsx?$/,
+          test: /\.jsx?$/,
           exclude: /node_modules/,
-          loader:  'babel',
-          query:   BABEL_QUERY
+          loader: 'babel',
+          query: BABEL_QUERY
         },
         {
-            test: /\.less$/,
-            loader: "style!css!less?strictMath&noIeCompat"
+          test: /\.less$/,
+          loader: 'style!css!less?strictMath&noIeCompat'
         },
         {
-          test: /\.json$/, loader: "json"
+          test: /\.json$/,
+          loader: 'json'
         }
       ]
     },
@@ -57,15 +54,15 @@ export default function(app) {
       new webpack.HotModuleReplacementPlugin(),
       new webpack.NoErrorsPlugin(),
       new webpack.DefinePlugin({
-          'process.env': {
-              NODE_ENV: JSON.stringify(process.env.NODE_ENV)
-          }
-      }),
-    ],
-  });
+        'process.env': {
+          NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+        }
+      })
+    ]
+  })
 
-  const compiler = webpack(config);
+  const compiler = webpack(config)
 
-  app.use(webpackDevMiddleware(compiler, { noInfo: true }));
-  app.use(webpackHotMiddleware(compiler));
+  app.use(webpackDevMiddleware(compiler, { noInfo: true }))
+  app.use(webpackHotMiddleware(compiler))
 }

@@ -7,13 +7,13 @@
  * @return {string}
  */
 const CardCVVNormalizer = (value, previousValue) => {
-    if (!value) {
-        return value
-    }
+  if (!value) {
+    return value
+  }
 
-    const onlyNums = value.replace(/[^\d]/g, '');
+  const onlyNums = value.replace(/[^\d]/g, '')
 
-    return onlyNums.slice(0, 3);
-};
+  return onlyNums.slice(0, 3)
+}
 
-export default CardCVVNormalizer;
+export default CardCVVNormalizer

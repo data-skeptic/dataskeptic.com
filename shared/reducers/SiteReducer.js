@@ -1,74 +1,79 @@
 import Immutable from 'immutable'
 import { fromJS } from 'immutable'
-import {v4} from 'uuid';
-import {clone} from 'lodash'
+import { v4 } from 'uuid'
+import { clone } from 'lodash'
 
 /**
  * Whenever some reducer initial state have been changed update current schema version
  * Unique version number is total count of commits in `master`
  */
-export const SCHEMA_VER = 'v1952';
+export const SCHEMA_VER = 'v1952'
 
-const randomSessionId = () => v4();
+const randomSessionId = () => v4()
 
 const init = {
-  title: "Data Skeptic - The intersection of data science, artificial intelligence, machine learning, statistics, and scientific skepticism",
-  disqus_username: "dataskeptic",
+  title:
+    'Data Skeptic - The intersection of data science, artificial intelligence, machine learning, statistics, and scientific skepticism',
+  disqus_username: 'dataskeptic',
   contact_form: {
-      name: "",
-      email: "",
-      msg: "",
-      error: "",
-      send: "no"
-    },
+    name: '',
+    email: '',
+    msg: '',
+    error: '',
+    send: 'no'
+  },
   contributors: {},
-  slackstatus: "",
+  slackstatus: '',
   schemaVersion: SCHEMA_VER,
   sessionId: randomSessionId()
-};
-
-const updateContributor = (contributors, contributor, fn) => {
-    if (contributors[contributor]) {
-        contributors[contributor] = fn(contributors[contributor])
-    }
-
-    return contributors
 }
 
-const defaultState = Immutable.fromJS(init);
+const updateContributor = (contributors, contributor, fn) => {
+  if (contributors[contributor]) {
+    contributors[contributor] = fn(contributors[contributor])
+  }
+
+  return contributors
+}
+
+const defaultState = Immutable.fromJS(init)
 
 export default function siteReducer(state = defaultState, action) {
   var nstate = state.toJS()
-  switch(action.type) {
+  switch (action.type) {
     case 'INITIALIZE_SITE':
       if (nstate.contact_form == undefined) {
         nstate.contact_form = {
-          name: "",
-          email: "",
-          msg: "",
-          error: "",
-          send: "no"
+          name: '',
+          email: '',
+          msg: '',
+          error: '',
+          send: 'no'
         }
       }
-      nstate.contact_form.send = "no"
+      nstate.contact_form.send = 'no'
       break
     case 'SET_CONTRIBUTORS':
       nstate.contributors = clone(action.payload)
       break
     case 'SET_CONTRIBUTOR_BLOGS':
-      nstate.contributors = updateContributor(nstate.contributors, action.payload.contributor, (contributor) => ({
+      nstate.contributors = updateContributor(
+        nstate.contributors,
+        action.payload.contributor,
+        contributor => ({
           ...contributor,
           postsLoaded: true,
           posts: action.payload.blogs
-      }))
+        })
+      )
       break
     case 'SET_TITLE':
-    	nstate.title = action.payload
-    	break
+      nstate.title = action.payload
+      break
     case 'SLACK_UPDATE':
       var msg = action.payload.msg
       nstate.slackstatus = msg
-      break;
+      break
     case 'UPDATE_CONTACT_FORM':
       if (action.payload.name != undefined) {
         nstate.contact_form.name = action.payload.name
@@ -79,23 +84,23 @@ export default function siteReducer(state = defaultState, action) {
       if (action.payload.msg != undefined) {
         nstate.contact_form.msg = action.payload.msg
       }
-      break;
+      break
     case 'CONTACT_FORM_ERROR':
       var error = action.payload.error
       nstate.contact_form.error = error
-      nstate.contact_form.send = "no"
+      nstate.contact_form.send = 'no'
       break
     case 'SET_SENDING':
-      nstate.contact_form.send = "sending"
+      nstate.contact_form.send = 'sending'
       break
     case 'CONTACT_FORM_COMPLETE':
       var success = action.payload.success
       if (success) {
-        nstate.contact_form.msg = "";
-        nstate.contact_form.error = "";
-        nstate.contact_form.send = "success"
+        nstate.contact_form.msg = ''
+        nstate.contact_form.error = ''
+        nstate.contact_form.send = 'success'
       } else {
-        nstate.contact_form.send = "error"
+        nstate.contact_form.send = 'error'
       }
       break
   }
