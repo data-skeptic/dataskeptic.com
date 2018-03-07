@@ -7,6 +7,7 @@ import moment from "moment"
 import BlogUpdateForm, { FORM_KEY } from "./BlogUpdateForm"
 import BlogRelatedForm from "./BlogRelatedForm"
 import BlogListItem from "../../Blog/Components/BlogListItem"
+import RelatedContent from "../../Blog/Components/RelatedContent"
 
 const normalizeDate = d => moment(d).format("YYYY-MM-DD")
 
@@ -52,6 +53,10 @@ class BlogUpdater extends Component {
     })
   }
 
+  onRelatedUpdate = data => {
+    debugger
+  }
+
   delete = () => {
     const { dispatch, blog: { blog_id } } = this.props
 
@@ -69,6 +74,7 @@ class BlogUpdater extends Component {
           contributor={contributor}
           onClick={fakeClick}
         />
+        <RelatedContent items={blog.related} />
       </Preview>
     )
   }
@@ -76,7 +82,7 @@ class BlogUpdater extends Component {
   render() {
     const { details, edit } = this.state
     const { odd, blog } = this.props
-    const { blog_id, prettyname } = blog
+    const { blog_id, prettyname, related = [] } = blog
 
     blog.publish_date = normalizeDate(blog.publish_date)
 
@@ -122,13 +128,16 @@ class BlogUpdater extends Component {
                 <SaveButton onClick={this.save}>Save</SaveButton>
               </Buttons>
 
-              <RelatedForm showSubmit={false} allowSubmit={true} />
+              <RelatedForm
+                showSubmit={false}
+                allowSubmit={true}
+                initialValues={blog.related}
+                onSubmit={this.onRelatedUpdate}
+              />
             </Editing>
           ) : (
             this.renderPreview()
           )}
-
-          {details && <Details>related</Details>}
         </Inner>
       </Wrapper>
     )
@@ -186,6 +195,9 @@ const Editing = styled.div`
 `
 
 const Preview = styled.div``
+
+const RelatedList = styled.div``
+const RelatedItem = styled.div``
 
 const BlogForm = styled(BlogUpdateForm)`
   display: flex;
