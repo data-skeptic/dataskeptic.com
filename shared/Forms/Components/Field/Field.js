@@ -12,16 +12,17 @@ export const renderField = ({
   meta: { touched, error, warning, invalid },
   fieldWrapperClasses = "",
   labelWrapperClasses = "",
-  inputWrapperStyles = ""
+  inputWrapperStyles = "",
+  ...rest
 }) => {
   const textareaType = (
     <textarea
       {...input}
       placeholder={placeholder}
-      type={type}
       className={`${inputWrapperStyles} ${
         touched && invalid ? "has-danger" : ""
       }`}
+      {...rest}
     />
   )
   const inputType = (
@@ -30,12 +31,13 @@ export const renderField = ({
       placeholder={placeholder}
       type={type}
       className={`${touched && invalid ? "has-danger" : ""}`}
+      {...rest}
     />
   )
 
   const CustomComponent = customComponent
   const inputComponent = customComponent
-    ? <CustomComponent input={input} />
+    ? <CustomComponent input={input} {...rest}/>
     : textarea ? textareaType : inputType
 
   return (

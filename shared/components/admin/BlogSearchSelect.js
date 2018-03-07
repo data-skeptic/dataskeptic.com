@@ -11,26 +11,27 @@ export default class BlogSearchSelect extends Component {
     selectedOption: this.props.input.value
   }
 
+  handleChange = selectedOption => {
+    this.setState({ selectedOption })
+
+    const blog_id = selectedOption ? selectedOption.blog_id : null
+
+    const { input: { onChange } } = this.props
+    onChange(blog_id)
+  }
+
+  inputChange = query => this.setState({ query })
+
   componentWillReceiveProps(nextProps) {
     if (this.props.input.value !== nextProps.input.value) {
       if (this.state.firstInit) return
 
       this.setState({
-        selectedOption: nextProps.input.value,
         firstInit: true
       })
+
+      this.handleChange(nextProps.input.value)
     }
-  }
-
-  inputChange = query => this.setState({ query })
-
-  handleChange = selectedOption => {
-    this.setState({ selectedOption })
-
-    const blog_id = selectedOption ? selectedOption.blog_id : null
-    const { id, input: { onChange } } = this.props
-
-    onChange(id, blog_id)
   }
 
   getOptions = query => {

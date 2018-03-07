@@ -8,6 +8,8 @@ import {
 } from "../../Forms/Components/Field"
 import styled from "styled-components"
 import BlogSearchSelect from "./BlogSearchSelect"
+import DragAndDropFileUploadField from "../../Forms/Components/DragAndDropFileUploadField";
+import ImageUploadField from "../../Forms/Components/ImageUploadField";
 
 export const INTERNAL_LINK = "internal-link"
 export const EXTERNAL_LINK = "external-link"
@@ -27,8 +29,14 @@ const EMPTY_RELATED_ITEM = {
   created: true
 }
 
-const renderInternalLinkFields = member => (
+const renderInternalLinkFields = (member, fields, index) => (
   <div>
+    <code>
+      {JSON.stringify({
+        val: fields.get(index)
+      })}
+    </code>
+    
     <Field
       label="Related Blog"
       component={renderField}
@@ -91,8 +99,12 @@ const renderHomePageImageFields = member => (
       label="Image url (400x400px)"
       component={renderField}
       name={`${member}.dest`}
-      type="url"
       required
+      customComponent={ImageUploadField}
+      maxWidth={400}
+      maxHeight={400}
+      single={true}
+      accept="image/jpeg, image/png"
     />
 
     <Field
@@ -111,8 +123,12 @@ const renderBlogHeaderImageFields = member => (
       label="Image url (800x150px)"
       component={renderField}
       name={`${member}.title`}
-      type="url"
       required
+      customComponent={ImageUploadField}
+      maxWidth={400}
+      maxHeight={400}
+      single={true}
+      accept="image/jpeg, image/png"
     />
 
     <Field
@@ -183,12 +199,12 @@ const renderPersonFields = member => (
 
 const renderBlankFields = member => <div />
 
-const renderRelatedFields = (type, member) => {
+const renderRelatedFields = (type, member, f, index) => {
   let fields
 
   switch (type) {
     case INTERNAL_LINK:
-      fields = renderInternalLinkFields(member)
+      fields = renderInternalLinkFields(member, f, index)
       break
 
     case EXTERNAL_LINK:
@@ -258,11 +274,14 @@ export const renderRelated = ({ fields, meta: { error, submitFailed } }) => (
             component={renderCheckbox}
           />
         </RelatedIndex>
-        {renderRelatedFields(fields.get(index).type, member)}
+        {renderRelatedFields(fields.get(index).type, member, fields, index)}
       </RelatedEntry>
     ))}
 
-    <RelatedAddButton type="button" onClick={() => fields.push(EMPTY_RELATED_ITEM)}>
+    <RelatedAddButton
+      type="button"
+      onClick={() => fields.push(EMPTY_RELATED_ITEM)}
+    >
       + Add Related
     </RelatedAddButton>
   </RelatedEntries>

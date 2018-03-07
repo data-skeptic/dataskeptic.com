@@ -5,7 +5,7 @@ import styled from "styled-components"
 import moment from "moment"
 
 import BlogUpdateForm, { FORM_KEY } from "./BlogUpdateForm"
-import BlogRelatedForm from "./BlogRelatedFields"
+import BlogRelatedForm, { INTERNAL_LINK } from "./BlogRelatedFields"
 
 import BlogListItem from "../../Blog/Components/BlogListItem"
 import RelatedContent from "../../Blog/Components/RelatedContent"
@@ -19,25 +19,19 @@ const fakeClick = e => {
 
 class BlogUpdater extends Component {
   state = {
-    details: false,
     edit: false
   }
-
-  toggle = () =>
-    this.setState(prevState => ({
-      details: !prevState.details
-    }))
-
   startEditing = () => this.setState({ edit: true })
+
   finishEditing = () => this.setState({ edit: false })
 
   save = async () => {
     await this.props.dispatch(submit(FORM_KEY))
-    this.finishEditing()
   }
 
   saveRelated = related => {
-    console.dir(related)
+    related = related.filter(item => !(item.created && item.remove))
+
     const created = related
       .filter(item => item.created)
       .map(item => this.addRelatedItem(item))
@@ -66,20 +60,22 @@ class BlogUpdater extends Component {
       blog_id,
       source: blog_id
     }))
-    
-    return this.saveRelated(blogRelated).then(() =>
-      dispatch({
-        type: "CMS_UPDATE_BLOG",
-        payload: {
-          blog_id,
-          title,
-          abstract,
-          author,
-          publish_date,
-          dispatch
-        }
-      })
-    )
+
+    return this.saveRelated(blogRelated)
+      .then(() =>
+        dispatch({
+          type: "CMS_UPDATE_BLOG",
+          payload: {
+            blog_id,
+            title,
+            abstract,
+            author,
+            publish_date,
+            dispatch
+          }
+        })
+      )
+      .then(() => this.finishEditing())
   }
 
   onRelatedUpdate = data => {
@@ -134,11 +130,24 @@ class BlogUpdater extends Component {
   }
 
   render() {
-    const { details, edit } = this.state
+    const { edit } = this.state
     const { odd, blog } = this.props
     const { blog_id, prettyname, related = [] } = blog
 
     blog.publish_date = normalizeDate(blog.publish_date)
+
+    const blogFormData = {
+      ...blog,
+      related: related.map(item => {
+        if (item.type === INTERNAL_LINK) {
+          item.dest = {
+            blog_id: item.blog_id,
+            title: item.title
+          }
+        }
+        return item
+      })
+    }
 
     return (
       <Wrapper odd={odd}>
@@ -170,13 +179,13 @@ class BlogUpdater extends Component {
 
           {edit ? (
             <Editing>
-              <code>{JSON.stringify(blog)}</code>
+              <code>{JSON.stringify(blogFormData)}</code>
               <BlogForm
                 onSubmit={this.onSave}
                 showSubmit={false}
                 allowSubmit={true}
                 submitValue={"Add"}
-                initialValues={blog}
+                initialValues={blogFormData}
               />
 
               <Buttons>
@@ -242,7 +251,7 @@ const Editing = styled.div`
   flex-direction: column;
 
   textarea {
-    min-height: 200px;
+    min-height: 100px;
   }
 `
 
