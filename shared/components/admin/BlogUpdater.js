@@ -5,6 +5,7 @@ import styled from "styled-components"
 import moment from "moment"
 
 import BlogUpdateForm, { FORM_KEY } from "./BlogUpdateForm"
+import BlogRelatedForm from "./BlogRelatedForm"
 import BlogListItem from "../../Blog/Components/BlogListItem"
 
 const normalizeDate = d => moment(d).format("YYYY-MM-DD")
@@ -34,12 +35,11 @@ class BlogUpdater extends Component {
   }
 
   onSave = data => {
-    console.log(data)
     const { blog_id, title, abstract, author, publish_date } = data
 
     const { dispatch } = this.props
 
-    console.dir({
+    dispatch({
       type: "CMS_UPDATE_BLOG",
       payload: {
         blog_id,
@@ -82,14 +82,6 @@ class BlogUpdater extends Component {
 
     return (
       <Wrapper odd={odd}>
-        <code>
-          <pre>
-            {JSON.stringify({
-              t: blog.title,
-              a: blog.abstract
-            })}
-          </pre>
-        </code>
         <Inner>
           <Heading>
             <Label>
@@ -114,7 +106,7 @@ class BlogUpdater extends Component {
 
           {edit ? (
             <Editing>
-              <Form
+              <BlogForm
                 onSubmit={this.onSave}
                 showSubmit={false}
                 allowSubmit={true}
@@ -123,9 +115,14 @@ class BlogUpdater extends Component {
               />
 
               <Buttons>
-                <SaveButton onClick={this.save}>Save</SaveButton>
+                <CancelButton onClick={this.finishEditing}>
+                  <span>Cancel</span>
+                </CancelButton>
                 <DeleteButton onClick={this.delete}>Delete</DeleteButton>
+                <SaveButton onClick={this.save}>Save</SaveButton>
               </Buttons>
+
+              <RelatedForm showSubmit={false} allowSubmit={true} />
             </Editing>
           ) : (
             this.renderPreview()
@@ -133,31 +130,25 @@ class BlogUpdater extends Component {
 
           {details && <Details>related</Details>}
         </Inner>
-        <ShowRelatedButton onClick={this.toggle}>
-          {details ? "Discard " : "Edit related Content"}
-        </ShowRelatedButton>
       </Wrapper>
     )
   }
 }
+
 export default connect(state => ({
   contributors: state.site.get("contributors")
 }))(BlogUpdater)
 
 const Wrapper = styled.div`
-  background: #ffffff;
+  background: #f9faf9;
   margin-bottom: 12px;
   border: 1px solid #e1e3e2;
   display: flex;
   flex-direction: column;
 
   ${props =>
-    props.odd &&
+    props.open &&
     `
-    background: #F9FAF9;
-  `} ${props =>
-      props.open &&
-      `
     background: rgba(240, 217, 67, 0.1);
   `};
 `
@@ -188,7 +179,7 @@ const Value = styled.div`
 const Editing = styled.div`
   display: flex;
   flex-direction: column;
-  
+
   textarea {
     min-height: 200px;
   }
@@ -196,7 +187,12 @@ const Editing = styled.div`
 
 const Preview = styled.div``
 
-const Form = styled(BlogUpdateForm)`
+const BlogForm = styled(BlogUpdateForm)`
+  display: flex;
+  flex-direction: column;
+`
+
+const RelatedForm = styled(BlogRelatedForm)`
   display: flex;
   flex-direction: column;
 `
@@ -232,15 +228,25 @@ const EditButton = ActionButton.extend`
   height: 27px;
 `
 
+const CancelButton = ActionButton.extend`
+  background: transparent;
+  margin-right: 12px;
+
+  span {
+    color: #333;
+    border-bottom: 1px dotted;
+  }
+`
+
 const SaveButton = ActionButton.extend`
   background: #2ecb70;
-  margin-right: 12px;
 `
 
 const DeleteButton = ActionButton.extend`
+  margin-right: 12px;
   background: #e74c3c;
   opacity: 0.7;
-  
+
   &:hover {
     opacity: 1;
   }
