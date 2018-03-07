@@ -1,6 +1,6 @@
 import uuidV4 from 'uuid/v4'
 
-import dialogHandler from './ConversationHandler'
+import conversationHandler from './conversationHandler'
 import {
   INIT,
   INIT_SUCCESS,
@@ -23,14 +23,22 @@ const handleLogic = (agent, dialogs, reply, greeting) => {
       userId
     }
     agent.saveSession(sessionData)
-    
+
     // notify agent about success
     agent.triggerAction(initSuccess({ id: userId }))
     // greeting user on connection
     greeting(agent.getSession(), reply)
   })
 
-  agent.on(MESSAGE_SENT, data => dialogHandler(dialogs, data.message, reply, agent.triggerAction))
+  agent.on(MESSAGE_SENT, data =>
+    conversationHandler({
+      dialogs,
+      receivedMessage: data.message,
+      session: agent.getSession(),
+      reply,
+      trigger: agent.triggerAction
+    })
+  )
 }
 
 const run = (server, { dialogs = [], greeting = () => {} }) => {
@@ -45,13 +53,18 @@ const run = (server, { dialogs = [], greeting = () => {} }) => {
     console.log('User connected')
 
     const agent = Agent(socket)
-    
+
     // handle dialogs logic
-    handleLogic(agent, dialogs, (message, author) => {
-      const { bot } = agent.getSession()
-      message.author = author || bot
-      agent.triggerAction(receiveMessage(message))
-    }, greeting)
+    handleLogic(
+      agent,
+      dialogs,
+      (message, author) => {
+        const { bot } = agent.getSession()
+        message.author = author || bot
+        agent.triggerAction(receiveMessage(message))
+      },
+      greeting
+    )
   })
 }
 

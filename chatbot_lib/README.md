@@ -72,12 +72,21 @@ app.listen(PORT).on('error', e => {
 
 chatbotServer(app)
 ```
+## Dialogs
 
-# Configuration
+Dialog methods 
 
-## 
+`response` 
+Handler fro user input message. 
 
-## Messages & Dialogs
+`canHandle`
+Check ability to handle input. By default return `true`.
 
-### Describing custom Dialog
+### Flow
+Dialogs execution are done in the chain.
+
+#### Simple Dialog Example
+
+#### Context Based Dialog Example
+
 
