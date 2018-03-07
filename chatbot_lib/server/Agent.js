@@ -2,7 +2,7 @@
 
 export default (socket) => ({
   getSession() {
-    return socket.session
+    return socket.session || {}
   },
   saveSession(data) {
     socket.session = data

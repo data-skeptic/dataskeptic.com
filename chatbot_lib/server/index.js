@@ -12,7 +12,7 @@ import Agent from './Agent'
 
 const generateUserId = () => uuidV4()
 
-const handleLogic = (agent, reply, greeting) => {
+const handleLogic = (agent, dialogs, reply, greeting) => {
   agent.on(INIT, data => {
     // initialize session
     const { publicKey, bot } = data
@@ -30,7 +30,7 @@ const handleLogic = (agent, reply, greeting) => {
     greeting(agent.getSession(), reply)
   })
 
-  agent.on(MESSAGE_SENT, data => dialogHandler(data, reply))
+  agent.on(MESSAGE_SENT, data => dialogHandler(dialogs, data.message, reply, agent.triggerAction))
 }
 
 const run = (server, { dialogs = [], greeting = () => {} }) => {
@@ -47,7 +47,7 @@ const run = (server, { dialogs = [], greeting = () => {} }) => {
     const agent = Agent(socket)
     
     // handle dialogs logic
-    handleLogic(agent, (message, author) => {
+    handleLogic(agent, dialogs, (message, author) => {
       const { bot } = agent.getSession()
       message.author = author || bot
       agent.triggerAction(receiveMessage(message))
