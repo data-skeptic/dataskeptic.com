@@ -145,6 +145,7 @@ class ContactUs extends React.Component {
 
         <Socials>
           <SocialBlock order={1}>
+            <SocialIcon src={'/img/svg/twitter-square.svg'} />
             <p>
               You can find us on Twitter via{' '}
               <TwitterLink href="https://twitter.com/dataskeptic">
@@ -153,6 +154,7 @@ class ContactUs extends React.Component {
             </p>
           </SocialBlock>
           <SocialBlock order={3}>
+            <SocialIcon src={'/img/svg/facebook-square.svg'} />
             <p>
               We are on Facebook via{' '}
               <FacebookLink href="https://www.facebook.com/dataskeptic">
@@ -162,7 +164,7 @@ class ContactUs extends React.Component {
           </SocialBlock>
           <SocialBlock order={2}>
             <SocialForm onSubmit={this.subscribeSlack}>
-              <SocialIcon src={'/img/png/contacts_slack.png'} />
+              <SocialIcon src={'/img/svg/logo-slack.svg'} />
               <input name="email" id="email" />
               <button
                 type="submit"
@@ -175,6 +177,7 @@ class ContactUs extends React.Component {
             </SocialForm>
           </SocialBlock>
           <SocialBlock order={4}>
+            <SocialIcon src={'/img/svg/mail_outline.svg'} />
             <SocialForm
               action="//dataskeptic.us9.list-manage.com/subscribe/post?u=65e63d6f84f1d87759105d133&amp;id=dc60d554db"
               method="post"
@@ -378,7 +381,7 @@ const Social = styled.div`
 const SocialIcon = styled.img`
   width: 32px;
   height: 32px;
-  margin-right: 7px;
+  margin-right: 17px;
 `
 
 const Sections = styled.div`
@@ -404,7 +407,7 @@ const Sections = styled.div`
 const ListenerArea = styled.div``
 
 const SocialForm = styled.form`
-	width: 100%;
+  flex: 1;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
