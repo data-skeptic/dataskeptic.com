@@ -1,17 +1,18 @@
-import React from 'react'
-import className from 'classnames'
+import React from "react"
+import className from "classnames"
 
 export const renderField = ({
   input,
   label,
   type,
   textarea,
+  customComponent,
   placeholder,
   required,
   meta: { touched, error, warning, invalid },
-  fieldWrapperClasses = '',
-  labelWrapperClasses = '',
-  inputWrapperStyles = ''
+  fieldWrapperClasses = "",
+  labelWrapperClasses = "",
+  inputWrapperStyles = ""
 }) => {
   const textareaType = (
     <textarea
@@ -19,7 +20,7 @@ export const renderField = ({
       placeholder={placeholder}
       type={type}
       className={`${inputWrapperStyles} ${
-        touched && invalid ? 'has-danger' : ''
+        touched && invalid ? "has-danger" : ""
       }`}
     />
   )
@@ -28,9 +29,14 @@ export const renderField = ({
       {...input}
       placeholder={placeholder}
       type={type}
-      className={`${touched && invalid ? 'has-danger' : ''}`}
+      className={`${touched && invalid ? "has-danger" : ""}`}
     />
   )
+
+  const CustomComponent = customComponent
+  const inputComponent = customComponent
+    ? <CustomComponent input={input} />
+    : textarea ? textareaType : inputType
 
   return (
     <div className={`field-container ${fieldWrapperClasses}`}>
@@ -38,7 +44,7 @@ export const renderField = ({
         {label}&nbsp;{required ? <span className="required">*</span> : null}
       </div>
       <div className={`field-input ${inputWrapperStyles}`}>
-        {textarea ? textareaType : inputType}
+        {inputComponent}
 
         <p className="error-message">
           {touched &&

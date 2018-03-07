@@ -22,7 +22,7 @@ class BlogUpdater extends Component {
     details: false,
     edit: false
   }
-
+  
   toggle = () =>
     this.setState(prevState => ({
       details: !prevState.details

@@ -1,6 +1,5 @@
 import React from "react"
 import { Field, FieldArray, reduxForm } from "redux-form"
-import FormController from "../../Forms/Components/FormController/FormController"
 import {
   renderCheckbox,
   renderField,
@@ -8,6 +7,7 @@ import {
   renderZip
 } from "../../Forms/Components/Field"
 import styled from "styled-components"
+import BlogSearchSelect from "./BlogSearchSelect"
 
 export const INTERNAL_LINK = "internal-link"
 export const EXTERNAL_LINK = "external-link"
@@ -25,18 +25,27 @@ const validate = values => {
 
 const renderInternalLinkFields = member => (
   <div>
-    internal-link
     <Field
-      label="Title"
+      label="Related Blog"
       component={renderField}
-      name="title"
+      customComponent={BlogSearchSelect}
+      name="dest"
       type="text"
       required
     />
+
+    <Field
+      label="Link Anchor Text"
+      component={renderField}
+      name="title"
+      type="url"
+      required
+    />
+
     <Field
       label="Comment"
       component={renderField}
-      name="title"
+      name="body"
       textarea
       required
     />
@@ -45,48 +54,43 @@ const renderInternalLinkFields = member => (
 
 const renderExternalLinkFields = member => (
   <div>
-    external-link
     <Field
       label="Related page url"
       component={renderField}
-      name="title"
-      type="text"
+      name={`${member}.dest`}
+      type="url"
       required
     />
+
     <Field
       label="Link Anchor Text"
       component={renderField}
       name="title"
-      type="text"
+      type="url"
       required
     />
+
     <Field
       label="Comment"
       component={renderField}
-      name="title"
-      type="text"
+      name="body"
+      textarea
       required
-    />
-    <Field
-      label="https://"
-      component={renderField}
-      name="title"
-      type="text"
-      required
+      defaultValue={"https://"}
     />
   </div>
 )
 
 const renderHomePageImageFields = member => (
   <div>
-    homepage-image
     <Field
       label="Image url (400x400px)"
       component={renderField}
-      name="title"
-      type="text"
+      name={`${member}.dest`}
+      type="url"
       required
     />
+
     <Field
       label="Alt text"
       component={renderField}
@@ -99,9 +103,16 @@ const renderHomePageImageFields = member => (
 
 const renderBlogHeaderImageFields = member => (
   <div>
-    blog-header image
     <Field
-      label="Media URL"
+      label="Image url (800x150px)"
+      component={renderField}
+      name={`${member}.dest`}
+      type="url"
+      required
+    />
+
+    <Field
+      label="Alt text"
       component={renderField}
       name="title"
       type="text"
@@ -112,14 +123,14 @@ const renderBlogHeaderImageFields = member => (
 
 const renderMp3Fields = member => (
   <div>
-    mp3
     <Field
       label="Media URL"
       component={renderField}
-      name="title"
-      type="text"
+      name={`${member}.dest`}
+      type="url"
       required
     />
+
     <Field
       label="Title of recording"
       component={renderField}
@@ -127,17 +138,12 @@ const renderMp3Fields = member => (
       type="text"
       required
     />
+
     <Field
       label="Description"
       component={renderField}
-      name="title"
+      name="body"
       textarea
-      required
-    />
-    <Field
-      label="https://dataskeptic.com/blog/"
-      component={renderField}
-      name="title"
       required
     />
   </div>
@@ -145,10 +151,29 @@ const renderMp3Fields = member => (
 
 const renderPersonFields = member => (
   <div>
-    person
-    <Field label="IMG URL" component={renderField} name="title" required />
-    <Field label="Guest Name" component={renderField} name="title" required />
-    <Field label="Guest Bio" component={renderField} name="title" required />
+    <Field
+      label="IMG URL"
+      component={renderField}
+      name={`${member}.dest`}
+      type="url"
+      required
+    />
+
+    <Field
+      label="Guest Name"
+      component={renderField}
+      name={`${member}.title`}
+      type="text"
+      required
+    />
+
+    <Field
+      label="Guest Bio"
+      component={renderField}
+      name={`${member}.body`}
+      textarea
+      required
+    />
   </div>
 )
 
@@ -200,11 +225,11 @@ const renderRelatedFields = (type, member) => {
           { label: "Internal Link", value: INTERNAL_LINK },
           { label: "External Link", value: EXTERNAL_LINK },
           { label: "Homepage Image", value: HOME_PAGE_IMAGE },
-          { label: "Blog Header Img", value: BLOG_HEADER_IMAGE },
-          { label: "Music", value: MP3 },
-          { label: "Person", value: PERSON },
-          { label: "Blank", value: BLANK }
+          { label: "Blog Header Image", value: BLOG_HEADER_IMAGE },
+          { label: "Audio", value: MP3 },
+          { label: "Person", value: PERSON }
         ]}
+        blankOption={true}
       />
 
       <code>{JSON.stringify({ type })}</code>
@@ -221,11 +246,11 @@ export const renderRelated = ({ fields, meta: { error, submitFailed } }) => (
       <RelatedEntry key={index}>
         <RelatedIndex>
           <span>Related #{index + 1}</span>
-          
+
           <Field
-            label="delete"
-            fieldWrapperClasses={"delete"}
-            name={`${member}.delete`}
+            label="remove"
+            fieldWrapperClasses={"remove"}
+            name={`${member}.remove`}
             type="checkbox"
             component={renderCheckbox}
           />
@@ -244,7 +269,9 @@ const RelatedEntries = styled.div`
   margin: 20px 0px;
 `
 
-const RelatedEntry = styled.div``
+const RelatedEntry = styled.div`
+  margin-bottom: 1em;
+`
 
 const RelatedIndex = styled.div`
   span {
@@ -252,10 +279,9 @@ const RelatedIndex = styled.div`
     margin-right: 10px;
   }
 
-  .delete {
-    background: red;
-    
-    label, p {
+  .remove {
+    label,
+    p {
       padding: 0px;
       margin: 0px;
     }

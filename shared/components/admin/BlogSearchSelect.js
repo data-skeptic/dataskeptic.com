@@ -1,13 +1,13 @@
-import React, { Component } from 'react'
-import { Async } from 'react-select'
-import axios from 'axios'
-import styled from 'styled-components'
-import Highlighter from 'react-highlight-words'
+import React, { Component } from "react"
+import { Async } from "react-select"
+import axios from "axios"
+import styled from "styled-components"
+import Highlighter from "react-highlight-words"
 
 export default class BlogSearchSelect extends Component {
   state = {
     firstInit: false,
-    query: '',
+    query: "",
     selectedOption: this.props.value
   }
 
@@ -28,7 +28,7 @@ export default class BlogSearchSelect extends Component {
     this.setState({ selectedOption })
 
     const blog_id = selectedOption ? selectedOption.blog_id : null
-    const { id, onChange = () => {} } = this.props
+    const { id, input: { onChange } } = this.props
 
     onChange(id, blog_id)
   }
