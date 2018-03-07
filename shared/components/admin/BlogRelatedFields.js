@@ -232,7 +232,6 @@ const renderRelatedFields = (type, member) => {
         blankOption={true}
       />
 
-      <code>{JSON.stringify({ type })}</code>
       {fields}
     </RelatedFields>
   )

@@ -22,7 +22,7 @@ class BlogUpdater extends Component {
     details: false,
     edit: false
   }
-  
+
   toggle = () =>
     this.setState(prevState => ({
       details: !prevState.details
@@ -64,9 +64,16 @@ class BlogUpdater extends Component {
     dispatch({ type: "CMS_DELETE_BLOG", payload: { blog_id, dispatch } })
   }
 
+  getAuthor = author =>
+    this.props.contributors.filter(
+      contributor =>
+        contributor.prettyname.toLowerCase().trim() ===
+        author.toLowerCase().trim()
+    )[0]
+
   renderPreview() {
-    const { blog, contributors } = this.props
-    const contributor = contributors[blog.author.toLowerCase()] || {}
+    const { blog } = this.props
+    const contributor = this.getAuthor(blog) || {}
 
     return (
       <Preview>
@@ -117,6 +124,7 @@ class BlogUpdater extends Component {
 
           {edit ? (
             <Editing>
+              <code>{JSON.stringify(blog)}</code>
               <BlogForm
                 onSubmit={this.onSave}
                 showSubmit={false}
