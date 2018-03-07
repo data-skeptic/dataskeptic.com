@@ -69,7 +69,7 @@ const renderExternalLinkFields = member => (
     <Field
       label="Link Anchor Text"
       component={renderField}
-      name="title"
+      name={`${member}.title`}
       type="url"
       required
     />
@@ -77,7 +77,7 @@ const renderExternalLinkFields = member => (
     <Field
       label="Comment"
       component={renderField}
-      name="body"
+      name={`${member}.body`}
       textarea
       required
       defaultValue={"https://"}
@@ -98,7 +98,7 @@ const renderHomePageImageFields = member => (
     <Field
       label="Alt text"
       component={renderField}
-      name="title"
+      name={`${member}.body`}
       type="text"
       required
     />
@@ -110,7 +110,7 @@ const renderBlogHeaderImageFields = member => (
     <Field
       label="Image url (800x150px)"
       component={renderField}
-      name={`${member}.dest`}
+      name={`${member}.title`}
       type="url"
       required
     />
@@ -118,7 +118,7 @@ const renderBlogHeaderImageFields = member => (
     <Field
       label="Alt text"
       component={renderField}
-      name="title"
+      name={`${member}.body`}
       type="text"
       required
     />
@@ -138,7 +138,7 @@ const renderMp3Fields = member => (
     <Field
       label="Title of recording"
       component={renderField}
-      name="title"
+      name={`${member}.title`}
       type="text"
       required
     />
@@ -146,7 +146,7 @@ const renderMp3Fields = member => (
     <Field
       label="Description"
       component={renderField}
-      name="body"
+      name={`${member}.body`}
       textarea
       required
     />

@@ -37,6 +37,7 @@ class BlogUpdater extends Component {
   }
 
   saveRelated = related => {
+    console.dir(related)
     const created = related
       .filter(item => item.created)
       .map(item => this.addRelatedItem(item))
@@ -62,7 +63,8 @@ class BlogUpdater extends Component {
 
     const blogRelated = related.map(item => ({
       ...item,
-      blog_id
+      blog_id,
+      source: blog_id
     }))
     
     return this.saveRelated(blogRelated).then(() =>
