@@ -183,5 +183,3 @@ function save_handler(dispatch, reply, cstate, message) {
     var handler = undefined
     return {msg, handler}
 }
-
-module.exports = {handler, get_opening_remark, can_handle, sms_handler, email_handler, channel_handler, save_handler}

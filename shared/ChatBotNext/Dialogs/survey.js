@@ -54,5 +54,3 @@ function save_answer(dispatch, reply, cstate, message) {
 		    });
 	})
 }
-
-module.exports = {handler, get_opening_remark, can_handle, answer_question_handler, save_answer}

@@ -99,5 +99,3 @@ function pre_customer_service_handler(dispatch, reply, cstate, message) {
 	}
 }
 
-module.exports = {handler, get_opening_remark, can_handle, order_yn_handler, customer_service_handler, send_email_handler, pre_customer_service_handler}
-

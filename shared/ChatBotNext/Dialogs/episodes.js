@@ -116,4 +116,3 @@ function no_results_handler(dispatch, reply, cstate, message) {
 	return {msg, handler}
 }
 
-module.exports = {handler, get_opening_remark, can_handle, make_recommendation_handler, verify_payload_is_blog, recommendation_action_handler, no_results_handler}
