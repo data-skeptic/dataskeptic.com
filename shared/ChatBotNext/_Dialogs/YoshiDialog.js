@@ -1,5 +1,5 @@
 import { StateDialog } from '../../../chatbot_lib/processing'
-import chatter from "../Dialogs/chatter";
+import chatter from "./chatter";
 
 export const DIALOG = 'yoshi'
 
@@ -36,12 +36,6 @@ export default class YoshiDialog extends StateDialog {
 
   isOpener(text) {
     return text.indexOf('yoshi') > -1
-  }
-
-  canHandle(receivedMessage, session) {
-    const { plainText } = receivedMessage
-
-    return this.isOpener(plainText)
   }
 
   getId() {

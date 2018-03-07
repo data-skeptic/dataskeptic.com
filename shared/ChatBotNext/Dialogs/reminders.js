@@ -2,7 +2,7 @@ import axios from "axios"
 
 var chrono = require('chrono-node')
 
-var chatter = require("./chatter")
+var chatter = require("../_Dialogs/chatter")
 
 var e164 = require('e164')
 var assert = require('assert')

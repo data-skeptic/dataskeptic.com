@@ -43,13 +43,7 @@ To give up, type <mark type="exit">'exit'</mark>`
   isOpener(text) {
     return triggerWords.filter(word => text.indexOf(word) > -1).length > 0
   }
-
-  canHandle(receivedMessage, session) {
-    const { plainText } = receivedMessage
-
-    return this.isOpener(plainText)
-  }
-
+  
   getId() {
     return DIALOG
   }

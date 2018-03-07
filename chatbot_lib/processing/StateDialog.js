@@ -72,4 +72,12 @@ export default class StateDialog extends Dialog {
   }
 
   commandResponse() {}
+
+  canHandle(receivedMessage, session) {
+    const { plainText } = receivedMessage
+
+    return this.isOpener(plainText)
+  }
+
+
 }

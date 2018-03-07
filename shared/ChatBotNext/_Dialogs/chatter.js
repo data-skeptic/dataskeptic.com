@@ -1,4 +1,4 @@
-var message_dict = require('./msgs.json')
+var message_dict = require('../Dialogs/msgs.json')
 
 function get_message(key) {
 	var arr = key.split(">")

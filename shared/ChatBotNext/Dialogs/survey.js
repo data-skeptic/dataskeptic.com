@@ -1,6 +1,6 @@
 import axios from "axios"
 
-var chatter = require("./chatter")
+var chatter = require("../_Dialogs/chatter")
 
 var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
 const config = require('../../../config/config.json');
@@ -22,20 +22,6 @@ function handler(dispatch, reply, cstate, message) {
 	var msg = undefined
 	var handler = module.exports.answer_question_handler
 	return {msg, handler}
-}
-
-function can_handle(message, cstate, reply) {
-	if (cstate.survey.did_survey) {
-		var msg = chatter.get_message("SURVEY>FINISHED_BEFORE")
-		reply({text: msg}, 'bot')
-		return false
-	}
-	var lmsg = message.text.toLowerCase()
-	if (lmsg.indexOf('survey') != -1) {
-		return true
-	} else {
-		return false
-	}
 }
 
 function answer_question_handler(dispatch, reply, cstate, message) {

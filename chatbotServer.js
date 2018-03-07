@@ -6,6 +6,7 @@ import KyleDialog from './shared/ChatBotNext/_Dialogs/KyleDialog'
 import EpisodesDialog from './shared/ChatBotNext/_Dialogs/Episodes/EpisodesDialog'
 import ProfileDialog from './shared/ChatBotNext/_Dialogs/ProfileDialog'
 import YoshiDialog from './shared/ChatBotNext/_Dialogs/YoshiDialog'
+import SurveyDialog from "./shared/ChatBotNext/_Dialogs/SurveyDialog";
 
 const PORT = process.env.CHAT_PORT || 9004
 const app = require('http').createServer((req, res) => {
@@ -38,9 +39,10 @@ const kyle = new KyleDialog()
 const yoshi = new YoshiDialog()
 const smalltalk = new SmallTalkDialog()
 const episode = new EpisodesDialog()
+const survey = new SurveyDialog()
 const profile = new ProfileDialog()
 
-const dialogs = [helper, site, kyle, yoshi, episode, profile, smalltalk]
+const dialogs = [helper, site, kyle, yoshi, episode, survey, profile, smalltalk]
 
 chatbotServer(app, {
   dialogs,

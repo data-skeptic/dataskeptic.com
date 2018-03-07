@@ -1,4 +1,4 @@
-var chatter = require("./chatter")
+var chatter = require("../_Dialogs/chatter")
 
 var reminders = require("./reminders")
 

@@ -1,4 +1,4 @@
-import chatter from '../Dialogs/chatter'
+import chatter from './chatter'
 
 import { StateDialog } from '../../../chatbot_lib/processing'
 import { MENU_ITEMS_MESSAGE } from '../../../chatbot_lib/shared/messageTypes'
@@ -44,12 +44,6 @@ export default class HelperDialog extends StateDialog {
 
   isOpener(text) {
     return triggerWords.filter(word => text.indexOf(word) > -1).length > 0
-  }
-
-  canHandle(receivedMessage, session) {
-    const { plainText } = receivedMessage
-
-    return this.isOpener(plainText)
   }
 
   getId() {
