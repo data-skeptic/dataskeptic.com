@@ -21,4 +21,4 @@ export { default as questions } from '../Questions/Reducers/QuestionsReducer'
 export {
   default as timeseries
 } from '../TimeSeriesExplorer/Reducers/TimeSeriesReducer'
-export { default as chatbot } from '../ChatBot/Reducers/ChatbotReducer'
+export { default as chatbot } from '../ChatBotNext/Reducers/ChatbotReducer'

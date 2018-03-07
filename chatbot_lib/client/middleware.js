@@ -30,7 +30,7 @@ export default function createConnector({ getState, dispatch }) {
   return next => action => {
     const actionType = String(action.type)
 
-    // handle only chatbot actions
+    // handle only ChatBotNext actions
     if (!isChatBotAction(actionType)) {
       return next(action)
     } else {

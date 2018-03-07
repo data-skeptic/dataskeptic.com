@@ -71,7 +71,7 @@ export default reducer
 // Actions
 
 /**
- * Initialize chatbot instance
+ * Initialize ChatBotNext instance
  */
 export const init = config => {
   return {
@@ -91,7 +91,7 @@ export const initSuccess = data => {
 }
 
 /**
- * Deconstructing chatbot instance
+ * Deconstructing ChatBotNext instance
  */
 export const destroy = () => {
   return {
@@ -100,7 +100,7 @@ export const destroy = () => {
 }
 
 /**
- * Send message event to the chatbot server
+ * Send message event to the ChatBotNext server
  */
 export const sendMessage = message => {
   return {
@@ -112,7 +112,7 @@ export const sendMessage = message => {
 }
 
 /**
- * Send message event to the chatbot server
+ * Send message event to the ChatBotNext server
  */
 export const receiveMessage = message => {
   return {

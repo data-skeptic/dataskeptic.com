@@ -1,6 +1,4 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
@@ -26,11 +24,7 @@ import QuestionForm from '../../Questions/Forms/QuestionForm'
 import { submitCommentForm } from '../../Proposals/Actions/CommentBoxFormActions'
 import SectionBlock from '../Components/SectionBlock/SectionBlock'
 
-import Launcher, {
-  reduxChatBot,
-  BOT_ID,
-  actions as chatBotActions
-} from '../../../chatbot/client'
+import Launcher, { reduxChatBot } from '../../../chatbot_lib/client'
 
 const ChatBotLauncher = reduxChatBot({
   publicKey: 'datas_chatbot'
@@ -86,20 +80,6 @@ class ContactUs extends React.Component {
   }
 
   isSectionOpen = section => section === this.state.openSection
-
-  reply = (message, operatorId) => {
-    operatorId = !!this.props.contributors[operatorId] ? operatorId : BOT_ID
-    const author = this.props.contributors[operatorId]
-
-    this.handleMessage({
-      ...message,
-      author
-    })
-  }
-
-  handleMessage = message => {
-    this.props.dispatch(chatBotActions.sendMessage(message))
-  }
 
   handleInactivity = () => {}
 
@@ -177,7 +157,6 @@ class ContactUs extends React.Component {
 
         <ChatBotLauncher
           thinking={thinking}
-          onMessage={this.handleMessage}
           onInactivity={this.handleInactivity}
           inactivityDelay={1000 * 1}
           bot="bot"
@@ -522,7 +501,7 @@ export default connect(state => ({
   activeStep: state.questions.getIn(['form', 'step']),
   errorMessage: state.questions.getIn(['form', 'error']),
   aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket']),
-  // chatbot
+  // ChatBotNext
   contributors: state.site.get('contributors').toJS(),
   thinking: state.chatbot.get('thinking')
 }))(ContactUs)

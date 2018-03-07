@@ -1,4 +1,5 @@
-import chatbotServer from './chatbot/server'
+import chatbotServer from './chatbot_lib/server/index'
+import {dialogs} from "./shared/ChatBotNext/Dialogs/ConversationHandler";
 
 const PORT = process.env.CHAT_PORT || 9004
 const app = require('http').createServer((req, res) => {
@@ -16,7 +17,6 @@ app.listen(PORT).on('error', e => {
 /**
  * Conversations handlers
  */
-const dialogs = []
 
 const privateKey = 'DATAS'
 

@@ -69,7 +69,7 @@ export default launcherConfig => Launcher => {
     //TODO: handle email changes with component will receive props
 
     /**
-     * Deinitialize current chatbot
+     * Deinitialize current ChatBotNext
      */
     componentWillUnmount() {
       this.props.dispatch(destroy())

@@ -29,7 +29,7 @@ import persistCart from '../shared/Cart/Helpers/persistCart'
 import {
   reducer as chatBotReducer,
   middleware as chatBotMiddleware
-} from '../chatbot/client'
+} from '../chatbot_lib/client'
 
 /**
  * Validate cached store schema version

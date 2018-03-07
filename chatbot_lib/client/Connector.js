@@ -5,7 +5,7 @@ const isDev = process.env.NODE_ENV === 'dev'
 const log = ({...args}) => isDev && console.log('[CHATBOT]', ...args)
 
 /**
- * Connector handle and process socket connection with chatbot server
+ * Connector handle and process socket connection with ChatBotNext server
  */
 export default class Connector {
   /**
@@ -21,7 +21,7 @@ export default class Connector {
   }
 
   /**
-   * Initialize connection with chatbot server
+   * Initialize connection with ChatBotNext server
    *
    * @param userId unique user session identificator
    */
@@ -40,14 +40,14 @@ export default class Connector {
   }
 
   /**
-   * Proxy method to emit action on the chatbot server
+   * Proxy method to emit action on the ChatBotNext server
    */
   emit(action, data) {
     this.socket.emit(action, data)
   }
   
   /**
-   * Close connection with chatbot server
+   * Close connection with ChatBotNext server
    */
   deinit() {
     log('Connector deinit')

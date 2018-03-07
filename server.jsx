@@ -71,7 +71,7 @@ import { reducer as formReducer } from 'redux-form'
 import {
   reducer as chatBotReducer,
   middleware as chatBotMiddleware
-} from './chatbot/client'
+} from './shared/ChatBotNext/client'
 
 import axios from 'axios'
 

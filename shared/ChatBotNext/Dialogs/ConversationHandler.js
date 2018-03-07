@@ -7,7 +7,7 @@ var profile   = require("./profile")
 var reminders = require("./reminders")
 var yoshi     = require("./yoshi")
 
-var dialogs = [help, store, episode, survey, profile, reminders]
+export const dialogs = [help, store, episode, survey, profile, reminders]
 
 // ga
 // free sticker
@@ -15,7 +15,7 @@ var dialogs = [help, store, episode, survey, profile, reminders]
 // TODO: survey
 
 
-function get_reply(dispatch, reply, cstate, message) {
+export default function get_reply(dispatch, reply, cstate, message) {
 	var handler = cstate.handler
 	var resp = undefined
 	var responder = 'bot'
@@ -94,5 +94,3 @@ function get_reply(dispatch, reply, cstate, message) {
 	}, 1000 * 30)
 	*/
 }
-
-module.exports = {get_reply}
