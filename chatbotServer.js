@@ -4,6 +4,8 @@ import SiteDialog from './shared/ChatBotNext/_Dialogs/SiteDialog'
 import SmallTalkDialog from './shared/ChatBotNext/_Dialogs/SmallTalkDialog'
 import KyleDialog from './shared/ChatBotNext/_Dialogs/KyleDialog'
 import ExitDialog from './shared/ChatBotNext/_Dialogs/ExitDialog'
+import EpisodesDialog from "./shared/ChatBotNext/_Dialogs/Episodes/EpisodesDialog";
+import ProfileDialog from "./shared/ChatBotNext/_Dialogs/ProfileDialog";
 
 const PORT = process.env.CHAT_PORT || 9004
 const app = require('http').createServer((req, res) => {
@@ -35,8 +37,10 @@ const site = new SiteDialog()
 const kyle = new KyleDialog()
 const exit = new ExitDialog()
 const smalltalk = new SmallTalkDialog()
+const episode = new EpisodesDialog()
+const profile = new ProfileDialog()
 
-const dialogs = [helper, site, kyle, smalltalk, exit]
+const dialogs = [helper, site, kyle, episode, profile, exit, smalltalk]
 
 chatbotServer(app, {
   dialogs,

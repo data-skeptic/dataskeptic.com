@@ -29,7 +29,7 @@ export default launcherConfig => Launcher => {
      */
     initState(props) {
       // remove unnecessary props
-      const { dispatch, bot, history, operators, ...safeProps } = props
+      const { dispatch, bot, history, operators, initialContext, ...safeProps } = props
 
       return {
         props: {
@@ -42,9 +42,10 @@ export default launcherConfig => Launcher => {
           ...launcherConfig
         },
         initialProps: {
+          ...initialContext,
           bot,
           history,
-          operators
+          operators,
         }
       }
     }

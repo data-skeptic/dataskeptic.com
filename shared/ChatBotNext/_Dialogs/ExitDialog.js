@@ -1,7 +1,10 @@
 import { Dialog } from "../../../chatbot_lib/processing";
 
+export const DIALOG = 'exit'
+
 export default class ExitDialog extends Dialog {
 
+  
   response(receivedMessage, context, reply, trigger) {
     context.clearHandler()
     
@@ -15,5 +18,8 @@ export default class ExitDialog extends Dialog {
     
     return plainText === "exit"
   }
-  
+
+  getId() {
+    return DIALOG
+  }
 }

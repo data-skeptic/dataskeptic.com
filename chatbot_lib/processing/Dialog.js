@@ -1,8 +1,7 @@
 /**
- * Dialog handler
+ * Simple Dialog flow handler
  */
 export default class Dialog {
-
   /**
    * Handle provided user input
    *
@@ -47,6 +46,13 @@ export default class Dialog {
     // empty
   }
 
+  static getId() {}
+
+  /**
+   *
+   */
+  getMessage(path) {}
+
   /**
    * Check
    * @param receivedMessage
@@ -54,5 +60,22 @@ export default class Dialog {
    */
   canHandle(receivedMessage, context) {
     return true
+  }
+
+  /**
+   *
+   *
+   * @param receivedMessage user input meta data
+   * @param receivedMessage.text user input
+   * @param receivedMessage.plainText normalized message
+   * @param context agent session state
+   */
+  getOpeningRemark(receivedMessage, context) {}
+
+  /**
+   * Returns unique dialog identifier
+   */
+  getId() {
+    return this.constructor.getId()
   }
 }

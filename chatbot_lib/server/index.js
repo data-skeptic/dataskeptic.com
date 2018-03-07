@@ -15,11 +15,9 @@ const generateUserId = () => uuidV4()
 const handleLogic = (agent, dialogs, reply, greeting) => {
   agent.on(INIT, data => {
     // initialize session
-    const { publicKey, bot } = data
     const userId = generateUserId()
     const sessionData = {
-      publicKey,
-      bot,
+      ...data,
       userId
     }
     agent.saveSession(sessionData)
@@ -34,7 +32,7 @@ const handleLogic = (agent, dialogs, reply, greeting) => {
     conversationHandler({
       dialogs,
       receivedMessage: data.message,
-      session: agent.getSession(),
+      context: agent.getSession(),
       reply,
       trigger: agent.triggerAction
     })

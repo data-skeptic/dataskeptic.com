@@ -161,6 +161,9 @@ class ContactUs extends React.Component {
           inactivityDelay={1000 * 1}
           bot="bot"
           operators={contributors}
+          initialContext={{
+            contributors
+          }}
         />
 
         <Title>Contact Us</Title>

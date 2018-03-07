@@ -27,15 +27,6 @@ function get_opening_remark(dispatch, reply, cstate) {
 	return msg
 }
 
-function can_handle(message, cstate, reply) {
-	var lmsg = message.text.toLowerCase()
-	if (lmsg.indexOf('help') != -1) {
-		return true
-	} else {
-		return false
-	}
-}
-
 function handler(dispatch, reply, cstate, message) {
 	var imsg = message.text
 	if (imsg.toLowerCase() == "exit") {
@@ -57,6 +48,6 @@ function handler(dispatch, reply, cstate, message) {
 	return {msg, handler}
 }
 
-module.exports = {handler, get_opening_remark, can_handle, help_menu}
+module.exports = { handler, get_opening_remark }
 
 

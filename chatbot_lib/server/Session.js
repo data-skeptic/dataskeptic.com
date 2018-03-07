@@ -45,7 +45,7 @@ export default class Session {
     return this.setAttribute(key, val)
   }
 
-  clearHandler() {
+  resetHandler() {
     this.handler = null
   }
   

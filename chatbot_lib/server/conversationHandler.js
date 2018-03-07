@@ -13,7 +13,8 @@ const chainify = dialogs => {
   
   return dialogs
 }
-  
+
+const getDialogById = (dialogs, id) => dialogs.filter(dialog => dialog.getId() === id)[0]
 
 /**
  * Process user input .
@@ -30,6 +31,12 @@ const chainify = dialogs => {
 export default ({ dialogs, receivedMessage, context, reply, trigger }) => {
   if (dialogs.length === 0) return
   
-  const start = chainify(dialogs)[0]
-  start.handle(receivedMessage, context, reply, trigger)
+  let handler = null
+  if (context.handler) {
+    handler = getDialogById(dialogs, context.handler)
+    return handler.response(receivedMessage, context, reply, trigger)
+  } 
+  
+  handler = chainify(dialogs)[0]
+  handler.handle(receivedMessage, context, reply, trigger)
 }
