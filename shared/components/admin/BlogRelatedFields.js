@@ -7,10 +7,10 @@ import {
 } from "../../Forms/Components/Field"
 import styled from "styled-components"
 import BlogSearchSelect from "./BlogSearchSelect"
-import ImageUploadField from "../../Forms/Components/ImageUploadField";
+import ImageUploadField from "../../Forms/Components/ImageUploadField"
 
-const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const config = require('../../../config/config.json')
+const env = process.env.NODE_ENV === "dev" ? "dev" : "prod"
+const config = require("../../../config/config.json")
 const c = config[env]
 
 export const INTERNAL_LINK = "internal-link"
@@ -31,7 +31,7 @@ const EMPTY_RELATED_ITEM = {
   created: true
 }
 
-const renderInternalLinkFields = (member) => (
+const renderInternalLinkFields = (member, disabled) => (
   <div>
     <Field
       label="Related Blog"
@@ -40,6 +40,7 @@ const renderInternalLinkFields = (member) => (
       name={`${member}.dest`}
       type="text"
       required
+      disabled={disabled}
     />
 
     <Field
@@ -48,6 +49,7 @@ const renderInternalLinkFields = (member) => (
       name={`${member}.title`}
       type="url"
       required
+      disabled={disabled}
     />
 
     <Field
@@ -56,11 +58,12 @@ const renderInternalLinkFields = (member) => (
       name={`${member}.body`}
       textarea
       required
+      disabled={disabled}
     />
   </div>
 )
 
-const renderExternalLinkFields = member => (
+const renderExternalLinkFields = (member, disabled) => (
   <div>
     <Field
       label="Related page url"
@@ -68,6 +71,7 @@ const renderExternalLinkFields = member => (
       name={`${member}.dest`}
       type="url"
       required
+      disabled={disabled}
     />
 
     <Field
@@ -76,6 +80,7 @@ const renderExternalLinkFields = member => (
       name={`${member}.title`}
       type="url"
       required
+      disabled={disabled}
     />
 
     <Field
@@ -85,11 +90,12 @@ const renderExternalLinkFields = member => (
       textarea
       required
       defaultValue={"https://"}
+      disabled={disabled}
     />
   </div>
 )
 
-const renderHomePageImageFields = member => (
+const renderHomePageImageFields = (member, disabled) => (
   <div>
     <Field
       label="Image url (400x400px)"
@@ -99,8 +105,9 @@ const renderHomePageImageFields = member => (
       customComponent={ImageUploadField}
       strictWidth={400}
       strictHeight={400}
-      bucket={c['files']['site_bucket']}
+      bucket={c["files"]["site_bucket"]}
       accept="image/jpeg, image/png"
+      disabled={disabled}
     />
 
     <Field
@@ -109,11 +116,12 @@ const renderHomePageImageFields = member => (
       name={`${member}.title`}
       type="text"
       required
+      disabled={disabled}
     />
   </div>
 )
 
-const renderBlogHeaderImageFields = member => (
+const renderBlogHeaderImageFields = (member, disabled) => (
   <div>
     <Field
       label="Image url (800x150px)"
@@ -123,8 +131,9 @@ const renderBlogHeaderImageFields = member => (
       customComponent={ImageUploadField}
       strictWidth={800}
       strictHeight={150}
-      bucket={c['files']['site_bucket']}
+      bucket={c["files"]["site_bucket"]}
       accept="image/jpeg, image/png"
+      disabled={disabled}
     />
 
     <Field
@@ -133,11 +142,12 @@ const renderBlogHeaderImageFields = member => (
       name={`${member}.title`}
       type="text"
       required
+      disabled={disabled}
     />
   </div>
 )
 
-const renderMp3Fields = member => (
+const renderMp3Fields = (member, disabled) => (
   <div>
     <Field
       label="Media URL"
@@ -145,6 +155,7 @@ const renderMp3Fields = member => (
       name={`${member}.dest`}
       type="url"
       required
+      disabled={disabled}
     />
 
     <Field
@@ -153,6 +164,7 @@ const renderMp3Fields = member => (
       name={`${member}.title`}
       type="text"
       required
+      disabled={disabled}
     />
 
     <Field
@@ -161,11 +173,12 @@ const renderMp3Fields = member => (
       name={`${member}.body`}
       textarea
       required
+      disabled={disabled}
     />
   </div>
 )
 
-const renderPersonFields = member => (
+const renderPersonFields = (member, disabled) => (
   <div>
     <Field
       label="IMG URL"
@@ -173,6 +186,7 @@ const renderPersonFields = member => (
       name={`${member}.dest`}
       type="url"
       required
+      disabled={disabled}
     />
 
     <Field
@@ -181,6 +195,7 @@ const renderPersonFields = member => (
       name={`${member}.title`}
       type="text"
       required
+      disabled={disabled}
     />
 
     <Field
@@ -189,47 +204,50 @@ const renderPersonFields = member => (
       name={`${member}.body`}
       textarea
       required
+      disabled={disabled}
     />
   </div>
 )
 
-const renderBlankFields = member => <div />
+const renderBlankFields = (member, disabled) => <div />
 
-const renderRelatedFields = (type, member, f, index) => {
-  let fields
+const renderRelatedFields = (type, member, disabled) => {
+  let fieldsRenderer
 
   switch (type) {
     case INTERNAL_LINK:
-      fields = renderInternalLinkFields(member, f, index)
+      fieldsRenderer = renderInternalLinkFields
       break
 
     case EXTERNAL_LINK:
-      fields = renderExternalLinkFields(member)
+      fieldsRenderer = renderExternalLinkFields
       break
 
     case HOME_PAGE_IMAGE:
-      fields = renderHomePageImageFields(member)
+      fieldsRenderer = renderHomePageImageFields
       break
 
     case BLOG_HEADER_IMAGE:
-      fields = renderBlogHeaderImageFields(member)
+      fieldsRenderer = renderBlogHeaderImageFields
       break
 
     case MP3:
-      fields = renderMp3Fields(member)
+      fieldsRenderer = renderMp3Fields
       break
 
     case PERSON:
-      fields = renderPersonFields(member)
+      fieldsRenderer = renderPersonFields
       break
 
     case BLANK:
-      fields = renderBlankFields(member)
+      fieldsRenderer = renderBlankFields
       break
 
     default:
-      fields = renderBlankFields(member)
+      fieldsRenderer = renderBlankFields
   }
+
+  const fields = fieldsRenderer(member, disabled)
 
   return (
     <RelatedFields>
@@ -258,7 +276,7 @@ export const renderRelated = ({ fields, meta: { error, submitFailed } }) => (
     {submitFailed && error && <span>{error}</span>}
 
     {fields.map((member, index) => (
-      <RelatedEntry key={index}>
+      <RelatedEntry key={index} remove={fields.get(index).remove}>
         <RelatedIndex>
           <span>Related #{index + 1}</span>
 
@@ -270,7 +288,11 @@ export const renderRelated = ({ fields, meta: { error, submitFailed } }) => (
             component={renderCheckbox}
           />
         </RelatedIndex>
-        {renderRelatedFields(fields.get(index).type, member, fields, index)}
+        {renderRelatedFields({
+          type: fields.get(index).type,
+          member,
+          disabled: fields.get(index).remove
+        })}
       </RelatedEntry>
     ))}
 
@@ -291,6 +313,13 @@ const RelatedEntry = styled.div`
   margin-bottom: 2em;
   border-top: 1px solid #e1e3e2;
   padding-top: 2em;
+
+  ${props =>
+    props.remove &&
+    `
+      text-decoration: line-through;
+      overflow: hidden;
+  `};
 `
 
 const RelatedIndex = styled.div`
@@ -323,5 +352,4 @@ const RelatedAddButton = ActionButton.extend`
   margin-top: 1em;
 `
 
-const RelatedFields = styled.div`
-`
+const RelatedFields = styled.div``
