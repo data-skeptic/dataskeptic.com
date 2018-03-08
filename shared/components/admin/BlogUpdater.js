@@ -30,12 +30,29 @@ class BlogUpdater extends Component {
   }
 
   saveRelated = related => {
-    related = related.filter(item => !(item.created && item.remove))
+    related = related
+      // remove not existing items
+      .filter(item => !(item.created && item.remove))
+      // remove unnecessary fields
+      .map(item => {
+        const {
+          dest,
+          source,
+          title,
+          body,
+          content_id,
+          blog_id2,
+          blog_id
+        } = item
+        return { dest, source, title, body, content_id, blog_id2, blog_id }
+      })
 
+    // manage new related
     const created = related
       .filter(item => item.created)
       .map(item => this.addRelatedItem(item))
 
+    // remove old related
     const remove = related
       .filter(item => item.remove)
       .map(item => this.deleteRelatedItem(item))

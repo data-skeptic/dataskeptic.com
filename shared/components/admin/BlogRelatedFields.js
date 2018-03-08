@@ -106,7 +106,7 @@ const renderHomePageImageFields = member => (
     <Field
       label="Alt text"
       component={renderField}
-      name={`${member}.body`}
+      name={`${member}.title`}
       type="text"
       required
     />
@@ -130,7 +130,7 @@ const renderBlogHeaderImageFields = member => (
     <Field
       label="Alt text"
       component={renderField}
-      name={`${member}.body`}
+      name={`${member}.title`}
       type="text"
       required
     />
