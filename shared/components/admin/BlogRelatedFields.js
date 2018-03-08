@@ -97,8 +97,8 @@ const renderHomePageImageFields = member => (
       name={`${member}.dest`}
       required
       customComponent={ImageUploadField}
-      maxWidth={400}
-      maxHeight={400}
+      strictWidth={400}
+      strictHeight={400}
       bucket={c['files']['site_bucket']}
       accept="image/jpeg, image/png"
     />
@@ -121,9 +121,9 @@ const renderBlogHeaderImageFields = member => (
       name={`${member}.title`}
       required
       customComponent={ImageUploadField}
-      maxWidth={400}
-      maxHeight={400}
-      single={true}
+      strictWidth={800}
+      strictHeight={150}
+      bucket={c['files']['site_bucket']}
       accept="image/jpeg, image/png"
     />
 

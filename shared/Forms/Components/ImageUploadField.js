@@ -1,54 +1,79 @@
 import React, { Component } from "react"
-import _ from 'lodash'
+import _ from "lodash"
 import DragAndDropFileUploadField from "./DragAndDropFileUploadField"
 
-const isError = v => !_.isBoolean(v) && _.isObject(v)
-
 export default class ImageUploadField extends Component {
-  naiveChecker = () => true
-  handleDrop = files => {
-    const { maxWidth, maxHeight } = this.props
+  defaultProps = {
+    maxWidth: null,
+    strictWidth: null,
+    maxHeight: null,
+    strictHeight: null
+  }
 
-    let checker = this.naiveChecker
-    if (maxWidth && maxHeight) {
-      checker = this.checkBoth
-    } else if (maxWidth) {
-      checker = this.checkWidth
-    } else if (maxHeight) {
-      checker = this.checkHeight
-    }
+  measure = file =>
+    new Promise(res => {
+      const img = new Image()
+      img.onload = function() {
+        const size = {
+          width: this.width,
+          height: this.height
+        }
+
+        res(size)
+      }
+      img.src = file.preview
+    })
+
+  naiveChecker = () => true
+  handleDrop = async files => {
+    let checker = this.getChecker()
 
     const acceptedFiles = []
     const rejectedFiles = []
-    
-    files.forEach(file => {
-      const check = checker(file)
-      if (isError(check)) {
+
+    const sizes = await Promise.all(files.map(file => this.measure(file)))
+    files.forEach((file, index) => {
+      const size = sizes[index]
+      const valid = checker(size)
+
+      if (!valid) {
         rejectedFiles.push({
-          reason: check.reason,
+          reason: `File dimension is to big ${size.width}x${size.height}.`,
           file
         })
       } else {
         acceptedFiles.push(file)
       }
     })
+
+    return { acceptedFiles, rejectedFiles }
+  }
+  checkStrictWidth = ({ width }) => width === this.props.strictWidth
+  checkMaxWidth = ({ width }) => width <= this.props.maxWidth
+  checkMaxHeight = ({ height }) => height <= this.props.maxHeight
+  checkStrictHeight = ({ height }) => height === this.props.strictHeight
+
+  getChecker() {
+    const { maxWidth, strictWidth, maxHeight, strictHeight } = this.props
+
+    let widthChecker = this.naiveChecker
+    let heightChecker = this.naiveChecker
+
+    if (maxWidth) {
+      widthChecker = this.checkMaxWidth
+    } else if (strictWidth) {
+      widthChecker = this.checkStrictWidth
+    }
+
+    if (maxHeight) {
+      heightChecker = this.checkMaxHeight
+    } else if (strictHeight) {
+      heightChecker = this.checkStrictHeight
+    }
     
-    return {acceptedFiles, rejectedFiles}
-  }
-
-  checkBoth = (file) => {
-    const { maxWidth, maxHeight } = this.props
-    return true
-  }
-
-  checkWidth = (file) => {
-    const { maxWidth } = this.props
-    return true
-  }
-
-  checkHeight = (file) => {
-    const { maxHeight } = this.props
-    return true
+    return size => {
+      return widthChecker(size) && heightChecker(size)
+    }
   }
 
   render() {

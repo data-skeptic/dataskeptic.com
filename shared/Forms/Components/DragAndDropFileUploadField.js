@@ -52,17 +52,31 @@ export default class DragAndDropFileUploadField extends Component {
     uploading: false
   }
 
-  handleDrop = (acceptedFiles = [], rejectedFiles = []) => {
+  handleDrop = async (acceptedFiles = [], uploadRejectedFiles = []) => {
+    const { rejectedFiles } = this.state
+    uploadRejectedFiles = uploadRejectedFiles.concat(rejectedFiles)
+
     if (this.props.onDrop) {
-      const checkResult = this.props.onDrop(acceptedFiles)
+      const checkResult = await this.props.onDrop(acceptedFiles)
       acceptedFiles = checkResult.acceptedFiles
-      rejectedFiles.concat(checkResult.rejectedFiles)
+      uploadRejectedFiles = uploadRejectedFiles.concat(
+        checkResult.rejectedFiles
+      )
     }
 
-    this.setRejectedFiles(rejectedFiles)
+    this.setRejectedFiles(uploadRejectedFiles)
+
+    if (acceptedFiles.length === 0) return
+
     this.setError(null)
     this.setUploading(true)
-    this.upload(acceptedFiles)
+
+    if (!this.props.multi) {
+      this.reset()
+    }
+
+    return
+    return this.upload(acceptedFiles)
       .then(files => {
         const nextFiles = this.props.multi
           ? this.state.files.concat(files)
@@ -196,6 +210,19 @@ export default class DragAndDropFileUploadField extends Component {
     )
   }
 
+  renderRejectedErrors() {
+    const { rejectedFiles } = this.state
+    return rejectedFiles.map(rejectedFile => {
+      const { file: { name }, reason } = rejectedFile
+
+      return (
+        <div>
+          {name} <span>{reason}</span>
+        </div>
+      )
+    })
+  }
+
   render() {
     const { files, rejectedFiles, loading, uploading, error } = this.state
     const { multi, accept, disabled } = this.props
@@ -203,6 +230,7 @@ export default class DragAndDropFileUploadField extends Component {
 
     const { title, icon } = this.getStateValues(uploaded)
     const IconComponent = icon
+    const hasRejectedFiles = rejectedFiles.length > 0
     const showSinglePreview = !loading && uploaded && !multi
     return (
       <Container>
@@ -230,6 +258,9 @@ export default class DragAndDropFileUploadField extends Component {
                   ? this.renderUploaded()
                   : this.renderAccepted()}
               </SubTitle>
+
+              {hasRejectedFiles && <Error>{this.renderRejectedErrors()}</Error>}
+
               <Error>{error}</Error>
             </Details>
           </Inner>
