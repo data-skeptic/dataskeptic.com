@@ -74,8 +74,7 @@ export default class DragAndDropFileUploadField extends Component {
     if (!this.props.multi) {
       this.reset()
     }
-
-    return
+    
     return this.upload(acceptedFiles)
       .then(files => {
         const nextFiles = this.props.multi
@@ -112,6 +111,7 @@ export default class DragAndDropFileUploadField extends Component {
 
   reset = () => {
     this.setFiles([])
+    this.setRejectedFiles([])
   }
 
   parseValue(val) {
@@ -212,13 +212,13 @@ export default class DragAndDropFileUploadField extends Component {
 
   renderRejectedErrors() {
     const { rejectedFiles } = this.state
-    return rejectedFiles.map(rejectedFile => {
+    return rejectedFiles.map((rejectedFile, index) => {
       const { file: { name }, reason } = rejectedFile
 
       return (
-        <div>
-          {name} <span>{reason}</span>
-        </div>
+        <RejectedError key={index}>
+          <RejectedFile>{name}</RejectedFile>{' '}<RejectedReason>{reason}</RejectedReason>
+        </RejectedError>
       )
     })
   }
@@ -258,13 +258,11 @@ export default class DragAndDropFileUploadField extends Component {
                   ? this.renderUploaded()
                   : this.renderAccepted()}
               </SubTitle>
-
-              {hasRejectedFiles && <Error>{this.renderRejectedErrors()}</Error>}
-
               <Error>{error}</Error>
             </Details>
           </Inner>
         </Wrapper>
+        {hasRejectedFiles && <RejectedErrors>{this.renderRejectedErrors()}</RejectedErrors>}
         {multi && uploaded && <Files>{this.renderFilesPreview(files)}</Files>}
       </Container>
     )
@@ -379,7 +377,7 @@ const Title = styled.div`
   font-weight: 400;
 `
 
-const Error = styled.div``
+const Error = styled.div`color: #ff1820;`
 
 const SubTitle = styled.div`
   font-size: 16px;
@@ -420,4 +418,17 @@ const RemoveButton = styled.button`
   &:hover {
     background-color: #f04b51;
   }
+`
+
+const RejectedErrors = Error.extend`
+  padding-top: 0.3em;
+`
+
+const RejectedError = styled.div``
+
+const RejectedFile = styled.span`
+  font-weight: bold;
+`
+
+const RejectedReason = styled.span`
 `
