@@ -1,8 +1,9 @@
 import React, { Component } from "react"
 import Dropzone from "react-dropzone"
 import styled, { css } from "styled-components"
+import Request from "../../Request";
 
-const Icon = name => <i className={`glyphicon glyphicon-${name}`} />
+const Icon = ({ name }) => <i className={`glyphicon glyphicon-${name}`} />
 
 const DefaultIcon = () => <Icon name="file" />
 const UploadedIcon = () => <Icon name="ok-sign" />
@@ -20,37 +21,50 @@ export default class DragAndDropFileUploadField extends Component {
     title: `Drop or Upload files here`,
     uploadedTitle: `Uploaded`,
     single: false,
-    accept: "",
+    accept: null,
     icon: DefaultIcon,
     uploadedIcon: UploadedIcon,
     errorIcon: ErrorIcon,
     bucket: null
   }
+
   state = {
     files: this.props.input.value || [],
-    error: null
+    rejectedFiles: [],
+    error: false
   }
-  handleDrop = files => {
-    let accept = true,
-      error = null
-
+  
+  upload = (files) => {
+    const {bucket} = this.props.bucket
+    const url = `/api/v1/files/upload?bucket=${bucket}`
+    
+    this.setError(null)
+    return Request.upload(url, files)
+  }
+  
+  handleDrop = (acceptedFiles = [], rejectedFiles = []) => {
     if (this.props.onDrop) {
-      const checkResult = this.props.onDrop(files)
-      accept = checkResult.accept
-      error = checkResult.error
+      const checkResult = this.props.onDrop(acceptedFiles)
+      acceptedFiles = checkResult.acceptedFiles
+      rejectedFiles.concat(checkResult.rejectedFiles)
     }
-
-    if (accept) {
-      this.setFiles(files)
-    } else {
-      this.setError(error)
-    }
+  
+    this.setRejectedFiles(rejectedFiles)
+    
+    this.upload(acceptedFiles)
+      .then(() => this.setFiles(acceptedFiles))
+      .catch((err) => this.setError(err))
   }
+
   setFiles = files => this.setState({ files })
+
+  setRejectedFiles = rejectedFiles => this.setState({ rejectedFiles })
+  
   setError = error => this.setState({ error })
+
   isFileUploaded = () => this.state.files.length > 0
 
-  componentWillRecieveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (this.props.files !== nextProps.files) {
       this.setFiles(nextProps.files)
     }
@@ -66,7 +80,7 @@ export default class DragAndDropFileUploadField extends Component {
   }
 
   render() {
-    const { error } = this.state
+    const { files, rejectedFiles, error } = this.state
     const {
       title,
       uploadedTitle,
@@ -78,14 +92,12 @@ export default class DragAndDropFileUploadField extends Component {
     } = this.props
     const uploaded = this.isFileUploaded()
 
-    const IconComponent = icon
-    let stateTitle = uploaded ? uploadedTitle : title
+    const IconComponent = error ? errorIcon : uploaded ? uploadedIcon : icon
     return (
       <Wrapper
         activeClassName="active"
         accept={accept}
         onDrop={this.handleDrop}
-        error={error}
         upload={uploaded}
       >
         <Inner>
@@ -93,10 +105,14 @@ export default class DragAndDropFileUploadField extends Component {
             <IconComponent />
           </IconArea>
           <Details>
-            <Title>{error ? error : stateTitle}</Title>
+            <Title>{uploaded ? uploadedTitle : title}</Title>
             <SubTitle>
               {uploaded ? this.renderUploaded() : this.renderAccepted()}
             </SubTitle>
+            <Error>
+              <code>{JSON.stringify(files)}</code>
+              <code>{JSON.stringify(rejectedFiles)}</code>
+            </Error>
           </Details>
         </Inner>
       </Wrapper>
@@ -123,15 +139,12 @@ const Wrapper = styled(Dropzone)`
   &.active {
     ${active};
   }
-  
-  ${props => props.uploaded && `
+
+  ${props =>
+    props.uploaded &&
+    `
     ${active}
   `};
-
-  ${props => props.error && `
-    color: #ff2730;
-    background-color: #fff0f0;
-  `} 
 `
 
 const Inner = styled.div`
@@ -166,6 +179,10 @@ const Details = styled.div`
 const Title = styled.div`
   font-size: 22px;
   font-weight: 400;
+`
+
+const Error = styled.div`
+  color: #ff2730;
 `
 
 const SubTitle = styled.div`
