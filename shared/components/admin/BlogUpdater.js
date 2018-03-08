@@ -179,7 +179,6 @@ class BlogUpdater extends Component {
 
           {edit ? (
             <Editing>
-              <code>{JSON.stringify(blogFormData)}</code>
               <BlogForm
                 onSubmit={this.onSave}
                 showSubmit={false}

@@ -1,11 +1,13 @@
 import React, { Component } from "react"
 import Dropzone from "react-dropzone"
 import _ from "lodash"
-import styled, {css, keyframes} from "styled-components"
+import styled, { css, keyframes } from "styled-components"
 import Request from "../../Request"
 import FilePreview from "./FilePreview"
 
-const Icon = ({ name, ...rest }) => <StateIcon {...rest} className={`glyphicon glyphicon-${name}`} />
+const Icon = ({ name, ...rest }) => (
+  <StateIcon {...rest} className={`glyphicon glyphicon-${name}`} />
+)
 
 const DefaultIcon = () => <Icon name="file" />
 const UploadedIcon = () => <Icon name="ok-sign" />
@@ -49,6 +51,7 @@ export default class DragAndDropFileUploadField extends Component {
     error: null,
     uploading: false
   }
+
   handleDrop = (acceptedFiles = [], rejectedFiles = []) => {
     if (this.props.onDrop) {
       const checkResult = this.props.onDrop(acceptedFiles)
@@ -64,7 +67,7 @@ export default class DragAndDropFileUploadField extends Component {
         const nextFiles = this.props.multi
           ? this.state.files.concat(files)
           : files
-        
+
         this.setFiles(nextFiles)
         this.setUploading(false)
       })
@@ -73,6 +76,7 @@ export default class DragAndDropFileUploadField extends Component {
         this.setUploading(false)
       })
   }
+
   setFiles = (files, notify = true) => {
     this.setState({ files })
 
@@ -80,13 +84,18 @@ export default class DragAndDropFileUploadField extends Component {
       this.handleFilesChange(files)
     }
   }
+
   handleFilesChange = files => {
-    this.props.input.onChange(files)
+    const { multi } = this.props
+    this.props.input.onChange(multi ? files : files[0])
   }
+
   removeFile = index => {
     this.setFiles(this.state.files.filter((f, i) => i !== index))
   }
+
   setUploading = uploading => this.setState({ uploading })
+
   reset = () => {
     this.setFiles([])
   }
@@ -95,7 +104,7 @@ export default class DragAndDropFileUploadField extends Component {
     if (this.props.multi) {
       return _.isEmpty(val) ? [] : val
     }
-    
+
     return val
   }
 
@@ -167,7 +176,9 @@ export default class DragAndDropFileUploadField extends Component {
   }
 
   renderPreview(file, index = 1, renderRemove) {
-    return <FilePreview preview={file} renderRemove={renderRemove} key={index} />
+    return (
+      <FilePreview preview={file} renderRemove={renderRemove} key={index} />
+    )
   }
 
   renderFilesPreview(files = []) {
@@ -186,13 +197,13 @@ export default class DragAndDropFileUploadField extends Component {
   }
 
   render() {
-    const { files, rejectedFiles, uploading, error } = this.state
+    const { files, rejectedFiles, loading, uploading, error } = this.state
     const { multi, accept, disabled } = this.props
     const uploaded = this.isFileUploaded()
 
     const { title, icon } = this.getStateValues(uploaded)
     const IconComponent = icon
-    const showSinglePreview = ! loading&& uploaded && !multi
+    const showSinglePreview = !loading && uploaded && !multi
     return (
       <Container>
         <Wrapper
@@ -207,7 +218,7 @@ export default class DragAndDropFileUploadField extends Component {
           <Inner>
             <IconArea>
               {showSinglePreview ? (
-                this.renderPreview(files[0])
+                this.renderPreview(files)
               ) : (
                 <IconComponent />
               )}
@@ -244,7 +255,7 @@ const rotate360 = keyframes`
   to {
     transform: rotate(360deg);
   }
-`;
+`
 
 const Container = styled.div``
 
@@ -321,11 +332,12 @@ const IconArea = styled.div`
 `
 
 const StateIcon = styled.i`
-  ${props => props.rotate && `
+  ${props =>
+    props.rotate &&
+    `
     animation: ${rotate360} 2s linear infinite;
-  `}
+  `};
 `
-
 
 const Details = styled.div`
   ${center};
@@ -353,7 +365,7 @@ const Reset = styled.button`
   background: transparent;
   margin-left: 1em;
   color: #333;
-  
+
   span {
     border-bottom: 1px dotted;
   }

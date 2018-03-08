@@ -68,6 +68,8 @@ const formatPublicLink = (filename, bucket) => {
   return `https://s3.amazonaws.com/${bucket}/${filename}`
 }
 
+const isLogicalEmpty = val => !val || val === 'null' || val === 'undefined'
+
 module.exports = cache => {
   const router = express.Router()
 
@@ -77,7 +79,7 @@ module.exports = cache => {
 
   router.put("/upload", (req, res) => {
     const { bucket } = req.query
-    if (!bucket) {
+    if (isLogicalEmpty(bucket)) {
       return res.status(500).send({
         success: false,
         error: `Bucket couldn't be empty`
