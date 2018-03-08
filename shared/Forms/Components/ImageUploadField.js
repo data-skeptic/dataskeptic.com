@@ -38,7 +38,7 @@ export default class ImageUploadField extends Component {
 
       if (!valid) {
         rejectedFiles.push({
-          reason: `dimension to big ${size.width}x${size.height}`,
+          reason: `illegal dimension ${size.width}x${size.height}`,
           file
         })
       } else {

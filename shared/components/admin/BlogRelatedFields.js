@@ -288,7 +288,9 @@ const RelatedEntries = styled.div`
 `
 
 const RelatedEntry = styled.div`
-  margin-bottom: 1em;
+  margin-bottom: 2em;
+  border-top: 1px solid #e1e3e2;
+  padding-top: 2em;
 `
 
 const RelatedIndex = styled.div`
@@ -321,10 +323,5 @@ const RelatedAddButton = ActionButton.extend`
   margin-top: 1em;
 `
 
-const RelatedRemoveButton = ActionButton.extend`
-  height: 20px;
-  font-size: 12px;
-  background: #e74c3c;
+const RelatedFields = styled.div`
 `
-
-const RelatedFields = styled.div``
