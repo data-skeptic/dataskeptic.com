@@ -14,7 +14,7 @@ const markdown = text => {
   const rawMarkup = marked(text)
   return { __html: rawMarkup }
 }
-k
+
 const getContributorInfo = (contributor = '', contributors) =>
   contributors && contributors[contributor.toLowerCase()]
 
