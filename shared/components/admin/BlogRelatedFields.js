@@ -3,13 +3,15 @@ import { Field, FieldArray, reduxForm } from "redux-form"
 import {
   renderCheckbox,
   renderField,
-  renderSelect,
-  renderZip
+  renderSelect
 } from "../../Forms/Components/Field"
 import styled from "styled-components"
 import BlogSearchSelect from "./BlogSearchSelect"
-import DragAndDropFileUploadField from "../../Forms/Components/DragAndDropFileUploadField";
 import ImageUploadField from "../../Forms/Components/ImageUploadField";
+
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const config = require('../../../config/config.json')
+const c = config[env]
 
 export const INTERNAL_LINK = "internal-link"
 export const EXTERNAL_LINK = "external-link"
@@ -29,14 +31,8 @@ const EMPTY_RELATED_ITEM = {
   created: true
 }
 
-const renderInternalLinkFields = (member, fields, index) => (
+const renderInternalLinkFields = (member) => (
   <div>
-    <code>
-      {JSON.stringify({
-        val: fields.get(index)
-      })}
-    </code>
-    
     <Field
       label="Related Blog"
       component={renderField}
@@ -103,7 +99,7 @@ const renderHomePageImageFields = member => (
       customComponent={ImageUploadField}
       maxWidth={400}
       maxHeight={400}
-      single={true}
+      bucket={c['files']['site_bucket']}
       accept="image/jpeg, image/png"
     />
 

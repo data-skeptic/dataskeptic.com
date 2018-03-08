@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import _ from 'lodash'
 import DragAndDropFileUploadField from "./DragAndDropFileUploadField"
 
-const isError = v => !_.isBoolean(v) && _isObject(v)
+const isError = v => !_.isBoolean(v) && _.isObject(v)
 
 export default class ImageUploadField extends Component {
   naiveChecker = () => true
