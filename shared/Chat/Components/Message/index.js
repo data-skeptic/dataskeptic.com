@@ -42,7 +42,6 @@ const Container = styled.div`
 const Author = styled.img`
   width: 32px;
   height: 32px;
-  margin-right: 15px;
   margin-top: 6px;
 
   ${props =>
@@ -53,6 +52,7 @@ const Author = styled.img`
 `
 
 const Bubble = styled.div`
+  margin-left: 15px;
   border-radius: 5px;
   padding: 12px;
   display: inline-block;
