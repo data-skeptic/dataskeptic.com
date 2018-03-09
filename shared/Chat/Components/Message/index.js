@@ -77,5 +77,11 @@ const Bubble = styled.div`
 `
 
 const Text = styled.span`
-
+  a {
+    border-bottom: 1px solid;
+    
+    &:hover {
+      border-bottom: 1px solid;
+    }
+  }
 `
