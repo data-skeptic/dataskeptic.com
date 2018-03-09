@@ -1,20 +1,16 @@
-import Immutable from 'immutable';
-import {fromJS} from 'immutable';
+import Immutable from 'immutable'
+import { fromJS } from 'immutable'
 import isEmpty from 'lodash/isEmpty'
 import axios  from 'axios'
 
 const init = {
-    is_playing: false,
-    has_shown: false,
-    playback_loaded: false,
-    position: 0,
-    position_updated: false,
-    episode: {}
+  is_playing: false,
+  has_shown: false,
+  playback_loaded: false,
+  position: 0,
+  position_updated: false,
+  episode: {}
 }
-
-var env = (process.env.NODE_ENV === 'dev') ? 'dev' : 'prod'
-const config = require('../../config/config.json');
-var base_url = config[env]['base_api'] + env
 
 const defaultState = Immutable.fromJS(init);
 
@@ -59,58 +55,56 @@ export default function PlayerReducer(state = defaultState, action) {
                 nstate.position = init.position;
             } else {
                 nstate.has_shown = true
-
-                if (nstate.is_playing) {
-                    if (episode == undefined) {
-                        console.log("Unusual situation for player to be in, but I can fix it")
-                        nstate.episode = episode
-                        nstate.is_playing = true
-                        nstate.playback_loaded = false
-                        nstate.position = init.position;
-                    } else {
-                        if (episode.guid == nstate.episode.guid) {
-                            nstate.is_playing = false
-                        } else {
-                            nstate.episode = episode
-                            nstate.playback_loaded = false
-                            nstate.position = init.position;
-                            nstate.is_playing = true
-                        }
-                    }
+        if (nstate.is_playing) {
+            if (episode == undefined) {
+                console.log('Unusual situation for player to be in, but I can fix it')
+                nstate.episode = episode
+                nstate.is_playing = true
+                nstate.playback_loaded = false
+                nstate.position = init.position
+            } else {
+                if (episode.guid == nstate.episode.guid) {
+                    nstate.is_playing = false
                 } else {
                     nstate.episode = episode
+                    nstate.playback_loaded = false
+                    nstate.position = init.position
                     nstate.is_playing = true
                 }
             }
-            break;
-        case 'STOP_PLAYBACK':
-            nstate.is_player = false
-            break;
+        } else {
+          nstate.episode = episode
+          nstate.is_playing = true
+        }
+      }
+      break
+    case 'STOP_PLAYBACK':
+      nstate.is_player = false
+      break
 
-        case 'STOP_PLAYING':
-            nstate.is_playing = false
-            break;
+    case 'STOP_PLAYING':
+      nstate.is_playing = false
+      break
 
-        case 'RESUME_PLAYING':
-            nstate.is_playing = true
-            break;
+    case 'RESUME_PLAYING':
+      nstate.is_playing = true
+      break
 
-
-        case 'PLAYBACK_LOADED':
-            nstate.playback_loaded = action.payload
-            break;
-        case 'PROGRESS_UPDATE':
-            var pos = action.payload
-            nstate.position = pos
-            break;
-        case 'PLAYER_SEEK':
-            var pos = action.payload
-            nstate.position = pos
-            nstate.position_updated = true
-            break;
-        case 'SEEK_SET':
-            nstate.position_updated = false
-            break;
-    }
-    return Immutable.fromJS(nstate)
+    case 'PLAYBACK_LOADED':
+      nstate.playback_loaded = action.payload
+      break
+    case 'PROGRESS_UPDATE':
+      var pos = action.payload
+      nstate.position = pos
+      break
+    case 'PLAYER_SEEK':
+      var pos = action.payload
+      nstate.position = pos
+      nstate.position_updated = true
+      break
+    case 'SEEK_SET':
+      nstate.position_updated = false
+      break
+  }
+  return Immutable.fromJS(nstate)
 }

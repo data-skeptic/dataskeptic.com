@@ -6,7 +6,7 @@ export const ContentContainer = styled.div`
   background-color: white;
   margin-top: -80px;
   height: 80px;
-  
+
   @media (max-width: 1336px) {
     margin: 0 55px;
     margin-top: -80px;

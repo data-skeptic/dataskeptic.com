@@ -7,6 +7,7 @@ var profile   = require("./profile")
 var reminders = require("./reminders")
 var yoshi     = require("./yoshi")
 var chatter   = require("./chatter")
+var shirt_size_picker = require("./short_size_picker")
 
 var dialogs = [help, store, episode, survey, profile, reminders]
 
@@ -21,28 +22,45 @@ function get_reply(dispatch, reply, cstate, message) {
 	var resp = undefined
 	var responder = 'bot'
 	var lmsg = message.text.toLowerCase()
+	var n = cstate.store_nudges
 	if (lmsg == 'exit') {
 		msg = "Ok, let's talk about something new."
 		handler = undefined
 		responder = 'bot'
 		resp = {msg, handler, responder}
 	} else if (handler) {
+		console.log()
 		resp = handler(dispatch, reply, cstate, message)
 	} else if (lmsg.indexOf('logo') > -1) {
-		msg = 'Here's our logo ![Data Skeptic](https://s3.amazonaws.com/dataskeptic.com/img/primary-logo-400.jpg)'
+		msg = 'Here is our logo ![Data Skeptic](https://s3.amazonaws.com/dataskeptic.com/img/primary-logo-400.jpg)'
 		resp = {handler, msg, responder}
 	} else if (lmsg.indexOf('what would kyle say') > -1) {
 		msg = "I'll need to give it some thought and get back to you."
 		responder = 'kyle'
 		resp = {handler, msg, responder}
 	} else {
+		var handled = false
 		for (var dialog of dialogs) {
-			if (dialog.can_handle(message, cstate, reply)) {
+			if (!handled && dialog.can_handle(message, cstate, reply)) {
 				handler = dialog.handler
 				msg = dialog.get_opening_remark(dispatch, reply)
 				console.log([handler, msg])
-				resp = {handler, msg, responder}				
+				resp = {handler, msg, responder}
+				handled = true
 			}
+		}
+		if (n < 3 && Math.random() < .35) {
+			if (n == 0) {
+				var msg = chatter.get_message("ROOT>SHIRT0")
+				resp = {handler, msg, responder}
+			} else if (n == 1) {
+				var msg = chatter.get_message("ROOT>SHIRT1")
+				resp = {handler, msg, responder}
+			} else if (n == 2) {
+				var msg = chatter.get_message("ROOT>SHIRT2")
+				resp = {handler: shirt_size_picker.handler, msg, responder}
+			}
+			dispatch({type: "STORE_NUDGE_INCR"})
 		}
 		if (resp == undefined) {
 			var msg = chatter.get_message("ROOT>GENERAL")
@@ -83,7 +101,8 @@ function get_reply(dispatch, reply, cstate, message) {
 	if (p < .05) {
 		if (!cstate.saw_yoshi) {
 			setTimeout(function() {
-				reply({text: "Tweet, tweet!  I'm Yoshi the bird."}, 'yoshi')
+				var msg = chatter.get_message("YOSHI>GREETING")
+				reply({text: msg}, 'yoshi')
 				dispatch({type: "SAW_YOSHI"})
 			}, 5000)
 		}

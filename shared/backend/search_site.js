@@ -31,7 +31,6 @@ module.exports = {
 				}
 			}
 		}
-		console.log(es_query)
 		client.search(es_query).then(function (resp) {
 			var hits = resp['hits']['hits']
 			var results = []

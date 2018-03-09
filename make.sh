@@ -1,8 +1,8 @@
 git pull
 npm i
 npm run build
-npm run prod
-docker build -t kylepolich/dataskeptic.com .
-tail -1 Dockerfile
-docker ps
+#docker build -t kylepolich/dataskeptic.com .
+#docker tag kylepolich/dataskeptic.com kylepolich/dataskeptic.com:2
+#tail -1 Dockerfile
+#docker ps
 

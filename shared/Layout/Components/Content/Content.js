@@ -1,14 +1,11 @@
-import React from "react"
+import React from 'react'
 
 export const Content = ({ title, children }) => (
-	<div className="col-md-8 col-xs-12 page-content">
-		{title
-			? <h2 className="page-content-title">{title}</h2>
-			: null
-		}
+  <div className="col-md-8 col-xs-12 page-content">
+    {title ? <h2 className="page-content-title">{title}</h2> : null}
 
-		{children}
-	</div>
-);
+    {children}
+  </div>
+)
 
-export default Content;
+export default Content

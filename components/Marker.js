@@ -1,13 +1,8 @@
 import styled from 'styled-components'
-import React from 'react';
+import React from 'react'
 
-export default (props) => (
-    <Marker>
-        {props.children}
-    </Marker>
-);
+export default props => <Marker>{props.children}</Marker>
 
 const Marker = styled.span`
-    color: ${props =>  props.color || props.theme.colors.primary};
+  color: ${props => props.color || props.theme.colors.primary};
 `
-

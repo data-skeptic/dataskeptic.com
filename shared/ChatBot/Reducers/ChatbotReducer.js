@@ -13,6 +13,7 @@ const init = {
     reminder_time: undefined,
     store_issue: undefined,
     saw_yoshi: false,
+    store_nudges: 0,
     payload: {obj: undefined, note: undefined}
 }
 
@@ -237,6 +238,8 @@ export default function ChatbotReducer(state = defaultState, action) {
         case 'SAW_YOSHI':
             nstate.saw_yoshi = true
             break
+        case 'STORE_NUDGE_INCR':
+            nstate.store_nudges += 1
     }
     return Immutable.fromJS(nstate)
 }

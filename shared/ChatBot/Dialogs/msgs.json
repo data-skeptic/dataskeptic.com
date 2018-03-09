@@ -68,7 +68,9 @@
 		"CUST_SERVICE_END":["Good to hear.  Please let me know if you have any future issues with our store."],
 		"CUST_SERVICE_ISSUE":["What seems to be the problem?", "Can you please describe your issue?", "Sorry to hear about the trouble.  What are you trying to do?"],
 		"CS_ASK_EMAIL":["Darn, I don't know how to fix that.  Please give me your email so I can have someone follow up with you.", "Either your testing the limits of my implementation or this is a first time we've seen this issue.  What's you're email?", "Oh boy, I have no idea what that means!  Sorry, I'm just a simple bot.  Would you give me your email so I can reach out to biological customer service for you?"],
-		"CUST_SERVICE_END2": ["Sorry I couldn't resolve your issue.  A human will follow up soon."]
+		"CUST_SERVICE_END2": ["Sorry I couldn't resolve your issue.  A human will follow up soon."],
+		"SIZE": ["Please tell me your size", "What size t-shirt would you like?", "Please type your size (e.g. S, M, L, XL, 2XL, etc)"],
+		"ADDED_TO_CART": ["Ok, I added that to your cart.", "Great, I put it in your cart.", "You're all set to checkout by clicking on the shopping cart icon."]
 	},
 	"SURVEY":{
 		"FINISHED_BEFORE":["Our records show you already participated in the survey.  Thanks for your responses."],
@@ -76,7 +78,7 @@
 		"FINISH":["Thank you for taking our survey.  Your input is very valuable to us."]
 	},
 	"YOSHI": {
-		"GREETING": ["I'm a good girl", "I love you", "HIIII!", "Linhdy!", "You're a good girl Yoshi.", "Go on!", "🎵 La la la la la 🎵 "]
+		"GREETING": ["My name is Yoshi.  I'm a good bird.", "I'm Yoshi.  I love you.", "HIIII!", "Linhdy!", "You're a good girl, Yoshi.", "Go on!", "🎵 La la la la la 🎵 "]
 	},
 	"GA":{
 		"ASK_PASSWORD":["What is the password?"],
@@ -95,6 +97,9 @@
 		"STILL_MISSING":[ "At least one of dates is still missing. Let's start from the beginning by typing 'ga'."]
 	},
 	"ROOT": {
-		"GENERAL": ["Huh?", "If you'd be willing to take our survey, say 'survey'", "I can make episode recommendations for you.  Just ask for a recommendation.", "I have some limited abilities to handle customer service issues at the store, can I help you there?", "Try typing 'help' to learn about my functionality."]
+		"GENERAL": ["Huh?", "If you'd be willing to take our survey, say 'survey'", "I can make episode recommendations for you.  Just ask for a recommendation.", "I have some limited abilities to handle customer service issues at the store, can I help you there?", "Try typing 'help' to learn about my functionality."],
+		"SHIRT0": ["We have some really nice t-shirts in our store.  You should show your support for Data Skeptic by checking them out."],
+		"SHIRT1": ["You should check out our t-shirts.  They're really cool.  Head over to the [store](https://dataskeptic.com/store) to get one"],
+		"SHIRT2": ["Listen, I know I keep talking about our t-shirts, but I think you really want one.  I'm going to go ahead and put a t-shirt in your cart.  What size would you like?"]
 	}
 }

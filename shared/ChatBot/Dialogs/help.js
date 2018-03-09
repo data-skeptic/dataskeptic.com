@@ -31,6 +31,10 @@ function can_handle(message, cstate, reply) {
 	var lmsg = message.text.toLowerCase()
 	if (lmsg.indexOf('help') != -1) {
 		return true
+	} else if (lmsg.indexOf('hi') != 0) {
+		return true
+	} else if (lmsg.indexOf('hello') != -1) {
+		return true
 	} else {
 		return false
 	}

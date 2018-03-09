@@ -3,7 +3,7 @@ var chatter = require("./chatter")
 var reminders = require("./reminders")
 
 function get_opening_remark(dispatch, reply, cstate) {
-	return "What sort of topics are you interested in?"
+	return "I can recommend an episode for you.  What sort of topics are you interested in?"
 }
 function handler(dispatch, reply, cstate, message) {
 	var query = message.text
@@ -20,7 +20,9 @@ function handler(dispatch, reply, cstate, message) {
 
 function can_handle(message, cstate, reply) {
 	var lmsg = message.text.toLowerCase()
-	if (lmsg.indexOf('survey') != -1) {
+	if (lmsg.indexOf('recommend') != -1) {
+		return true
+	} else if (lmsg.indexOf('episode') != -1) {
 		return true
 	} else {
 		return false

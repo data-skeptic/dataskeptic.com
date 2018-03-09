@@ -1,18 +1,18 @@
-import axios from 'axios';
-import axiosCookieJarSupport from '@3846masa/axios-cookiejar-support';
+import axios from 'axios'
+import axiosCookieJarSupport from '@3846masa/axios-cookiejar-support'
 
-const tough = require('tough-cookie');
+const tough = require('tough-cookie')
 
-axiosCookieJarSupport(axios);
+axiosCookieJarSupport(axios)
 
-const cookieJar = new tough.CookieJar();
+const cookieJar = new tough.CookieJar()
 
-const extendCookies = (params) => {
+const extendCookies = params => {
   return {
     ...params,
     jar: cookieJar,
     withCredentials: true
-  };
-};
+  }
+}
 
-export default extendCookies;
+export default extendCookies
