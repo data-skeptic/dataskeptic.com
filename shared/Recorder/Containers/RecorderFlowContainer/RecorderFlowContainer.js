@@ -544,7 +544,7 @@ class RecorderFlowContainer extends Component {
           <div key={[READY, RECORDING]} className="recording-step">
             <Recorder
               recording={this.isRecording()}
-              startComponent={<i className="fa fa-microphone icon">&nbsp;</i>}
+              startComponent={<i className="microphone icon" />}
               stopComponent={<i className="fa fa-circle icon">&nbsp;</i>}
               onClick={this.toggleRecording}
               info={this.getInfoMessage()}

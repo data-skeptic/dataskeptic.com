@@ -158,13 +158,13 @@ class ContactUs extends React.Component {
 	  this.reply({ text: 'Still there?  Let me know what you think of the bot by DMing me on Slack!  I would appreciate your candid feedback'}, 'kyle')
   }
 
-    componentDidMount() {
-        const {dispatch} = this.props;
-        const {title} = ContactUs.getPageMeta(this.props);
-        dispatch(changePageTitle(title));
+  componentDidMount() {
+      const {dispatch} = this.props;
+      const {title} = ContactUs.getPageMeta(this.props);
+      dispatch(changePageTitle(title));
 
-	      this.reply({ text: 'What would you like to talk about?'})
-    }
+      this.reply({ text: 'What would you like to talk about?'})
+  }
 
 	render() {
 			const {confirmPolicy,activeStep,errorMessage, contributors, chatbot} = this.props;
@@ -337,7 +337,7 @@ const Social = styled.div`
 const SocialIcon = styled.img`
   width: 32px;
   height: 32px;
-  margin-right: 7px;
+  margin-right: 17px;
 `
 
 const Sections = styled.div`
@@ -363,7 +363,7 @@ const Sections = styled.div`
 const ListenerArea = styled.div``
 
 const SocialForm = styled.form`
-	width: 100%;
+  flex: 1;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;

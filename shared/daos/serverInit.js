@@ -165,23 +165,28 @@ function xml_to_list(xml) {
     '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:cc="http://web.resource.org/cc/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"></rss>'
   var guid_to_media_link = {}
   parser.parseString(xml, function(err, rss) {
-    var items = rss['rss']['channel'][0]['item']
-    var episodes = convert_items_to_json(items)
-    for (var i = 0; i < episodes.length; i++) {
-      var episode = episodes[i]
-      episode.img = episode.img.replace('http://', 'https://')
-      episode.mp3 = episode.mp3.replace('http://', 'https://')
-      var link = episode['link']
-      var prettyname = link
-        .replace('http://' + domain, '')
-        .replace('https://' + domain, '')
-        .replace('.php', '')
-        .replace('/blog/', '/')
-      var guid = episode.guid
-      guid_to_media_link[guid] = link
-      episodes_map[guid] = episode
-      episodes_content[prettyname] = episode
-      episodes_list.push(episode.guid)
+    if (err) {
+      console.log("Error on rss")
+      console.log(err)
+    } else {
+      var items = rss['rss']['channel'][0]['item']
+      var episodes = convert_items_to_json(items)
+      for (var i = 0; i < episodes.length; i++) {
+        var episode = episodes[i]
+        episode.img = episode.img.replace('http://', 'https://')
+        episode.mp3 = episode.mp3.replace('http://', 'https://')
+        var link = episode['link']
+        var prettyname = link
+          .replace('http://' + domain, '')
+          .replace('https://' + domain, '')
+          .replace('.php', '')
+          .replace('/blog/', '/')
+        var guid = episode.guid
+        guid_to_media_link[guid] = link
+        episodes_map[guid] = episode
+        episodes_content[prettyname] = episode
+        episodes_list.push(episode.guid)
+      }      
     }
   })
 
