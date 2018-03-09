@@ -19,7 +19,9 @@ export default class Message extends Component {
     return (
       <Container sent={sent}>
         {author && <Author src={author.img} bot={author.author === BOT_ID} />}
-        <Bubble sent={sent}>{children ? children : renderText(text)}</Bubble>
+        <Content>
+          <Bubble sent={sent}>{children ? children : renderText(text)}</Bubble>
+        </Content>
       </Container>
     )
   }
@@ -51,8 +53,12 @@ const Author = styled.img`
   `};
 `
 
+const Content = styled.div`
+  padding-left: 15px;
+  flex: 1
+`
+
 const Bubble = styled.div`
-  margin-left: 15px;
   border-radius: 5px;
   padding: 12px;
   display: inline-block;
