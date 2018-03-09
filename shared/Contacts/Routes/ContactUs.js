@@ -179,105 +179,196 @@ class ContactUs extends React.Component {
 			const thinking = chatbot.get('thinking')
 
     	return (
-		    <Container>
-			    <Launcher
-				    defaultBot={contributors[BOT_ID]}
-				    thinking={thinking}
-				    messages={this.state.messages}
-				    onMessage={this.onMessage}
-				    onInactivity={this.onInactivity}
-				    inactivityDelay={1000 * 30}
-			    />
+      <Container>
+          <Launcher
+            defaultBot={contributors[BOT_ID]}
+            thinking={thinking}
+            messages={this.state.messages}
+            onMessage={this.onMessage}
+            onInactivity={this.onInactivity}
+            inactivityDelay={1000 * 60 * 5}
+          />      
+        <Title>Contact Us</Title>
+        <Text>
+          We hope to respond to all inquiries, but sometimes the volume of
+          incoming questions can cause our queue to explode. We prioritize
+          responses to Data Skeptic members first, and to those who ask
+          questions in a public forum like Twitter, our Facebook wall (not
+          Facebook direct message), or Slack. Many people can benefit from
+          responses in public places.
+        </Text>
 
-			    <Title>Contact Us</Title>
-					<Text>We hope to respond to all inquiries, but sometimes the volume of incoming questions can cause our queue to explode.  We prioritize responses to Data Skeptic members first, and to those who ask questions in a public forum like Twitter, our Facebook wall (not Facebook direct message), or Slack.  Many people can benefit from responses in public places.</Text>
+        <Socials>
+          <SocialBlock order={1}>
+            <SocialIcon src={'/img/svg/twitter-square.svg'} />
+            <p>
+              You can find us on Twitter via{' '}
+              <TwitterLink href="https://twitter.com/dataskeptic">
+                @DataSkeptic
+              </TwitterLink>
+            </p>
+          </SocialBlock>
+          <SocialBlock order={3}>
+            <SocialIcon src={'/img/svg/facebook-square.svg'} />
+            <p>
+              We are on Facebook via{' '}
+              <FacebookLink href="https://www.facebook.com/dataskeptic">
+                https://www.facebook.com/dataskeptic
+              </FacebookLink>
+            </p>
+          </SocialBlock>
+          <SocialBlock order={2}>
+            <SocialForm onSubmit={this.subscribeSlack}>
+              <SocialIcon src={'/img/svg/logo-slack.svg'} />
+              <input name="email" id="email" />
+              <button
+                type="submit"
+                className="slack-button"
+                onClick={this.onClick}
+              >
+                Join Slack
+              </button>
+              {slackstatus}
+            </SocialForm>
+          </SocialBlock>
+          <SocialBlock order={4}>
+            <SocialIcon src={'/img/svg/mail_outline.svg'} />
+            <SocialForm
+              action="//dataskeptic.us9.list-manage.com/subscribe/post?u=65e63d6f84f1d87759105d133&amp;id=dc60d554db"
+              method="post"
+              id="mc-embedded-subscribe-form"
+              name="mc-embedded-subscribe-form"
+              className="validate"
+              target="_blank"
+              noValidate
+            >
+              <div id="mc_embed_signup_scroll" />
+              <input
+                name="EMAIL"
+                className="email"
+                id="mce-EMAIL"
+                placeholder="Email address"
+                required
+              />
+              <button
+                type="submit"
+                onClick={this.onClick}
+                id="mc-embedded-subscribe"
+              >
+                Join Mailing List
+              </button>
+            </SocialForm>
+          </SocialBlock>
+        </Socials>
 
-			    <Socials>
-						<SocialBlock order={1}>
-							<p>You can find us on Twitter via <TwitterLink href="https://twitter.com/dataskeptic">@DataSkeptic</TwitterLink></p>
-						</SocialBlock>
-				    <SocialBlock order={3}>
-					    <p>We are on Facebook via <FacebookLink href="https://www.facebook.com/dataskeptic">https://www.facebook.com/dataskeptic</FacebookLink></p>
-						</SocialBlock>
-				    <SocialBlock order={2}>
-					    <SocialForm onSubmit={this.subscribeSlack}>
-						    <SocialIcon src={"/img/png/contacts_slack.png"} />
-					      <input name="email" id="email"/>
-					      <button type="submit" className="slack-button" onClick={this.onClick}>Join Slack</button>
-						    {slackstatus}
-					    </SocialForm>
-						</SocialBlock>
-				    <SocialBlock order={4}>
-					    <SocialForm  action="//dataskeptic.us9.list-manage.com/subscribe/post?u=65e63d6f84f1d87759105d133&amp;id=dc60d554db" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" className="validate" target="_blank" noValidate>
-						    <div id="mc_embed_signup_scroll" />
-						    <input name="EMAIL" className="email" id="mce-EMAIL" placeholder="Email address" required />
-						    <button type="submit" onClick={this.onClick}  id="mc-embedded-subscribe">Join Mailing List</button>
-					    </SocialForm>
-						</SocialBlock>
-			    </Socials>
+        <ListenerArea>
+          <Title>Listener Questions</Title>
+          <Text>
+            We love hearing from our listeners! If you have a question about one
+            of our episodes or a general question that's relevant to Data
+            Skeptic, please ask via the in-browser recording system below. Try
+            to keep your question to 30 seconds or less and make sure your
+            question is a question.
+          </Text>
+          <QuestionFormWrapper>
+            <QuestionForm
+              allowSubmit={confirmPolicy}
+              showSubmit={activeStep === 'REVIEW'}
+              initialValues={{
+                confirmPolicy: true
+              }}
+              onSubmit={this.questionSubmit}
+            >
+              <Recorder
+                activeStep={activeStep}
+                errorMessage={errorMessage}
+                ready={this.recordingReady}
+                recording={this.recorderRecording}
+                stop={this.recorderStop}
+                review={this.recorderReview}
+                submit={this.recorderSubmit}
+                complete={this.recorderComplete}
+                error={this.recorderError}
+                submittedUrl={submittedUrl}
+                reset={this.reset}
+              />
+              {activeStep === 'COMPLETE' && <p>Thanks for your question!</p>}
+            </QuestionForm>
+          </QuestionFormWrapper>
+        </ListenerArea>
 
-			    <ListenerArea>
-				    <Title>Listener Questions</Title>
-				    <Text>
-					    We love hearing from our listeners!
-					    If you have a question about one of our episodes or a general question that's relevant to Data
-					    Skeptic, please ask via the in-browser recording system below.
-					    Try to keep your question to 30 seconds or less and make sure your question is a question.
-				    </Text>
-				    <QuestionFormWrapper>
-					    <QuestionForm
-						    allowSubmit={confirmPolicy}
-						    showSubmit={activeStep === 'REVIEW'}
-						    initialValues={{
-							    confirmPolicy: true
-						    }}
-						    onSubmit={this.questionSubmit}
-					    >
-						    <Recorder
-							    activeStep={activeStep}
-							    errorMessage={errorMessage}
-							    ready={this.recordingReady}
-							    recording={this.recorderRecording}
-							    stop={this.recorderStop}
-							    review={this.recorderReview}
-							    submit={this.recorderSubmit}
-							    complete={this.recorderComplete}
-							    error={this.recorderError}
-							    submittedUrl={submittedUrl}
-							    reset={this.reset}
-						    />
-						    {activeStep === 'COMPLETE' && <p>Thanks for your question!</p>}
-					    </QuestionForm>
-				    </QuestionFormWrapper>
-			    </ListenerArea>
+        <hr />
 
-			    <hr/>
+        <Sections>
+          <SectionBlock
+            title="General Inquiries"
+            open={this.isSectionOpen('general')}
+            onToggle={() => this.toggleSection('general')}
+          >
+            <Text>
+              We can no longer reply to every message we get. If your inquiry is
+              a question that you'd like us to answer, your best bet is to use
+              the Listener Questions section on this page or ask publically via
+              Twitter. Alternatively, we do have the contact form below
+              available.
+            </Text>
+            <ContactFormContainer type />
+          </SectionBlock>
 
-			    <Sections>
-				    <SectionBlock title="General Inquiries" open={this.isSectionOpen('general')} onToggle={() => this.toggleSection('general')}>
-					    <Text>We can no longer reply to every message we get.  If your inquiry is a question that you'd like us to answer, your best bet is to use the Listener Questions section on this page or ask publically via Twitter.  Alternatively, we do have the contact form below available.</Text>
-					    <ContactFormContainer type/>
-				    </SectionBlock>
+          <SectionBlock
+            title="For Members"
+            open={this.isSectionOpen('members')}
+            onToggle={() => this.toggleSection('members')}
+          >
+            <Text>
+              Login to the Members' Portal <Link to="/login">here</Link> or send
+              us a quick message via the form below.
+            </Text>
+            <ContactFormContainer type />
+          </SectionBlock>
 
-					<SectionBlock title="For Members" open={this.isSectionOpen('members')} onToggle={() => this.toggleSection('members')}>
-						<Text>Login to the Members' Portal <Link to="/login">here</Link> or send us a quick message via the form below.</Text>
-						<ContactFormContainer type/>
-					</SectionBlock>
+          <SectionBlock
+            title="Store / Orders"
+            open={this.isSectionOpen('orders')}
+            onToggle={() => this.toggleSection('orders')}
+          >
+            <Text>
+              If you have any issues with your order from our store, please
+              contact{' '}
+              <a href="mailto:orders@dataskeptic.com">orders@dataskeptic.com</a>.
+            </Text>
+          </SectionBlock>
 
-				    <SectionBlock title="Store / Orders" open={this.isSectionOpen('orders')} onToggle={() => this.toggleSection('orders')}>
-						<Text>If you have any issues with your order from our store, please contact <a href="mailto:orders@dataskeptic.com">orders@dataskeptic.com</a>.</Text>
-					</SectionBlock>
+          <SectionBlock
+            title="For Advertisers"
+            open={this.isSectionOpen('advertise')}
+            onToggle={() => this.toggleSection('advertise')}
+          >
+            <Text>
+              Data Skeptic currently accepts one (1) advertising slot per show.
+              We are often booked months in advance. For a rate sheet, please
+              contact{' '}
+              <a href="mailto:advertising@dataskeptic.com">
+                advertising@dataskeptic.com
+              </a>.
+            </Text>
+          </SectionBlock>
 
-				    <SectionBlock title="For Advertisers" open={this.isSectionOpen('advertise')} onToggle={() => this.toggleSection('advertise')}>
-					    <Text>Data Skeptic currently accepts one (1) advertising slot per show.  We are often booked months in advance.  For a rate sheet, please contact <a href="mailto:advertising@dataskeptic.com">advertising@dataskeptic.com</a>.</Text>
-					</SectionBlock>
-
-				    <SectionBlock title="For Media Inquiries" open={this.isSectionOpen('media')} onToggle={() => this.toggleSection('media')}>
-					    <Text>Kyle is available for comment to the media.  Please send a direct email to <a href="mailto:kyle@dataskeptic.com">kyle@dataskeptic.com</a> to make first contact.  After connecting, we have a Calendly link to share that will allow you to book a time that suits your schedule.</Text>
-					</SectionBlock>
-
-			    </Sections>
-        </Container>
+          <SectionBlock
+            title="For Media Inquiries"
+            open={this.isSectionOpen('media')}
+            onToggle={() => this.toggleSection('media')}
+          >
+            <Text>
+              Kyle is available for comment to the media. Please send a direct
+              email to{' '}
+              <a href="mailto:kyle@dataskeptic.com">kyle@dataskeptic.com</a> to
+              make first contact. After connecting, we have a Calendly link to
+              share that will allow you to book a time that suits your schedule.
+            </Text>
+          </SectionBlock>
+        </Sections>
+      </Container>
       )
     }
 }

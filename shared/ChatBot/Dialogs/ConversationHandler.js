@@ -11,11 +11,6 @@ var shirt_size_picker = require("./short_size_picker")
 
 var dialogs = [help, store, episode, survey, profile, reminders]
 
-// ga
-// free sticker
-// TODO: reminder backend
-// TODO: survey
-
 
 function get_reply(dispatch, reply, cstate, message) {
 	var handler = cstate.handler
@@ -43,13 +38,14 @@ function get_reply(dispatch, reply, cstate, message) {
 		for (var dialog of dialogs) {
 			if (!handled && dialog.can_handle(message, cstate, reply)) {
 				handler = dialog.handler
+				console.log(dialog)
 				msg = dialog.get_opening_remark(dispatch, reply)
 				console.log([handler, msg])
 				resp = {handler, msg, responder}
 				handled = true
 			}
 		}
-		if (n < 3 && Math.random() < .35) {
+		if (!handled && n < 3 && Math.random() < .35) {
 			if (n == 0) {
 				var msg = chatter.get_message("ROOT>SHIRT0")
 				resp = {handler, msg, responder}

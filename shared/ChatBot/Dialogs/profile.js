@@ -33,7 +33,7 @@ function can_handle(message, cstate, reply) {
 	else if (lmsg.indexOf('profile') != -1) {
 		return true
 	}
-	else if (lmsg.indexOf('who is') != 0) {
+	else if (lmsg.indexOf('who is') == 0) {
 		return true
 	}
 	else {
