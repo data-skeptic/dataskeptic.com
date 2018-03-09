@@ -43,13 +43,13 @@ const BlogBox = props => {
     <div>
       {blogList.map((item, index) => {
         let href = "blog" + item.prettyname
-        const author = getContributor(item)
+        const contributor = getContributor(item)
 
         const multipleContributors =
           item.contributors && item.contributors.length > 0
 
         if (!multipleContributors && contributor) {
-          item.contributors = [author]
+          item.contributors = [contributor]
         }
 
         return (
