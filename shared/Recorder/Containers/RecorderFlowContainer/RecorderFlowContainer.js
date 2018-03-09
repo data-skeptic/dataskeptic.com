@@ -191,7 +191,7 @@ class RecorderFlowContainer extends Component {
         console.log('onComplete()');
         this.props.complete(this.props.recorder.id);
     }
-  
+
   onError() {
     console.log('onError()')
   }
