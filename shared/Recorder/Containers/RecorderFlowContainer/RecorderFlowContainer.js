@@ -191,7 +191,6 @@ class RecorderFlowContainer extends Component {
         console.log('onComplete()');
         this.props.complete(this.props.recorder.id);
     }
-  }
 
   componentWillMount() {
     this.controlFlow(this.props)
