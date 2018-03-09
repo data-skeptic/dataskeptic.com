@@ -17,6 +17,21 @@ const fakeClick = e => {
   e.stopPropagation()
 }
 
+const formatRelated = (item) => {
+  const {
+    dest = '',
+    source = '',
+    title = '',
+    body = '',
+    content_id,
+    blog_id2,
+    blog_id,
+    type
+  } = item
+  
+  return { dest, source, title, body, content_id, blog_id2, blog_id, type }
+} 
+
 class BlogUpdater extends Component {
   state = {
     edit: false
@@ -30,23 +45,6 @@ class BlogUpdater extends Component {
   }
 
   saveRelated = related => {
-    related = related
-      // remove not existing items
-      .filter(item => !(item.created && item.remove))
-      // remove unnecessary fields
-      .map(item => {
-        const {
-          dest,
-          source,
-          title,
-          body,
-          content_id,
-          blog_id2,
-          blog_id
-        } = item
-        return { dest, source, title, body, content_id, blog_id2, blog_id }
-      })
-
     // manage new related
     const created = related
       .filter(item => item.created)
@@ -107,6 +105,7 @@ class BlogUpdater extends Component {
 
   addRelatedItem = data => {
     const { dispatch } = this.props
+    data = formatRelated(data)
 
     dispatch({
       type: "RELATED_CONTENT_ADD",
