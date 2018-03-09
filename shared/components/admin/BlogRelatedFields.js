@@ -211,7 +211,7 @@ const renderPersonFields = (member, disabled) => (
 
 const renderBlankFields = (member, disabled) => <div />
 
-const renderRelatedFields = (type, member, disabled) => {
+const renderRelatedFields = ({ type, member, disabled }) => {
   let fieldsRenderer
 
   switch (type) {
@@ -264,6 +264,7 @@ const renderRelatedFields = (type, member, disabled) => {
           { label: "Person", value: PERSON }
         ]}
         blankOption={true}
+        disabled={disabled}
       />
 
       {fields}
@@ -276,8 +277,8 @@ export const renderRelated = ({ fields, meta: { error, submitFailed } }) => (
     {submitFailed && error && <span>{error}</span>}
 
     {fields.map((member, index) => (
-      <RelatedEntry key={index} remove={fields.get(index).remove}>
-        <RelatedIndex>
+      <RelatedEntry key={index} >
+        <RelatedIndex removed={fields.get(index).remove}>
           <span>Related #{index + 1}</span>
 
           <Field
@@ -313,13 +314,6 @@ const RelatedEntry = styled.div`
   margin-bottom: 2em;
   border-top: 1px solid #e1e3e2;
   padding-top: 2em;
-
-  ${props =>
-    props.remove &&
-    `
-      text-decoration: line-through;
-      overflow: hidden;
-  `};
 `
 
 const RelatedIndex = styled.div`
@@ -338,6 +332,13 @@ const RelatedIndex = styled.div`
 
   display: flex;
   align-items: center;
+  
+   ${props =>
+  props.removed &&
+  `
+      text-decoration: line-through;
+      overflow: hidden;
+  `}; 
 `
 
 const ActionButton = styled.button`
