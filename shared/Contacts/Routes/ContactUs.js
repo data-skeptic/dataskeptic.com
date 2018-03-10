@@ -11,51 +11,83 @@ import ContactFormContainer from '../Containers/ContactFormContainer/ContactForm
 import { changePageTitle } from '../../Layout/Actions/LayoutActions'
 import { formValueSelector, reset } from 'redux-form'
 import {
-  init,
-  ready,
-  recordingStart,
-  recordingFinish,
-  review,
-  submit,
-  complete,
-  fail
-} from '../../Proposals/Actions/RecordingFlowActions'
-import { RECORDING } from '../../Proposals/Constants/CommentTypes'
-import Recorder, { steps } from '../../Recorder'
-import QuestionForm from '../../Questions/Forms/QuestionForm'
-import { submitCommentForm } from '../../Proposals/Actions/CommentBoxFormActions'
-import SectionBlock from '../Components/SectionBlock/SectionBlock'
+    init,
+    ready,
+    recordingStart,
+    recordingFinish,
+    review,
+    submit,
+    complete,
+    fail
+} from '../../Proposals/Actions/RecordingFlowActions';
+import {RECORDING} from "../../Proposals/Constants/CommentTypes";
+import Recorder, {steps} from '../../Recorder';
+import QuestionForm from "../../Questions/Forms/QuestionForm";
+import {submitCommentForm} from "../../Proposals/Actions/CommentBoxFormActions";
+import SectionBlock from "../Components/SectionBlock/SectionBlock";
+import Launcher from "../../Chat/Containers/Launcher";
+import ConversationHandler from "../../ChatBot/Dialogs/ConversationHandler"
+import {BOT_ID, THINKING_MESSAGE} from "../../Chat/Constants";
 
 class ContactUs extends React.Component {
-  isSectionOpen = section => section === this.state.openSection
-  toggleSection = section => {
-    this.setState(prevState => ({
-      openSection: prevState.openSection === section ? '' : section
-    }))
-  }
-  recordingReady = noDelay => {
-    this.props.dispatch(ready(noDelay))
-    this.setState({ submittedUrl: '' })
-  }
-  recorderRecording = () => {
-    this.props.dispatch(recordingStart())
-  }
-  recorderStop = id => {
-    this.props.dispatch(recordingFinish(id))
-    this.setState({ submittedUrl: id })
-  }
-  recorderReview = id => {
-    this.props.dispatch(review())
-  }
-  recorderSubmit = id => {
-    this.props.dispatch(submit())
-  }
-  recorderComplete = id => {
-    this.props.dispatch(complete(id))
-  }
-  recorderError = error => {
-    this.props.dispatch(fail(error))
-  }
+
+	constructor(props) {
+		super(props)
+
+		this.state = {
+			submittedUrl: '',
+			openSection: '',
+			messages: [
+			]
+		}
+	}
+
+	onMessage = (message) => {
+		this.addMessage(message)
+		let cstate = this.props.chatbot.toJS()
+		const dispatch = this.props.dispatch
+		cstate.contributors = this.props.contributors
+
+		ConversationHandler.get_reply(dispatch, this.reply, cstate, message)
+	}
+
+    isSectionOpen = section => section === this.state.openSection
+
+		toggleSection = section => {
+    	this.setState(prevState => ({
+    		openSection: (prevState.openSection === section) ? '' : section
+	    }))
+		}
+
+    recordingReady = (noDelay) => {
+        this.props.dispatch(ready(noDelay))
+        this.setState({submittedUrl: ''});
+    }
+
+    recorderRecording = () =>{
+        this.props.dispatch(recordingStart())
+    }
+
+    recorderStop = (id) => {
+        this.props.dispatch(recordingFinish(id))
+        this.setState({submittedUrl:id});
+    }
+
+    recorderReview = (id) => {
+        this.props.dispatch(review())
+    }
+
+    recorderSubmit = (id) => {
+        this.props.dispatch(submit())
+    }
+
+    recorderComplete = (id) => {
+        this.props.dispatch(complete(id))
+    }
+
+    recorderError = (error) => {
+        this.props.dispatch(fail(error))
+    }
   questionSubmit = data => {
     data.recording = this.state.submittedUrl
     data.type = RECORDING
@@ -100,14 +132,15 @@ class ContactUs extends React.Component {
       })
   }
 
-  constructor(props) {
-    super(props)
+	reply = (message, operatorId) => {
+		operatorId = !!this.props.contributors[operatorId] ? operatorId : BOT_ID
+		const author = this.props.contributors[operatorId]
 
-    this.state = {
-      submittedUrl: '',
-      openSection: ''
-    }
-  }
+		this.addMessage({
+			...message,
+			author
+		})
+	}
 
   static getPageMeta() {
     return {
@@ -117,22 +150,44 @@ class ContactUs extends React.Component {
     }
   }
 
-  componentDidMount() {
-    const { dispatch } = this.props
-    const { title } = ContactUs.getPageMeta(this.props)
-    dispatch(changePageTitle(title))
+	addMessage = (message) => this.setState(prevState => ({
+		messages: [...prevState.messages, message]
+	}))
+
+  onInactivity = () => {
+	  this.reply({ text: 'Still there?  Let me know what you think of the bot by DMing me on Slack!  I would appreciate your candid feedback'}, 'kyle')
   }
 
-  render() {
-    const { confirmPolicy, activeStep, errorMessage } = this.props
-    const { submittedUrl } = this.state
+  componentDidMount() {
+      const {dispatch} = this.props;
+      const {title} = ContactUs.getPageMeta(this.props);
+      dispatch(changePageTitle(title));
 
-    const osite = this.props.site.toJS()
+      this.reply({ text: 'What would you like to talk about?'})
+  }
 
-    const slackstatus = <SlackStatus>{osite.slackstatus}</SlackStatus>
+	render() {
+			const {confirmPolicy,activeStep,errorMessage, contributors, chatbot} = this.props;
+			const { submittedUrl } = this.state
 
-    return (
+			const osite = this.props.site.toJS()
+
+			const slackstatus = (
+				<SlackStatus>{osite.slackstatus}</SlackStatus>
+			)
+
+			const thinking = chatbot.get('thinking')
+
+    	return (
       <Container>
+          <Launcher
+            defaultBot={contributors[BOT_ID]}
+            thinking={thinking}
+            messages={this.state.messages}
+            onMessage={this.onMessage}
+            onInactivity={this.onInactivity}
+            inactivityDelay={1000 * 60 * 5}
+          />      
         <Title>Contact Us</Title>
         <Text>
           We hope to respond to all inquiries, but sometimes the volume of
@@ -145,6 +200,7 @@ class ContactUs extends React.Component {
 
         <Socials>
           <SocialBlock order={1}>
+            <SocialIcon src={'/img/svg/twitter-square.svg'} />
             <p>
               You can find us on Twitter via{' '}
               <TwitterLink href="https://twitter.com/dataskeptic">
@@ -153,6 +209,7 @@ class ContactUs extends React.Component {
             </p>
           </SocialBlock>
           <SocialBlock order={3}>
+            <SocialIcon src={'/img/svg/facebook-square.svg'} />
             <p>
               We are on Facebook via{' '}
               <FacebookLink href="https://www.facebook.com/dataskeptic">
@@ -162,7 +219,7 @@ class ContactUs extends React.Component {
           </SocialBlock>
           <SocialBlock order={2}>
             <SocialForm onSubmit={this.subscribeSlack}>
-              <SocialIcon src={'/img/png/contacts_slack.png'} />
+              <SocialIcon src={'/img/svg/logo-slack.svg'} />
               <input name="email" id="email" />
               <button
                 type="submit"
@@ -175,6 +232,7 @@ class ContactUs extends React.Component {
             </SocialForm>
           </SocialBlock>
           <SocialBlock order={4}>
+            <SocialIcon src={'/img/svg/mail_outline.svg'} />
             <SocialForm
               action="//dataskeptic.us9.list-manage.com/subscribe/post?u=65e63d6f84f1d87759105d133&amp;id=dc60d554db"
               method="post"
@@ -311,17 +369,9 @@ class ContactUs extends React.Component {
           </SectionBlock>
         </Sections>
       </Container>
-    )
-  }
+      )
+    }
 }
-
-/*
-				    <SectionBlock title="For PR Firms" open={this.isSectionOpen('pr')} onToggle={() => this.toggleSection('pr')}>
-					    <Text>pr</Text>
-
-					    <ContactFormContainer type/>
-						</SectionBlock>
-*/
 
 const SocialBlock = ({ left, children, order }) => (
   <Social order={order}>{children}</Social>
@@ -378,7 +428,7 @@ const Social = styled.div`
 const SocialIcon = styled.img`
   width: 32px;
   height: 32px;
-  margin-right: 7px;
+  margin-right: 17px;
 `
 
 const Sections = styled.div`
@@ -404,7 +454,7 @@ const Sections = styled.div`
 const ListenerArea = styled.div``
 
 const SocialForm = styled.form`
-	width: 100%;
+  flex: 1;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -462,12 +512,16 @@ const SlackStatus = styled.span`
   }
 `
 
-const selector = formValueSelector('question')
-export default connect(state => ({
-  cart: state.cart,
-  site: state.site,
-  confirmPolicy: selector(state, 'confirmPolicy'),
-  activeStep: state.questions.getIn(['form', 'step']),
-  errorMessage: state.questions.getIn(['form', 'error']),
-  aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket'])
-}))(ContactUs)
+const selector = formValueSelector('question');
+export default connect(
+	state => ({
+		cart: state.cart,
+		chatbot: state.chatbot,
+		contributors: state.site.get('contributors').toJS(),
+		site: state.site,
+        confirmPolicy: selector(state, 'confirmPolicy'),
+        activeStep: state.questions.getIn(['form', 'step']),
+        errorMessage : state.questions.getIn(['form', 'error']),
+        aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket'])
+	})
+)(ContactUs)

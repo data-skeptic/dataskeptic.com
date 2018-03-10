@@ -5,9 +5,15 @@ import { changePageTitle } from '../../Layout/Actions/LayoutActions'
 import { snserror } from '../../SnsUtil'
 import NotFound from '../../NotFound/Components/NotFound'
 import { Link } from 'react-router'
+import marked from 'marked'
 import moment from 'moment/moment'
 import { get_contributor_posts } from '../../utils/redux_loader'
 import Loading from '../../Common/Components/Loading'
+
+const markdown = text => {
+  const rawMarkup = marked(text)
+  return { __html: rawMarkup }
+}
 
 const getContributorInfo = (contributor = '', contributors) =>
   contributors && contributors[contributor.toLowerCase()]
@@ -16,6 +22,8 @@ const renderTwitter = twitter => (
   <a href={`https://twitter.com/${twitter}`}>@{twitter}</a>
 )
 const renderLinkedin = linkedin => <a href={linkedin}>LinkedIn</a>
+
+const renderBio = (bio) => <Bio dangerouslySetInnerHTML={markdown(bio)} />
 
 const formatDate = date => moment(date).format('MMMM D, Y')
 
@@ -109,7 +117,7 @@ class ContributorPage extends Component {
           <Avatar src={img} height={64} width={64} />
           <Name>{prettyname}</Name>
         </About>
-        <Bio>{bio}</Bio>
+        {renderBio(bio)}
         <Navigation>
           <Item line={true}>
             <Category>Posts</Category>

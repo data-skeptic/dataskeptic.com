@@ -55,152 +55,142 @@ const getAudioContext = () => {
  * 5. COMPLETE - user successfully submitted record | ERROR - server response with error message
  */
 class RecorderFlowContainer extends Component {
-  static propTypes = {
-    activeStep: PropTypes.string
-  }
 
-  constructor() {
-    super()
+    static propTypes = {
+        activeStep: PropTypes.string
+    };
 
-    /**
-     * STEPS HOOKS
-     **/
-    this.stepsActionHandlers = {
-      [INIT]: this.onInit.bind(this),
-      [READY]: this.onReady.bind(this),
-      [RECORDING]: this.onRecording.bind(this),
-      [UPLOADING]: this.onUploading.bind(this),
-      [REVIEW]: this.onReview.bind(this),
-      [SUBMITTING]: this.onSubmitting.bind(this),
-      [COMPLETE]: this.onComplete.bind(this),
-      [ERROR]: this.onError.bind(this)
+    constructor() {
+        super();
+
+        /**
+         * STEPS HOOKS
+         **/
+        this.stepsActionHandlers = {
+            [INIT]: this.onInit.bind(this),
+            [READY]: this.onReady.bind(this),
+            [RECORDING]: this.onRecording.bind(this),
+            [UPLOADING]: this.onUploading.bind(this),
+            [REVIEW]: this.onReview.bind(this),
+            [SUBMITTING]: this.onSubmitting.bind(this),
+            [COMPLETE]: this.onComplete.bind(this),
+            [ERROR]: this.onError.bind(this),
+        };
+
+        this.toggleRecording = this.toggleRecording.bind(this);
+        this.togglePlaying = this.togglePlaying.bind(this);
+
+        this.discardRecord = this.discardRecord.bind(this);
+        this.submitRecord = this.submitRecord.bind(this);
+
+        this.haveServerConnection = this.haveServerConnection.bind(this);
+        this.initRecorderSuccess = this.initRecorderSuccess.bind(this);
+        this.uploadChunk = this.uploadChunk.bind(this);
+        this.updateDuration = this.updateDuration.bind(this);
+
+        this.resetProcess = this.resetProcess.bind(this);
+
+        this.state = {
+            uploading: false,
+            metaReady: false,
+            playing: false
+        };
     }
 
-    this.toggleRecording = this.toggleRecording.bind(this)
-    this.togglePlaying = this.togglePlaying.bind(this)
-
-    this.discardRecord = this.discardRecord.bind(this)
-    this.submitRecord = this.submitRecord.bind(this)
-
-    this.haveServerConnection = this.haveServerConnection.bind(this)
-    this.initRecorderSuccess = this.initRecorderSuccess.bind(this)
-    this.uploadChunk = this.uploadChunk.bind(this)
-    this.updateDuration = this.updateDuration.bind(this)
-
-    this.resetProcess = this.resetProcess.bind(this)
-
-    this.state = {
-      uploading: false,
-      metaReady: false,
-      playing: false
-    }
-  }
-
-  componentWillMount() {
-    this.controlFlow(this.props)
-    this.props.getNextId()
-  }
-
-  componentDidMount() {
-    this.audioController = ReactDOM.findDOMNode(this.refs.listen_controller)
-    this.audioContext = this.audioContext || getAudioContext()
-  }
-
-  componentWillReceiveProps(nextProps) {
-    console.log('[RECORDER FLOW CONTAINER] will receive props')
-
-    if (this.isStepChanged(this.props.activeStep, nextProps.activeStep)) {
-      this.controlFlow(nextProps)
-    }
-  }
-
-  controlFlow(props) {
-    this.nextFlowStep(props.activeStep)
-  }
-
-  isStepChanged(currentStep, nextStep) {
-    return currentStep !== nextStep
-  }
-
-  nextFlowStep(nextStep) {
-    console.log('[RECORDER FLOW CONTAINER] next flow step')
-    console.dir(nextStep)
-
-    this.stepsActionHandlers[nextStep]()
-  }
-
-  onInit() {
-    console.log('onInit()')
-
-    if (this.isBrowserSupportRecording()) {
-      this.props.ready()
-    } else {
-      this.props.error({
-        title: 'Browser error',
-        body: 'Your browser does not support audio recording.'
-      })
-    }
-  }
-
-  onReady() {
-    this.haveServerConnection()
-      .then(() => {
-        this.props.resetRecording()
-      })
-      .catch(err =>
-        this.props.error({
-          title: 'Server unreachable',
-          body: 'Error in connection establishment.'
-        })
-      )
-  }
-
-  onRecording() {
-    console.log('onRecording()')
-    this.initRecorder()
-
-    const audio = ReactDOM.findDOMNode(this.refs.listen_controller)
-    audio.src = ''
-  }
-
-  onUploading() {
-    console.log('onUploading()')
-
-    if (!this.state.uploading) {
-      this.stopTimeCounter()
-      this.stopStreams(this.browserStream)
-      this.closeConnection()
-
-      this.setState({
-        uploading: true,
-        metaReady: false
-      })
-    }
-  }
-
-  onReview() {
-    console.log('onReview()')
-    this.audioController.src = `/api/v1/recording/get?id=${
-      this.props.submittedUrl
-    }`
-
-    this.audioController.onloadedmetadata = () => {
-      this.setState({ metaReady: true })
+    componentWillMount() {
+        this.controlFlow(this.props);
+        this.props.getNextId();
     }
 
-    this.audioController.onended = () => {
-      this.pauseAudio()
+    componentDidMount() {
+        this.audioController = ReactDOM.findDOMNode(this.refs.listen_controller);
+        this.audioContext = this.audioContext || getAudioContext()
     }
-  }
 
-  onSubmitting() {
-    console.log('onSubmitting()')
-  }
+    componentWillReceiveProps(nextProps) {
+        if (this.isStepChanged(this.props.activeStep, nextProps.activeStep)) {
+            this.controlFlow(nextProps)
+        }
+    }
 
-  onComplete() {
-    console.log('onComplete()')
-    this.props.complete(this.props.recorder.id)
-  }
+    controlFlow(props) {
+        this.nextFlowStep(props.activeStep);
+    }
+
+    isStepChanged(currentStep, nextStep) {
+        return (currentStep !== nextStep);
+    }
+
+    nextFlowStep(nextStep) {
+        this.stepsActionHandlers[nextStep]();
+    }
+
+    onInit() {
+        if (this.isBrowserSupportRecording()) {
+            this.props.ready();
+        } else {
+            this.props.error({
+                title: 'Browser error',
+                body: 'Your browser does not support audio recording.'
+            })
+        }
+    }
+
+    onReady() {
+        this.haveServerConnection()
+            .then(() => {
+                this.props.resetRecording();
+            })
+            .catch((err) => this.props.error({
+                title: 'Server unreachable',
+                body: 'Error in connection establishment.'
+            }));
+    }
+
+    onRecording() {
+        console.log('onRecording()');
+        this.initRecorder();
+
+        const audio = ReactDOM.findDOMNode(this.refs.listen_controller);
+        audio.src = '';
+    }
+
+    onUploading() {
+        console.log('onUploading()');
+
+        if (!this.state.uploading) {
+            this.stopTimeCounter();
+            this.stopStreams(this.browserStream);
+            this.closeConnection();
+
+            this.setState({
+                uploading: true,
+                metaReady: false
+            })
+        }
+    }
+
+    onReview() {
+        console.log('onReview()');
+        this.audioController.src = `/api/v1/recording/get?id=${this.props.submittedUrl}`
+
+        this.audioController.onloadedmetadata = () => {
+            this.setState({metaReady: true});
+        };
+
+        this.audioController.onended = () => {
+            this.pauseAudio();
+        }
+    }
+
+    onSubmitting() {
+        console.log('onSubmitting()');
+    }
+
+    onComplete() {
+        console.log('onComplete()');
+        this.props.complete(this.props.recorder.id);
+    }
 
   onError() {
     console.log('onError()')
@@ -447,7 +437,7 @@ class RecorderFlowContainer extends Component {
           <div key={[READY, RECORDING]} className="recording-step">
             <Recorder
               recording={this.isRecording()}
-              startComponent={<i className="fa fa-microphone icon">&nbsp;</i>}
+              startComponent={<i className="microphone icon" />}
               stopComponent={<i className="fa fa-circle icon">&nbsp;</i>}
               onClick={this.toggleRecording}
               info={this.getInfoMessage()}

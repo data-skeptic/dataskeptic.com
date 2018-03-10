@@ -217,6 +217,7 @@ class MainView extends React.Component {
     if (!oadmin["bot"]) {
       cbc = <div />
     }
+    cbc = <div></div>
 
     return (
       <div
