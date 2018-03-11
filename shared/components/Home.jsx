@@ -1,38 +1,43 @@
-import React, { Component , PropTypes }   from 'react';
-import { connect }            from 'react-redux';
+import React, { Component, PropTypes } from "react"
+import { connect } from "react-redux"
 import MailingList from "../Common/Components/MailingList"
 
-import {changePageTitle} from '../Layout/Actions/LayoutActions'
+import { changePageTitle } from "../Layout/Actions/LayoutActions"
 
-import HomeContainer from '../../shared/Home'
-import {parseQuery} from "../utils/parseQuery";
+import HomeContainer from "../../shared/Home"
+import { parseQuery } from "../utils/parseQuery"
 
 class Home extends Component {
-
-  componentWillMount() {
-      var dispatch = this.props.dispatch
-      const {title} = Home.getPageMeta()
-      dispatch(changePageTitle(title))
-
-      if (!this.props.cms.get('home_loaded')) {
-          dispatch({type: "CMS_GET_HOMEPAGE_CONTENT", payload: {dispatch}})
-
-          const query = parseQuery(this.props.location.search)
-          const location = query.location
-          dispatch({type: "CMS_GET_HOMEPAGE_JOB_LISTING", payload: {dispatch, location}})
-      }
+  static getPageMeta() {
+    return {
+      title: "Data Skeptic"
+    }
   }
 
-  static getPageMeta() {
-      return {
-          title: 'Data Skeptic'
-      }
+  componentWillMount() {
+    var dispatch = this.props.dispatch
+    const { title } = Home.getPageMeta()
+    dispatch(changePageTitle(title))
+
+    if (!this.props.cms.get("home_loaded")) {
+      dispatch({
+        type: "CMS_GET_HOMEPAGE_CONTENT",
+        payload: { dispatch }
+      })
+
+      const query = parseQuery(this.props.location.search)
+      const location = query.location
+      dispatch({
+        type: "CMS_GET_HOMEPAGE_JOB_LISTING",
+        payload: { dispatch, location }
+      })
+    }
   }
 
   render() {
     var ocms = this.props.cms.toJS()
     var latest_episode_blog = ocms.latest_episode
-    var guid = latest_episode_blog['guid']
+    var guid = latest_episode_blog["guid"]
     var oepisodes = this.props.episodes.toJS()
     var ep_map = oepisodes.ep_map
     var latest_episode = ep_map[guid]
@@ -58,13 +63,14 @@ class Home extends Component {
           </div>
           <div className="clear" />
         </div>
-        <br/><br/>
+        <br />
+        <br />
       </div>
-    );
+    )
   }
 }
 
 export default connect(state => ({
-    episodes: state.episodes, 
-    cms: state.cms
+  episodes: state.episodes,
+  cms: state.cms
 }))(Home)

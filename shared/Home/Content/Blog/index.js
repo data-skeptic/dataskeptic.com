@@ -1,4 +1,4 @@
-import React, { Component }  from 'react'
+import React, { Component } from 'react'
 import moment from 'moment'
 import { Link } from 'react-router'
 import {
@@ -14,36 +14,34 @@ import {
   Name
 } from './style'
 
-import AuthorLink from "../../../components/AuthorLink";
+import AuthorLink from '../../../components/AuthorLink'
 
 const BlogBox = props => {
   const { blogList, getContributor } = props
   return (
     <div>
-      {
-        blogList.map(
-          (item, index) => {
-            let href = 'blog' + item.prettyname
-            const author = getContributor(item)
-            return (
-              <BlogItem key={index}>
-                <ItemDate>{moment(item.publish_date).format('MMMM D, Y')}</ItemDate>
-                <Link to={href}><ItemTitle>{item.title}</ItemTitle></Link>
-                <ItemDesc>{item.abstract}</ItemDesc>
-                <ViewMore to={href}>View More</ViewMore>
-                {author &&
-                  <AuthorLink author={author.author}>
-                    <Author>
-                          <Avatar src={author.img} />
-                          <Name>{author.prettyname}</Name>
-                    </Author>
-                  </AuthorLink>
-                }
-              </BlogItem>
-            )
-          }
+      {blogList.map((item, index) => {
+        let href = 'blog' + item.prettyname
+        const author = getContributor(item)
+        return (
+          <BlogItem key={index}>
+            <ItemDate>{moment(item.publish_date).format('MMMM D, Y')}</ItemDate>
+            <Link to={href}>
+              <ItemTitle>{item.title}</ItemTitle>
+            </Link>
+            <ItemDesc>{item.abstract}</ItemDesc>
+            <ViewMore to={href}>View More</ViewMore>
+            {author && (
+              <AuthorLink author={author.author}>
+                <Author>
+                  <Avatar src={author.img} />
+                  <Name>{author.prettyname}</Name>
+                </Author>
+              </AuthorLink>
+            )}
+          </BlogItem>
         )
-      }
+      })}
     </div>
   )
 }
@@ -53,7 +51,7 @@ class Blog extends Component {
     super(props)
   }
 
-  render () {
+  render() {
     const { blogList, getContributor } = this.props
     return (
       <Container>

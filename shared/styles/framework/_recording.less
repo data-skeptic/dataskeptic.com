@@ -24,10 +24,17 @@
     display: none;
   }
 
-  .messages {
-    margin-left: 60px;
+  .row {
+    display: flex;
+  }
 
-    > p {
+  .messages {
+    flex-grow: 1;
+    align-items: center;
+    display: flex;
+    margin-left: 10px;
+
+    p {
       margin: 0px;
       padding: 0px;
     }
@@ -93,8 +100,11 @@
   .btn-recorder {
     float: left;
     outline: none;
-    border: 2px solid @recording-button-border-color;
-    background: @recording-button-bg-color;
+    background-image: url('/img/proposals/record-button.svg');
+    background-size: cover;
+    border: none;
+    display: flex;
+    justify-content: center;
     border-radius: 50%;
     width: @recording-button-width;
     height: @recording-button-width;
@@ -106,15 +116,21 @@
     &:focus,
     &:active,
     &:focus:active {
-      border-color: @recording-button-border-color;
-      background: @recording-button-bg-color;
+      outline: none;
     }
 
     .icon {
-      transition: all .2s ease-in-out;
       color: @recording-icon-bg;
       fill: @recording-icon-bg;
-      margin-left: 5px;
+      margin-left: 4px;
+
+      &.microphone {
+        width: 11px;
+        height: 18px;
+        background-image: url('/img/proposals/microphone.svg');
+        background-size: cover;
+        margin: 0px;
+      }
     }
 
     &.recording {

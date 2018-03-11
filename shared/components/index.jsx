@@ -1,34 +1,36 @@
-import React  from 'react'
-import ReactGA from 'react-ga'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import classNames from 'classnames'
-
+import React from "react"
+import ReactGA from "react-ga"
+import { bindActionCreators } from "redux"
+import { connect } from "react-redux"
+import classNames from "classnames"
 
 import xml2js from "xml2js"
 
-import { calculateShipping, calculateTotal } from '../utils/store_utils'
-import { extractFolders } from '../utils/blog_utils'
+import { calculateShipping, calculateTotal } from "../utils/store_utils"
+import { extractFolders } from "../utils/blog_utils"
 
-import Footer from '../Layout/Components/Footer/Footer'
-import Header from './Header'
-import Menu from './Menu'
-import PlayerContainer from '../Player'
-import Sidebar from './Sidebar'
-import Overflow from '../Layout/Components/Overflow/Overflow'
+import Footer from "../Layout/Components/Footer/Footer"
+import Header from "./Header"
+import Menu from "./Menu"
+import PlayerContainer from "../Player"
+import Sidebar from "./Sidebar"
+import Overflow from "../Layout/Components/Overflow/Overflow"
 
-import { toggleMobileMenu } from '../Layout/Actions/LayoutActions';
-import MobileMenu from '../MobileMenu/Components/MobileMenu'
-import { getItemsCount as getCartItemsCount } from '../Cart/Helpers/getItemsCount';
-import { toggleCart } from '../Cart/Actions/CartActions'
-import ChatBotContainer from "../ChatBot/Containers/ChatBotContainer";
+import { toggleMobileMenu } from "../Layout/Actions/LayoutActions"
+import MobileMenu from "../MobileMenu/Components/MobileMenu"
+import { getItemsCount as getCartItemsCount } from "../Cart/Helpers/getItemsCount"
+import { toggleCart } from "../Cart/Actions/CartActions"
+import ChatBotContainer from "../ChatBot/Containers/ChatBotContainer"
 
 class MainView extends React.Component {
   constructor(props) {
     super(props)
     var persisted = this.loadState()
     var total = calculateTotal(persisted.cart_items, persisted.country.short)
-    var shipping = calculateShipping(persisted.cart_items, persisted.country.short)
+    var shipping = calculateShipping(
+      persisted.cart_items,
+      persisted.country.short
+    )
 
     this.onNavigationItemClick = this.onNavigationItemClick.bind(this)
     this.onOverflowClick = this.onOverflowClick.bind(this)
@@ -41,13 +43,13 @@ class MainView extends React.Component {
 
   loadState() {
     var cart_items = []
-    var country = {short: "us", long: "United State of America"}
-    return {cart_items, country}
+    var country = { short: "us", long: "United State of America" }
+    return { cart_items, country }
   }
 
   generateEpisodeMap(episodes) {
     var map = {}
-    for (var i=0; i < episodes.length; i++) {
+    for (var i = 0; i < episodes.length; i++) {
       var episode = episodes[i]
       var guid = episode.guid
       map[guid] = episode
@@ -59,7 +61,7 @@ class MainView extends React.Component {
     var player = this.state.player
     if (episode == undefined) {
       console.log("Stopping playback")
-      this.setState({player: {is_playing: false}})
+      this.setState({ player: { is_playing: false } })
     } else {
       var s = this.state
       s.player.has_shown = true
@@ -86,12 +88,12 @@ class MainView extends React.Component {
       }
     }
   }
-  
+
   onChangeCountry(short, long) {
-    var country = {short, long}
+    var country = { short, long }
     var total = calculateTotal(this.state.cart_items, short)
     var shipping = calculateShipping(this.state.cart_items, short)
-    this.setState({country, total, shipping})
+    this.setState({ country, total, shipping })
   }
 
   addToCart(product, size) {
@@ -99,14 +101,14 @@ class MainView extends React.Component {
     if (size == undefined) {
       size = ""
     }
-    var cart_elem = {product, size, quan}
+    var cart_elem = { product, size, quan }
     var s = JSON.stringify(this.state.cart_items)
     var cart_items = JSON.parse(s)
     var found = false
     for (var i in cart_items) {
       var item = cart_items[i]
-      if (item['product']['id'] == product['id'] && item['size'] == size) {
-        item['quan'] += 1
+      if (item["product"]["id"] == product["id"] && item["size"] == size) {
+        item["quan"] += 1
         found = true
       }
     }
@@ -116,7 +118,7 @@ class MainView extends React.Component {
     var short = this.state.country.short
     var total = calculateTotal(cart_items, short)
     var shipping = calculateShipping(cart_items, short)
-    this.setState({cart_items, total, shipping})
+    this.setState({ cart_items, total, shipping })
   }
 
   updateCartQuantity(product, size, delta) {
@@ -126,9 +128,9 @@ class MainView extends React.Component {
     var cart_items = JSON.parse(JSON.stringify(this.state.cart_items))
     for (var i in cart_items) {
       var item = cart_items[i]
-      if (item['product']['id'] == product['id'] && item['size'] == size) {
-        item['quan'] += delta
-        if (item['quan'] <= 0) {
+      if (item["product"]["id"] == product["id"] && item["size"] == size) {
+        item["quan"] += delta
+        if (item["quan"] <= 0) {
           cart_items.splice(i, 1)
         }
         i = cart_items.length
@@ -137,12 +139,12 @@ class MainView extends React.Component {
     var short = this.state.country.short
     var total = calculateTotal(cart_items, short)
     var shipping = calculateShipping(cart_items, short)
-    this.setState({cart_items, total, shipping})
+    this.setState({ cart_items, total, shipping })
   }
   toggleCart() {
     var cart_visible = this.state.cart_visible
     cart_visible = !cart_visible
-    this.setState({cart_visible: cart_visible})
+    this.setState({ cart_visible: cart_visible })
     this.logPageViewInner("cart toggle")
   }
   logPageView() {
@@ -150,8 +152,8 @@ class MainView extends React.Component {
   }
   logPageViewInner(page) {
     console.log(["logPageViewInner", page])
-    ReactGA.set({ page });
-    ReactGA.pageview(page);
+    ReactGA.set({ page })
+    ReactGA.pageview(page)
   }
 
   /**
@@ -167,14 +169,14 @@ class MainView extends React.Component {
    *
    * @param {Boolean} isMobileMenuVisible Mobile Menu visibility state
    */
-  getClassList({isMobileMenuVisible}) {
-    let classes = ['site'];
+  getClassList({ isMobileMenuVisible }) {
+    let classes = ["site"]
 
     if (isMobileMenuVisible) {
-      classes.push('no-scroll');
+      classes.push("no-scroll")
     }
 
-    return classes.join(' ');
+    return classes.join(" ")
   }
 
   /**
@@ -195,62 +197,81 @@ class MainView extends React.Component {
 
   render() {
     this.logPageView()
-    const {isMobileMenuVisible, admin, cart, isCartVisible, loggedIn, user} = this.props;
-    const {showAds = true} = this.props.route;
-    const {pathname} = this.props.location
-    const itemsCount = getCartItemsCount(cart.toJS().cart_items);
+    const {
+      isMobileMenuVisible,
+      admin,
+      cart,
+      isCartVisible,
+      loggedIn,
+      user
+    } = this.props
+    const { showAds = true } = this.props.route
+    const { pathname } = this.props.location
+    const itemsCount = getCartItemsCount(cart.toJS().cart_items)
     const isOverflowMode = isCartVisible
 
     const { ready } = this.state
 
     var oadmin = admin.toJS()
-    var cbc = <ChatBotContainer/>
-    if (!oadmin['bot']) {
-      cbc = <div></div>
+    var cbc = <ChatBotContainer />
+    if (!oadmin["bot"]) {
+      cbc = <div />
     }
+    cbc = <div></div>
 
     return (
-        <div className={ classNames('site', {'no-scroll' : isMobileMenuVisible}) }>
-          <div className="container-fluid">
-            <MobileMenu
-                itemClick={this.onNavigationItemClick}
-                pathname={pathname}
-                cartItemsCount={itemsCount}
-                visible={isMobileMenuVisible}
-                loggedIn={loggedIn}
-                user={user}
-            />
+      <div
+        className={classNames("site", {
+          "no-scroll": isMobileMenuVisible
+        })}
+      >
+        <div className="container-fluid">
+          <MobileMenu
+            itemClick={this.onNavigationItemClick}
+            pathname={pathname}
+            cartItemsCount={itemsCount}
+            visible={isMobileMenuVisible}
+            loggedIn={loggedIn}
+            user={user}
+          />
 
-            <div className="row row-centered">
-              <Header pathname={pathname} />
-            </div>
-            <div className="row">
-              <PlayerContainer />
-            </div>
-            {this.props.children}
-            <Sidebar />
+          <div className="row row-centered">
+            <Header pathname={pathname} />
           </div>
-          {cbc}
-          <Footer showAds={showAds} linkClick={this.onFooterItemClick} banner={this.props.bannerContent}/>
-          <Overflow visible={isOverflowMode} onClick={this.onOverflowClick}/>
+          <div className="row">
+            <PlayerContainer />
+          </div>
+          {this.props.children}
+          <Sidebar />
         </div>
+        {cbc}
+        <Footer
+          showAds={showAds}
+          linkClick={this.onFooterItemClick}
+          banner={this.props.bannerContent}
+        />
+        <Overflow visible={isOverflowMode} onClick={this.onOverflowClick} />
+      </div>
     )
   }
 }
 
 export default connect(
-    state => ({ 
-      cart: state.cart,
-      admin: state.admin,
-      isCartVisible: state.cart.getIn(['cart_visible']),
-      site: state.site,
-      isMobileMenuVisible: state.layout.getIn(['isMobileMenuVisible']),
-      loggedIn: state.auth.getIn(['loggedIn']),
-      user: state.auth.getIn(['user']).toJS(),
-    }),
-    dispatch => bindActionCreators({
-      toggleMobileMenu,
-      toggleCart
-    }, dispatch)
+  state => ({
+    cart: state.cart,
+    admin: state.admin,
+    isCartVisible: state.cart.getIn(["cart_visible"]),
+    site: state.site,
+    isMobileMenuVisible: state.layout.getIn(["isMobileMenuVisible"]),
+    loggedIn: state.auth.getIn(["loggedIn"]),
+    user: state.auth.getIn(["user"]).toJS()
+  }),
+  dispatch =>
+    bindActionCreators(
+      {
+        toggleMobileMenu,
+        toggleCart
+      },
+      dispatch
+    )
 )(MainView)
-

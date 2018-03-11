@@ -1,4 +1,4 @@
-import React, { Component }  from 'react'
+import React, { Component } from 'react'
 import { Link } from 'react-router'
 import {
   Container,
@@ -17,37 +17,47 @@ import {
 } from './style'
 
 import { ArrowRight } from '../Blog/style'
-import AuthorLink from "../../../components/AuthorLink";
+import AuthorLink from '../../../components/AuthorLink'
 
 class Feature extends Component {
   constructor(props) {
     super(props)
   }
-  
-  render () {
+
+  render() {
     const { feature_blog, author } = this.props
     var href = 'blog' + feature_blog.prettyname
     return (
       <Container>
         <LogoContainer className="col-xs-12 col-sm-12 col-md-3">
-          <Link to={href}><LogoImg src={feature_blog.img} /></Link>
-        </LogoContainer >
+          <Link to={href}>
+            <LogoImg src={feature_blog.img} />
+          </Link>
+        </LogoContainer>
         <DescBox className="col-xs-12 col-sm-12 col-md-9">
           <Title>feature of the week</Title>
-          <Link to={href}><SubTitle>{feature_blog.title}</SubTitle></Link>
+          <Link to={href}>
+            <SubTitle>{feature_blog.title}</SubTitle>
+          </Link>
           <Desc>{feature_blog.abstract}</Desc>
           <BlogViewMore to={href}>View More</BlogViewMore>
-          { author &&
+          {author && (
             <UserBox author={author.author}>
               <UserImgArea>
-                  <AuthorLink author={author.author}><UserImg src={author.img} /></AuthorLink>
+                <AuthorLink author={author.author}>
+                  <UserImg src={author.img} />
+                </AuthorLink>
               </UserImgArea>
               <UserDetail>
-                <AuthorLink author={author.author}>{author.prettyname}</AuthorLink>
-                <UserInfo href={`https://twitter.com/${author.twitter}`}>@{author.twitter}</UserInfo>
+                <AuthorLink author={author.author}>
+                  {author.prettyname}
+                </AuthorLink>
+                <UserInfo href={`https://twitter.com/${author.twitter}`}>
+                  @{author.twitter}
+                </UserInfo>
               </UserDetail>
             </UserBox>
-          }
+          )}
         </DescBox>
       </Container>
     )

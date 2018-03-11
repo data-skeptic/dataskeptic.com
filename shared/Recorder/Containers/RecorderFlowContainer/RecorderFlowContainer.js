@@ -1,48 +1,47 @@
-import React, {Component, PropTypes} from 'react';
-import ReactDOM from 'react-dom';
+import React, { Component, PropTypes } from 'react'
+import ReactDOM from 'react-dom'
 
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 
-import moment from 'moment';
-
-
-import {
-    INIT,
-    READY,
-    ERROR,
-    RECORDING,
-    UPLOADING,
-    REVIEW,
-    SUBMITTING,
-    COMPLETE
-} from '../../../Recorder/Constants/steps';
+import moment from 'moment'
 
 import {
-    startRecording,
-    stopRecording,
-    resetRecording,
-    updateRecordingDuration,
-    getNextId
-} from '../../Actions/RecorderActions';
+  INIT,
+  READY,
+  ERROR,
+  RECORDING,
+  UPLOADING,
+  REVIEW,
+  SUBMITTING,
+  COMPLETE
+} from '../../../Recorder/Constants/steps'
 
-import Wizard from '../../../Wizard';
-import Debug from '../../../Debug';
-import ProposalLoading from '../../../Proposals/Components/ProposalLoading/ProposalLoading';
+import {
+  startRecording,
+  stopRecording,
+  resetRecording,
+  updateRecordingDuration,
+  getNextId
+} from '../../Actions/RecorderActions'
 
-import TogglePlayButton from '../../../Player/Components/TogglePlayButton';
-import Recorder from '../../Components/Recorder/Recorder';
-import RecordingTimeTracker from '../../Components/RecordingTimeTracker/RecordingTimeTracker';
+import Wizard from '../../../Wizard'
+import Debug from '../../../Debug'
+import ProposalLoading from '../../../Proposals/Components/ProposalLoading/ProposalLoading'
 
-import {float32ToInt16} from '../../Helpers/Converter';
-import AudioVolumeIndicator from "../../../components/AudioVolumeIndicator";
+import TogglePlayButton from '../../../Player/Components/TogglePlayButton'
+import Recorder from '../../Components/Recorder/Recorder'
+import RecordingTimeTracker from '../../Components/RecordingTimeTracker/RecordingTimeTracker'
+
+import { float32ToInt16 } from '../../Helpers/Converter'
+import AudioVolumeIndicator from '../../../components/AudioVolumeIndicator'
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const IS_PROD = (env === 'prod')
+const IS_PROD = env === 'prod'
 
 const getAudioContext = () => {
-    const audioContextSource = window.AudioContext || window.webkitAudioContext;
-    return new audioContextSource();
+  const audioContextSource = window.AudioContext || window.webkitAudioContext
+  return new audioContextSource()
 }
 
 /**
@@ -109,8 +108,6 @@ class RecorderFlowContainer extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('[RECORDER FLOW CONTAINER] will receive props');
-
         if (this.isStepChanged(this.props.activeStep, nextProps.activeStep)) {
             this.controlFlow(nextProps)
         }
@@ -125,15 +122,10 @@ class RecorderFlowContainer extends Component {
     }
 
     nextFlowStep(nextStep) {
-        console.log('[RECORDER FLOW CONTAINER] next flow step');
-        console.dir(nextStep);
-
         this.stepsActionHandlers[nextStep]();
     }
 
     onInit() {
-        console.log('onInit()');
-
         if (this.isBrowserSupportRecording()) {
             this.props.ready();
         } else {
@@ -200,311 +192,341 @@ class RecorderFlowContainer extends Component {
         this.props.complete(this.props.recorder.id);
     }
 
-    onError() {
-        console.log('onError()');
+  onError() {
+    console.log('onError()')
+  }
+
+  isBrowserSupportRecording() {
+    if (typeof window === 'undefined') return
+
+    if (!navigator.getUserMedia) {
+      navigator.getUserMedia =
+        navigator.getUserMedia ||
+        navigator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia ||
+        navigator.msGetUserMedia
     }
 
-    isBrowserSupportRecording() {
-        if (typeof window === "undefined") return;
+    return !!navigator.getUserMedia
+  }
 
-        if (!navigator.getUserMedia) {
-            navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
-                navigator.mozGetUserMedia || navigator.msGetUserMedia;
-        }
+  haveServerConnection() {
+    return new Promise((res, rej) => {
+      const { id, chunkId } = this.props.recorder
 
-        return !!navigator.getUserMedia;
+      const BinaryClient = require('binaryjs-client').BinaryClient
+
+      let hostname
+      if (IS_PROD) {
+        hostname = `wss://${window.location.hostname}${window.location.port &&
+          `:${window.location.port}`}/recording`
+      } else {
+        hostname = `ws://${window.location.hostname}:9001/recording`
+      }
+
+      this.client = new BinaryClient(hostname)
+
+      const audioCtx = new AudioContext()
+      const sampleRate = audioCtx.sampleRate
+
+      this.client.on('open', () => {
+        const meta = { id, chunkId, sampleRate }
+        this.Stream = this.client.createStream(meta)
+        res()
+      })
+
+      this.client.on('error', err => rej(err))
+    })
+  }
+
+  isRecording() {
+    return this.props.activeStep === RECORDING
+  }
+
+  toggleRecording() {
+    const { id, chunkId } = this.props.recorder
+
+    if (!this.isRecording()) {
+      this.props.recording()
+      this.props.updateRecordingDuration('00:00:00')
+      this.props.startRecording(id, chunkId)
+    } else {
+      this.props.stop(id)
+      this.props.stopRecording(id)
+    }
+  }
+
+  getInfoMessage() {
+    const { duration } = this.props.recorder
+
+    if (this.isRecording()) {
+      return <RecordingTimeTracker duration={duration} />
     }
 
-    haveServerConnection() {
-        return new Promise((res, rej) => {
-            const {id, chunkId} = this.props.recorder;
+    return (
+      <p className="text-muted">
+        Recording will start when you hit the button below.<br />You will have a
+        chance to review your recording before submitting.
+      </p>
+    )
+  }
 
-            const BinaryClient = require('binaryjs-client').BinaryClient;
+  discardRecord() {
+    this.pauseAudio()
+    this.props.ready(true)
+    this.props.resetRecording()
+    this.props.getNextId()
 
-            let hostname;
-            if (IS_PROD) {
-                hostname = `wss://${window.location.hostname}${window.location.port && `:${window.location.port}`}/recording`;
-            } else {
-                hostname = `ws://${window.location.hostname}:9001/recording`;
-            }
+    this.setState({
+      uploading: false
+    })
+  }
 
-            this.client = new BinaryClient(hostname);
+  submitRecord() {
+    this.props.submit()
+  }
 
-            const audioCtx = new AudioContext();
-            const sampleRate = audioCtx.sampleRate;
+  initRecorder() {
+    if (navigator.getUserMedia) {
+      navigator.getUserMedia({ audio: true }, this.initRecorderSuccess, e => {
+        this.props.error({
+          title: 'Recording error',
+          body:
+            'Enable(link based on browser) dataskeptic.com to use your microphone.'
+        })
+      })
+    } else {
+      this.props.error({
+        title: 'Recording error',
+        body: 'Audio recording is not supported in this browser.'
+      })
+    }
+  }
 
-            this.client.on('open', () => {
-                const meta = {id, chunkId, sampleRate};
-                this.Stream = this.client.createStream(meta);
-                res();
-            });
+  initRecorderSuccess(stream) {
+    this.browserStream = stream
 
-            this.client.on('error', (err) => rej(err));
-        });
+    // the sample rate is in context.sampleRate
+    this.audioInput = this.audioContext.createMediaStreamSource(stream)
+
+    const bufferSize = 4096
+    this.recorder = this.audioContext.createScriptProcessor(bufferSize, 2, 2)
+
+    this.startTimeCounter()
+
+    this.recorder.onaudioprocess = e => {
+      if (!this.isRecording()) return
+
+      const left = e.inputBuffer.getChannelData(0)
+      this.uploadChunk(float32ToInt16(left))
     }
 
-    isRecording() {
-        return (this.props.activeStep === RECORDING);
+    this.audioInput.connect(this.recorder)
+    this.recorder.connect(this.audioContext.destination)
+  }
+
+  startTimeCounter() {
+    this.timeCounter = setInterval(this.updateDuration, 1000)
+  }
+
+  stopTimeCounter() {
+    if (this.timeCounter) {
+      clearInterval(this.timeCounter)
+      this.timeCounter = null
     }
+  }
 
-    toggleRecording() {
-        const {id, chunkId} = this.props.recorder;
+  updateDuration() {
+    const then = new Date(this.props.recorder.startedAt)
+    const now = new Date()
 
-        if (!this.isRecording()) {
-            this.props.recording();
-            this.props.updateRecordingDuration('00:00:00');
-            this.props.startRecording(id, chunkId);
-        } else {
-            this.props.stop(id);
-            this.props.stopRecording(id);
-        }
-    }
-
-    getInfoMessage() {
-        const {duration} = this.props.recorder;
-
-        if (this.isRecording()) {
-            return (
-                <RecordingTimeTracker duration={duration}/>
-            )
-        }
-
-        return (
-            <p className="text-muted">
-                Recording will start when you hit the button below.<br/>You will have a chance to review your recording
-                before submitting.
-            </p>
-        );
-    }
-
-    discardRecord() {
-        this.pauseAudio();
-        this.props.ready(true);
-        this.props.resetRecording();
-        this.props.getNextId();
-
-        this.setState({
-            uploading: false
-        });
-    }
-
-    submitRecord() {
-        this.props.submit();
-    }
-
-    initRecorder() {
-        if (navigator.getUserMedia) {
-            navigator.getUserMedia({audio: true}, this.initRecorderSuccess, (e) => {
-                this.props.error({
-                    title: 'Recording error',
-                    body: 'Enable(link based on browser) dataskeptic.com to use your microphone.'
-                });
-            });
-        } else {
-            this.props.error({
-                title: 'Recording error',
-                body: 'Audio recording is not supported in this browser.'
-            });
-        }
-    }
-
-    initRecorderSuccess(stream) {
-        this.browserStream = stream;
-
-        // the sample rate is in context.sampleRate
-        this.audioInput = this.audioContext.createMediaStreamSource(stream);
-
-        const bufferSize = 4096;
-        this.recorder = this.audioContext.createScriptProcessor(bufferSize, 2, 2);
-
-        this.startTimeCounter();
-
-        this.recorder.onaudioprocess = (e) => {
-            if (!this.isRecording()) return;
-
-            const left = e.inputBuffer.getChannelData(0);
-            this.uploadChunk(float32ToInt16(left));
-        };
-
-        this.audioInput.connect(this.recorder);
-        this.recorder.connect(this.audioContext.destination);
-    }
-
-    startTimeCounter() {
-        this.timeCounter = setInterval(this.updateDuration, 1000);
-    }
-
-    stopTimeCounter() {
-        if (this.timeCounter) {
-            clearInterval(this.timeCounter);
-            this.timeCounter = null;
-        }
-    }
-
-    updateDuration() {
-        const then = new Date(this.props.recorder.startedAt);
-        const now = new Date();
-
-        const duration = moment.utc(moment(now, "DD/MM/YYYY HH:mm:ss").diff(moment(then, "DD/MM/YYYY HH:mm:ss"))).format("HH:mm:ss")
-
-        this.props.updateRecordingDuration(duration);
-    }
-
-    uploadChunk(convertedChunk) {
-        this.Stream.write(convertedChunk);
-    }
-
-    stopStreams(stream) {
-        for (let track of stream.getTracks()) {
-            track.stop()
-        }
-
-        this.recorder.disconnect();
-        this.audioInput.disconnect();
-
-        this.recorder = null;
-        this.audioInput = null;
-    }
-
-    closeConnection() {
-        this.client.close();
-        this.Stream.end();
-    }
-
-    togglePlaying() {
-        if (this.isPlaying()) {
-            this.pauseAudio();
-        } else {
-            this.playAudio();
-        }
-    }
-
-    isMetaReady() {
-        return this.state.metaReady;
-    }
-
-    isPlaying() {
-        return this.state.playing;
-    }
-
-    pauseAudio() {
-        this.setState({playing: false});
-
-        this.audioController.pause();
-    }
-
-    playAudio() {
-        this.setState({playing: true});
-        this.audioController.play();
-    }
-
-    resetProcess() {
-        this.discardRecord()
-        this.props.reset()
-    }
-
-    render() {
-        const {activeStep, recorder, errorMessage = {}, submittedUrl} = this.props;
-        const {isRecording, isUploading, duration, recordingId, chunkId} = recorder;
-
-        const isMetaReady = this.isMetaReady();
-        const isPlaying = this.isPlaying();
-
-        return (
-            <div className={`recording-flow-container step-${activeStep}`}>
-
-                <Wizard activeKey={activeStep}>
-
-                    <div key={INIT} className="init-step">
-                        <div className="media init-box">
-                            <div className="media-left">
-                                <i className="glyphicon glyphicon-wrench icon"/>
-                            </div>
-                            <div className="media-body">
-                                <h4 className="media-heading">Setting up recorder...</h4>
-                                <p className="text">Checking browser microphone access and server availability.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div key={[READY, RECORDING]} className="recording-step">
-                        <Recorder
-                            recording={this.isRecording()}
-                            startComponent={<i className="fa fa-microphone icon">&nbsp;</i>}
-                            stopComponent={<i className="fa fa-circle icon">&nbsp;</i>}
-                            onClick={this.toggleRecording}
-                            info={this.getInfoMessage()}
-                        />
-
-                        {activeStep === RECORDING &&
-                          <div>
-	                          <br />
-
-	                          <AudioVolumeIndicator
-		                          audioInput={this.audioInput}
-		                          audioContext={this.audioContext}
-
-		                          width={400}
-		                          height={220}
-	                          />
-                          </div>
-                        }
-                    </div>
-
-                    <div key={UPLOADING} className="uploading-step">
-                        <ProposalLoading/>
-                    </div>
-
-                    <div key={[REVIEW]} className="review-step">
-                        <TogglePlayButton
-                            onClick={this.togglePlaying}
-                            playing={isPlaying}
-                            disabled={!isMetaReady}
-                        />
-
-                        {isMetaReady &&
-                        <div className="buttons">
-                            <button type="button" onClick={this.discardRecord}
-                                    className="btn btn-recording-discard btn-xs">
-                                <i className="fa fa-undo" aria-hidden="true"/> Discard and record again
-                            </button>
-                        </div>
-                        }
-                    </div>
-
-                    <div key={SUBMITTING} className="complete-step">
-                        Processing recording...
-                    </div>
-
-                    <div key={COMPLETE} className="complete-step">
-                        <button type="button" onClick={this.resetProcess}
-                                className="btn btn-recording-discard btn-xs">
-                            <i className="fa fa-undo" aria-hidden="true"/> Record another submission
-                        </button>
-                    </div>
-
-                    <div key={ERROR} className="error-step">
-                        Something went wrong.
-                    </div>
-                </Wizard>
-
-                <audio ref="listen_controller" className="recording-listener" controls="false" id="rfcRecorder"/>
-            </div>
+    const duration = moment
+      .utc(
+        moment(now, 'DD/MM/YYYY HH:mm:ss').diff(
+          moment(then, 'DD/MM/YYYY HH:mm:ss')
         )
+      )
+      .format('HH:mm:ss')
+
+    this.props.updateRecordingDuration(duration)
+  }
+
+  uploadChunk(convertedChunk) {
+    this.Stream.write(convertedChunk)
+  }
+
+  stopStreams(stream) {
+    for (let track of stream.getTracks()) {
+      track.stop()
     }
 
+    this.recorder.disconnect()
+    this.audioInput.disconnect()
+
+    this.recorder = null
+    this.audioInput = null
+  }
+
+  closeConnection() {
+    this.client.close()
+    this.Stream.end()
+  }
+
+  togglePlaying() {
+    if (this.isPlaying()) {
+      this.pauseAudio()
+    } else {
+      this.playAudio()
+    }
+  }
+
+  isMetaReady() {
+    return this.state.metaReady
+  }
+
+  isPlaying() {
+    return this.state.playing
+  }
+
+  pauseAudio() {
+    this.setState({ playing: false })
+
+    this.audioController.pause()
+  }
+
+  playAudio() {
+    this.setState({ playing: true })
+    this.audioController.play()
+  }
+
+  resetProcess() {
+    this.discardRecord()
+    this.props.reset()
+  }
+
+  render() {
+    const { activeStep, recorder, errorMessage = {}, submittedUrl } = this.props
+    const {
+      isRecording,
+      isUploading,
+      duration,
+      recordingId,
+      chunkId
+    } = recorder
+
+    const isMetaReady = this.isMetaReady()
+    const isPlaying = this.isPlaying()
+
+    return (
+      <div className={`recording-flow-container step-${activeStep}`}>
+        <Wizard activeKey={activeStep}>
+          <div key={INIT} className="init-step">
+            <div className="media init-box">
+              <div className="media-left">
+                <i className="glyphicon glyphicon-wrench icon" />
+              </div>
+              <div className="media-body">
+                <h4 className="media-heading">Setting up recorder...</h4>
+                <p className="text">
+                  Checking browser microphone access and server availability.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div key={[READY, RECORDING]} className="recording-step">
+            <Recorder
+              recording={this.isRecording()}
+              startComponent={<i className="microphone icon" />}
+              stopComponent={<i className="fa fa-circle icon">&nbsp;</i>}
+              onClick={this.toggleRecording}
+              info={this.getInfoMessage()}
+            />
+
+            {activeStep === RECORDING && (
+              <div>
+                <br />
+
+                <AudioVolumeIndicator
+                  audioInput={this.audioInput}
+                  audioContext={this.audioContext}
+                  width={400}
+                  height={220}
+                />
+              </div>
+            )}
+          </div>
+
+          <div key={UPLOADING} className="uploading-step">
+            <ProposalLoading />
+          </div>
+
+          <div key={[REVIEW]} className="review-step">
+            <TogglePlayButton
+              onClick={this.togglePlaying}
+              playing={isPlaying}
+              disabled={!isMetaReady}
+            />
+
+            {isMetaReady && (
+              <div className="buttons">
+                <button
+                  type="button"
+                  onClick={this.discardRecord}
+                  className="btn btn-recording-discard btn-xs"
+                >
+                  <i className="fa fa-undo" aria-hidden="true" /> Discard and
+                  record again
+                </button>
+              </div>
+            )}
+          </div>
+
+          <div key={SUBMITTING} className="complete-step">
+            Processing recording...
+          </div>
+
+          <div key={COMPLETE} className="complete-step">
+            <button
+              type="button"
+              onClick={this.resetProcess}
+              className="btn btn-recording-discard btn-xs"
+            >
+              <i className="fa fa-undo" aria-hidden="true" /> Record another
+              submission
+            </button>
+          </div>
+
+          <div key={ERROR} className="error-step">
+            Something went wrong.
+          </div>
+        </Wizard>
+
+        <audio
+          ref="listen_controller"
+          className="recording-listener"
+          controls="false"
+          id="rfcRecorder"
+        />
+      </div>
+    )
+  }
 }
 
 export default connect(
-    (state, ownProps) => ({
-        submittedUrl: ownProps.submittedUrl,
-        recorder: state.recorder.toJS()
-    }),
-    (dispatch) => bindActionCreators({
+  (state, ownProps) => ({
+    submittedUrl: ownProps.submittedUrl,
+    recorder: state.recorder.toJS()
+  }),
+  dispatch =>
+    bindActionCreators(
+      {
         getNextId,
         startRecording,
         stopRecording,
         resetRecording,
         updateRecordingDuration
-    }, dispatch)
-)(RecorderFlowContainer);
+      },
+      dispatch
+    )
+)(RecorderFlowContainer)

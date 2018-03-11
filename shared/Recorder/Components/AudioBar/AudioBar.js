@@ -1,9 +1,7 @@
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react'
 
-export const AudioBar = () => (
-    <div>bar</div>
-);
+export const AudioBar = () => <div>bar</div>
 
-AudioBar.propTypes = {};
+AudioBar.propTypes = {}
 
-export default AudioBar;
+export default AudioBar

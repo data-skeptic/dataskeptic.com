@@ -3,8 +3,8 @@
  *
  * @return {boolean} valid state
  */
-export const CardCVVValidator = (CVV='') => {
-    return (CVV.length === 3);
-};
+export const CardCVVValidator = (CVV = '') => {
+  return CVV.length === 3
+}
 
-export default CardCVVValidator;
+export default CardCVVValidator

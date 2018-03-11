@@ -1,35 +1,34 @@
-import axios from "axios"
-const express = require("express")
+import axios from 'axios'
+const express = require('express')
 
-const env = process.env.NODE_ENV === "dev" ? "dev" : "prod"
-const c = require("../../../config/config.json")
-const base_url = c[env]["base_api"] + env
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const c = require('../../../config/config.json')
+const base_url = c[env]['base_api'] + env
 
 module.exports = cache => {
+  const router = express.Router()
 
-	const router = express.Router()
+  router.post('/search/result', function(req, res) {
+    const { q } = req.body
+    const user_agent = req.get('User-Agent')
 
-	router.post("/search/result", function(req, res) {
-		const {q} = req.body
-		const user_agent = req.get('User-Agent');
+    const data = {
+      q,
+      user_agent,
+      ...req.session.ipInfo
+    }
 
-		const data = {
-			q,
-			user_agent,
-			...req.session.ipInfo
-		}
+    axios
+      .post(`${base_url}/tracking/search/result`, data)
+      .then(result => res.send(result.data))
+      .catch(err => res.send(err))
+  })
 
-		axios
-			.post(`${base_url}/tracking/search/result`, data)
-			.then(result => res.send(result.data))
-			.catch(err => res.send(err))
-	})
-
-  router.post("/jobs/impression", function(req, res) {
+  router.post('/jobs/impression', function(req, res) {
     const { job_id } = req.body
     const data = {
-       job_id,
-        ...req.session.ipInfo
+      job_id,
+      ...req.session.ipInfo
     }
 
     axios
@@ -38,11 +37,11 @@ module.exports = cache => {
       .catch(err => res.send(err))
   })
 
-  router.post("/jobs/click", function(req, res) {
+  router.post('/jobs/click', function(req, res) {
     const { job_id, impression_id } = req.body
     const data = {
       job_id,
-	    impression_id,
+      impression_id,
       ...req.session.ipInfo
     }
 
