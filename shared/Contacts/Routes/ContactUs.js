@@ -203,7 +203,7 @@ class ContactUs extends React.Component {
             <SocialIcon src={'/img/svg/twitter-square.svg'} />
             <p>
               You can find us on Twitter via{' '}
-              <TwitterLink href="https://twitter.com/dataskeptic">
+              <TwitterLink href="https://twitter.com/dataskeptic" className="no-line">
                 @DataSkeptic
               </TwitterLink>
             </p>
@@ -212,7 +212,7 @@ class ContactUs extends React.Component {
             <SocialIcon src={'/img/svg/facebook-square.svg'} />
             <p>
               We are on Facebook via{' '}
-              <FacebookLink href="https://www.facebook.com/dataskeptic">
+              <FacebookLink href="https://www.facebook.com/dataskeptic" className="no-line">
                 https://www.facebook.com/dataskeptic
               </FacebookLink>
             </p>

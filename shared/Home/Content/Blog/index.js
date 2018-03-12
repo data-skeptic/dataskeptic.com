@@ -51,10 +51,6 @@ const BlogBox = props => {
         if (!multipleContributors && contributor) {
           item.contributors = [contributor]
         }
-        
-        if (!item.contributors) {
-          item.contributors = []
-        }
 
         return (
           <BlogItem key={index}>
@@ -62,7 +58,7 @@ const BlogBox = props => {
             <ItemTitle><Link to={href} className="no-line">{item.title}</Link></ItemTitle>
             <ItemDesc>{item.abstract}</ItemDesc>
             <ViewMore to={href} className="no-line"><span className="pseudo no-line">View More</span></ViewMore>
-            <Authors>{item.contributors.map(renderAuthor)}</Authors>
+            <Authors>{item.contributors && item.contributors.map(renderAuthor)}</Authors>
           </BlogItem>
         )
       })}
