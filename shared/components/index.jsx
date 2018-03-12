@@ -20,25 +20,41 @@ import { toggleMobileMenu } from "../Layout/Actions/LayoutActions"
 import MobileMenu from "../MobileMenu/Components/MobileMenu"
 import { getItemsCount as getCartItemsCount } from "../Cart/Helpers/getItemsCount"
 import { toggleCart } from "../Cart/Actions/CartActions"
-import ChatBotContainer from "../ChatBot/Containers/ChatBotContainer"
+
+import Launcher from "../Chat/Containers/Launcher"
+import { BOT_ID, THINKING_MESSAGE } from "../Chat/Constants"
+import ConversationHandler from "../ChatBot/Dialogs/ConversationHandler"
 
 class MainView extends React.Component {
-  constructor(props) {
-    super(props)
-    var persisted = this.loadState()
-    var total = calculateTotal(persisted.cart_items, persisted.country.short)
-    var shipping = calculateShipping(
-      persisted.cart_items,
-      persisted.country.short
+  addMessage = message =>
+    this.setState(prevState => ({
+      messages: [...prevState.messages, message]
+    }))
+  reply = (message, operatorId) => {
+    operatorId = !!this.props.contributors[operatorId] ? operatorId : BOT_ID
+    const author = this.props.contributors[operatorId]
+
+    this.addMessage({
+      ...message,
+      author
+    })
+  }
+  onMessage = message => {
+    this.addMessage(message)
+    let cstate = this.props.chatbot.toJS()
+    const dispatch = this.props.dispatch
+    cstate.contributors = this.props.contributors
+
+    ConversationHandler.get_reply(dispatch, this.reply, cstate, message)
+  }
+  onInactivity = () => {
+    this.reply(
+      {
+        text:
+          "Still there?  Let me know what you think of the bot by DMing me on Slack!  I would appreciate your candid feedback"
+      },
+      "kyle"
     )
-
-    this.onNavigationItemClick = this.onNavigationItemClick.bind(this)
-    this.onOverflowClick = this.onOverflowClick.bind(this)
-    this.onFooterItemClick = this.onFooterItemClick.bind(this)
-
-    this.state = {
-      ready: false
-    }
   }
 
   loadState() {
@@ -195,6 +211,29 @@ class MainView extends React.Component {
     // window.scrollTo(0, 0);
   }
 
+  constructor(props) {
+    super(props)
+    var persisted = this.loadState()
+    var total = calculateTotal(persisted.cart_items, persisted.country.short)
+    var shipping = calculateShipping(
+      persisted.cart_items,
+      persisted.country.short
+    )
+
+    this.onNavigationItemClick = this.onNavigationItemClick.bind(this)
+    this.onOverflowClick = this.onOverflowClick.bind(this)
+    this.onFooterItemClick = this.onFooterItemClick.bind(this)
+
+    this.state = {
+      ready: false,
+      messages: []
+    }
+  }
+
+  componentDidMount() {
+    this.reply({ text: "What would you like to talk about?" })
+  }
+
   render() {
     this.logPageView()
     const {
@@ -203,21 +242,15 @@ class MainView extends React.Component {
       cart,
       isCartVisible,
       loggedIn,
-      user
+      user,
+      chatbot,
+      contributors
     } = this.props
     const { showAds = true } = this.props.route
     const { pathname } = this.props.location
     const itemsCount = getCartItemsCount(cart.toJS().cart_items)
     const isOverflowMode = isCartVisible
-
-    const { ready } = this.state
-
-    var oadmin = admin.toJS()
-    var cbc = <ChatBotContainer />
-    if (!oadmin["bot"]) {
-      cbc = <div />
-    }
-    cbc = <div></div>
+    const thinking = chatbot.get("thinking")
 
     return (
       <div
@@ -244,13 +277,20 @@ class MainView extends React.Component {
           {this.props.children}
           <Sidebar />
         </div>
-        {cbc}
         <Footer
           showAds={showAds}
           linkClick={this.onFooterItemClick}
           banner={this.props.bannerContent}
         />
         <Overflow visible={isOverflowMode} onClick={this.onOverflowClick} />
+        <Launcher
+          defaultBot={contributors[BOT_ID]}
+          thinking={thinking}
+          messages={this.state.messages}
+          onMessage={this.onMessage}
+          onInactivity={this.onInactivity}
+          inactivityDelay={1000 * 60 * 5}
+        />
       </div>
     )
   }
@@ -264,7 +304,9 @@ export default connect(
     site: state.site,
     isMobileMenuVisible: state.layout.getIn(["isMobileMenuVisible"]),
     loggedIn: state.auth.getIn(["loggedIn"]),
-    user: state.auth.getIn(["user"]).toJS()
+    user: state.auth.getIn(["user"]).toJS(),
+    chatbot: state.chatbot,
+    contributors: state.site.get("contributors").toJS()
   }),
   dispatch =>
     bindActionCreators(
