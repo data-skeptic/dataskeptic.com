@@ -1,10 +1,5 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-
-const Arrow = ({ down }) => (
-  <i className={`glyphicon glyphicon-chevron-${down ? 'down' : 'up'}`} />
-)
-
 export default class SectionBlock extends Component {
   toggle = () => this.props.onToggle()
 
@@ -14,7 +9,7 @@ export default class SectionBlock extends Component {
       <Block>
         <Head onClick={this.toggle} open={open}>
           <BlockTitle>{title}</BlockTitle>
-          <Arrow down={!open} />
+          <Arrow down={open} />
         </Head>
         {open && <BlockContent>{children}</BlockContent>}
       </Block>
@@ -54,4 +49,16 @@ const BlockContent = styled.div`
   .field-input {
     padding: 0px;
   }
+`
+
+const Arrow = styled.i`
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  background-image: url(https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/keyboard_arrow_down+-+material.svg);
+  background-repeat: no-repeat;
+  background-position: center center;
+  ${props => props.down && `
+      transform: rotate(180deg);
+  `}
 `
