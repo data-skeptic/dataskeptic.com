@@ -33,8 +33,7 @@ import {
   loadProducts,
   load,
   get_contributors,
-  loadCurrentRFC,
-  get_bot_status
+  loadCurrentRFC
 } from "daos/serverInit"
 import place_order from "printful/wrapper"
 import { getProducts } from "daos/products"
@@ -168,13 +167,12 @@ const doRefresh = () => {
     loadEpisodes(),
     loadProducts(),
     get_contributors(),
-    loadCurrentRFC(),
-    get_bot_status()
+    loadCurrentRFC()
   ])
     .then(results => {
       // but wait until all of them will be done
 
-      const [episodes, products, contributors, rfc, bot] = results
+      const [episodes, products, contributors, rfc] = results
       console.log("-[All cache data fetched]-")
 
       // episodes
@@ -201,9 +199,6 @@ const doRefresh = () => {
 
       // RFC
       Cache.rfc = rfc
-
-      // bot
-      Cache.bot = bot
     })
     .then(() => console.log("-[Refreshing Complete]-"))
     .catch(err => {
@@ -545,11 +540,6 @@ async function updateState(store, pathname, req) {
       type: "SET_CONTRIBUTORS",
       payload: Cache.contributors
     })
-  }
-  console.log("on to bot")
-  var bot = Cache.bot
-  if (bot) {
-    store.dispatch({ type: "SET_BOT", payload: bot })
   }
   if (pathname === "" || pathname === "/") {
     const location = extractLocation(req)

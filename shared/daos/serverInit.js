@@ -331,18 +331,3 @@ export function apiMemberFeed(req, res, feed) {
   console.log(feed.length)
   res.status(200).end(feed)
 }
-
-export function get_bot_status() {
-  console.log('-[Refreshing Bot]-')
-  var url = base_api + '/bot/status'
-
-  return axios
-    .get(url)
-    .then(function(result) {
-      var resp = result.data
-      return resp
-    })
-    .catch(err => {
-      console.log(err)
-    })
-}

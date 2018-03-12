@@ -23,7 +23,7 @@ import { toggleCart } from "../Cart/Actions/CartActions"
 
 import Launcher from "../Chat/Containers/Launcher"
 import { BOT_ID, THINKING_MESSAGE } from "../Chat/Constants"
-import ConversationHandler from "../ChatBot/Dialogs/ConversationHandler"
+import ConversationHandler from "../Chat/Dialogs/ConversationHandler"
 
 class MainView extends React.Component {
   addMessage = message =>
