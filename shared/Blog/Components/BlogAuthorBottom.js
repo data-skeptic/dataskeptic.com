@@ -7,9 +7,9 @@ const Bio = ({ bio }) => <Text dangerouslySetInnerHTML={{ __html: bio }} />
 const formatLink = id => `/contributors/${id}`
 
 const renderTwitter = twitter => (
-  <a href={`https://twitter.com/${twitter}`} className="no-line">@{twitter}</a>
+  <a href={`https://twitter.com/${twitter}`}>@{twitter}</a>
 )
-const renderLinkedin = linkedin => <a href={linkedin} className="no-line">LinkedIn</a>
+const renderLinkedin = linkedin => <a href={linkedin}>LinkedIn</a>
 
 export const BlogAuthorBottom = ({
   author,
