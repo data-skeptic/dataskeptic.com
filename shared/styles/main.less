@@ -34,12 +34,15 @@ a {
   transition-duration: 0.33s;
   transition-timing-function: ease-out;
 
-  .no-line {
-    border-bottom: none !important;
-  }
-
   &:link {
     cursor: pointer;
+
+    .pseudo {
+      color: @linkColor;
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+      border-bottom-color: @linkUnderlineColor;
+    }
   }
 
   &:visited {
@@ -52,11 +55,32 @@ a {
     border-bottom: 1px solid @linkUnderlineColorHover;
     transition: none;
     text-decoration: none;
+
+    .pseudo {
+      color: @linkColorHover;
+      border-bottom: 1px solid @linkUnderlineColorHover;
+    }
   }
 
   img {
     text-decoration: none;
     border: 0 none;
+  }
+
+  &.no-line {
+    border-bottom: none !important;
+
+    &:hover {
+      border-bottom: none !important;
+    }
+  }
+
+  .no-line {
+    border-bottom: none !important;
+
+    &:hover {
+      border-bottom: none !important;
+    }
   }
 }
 

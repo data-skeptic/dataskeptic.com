@@ -62,9 +62,9 @@ export const UserImg = styled.img`
   width: 60px;
   height: 60px;
 
-  padding: 4px;
+  padding: 4px !important;
   background-color: #ffffff;
-  border: 1px solid #dddddd;
+  border: 1px solid #dddddd !important;
 `
 
 export const UserDetail = styled.div`

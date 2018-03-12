@@ -114,7 +114,7 @@ export const Avatar = styled.img`
 
   padding: 4px;
   background-color: #ffffff;
-  border: 1px solid #dddddd;
+  border: 1px solid #dddddd  !important;
 `
 
 export const Details = styled.div`
