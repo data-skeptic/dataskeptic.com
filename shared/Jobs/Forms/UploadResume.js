@@ -53,7 +53,7 @@ const Form = ({
         label="Email"
         name="email"
         type="text"
-        placeholder="john@site.com"
+        placeholder="listener@dataskeptic.com"
       />
     )}
   </FormController>
