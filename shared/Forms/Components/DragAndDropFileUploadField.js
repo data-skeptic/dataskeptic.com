@@ -74,7 +74,7 @@ export default class DragAndDropFileUploadField extends Component {
     if (!this.props.multi) {
       this.reset()
     }
-    
+
     return this.upload(acceptedFiles)
       .then(files => {
         const nextFiles = this.props.multi
@@ -85,7 +85,10 @@ export default class DragAndDropFileUploadField extends Component {
         this.setUploading(false)
       })
       .catch(err => {
-        this.setError(err)
+        console.dir(err.data)
+        this.setError(
+          `Server error, please contact kyle@dataskeptic.com for support`
+        )
         this.setUploading(false)
       })
   }
@@ -140,18 +143,12 @@ export default class DragAndDropFileUploadField extends Component {
     const { bucket } = this.props
     const url = `/api/v1/files/upload?bucket=${bucket}`
 
-    return Request.upload(url, files)
-      .then(res => res.data.files)
-      .catch(err => {
-        throw Error(
-          `Server error, please contact kyle@dataskeptic.com for support`
-        )
-      })
+    return Request.upload(url, files).then(res => res.data.files)
   }
 
   renderAccepted() {
     const { accept } = this.props
-    return <span>Accept {accept ? formatAccept(accept) : 'Any'}</span>
+    return <span>Accept {accept ? formatAccept(accept) : "Any"}</span>
   }
 
   renderUploaded() {
@@ -214,7 +211,8 @@ export default class DragAndDropFileUploadField extends Component {
 
       return (
         <RejectedError key={index}>
-          <RejectedFile>{name}</RejectedFile>{' '}<RejectedReason>{reason}</RejectedReason>
+          <RejectedFile>{name}</RejectedFile>{" "}
+          <RejectedReason>{reason}</RejectedReason>
         </RejectedError>
       )
     })
@@ -250,16 +248,20 @@ export default class DragAndDropFileUploadField extends Component {
             </IconArea>
             <Details>
               <Title>{title}</Title>
-              <SubTitle>
-                {!uploading && uploaded
-                  ? this.renderUploaded()
-                  : this.renderAccepted()}
-              </SubTitle>
-              <Error>{error}</Error>
+              {!error && (
+                <SubTitle>
+                  {!uploading && uploaded
+                    ? this.renderUploaded()
+                    : this.renderAccepted()}
+                </SubTitle>
+              )}
+              {error && <Error>{error}</Error>}
             </Details>
           </Inner>
         </Wrapper>
-        {hasRejectedFiles && <RejectedErrors>{this.renderRejectedErrors()}</RejectedErrors>}
+        {hasRejectedFiles && (
+          <RejectedErrors>{this.renderRejectedErrors()}</RejectedErrors>
+        )}
         {multi && uploaded && <Files>{this.renderFilesPreview(files)}</Files>}
       </Container>
     )
@@ -374,7 +376,9 @@ const Title = styled.div`
   font-weight: 400;
 `
 
-const Error = styled.div`color: #ff1820;`
+const Error = styled.div`
+  color: #ff1820;
+`
 
 const SubTitle = styled.div`
   font-size: 16px;
@@ -427,5 +431,4 @@ const RejectedFile = styled.span`
   font-weight: bold;
 `
 
-const RejectedReason = styled.span`
-`
+const RejectedReason = styled.span``
