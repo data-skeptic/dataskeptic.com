@@ -151,7 +151,7 @@ export default class DragAndDropFileUploadField extends Component {
 
   renderAccepted() {
     const { accept } = this.props
-    return <span>Accept {formatAccept(accept)}</span>
+    return <span>Accept {accept ? formatAccept(accept) : 'Any'}</span>
   }
 
   renderUploaded() {
