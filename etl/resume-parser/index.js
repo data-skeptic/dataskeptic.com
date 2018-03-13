@@ -201,6 +201,7 @@ s3.listObjects(params, function (err, data) {
  	console.log('err!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
  }
  var Contents = data['CommonPrefixes']
+ console.log(Object.keys(Contents).length + '<>')
  var promises = []
  for (var item of Contents) {
  	var Prefix = item['Prefix']
