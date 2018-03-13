@@ -37,12 +37,8 @@ const Form = ({
     customError={customError}
     btnWrapperClasses={'submit-wrapper'}
   >
-    <p>
-      If you're concerned about privacy, feel free to remove your
-      contact information from PDF you upload.
-    </p>
-    
     <Field
+      label={`If you're concerned about privacy, feel free to remove your contact information from PDF you upload.`}
       component={renderField}
       customComponent={DragAndDropFileUploadField}
       name={RESUME_FIELD}
