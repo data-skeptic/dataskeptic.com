@@ -31,7 +31,7 @@ var client = new elasticsearch.Client({
 var params = { 
  Bucket: bucket,
  Delimiter: '.pdf',
- Prefix: s3path
+ Prefix: 'resumes/unsourced/2fab213d'
 }
 
 String.prototype.replaceAll = function (find, replace) {
@@ -83,7 +83,6 @@ function convert_pdf_to_text_promise(pdf_absfile) {
 				})
 		  	} finally { 
 				cleanup(pdf_absfile)
-				console.log(pdf_absfile + '!!!')
 			}
 		});		
 	})
@@ -108,7 +107,7 @@ function move_text_to_s3_promise(Bucket, Key, txt_file) {
 		 		}
 	 		})
 		} finally {
-			cleanup(txt_file+'!!!')
+			cleanup(txt_file)
 		}
 
 	})
