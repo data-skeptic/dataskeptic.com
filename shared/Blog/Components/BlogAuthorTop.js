@@ -37,7 +37,7 @@ const Avatar = styled.img`
   height: 38px;
   padding: 2px;
   background-color: #ffffff;
-  border: 1px solid #dddddd;
+  border: 1px solid #dddddd  !important;
   margin-right: 0.3em;
   margin-left: 0.3em;
 `

@@ -167,7 +167,7 @@ const Avatar = styled.img`
   border-radius: 50%;
   padding: 4px;
   background-color: #ffffff;
-  border: 1px solid #dddddd;
+  border: 1px solid #dddddd !important;
 `
 
 const Bio = styled.p`
