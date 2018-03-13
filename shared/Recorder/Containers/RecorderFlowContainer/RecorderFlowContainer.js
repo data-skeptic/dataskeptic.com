@@ -265,7 +265,7 @@ class RecorderFlowContainer extends Component {
 
     return (
       <p className="text-muted">
-        Recording will start when you hit the button below.<br />You will have a
+        Recording will start when you click the record button to the left of this message.<br />You will have a
         chance to review your recording before submitting.
       </p>
     )
