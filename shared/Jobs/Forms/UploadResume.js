@@ -27,7 +27,8 @@ const validate = values => {
 const Form = ({
   handleSubmit,
   customError,
-  showEmail
+  showEmail,
+  bucket
 }) => (
   <FormController
     name="contacts"
@@ -43,6 +44,7 @@ const Form = ({
       customComponent={DragAndDropFileUploadField}
       name={RESUME_FIELD}
       accept="application/pdf"
+      bucket={bucket}
     />
     
     <Field
