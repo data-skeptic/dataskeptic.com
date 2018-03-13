@@ -6,6 +6,7 @@ import { Field } from 'redux-form'
 import { FormController } from '../../Forms/Components'
 import { renderCheckbox } from '../../Forms/Components/Field'
 import { renderField } from '../../Forms/Components/Field/Field'
+import DragAndDropFileUploadField from "../../Forms/Components/DragAndDropFileUploadField";
 
 export const KEY = 'uploadResume'
 export const RESUME_FIELD = 'resume'
@@ -25,7 +26,6 @@ const validate = values => {
 
 const Form = ({
   handleSubmit,
-  children,
   customError,
   showEmail
 }) => (
@@ -37,13 +37,24 @@ const Form = ({
     customError={customError}
     btnWrapperClasses={'submit-wrapper'}
   >
-    {children}
+    <Text>
+      If you're concerned about privacy, feel free to remove your
+      contact information from PDF you upload.
+    </Text>
 
     <Field
       label="Notify me when there's news about this project"
       component={renderCheckbox}
       name={NOTIFY_FIELD}
       type="checkbox"
+    />
+
+    <Field
+      label={`If you're concerned about privacy, feel free to remove your
+        contact information from PDF you upload.`}
+      component={renderCheckbox}
+      customComponent={DragAndDropFileUploadField}
+      name={RESUME_FIELD}
     />
 
     {showEmail && (
