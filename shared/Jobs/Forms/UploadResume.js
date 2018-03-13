@@ -43,11 +43,10 @@ const Form = ({
     </p>
     
     <Field
-      label={`If you're concerned about privacy, feel free to remove your
-        contact information from PDF you upload.`}
       component={renderField}
       customComponent={DragAndDropFileUploadField}
       name={RESUME_FIELD}
+      accept="application/pdf"
     />
     
     <Field
