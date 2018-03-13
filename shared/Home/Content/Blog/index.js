@@ -26,7 +26,7 @@ const renderAuthor = ({
   contribution,
   contributor_id
 }) => (
-  <AuthorLink author={author} key={contributor_id}>
+  <AuthorLink author={author} key={contributor_id} className="no-line">
     <Author>
       <Avatar src={img} />
       <Details>
@@ -55,12 +55,10 @@ const BlogBox = props => {
         return (
           <BlogItem key={index}>
             <ItemDate>{moment(item.publish_date).format("MMMM D, Y")}</ItemDate>
-            <Link to={href}>
-              <ItemTitle>{item.title}</ItemTitle>
-            </Link>
+            <ItemTitle><Link to={href} className="no-line">{item.title}</Link></ItemTitle>
             <ItemDesc>{item.abstract}</ItemDesc>
-            <ViewMore to={href}>View More</ViewMore>
-            <Authors>{item.contributors.map(renderAuthor)}</Authors>
+            <ViewMore to={href} className="no-line"><span className="pseudo no-line">View More</span></ViewMore>
+            <Authors>{item.contributors && item.contributors.map(renderAuthor)}</Authors>
           </BlogItem>
         )
       })}

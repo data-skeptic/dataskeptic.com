@@ -23,14 +23,14 @@ export const BlogAuthorBottom = ({
   <Container>
     <AuthorBox>
       <Photo>
-        <Link to={formatLink(author)}>
+        <Link to={formatLink(author)} className="no-line">
           <img src={img} alt={prettyname} />
         </Link>
       </Photo>
       <About>
         <Author>
-          {contribution && <Contribution to={formatLink(author)}>{contribution}</Contribution>}
-          <Name to={formatLink(author)}>{prettyname}</Name>
+          {contribution && <Contribution to={formatLink(author)} className="no-line">{contribution}</Contribution>}
+          <Name to={formatLink(author)} className="no-line">{prettyname}</Name>
         </Author>
 
         <Bio bio={bio} />

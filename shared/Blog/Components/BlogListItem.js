@@ -51,7 +51,7 @@ class BlogListItem extends Component {
       <div className="row blog-list-item" key={blog.uri}>
         {preview && (
           <div className="col-xs-12 col-sm-3 col-md-3 blog-preview">
-            <Link to={link} onClick={onClick}>
+            <Link to={link} onClick={onClick} className="no-line">
               <img src={preview.dest} />
             </Link>
           </div>
@@ -66,7 +66,7 @@ class BlogListItem extends Component {
             </div>
             <div className="media-body">
               <Link
-                className="blog-title media-heading"
+                className="blog-title media-heading no-line"
                 to={link}
                 onClick={onClick}
               >
@@ -75,7 +75,7 @@ class BlogListItem extends Component {
               <p className="by">
                 by{' '}
                 <b>
-                  <AuthorLink author={contributor.author}>
+                  <AuthorLink author={contributor.author} className="no-line">
                     {prettyname}
                   </AuthorLink>
                 </b>
@@ -85,7 +85,7 @@ class BlogListItem extends Component {
           <p className="blog-desc">
             {blog.abstract}
             <br />
-            <Link className="blog-view-more" to={link}>
+            <Link className="blog-view-more no-line" to={link}>
               View More &gt;
             </Link>
           </p>
