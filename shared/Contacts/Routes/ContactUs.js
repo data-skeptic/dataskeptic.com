@@ -200,26 +200,26 @@ class ContactUs extends React.Component {
 
         <Socials>
           <SocialBlock order={1}>
-            <SocialIcon src={'/img/svg/twitter-square.svg'} />
+            <SocialIcon src={'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/twitter-square+-+FontAwesome.svg'} />
             <p>
               You can find us on Twitter via{' '}
-              <TwitterLink href="https://twitter.com/dataskeptic">
+              <TwitterLink href="https://twitter.com/dataskeptic" className="no-line">
                 @DataSkeptic
               </TwitterLink>
             </p>
           </SocialBlock>
           <SocialBlock order={3}>
-            <SocialIcon src={'/img/svg/facebook-square.svg'} />
+            <SocialIcon src={'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/facebook-square+-+FontAwesome.svg'} />
             <p>
               We are on Facebook via{' '}
-              <FacebookLink href="https://www.facebook.com/dataskeptic">
+              <FacebookLink href="https://www.facebook.com/dataskeptic" className="no-line">
                 https://www.facebook.com/dataskeptic
               </FacebookLink>
             </p>
           </SocialBlock>
           <SocialBlock order={2}>
             <SocialForm onSubmit={this.subscribeSlack}>
-              <SocialIcon src={'/img/svg/logo-slack.svg'} />
+              <SocialIcon src={'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/logo-slack.svg'} />
               <input name="email" id="email" />
               <button
                 type="submit"
@@ -232,7 +232,7 @@ class ContactUs extends React.Component {
             </SocialForm>
           </SocialBlock>
           <SocialBlock order={4}>
-            <SocialIcon src={'/img/svg/mail_outline.svg'} />
+            <SocialIcon src={'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/mail_outline+-+material+copy.svg'} />
             <SocialForm
               action="//dataskeptic.us9.list-manage.com/subscribe/post?u=65e63d6f84f1d87759105d133&amp;id=dc60d554db"
               method="post"

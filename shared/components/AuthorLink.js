@@ -12,8 +12,8 @@ const goTop = e => {
   }
 }
 
-export default ({ author, children }) => (
-  <Link to={formatLink(author)} onClick={goTop}>
+export default ({ author, children, ...rest }) => (
+  <Link to={formatLink(author)} onClick={goTop} {...rest}>
     {children}
   </Link>
 )

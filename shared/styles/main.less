@@ -2,46 +2,102 @@
  DATASKEPTIC STYLES
 *****************************************************************************/
 
-html, body {
-    width: 100%;
+html,
+body {
+  width: 100%;
 }
 
 body {
-    font-size: 15px;
-    font-weight: 500;
-    margin: 0px;
-    padding: 0px;
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0px;
+  padding: 0px;
 }
 
 * {
-    outline: none;
+  outline: none;
 }
 
+@linkColor: #38383a;
+@linkUnderlineColor: lighten(@linkColor, 20%);
+
+@linkColorHover: #2e1453;
+@linkUnderlineColorHover: lighten(@linkColorHover, 20%);
 
 a {
-    color: #000;
+  color: @linkColor;
+  text-decoration: none;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: @linkUnderlineColor;
+  transition-property: border-bottom, border-color, background, color, fill;
+  transition-duration: 0.33s;
+  transition-timing-function: ease-out;
+
+  &:link {
+    cursor: pointer;
+
+    .pseudo {
+      color: @linkColor;
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+      border-bottom-color: @linkUnderlineColor;
+    }
+  }
+
+  &:visited {
+    color: @linkColor;
+    border-bottom-color: @linkUnderlineColor;
+  }
+
+  &:hover {
+    color: @linkColorHover;
+    border-bottom: 1px solid @linkUnderlineColorHover;
+    transition: none;
     text-decoration: none;
 
-    &:hover,
-    &:focus {
-        color: #333333;
-        text-decoration: none;
+    .pseudo {
+      color: @linkColorHover;
+      border-bottom: 1px solid @linkUnderlineColorHover;
     }
+  }
 
-    img {
-      border: none !important;
-      vertical-align: initial;
+  img {
+    text-decoration: none;
+    border: 0 none;
+  }
+
+  &.no-line {
+    border-bottom: none !important;
+
+    &:hover {
+      border-bottom: none !important;
     }
+  }
+
+  .no-line {
+    border-bottom: none !important;
+
+    &:hover {
+      border-bottom: none !important;
+    }
+  }
+}
+
+a img,
+:link img,
+:visited img {
+  border: none;
 }
 
 .container-fluid {
-    padding-left: 0px;
-    padding-right: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 .row {
-    margin-left: 0px;
-    margin-right: 0px;
+  margin-left: 0px;
+  margin-right: 0px;
 }
 
 @import "admin";
