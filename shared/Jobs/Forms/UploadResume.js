@@ -26,8 +26,8 @@ const validate = values => {
     }
   }
 
-  if (_.isEmpty(errors.resume)) {
-    errors.resume = 'Please upload resume.'
+  if (_.isEmpty(values.resume)) {
+    errors.resume = 'Please upload resume'
   }
 
   return errors
