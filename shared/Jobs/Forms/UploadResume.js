@@ -1,6 +1,7 @@
 import React from "react"
 import { reduxForm } from "redux-form"
 import { Field } from "redux-form"
+import _ from 'lodash'
 
 import { FormController } from "../../Forms/Components"
 import { renderCheckbox } from "../../Forms/Components/Field"
@@ -18,11 +19,15 @@ const validate = values => {
   const errors = {}
 
   if (values[NOTIFY_FIELD]) {
-    if (!values.email || values.email.length === 0) {
+    if (_.isEmpty(errors.email)) {
       errors.email = "Email field is required"
     } else if (!isEmailValid(values.email)) {
       errors.email = "Invalid email address"
     }
+  }
+
+  if (_.isEmpty(errors.resume)) {
+    errors.resume = 'Please upload resume.'
   }
 
   return errors
