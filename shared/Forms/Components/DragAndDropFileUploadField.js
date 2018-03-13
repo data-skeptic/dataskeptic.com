@@ -18,7 +18,7 @@ const RemoveIcon = () => <Icon name="trash" />
 const formatAccept = accept => {
   return accept
     .split(",")
-    .map(rule => "." + rule.split("/")[1])
+    .map(rule => "*." + rule.split("/")[1])
     .join(", ")
 }
 
