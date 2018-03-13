@@ -17,7 +17,7 @@ class Content extends Component {
       <ContentContainer>
         <Feature
           feature_blog={featured_blog}
-          author={this.getContributor(featured_blog)}
+          contributor={this.getContributor(featured_blog)}
         />
         <BlogContainer className="col-xs-12 col-sm-12 col-md-7">
           <Blog blogList={blogList} getContributor={this.getContributor} />
