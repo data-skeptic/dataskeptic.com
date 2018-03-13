@@ -48,10 +48,12 @@ class Careers extends Component {
   render() {
     const { resume, notify, submitted, error } = this.props
     const files = resume ? [resume] : []
+    var due_date = new Date(2018,4,2)
+    var due_date_str = due_date.toString()
 
     return (
       <Container className="careers_page">
-        <Title>Careers</Title>
+        <Title>Enter to win a copy of "The Master Algorithm" by Pedro Domingos</Title>
         <Row>
           <Column>
             <Text>
@@ -59,10 +61,6 @@ class Careers extends Component {
               upcoming project. Submit your resume and we'll send you a
               personalized analysis which compares your resume to other
               submissions.
-            </Text>
-            <Text>
-              If you're concerned about privacy, feel free to remove your
-              contact information from PDF you upload.
             </Text>
 
             {!submitted ? (
@@ -72,6 +70,10 @@ class Careers extends Component {
                 customError={error}
                 showEmail={notify}
               >
+                <Text>
+                  If you're concerned about privacy, feel free to remove your
+                  contact information from PDF you upload.
+                </Text>
                 <UploadBox
                   wrapperClass="resume_upload"
                   multiple={false}
@@ -82,8 +84,11 @@ class Careers extends Component {
               </UploadResume>
             ) : (
               <Success>
-                <h1>Thank you!</h1>
+                <h3>Thank you!</h3>
                 <p>Resume Uploaded.</p>
+                <p>We're planning about two weeks of data collection.</p>
+                <p>After that, our analysis phase will begin.</p>
+                <p>You should expect your personalized report in the next 3-4 weeks.</p>
                 <img
                   src="https://s3.amazonaws.com/dataskeptic.com/img/bot/bot-image.png"
                   width="200"
@@ -94,7 +99,9 @@ class Careers extends Component {
           <Right>
             <Img src="https://s3.amazonaws.com/dataskeptic.com/img/2018/kyle-reading-the-master-algorithm.jpg" />
             <Text>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis eaque et laborum nobis officiis quia ratione ut veniam? Cum delectus dolor dolorum eligendi eos maiores molestias officiis quae ratione repudiandae!
+              We are going to randomly select two submitters to win a copy of "The Master Algorithm" by Pedro Domingos.
+              <br/><br/>
+              <b>To be entered, submit your PDF resume/CV by {due_date_str}</b>
             </Text>
           </Right>
         </Row>
