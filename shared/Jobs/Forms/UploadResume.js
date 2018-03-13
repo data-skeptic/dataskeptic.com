@@ -41,20 +41,20 @@ const Form = ({
       If you're concerned about privacy, feel free to remove your
       contact information from PDF you upload.
     </p>
-
+    
+    <Field
+      label={`If you're concerned about privacy, feel free to remove your
+        contact information from PDF you upload.`}
+      component={renderField}
+      customComponent={DragAndDropFileUploadField}
+      name={RESUME_FIELD}
+    />
+    
     <Field
       label="Notify me when there's news about this project"
       component={renderCheckbox}
       name={NOTIFY_FIELD}
       type="checkbox"
-    />
-
-    <Field
-      label={`If you're concerned about privacy, feel free to remove your
-        contact information from PDF you upload.`}
-      component={renderCheckbox}
-      customComponent={DragAndDropFileUploadField}
-      name={RESUME_FIELD}
     />
 
     {showEmail && (
