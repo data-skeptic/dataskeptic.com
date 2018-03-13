@@ -52,41 +52,52 @@ class Careers extends Component {
     return (
       <Container className="careers_page">
         <Title>Careers</Title>
-        <Text>
-          Data Skeptic is asking listeners to send us their resumes for an
-          upcoming project. Submit your resume and we'll send you a personalized
-          analysis which compares your resume to other submissions.
-        </Text>
-        <Text>
-          If you're concerned about privacy, feel free to remove your contact
-          information from PDF you upload.
-        </Text>
-        
-        {!submitted ? (
-          <UploadResume
-            showSubmit={true}
-            onSubmit={this.submit}
-            customError={error}
-            showEmail={notify}
-          >
-            <UploadBox
-              wrapperClass="resume_upload"
-              multiple={false}
-              files={files}
-              onDrop={this.onResumeUpload}
-              onRemove={this.onResumeRemove}
-            />
-          </UploadResume>
-        ) : (
-          <Success>
-            <h1>Thank you!</h1>
-            <p>Resume Uploaded.</p>
-            <img
-              src="https://s3.amazonaws.com/dataskeptic.com/img/bot/bot-image.png"
-              width="200"
-            />
-          </Success>
-        )}
+        <Row>
+          <Column>
+            <Text>
+              Data Skeptic is asking listeners to send us their resumes for an
+              upcoming project. Submit your resume and we'll send you a
+              personalized analysis which compares your resume to other
+              submissions.
+            </Text>
+            <Text>
+              If you're concerned about privacy, feel free to remove your
+              contact information from PDF you upload.
+            </Text>
+
+            {!submitted ? (
+              <UploadResume
+                showSubmit={true}
+                onSubmit={this.submit}
+                customError={error}
+                showEmail={notify}
+              >
+                <UploadBox
+                  wrapperClass="resume_upload"
+                  multiple={false}
+                  files={files}
+                  onDrop={this.onResumeUpload}
+                  onRemove={this.onResumeRemove}
+                />
+              </UploadResume>
+            ) : (
+              <Success>
+                <h1>Thank you!</h1>
+                <p>Resume Uploaded.</p>
+                <img
+                  src="https://s3.amazonaws.com/dataskeptic.com/img/bot/bot-image.png"
+                  width="200"
+                />
+              </Success>
+            )}
+          </Column>
+          <Right>
+            <Img src="https://s3.amazonaws.com/dataskeptic.com/img/2018/kyle-reading-the-master-algorithm.jpg" />
+            <Text>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis eaque et laborum nobis officiis quia ratione ut veniam? Cum delectus dolor dolorum eligendi eos maiores molestias officiis quae ratione repudiandae!
+            </Text>
+          </Right>
+        </Row>
       </Container>
     )
   }
@@ -98,9 +109,42 @@ const Container = styled.div`
   padding: 15px;
 `
 
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+
+  @media (max-width: 500px) {
+    flex-direction: column;
+  }
+`
+
+const Column = styled.div`
+  margin-right: 2em;
+  margin-bottom: 2em;
+  
+  @media (max-width: 500px) {
+     margin-right: 0;
+  }
+`
+
+// flex: 1; // same width
+// flex: 0 0 230px; // side right
+const Right = Column.extend`
+  flex: 0 0 230px;
+  
+  @media (max-width: 768px) {
+    flex-basis: auto;
+  }
+`
+
 const Title = styled.h2``
 
 const Text = styled.p``
+
+const Img = styled.img`
+  max-width: 100%;
+  margin-bottom: 1em;
+`
 
 const Success = styled.div`
   display: flex;
