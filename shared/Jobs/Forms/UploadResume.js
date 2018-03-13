@@ -37,10 +37,10 @@ const Form = ({
     customError={customError}
     btnWrapperClasses={'submit-wrapper'}
   >
-    <Text>
+    <p>
       If you're concerned about privacy, feel free to remove your
       contact information from PDF you upload.
-    </Text>
+    </p>
 
     <Field
       label="Notify me when there's news about this project"
