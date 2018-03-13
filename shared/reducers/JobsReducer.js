@@ -37,17 +37,7 @@ export default function jobReducer(state = defaultState, action) {
 }
 
 export const submitResume = (dispatch, data) => {
-  const files = [data.resume]
-  return Request.upload('/api/v1/career/upload', files)
-    .then(res => {
-      if (!res.data.success) {
-        throw Error(res.data.error)
-      }
-      
-      data.resume = res.data.files[0]
-
-      return Request.post('/api/v1/career', data)
-    })
+  Request.post('/api/v1/career', data)
     .then(res => {
       if (!res.data.success) {
         throw Error(res.data.error)
