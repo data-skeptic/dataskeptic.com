@@ -17,8 +17,9 @@ var s3 = new AWS.S3()
 const bucket = config['bucket']
 const s3path = config['s3path']
 
-//var pdf_filename = '00a7d5ee.pdf'  
+//var pdf_filename = 'ALIREZA_ALIAMIRI.pdf'  
 //var s3key = s3path + pdf_filename
+
 
 var elasticsearch = require('elasticsearch')
 var elastic_search_endpoint = config['elastic_search_endpoint']
@@ -38,9 +39,9 @@ String.prototype.replaceAll = function (find, replace) {
     return str.replace(new RegExp(find.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g'), replace);
 };
 
+
 function get_local_filename_from_s3_key(Key) {
 	var filename = Key.replaceAll('/', '_')
-	console.log(filename)
 	return filename
 }
 
@@ -70,23 +71,26 @@ function convert_pdf_to_text_promise(pdf_absfile) {
 		pdfUtil.pdfToText(pdf_absfile, option, function(err, data) {
 			console.log(pdf_absfile)
 		  	if (err) reject(err)
-		  	console.log('10')
-			fs.writeFile(filename, data, function(err) {
-			    if (err) {
-			    	console.log('12')
-			    	reject(err)
-			    } else {
-			    	console.log(filename)
-			    	resolve(filename, pdf_absfile)
-			    }
-			})
+		  	try { 
+			  	fs.writeFile(filename, data, function(err) {
+				    if (err) {
+				    	console.log('12')
+				    	reject(err)
+				    } else {
+				    	console.log(filename)
+				    	resolve(filename, pdf_absfile)
+				    }
+				})
+		  	} finally { 
+				cleanup(pdf_absfile)
+				console.log(pdf_absfile + '!!!')
+			}
 		});		
 	})
 }
 
 function move_text_to_s3_promise(Bucket, Key, txt_file) {
 	return new Promise(function(resolve, reject) {
-		console.log('move_text_to_s3_promise!!!')
 		var Body = fs.createReadStream( txt_file )
 		var opts = {
 			Bucket,
@@ -95,20 +99,24 @@ function move_text_to_s3_promise(Bucket, Key, txt_file) {
 			ACL: 'public-read',
 			Body
 		}
-		s3.putObject(opts, function(err, data) {
-	 		if (err) {	
-	 			reject(err)
-	 		} else {
-	 			resolve({"filename": txt_file, "response": data})
-	 		}
-	 	})
+		try {
+			s3.putObject(opts, function(err, data) {
+		 		if (err) {	
+		 			reject(err)
+		 		} else {
+		 			resolve({"filename": txt_file, "response": data})
+		 		}
+	 		})
+		} finally {
+			cleanup(txt_file+'!!!')
+		}
+
 	})
 }
 
 function parse_text_promise(bucket, s3path, filename) {
 	return new Promise(function(resolve, reject) {
 		var url = `https://s3.amazonaws.com/${bucket}/${s3path}text/` + filename
-		console.log(url)
 		ResumeParser.parseResumeUrl(url, './output').then(data => {
 			data['id'] = url
 	    	resolve(data)
@@ -145,94 +153,55 @@ function save_parse_to_es(parse_result) {
 }
 
 
-
 function cleanup(s3key) {
-	console.log('function run')
 	var filename = get_local_filename_from_s3_key(s3key) 
-	console.log('***'+filename)
 	if (fs.existsSync(filename)) {
 		fs.unlinkSync(filename)
 	}
-	var filename2 = filename + '.txt'
-	console.log('???'+filename2)
-	if (fs.existsSync(filename2)) {
-		console.log('<<<<<<')
-		fs.unlinkSync(filename2)
-	}	
 }
 
 
 
-var p = new Promise(function(resolve, reject) {
-	return get_pdf_from_s3_promise(bucket, s3key)
-		.then(function (local_file) {
-			console.log('get_pdf_from_s3_promise')
-			return convert_pdf_to_text_promise(local_file)
-		})
-		.then(function(txt_file, pdf_absfile) {
-			console.log('convert_pdf_to_text_promise')
-			return move_text_to_s3_promise(bucket, s3path + 'text/' + txt_file, txt_file)
-		})
-		.then(function(data) {
-			var txt_file = data['filename']
-			console.log('move_text_to_s3_promise')
-			return parse_text_promise(bucket, s3path, txt_file)
-		})
-		.then(function(parse_result) {
-			console.log('parse_text_promise')
-			return save_parse_to_es(parse_result)
-		})
-		.then(function(result) {
-			console.log('save_parse_to_es')
-			console.log(result)
-			resolve(s3key)
-		})
-		.catch(function(err) {
-			console.log("error!!!")
-			console.log(err)
-			reject(s3key) 
-		})
-})
 
 
+function etl(s3key){
+	return new Promise(function(resolve, reject) {
+		return get_pdf_from_s3_promise(bucket, s3key)
+			.then(function (local_file) {
+				return convert_pdf_to_text_promise(local_file)
+			})
+			.then(function(txt_file, pdf_absfile) {
+				return move_text_to_s3_promise(bucket, s3path + 'text/' + txt_file, txt_file)
+			})
+			.then(function(data) {
+				var txt_file = data['filename']
+				return parse_text_promise(bucket, s3path, txt_file)
+			})
+			.then(function(parse_result) {
+				return save_parse_to_es(parse_result)
+			})
+			.then(function(result) {
+				console.log(result)
+				resolve(s3key)
+			})
+			.catch(function(err) {
+				console.log("error!!!")
+				console.log(err)
+				reject(s3key) 
+			})
+
+	})
+}	
 
 
-
-
-
-
-	
-
-
-p.then(cleanup).catch(cleanup)
-
-
-
-
-
-
-
-//var p = process_file(bucket, 'resumes/unsourced/00a7d5ee.pdf')
-/*
-p.then(function(s3key){
-	console.log('done!!!!!!!')
-	cleanup(s3key)
-})
-.then(function(){
-	console.log('done')
-})
-*/
-
-
-
-/*
 s3.listObjects(params, function (err, data) {
  if(err)throw err;
  var IsTruncated = data['IsTruncated']
  if (IsTruncated) {
  	console.log('err!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
  }
- var Contents = data['CommonPrefixes'].slice(74,75)
+ var Contents = data['CommonPrefixes']
+ var promises = []
  for (var item of Contents) {
  	var Prefix = item['Prefix']
  	var n = Prefix.length
@@ -240,27 +209,10 @@ s3.listObjects(params, function (err, data) {
  	var ext = Prefix.substring(n-3,n).toLowerCase()
  	console.log(ext)
  	if (ext == "pdf") {
- 		process_file(bucket, Prefix)
+ 		var p = etl(Prefix)
+ 		promises.push(p)
  	}
  }
+ Promise.all(promises)
 });
-*/
-
-//process_file(bucket, 'resumes/unsourced/ALIREZA_ALIAMIRI.pdf') 
-
-/*
-try{
-
-process_file(bucket, 'resumes/unsourced/00a7d5ee.pdf')
-
-}catch(e){
-
-console.log('error');
-}
-
-
-*/
-
-// If exists, delete local files
-// Change ACL to private
 
