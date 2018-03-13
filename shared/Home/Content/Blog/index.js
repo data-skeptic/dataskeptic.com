@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
-import moment from 'moment'
-import { Link } from 'react-router'
+import React, { Component } from "react"
+import moment from "moment"
+import { Link } from "react-router"
 import {
   Container,
   Title,
@@ -9,36 +9,56 @@ import {
   ItemTitle,
   ItemDesc,
   ViewMore,
+  Authors,
   Author,
+  Details,
   Avatar,
-  Name
-} from './style'
+  Name,
+  Contribution
+} from "./style"
 
-import AuthorLink from '../../../components/AuthorLink'
+import AuthorLink from "../../../components/AuthorLink"
+
+const renderAuthor = ({
+  author,
+  img,
+  prettyname,
+  contribution,
+  contributor_id
+}) => (
+  <AuthorLink author={author} key={contributor_id} className="no-line">
+    <Author>
+      <Avatar src={img} />
+      <Details>
+        <Name>{prettyname}</Name>
+        {contribution && <Contribution>{contribution}</Contribution>}
+      </Details>
+    </Author>
+  </AuthorLink>
+)
 
 const BlogBox = props => {
   const { blogList, getContributor } = props
   return (
     <div>
       {blogList.map((item, index) => {
-        let href = 'blog' + item.prettyname
-        const author = getContributor(item)
+        let href = "blog" + item.prettyname
+        const contributor = getContributor(item)
+
+        const multipleContributors =
+          item.contributors && item.contributors.length > 0
+
+        if (!multipleContributors && contributor) {
+          item.contributors = [contributor]
+        }
+
         return (
           <BlogItem key={index}>
-            <ItemDate>{moment(item.publish_date).format('MMMM D, Y')}</ItemDate>
-            <Link to={href}>
-              <ItemTitle>{item.title}</ItemTitle>
-            </Link>
+            <ItemDate>{moment(item.publish_date).format("MMMM D, Y")}</ItemDate>
+            <ItemTitle><Link to={href} className="no-line">{item.title}</Link></ItemTitle>
             <ItemDesc>{item.abstract}</ItemDesc>
-            <ViewMore to={href}>View More</ViewMore>
-            {author && (
-              <AuthorLink author={author.author}>
-                <Author>
-                  <Avatar src={author.img} />
-                  <Name>{author.prettyname}</Name>
-                </Author>
-              </AuthorLink>
-            )}
+            <ViewMore to={href} className="no-line"><span className="pseudo no-line">View More</span></ViewMore>
+            <Authors>{item.contributors && item.contributors.map(renderAuthor)}</Authors>
           </BlogItem>
         )
       })}

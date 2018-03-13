@@ -1,54 +1,47 @@
-import React, { PropTypes } from 'react'
-import ReactDOM from 'react-dom'
-import { connect } from 'react-redux'
-import AuthorLink from '../../components/AuthorLink'
+import React, { PropTypes } from "react"
+import styled from "styled-components"
+import { Link } from "react-router"
 
-export const BlogAuthorTop = ({ contributor = {} }) => {
-  if (contributor == undefined || contributor.prettyname == undefined) {
-    return <div />
-  }
-  let twitterimg = ''
-  let twitterlink = ''
-  let linkedinimg = ''
-  let linkedinlink = ''
+const formatLink = id => `/contributors/${id}`
 
-  const { twitter, linkedin } = contributor
+export const BlogAuthorTop = ({ author, prettyname, img, isFirst, isLast }) => (
+  <Wrapper to={formatLink(author)} isFirst={isFirst} isLast={isLast}>
+    <Avatar src={img} />
+    <Name>{prettyname}</Name>
+  </Wrapper>
+)
 
-  if (twitter) {
-    const twitterurl = 'https://twitter.com/' + twitter
-    twitterimg = (
-      <a href={twitterurl}>
-        <img src="/img/png/twitter.png" />
-      </a>
-    )
-    twitterlink = <a href={twitterurl}>{twitter}</a>
-  }
+const Wrapper = styled(Link)`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border: none;
 
-  if (linkedin) {
-    linkedinimg = (
-      <a href={linkedin}>
-        <img src="/img/png/linkedin.png" />
-      </a>
-    )
-    linkedinlink = <a href={linkedin}>LinkedIn</a>
+  &:after {
+    ${props =>
+      !props.isLast &&
+      `
+      content: ",";
+    `};
   }
 
-  return (
-    <div className="row blog-author-top">
-      <div className="col-xs-12 col-sm-4">
-        <b>Author:</b>{' '}
-        <AuthorLink author={contributor.author}>
-          {contributor.prettyname}
-        </AuthorLink>
-      </div>
-      <div className="col-xs-12 col-sm-4">
-        {twitterimg} {twitterlink}
-      </div>
-      <div className="col-xs-12 col-sm-4">
-        {linkedinimg} {linkedinlink}
-      </div>
-    </div>
-  )
-}
+  &:hover {
+    border: none;
+  }
+`
+
+const Avatar = styled.img`
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  padding: 2px;
+  background-color: #ffffff;
+  border: 1px solid #dddddd  !important;
+  margin-right: 0.3em;
+  margin-left: 0.3em;
+`
+
+const Name = styled.span``
 
 export default BlogAuthorTop

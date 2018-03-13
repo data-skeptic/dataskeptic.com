@@ -30,21 +30,19 @@ class Feature extends Component {
     return (
       <Container>
         <LogoContainer className="col-xs-12 col-sm-12 col-md-3">
-          <Link to={href}>
+          <Link to={href} className="no-line">
             <LogoImg src={feature_blog.img} />
           </Link>
         </LogoContainer>
         <DescBox className="col-xs-12 col-sm-12 col-md-9">
           <Title>feature of the week</Title>
-          <Link to={href}>
-            <SubTitle>{feature_blog.title}</SubTitle>
-          </Link>
+          <SubTitle><Link to={href} className="no-line">{feature_blog.title}</Link></SubTitle>
           <Desc>{feature_blog.abstract}</Desc>
           <BlogViewMore to={href}>View More</BlogViewMore>
           {author && (
             <UserBox author={author.author}>
               <UserImgArea>
-                <AuthorLink author={author.author}>
+                <AuthorLink author={author.author} className="no-line">
                   <UserImg src={author.img} />
                 </AuthorLink>
               </UserImgArea>
