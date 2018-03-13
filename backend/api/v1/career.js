@@ -94,12 +94,13 @@ module.exports = cache => {
   })
 
   router.post("/", (req, res) => {
-    const { email, notify, resume } = req.body
+    const { email, notify, resume, subscribe} = req.body
     
     const message = {
       msg: `
         Candidate just uploaded resume ${formatResumeLink(resume)}.</br>
         Notify: ${notify ? 'Checked' : 'Unchecked'}</br>
+        Send periodic: ${subscribe ? 'Send' : 'No'}</br>
         
         Try reach him by ${email}
       `,
