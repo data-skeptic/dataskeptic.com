@@ -39,14 +39,22 @@ const initialValues = {
   [SUBSCRIBE_FIELD]: true
 }
 
-const Form = ({ handleSubmit, children, customError, showEmail, bucket }) => (
+const Form = ({
+  handleSubmit,
+  children,
+  customError,
+  showEmail,
+  bucket,
+  customSubmitting
+}) => (
   <FormController
     name="contacts"
     handleSubmit={handleSubmit}
-    submitValue={<span>Submit</span>}
+    submitValue={customSubmitting ? "Uploading..." : "Submit"}
     showSubmit={true}
     customError={customError}
     btnWrapperClasses={"submit-wrapper"}
+    customSubmitting={customSubmitting}
   >
     <Field
       label={`If you're concerned about privacy, feel free to remove your contact information from PDF you upload.`}
@@ -82,6 +90,7 @@ const Form = ({ handleSubmit, children, customError, showEmail, bucket }) => (
       name={SUBSCRIBE_FIELD}
       type="checkbox"
     />
+
   </FormController>
 )
 

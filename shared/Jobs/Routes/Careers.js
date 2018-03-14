@@ -60,7 +60,7 @@ class Careers extends Component {
   }
 
   render() {
-    const { resume, notify, submitted, error } = this.props
+    const { resume, notify, submitted, error, submitting } = this.props
     const files = resume ? [resume] : []
     var due_date = new Date(2018, 4, 2)
     var due_date_str = due_date.toString()
@@ -86,6 +86,7 @@ class Careers extends Component {
                 customError={error}
                 showEmail={notify}
                 bucket={FILES_BUCKET}
+                customSubmitting={submitting}
               />
             ) : (
               <Success>
@@ -182,5 +183,6 @@ export default connect(state => ({
   resume: selector(state, RESUME_FIELD),
   notify: selector(state, NOTIFY_FIELD),
   submitted: state.jobs.getIn(["resume", "submitted"]),
+  submitting: state.jobs.getIn(["resume", "submitting"]),
   error: state.jobs.getIn(["resume", "error"])
 }))(Careers)
