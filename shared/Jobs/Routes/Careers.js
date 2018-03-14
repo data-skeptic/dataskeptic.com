@@ -19,6 +19,8 @@ const config = require('../../../config/config.json')
 const c = config[env]
 
 const RESUME_BUCKET = c['files']['site_bucket']
+const subpath = env === 'dev' ? 'dev' : 'career_page1'
+const RESUME_PREFIX = `resumes/${subpath}/${moment().format('YYYY-MM')}`
 
 class Careers extends Component {
   onResumeUpload = data => {
@@ -80,6 +82,7 @@ class Careers extends Component {
                 customError={error}
                 showEmail={notify}
                 bucket={RESUME_BUCKET}
+                prefix={RESUME_PREFIX}
               />
             ) : (
               <Success>
