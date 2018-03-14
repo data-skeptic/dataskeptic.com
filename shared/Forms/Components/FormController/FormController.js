@@ -1,7 +1,7 @@
 import React, { PropTypes } from "react"
 import { isEmpty } from "lodash"
 
-const DEFAULT_ERROR = (
+const DefaultError = () => (
   <p>
     <i className="glyphicon glyphicon-warning-sign"> </i> Server error, please
     contact kyle@dataskeptic.com for support
@@ -21,7 +21,7 @@ export const FormController = ({
   submitValue,
   btnWrapperClasses = "",
   customSuccess,
-  customError = DEFAULT_ERROR
+  customError
 }) => (
   <form
     className={`form ${name}-form`}
@@ -42,7 +42,11 @@ export const FormController = ({
       </div>
     ) : null}
 
-    {customError && <div className="col-md-12 error">{customError}</div>}
+    {customError && (
+      <div className="col-md-12 error">
+        {customError ? customError : <DefaultError />}
+      </div>
+    )}
 
     <div className="col-md-12 success">
       {customSuccess ? (
