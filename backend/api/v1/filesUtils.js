@@ -8,6 +8,9 @@ const env = process.env.NODE_ENV === "dev" ? "dev" : "prod"
 const temp_files = c[env]["files"]["folder"]
 const dest = path.resolve(__dirname, "../../../", temp_files)
 
+export const getExtension = file =>
+  file.slice((Math.max(0, file.lastIndexOf(".")) || Infinity) + 1)
+
 export const uploadFileToBucket = (fileName, Bucket, prefix) => {
   prefix = prefix ? prefix + "/" : ""
 
@@ -65,7 +68,7 @@ export const isLogicalEmpty = val =>
   !val || val === "null" || val === "undefined"
 
 export const move = (Bucket, CopySource, OldKey, NextKey) => {
-  console.log(Bucket,"rename from", OldKey, "to", NextKey)
+  console.log(Bucket, "rename from", OldKey, "to", NextKey)
 
   return s3
     .copyObject({

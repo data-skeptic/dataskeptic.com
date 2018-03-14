@@ -46,6 +46,7 @@ const Form = ({
       name={RESUME_FIELD}
       accept="application/pdf"
       bucket={bucket}
+      saveOrigin={true}
     />
 
     {prefix}

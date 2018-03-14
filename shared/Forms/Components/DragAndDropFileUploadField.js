@@ -141,8 +141,8 @@ export default class DragAndDropFileUploadField extends Component {
   }
 
   upload(files) {
-    const { bucket, prefix } = this.props
-    const url = `/api/v1/files/upload?bucket=${bucket}&prefix=${prefix}`
+    const { bucket, prefix, saveOrigin } = this.props
+    const url = `/api/v1/files/upload?bucket=${bucket}&prefix=${prefix}&saveOrigin=${saveOrigin}`
 
     return Request.upload(url, files).then(res => res.data.files)
   }

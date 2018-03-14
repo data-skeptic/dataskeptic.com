@@ -7,7 +7,8 @@ import {
   isLogicalEmpty,
   fileExistS3,
   formatPublicLink,
-  uploadFilesToBucket
+  uploadFilesToBucket,
+  getExtension
 } from "./filesUtils"
 
 const env = process.env.NODE_ENV === "dev" ? "dev" : "prod"
@@ -21,8 +22,20 @@ const storage = multer.diskStorage({
     cb(null, dest)
   },
   filename: function(req, file, cb) {
-    let fileName =
-      file.fieldname + "-" + Date.now() + "." + mime.getExtension(file.mimetype)
+    let fileName
+
+    if (req.query.saveOrigin) {
+      fileName = file.originalname
+    } else {
+      fileName =
+        file.originalname +
+        "-" +
+        Date.now() +
+        "." +
+        mime.getExtension(file.mimetype)
+    }
+
+    console.dir({ file, fileName })
 
     cb(null, fileName)
   }

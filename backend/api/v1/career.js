@@ -52,7 +52,7 @@ module.exports = cache => {
           to: EMAIL_ADDRESS
         }
         
-        MailServices.sendMail(message)
+        // MailServices.sendMail(message)
       })
       .then(() => {
         if (email) {
