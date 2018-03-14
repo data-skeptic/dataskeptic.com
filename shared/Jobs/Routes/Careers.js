@@ -84,8 +84,19 @@ class Careers extends Component {
                 onSubmit={this.submit}
                 customError={error}
                 showEmail={notify}
-                bucket={FILES_BUCKET}
-              />
+              >
+                <Text>
+                  If you're concerned about privacy, feel free to remove your
+                  contact information from PDF you upload.
+                </Text>
+                <UploadBox
+                  wrapperClass="resume_upload"
+                  multiple={false}
+                  files={files}
+                  onDrop={this.onResumeUpload}
+                  onRemove={this.onResumeRemove}
+                />
+              </UploadResume>
             ) : (
               <Success>
                 <h3>Thank you!</h3>
@@ -108,10 +119,13 @@ class Careers extends Component {
             <Text>
               We are going to randomly select two submitters to win a copy of
               "The Master Algorithm" by Pedro Domingos.
-              <br />
-              <br />
-              <b>To be entered, submit your PDF resume/CV by {due_date_str}</b>
             </Text>
+            {due_date_str && (
+              <Text>
+                <b>To be entered, submit your PDF resume/CV by</b>
+                <Countdown to={due_date_str} />
+              </Text>
+            )}
           </Right>
         </Row>
       </Container>

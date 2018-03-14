@@ -13,7 +13,7 @@ import { changePageTitle } from '../../../Layout/Actions/LayoutActions'
 class Checkout extends Component {
   redirectToSuccessPage = ({ stripe_order_id }) => {
     window.scrollTo(0, 0)
-    return this.props.history.push(`/checkout/thank-you?num=${stripe_order_id}`)
+    return window.location.href = `/checkout/thank-you?num=${stripe_order_id}`
   }
 
   constructor(props) {
