@@ -68,8 +68,6 @@ export const isLogicalEmpty = val =>
   !val || val === "null" || val === "undefined"
 
 export const move = (Bucket, CopySource, OldKey, NextKey) => {
-  console.log(Bucket, "rename from", OldKey, "to", NextKey)
-
   return s3
     .copyObject({
       Bucket,

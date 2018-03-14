@@ -35,8 +35,6 @@ const storage = multer.diskStorage({
         mime.getExtension(file.mimetype)
     }
 
-    console.dir({ file, fileName })
-
     cb(null, fileName)
   }
 })
