@@ -23,7 +23,7 @@ class ThankYouRoute extends Component {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const id = getLocationQuery(this.props.location.search)
     if (isEmpty(id)) {
       return this.props.history.push('/')
