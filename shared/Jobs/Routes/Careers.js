@@ -84,19 +84,8 @@ class Careers extends Component {
                 onSubmit={this.submit}
                 customError={error}
                 showEmail={notify}
-              >
-                <Text>
-                  If you're concerned about privacy, feel free to remove your
-                  contact information from PDF you upload.
-                </Text>
-                <UploadBox
-                  wrapperClass="resume_upload"
-                  multiple={false}
-                  files={files}
-                  onDrop={this.onResumeUpload}
-                  onRemove={this.onResumeRemove}
-                />
-              </UploadResume>
+                bucket={FILES_BUCKET}
+              />
             ) : (
               <Success>
                 <h3>Thank you!</h3>

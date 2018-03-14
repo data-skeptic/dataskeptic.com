@@ -1,11 +1,12 @@
 import React from "react"
 import { reduxForm } from "redux-form"
 import { Field } from "redux-form"
-import _ from 'lodash'
+import _ from "lodash"
 
 import { FormController } from "../../Forms/Components"
 import { renderCheckbox } from "../../Forms/Components/Field"
 import { renderField } from "../../Forms/Components/Field/Field"
+import DragAndDropFileUploadField from "../../Forms/Components/DragAndDropFileUploadField"
 
 export const KEY = "uploadResume"
 export const RESUME_FIELD = "resume"
@@ -27,7 +28,7 @@ const validate = values => {
   }
 
   if (_.isEmpty(values.resume)) {
-    errors.resume = 'Please upload resume'
+    errors.resume = "Please upload resume"
   }
 
   return errors
@@ -38,7 +39,7 @@ const initialValues = {
   [SUBSCRIBE_FIELD]: true
 }
 
-const Form = ({ handleSubmit, children, customError, showEmail }) => (
+const Form = ({ handleSubmit, children, customError, showEmail, bucket }) => (
   <FormController
     name="contacts"
     handleSubmit={handleSubmit}
@@ -47,7 +48,15 @@ const Form = ({ handleSubmit, children, customError, showEmail }) => (
     customError={customError}
     btnWrapperClasses={"submit-wrapper"}
   >
-    {children}
+    <Field
+      label={`If you're concerned about privacy, feel free to remove your contact information from PDF you upload.`}
+      component={renderField}
+      customComponent={DragAndDropFileUploadField}
+      name={RESUME_FIELD}
+      accept="application/pdf"
+      bucket={bucket}
+      saveOrigin={true}
+    />
 
     <Field
       label="Notify me when there's news about this project"
