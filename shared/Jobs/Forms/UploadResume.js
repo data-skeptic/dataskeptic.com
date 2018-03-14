@@ -46,7 +46,6 @@ const Form = ({
       name={RESUME_FIELD}
       accept="application/pdf"
       bucket={bucket}
-      prefix={prefix}
     />
 
     {prefix}

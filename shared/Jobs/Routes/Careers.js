@@ -14,13 +14,11 @@ import UploadResume, {
 
 import { submitResume } from "../../reducers/JobsReducer"
 
-const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const config = require('../../../config/config.json')
+const env = process.env.NODE_ENV === "dev" ? "dev" : "prod"
+const config = require("../../../config/config.json")
 const c = config[env]
 
-const RESUME_BUCKET = c['files']['site_bucket']
-const subpath = env === 'dev' ? 'dev' : 'career_page1'
-const RESUME_PREFIX = `resumes/${subpath}/${moment().format('YYYY-MM')}`
+const FILES_BUCKET = c["files"]["site_bucket"]
 
 class Careers extends Component {
   onResumeUpload = data => {
@@ -38,6 +36,11 @@ class Careers extends Component {
     dispatch(changePageTitle(title))
   }
   submit = data => {
+    data = {
+      ...data,
+      Bucket: FILES_BUCKET
+    }
+    
     return submitResume(this.props.dispatch, data)
   }
 
@@ -74,15 +77,14 @@ class Careers extends Component {
               personalized analysis which compares your resume to other
               submissions.
             </Text>
-            
+
             {!submitted ? (
               <UploadResume
                 showSubmit={true}
                 onSubmit={this.submit}
                 customError={error}
                 showEmail={notify}
-                bucket={RESUME_BUCKET}
-                prefix={RESUME_PREFIX}
+                bucket={FILES_BUCKET}
               />
             ) : (
               <Success>

@@ -1,4 +1,6 @@
 import * as MailServices from "../../modules/mail/services/MailServices"
+import moment from "moment/moment"
+import { move } from "./filesUtils"
 const express = require("express")
 const axios = require("axios")
 
@@ -7,7 +9,7 @@ const env = process.env.NODE_ENV === "dev" ? "dev" : "prod"
 const base_api = c[env]["base_api"] + env
 const EMAIL_ADDRESS = c[env]["careers"]["email"]
 
-const formatResumeLink = resume => resume
+const formatResumeLink = resume => `https://s3.amazonaws.com/${resume}`
 
 const registerUser = ({ email }) => {
   const data = {
@@ -18,31 +20,45 @@ const registerUser = ({ email }) => {
   return axios.post(base_api + "/drip/user/add", data).then(res => res.data)
 }
 
+const commitResume = ({ email, resume, Bucket }) => {
+  const subpath = env === "dev" ? "dev" : "career_page1"
+  const ObjectPath = resume.replace("https://s3.amazonaws.com/", "")
+  const Key = ObjectPath.replace(Bucket + "/", "")
+  let nextKey = `resumes/${subpath}/${moment().format("YYYY-MM")}/${Key}`
+  
+  if (email) {
+    nextKey = email+'_'+nextKey
+  }
+
+  return move(Bucket, ObjectPath, Key, nextKey)
+}
+
 module.exports = cache => {
   const router = express.Router()
 
-  const onUpload = data => {
-    return registerUser(data)
-  }
-
   router.post("/", (req, res) => {
-    const { email, notify, resume } = req.body
+    const { email, notify } = req.body
 
-    const message = {
-      msg: `
+    return commitResume(req.body)
+      .then(resume => {
+        const message = {
+          msg: `
         Candidate just uploaded resume ${formatResumeLink(resume)}.</br>
         Notify: ${notify ? "Checked" : "Unchecked"}</br>
         
         Try reach him by ${email}
       `,
-      subject: `dataskeptic.com account created`,
-      to: EMAIL_ADDRESS
-    }
-
-    const flow = email ? onUpload(req.body) : Promise.resolve()
-
-    return flow
-      .then(() => MailServices.sendMail(message))
+          subject: `dataskeptic.com account created`,
+          to: EMAIL_ADDRESS
+        }
+        
+        MailServices.sendMail(message)
+      })
+      .then(() => {
+        if (email) {
+          return registerUser(req.body)
+        }
+      })
       .then(() => {
         res.send({ success: true })
       })
