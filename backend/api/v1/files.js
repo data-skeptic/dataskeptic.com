@@ -24,6 +24,8 @@ const storage = multer.diskStorage({
 })
 
 const uploadFileToBucket = (fileName, Bucket, prefix) => {
+  prefix = prefix ? prefix + "/" : ""
+  
   const filePath = path.join(dest, fileName)
   const Body = fs.readFileSync(filePath)
   const Key = `${prefix}${fileName}`
@@ -35,6 +37,8 @@ const uploadFileToBucket = (fileName, Bucket, prefix) => {
     ContentEncoding: "base64",
     ACL: "public-read"
   }
+
+  console.dir(Key)
 
   return s3
     .upload(params)
@@ -68,8 +72,11 @@ const fileExistLocally = file => {
   return exist
 }
 
-const formatPublicLink = (filename, bucket, prefix) =>
-  `https://s3.amazonaws.com/${bucket}${prefix}/${filename}`
+const formatPublicLink = (filename, bucket, prefix) => {
+  prefix = prefix ? "/" + prefix : ""
+
+  return `https://s3.amazonaws.com/${bucket}${prefix}/${filename}`
+}
 
 const isLogicalEmpty = val => !val || val === "null" || val === "undefined"
 
@@ -82,7 +89,6 @@ module.exports = cache => {
 
   router.put("/upload", (req, res) => {
     let { bucket, prefix } = req.query
-    prefix = prefix ? "/" + prefix : ""
 
     if (isLogicalEmpty(bucket)) {
       return res.status(500).send({
