@@ -24,11 +24,13 @@ const commitResume = ({ email, resume, Bucket }) => {
   const subpath = env === "dev" ? "dev" : "career_page1"
   const ObjectPath = resume.replace("https://s3.amazonaws.com/", "")
   const Key = ObjectPath.replace(Bucket + "/", "")
-  let nextKey = `resumes/${subpath}/${moment().format("YYYY-MM")}/${Key}`
+  let nextKey = `resumes/${subpath}/${moment().format("YYYY-MM")}/`
   
   if (email) {
-    nextKey = email+'_'+nextKey
+    nextKey += email+'_'
   }
+
+  nextKey += Key
 
   return move(Bucket, ObjectPath, Key, nextKey)
 }
