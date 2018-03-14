@@ -20,7 +20,7 @@ const validate = values => {
   const errors = {}
 
   if (values[NOTIFY_FIELD]) {
-    if (_.isEmpty(errors.email)) {
+    if (_.isEmpty(values.email)) {
       errors.email = "Email field is required"
     } else if (!isEmailValid(values.email)) {
       errors.email = "Invalid email address"
