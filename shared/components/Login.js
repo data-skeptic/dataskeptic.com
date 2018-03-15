@@ -44,8 +44,12 @@ class Login extends Component {
     this.props.dispatch(changePageTitle(title))
   }
 
-  followLogin() {
+  googleLogin() {
     window.location.href = '/api/v1/auth/login/google/'
+  }
+
+  linkedinLogin() {
+    window.location.href = '/api/v1/auth/login/linkedin/'
   }
 
   componentDidMount() {
@@ -83,8 +87,11 @@ class Login extends Component {
                   <span>or</span>
                 </div>
                 <div className="buttons col-xs-12 col-sm-12">
-                  <button className="btn google-btn" onClick={this.followLogin}>
+                  <button className="btn google-btn" onClick={this.googleLogin}>
                     Log in with <b>Google</b>
+                  </button>
+                  <button className="btn google-btn" onClick={this.linkedinLogin}>
+                    Log in with <b>Linkedin</b>
                   </button>
                   <Link className="btn signup-btn" to="/signup">
                     Sign Up
