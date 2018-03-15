@@ -1,4 +1,4 @@
-import Immutable from "immutable"
+import Immutable, {List} from "immutable"
 import Request from "../Request"
 
 const LOAD_CAREERS_CITY = "LOAD_CAREERS_CITY"
@@ -51,6 +51,28 @@ export default function jobReducer(state = defaultState, action) {
       state = state.setIn(["resume", "submitting"], false)
       state = state.setIn(["resume", "error"], action.payload.error)
       break
+    
+    case LOAD_CAREERS_CITY:
+    case LOAD_CAREERS_CITY_JOBS:
+      state = state.setIn(["city", "loading"], true)
+      state = state.setIn(["city", "loaded"], false)
+      state = state.setIn(["city", "error"], null);
+      
+    case LOAD_CAREERS_CITY_SUCCESS:
+      state = state.setIn(["city", "blogs"], List(action.payload.result.blogs));
+      state = state.setIn(["city", "events"], List(action.payload.result.events));
+      break;
+    
+    case LOAD_CAREERS_CITY_JOBS_SUCCESS:
+      state = state.setIn(["city", "jobs"], List(action.payload.result));
+      break;
+
+    case LOAD_CAREERS_CITY_FAIL:
+    case LOAD_CAREERS_CITY_JOBS_FAIL:
+      state = state.setIn(["city", "loading"], false)
+      state = state.setIn(["city", "loaded"], false)
+      state = state.setIn(["city", "error"], action.payload.error);
+      break;
   }
 
   return state

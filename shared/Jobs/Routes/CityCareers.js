@@ -3,16 +3,23 @@ import { connect } from "react-redux"
 import styled from "styled-components"
 
 import { changePageTitle } from "../../Layout/Actions/LayoutActions"
+
 import Carousel, {
   Wrapper as CarouselWrapper
 } from "../../Common/Components/Carousel"
-import {loadCareersCity, loadCareersCityData} from "../../reducers/JobsReducer";
 
-const env = process.env.NODE_ENV === "dev" ? "dev" : "prod"
-const config = require("../../../config/config.json")
-const c = config[env]
+import { loadCareersCity } from "../../reducers/JobsReducer"
 
 class CityCareers extends Component {
+  static defaultProps = {
+    blogs: [],
+    events: [],
+    jobs: [],
+    loading: false,
+    loaded: false,
+    error: null
+  }
+
   static getPageMeta() {
     return {
       title: "Careers | Data Skeptic"
@@ -29,17 +36,32 @@ class CityCareers extends Component {
   }
 
   render() {
+    const { loading, loaded, error } = this.props
+    const { jobs, events, blogs } = this.props
+
     return (
       <Container className="careers_city_page">
+        <code>
+          {JSON.stringify({
+            loading,
+            loaded,
+            error
+          })}
+        </code>
         <Layout>
           <Left>
-            <Carousel />
+            <code>{JSON.stringify(jobs)}</code>
+            <Carousel items={blogs} />
             <Row>
-              <Events>events</Events>
+              <Events>
+                <code>{JSON.stringify(events)}</code>
+              </Events>
               <Resume>resume</Resume>
             </Row>
           </Left>
-          <Jobs>jobs</Jobs>
+          <Jobs>
+            <code>{JSON.stringify(jobs)}</code>
+          </Jobs>
         </Layout>
       </Container>
     )
@@ -82,4 +104,11 @@ const Resume = styled.div`
   flex-basis: 48%;
 `
 
-export default connect(state => ({}))(CityCareers)
+export default connect(state => ({
+  loading: state.jobs.getIn(["city", "loading"]),
+  loaded: state.jobs.getIn(["city", "loaded"]),
+  error: state.jobs.getIn(["city", "error"]),
+  jobs: state.jobs.getIn(["city", "jobs"]),
+  events: state.jobs.getIn(["city", "events"]),
+  blogs: state.jobs.getIn(["city", "blogs"])
+}))(CityCareers)
