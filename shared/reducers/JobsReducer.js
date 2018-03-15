@@ -57,6 +57,7 @@ export default function jobReducer(state = defaultState, action) {
       state = state.setIn(["city", "loading"], true)
       state = state.setIn(["city", "loaded"], false)
       state = state.setIn(["city", "error"], null);
+      break;
       
     case LOAD_CAREERS_CITY_SUCCESS:
       state = state.setIn(["city", "blogs"], List(action.payload.result.blogs));
@@ -111,7 +112,7 @@ export const loadCareersCityData = city => {
     dispatch(loadCareersCityRequest(city))
 
     Request.get(`/api/v1/careers/city/${city}`)
-      .then(result => dispatch(loadCareersCitySuccess(result)))
+      .then(result => dispatch(loadCareersCitySuccess(result.data)))
       .catch(err => dispatch(loadCareersCityFail(err)))
   }
 }
@@ -138,7 +139,7 @@ export const loadCareersCityJobs = (location = '') => {
     dispatch(loadCareersCityJobsRequest(location))
 
     Request.get(`/api/v1/jobs?location=${location}`)
-      .then(result => dispatch(loadCareersCityJobsSuccess(result)))
+      .then(result => dispatch(loadCareersCityJobsSuccess(result.data)))
       .catch(err => dispatch(loadCareersCityJobsFail(err)))
   }
 }
