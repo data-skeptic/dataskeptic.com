@@ -1,12 +1,28 @@
 import Immutable from "immutable"
 import Request from "../Request"
 
+const LOAD_CAREERS_CITY = "LOAD_CAREERS_CITY"
+const LOAD_CAREERS_CITY_SUCCESS = "LOAD_CAREERS_CITY_SUCCESS"
+const LOAD_CAREERS_CITY_FAIL = "LOAD_CAREERS_CITY_FAIL"
+
+const LOAD_CAREERS_CITY_JOBS = "LOAD_CAREERS_CITY_JOBS"
+const LOAD_CAREERS_CITY_JOBS_SUCCESS = "LOAD_CAREERS_CITY_JOBS_SUCCESS"
+const LOAD_CAREERS_CITY_JOBS_FAIL = "LOAD_CAREERS_JOBS_CITY_FAIL"
+
 const init = {
   resume: {
     submitted: false,
     submitting: false,
     error: false,
     files: null
+  },
+  city: {
+    loading: false,
+    loaded: false,
+    error: null,
+    blogs: [],
+    events: [],
+    jobs: []
   }
 }
 
@@ -45,7 +61,7 @@ export const submitResume = (dispatch, data) => {
     type: "SUBMIT_RESUME"
   })
 
-  Request.post("/api/v1/career", data)
+  Request.post("/api/v1/careers", data)
     .then(res => {
       if (!res.data.success) {
         throw Error(res.data.error)
@@ -66,4 +82,65 @@ export const submitResume = (dispatch, data) => {
         }
       })
     )
+}
+
+export const loadCareersCityData = city => {
+  return dispatch => {
+    dispatch(loadCareersCityRequest(city))
+
+    Request.get(`/api/v1/careers/city/${city}`)
+      .then(result => dispatch(loadCareersCitySuccess(result)))
+      .catch(err => dispatch(loadCareersCityFail(err)))
+  }
+}
+
+export const loadCareersCityRequest = city => ({
+  type: LOAD_CAREERS_CITY,
+  payload: {
+    city
+  }
+})
+
+export const loadCareersCitySuccess = result => ({
+  type: LOAD_CAREERS_CITY_SUCCESS,
+  payload: { result }
+})
+
+export const loadCareersCityFail = error => ({
+  type: LOAD_CAREERS_CITY_FAIL,
+  payload: { error }
+})
+
+export const loadCareersCityJobs = (location = '') => {
+  return dispatch => {
+    dispatch(loadCareersCityJobsRequest(location))
+
+    Request.get(`/api/v1/jobs?location=${location}`)
+      .then(result => dispatch(loadCareersCityJobsSuccess(result)))
+      .catch(err => dispatch(loadCareersCityJobsFail(err)))
+  }
+}
+
+export const loadCareersCityJobsRequest = city => ({
+  type: LOAD_CAREERS_CITY_JOBS,
+  payload: {
+    city
+  }
+})
+
+export const loadCareersCityJobsSuccess = result => ({
+  type: LOAD_CAREERS_CITY_JOBS_SUCCESS,
+  payload: { result }
+})
+
+export const loadCareersCityJobsFail = error => ({
+  type: LOAD_CAREERS_CITY_JOBS_FAIL,
+  payload: { error }
+})
+
+export const loadCareersCity = (city) => {
+  return (dispatch) => {
+    dispatch(loadCareersCityData(city))
+    dispatch(loadCareersCityJobs(city))
+  }
 }

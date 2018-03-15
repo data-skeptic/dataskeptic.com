@@ -23,7 +23,7 @@ module.exports = cache => {
   // lets map to the start of url request
   router.use('/tse', require('./tse')(cache))
   router.use('/jobs', require('./jobs')(cache))
-  router.use('/career', require('./career')(cache))
+  router.use('/careers', require('./careers')(cache))
 
   return router
 }
