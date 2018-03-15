@@ -4,10 +4,8 @@ const UserServices = require('../Users/Services/UserServices')
 
 export default function(env) {
   return new LinkedInStrategy(config[env].linkedin, function(
-    accessToken,
-    refreshToken,
-    { _json: { id, emailAddress, firstName, formattedName } },
-    done
+   
+    
   ) {
     try {
       // fetch user data
@@ -17,6 +15,8 @@ export default function(env) {
         fullName: formattedName,
         email: emailAddress
       }
+      
+      console.dir({ id, emailAddress, firstName, formattedName })
       process.nextTick(function() {
         UserServices.getUserByLinkedinId(id).then(row => {
           if (row === undefined) {
