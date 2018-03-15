@@ -117,26 +117,31 @@ module.exports = () => {
         (
           accessToken,
           refreshToken,
-          { _json: { id, emailAddress, firstName, formattedName, positions, pictureUrl } },
+          {
+            _json
+          },
           done
         ) => {
+          const {
+            id,
+            emailAddress,
+            formattedName,
+            pictureUrl
+          } = _json
+          
           let user = {}
           user.id = id
           user.displayName = formattedName
           user.avatar = pictureUrl
           user.email = emailAddress
-          user.linkedin = {
-            id,
-            refreshToken,
-            token: accessToken,
-          }
-          console.dir(user)
+          
+          user.linkedin = _json
           done(null, user)
         }
       )
     )
   }
-  
+
   var gp = c[env]["googlePassport"]
   if (gp) {
     console.log("AUTH: allowing Google Login")
@@ -254,8 +259,13 @@ module.exports = () => {
       ]
     })(req, res, next)
   })
+  
   // LINKEDIN
-  router.all("/login/linkedin", passport.authenticate("linkedin"))
+  router.all("/login/linkedin", (req, res, next) => {
+    redirectURL = req.headers.referer
+    passport.authenticate("linkedin")(req, res, next)
+  })
+  
   router.all("/linkedin/activate", function(req, res) {
     UserServices.changeActiveStatus(req.body).then(status => {
       res.redirect("/")
