@@ -2,6 +2,8 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import { change, formValueSelector } from "redux-form"
 import styled from "styled-components"
+import moment from "moment"
+
 import { changePageTitle } from "../../Layout/Actions/LayoutActions"
 import UploadFileTypeBox from "../../Proposals/Components/UploadFileTypeBox/UploadFileTypeBox"
 import UploadResume, {
@@ -11,7 +13,13 @@ import UploadResume, {
 } from "../Forms/UploadResume"
 
 import { submitResume } from "../../reducers/JobsReducer"
-import Countdown from "../../Common/Components/Countdown"
+import Countdown from "../../Common/Components/Countdown";
+
+const env = process.env.NODE_ENV === "dev" ? "dev" : "prod"
+const config = require("../../../config/config.json")
+const c = config[env]
+
+const FILES_BUCKET = c["files"]["site_bucket"]
 
 class Careers extends Component {
   onResumeUpload = data => {
@@ -29,6 +37,11 @@ class Careers extends Component {
     dispatch(changePageTitle(title))
   }
   submit = data => {
+    data = {
+      ...data,
+      Bucket: FILES_BUCKET
+    }
+    
     return submitResume(this.props.dispatch, data)
   }
 
@@ -47,7 +60,7 @@ class Careers extends Component {
   }
 
   render() {
-    const { resume, notify, submitted, error } = this.props
+    const { resume, notify, submitted, error, submitting } = this.props
     const files = resume ? [resume] : []
     var due_date = new Date(2018, 4, 2)
     var due_date_str = due_date.toString()
@@ -72,19 +85,9 @@ class Careers extends Component {
                 onSubmit={this.submit}
                 customError={error}
                 showEmail={notify}
-              >
-                <Text>
-                  If you're concerned about privacy, feel free to remove your
-                  contact information from PDF you upload.
-                </Text>
-                <UploadBox
-                  wrapperClass="resume_upload"
-                  multiple={false}
-                  files={files}
-                  onDrop={this.onResumeUpload}
-                  onRemove={this.onResumeRemove}
-                />
-              </UploadResume>
+                bucket={FILES_BUCKET}
+                customSubmitting={submitting}
+              />
             ) : (
               <Success>
                 <h3>Thank you!</h3>
@@ -180,5 +183,6 @@ export default connect(state => ({
   resume: selector(state, RESUME_FIELD),
   notify: selector(state, NOTIFY_FIELD),
   submitted: state.jobs.getIn(["resume", "submitted"]),
+  submitting: state.jobs.getIn(["resume", "submitting"]),
   error: state.jobs.getIn(["resume", "error"])
 }))(Careers)
