@@ -8,6 +8,10 @@ import Carousel, {
   Wrapper as CarouselWrapper
 } from "../../Common/Components/Carousel"
 
+import Events, {
+  Wrapper as EventsWrapper
+} from '../Containers/Events'
+
 import { loadCareersCity } from "../../reducers/JobsReducer"
 
 class CityCareers extends Component {
@@ -37,8 +41,10 @@ class CityCareers extends Component {
 
   render() {
     const { loading, loaded, error } = this.props
-    const { jobs, events, blogs } = this.props
+    let { jobs, events, blogs } = this.props
 
+    events = events.concat(events).concat(events).concat(events)
+    
     return (
       <Container className="careers_city_page">
         <code>
@@ -50,17 +56,15 @@ class CityCareers extends Component {
         </code>
         <Layout>
           <Left>
-            <code>{JSON.stringify(jobs)}</code>
-            <Carousel items={blogs} />
+            {/*<code>{JSON.stringify(jobs)}</code>*/}
+            {/*<Carousel items={blogs} />*/}
             <Row>
-              <Events>
-                <code>{JSON.stringify(events)}</code>
-              </Events>
+              <Events events={events} />
               <Resume>resume</Resume>
             </Row>
           </Left>
           <Jobs>
-            <code>{JSON.stringify(jobs)}</code>
+            {/*<code>{JSON.stringify(jobs)}</code>*/}
           </Jobs>
         </Layout>
       </Container>
@@ -94,14 +98,14 @@ const Row = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-`
-
-const Events = styled.div`
-  flex-basis: 48%;
+  
+  ${EventsWrapper} {
+    flex-basis: 68%;
+  }
 `
 
 const Resume = styled.div`
-  flex-basis: 48%;
+  flex-basis: 28%;
 `
 
 export default connect(state => ({
