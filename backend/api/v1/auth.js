@@ -122,6 +122,8 @@ module.exports = () => {
           },
           done
         ) => {
+          console.dir('received LI user')
+          console.dir(_json)
           const {
             id,
             emailAddress,
@@ -136,6 +138,7 @@ module.exports = () => {
           user.email = emailAddress
           
           user.linkedin = _json
+          console.log('success LI login')
           done(null, user)
         }
       )
@@ -263,6 +266,8 @@ module.exports = () => {
   // LINKEDIN
   router.all("/login/linkedin", (req, res, next) => {
     redirectURL = req.headers.referer
+    console.dir('login with linkedin')
+    console.log('redirectUrl=', redirectURL)
     passport.authenticate("linkedin")(req, res, next)
   })
   
@@ -321,6 +326,10 @@ module.exports = () => {
         failureFlash: true
       },
       async (err, user, info) => {
+        console.log('error', err)
+        console.log('user data')
+        console.dir(user)
+        
         if (err) {
           return res.status(403).send({ message: err.message })
         }
@@ -328,17 +337,24 @@ module.exports = () => {
           return res.status(403).send({ message: "System Error" })
         }
 
+        console.log('check user with same LI email address')
         const userAccount = await getUserAccount(user.email)
         if (!userAccount) {
           const userData = {
             email: user.email
           }
 
+          console.log('create user with LI data')
           await createUserAccount(userData)
+          console.log('notify new user')
           notifyOnJoin(user)
         }
 
         req.logIn(user, err => {
+          console.log('init user session')
+          console.log('err', err)
+          console.log('user data', user)
+          
           if (err) {
             return res.send({
               success: false,
@@ -350,6 +366,8 @@ module.exports = () => {
                 redirectURL = redirectURL.replace("/login", "")
               }
             }
+            
+            console.log('flow end: redirect to', redirectURL)
             return res.redirect(redirectURL)
           }
         })
