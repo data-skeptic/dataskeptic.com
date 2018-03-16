@@ -1,11 +1,12 @@
 import React from "react"
 import { reduxForm } from "redux-form"
 import { Field } from "redux-form"
-import _ from 'lodash'
+import _ from "lodash"
 
 import { FormController } from "../../Forms/Components"
 import { renderCheckbox } from "../../Forms/Components/Field"
 import { renderField } from "../../Forms/Components/Field/Field"
+import DragAndDropFileUploadField from "../../Forms/Components/DragAndDropFileUploadField"
 
 export const KEY = "uploadResume"
 export const RESUME_FIELD = "resume"
@@ -19,7 +20,7 @@ const validate = values => {
   const errors = {}
 
   if (values[NOTIFY_FIELD]) {
-    if (_.isEmpty(errors.email)) {
+    if (_.isEmpty(values.email)) {
       errors.email = "Email field is required"
     } else if (!isEmailValid(values.email)) {
       errors.email = "Invalid email address"
@@ -27,7 +28,7 @@ const validate = values => {
   }
 
   if (_.isEmpty(values.resume)) {
-    errors.resume = 'Please upload resume'
+    errors.resume = "Please upload resume"
   }
 
   return errors
@@ -38,16 +39,32 @@ const initialValues = {
   [SUBSCRIBE_FIELD]: true
 }
 
-const Form = ({ handleSubmit, children, customError, showEmail }) => (
+const Form = ({
+  handleSubmit,
+  children,
+  customError,
+  showEmail,
+  bucket,
+  customSubmitting
+}) => (
   <FormController
     name="contacts"
     handleSubmit={handleSubmit}
-    submitValue={<span>Submit</span>}
+    submitValue={customSubmitting ? "Uploading..." : "Submit"}
     showSubmit={true}
     customError={customError}
     btnWrapperClasses={"submit-wrapper"}
+    customSubmitting={customSubmitting}
   >
-    {children}
+    <Field
+      label={`If you're concerned about privacy, feel free to remove your contact information from PDF you upload.`}
+      component={renderField}
+      customComponent={DragAndDropFileUploadField}
+      name={RESUME_FIELD}
+      accept="application/pdf"
+      bucket={bucket}
+      saveOrigin={true}
+    />
 
     <Field
       label="Notify me when there's news about this project"
@@ -73,6 +90,7 @@ const Form = ({ handleSubmit, children, customError, showEmail }) => (
       name={SUBSCRIBE_FIELD}
       type="checkbox"
     />
+
   </FormController>
 )
 

@@ -2,10 +2,16 @@ import express from "express"
 import multer from "multer"
 import aws from "aws-sdk"
 import path from "path"
-import fse from "fs-extra"
-import fs from "fs"
 import mime from "mime"
+import {
+  isLogicalEmpty,
+  fileExistS3,
+  formatPublicLink,
+  uploadFilesToBucket,
+  getExtension
+} from "./filesUtils"
 
+const env = process.env.NODE_ENV === "dev" ? "dev" : "prod"
 const c = require("../../../config/config.json")
 const temp_files = c[env]["files"]["folder"]
 const dest = path.resolve(__dirname, "../../../", temp_files)
@@ -16,59 +22,22 @@ const storage = multer.diskStorage({
     cb(null, dest)
   },
   filename: function(req, file, cb) {
-    cb(
-      null,
-      file.fieldname + "-" + Date.now() + "." + mime.getExtension(file.mimetype)
-    )
+    let fileName
+
+    if (req.query.saveOrigin) {
+      fileName = file.originalname
+    } else {
+      fileName =
+        file.originalname +
+        "-" +
+        Date.now() +
+        "." +
+        mime.getExtension(file.mimetype)
+    }
+
+    cb(null, fileName)
   }
 })
-
-const uploadFileToBucket = (Key, Bucket) => {
-  const filePath = path.join(dest, Key)
-  const Body = fs.readFileSync(filePath)
-
-  const params = {
-    Bucket,
-    Key,
-    Body,
-    ContentEncoding: "base64",
-    ACL: "public-read"
-  }
-
-  return s3
-    .upload(params)
-    .promise()
-    .then(() => fs.unlinkSync(filePath))
-}
-
-const uploadFilesToBucket = (files, bucket) => {
-  return Promise.all(files.map(file => uploadFileToBucket(file, bucket)))
-}
-
-const fileExistS3 = params => {
-  return s3
-    .headObject(params)
-    .promise()
-    .then(() => true)
-    .catch(() => false)
-}
-
-const fileExistLocally = file => {
-  let exist = false
-
-  try {
-    fs.statSync(file)
-    exist = true
-  } catch (err) {}
-
-  return exist
-}
-
-const formatPublicLink = (filename, bucket) => {
-  return `https://s3.amazonaws.com/${bucket}/${filename}`
-}
-
-const isLogicalEmpty = val => !val || val === 'null' || val === 'undefined'
 
 module.exports = cache => {
   const router = express.Router()
@@ -78,7 +47,8 @@ module.exports = cache => {
   }).array("files")
 
   router.put("/upload", (req, res) => {
-    const { bucket } = req.query
+    let { bucket, prefix } = req.query
+
     if (isLogicalEmpty(bucket)) {
       return res.status(500).send({
         success: false,
@@ -95,11 +65,11 @@ module.exports = cache => {
           })
         } else {
           const files = req.files.map(file => file.filename)
-          await uploadFilesToBucket(files, bucket)
+          await uploadFilesToBucket(files, bucket, prefix)
 
           res.send({
             success: true,
-            files: files.map(file => formatPublicLink(file, bucket))
+            files: files.map(file => formatPublicLink(file, bucket, prefix))
           })
         }
       })
@@ -115,39 +85,8 @@ module.exports = cache => {
     const { bucket } = req.query
     const { key } = req.params
 
-    if (bucket) {
-      serveS3File(key, bucket, req, res)
-    } else {
-      serveLocalFile(key, req, res)
-    }
+    serveS3File(key, bucket, req, res)
   })
-
-  function serveLocalFile(key, req, res) {
-    const filePath = path.join(dest, key)
-    const type = mime.getType(filePath)
-
-    if (fileExistLocally(filePath)) {
-      const stream = fs.createReadStream(filePath)
-
-      stream.on("open", () => {
-        res.set("Content-Type", type)
-        stream.pipe(res)
-      })
-
-      stream.on("error", err => {
-        res.status(404).send({
-          success: false,
-          error: err.message
-        })
-      })
-    } else {
-      res.status(404).send({
-        success: false,
-        error: `No such file`,
-        file: key
-      })
-    }
-  }
 
   function serveS3File(Key, Bucket, req, res) {
     const params = { Key, Bucket }

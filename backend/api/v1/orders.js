@@ -1,7 +1,9 @@
 const express = require('express')
 const OrdersServices = require('../../modules/orders/services/OrdersServices')
-var stripe_key = 'sk_test_81PZIV6UfHDlapSAkn18bmQi'
-var sp_key = 'test_Z_gOWbE8iwjhXf4y4vqizQ'
+
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const c = require('../../../config/config.json')
+const stripe_key = c[env]["stripe"]
 
 module.exports = cache => {
   const router = express.Router()
@@ -43,7 +45,7 @@ module.exports = cache => {
   })
 
   router.put('/fulfill', function(req, res) {
-    OrdersServices.fulFillOrder(sp_key, req.body)
+    OrdersServices.fulFillOrder(stripe_key, req.body)
       .then(data => {
         res.send(data)
       })
