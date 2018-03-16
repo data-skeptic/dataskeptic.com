@@ -56,15 +56,14 @@ class CityCareers extends Component {
         </code>
         <Layout>
           <Left>
-            {/*<code>{JSON.stringify(jobs)}</code>*/}
-            {/*<Carousel items={blogs} />*/}
+            <Carousel items={blogs} />
             <Row>
               <Events events={events} />
               <Resume>resume</Resume>
             </Row>
           </Left>
           <Jobs>
-            {/*<code>{JSON.stringify(jobs)}</code>*/}
+            <code>{JSON.stringify(jobs)}</code>
           </Jobs>
         </Layout>
       </Container>

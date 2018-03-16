@@ -60,6 +60,11 @@ export const Event = styled(Link)`
   border-bottom: 1px solid #e6e6e6;
   padding-top: 2em;
   padding-bottom: 2em;
+
+  &:hover,
+  &:focus, {
+    border-bottom: 1px solid #e6e6e6;
+  }
 `
 
 export const DateTime = styled.div`
