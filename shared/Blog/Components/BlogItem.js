@@ -37,7 +37,7 @@ const injectImage = (content, preview) => {
 
 const renderTopContributors = (contributors = []) => (
   <By>
-    by
+    
     <AuthorsTop>
       {contributors.map((contributor, index) => (
         <BlogAuthorTop
