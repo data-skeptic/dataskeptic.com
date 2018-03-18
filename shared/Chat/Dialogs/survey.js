@@ -25,7 +25,6 @@ function handler(dispatch, reply, cstate, message) {
 }
 
 function can_handle(message, cstate, reply) {
-	console.log("survey can_handle")
 	if (cstate.survey.did_survey) {
 		var msg = chatter.get_message("SURVEY>FINISHED_BEFORE")
 		reply({text: msg}, 'bot')
