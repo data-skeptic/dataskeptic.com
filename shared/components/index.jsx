@@ -176,7 +176,7 @@ class MainView extends React.Component {
    *
    */
   onNavigationItemClick() {
-    this.props.toggleMobileMenu()
+    this.props.dispatch(toggleMobileMenu())
   }
 
   /**
@@ -198,7 +198,7 @@ class MainView extends React.Component {
    * Click handler for overflow view
    */
   onOverflowClick() {
-    this.props.toggleCart()
+    this.props.dispatch(toggleCart())
   }
 
   /**
