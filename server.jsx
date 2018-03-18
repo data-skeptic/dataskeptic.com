@@ -629,14 +629,27 @@ function getIpData(ip) {
 
   const url = `https://ipinfo.io${ip && `/${ip}`}/json`
 
-  const safe = str => str.replace(/'/g, '"')
+  const safe = function(str) {
+    if (str == undefined) {
+      return ""
+    } else {
+      return str.replace(/'/g, '"')
+    }
+  }
 
   return axios
     .get(url)
     .then(res => res.data)
     .then(data => {
+      if (data['postal'] == undefined) {
+        data['postal'] = ""
+      }
       const { ip, city, region, country, loc, org, postal } = data
-      const [lat, lng] = loc.split(",")
+      var lat = -1
+      var lng = -1
+      if (loc != undefined) {
+        [lat, lng] = loc.split(",")
+      }
 
       return {
         ip,
@@ -645,8 +658,8 @@ function getIpData(ip) {
         country: safe(country),
         lat,
         lng,
-        org,
-        postal,
+        org: safe(org),
+        postal: safe(postal),
         version: CURRENT_IP_REQ_VERSION
       }
     })

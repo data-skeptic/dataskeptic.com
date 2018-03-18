@@ -68,5 +68,34 @@ module.exports = cache => {
       .catch(error => res.send({ success: false, error: error.message }))
   })
 
+  router.get("/drip/content/rate", (req, res) => {
+    var drip_user_id = req.query.drip_user_id
+    var send_id = req.query.send_id
+    var rate = req.query.rate
+    var url = base_api + `/drip/content/rate`
+    var data = {drip_user_id, send_id, rate}
+    return axios.post(url, data)
+        .then(function(result) {
+            console.log(result)
+            res.redirect('/drip-result?rate=true')
+        })
+        .catch(error => res.send({ success: false, error: error.message }))
+  })
+
+  router.get("/drip/unsubscribe", (req, res) => {
+    var drip_user_id = req.query.drip_user_id
+    var send_id = req.query.send_id
+    var url = base_api + `/drip/unsubscribe`
+    var data = {drip_user_id, send_id}
+    console.log(url)
+    console.log(data)
+    return axios.post(url, data)
+        .then(function(result) {
+            console.log(result)
+            res.redirect('/drip-unsubscribe')
+        })
+        .catch(error => res.send({ success: false, error: error.message }))
+  })
+
   return router
 }
