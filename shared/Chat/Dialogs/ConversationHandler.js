@@ -24,7 +24,7 @@ function get_reply(dispatch, reply, cstate, message) {
 		responder = 'bot'
 		resp = {msg, handler, responder}
 	} else if (handler) {
-		console.log()
+		console.log(handler)
 		resp = handler(dispatch, reply, cstate, message)
 	} else if (lmsg.indexOf('logo') > -1) {
 		msg = 'Here is our logo ![Data Skeptic](https://s3.amazonaws.com/dataskeptic.com/img/primary-logo-400.jpg)'
@@ -39,6 +39,7 @@ function get_reply(dispatch, reply, cstate, message) {
 			if (!handled && dialog.can_handle(message, cstate, reply)) {
 				handler = dialog.handler
 				console.log(dialog)
+				console.log(dispatch)
 				msg = dialog.get_opening_remark(dispatch, reply)
 				console.log([handler, msg])
 				resp = {handler, msg, responder}
@@ -87,6 +88,8 @@ function get_reply(dispatch, reply, cstate, message) {
 			}
 		}
 		var handler = resp.handler
+		console.log('dispatch')
+		console.log(dispatch)
 		dispatch({type: "SET_HANDLER", handler })
 	} else {
 		handler = undefined

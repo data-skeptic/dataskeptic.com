@@ -51,7 +51,7 @@ function handler(dispatch, reply, cstate, message) {
 		var label = item['label']
 		var similarity = stringSimilarity.compareTwoStrings(imsg, label)
 		if (similarity > .5) {
-			msg = item.get_opening_remark()
+			msg = item.get_opening_remark(dispatch, reply, cstate)
 			handler = item['handler']
 			return {msg, handler}
 		}

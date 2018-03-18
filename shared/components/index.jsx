@@ -39,12 +39,11 @@ class MainView extends React.Component {
       author
     })
   }
-  onMessage = message => {
+  onMessage = (message) => {
     this.addMessage(message)
     let cstate = this.props.chatbot.toJS()
     const dispatch = this.props.dispatch
     cstate.contributors = this.props.contributors
-
     ConversationHandler.get_reply(dispatch, this.reply, cstate, message)
   }
   onInactivity = () => {
@@ -251,6 +250,7 @@ class MainView extends React.Component {
     const itemsCount = getCartItemsCount(cart.toJS().cart_items)
     const isOverflowMode = isCartVisible
     const thinking = chatbot.get("thinking")
+    var dispatch = this.props.dispatch
 
     return (
       <div
@@ -296,6 +296,7 @@ class MainView extends React.Component {
   }
 }
 
+
 export default connect(
   state => ({
     cart: state.cart,
@@ -308,12 +309,5 @@ export default connect(
     chatbot: state.chatbot,
     contributors: state.site.get("contributors").toJS()
   }),
-  dispatch =>
-    bindActionCreators(
-      {
-        toggleMobileMenu,
-        toggleCart
-      },
-      dispatch
-    )
+
 )(MainView)
