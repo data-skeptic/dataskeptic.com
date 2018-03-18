@@ -62,7 +62,7 @@ class Careers extends Component {
   render() {
     const { resume, notify, submitted, error, submitting } = this.props
     const files = resume ? [resume] : []
-    var due_date = new Date(2018, 4, 2)
+    var due_date = new Date(2018, 4, 1)
     var due_date_str = due_date.toString()
 
     return (
@@ -113,7 +113,7 @@ class Careers extends Component {
             </Text>
             {due_date_str && (
               <Text>
-                <b>To be entered, submit your PDF resume/CV by</b>
+                <b>To be entered, submit your PDF resume/CV by the end of March</b>
                 <Countdown to={due_date_str} />
               </Text>
             )}
