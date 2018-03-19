@@ -33,8 +33,7 @@ import {
   loadProducts,
   load,
   get_contributors,
-  loadCurrentRFC,
-  get_bot_status
+  loadCurrentRFC
 } from "daos/serverInit"
 import place_order from "printful/wrapper"
 import { getProducts } from "daos/products"
@@ -168,13 +167,12 @@ const doRefresh = () => {
     loadEpisodes(),
     loadProducts(),
     get_contributors(),
-    loadCurrentRFC(),
-    get_bot_status()
+    loadCurrentRFC()
   ])
     .then(results => {
       // but wait until all of them will be done
 
-      const [episodes, products, contributors, rfc, bot] = results
+      const [episodes, products, contributors, rfc] = results
       console.log("-[All cache data fetched]-")
 
       // episodes
@@ -201,9 +199,6 @@ const doRefresh = () => {
 
       // RFC
       Cache.rfc = rfc
-
-      // bot
-      Cache.bot = bot
     })
     .then(() => console.log("-[Refreshing Complete]-"))
     .catch(err => {
@@ -546,11 +541,6 @@ async function updateState(store, pathname, req) {
       payload: Cache.contributors
     })
   }
-  console.log("on to bot")
-  var bot = Cache.bot
-  if (bot) {
-    store.dispatch({ type: "SET_BOT", payload: bot })
-  }
   if (pathname === "" || pathname === "/") {
     const location = extractLocation(req)
     await inject_homepage(store, Cache, location)
@@ -639,14 +629,27 @@ function getIpData(ip) {
 
   const url = `https://ipinfo.io${ip && `/${ip}`}/json`
 
-  const safe = str => str.replace(/'/g, '"')
+  const safe = function(str) {
+    if (str == undefined) {
+      return ""
+    } else {
+      return str.replace(/'/g, '"')
+    }
+  }
 
   return axios
     .get(url)
     .then(res => res.data)
     .then(data => {
+      if (data['postal'] == undefined) {
+        data['postal'] = ""
+      }
       const { ip, city, region, country, loc, org, postal } = data
-      const [lat, lng] = loc.split(",")
+      var lat = -1
+      var lng = -1
+      if (loc != undefined) {
+        [lat, lng] = loc.split(",")
+      }
 
       return {
         ip,
@@ -655,8 +658,8 @@ function getIpData(ip) {
         country: safe(country),
         lat,
         lng,
-        org,
-        postal,
+        org: safe(org),
+        postal: safe(postal),
         version: CURRENT_IP_REQ_VERSION
       }
     })

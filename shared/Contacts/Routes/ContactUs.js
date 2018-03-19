@@ -1,193 +1,136 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import { Link } from 'react-router'
+import React from "react"
+import { connect } from "react-redux"
+import { Link } from "react-router"
 
-import axios from 'axios'
-import styled from 'styled-components'
+import axios from "axios"
+import styled from "styled-components"
 
-import ContactFormContainer from '../Containers/ContactFormContainer/ContactFormContainer'
-import { changePageTitle } from '../../Layout/Actions/LayoutActions'
-import { formValueSelector, reset } from 'redux-form'
+import ContactFormContainer from "../Containers/ContactFormContainer/ContactFormContainer"
+import { changePageTitle } from "../../Layout/Actions/LayoutActions"
+import { formValueSelector, reset } from "redux-form"
 import {
-    init,
-    ready,
-    recordingStart,
-    recordingFinish,
-    review,
-    submit,
-    complete,
-    fail
-} from '../../Proposals/Actions/RecordingFlowActions';
-import {RECORDING} from "../../Proposals/Constants/CommentTypes";
-import Recorder, {steps} from '../../Recorder';
-import QuestionForm from "../../Questions/Forms/QuestionForm";
-import {submitCommentForm} from "../../Proposals/Actions/CommentBoxFormActions";
-import SectionBlock from "../Components/SectionBlock/SectionBlock";
-import Launcher from "../../Chat/Containers/Launcher";
-import ConversationHandler from "../../ChatBot/Dialogs/ConversationHandler"
-import {BOT_ID, THINKING_MESSAGE} from "../../Chat/Constants";
+  init,
+  ready,
+  recordingStart,
+  recordingFinish,
+  review,
+  submit,
+  complete,
+  fail
+} from "../../Proposals/Actions/RecordingFlowActions"
+import { RECORDING } from "../../Proposals/Constants/CommentTypes"
+import Recorder, { steps } from "../../Recorder"
+import QuestionForm from "../../Questions/Forms/QuestionForm"
+import { submitCommentForm } from "../../Proposals/Actions/CommentBoxFormActions"
+import SectionBlock from "../Components/SectionBlock/SectionBlock"
 
 class ContactUs extends React.Component {
-
-	constructor(props) {
-		super(props)
-
-		this.state = {
-			submittedUrl: '',
-			openSection: '',
-			messages: [
-			]
-		}
-	}
-
-	onMessage = (message) => {
-		this.addMessage(message)
-		let cstate = this.props.chatbot.toJS()
-		const dispatch = this.props.dispatch
-		cstate.contributors = this.props.contributors
-
-		ConversationHandler.get_reply(dispatch, this.reply, cstate, message)
-	}
-
-    isSectionOpen = section => section === this.state.openSection
-
-		toggleSection = section => {
-    	this.setState(prevState => ({
-    		openSection: (prevState.openSection === section) ? '' : section
-	    }))
-		}
-
-    recordingReady = (noDelay) => {
-        this.props.dispatch(ready(noDelay))
-        this.setState({submittedUrl: ''});
-    }
-
-    recorderRecording = () =>{
-        this.props.dispatch(recordingStart())
-    }
-
-    recorderStop = (id) => {
-        this.props.dispatch(recordingFinish(id))
-        this.setState({submittedUrl:id});
-    }
-
-    recorderReview = (id) => {
-        this.props.dispatch(review())
-    }
-
-    recorderSubmit = (id) => {
-        this.props.dispatch(submit())
-    }
-
-    recorderComplete = (id) => {
-        this.props.dispatch(complete(id))
-    }
-
-    recorderError = (error) => {
-        this.props.dispatch(fail(error))
-    }
+  isSectionOpen = section => section === this.state.openSection
+  toggleSection = section => {
+    this.setState(prevState => ({
+      openSection: prevState.openSection === section ? "" : section
+    }))
+  }
+  recordingReady = noDelay => {
+    this.props.dispatch(ready(noDelay))
+    this.setState({ submittedUrl: "" })
+  }
+  recorderRecording = () => {
+    this.props.dispatch(recordingStart())
+  }
+  recorderStop = id => {
+    this.props.dispatch(recordingFinish(id))
+    this.setState({ submittedUrl: id })
+  }
+  recorderReview = id => {
+    this.props.dispatch(review())
+  }
+  recorderSubmit = id => {
+    this.props.dispatch(submit())
+  }
+  recorderComplete = id => {
+    this.props.dispatch(complete(id))
+  }
+  recorderError = error => {
+    this.props.dispatch(fail(error))
+  }
+  reset = () => {
+    this.setState({ submittedUrl: "" })
+    this.props.dispatch(reset(`question`))
+  }
   questionSubmit = data => {
     data.recording = this.state.submittedUrl
     data.type = RECORDING
     this.props.dispatch(submitCommentForm(data))
-  }
-  reset = () => {
-    this.setState({ submittedUrl: '' })
-    this.props.dispatch(reset(`question`))
   }
   subscribeSlack = e => {
     e.preventDefault()
     const email = e.target.email.value
     const ocart = this.props.cart.toJS()
     const dispatch = this.props.dispatch
-    const token = ''
+    const token = ""
     const req = { email: email, token: token, set_active: true }
 
     dispatch({
-      type: 'UPDATE_ADDRESS',
-      payload: { cls: 'email', val: email }
+      type: "UPDATE_ADDRESS",
+      payload: { cls: "email", val: email }
     })
-    dispatch({ type: 'SLACK_UPDATE', payload: { msg: 'Sending...' } })
+    dispatch({ type: "SLACK_UPDATE", payload: { msg: "Sending..." } })
 
     var config = {}
     axios
-      .post('/api/slack/join', req, config)
+      .post("/api/slack/join", req, config)
       .then(function(resp) {
-        var data = resp['data']
-        var msg = data['msg']
-        dispatch({ type: 'SLACK_UPDATE', payload: { msg } })
+        var data = resp["data"]
+        var msg = data["msg"]
+        dispatch({ type: "SLACK_UPDATE", payload: { msg } })
       })
       .catch(function(err) {
-        var data = err['data']
+        var data = err["data"]
         var msg = "Sorry, we're having a problem getting that done :("
         if (data != undefined) {
-          if (data['msg'] != undefined) {
-            msg = data['msg']
+          if (data["msg"] != undefined) {
+            msg = data["msg"]
           }
         }
-        dispatch({ type: 'SLACK_UPDATE', payload: { msg } })
+        dispatch({ type: "SLACK_UPDATE", payload: { msg } })
         console.log(err)
       })
   }
 
-	reply = (message, operatorId) => {
-		operatorId = !!this.props.contributors[operatorId] ? operatorId : BOT_ID
-		const author = this.props.contributors[operatorId]
+  constructor(props) {
+    super(props)
 
-		this.addMessage({
-			...message,
-			author
-		})
-	}
-
-  static getPageMeta() {
-    return {
-      title: 'Contact Us | Data Skeptic',
-      description:
-        'We hope to respond to all inquiries, but sometimes the volume of incoming questions can cause our queue to explode. We prioritize responses to Data Skeptic members first, and to those who ask questions in a public forum like Twitter, our Facebook wall (not Facebook direct message), or Slack. Many people can benefit from responses in public places.'
+    this.state = {
+      submittedUrl: "",
+      openSection: ""
     }
   }
 
-	addMessage = (message) => this.setState(prevState => ({
-		messages: [...prevState.messages, message]
-	}))
-
-  onInactivity = () => {
-	  this.reply({ text: 'Still there?  Let me know what you think of the bot by DMing me on Slack!  I would appreciate your candid feedback'}, 'kyle')
+  static getPageMeta() {
+    return {
+      title: "Contact Us | Data Skeptic",
+      description:
+        "We hope to respond to all inquiries, but sometimes the volume of incoming questions can cause our queue to explode. We prioritize responses to Data Skeptic members first, and to those who ask questions in a public forum like Twitter, our Facebook wall (not Facebook direct message), or Slack. Many people can benefit from responses in public places."
+    }
   }
 
   componentDidMount() {
-      const {dispatch} = this.props;
-      const {title} = ContactUs.getPageMeta(this.props);
-      dispatch(changePageTitle(title));
-
-      this.reply({ text: 'What would you like to talk about?'})
+    const { dispatch } = this.props
+    const { title } = ContactUs.getPageMeta(this.props)
+    dispatch(changePageTitle(title))
   }
 
-	render() {
-			const {confirmPolicy,activeStep,errorMessage, contributors, chatbot} = this.props;
-			const { submittedUrl } = this.state
+  render() {
+    const { confirmPolicy, activeStep, errorMessage } = this.props
+    const { submittedUrl } = this.state
 
-			const osite = this.props.site.toJS()
+    const osite = this.props.site.toJS()
 
-			const slackstatus = (
-				<SlackStatus>{osite.slackstatus}</SlackStatus>
-			)
+    const slackstatus = <SlackStatus>{osite.slackstatus}</SlackStatus>
 
-			const thinking = chatbot.get('thinking')
-
-    	return (
+    return (
       <Container>
-          <Launcher
-            defaultBot={contributors[BOT_ID]}
-            thinking={thinking}
-            messages={this.state.messages}
-            onMessage={this.onMessage}
-            onInactivity={this.onInactivity}
-            inactivityDelay={1000 * 60 * 5}
-          />      
         <Title>Contact Us</Title>
         <Text>
           We hope to respond to all inquiries, but sometimes the volume of
@@ -273,7 +216,7 @@ class ContactUs extends React.Component {
           <QuestionFormWrapper>
             <QuestionForm
               allowSubmit={confirmPolicy}
-              showSubmit={activeStep === 'REVIEW'}
+              showSubmit={activeStep === "REVIEW"}
               initialValues={{
                 confirmPolicy: true
               }}
@@ -292,7 +235,7 @@ class ContactUs extends React.Component {
                 submittedUrl={submittedUrl}
                 reset={this.reset}
               />
-              {activeStep === 'COMPLETE' && <p>Thanks for your question!</p>}
+              {activeStep === "COMPLETE" && <p>Thanks for your question!</p>}
             </QuestionForm>
           </QuestionFormWrapper>
         </ListenerArea>
@@ -302,8 +245,8 @@ class ContactUs extends React.Component {
         <Sections>
           <SectionBlock
             title="General Inquiries"
-            open={this.isSectionOpen('general')}
-            onToggle={() => this.toggleSection('general')}
+            open={this.isSectionOpen("general")}
+            onToggle={() => this.toggleSection("general")}
           >
             <Text>
               We can no longer reply to every message we get. If your inquiry is
@@ -317,8 +260,8 @@ class ContactUs extends React.Component {
 
           <SectionBlock
             title="For Members"
-            open={this.isSectionOpen('members')}
-            onToggle={() => this.toggleSection('members')}
+            open={this.isSectionOpen("members")}
+            onToggle={() => this.toggleSection("members")}
           >
             <Text>
               Login to the Members' Portal <Link to="/login">here</Link> or send
@@ -329,25 +272,25 @@ class ContactUs extends React.Component {
 
           <SectionBlock
             title="Store / Orders"
-            open={this.isSectionOpen('orders')}
-            onToggle={() => this.toggleSection('orders')}
+            open={this.isSectionOpen("orders")}
+            onToggle={() => this.toggleSection("orders")}
           >
             <Text>
               If you have any issues with your order from our store, please
-              contact{' '}
+              contact{" "}
               <a href="mailto:orders@dataskeptic.com">orders@dataskeptic.com</a>.
             </Text>
           </SectionBlock>
 
           <SectionBlock
             title="For Advertisers"
-            open={this.isSectionOpen('advertise')}
-            onToggle={() => this.toggleSection('advertise')}
+            open={this.isSectionOpen("advertise")}
+            onToggle={() => this.toggleSection("advertise")}
           >
             <Text>
               Data Skeptic currently accepts one (1) advertising slot per show.
               We are often booked months in advance. For a rate sheet, please
-              contact{' '}
+              contact{" "}
               <a href="mailto:advertising@dataskeptic.com">
                 advertising@dataskeptic.com
               </a>.
@@ -356,12 +299,12 @@ class ContactUs extends React.Component {
 
           <SectionBlock
             title="For Media Inquiries"
-            open={this.isSectionOpen('media')}
-            onToggle={() => this.toggleSection('media')}
+            open={this.isSectionOpen("media")}
+            onToggle={() => this.toggleSection("media")}
           >
             <Text>
               Kyle is available for comment to the media. Please send a direct
-              email to{' '}
+              email to{" "}
               <a href="mailto:kyle@dataskeptic.com">kyle@dataskeptic.com</a> to
               make first contact. After connecting, we have a Calendly link to
               share that will allow you to book a time that suits your schedule.
@@ -369,8 +312,8 @@ class ContactUs extends React.Component {
           </SectionBlock>
         </Sections>
       </Container>
-      )
-    }
+    )
+  }
 }
 
 const SocialBlock = ({ left, children, order }) => (
@@ -512,16 +455,12 @@ const SlackStatus = styled.span`
   }
 `
 
-const selector = formValueSelector('question');
-export default connect(
-	state => ({
-		cart: state.cart,
-		chatbot: state.chatbot,
-		contributors: state.site.get('contributors').toJS(),
-		site: state.site,
-        confirmPolicy: selector(state, 'confirmPolicy'),
-        activeStep: state.questions.getIn(['form', 'step']),
-        errorMessage : state.questions.getIn(['form', 'error']),
-        aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket'])
-	})
-)(ContactUs)
+const selector = formValueSelector("question")
+export default connect(state => ({
+  cart: state.cart,
+  site: state.site,
+  confirmPolicy: selector(state, "confirmPolicy"),
+  activeStep: state.questions.getIn(["form", "step"]),
+  errorMessage: state.questions.getIn(["form", "error"]),
+  aws_proposals_bucket: state.proposals.getIn(["aws_proposals_bucket"])
+}))(ContactUs)

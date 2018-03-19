@@ -63,6 +63,9 @@ import AdminAddJob from "components/admin/AdminAddJob"
 
 import UserPlaylist from "components/UserPlaylist"
 
+import DripThankYou from "components/drip/ThankYou"
+import DripUnsubscribe from 'components/drip/DripUnsubscribe'
+
 import SERP from "Search/Containers/SERP"
 
 import SnlImpact from "components/l/SnlImpact"
@@ -217,6 +220,12 @@ export default (
       <IndexRoute component={UserPlaylist} />
     </Route>
 
+    <Route path="/drip-result" showAds={true} component={App}>
+      <IndexRoute component={DripThankYou} />
+    </Route>
+    <Route path="/drip-unsubscribe" showAds={true} component={App}>
+      <IndexRoute component={DripUnsubscribe} />
+    </Route>
     <Route path="/analytics" component={App}>
       <IndexRoute component={Analytics} />
     </Route>

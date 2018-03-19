@@ -16,4 +16,4 @@ export { default as proposals } from '../Proposals/Reducers/ProposalsReducer';
 export { default as recorder } from '../Recorder/Reducers/RecorderReducer';
 export { default as questions } from '../Questions/Reducers/QuestionsReducer'
 export { default as timeseries } from '../TimeSeriesExplorer/Reducers/TimeSeriesReducer'
-export { default as chatbot } from '../ChatBot/Reducers/ChatbotReducer'
+export { default as chatbot } from '../Chat/Reducers/ChatbotReducer'
