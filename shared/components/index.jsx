@@ -47,15 +47,13 @@ class MainView extends React.Component {
     ConversationHandler.get_reply(dispatch, this.reply, cstate, message)
   }
   onInactivity = () => {
-    /*
     this.reply(
       {
         text:
-          "Still there?  Let me know what you think of the bot by DMing me on Slack!  I would appreciate your candid feedback"
+          'Still there?  Let me know what you think of the bot by DMing me on Slack!  I would appreciate your candid feedback'
       },
-      "kyle"
+      'kyle'
     )
-    */
   }
 
   loadState() {

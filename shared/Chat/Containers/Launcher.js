@@ -22,6 +22,11 @@ export default class Launcher extends Component {
   }
   triggerInactivity = () => {
     this.props.onInactivity()
+
+    if (this.timer) {
+      clearTimeout(this.timer)
+      this.timer = null
+    }
   }
   handleMessage = message => {
     this.resetInactivityTimer()
