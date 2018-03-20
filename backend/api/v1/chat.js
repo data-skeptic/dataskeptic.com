@@ -5,8 +5,12 @@ module.exports = cache => {
   const router = express.Router()
 
   router.post("/log", (req, res) => {
+    const user = req.user
     try {
-      const message = req.body
+      const message = {
+        ...req.body,
+        user
+      }
       chat_utils.logMessage(message)
     } catch (error) {
       console.error(error)
