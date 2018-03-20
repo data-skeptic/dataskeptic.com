@@ -1,18 +1,16 @@
-import React, { Component } from "react"
-import { connect } from "react-redux"
-import styled from "styled-components"
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import styled from 'styled-components'
 
-import { changePageTitle } from "../../Layout/Actions/LayoutActions"
+import { changePageTitle } from '../../Layout/Actions/LayoutActions'
 
 import Carousel, {
   Wrapper as CarouselWrapper
-} from "../../Common/Components/Carousel"
+} from '../../Common/Components/Carousel'
 
-import Events, {
-  Wrapper as EventsWrapper
-} from '../Containers/Events'
+import Events, { Wrapper as EventsWrapper } from '../Containers/Events'
 
-import { loadCareersCity } from "../../reducers/JobsReducer"
+import { loadCareersCity } from '../../reducers/JobsReducer'
 
 class CityCareers extends Component {
   static defaultProps = {
@@ -26,7 +24,7 @@ class CityCareers extends Component {
 
   static getPageMeta() {
     return {
-      title: "Careers | Data Skeptic"
+      title: 'Careers | Data Skeptic'
     }
   }
 
@@ -43,8 +41,11 @@ class CityCareers extends Component {
     const { loading, loaded, error } = this.props
     let { jobs, events, blogs } = this.props
 
-    events = events.concat(events).concat(events).concat(events)
-    
+    events = events
+      .concat(events)
+      .concat(events)
+      .concat(events)
+
     return (
       <Container className="careers_city_page">
         <code>
@@ -97,7 +98,7 @@ const Row = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  
+
   ${EventsWrapper} {
     flex-basis: 68%;
   }
@@ -108,10 +109,10 @@ const Resume = styled.div`
 `
 
 export default connect(state => ({
-  loading: state.jobs.getIn(["city", "loading"]),
-  loaded: state.jobs.getIn(["city", "loaded"]),
-  error: state.jobs.getIn(["city", "error"]),
-  jobs: state.jobs.getIn(["city", "jobs"]),
-  events: state.jobs.getIn(["city", "events"]),
-  blogs: state.jobs.getIn(["city", "blogs"])
+  loading: state.jobs.getIn(['city', 'loading']),
+  loaded: state.jobs.getIn(['city', 'loaded']),
+  error: state.jobs.getIn(['city', 'error']),
+  jobs: state.jobs.getIn(['city', 'jobs']),
+  events: state.jobs.getIn(['city', 'events']),
+  blogs: state.jobs.getIn(['city', 'blogs'])
 }))(CityCareers)

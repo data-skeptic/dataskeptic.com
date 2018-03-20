@@ -1,13 +1,13 @@
-import Immutable, {List} from "immutable"
-import Request from "../Request"
+import Immutable, { List } from 'immutable'
+import Request from '../Request'
 
-const LOAD_CAREERS_CITY = "LOAD_CAREERS_CITY"
-const LOAD_CAREERS_CITY_SUCCESS = "LOAD_CAREERS_CITY_SUCCESS"
-const LOAD_CAREERS_CITY_FAIL = "LOAD_CAREERS_CITY_FAIL"
+const LOAD_CAREERS_CITY = 'LOAD_CAREERS_CITY'
+const LOAD_CAREERS_CITY_SUCCESS = 'LOAD_CAREERS_CITY_SUCCESS'
+const LOAD_CAREERS_CITY_FAIL = 'LOAD_CAREERS_CITY_FAIL'
 
-const LOAD_CAREERS_CITY_JOBS = "LOAD_CAREERS_CITY_JOBS"
-const LOAD_CAREERS_CITY_JOBS_SUCCESS = "LOAD_CAREERS_CITY_JOBS_SUCCESS"
-const LOAD_CAREERS_CITY_JOBS_FAIL = "LOAD_CAREERS_JOBS_CITY_FAIL"
+const LOAD_CAREERS_CITY_JOBS = 'LOAD_CAREERS_CITY_JOBS'
+const LOAD_CAREERS_CITY_JOBS_SUCCESS = 'LOAD_CAREERS_CITY_JOBS_SUCCESS'
+const LOAD_CAREERS_CITY_JOBS_FAIL = 'LOAD_CAREERS_JOBS_CITY_FAIL'
 
 const init = {
   resume: {
@@ -51,29 +51,32 @@ export default function jobReducer(state = defaultState, action) {
       state = state.setIn(['resume', 'submitting'], false)
       state = state.setIn(['resume', 'error'], action.payload.error)
       break
-    
+
     case LOAD_CAREERS_CITY:
     case LOAD_CAREERS_CITY_JOBS:
-      state = state.setIn(["city", "loading"], true)
-      state = state.setIn(["city", "loaded"], false)
-      state = state.setIn(["city", "error"], null);
-      break;
-      
+      state = state.setIn(['city', 'loading'], true)
+      state = state.setIn(['city', 'loaded'], false)
+      state = state.setIn(['city', 'error'], null)
+      break
+
     case LOAD_CAREERS_CITY_SUCCESS:
-      state = state.setIn(["city", "blogs"], List(action.payload.result.blogs));
-      state = state.setIn(["city", "events"], List(action.payload.result.events));
-      break;
-    
+      state = state.setIn(['city', 'blogs'], List(action.payload.result.blogs))
+      state = state.setIn(
+        ['city', 'events'],
+        List(action.payload.result.events)
+      )
+      break
+
     case LOAD_CAREERS_CITY_JOBS_SUCCESS:
-      state = state.setIn(["city", "jobs"], List(action.payload.result));
-      break;
+      state = state.setIn(['city', 'jobs'], List(action.payload.result))
+      break
 
     case LOAD_CAREERS_CITY_FAIL:
     case LOAD_CAREERS_CITY_JOBS_FAIL:
-      state = state.setIn(["city", "loading"], false)
-      state = state.setIn(["city", "loaded"], false)
-      state = state.setIn(["city", "error"], action.payload.error);
-      break;
+      state = state.setIn(['city', 'loading'], false)
+      state = state.setIn(['city', 'loaded'], false)
+      state = state.setIn(['city', 'error'], action.payload.error)
+      break
   }
 
   return state
@@ -84,7 +87,7 @@ export const submitResume = (dispatch, data) => {
     type: 'SUBMIT_RESUME'
   })
 
-  Request.post("/api/v1/careers", data)
+  Request.post('/api/v1/careers', data)
     .then(res => {
       if (!res.data.success) {
         throw Error(res.data.error)
@@ -161,8 +164,8 @@ export const loadCareersCityJobsFail = error => ({
   payload: { error }
 })
 
-export const loadCareersCity = (city) => {
-  return (dispatch) => {
+export const loadCareersCity = city => {
+  return dispatch => {
     dispatch(loadCareersCityData(city))
     dispatch(loadCareersCityJobs(city))
   }

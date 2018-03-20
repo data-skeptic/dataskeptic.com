@@ -1,7 +1,7 @@
-import React from "react"
-import styled from "styled-components"
-import moment from "moment"
-import { Link } from "react-router"
+import React from 'react'
+import styled from 'styled-components'
+import moment from 'moment'
+import { Link } from 'react-router'
 
 const Dollar = () => <Symbol>$</Symbol>
 
@@ -13,14 +13,14 @@ const formatLocation = (location, latitude, longitude) => (
 
 const formatStart = start => (
   <Start>
-    {moment(start).format("MMMM Do YYYY")}
-    {" at "}
-    {moment(start).format("h A")}
+    {moment(start).format('MMMM Do YYYY')}
+    {' at '}
+    {moment(start).format('h A')}
   </Start>
 )
 
 const formatDuration = (start, end) =>
-  `${moment.duration(moment(end).diff(start, "hours"), "hours").humanize()}`
+  `${moment.duration(moment(end).diff(start, 'hours'), 'hours').humanize()}`
 
 const formatPrice = (price = 0) => (
   <Price>
@@ -62,7 +62,7 @@ export const Event = styled(Link)`
   padding-bottom: 2em;
 
   &:hover,
-  &:focus, {
+  &:focus {
     border-bottom: 1px solid #e6e6e6;
   }
 `

@@ -2,22 +2,15 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 
 export default class Carousel extends Component {
-  static propTypes = {
-    
-  }
+  static propTypes = {}
 
   constructor() {
     super()
   }
 
   render() {
-    return (
-      <Wrapper>
-        Carousel
-      </Wrapper>
-    )
+    return <Wrapper>Carousel</Wrapper>
   }
 }
 
-export const Wrapper = styled.div`
-`
+export const Wrapper = styled.div``

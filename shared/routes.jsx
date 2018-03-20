@@ -20,7 +20,7 @@ import Coaching2 from 'components/Coaching2'
 import CoachingBiWeekly from 'components/CoachingBiWeekly'
 import ContactUs from 'Contacts/Routes/ContactUs'
 import Careers from 'Jobs/Routes/Careers'
-import CityCareers from "Jobs/Routes/CityCareers"
+import CityCareers from 'Jobs/Routes/CityCareers'
 import DontHackMe from 'components/DontHackMe'
 import Explorer from 'TimeSeriesExplorer/Components/Explorer'
 import Home from 'components/Home'

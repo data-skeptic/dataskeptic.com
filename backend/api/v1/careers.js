@@ -31,7 +31,7 @@ const commitResume = ({ email, resume, Bucket }) => {
   const Key = ObjectPath.replace(Bucket + '/', '')
   let nextKey = `resumes/${subpath}/${moment().format('YYYY-MM')}/`
   if (email) {
-    nextKey += email+"_"
+    nextKey += email + '_'
   }
 
   nextKey += Key
@@ -50,8 +50,8 @@ module.exports = cache => {
         const message = {
           msg: `
         Candidate just uploaded resume ${formatResumeLink(resume)}.</br>
-        Notify: ${notify ? "Checked" : "Unchecked"}</br>
-        Send periodic: ${subscribe ? "Send" : "No"}</br>
+        Notify: ${notify ? 'Checked' : 'Unchecked'}</br>
+        Send periodic: ${subscribe ? 'Send' : 'No'}</br>
         
         Try reach him by ${email}
       `,
@@ -103,7 +103,7 @@ module.exports = cache => {
       .catch(error => res.send({ success: false, error: error.message }))
   })
 
-  router.get("/city/:cityId", (req, res) => {
+  router.get('/city/:cityId', (req, res) => {
     const { cityId } = req.params
 
     return getCityData(cityId)

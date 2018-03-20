@@ -1,7 +1,7 @@
-import React, { Component } from "react"
-import styled from "styled-components"
+import React, { Component } from 'react'
+import styled from 'styled-components'
 
-import Event from "../../Components/Event"
+import Event from '../../Components/Event'
 
 export default class Events extends Component {
   static defaultProps = {
