@@ -24,6 +24,7 @@ import { toggleCart } from "../Cart/Actions/CartActions"
 import Launcher from "../Chat/Containers/Launcher"
 import { BOT_ID, THINKING_MESSAGE } from "../Chat/Constants"
 import ConversationHandler from "../Chat/Dialogs/ConversationHandler"
+import {loggMessage} from "../Chat/Reducers/ChatbotReducer";
 
 class MainView extends React.Component {
   addMessage = message =>
@@ -43,6 +44,8 @@ class MainView extends React.Component {
     this.addMessage(message)
     let cstate = this.props.chatbot.toJS()
     const dispatch = this.props.dispatch
+
+    dispatch(loggMessage(message))
     cstate.contributors = this.props.contributors
     ConversationHandler.get_reply(dispatch, this.reply, cstate, message)
   }
