@@ -1,6 +1,6 @@
-import React, { Component } from "react"
-import moment from "moment"
-import { Link } from "react-router"
+import React, { Component } from 'react'
+import moment from 'moment'
+import { Link } from 'react-router'
 import {
   Container,
   Title,
@@ -15,9 +15,9 @@ import {
   Avatar,
   Name,
   Contribution
-} from "./style"
+} from './style'
 
-import AuthorLink from "../../../components/AuthorLink"
+import AuthorLink from '../../../components/AuthorLink'
 
 const renderAuthor = ({
   author,
@@ -42,7 +42,7 @@ const BlogBox = props => {
   return (
     <div>
       {blogList.map((item, index) => {
-        let href = "blog" + item.prettyname
+        let href = 'blog' + item.prettyname
         const contributor = getContributor(item)
 
         const multipleContributors =
@@ -54,11 +54,19 @@ const BlogBox = props => {
 
         return (
           <BlogItem key={index}>
-            <ItemDate>{moment(item.publish_date).format("MMMM D, Y")}</ItemDate>
-            <ItemTitle><Link to={href} className="no-line">{item.title}</Link></ItemTitle>
+            <ItemDate>{moment(item.publish_date).format('MMMM D, Y')}</ItemDate>
+            <ItemTitle>
+              <Link to={href} className="no-line">
+                {item.title}
+              </Link>
+            </ItemTitle>
             <ItemDesc>{item.abstract}</ItemDesc>
-            <ViewMore to={href} className="no-line"><span className="pseudo no-line">View More</span></ViewMore>
-            <Authors>{item.contributors && item.contributors.map(renderAuthor)}</Authors>
+            <ViewMore to={href} className="no-line">
+              <span className="pseudo no-line">View More</span>
+            </ViewMore>
+            <Authors>
+              {item.contributors && item.contributors.map(renderAuthor)}
+            </Authors>
           </BlogItem>
         )
       })}

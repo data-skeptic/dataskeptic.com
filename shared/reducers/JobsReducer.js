@@ -30,26 +30,26 @@ const defaultState = Immutable.fromJS(init)
 
 export default function jobReducer(state = defaultState, action) {
   switch (action.type) {
-    case "UPLOAD_RESUME":
-      state = state.setIn(["resume", "files"], action.payload)
+    case 'UPLOAD_RESUME':
+      state = state.setIn(['resume', 'files'], action.payload)
       break
 
-    case "SUBMIT_RESUME":
-      state = state.setIn(["resume", "submitted"], false)
-      state = state.setIn(["resume", "submitting"], true)
-      state = state.setIn(["resume", "error"], false)
+    case 'SUBMIT_RESUME':
+      state = state.setIn(['resume', 'submitted'], false)
+      state = state.setIn(['resume', 'submitting'], true)
+      state = state.setIn(['resume', 'error'], false)
       break
 
-    case "SUBMIT_RESUME_SUCCESS":
-      state = state.setIn(["resume", "submitted"], true)
-      state = state.setIn(["resume", "submitting"], false)
-      state = state.setIn(["resume", "error"], false)
+    case 'SUBMIT_RESUME_SUCCESS':
+      state = state.setIn(['resume', 'submitted'], true)
+      state = state.setIn(['resume', 'submitting'], false)
+      state = state.setIn(['resume', 'error'], false)
       break
 
-    case "SUBMIT_RESUME_FAIL":
-      state = state.setIn(["resume", "submitted"], false)
-      state = state.setIn(["resume", "submitting"], false)
-      state = state.setIn(["resume", "error"], action.payload.error)
+    case 'SUBMIT_RESUME_FAIL':
+      state = state.setIn(['resume', 'submitted'], false)
+      state = state.setIn(['resume', 'submitting'], false)
+      state = state.setIn(['resume', 'error'], action.payload.error)
       break
     
     case LOAD_CAREERS_CITY:
@@ -81,7 +81,7 @@ export default function jobReducer(state = defaultState, action) {
 
 export const submitResume = (dispatch, data) => {
   dispatch({
-    type: "SUBMIT_RESUME"
+    type: 'SUBMIT_RESUME'
   })
 
   Request.post("/api/v1/careers", data)
@@ -91,7 +91,7 @@ export const submitResume = (dispatch, data) => {
       }
 
       dispatch({
-        type: "SUBMIT_RESUME_SUCCESS",
+        type: 'SUBMIT_RESUME_SUCCESS',
         payload: {
           data: res.data
         }
@@ -99,7 +99,7 @@ export const submitResume = (dispatch, data) => {
     })
     .catch(error =>
       dispatch({
-        type: "SUBMIT_RESUME_FAIL",
+        type: 'SUBMIT_RESUME_FAIL',
         payload: {
           error: error.message
         }

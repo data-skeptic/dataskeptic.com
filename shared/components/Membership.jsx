@@ -1,12 +1,12 @@
-import React, { Component, PropTypes } from "react"
-import { Link } from "react-router"
-import { connect } from "react-redux"
+import React, { Component, PropTypes } from 'react'
+import { Link } from 'react-router'
+import { connect } from 'react-redux'
 
-import Loading from "../Common/Components/Loading"
-import Error from "../Common/Components/Error"
-import { get_products } from "../utils/redux_loader"
+import Loading from '../Common/Components/Loading'
+import Error from '../Common/Components/Error'
+import { get_products } from '../utils/redux_loader'
 
-import { changePageTitle } from "../Layout/Actions/LayoutActions"
+import { changePageTitle } from '../Layout/Actions/LayoutActions'
 
 class Membership extends Component {
   constructor(props, context) {
@@ -16,7 +16,7 @@ class Membership extends Component {
 
   static getPageMeta() {
     return {
-      title: "Membership | Data Skeptic"
+      title: 'Membership | Data Skeptic'
     }
   }
 
@@ -33,12 +33,12 @@ class Membership extends Component {
   }
 
   addToCart(product) {
-    var size = ""
+    var size = ''
     this.props.dispatch({
-      type: "ADD_TO_CART",
+      type: 'ADD_TO_CART',
       payload: { product, size }
     })
-    this.props.dispatch({ type: "SHOW_CART", payload: true })
+    this.props.dispatch({ type: 'SHOW_CART', payload: true })
   }
 
   render() {
@@ -64,14 +64,14 @@ class Membership extends Component {
         products = []
       }
       products.sort(function(a, b) {
-        return a["price"] - b["price"]
+        return a['price'] - b['price']
       })
       var me = this
       return (
         <div className="center">
           <h2>Data Skeptic Membership</h2>
           <p>
-            If you are already a member, you can log-in{" "}
+            If you are already a member, you can log-in{' '}
             <a href="/login">here</a>.
           </p>
           <p>
@@ -118,7 +118,7 @@ class Membership extends Component {
             {products.map(function(product) {
               if (
                 product.active == 1 &&
-                product.type == "membership" &&
+                product.type == 'membership' &&
                 product.price < 128
               ) {
                 const pid = product.id
@@ -126,14 +126,16 @@ class Membership extends Component {
                 return (
                   <div
                     key={pid}
-                    className={`col-xs-12 col-sm-4 membership-container membership-${uid}`}
+                    className={`col-xs-12 col-sm-4 membership-container membership-${
+                      uid
+                    }`}
                   >
                     <div className="membership-inner">
                       <div className="membership-title">{product.title}</div>
                       <div className="membership-desc">{product.desc}</div>
                       <div className="membership-bottom-container">
                         <div className="membership-price">
-                          ${product.price}{" "}
+                          ${product.price}{' '}
                           <span className="per_month">/ month</span>
                         </div>
                         <div className="membership-btn">

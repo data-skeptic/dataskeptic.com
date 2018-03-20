@@ -1,4 +1,5 @@
 var redirects_map = {
+  '/ma': '/careers',
   '/epnotes/causal-impact.php': '/blog/episodes/2016/causal-impact',
   '/blog/episodes/2017/polling':
     '/blog/episodes/2017/opinion-polling-for-presidential-elections',

@@ -246,7 +246,8 @@ export class RecorderContainer extends Component {
 
     return (
       <div className="text-muted">
-        Recording will start when you click the record button to the left of this message.{' '}
+        Recording will start when you click the record button to the left of
+        this message.{' '}
         <i>
           You will have a chance to review your recording before submitting.
         </i>

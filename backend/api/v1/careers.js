@@ -1,13 +1,13 @@
-import * as MailServices from "../../modules/mail/services/MailServices"
-import moment from "moment/moment"
-import { move } from "./filesUtils"
-const express = require("express")
-const axios = require("axios")
+import * as MailServices from '../../modules/mail/services/MailServices'
+import moment from 'moment/moment'
+import { move } from './filesUtils'
+const express = require('express')
+const axios = require('axios')
 
-const c = require("../../../config/config.json")
-const env = process.env.NODE_ENV === "dev" ? "dev" : "prod"
-const base_api = c[env]["base_api"] + env
-const EMAIL_ADDRESS = c[env]["careers"]["email"]
+const c = require('../../../config/config.json')
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const base_api = c[env]['base_api'] + env
+const EMAIL_ADDRESS = c[env]['careers']['email']
 
 const formatResumeLink = resume => `https://s3.amazonaws.com/${resume}`
 
@@ -17,7 +17,7 @@ const registerUser = ({ email }) => {
     email
   }
 
-  return axios.post(base_api + "/drip/user/add", data).then(res => res.data)
+  return axios.post(base_api + '/drip/user/add', data).then(res => res.data)
 }
 
 const getCityData = cityId => {
@@ -26,13 +26,12 @@ const getCityData = cityId => {
 }
 
 const commitResume = ({ email, resume, Bucket }) => {
-  const subpath = env === "dev" ? "dev" : "career_page1"
-  const ObjectPath = resume.replace("https://s3.amazonaws.com/", "")
-  const Key = ObjectPath.replace(Bucket + "/", "")
-  let nextKey = `resumes/${subpath}/${moment().format("YYYY-MM")}/`
-
+  const subpath = env === 'dev' ? 'dev' : 'career_page1'
+  const ObjectPath = resume.replace('https://s3.amazonaws.com/', '')
+  const Key = ObjectPath.replace(Bucket + '/', '')
+  let nextKey = `resumes/${subpath}/${moment().format('YYYY-MM')}/`
   if (email) {
-    nextKey += email + "_"
+    nextKey += email+"_"
   }
 
   nextKey += Key
@@ -43,7 +42,7 @@ const commitResume = ({ email, resume, Bucket }) => {
 module.exports = cache => {
   const router = express.Router()
 
-  router.post("/", (req, res) => {
+  router.post('/', (req, res) => {
     const { email, notify, subscribe } = req.body
 
     return commitResume(req.body)
@@ -69,6 +68,37 @@ module.exports = cache => {
       })
       .then(() => {
         res.send({ success: true })
+      })
+      .catch(error => res.send({ success: false, error: error.message }))
+  })
+
+  router.get('/drip/content/rate', (req, res) => {
+    var drip_user_id = req.query.drip_user_id
+    var send_id = req.query.send_id
+    var rate = req.query.rate
+    var url = base_api + `/drip/content/rate`
+    var data = { drip_user_id, send_id, rate }
+    return axios
+      .post(url, data)
+      .then(function(result) {
+        console.log(result)
+        res.redirect('/drip-result?rate=true')
+      })
+      .catch(error => res.send({ success: false, error: error.message }))
+  })
+
+  router.get('/drip/unsubscribe', (req, res) => {
+    var drip_user_id = req.query.drip_user_id
+    var send_id = req.query.send_id
+    var url = base_api + `/drip/unsubscribe`
+    var data = { drip_user_id, send_id }
+    console.log(url)
+    console.log(data)
+    return axios
+      .post(url, data)
+      .then(function(result) {
+        console.log(result)
+        res.redirect('/drip-unsubscribe')
       })
       .catch(error => res.send({ success: false, error: error.message }))
   })
