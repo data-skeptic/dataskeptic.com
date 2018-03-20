@@ -129,7 +129,7 @@ class About extends Component {
 
 const Avatar = styled.img`
   border: 1px solid #dddddd;
-` 
+`
 
 export default connect(state => ({
   contributors: state.site.get('contributors').toJS()

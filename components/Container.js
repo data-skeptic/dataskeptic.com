@@ -9,5 +9,5 @@ export default props => (
 
 const Container = styled.div`
   ${props => props.global && `min-height: 88vh;`} ${props =>
-    !props.fullWidth && `margin:0 150px;`};
+      !props.fullWidth && `margin:0 150px;`};
 `

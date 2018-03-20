@@ -1,5 +1,5 @@
-import styled from "styled-components"
-import { Link } from "react-router"
+import styled from 'styled-components'
+import { Link } from 'react-router'
 
 export const Container = styled.div`
   border-top: 1px solid #979797;
@@ -63,7 +63,7 @@ export const ViewMore = styled(Link)`
   :before,
   :after {
     border-right: 2px solid;
-    content: "";
+    content: '';
     display: block;
     height: 8px;
     margin-top: -6px;
@@ -114,7 +114,7 @@ export const Avatar = styled.img`
 
   padding: 4px;
   background-color: #ffffff;
-  border: 1px solid #dddddd  !important;
+  border: 1px solid #dddddd !important;
 `
 
 export const Details = styled.div`

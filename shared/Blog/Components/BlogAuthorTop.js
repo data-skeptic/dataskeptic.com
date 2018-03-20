@@ -1,6 +1,6 @@
-import React, { PropTypes } from "react"
-import styled from "styled-components"
-import { Link } from "react-router"
+import React, { PropTypes } from 'react'
+import styled from 'styled-components'
+import { Link } from 'react-router'
 
 const formatLink = id => `/contributors/${id}`
 
@@ -37,7 +37,7 @@ const Avatar = styled.img`
   height: 38px;
   padding: 2px;
   background-color: #ffffff;
-  border: 1px solid #dddddd  !important;
+  border: 1px solid #dddddd !important;
   margin-right: 0.3em;
   margin-left: 0.3em;
 `

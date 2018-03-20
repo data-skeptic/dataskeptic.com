@@ -1,20 +1,20 @@
-import express from "express"
-import multer from "multer"
-import aws from "aws-sdk"
-import path from "path"
-import mime from "mime"
+import express from 'express'
+import multer from 'multer'
+import aws from 'aws-sdk'
+import path from 'path'
+import mime from 'mime'
 import {
   isLogicalEmpty,
   fileExistS3,
   formatPublicLink,
   uploadFilesToBucket,
   getExtension
-} from "./filesUtils"
+} from './filesUtils'
 
-const env = process.env.NODE_ENV === "dev" ? "dev" : "prod"
-const c = require("../../../config/config.json")
-const temp_files = c[env]["files"]["folder"]
-const dest = path.resolve(__dirname, "../../../", temp_files)
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const c = require('../../../config/config.json')
+const temp_files = c[env]['files']['folder']
+const dest = path.resolve(__dirname, '../../../', temp_files)
 
 const s3 = new aws.S3()
 const storage = multer.diskStorage({
@@ -29,9 +29,9 @@ const storage = multer.diskStorage({
     } else {
       fileName =
         file.originalname +
-        "-" +
+        '-' +
         Date.now() +
-        "." +
+        '.' +
         mime.getExtension(file.mimetype)
     }
 
@@ -44,9 +44,9 @@ module.exports = cache => {
 
   const upload = multer({
     storage: storage
-  }).array("files")
+  }).array('files')
 
-  router.put("/upload", (req, res) => {
+  router.put('/upload', (req, res) => {
     let { bucket, prefix } = req.query
 
     if (isLogicalEmpty(bucket)) {
@@ -81,7 +81,7 @@ module.exports = cache => {
     }
   })
 
-  router.get("/download/:key", (req, res) => {
+  router.get('/download/:key', (req, res) => {
     const { bucket } = req.query
     const { key } = req.params
 
