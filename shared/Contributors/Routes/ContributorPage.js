@@ -23,7 +23,7 @@ const renderTwitter = twitter => (
 )
 const renderLinkedin = linkedin => <a href={linkedin}>LinkedIn</a>
 
-const renderBio = (bio) => <Bio dangerouslySetInnerHTML={markdown(bio)} />
+const renderBio = bio => <Bio dangerouslySetInnerHTML={markdown(bio)} />
 
 const formatDate = date => moment(date).format('MMMM D, Y')
 

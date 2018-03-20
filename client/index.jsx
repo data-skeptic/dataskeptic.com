@@ -1,27 +1,27 @@
-import React from "react"
-import { render } from "react-dom"
-import ReactGA from "react-ga"
-import { Router } from "react-router"
-import createBrowserHistory from "history/lib/createBrowserHistory"
-import { Provider } from "react-redux"
-import * as reducers from "reducers"
-import doRefresh from "daos/doRefresh"
-import routes from "routes"
-import Immutable from "immutable"
-import thunk from "redux-thunk"
-import promiseMiddleware from "lib/promiseMiddleware"
-import immutifyState from "lib/immutifyState"
-import { createStore, combineReducers, applyMiddleware } from "redux"
+import React from 'react'
+import { render } from 'react-dom'
+import ReactGA from 'react-ga'
+import { Router } from 'react-router'
+import createBrowserHistory from 'history/lib/createBrowserHistory'
+import { Provider } from 'react-redux'
+import * as reducers from 'reducers'
+import doRefresh from 'daos/doRefresh'
+import routes from 'routes'
+import Immutable from 'immutable'
+import thunk from 'redux-thunk'
+import promiseMiddleware from 'lib/promiseMiddleware'
+import immutifyState from 'lib/immutifyState'
+import { createStore, combineReducers, applyMiddleware } from 'redux'
 
-import axios from "axios"
+import axios from 'axios'
 
-import "../shared/styles/main.less"
+import '../shared/styles/main.less'
 
-import { reducer as formReducer } from "redux-form"
-import { SCHEMA_VER } from "../shared/reducers/SiteReducer"
+import { reducer as formReducer } from 'redux-form'
+import { SCHEMA_VER } from '../shared/reducers/SiteReducer'
 
-import initCart from "../shared/Cart/Helpers/initCart"
-import persistCart from "../shared/Cart/Helpers/persistCart"
+import initCart from '../shared/Cart/Helpers/initCart'
+import persistCart from '../shared/Cart/Helpers/persistCart'
 
 /**
  * Validate cached store schema version
@@ -54,27 +54,27 @@ const store = applyMiddleware(thunk, promiseMiddleware)(createStore)(
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 )
 
-var env = "prod"
+var env = 'prod'
 
-if (process.env.NODE_ENV != "production") {
-  env = "dev"
+if (process.env.NODE_ENV != 'production') {
+  env = 'dev'
 } else {
-  console.log("index.jsx env=" + process.env.NODE_ENV)
-  console.log("Initialize GA")
-  ReactGA.initialize("UA-51062432-1", {
+  console.log('index.jsx env=' + process.env.NODE_ENV)
+  console.log('Initialize GA')
+  ReactGA.initialize('UA-51062432-1', {
     debug: false
   })
 }
 
-var country = "us"
+var country = 'us'
 var player = { episode: undefined, is_playing: false, has_shown: false }
 
-store.dispatch({ type: "SET_STORE_ENVIRONMENT", payload: env })
-store.dispatch({ type: "SET_BLOG_ENVIRONMENT", payload: env })
-store.dispatch({ type: "SET_COUNTRY", payload: country })
-store.dispatch({ type: "INITIALIZE_PLAYER", payload: player })
+store.dispatch({ type: 'SET_STORE_ENVIRONMENT', payload: env })
+store.dispatch({ type: 'SET_BLOG_ENVIRONMENT', payload: env })
+store.dispatch({ type: 'SET_COUNTRY', payload: country })
+store.dispatch({ type: 'INITIALIZE_PLAYER', payload: player })
 store.dispatch({
-  type: "INITIALIZE_SITE",
+  type: 'INITIALIZE_SITE',
   payload: { dispatch: store.dispatch }
 })
 
@@ -93,7 +93,7 @@ store.subscribe(() => {
       // fix for non immutable states
       // f.e. redux-forms
       nstate[key] = val.toJS()
-      if (key === "player") {
+      if (key === 'player') {
         nstate[key].is_playing = false
       }
     } catch (e) {}
@@ -103,7 +103,7 @@ store.subscribe(() => {
   delete nstate.recording
 
   const s = JSON.stringify(nstate)
-  localStorage.setItem("reduxState", s)
+  localStorage.setItem('reduxState', s)
 
   persistCart(nstate)
 })
@@ -112,5 +112,5 @@ render(
   <Provider store={store}>
     <Router children={routes} history={history} />
   </Provider>,
-  document.getElementById("react-view")
+  document.getElementById('react-view')
 )
