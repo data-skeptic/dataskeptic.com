@@ -1,27 +1,27 @@
-import React, { Component } from "react"
-import styled from "styled-components"
-import UserInput from "./UserInput"
-import Messages from "./Messages"
-import { REGULAR_MESSAGE, THINKING_MESSAGE } from "../Constants"
+import React, { Component } from 'react'
+import styled from 'styled-components'
+import UserInput from './UserInput'
+import Messages from './Messages'
+import { REGULAR_MESSAGE, THINKING_MESSAGE } from '../Constants'
 
-export { BOT_AUTHOR, BOT_ID } from "../Constants"
+export { BOT_AUTHOR, BOT_ID } from '../Constants'
 
 export default class Launcher extends Component {
   static defaultProps = {
-    placeholder: "Send a message...",
-    header: "DataSkeptic Bot",
+    placeholder: 'Send a message...',
+    header: 'DataSkeptic Bot',
     messages: [],
     onMessage: () => {},
     onInactivity: () => {},
-	  defaultBot: {},
-	  inactivityDelay: 3000
+    defaultBot: {},
+    inactivityDelay: 3000
   }
 
   state = {
     open: false
   }
-	triggerInactivity = () => {
-		this.props.onInactivity()
+  triggerInactivity = () => {
+    this.props.onInactivity()
   }
   handleMessage = message => {
     this.resetInactivityTimer()
@@ -48,11 +48,11 @@ export default class Launcher extends Component {
 
   resetInactivityTimer() {
     if (this.timer) {
-	    clearTimeout(this.timer)
+      clearTimeout(this.timer)
       this.timer = null
     }
 
-    setTimeout(this.triggerInactivity, this.props.inactivityDelay);
+    setTimeout(this.triggerInactivity, this.props.inactivityDelay)
   }
 
   getThinkingMessage() {

@@ -1,6 +1,4 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
@@ -11,91 +9,59 @@ import ContactFormContainer from '../Containers/ContactFormContainer/ContactForm
 import { changePageTitle } from '../../Layout/Actions/LayoutActions'
 import { formValueSelector, reset } from 'redux-form'
 import {
-    init,
-    ready,
-    recordingStart,
-    recordingFinish,
-    review,
-    submit,
-    complete,
-    fail
-} from '../../Proposals/Actions/RecordingFlowActions';
-import {RECORDING} from "../../Proposals/Constants/CommentTypes";
-import Recorder, {steps} from '../../Recorder';
-import QuestionForm from "../../Questions/Forms/QuestionForm";
-import {submitCommentForm} from "../../Proposals/Actions/CommentBoxFormActions";
-import SectionBlock from "../Components/SectionBlock/SectionBlock";
-import Launcher from "../../Chat/Containers/Launcher";
-import ConversationHandler from "../../ChatBot/Dialogs/ConversationHandler"
-import {BOT_ID, THINKING_MESSAGE} from "../../Chat/Constants";
+  init,
+  ready,
+  recordingStart,
+  recordingFinish,
+  review,
+  submit,
+  complete,
+  fail
+} from '../../Proposals/Actions/RecordingFlowActions'
+import { RECORDING } from '../../Proposals/Constants/CommentTypes'
+import Recorder, { steps } from '../../Recorder'
+import QuestionForm from '../../Questions/Forms/QuestionForm'
+import { submitCommentForm } from '../../Proposals/Actions/CommentBoxFormActions'
+import SectionBlock from '../Components/SectionBlock/SectionBlock'
 
 class ContactUs extends React.Component {
-
-	constructor(props) {
-		super(props)
-
-		this.state = {
-			submittedUrl: '',
-			openSection: '',
-			messages: [
-			]
-		}
-	}
-
-	onMessage = (message) => {
-		this.addMessage(message)
-		let cstate = this.props.chatbot.toJS()
-		const dispatch = this.props.dispatch
-		cstate.contributors = this.props.contributors
-
-		ConversationHandler.get_reply(dispatch, this.reply, cstate, message)
-	}
-
-    isSectionOpen = section => section === this.state.openSection
-
-		toggleSection = section => {
-    	this.setState(prevState => ({
-    		openSection: (prevState.openSection === section) ? '' : section
-	    }))
-		}
-
-    recordingReady = (noDelay) => {
-        this.props.dispatch(ready(noDelay))
-        this.setState({submittedUrl: ''});
-    }
-
-    recorderRecording = () =>{
-        this.props.dispatch(recordingStart())
-    }
-
-    recorderStop = (id) => {
-        this.props.dispatch(recordingFinish(id))
-        this.setState({submittedUrl:id});
-    }
-
-    recorderReview = (id) => {
-        this.props.dispatch(review())
-    }
-
-    recorderSubmit = (id) => {
-        this.props.dispatch(submit())
-    }
-
-    recorderComplete = (id) => {
-        this.props.dispatch(complete(id))
-    }
-
-    recorderError = (error) => {
-        this.props.dispatch(fail(error))
-    }
-  questionSubmit = data => {
-    data.recording = this.state.submittedUrl
-    data.type = RECORDING
-    this.props.dispatch(submitCommentForm(data))
+  isSectionOpen = section => section === this.state.openSection
+  toggleSection = section => {
+    this.setState(prevState => ({
+      openSection: prevState.openSection === section ? '' : section
+    }))
+  }
+  recordingReady = noDelay => {
+    this.props.dispatch(ready(noDelay))
+    this.setState({ submittedUrl: '' })
+  }
+  recorderRecording = () => {
+    this.props.dispatch(recordingStart())
+  }
+  recorderStop = id => {
+    this.props.dispatch(recordingFinish(id))
+    this.setState({ submittedUrl: id })
+  }
+  recorderReview = id => {
+    this.props.dispatch(review())
+  }
+  recorderSubmit = id => {
+    this.props.dispatch(submit())
+  }
+  recorderComplete = id => {
+    this.props.dispatch(complete(id))
+  }
+  recorderError = error => {
+    this.props.dispatch(fail(error))
   }
   reset = () => {
     this.setState({ submittedUrl: '' })
     this.props.dispatch(reset(`question`))
+  }
+  questionSubmit = data => {
+    data.recording = this.state.submittedUrl
+    data.type = RECORDING
+    this.props.dispatch(submitCommentForm(data))
   }
   subscribeSlack = e => {
     e.preventDefault()
@@ -132,15 +98,14 @@ class ContactUs extends React.Component {
       })
   }
 
-	reply = (message, operatorId) => {
-		operatorId = !!this.props.contributors[operatorId] ? operatorId : BOT_ID
-		const author = this.props.contributors[operatorId]
+  constructor(props) {
+    super(props)
 
-		this.addMessage({
-			...message,
-			author
-		})
-	}
+    this.state = {
+      submittedUrl: '',
+      openSection: ''
+    }
+  }
 
   static getPageMeta() {
     return {
@@ -150,44 +115,22 @@ class ContactUs extends React.Component {
     }
   }
 
-	addMessage = (message) => this.setState(prevState => ({
-		messages: [...prevState.messages, message]
-	}))
-
-  onInactivity = () => {
-	  this.reply({ text: 'Still there?  Let me know what you think of the bot by DMing me on Slack!  I would appreciate your candid feedback'}, 'kyle')
-  }
-
   componentDidMount() {
-      const {dispatch} = this.props;
-      const {title} = ContactUs.getPageMeta(this.props);
-      dispatch(changePageTitle(title));
-
-      this.reply({ text: 'What would you like to talk about?'})
+    const { dispatch } = this.props
+    const { title } = ContactUs.getPageMeta(this.props)
+    dispatch(changePageTitle(title))
   }
 
-	render() {
-			const {confirmPolicy,activeStep,errorMessage, contributors, chatbot} = this.props;
-			const { submittedUrl } = this.state
+  render() {
+    const { confirmPolicy, activeStep, errorMessage } = this.props
+    const { submittedUrl } = this.state
 
-			const osite = this.props.site.toJS()
+    const osite = this.props.site.toJS()
 
-			const slackstatus = (
-				<SlackStatus>{osite.slackstatus}</SlackStatus>
-			)
+    const slackstatus = <SlackStatus>{osite.slackstatus}</SlackStatus>
 
-			const thinking = chatbot.get('thinking')
-
-    	return (
+    return (
       <Container>
-          <Launcher
-            defaultBot={contributors[BOT_ID]}
-            thinking={thinking}
-            messages={this.state.messages}
-            onMessage={this.onMessage}
-            onInactivity={this.onInactivity}
-            inactivityDelay={1000 * 60 * 5}
-          />      
         <Title>Contact Us</Title>
         <Text>
           We hope to respond to all inquiries, but sometimes the volume of
@@ -200,26 +143,44 @@ class ContactUs extends React.Component {
 
         <Socials>
           <SocialBlock order={1}>
-            <SocialIcon src={'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/twitter-square+-+FontAwesome.svg'} />
+            <SocialIcon
+              src={
+                'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/twitter-square+-+FontAwesome.svg'
+              }
+            />
             <p>
               You can find us on Twitter via{' '}
-              <TwitterLink href="https://twitter.com/dataskeptic" className="no-line">
+              <TwitterLink
+                href="https://twitter.com/dataskeptic"
+                className="no-line"
+              >
                 @DataSkeptic
               </TwitterLink>
             </p>
           </SocialBlock>
           <SocialBlock order={3}>
-            <SocialIcon src={'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/facebook-square+-+FontAwesome.svg'} />
+            <SocialIcon
+              src={
+                'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/facebook-square+-+FontAwesome.svg'
+              }
+            />
             <p>
               We are on Facebook via{' '}
-              <FacebookLink href="https://www.facebook.com/dataskeptic" className="no-line">
+              <FacebookLink
+                href="https://www.facebook.com/dataskeptic"
+                className="no-line"
+              >
                 https://www.facebook.com/dataskeptic
               </FacebookLink>
             </p>
           </SocialBlock>
           <SocialBlock order={2}>
             <SocialForm onSubmit={this.subscribeSlack}>
-              <SocialIcon src={'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/logo-slack.svg'} />
+              <SocialIcon
+                src={
+                  'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/logo-slack.svg'
+                }
+              />
               <input name="email" id="email" />
               <button
                 type="submit"
@@ -232,7 +193,11 @@ class ContactUs extends React.Component {
             </SocialForm>
           </SocialBlock>
           <SocialBlock order={4}>
-            <SocialIcon src={'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/mail_outline+-+material+copy.svg'} />
+            <SocialIcon
+              src={
+                'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/mail_outline+-+material+copy.svg'
+              }
+            />
             <SocialForm
               action="//dataskeptic.us9.list-manage.com/subscribe/post?u=65e63d6f84f1d87759105d133&amp;id=dc60d554db"
               method="post"
@@ -369,8 +334,8 @@ class ContactUs extends React.Component {
           </SectionBlock>
         </Sections>
       </Container>
-      )
-    }
+    )
+  }
 }
 
 const SocialBlock = ({ left, children, order }) => (
@@ -512,16 +477,12 @@ const SlackStatus = styled.span`
   }
 `
 
-const selector = formValueSelector('question');
-export default connect(
-	state => ({
-		cart: state.cart,
-		chatbot: state.chatbot,
-		contributors: state.site.get('contributors').toJS(),
-		site: state.site,
-        confirmPolicy: selector(state, 'confirmPolicy'),
-        activeStep: state.questions.getIn(['form', 'step']),
-        errorMessage : state.questions.getIn(['form', 'error']),
-        aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket'])
-	})
-)(ContactUs)
+const selector = formValueSelector('question')
+export default connect(state => ({
+  cart: state.cart,
+  site: state.site,
+  confirmPolicy: selector(state, 'confirmPolicy'),
+  activeStep: state.questions.getIn(['form', 'step']),
+  errorMessage: state.questions.getIn(['form', 'error']),
+  aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket'])
+}))(ContactUs)

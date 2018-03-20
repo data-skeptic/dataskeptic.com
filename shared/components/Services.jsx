@@ -1,10 +1,10 @@
-import React from "react"
-import { bindActionCreators } from "redux"
-import { connect } from "react-redux"
+import React from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 
-import ContactFormContainer from "../Contacts/Containers/ContactFormContainer/ContactFormContainer"
+import ContactFormContainer from '../Contacts/Containers/ContactFormContainer/ContactFormContainer'
 
-import { changePageTitle } from "../Layout/Actions/LayoutActions"
+import { changePageTitle } from '../Layout/Actions/LayoutActions'
 
 class Services extends React.Component {
   constructor(props) {
@@ -13,7 +13,7 @@ class Services extends React.Component {
 
   static getPageMeta() {
     return {
-      title: "Services | Data Skeptic"
+      title: 'Services | Data Skeptic'
     }
   }
 
