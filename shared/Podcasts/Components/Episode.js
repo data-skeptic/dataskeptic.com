@@ -125,7 +125,11 @@ class Episode extends React.Component {
       <div className="row episode">
         <div className="col-xs-12 col-sm-3 episode-left">
           <LinkArea>
-            <Link to={episodeLink} onClick={this.onEpisodeClick} className="no-line">
+            <Link
+              to={episodeLink}
+              onClick={this.onEpisodeClick}
+              className="no-line"
+            >
               <img className="episode-img" src={ep.img} />
             </Link>
           </LinkArea>

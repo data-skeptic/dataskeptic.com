@@ -166,7 +166,7 @@ function xml_to_list(xml) {
   var guid_to_media_link = {}
   parser.parseString(xml, function(err, rss) {
     if (err) {
-      console.log("Error on rss")
+      console.log('Error on rss')
       console.log(err)
     } else {
       var items = rss['rss']['channel'][0]['item']
@@ -186,7 +186,7 @@ function xml_to_list(xml) {
         episodes_map[guid] = episode
         episodes_content[prettyname] = episode
         episodes_list.push(episode.guid)
-      }      
+      }
     }
   })
 

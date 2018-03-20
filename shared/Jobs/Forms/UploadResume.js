@@ -1,17 +1,17 @@
-import React from "react"
-import { reduxForm } from "redux-form"
-import { Field } from "redux-form"
-import _ from "lodash"
+import React from 'react'
+import { reduxForm } from 'redux-form'
+import { Field } from 'redux-form'
+import _ from 'lodash'
 
-import { FormController } from "../../Forms/Components"
-import { renderCheckbox } from "../../Forms/Components/Field"
-import { renderField } from "../../Forms/Components/Field/Field"
-import DragAndDropFileUploadField from "../../Forms/Components/DragAndDropFileUploadField"
+import { FormController } from '../../Forms/Components'
+import { renderCheckbox } from '../../Forms/Components/Field'
+import { renderField } from '../../Forms/Components/Field/Field'
+import DragAndDropFileUploadField from '../../Forms/Components/DragAndDropFileUploadField'
 
-export const KEY = "uploadResume"
-export const RESUME_FIELD = "resume"
-export const NOTIFY_FIELD = "notify"
-export const SUBSCRIBE_FIELD = "subscribe"
+export const KEY = 'uploadResume'
+export const RESUME_FIELD = 'resume'
+export const NOTIFY_FIELD = 'notify'
+export const SUBSCRIBE_FIELD = 'subscribe'
 
 const isEmailValid = email =>
   /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)
@@ -21,14 +21,14 @@ const validate = values => {
 
   if (values[NOTIFY_FIELD]) {
     if (_.isEmpty(values.email)) {
-      errors.email = "Email field is required"
+      errors.email = 'Email field is required'
     } else if (!isEmailValid(values.email)) {
-      errors.email = "Invalid email address"
+      errors.email = 'Invalid email address'
     }
   }
 
   if (_.isEmpty(values.resume)) {
-    errors.resume = "Please upload resume"
+    errors.resume = 'Please upload resume'
   }
 
   return errors
@@ -50,10 +50,10 @@ const Form = ({
   <FormController
     name="contacts"
     handleSubmit={handleSubmit}
-    submitValue={customSubmitting ? "Uploading..." : "Submit"}
+    submitValue={customSubmitting ? 'Uploading...' : 'Submit'}
     showSubmit={true}
     customError={customError}
-    btnWrapperClasses={"submit-wrapper"}
+    btnWrapperClasses={'submit-wrapper'}
     customSubmitting={customSubmitting}
   >
     <Field
@@ -90,7 +90,6 @@ const Form = ({
       name={SUBSCRIBE_FIELD}
       type="checkbox"
     />
-
   </FormController>
 )
 

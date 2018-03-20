@@ -1,16 +1,16 @@
-import React, { Component, PropTypes } from "react"
-import { connect } from "react-redux"
-import MailingList from "../Common/Components/MailingList"
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import MailingList from '../Common/Components/MailingList'
 
-import { changePageTitle } from "../Layout/Actions/LayoutActions"
+import { changePageTitle } from '../Layout/Actions/LayoutActions'
 
-import HomeContainer from "../../shared/Home"
-import { parseQuery } from "../utils/parseQuery"
+import HomeContainer from '../../shared/Home'
+import { parseQuery } from '../utils/parseQuery'
 
 class Home extends Component {
   static getPageMeta() {
     return {
-      title: "Data Skeptic"
+      title: 'Data Skeptic'
     }
   }
 
@@ -19,16 +19,16 @@ class Home extends Component {
     const { title } = Home.getPageMeta()
     dispatch(changePageTitle(title))
 
-    if (!this.props.cms.get("home_loaded")) {
+    if (!this.props.cms.get('home_loaded')) {
       dispatch({
-        type: "CMS_GET_HOMEPAGE_CONTENT",
+        type: 'CMS_GET_HOMEPAGE_CONTENT',
         payload: { dispatch }
       })
 
       const query = parseQuery(this.props.location.search)
       const location = query.location
       dispatch({
-        type: "CMS_GET_HOMEPAGE_JOB_LISTING",
+        type: 'CMS_GET_HOMEPAGE_JOB_LISTING',
         payload: { dispatch, location }
       })
     }
@@ -37,7 +37,7 @@ class Home extends Component {
   render() {
     var ocms = this.props.cms.toJS()
     var latest_episode_blog = ocms.latest_episode
-    var guid = latest_episode_blog["guid"]
+    var guid = latest_episode_blog['guid']
     var oepisodes = this.props.episodes.toJS()
     var ep_map = oepisodes.ep_map
     var latest_episode = ep_map[guid]

@@ -36,7 +36,11 @@ class Feature extends Component {
         </LogoContainer>
         <DescBox className="col-xs-12 col-sm-12 col-md-9">
           <Title>feature of the week</Title>
-          <SubTitle><Link to={href} className="no-line">{feature_blog.title}</Link></SubTitle>
+          <SubTitle>
+            <Link to={href} className="no-line">
+              {feature_blog.title}
+            </Link>
+          </SubTitle>
           <Desc>{feature_blog.abstract}</Desc>
           <BlogViewMore to={href}>View More</BlogViewMore>
           {author && (

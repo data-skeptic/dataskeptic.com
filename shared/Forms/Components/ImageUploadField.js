@@ -1,6 +1,6 @@
-import React, { Component } from "react"
-import _ from "lodash"
-import DragAndDropFileUploadField from "./DragAndDropFileUploadField"
+import React, { Component } from 'react'
+import _ from 'lodash'
+import DragAndDropFileUploadField from './DragAndDropFileUploadField'
 
 export default class ImageUploadField extends Component {
   defaultProps = {
@@ -70,7 +70,7 @@ export default class ImageUploadField extends Component {
     } else if (strictHeight) {
       heightChecker = this.checkStrictHeight
     }
-    
+
     return size => {
       return widthChecker(size) && heightChecker(size)
     }

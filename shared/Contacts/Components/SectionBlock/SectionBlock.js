@@ -58,7 +58,9 @@ const Arrow = styled.i`
   background-image: url(https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/keyboard_arrow_down+-+material.svg);
   background-repeat: no-repeat;
   background-position: center center;
-  ${props => props.down && `
+  ${props =>
+    props.down &&
+    `
       transform: rotate(180deg);
-  `}
+  `};
 `
