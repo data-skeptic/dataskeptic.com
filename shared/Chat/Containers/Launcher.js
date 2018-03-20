@@ -114,11 +114,11 @@ const Chat = styled.div`
   border-radius: 10px;
 
   @media (max-width: 768px) {
-    top: 0px;
+    top: 80px;
     left: 0px;
     right: 0px;
     bottom: 0px;
-    height: calc(100%);
+    height: 100%;
     width: 100%;
     border-radius: 0px;
     z-index: 4;
