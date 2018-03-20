@@ -113,6 +113,19 @@ const Chat = styled.div`
   transition: 0.3s ease-in-out;
   border-radius: 10px;
 
+  @media (max-width: 768px) {
+    top: 80px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    height: 100%;
+    width: 100%;
+    border-radius: 0px;
+    z-index: 4;
+    box-shadow: none;
+    min-height: auto;
+  }
+
   ${props =>
     props.inactive &&
     `
@@ -139,6 +152,7 @@ const Close = styled.button`
   right: 26px;
   top: 16px;
 
+  background-color: transparent;
   background-image: url(/img/chat/close.svg);
   width: 20px;
   height: 20px;
@@ -184,6 +198,10 @@ const Button = styled.div`
   &:hover {
     box-shadow: 0 1px 1px 0 rgba(56, 56, 58, 0.1),
       0 10px 20px 0 rgba(56, 56, 58, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    z-index: 2;
   }
 `
 
