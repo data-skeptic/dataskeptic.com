@@ -4,13 +4,23 @@ import styled from 'styled-components'
 
 import { changePageTitle } from '../../Layout/Actions/LayoutActions'
 
-import Carousel, {
+import Blogs, {
   Wrapper as CarouselWrapper
-} from '../../Common/Components/Carousel'
+} from '../Containers/Blogs'
 
 import Events, { Wrapper as EventsWrapper } from '../Containers/Events'
+import Jobs from '../Containers/Jobs'
 
 import { loadCareersCity } from '../../reducers/JobsReducer'
+import UploadResume from "../Forms/UploadResume";
+
+
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const config = require('../../../config/config.json')
+const c = config[env]
+
+const FILES_BUCKET = c['files']['site_bucket']
+
 
 class CityCareers extends Component {
   static defaultProps = {
@@ -38,7 +48,7 @@ class CityCareers extends Component {
   }
 
   render() {
-    const { loading, loaded, error } = this.props
+    const { loading, loaded, error, submitted, submitting, notify } = this.props
     let { jobs, events, blogs } = this.props
 
     events = events
@@ -48,24 +58,45 @@ class CityCareers extends Component {
 
     return (
       <Container className="careers_city_page">
-        <code>
-          {JSON.stringify({
-            loading,
-            loaded,
-            error
-          })}
-        </code>
         <Layout>
           <Left>
-            <Carousel items={blogs} />
+            {/*<Blogs blogs={blogs} />*/}
             <Row>
               <Events events={events} />
-              <Resume>resume</Resume>
+              <Resume>
+
+                {!submitted ? (
+                  <UploadResume
+                    showSubmit={true}
+                    onSubmit={this.submit}
+                    customError={error}
+                    showEmail={notify}
+                    bucket={FILES_BUCKET}
+                    customSubmitting={submitting}
+                  />
+                ) : (
+                  <Success>
+                    <h3>Thank you!</h3>
+                    <p>Resume Uploaded.</p>
+                    <p>We're planning about two weeks of data collection.</p>
+                    <p>After that, our analysis phase will begin.</p>
+                    <p>
+                      You should expect your personalized report in the next 3-4
+                      weeks.
+                    </p>
+                    <img
+                      src="https://s3.amazonaws.com/dataskeptic.com/img/bot/bot-image.png"
+                      width="200"
+                    />
+                  </Success>
+                )}
+                
+              </Resume>
             </Row>
           </Left>
-          <Jobs>
-            <code>{JSON.stringify(jobs)}</code>
-          </Jobs>
+          <Right>
+            <Jobs jobs={jobs} />
+          </Right>
         </Layout>
       </Container>
     )
@@ -87,10 +118,11 @@ const Left = styled.div`
 
   ${CarouselWrapper} {
     background: red;
+    height: 400px;
   }
 `
 
-const Jobs = styled.div`
+const Right = styled.div`
   flex: 0 0 320px;
 `
 
