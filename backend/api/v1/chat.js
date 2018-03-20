@@ -6,9 +6,11 @@ module.exports = cache => {
 
   router.post("/log", (req, res) => {
     try {
-      chat_utils.logMessage(req.body)
+      const message = req.body
+      chat_utils.logMessage(message)
     } catch (error) {
-      res.status(500).send({
+      console.error(error)
+      return res.status(500).send({
         success: false,
         error
       })
