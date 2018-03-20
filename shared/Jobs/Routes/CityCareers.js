@@ -56,15 +56,20 @@ class CityCareers extends Component {
       .concat(events)
       .concat(events)
 
+    blogs = blogs
+      .concat(blogs)
+      .concat(blogs)
+      .concat(blogs)
+
     return (
       <Container className="careers_city_page">
         <Layout>
           <Left>
-            {/*<Blogs blogs={blogs} />*/}
+            <Blogs blogs={blogs} />
             <Row>
               <Events events={events} />
               <Resume>
-
+            
                 {!submitted ? (
                   <UploadResume
                     showSubmit={true}
@@ -115,18 +120,20 @@ const Layout = styled.div`
 
 const Left = styled.div`
   flex: 1;
+  border: 1px solid red;
 
   ${CarouselWrapper} {
-    background: red;
     height: 400px;
   }
 `
 
 const Right = styled.div`
-  flex: 0 0 320px;
+  width: 320px;
+  border: 1px solid blue;
 `
 
 const Row = styled.div`
+  border: 1px solid yellow;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -138,6 +145,7 @@ const Row = styled.div`
 
 const Resume = styled.div`
   flex-basis: 28%;
+  border: 1px solid green;
 `
 
 export default connect(state => ({
