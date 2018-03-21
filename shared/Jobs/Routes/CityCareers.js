@@ -61,6 +61,7 @@ class CityCareers extends Component {
         <Layout>
           <Left>
             <Blogs blogs={blogs} />
+            <Title>Events</Title>
             <Row>
               <Events events={events} />
               <Resume>
@@ -95,6 +96,7 @@ class CityCareers extends Component {
             </Row>
           </Left>
           <Right>
+            <Title>Jobs</Title>
             <Jobs jobs={jobs} />
           </Right>
         </Layout>
@@ -107,6 +109,14 @@ const Container = styled.div`
   max-width: 960px;
   margin: 0px auto;
   padding: 15px;
+`
+
+const Title = styled.h1`
+    color: #2d1454;
+    font-size: 24px;
+    line-height: 31px;
+    font-weight: bold;
+    text-transform: uppercase;
 `
 
 const Layout = styled.div`
@@ -122,21 +132,29 @@ const Left = styled.div`
 `
 
 const Right = styled.div`
-  width: 320px;
+  flex-basis: 420px;
+  
+  
+  background-color: #f4f4f4;
+  padding: 32px;
+  margin: 10px;
+  margin-top: 24px;
 `
 
 const Row = styled.div`
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
 
   ${EventsWrapper} {
-    flex-basis: 68%;
+    margin: 10px;
+    flex-basis: 60%;
   }
 `
 
 const Resume = styled.div`
-  flex-basis: 28%;
+  flex-basis: 40%;
+  margin: 10px;
 `
 
 export default connect(state => ({

@@ -56,6 +56,7 @@ export default ({
 
 export const Event = styled(Link)`
   display: flex;
+  flex-direction: column;
 
   border-bottom: 1px solid #e6e6e6;
   padding-top: 2em;
@@ -68,13 +69,12 @@ export const Event = styled(Link)`
 `
 
 export const DateTime = styled.div`
-  flex-basis: 200px;
   color: #828382;
+
+  margin-bottom: 2em;
 `
 
-export const Info = styled.div`
-  flex: 1;
-`
+export const Info = styled.div``
 
 export const Time = styled.div``
 

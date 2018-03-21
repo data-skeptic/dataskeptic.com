@@ -107,12 +107,17 @@ const Slider = styled.div`
 
   .item {
     text-decoration: none !important;
+    border: none !important;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-decoration: none;
     height: 400px;
+    
+    &:hover {
+      border: none !important;
+    }
   }
 `
 
