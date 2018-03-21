@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import styled, { css } from 'styled-components'
-import Slick from 'react-slick'
 import moment from 'moment/moment'
 import { Link } from 'react-router'
 import AuthorLink from '../../../components/AuthorLink'
+import SlideCarousel from '../../../Common/Components/SlideCarousel'
+import { connect } from 'react-redux'
 
 const renderAuthor = ({
   author,
@@ -12,23 +13,24 @@ const renderAuthor = ({
   contribution,
   contributor_id
 }) => (
-  <AuthorLink author={author} key={contributor_id} className="no-line">
-    <Author>
-      <Avatar src={img} />
-      <Details>
-        <Name>{prettyname}</Name>
-        {contribution && <Contribution>{contribution}</Contribution>}
-      </Details>
-    </Author>
-  </AuthorLink>
+  <Author>
+    <Avatar src={img} />
+    <Details>
+      <Name>{prettyname}</Name>
+      {contribution && <Contribution>{contribution}</Contribution>}
+    </Details>
+  </Author>
 )
 
-export default class BlogsSlider extends Component {
+class BlogsSlider extends Component {
   static defaultProps = {
     blogs: []
   }
 
-  renderSlide = (item, index) => (
+  getContributor = ({ author = '' }) =>
+    this.props.contributors && this.props.contributors[author.toLowerCase()]
+
+  renderSlidOlde = (item, index) => (
     <BlogItem key={index}>
       <ItemDate>{moment(item.publish_date).format('MMMM D, Y')}</ItemDate>
       <ItemTitle>
@@ -36,57 +38,60 @@ export default class BlogsSlider extends Component {
           {item.title}
         </Link>
       </ItemTitle>
-      <ItemDesc>{item.abstract}</ItemDesc>
+      <Abstract>{item.abstract}</Abstract>
       <Authors>
         {item.contributors && item.contributors.map(renderAuthor)}
       </Authors>
     </BlogItem>
   )
 
+  renderSlide = (item, index) => {
+    let href = '/blog' + item.prettyname
+    const contributor = this.getContributor(item)
+
+    const multipleContributors =
+      item.contributors && item.contributors.length > 0
+
+    if (!multipleContributors && contributor) {
+      item.contributors = [contributor]
+    }
+
+    return (
+      <a className={'item'} key={index} href={href}>
+        <BlogItem>
+          <ItemDate>{moment(item.publish_date).format('MMMM D, Y')}</ItemDate>
+          <ItemTitle>{item.title}</ItemTitle>
+          <Abstract>{item.abstract}</Abstract>
+          <Authors>
+            {item.contributors && item.contributors.map(renderAuthor)}
+          </Authors>
+        </BlogItem>
+      </a>
+    )
+  }
+
   render() {
     const { blogs } = this.props
     const settings = {
-      dots: true,
-      infinite: true,
-      speed: 500,
-      slidesToShow: 1,
-      slidesToScroll: 1
+      showArrows: true,
+      showStatus: false
     }
 
     return (
       <Wrapper>
         <Slider>
-          <Slick {...settings}>
-            <div>
-              <h3>1</h3>
-            </div>
-            <div>
-              <h3>2</h3>
-            </div>
-            <div>
-              <h3>3</h3>
-            </div>
-            <div>
-              <h3>4</h3>
-            </div>
-            <div>
-              <h3>5</h3>
-            </div>
-            <div>
-              <h3>6</h3>
-            </div>
-          </Slick>
+          <SlideCarousel {...settings}>
+            {blogs.map(this.renderSlide)}
+          </SlideCarousel>
         </Slider>
-
-        {/*{blogs.length > 0 && (*/}
-        {/*<Slider {...settings}>{blogs.map(this.renderSlide)}</Slider>*/}
-        {/*)}*/}
       </Wrapper>
     )
   }
 }
 
-const slider = css``
+export default connect(state => ({
+  contributors: state.site.get('contributors').toJS()
+}))(BlogsSlider)
 
 export const Wrapper = styled.div`
   position: relative;
@@ -99,10 +104,27 @@ const Slider = styled.div`
   width: 100%;
   height: 100%;
   overflow: hidden;
+
+  .item {
+    text-decoration: none !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    height: 400px;
+  }
 `
 
 export const BlogItem = styled.div`
-  padding-top: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  height: 180px;
+  width: 60%;
+  background-color: #f4f4f4;
 `
 
 export const Title = styled.div`
@@ -129,10 +151,11 @@ export const ItemTitle = styled.span`
   padding-bottom: 8px;
 `
 
-export const ItemDesc = styled.span`
+export const Abstract = styled.p`
   font-size: 14px;
   line-height: 24px;
   color: #575959;
+  text-align: left;
 `
 
 export const ViewMore = styled(Link)`
@@ -171,6 +194,7 @@ export const Authors = styled.div`
   flex-direction: row;
   display: flex;
   flex-wrap: wrap;
+  margin-top: 1em;
 
   > a {
     flex-basis: 40%;
@@ -196,10 +220,10 @@ export const Author = styled.div`
 
 export const Avatar = styled.img`
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
+  width: 30px;
+  height: 30px;
 
-  padding: 4px;
+  padding: 2px;
   background-color: #ffffff;
   border: 1px solid #dddddd !important;
 `

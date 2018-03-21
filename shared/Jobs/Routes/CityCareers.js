@@ -55,12 +55,7 @@ class CityCareers extends Component {
       .concat(events)
       .concat(events)
       .concat(events)
-
-    blogs = blogs
-      .concat(blogs)
-      .concat(blogs)
-      .concat(blogs)
-
+    
     return (
       <Container className="careers_city_page">
         <Layout>
@@ -120,7 +115,6 @@ const Layout = styled.div`
 
 const Left = styled.div`
   flex: 1;
-  border: 1px solid red;
 
   ${CarouselWrapper} {
     height: 400px;
@@ -129,11 +123,9 @@ const Left = styled.div`
 
 const Right = styled.div`
   width: 320px;
-  border: 1px solid blue;
 `
 
 const Row = styled.div`
-  border: 1px solid yellow;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -145,7 +137,6 @@ const Row = styled.div`
 
 const Resume = styled.div`
   flex-basis: 28%;
-  border: 1px solid green;
 `
 
 export default connect(state => ({
