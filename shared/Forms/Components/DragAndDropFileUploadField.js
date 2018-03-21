@@ -1,9 +1,9 @@
-import React, { Component } from "react"
-import Dropzone from "react-dropzone"
-import _ from "lodash"
-import styled, { css, keyframes } from "styled-components"
-import Request from "../../Request"
-import FilePreview from "./FilePreview"
+import React, { Component } from 'react'
+import Dropzone from 'react-dropzone'
+import _ from 'lodash'
+import styled, { css, keyframes } from 'styled-components'
+import Request from '../../Request'
+import FilePreview from './FilePreview'
 
 const Icon = ({ name, ...rest }) => (
   <StateIcon {...rest} className={`glyphicon glyphicon-${name}`} />
@@ -17,9 +17,9 @@ const RemoveIcon = () => <Icon name="trash" />
 
 const formatAccept = accept => {
   return accept
-    .split(",")
-    .map(rule => "*." + rule.split("/")[1])
-    .join(", ")
+    .split(',')
+    .map(rule => '*.' + rule.split('/')[1])
+    .join(', ')
 }
 
 export default class DragAndDropFileUploadField extends Component {
@@ -142,14 +142,16 @@ export default class DragAndDropFileUploadField extends Component {
 
   upload(files) {
     const { bucket, prefix, saveOrigin } = this.props
-    const url = `/api/v1/files/upload?bucket=${bucket}&prefix=${prefix}&saveOrigin=${saveOrigin}`
+    const url = `/api/v1/files/upload?bucket=${bucket}&prefix=${
+      prefix
+    }&saveOrigin=${saveOrigin}`
 
     return Request.upload(url, files).then(res => res.data.files)
   }
 
   renderAccepted() {
     const { accept } = this.props
-    return <span>Accept {accept ? formatAccept(accept) : "Any"}</span>
+    return <span>Accept {accept ? formatAccept(accept) : 'Any'}</span>
   }
 
   renderUploaded() {
@@ -212,7 +214,7 @@ export default class DragAndDropFileUploadField extends Component {
 
       return (
         <RejectedError key={index}>
-          <RejectedFile>{name}</RejectedFile>{" "}
+          <RejectedFile>{name}</RejectedFile>{' '}
           <RejectedReason>{reason}</RejectedReason>
         </RejectedError>
       )

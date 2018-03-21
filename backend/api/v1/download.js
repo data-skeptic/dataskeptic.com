@@ -1,5 +1,5 @@
-import express from 'express'
-import aws from 'aws-sdk'
+import express from "express"
+import aws from "aws-sdk"
 
 const checkFileExist = (s3, params) =>
   new Promise((res, rej) => {
@@ -10,11 +10,15 @@ const checkFileExist = (s3, params) =>
     })
   })
 
+const normalizePath = path =>
+  path.indexOf("/") === 0 ? path.replace("/", "") : path
+
 module.exports = () => {
   const router = express.Router()
 
-  router.all('/', (req, res) => {
-    const { bucket, path } = req.query
+  router.all("/", (req, res) => {
+    let { bucket, path } = req.query
+    path = normalizePath(path)
 
     const s3 = new aws.S3({ params: { Bucket: bucket } })
     const fileParams = { Bucket: bucket, Key: path }

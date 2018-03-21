@@ -1,6 +1,6 @@
-import React from "react"
-import styled from "styled-components"
-import { Link } from "react-router"
+import React from 'react'
+import styled from 'styled-components'
+import { Link } from 'react-router'
 
 const Bio = ({ bio }) => <Text dangerouslySetInnerHTML={{ __html: bio }} />
 
@@ -29,8 +29,14 @@ export const BlogAuthorBottom = ({
       </Photo>
       <About>
         <Author>
-          {contribution && <Contribution to={formatLink(author)} className="no-line">{contribution}</Contribution>}
-          <Name to={formatLink(author)} className="no-line">{prettyname}</Name>
+          {contribution && (
+            <Contribution to={formatLink(author)} className="no-line">
+              {contribution}
+            </Contribution>
+          )}
+          <Name to={formatLink(author)} className="no-line">
+            {prettyname}
+          </Name>
         </Author>
 
         <Bio bio={bio} />
@@ -97,7 +103,7 @@ const Contribution = styled(Link)`
   line-height: 20px;
   color: #7d8080;
   display: block;
-  
+
   &:hover {
     color: #7d8080;
   }
