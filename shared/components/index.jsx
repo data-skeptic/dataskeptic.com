@@ -50,6 +50,7 @@ class MainView extends React.Component {
     ConversationHandler.get_reply(dispatch, this.reply, cstate, message)
   }
   onInactivity = () => {
+    /*
     this.reply(
       {
         text:
@@ -57,6 +58,7 @@ class MainView extends React.Component {
       },
       'kyle'
     )
+    */
   }
 
   loadState() {
