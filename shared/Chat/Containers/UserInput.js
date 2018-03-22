@@ -133,6 +133,7 @@ const Text = styled.textarea`
 
 const SendButton = styled.button`
   margin-right: 16px;
+  flex-basis: 32px;
   width: 32px;
   border: none;
   background: transparent;
@@ -147,4 +148,8 @@ const SendButton = styled.button`
     `
     transform: scale(1.2);
   `};
+  
+   @media (max-width: 768px) {
+      padding: 0px;
+   }
 `
