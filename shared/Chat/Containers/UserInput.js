@@ -129,10 +129,6 @@ const Text = styled.textarea`
   border: none;
   resize: none;
   background: transparent;
-  
- @media (max-width: 768px) {
-    background-image: url('/img/svg/enter.svg') center right no-repeat;
- }
 `
 
 const SendButton = styled.button`
