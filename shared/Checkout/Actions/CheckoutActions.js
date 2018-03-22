@@ -62,7 +62,7 @@ export function checkout(data, redirect) {
               dispatch(checkoutRequestFailed(successData.msg))
             }
           })
-          .catch(({ message }) => dispatch(checkoutRequestFailed(message)))
+          .catch((error) => dispatch(checkoutRequestFailed(error.message)))
       }
     })
   }
@@ -95,7 +95,8 @@ export function checkoutRequestSuccess(successData, data) {
   return {
     type: CHECKOUT_REQUEST_SUCCESS,
     payload: {
-      message
+      successData,
+      data
     }
   }
 }
