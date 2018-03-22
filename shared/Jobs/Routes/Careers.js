@@ -1,32 +1,32 @@
-import React, { Component } from "react"
-import { connect } from "react-redux"
-import { change, formValueSelector } from "redux-form"
-import styled from "styled-components"
-import moment from "moment"
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { change, formValueSelector } from 'redux-form'
+import styled from 'styled-components'
+import moment from 'moment'
 
-import { changePageTitle } from "../../Layout/Actions/LayoutActions"
-import UploadFileTypeBox from "../../Proposals/Components/UploadFileTypeBox/UploadFileTypeBox"
+import { changePageTitle } from '../../Layout/Actions/LayoutActions'
+import UploadFileTypeBox from '../../Proposals/Components/UploadFileTypeBox/UploadFileTypeBox'
 import UploadResume, {
   KEY,
   RESUME_FIELD,
   NOTIFY_FIELD
-} from "../Forms/UploadResume"
+} from '../Forms/UploadResume'
 
-import { submitResume } from "../../reducers/JobsReducer"
-import Countdown from "../../Common/Components/Countdown";
+import { submitResume } from '../../reducers/JobsReducer'
+import Countdown from '../../Common/Components/Countdown'
 
-const env = process.env.NODE_ENV === "dev" ? "dev" : "prod"
-const config = require("../../../config/config.json")
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const config = require('../../../config/config.json')
 const c = config[env]
 
-const FILES_BUCKET = c["files"]["site_bucket"]
+const FILES_BUCKET = c['files']['site_bucket']
 
 class Careers extends Component {
   onResumeUpload = data => {
     const value = data[0]
     this.setResume(value)
     this.props.dispatch({
-      type: "UPLOAD_RESUME",
+      type: 'UPLOAD_RESUME',
       payload: data
     })
   }
@@ -41,7 +41,7 @@ class Careers extends Component {
       ...data,
       Bucket: FILES_BUCKET
     }
-    
+
     return submitResume(this.props.dispatch, data)
   }
 
@@ -55,7 +55,7 @@ class Careers extends Component {
 
   static getPageMeta() {
     return {
-      title: "Careers | Data Skeptic"
+      title: 'Careers | Data Skeptic'
     }
   }
 
@@ -113,7 +113,9 @@ class Careers extends Component {
             </Text>
             {due_date_str && (
               <Text>
-                <b>To be entered, submit your PDF resume/CV by the end of March</b>
+                <b>
+                  To be entered, submit your PDF resume/CV by the end of March
+                </b>
                 <Countdown to={due_date_str} />
               </Text>
             )}
@@ -182,7 +184,7 @@ const selector = formValueSelector(KEY)
 export default connect(state => ({
   resume: selector(state, RESUME_FIELD),
   notify: selector(state, NOTIFY_FIELD),
-  submitted: state.jobs.getIn(["resume", "submitted"]),
-  submitting: state.jobs.getIn(["resume", "submitting"]),
-  error: state.jobs.getIn(["resume", "error"])
+  submitted: state.jobs.getIn(['resume', 'submitted']),
+  submitting: state.jobs.getIn(['resume', 'submitting']),
+  error: state.jobs.getIn(['resume', 'error'])
 }))(Careers)

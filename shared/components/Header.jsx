@@ -1,17 +1,17 @@
-import React from "react"
-import { bindActionCreators } from "redux"
-import { connect } from "react-redux"
-import { Link } from "react-router"
+import React from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { Link } from 'react-router'
 
-import { toggleMobileMenu } from "../Layout/Actions/LayoutActions"
+import { toggleMobileMenu } from '../Layout/Actions/LayoutActions'
 
-import Menu from "./Menu"
-import CartMenu from "../Cart/Components/CartMenu"
-import CartLink from "../Cart/Components/CartLink"
+import Menu from './Menu'
+import CartMenu from '../Cart/Components/CartMenu'
+import CartLink from '../Cart/Components/CartLink'
 
-import { toggleCart } from "../Cart/Actions/CartActions"
+import { toggleCart } from '../Cart/Actions/CartActions'
 
-import { getItemsCount as getCartItemsCount } from "../Cart/Helpers/getItemsCount"
+import { getItemsCount as getCartItemsCount } from '../Cart/Helpers/getItemsCount'
 
 class Header extends React.Component {
   constructor(props) {
@@ -44,13 +44,13 @@ class Header extends React.Component {
    * @returns {string} classList List of component styles
    */
   getClassList({ isMobileMenuVisible }) {
-    let classList = ["header"]
+    let classList = ['header']
 
     if (isMobileMenuVisible) {
-      classList.push("collapsed")
+      classList.push('collapsed')
     }
 
-    return classList.join(" ")
+    return classList.join(' ')
   }
 
   render() {
@@ -110,9 +110,9 @@ class Header extends React.Component {
 
 export default connect(
   state => ({
-    user: state.auth.getIn(["user"]).toJS(),
-    loggedIn: state.auth.getIn(["loggedIn"]),
-    isMobileMenuVisible: state.layout.getIn(["isMobileMenuVisible"]),
+    user: state.auth.getIn(['user']).toJS(),
+    loggedIn: state.auth.getIn(['loggedIn']),
+    isMobileMenuVisible: state.layout.getIn(['isMobileMenuVisible']),
     cart: state.cart
   }),
   dispatch =>

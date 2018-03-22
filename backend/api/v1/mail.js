@@ -9,8 +9,9 @@ const formatAddress = ({
   postal_code = '',
   state = ''
 }) =>
-  `${line1}${' ' +
-    line2}, ${city}, ${country.toUpperCase()}, ${state}, ${postal_code}`
+  `${line1}${' ' + line2}, ${city}, ${country.toUpperCase()}, ${state}, ${
+    postal_code
+  }`
 
 module.exports = cache => {
   const router = express.Router()

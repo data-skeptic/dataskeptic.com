@@ -1,16 +1,16 @@
-import React from "react"
-import styled from "styled-components"
+import React from 'react'
+import styled from 'styled-components'
 
-const imageFormats = ["png", "jpg", "jpeg", "bmp", "gif"]
+const imageFormats = ['png', 'jpg', 'jpeg', 'bmp', 'gif']
 
-const Icon = ({ name, extension = ".pdf" }) => (
+const Icon = ({ name, extension = '.pdf' }) => (
   <FileIcon className={`glyphicon glyphicon-file`}>
     <Ext>{extension}</Ext>
   </FileIcon>
 )
 
 const getExtension = file =>
-  file.slice((Math.max(0, file.lastIndexOf(".")) || Infinity) + 1)
+  file.slice((Math.max(0, file.lastIndexOf('.')) || Infinity) + 1)
 
 const isImage = ext => imageFormats.indexOf(ext) > -1
 

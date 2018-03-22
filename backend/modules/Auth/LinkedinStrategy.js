@@ -3,10 +3,7 @@ const config = require('../../../config/config.json')
 const UserServices = require('../Users/Services/UserServices')
 
 export default function(env) {
-  return new LinkedInStrategy(config[env].linkedin, function(
-   
-    
-  ) {
+  return new LinkedInStrategy(config[env].linkedin, function() {
     try {
       // fetch user data
       const user = {
@@ -15,7 +12,7 @@ export default function(env) {
         fullName: formattedName,
         email: emailAddress
       }
-      
+
       console.dir({ id, emailAddress, firstName, formattedName })
       process.nextTick(function() {
         UserServices.getUserByLinkedinId(id).then(row => {

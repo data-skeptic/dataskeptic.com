@@ -83,10 +83,16 @@ class Login extends Component {
                   {error && <p className="error-message">{error}</p>}
 
                   <div className="buttons col-xs-12 col-sm-12">
-                    <button className="btn small-btn google-btn" onClick={this.googleLogin}>
+                    <button
+                      className="btn small-btn google-btn"
+                      onClick={this.googleLogin}
+                    >
                       Log in with <b>Google</b>
                     </button>
-                    <button className="btn small-btn linkedin-btn" onClick={this.linkedinLogin}>
+                    <button
+                      className="btn small-btn linkedin-btn"
+                      onClick={this.linkedinLogin}
+                    >
                       Log in with <b>Linkedin</b>
                     </button>
                   </div>
@@ -100,8 +106,7 @@ class Login extends Component {
                     Sign Up
                   </Link>
                 </div>
-                <div className="buttons col-xs-12 col-sm-12">
-                </div>
+                <div className="buttons col-xs-12 col-sm-12" />
               </div>
             </div>
           ) : (

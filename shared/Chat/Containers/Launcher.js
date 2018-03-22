@@ -1,15 +1,15 @@
-import React, { Component } from "react"
-import styled from "styled-components"
-import UserInput from "./UserInput"
-import Messages from "./Messages"
-import { REGULAR_MESSAGE, THINKING_MESSAGE } from "../Constants"
+import React, { Component } from 'react'
+import styled from 'styled-components'
+import UserInput from './UserInput'
+import Messages from './Messages'
+import { REGULAR_MESSAGE, THINKING_MESSAGE } from '../Constants'
 
-export { BOT_AUTHOR, BOT_ID } from "../Constants"
+export { BOT_AUTHOR, BOT_ID } from '../Constants'
 
 export default class Launcher extends Component {
   static defaultProps = {
-    placeholder: "Send a message...",
-    header: "DataSkeptic Bot",
+    placeholder: 'Send a message...',
+    header: 'DataSkeptic Bot',
     messages: [],
     onMessage: () => {},
     onInactivity: () => {},
@@ -22,6 +22,11 @@ export default class Launcher extends Component {
   }
   triggerInactivity = () => {
     this.props.onInactivity()
+
+    if (this.timer) {
+      clearTimeout(this.timer)
+      this.timer = null
+    }
   }
   handleMessage = message => {
     this.resetInactivityTimer()

@@ -1,5 +1,5 @@
-import React, { PropTypes } from "react"
-import { isEmpty } from "lodash"
+import React, { PropTypes } from 'react'
+import { isEmpty } from 'lodash'
 
 const DefaultError = () => (
   <p>
@@ -19,7 +19,7 @@ export const FormController = ({
   pristine,
   invalid,
   submitValue,
-  btnWrapperClasses = "",
+  btnWrapperClasses = '',
   customSuccess,
   customError
 }) => (

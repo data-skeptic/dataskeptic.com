@@ -1,5 +1,5 @@
-import React, { Component } from "react"
-import styled from "styled-components"
+import React, { Component } from 'react'
+import styled from 'styled-components'
 
 const animationDuration = 300
 
@@ -8,19 +8,19 @@ const normalize = val => val.toLowerCase().trim()
 export default class UserInput extends Component {
   static defaultProps = {
     onSubmit: () => {},
-	  focused: false
+    focused: false
   }
   state = {
-    value: "",
+    value: '',
     focus: false
   }
 
   clear = () => {
     this.ref.scrollTop = this.ref.scrollHeight
-    this.setState({ value: "" })
+    this.setState({ value: '' })
   }
 
-  isEmpty = () => this.state.value === ""
+  isEmpty = () => this.state.value === ''
 
   saveRef = ref => (this.ref = ref)
   handleSubmit = event => {
@@ -30,7 +30,7 @@ export default class UserInput extends Component {
 
     const data = {
       sent: true,
-      type: "text",
+      type: 'text',
       text,
       plainText: normalize(text)
     }
@@ -40,7 +40,7 @@ export default class UserInput extends Component {
   }
 
   focus() {
-	  this.ref.focus()
+    this.ref.focus()
   }
 
   onFocus = () => {
@@ -81,8 +81,8 @@ export default class UserInput extends Component {
       <Form active={active} onSubmit={this.handleSubmit}>
         <Input>
           <Text
-	          innerRef={this.saveRef}
-	          value={value}
+            innerRef={this.saveRef}
+            value={value}
             placeholder={placeholder}
             onChange={this.onChange}
             onKeyDown={this.onKeyDown}

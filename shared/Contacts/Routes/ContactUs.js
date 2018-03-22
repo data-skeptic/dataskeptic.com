@@ -1,13 +1,13 @@
-import React from "react"
-import { connect } from "react-redux"
-import { Link } from "react-router"
+import React from 'react'
+import { connect } from 'react-redux'
+import { Link } from 'react-router'
 
-import axios from "axios"
-import styled from "styled-components"
+import axios from 'axios'
+import styled from 'styled-components'
 
-import ContactFormContainer from "../Containers/ContactFormContainer/ContactFormContainer"
-import { changePageTitle } from "../../Layout/Actions/LayoutActions"
-import { formValueSelector, reset } from "redux-form"
+import ContactFormContainer from '../Containers/ContactFormContainer/ContactFormContainer'
+import { changePageTitle } from '../../Layout/Actions/LayoutActions'
+import { formValueSelector, reset } from 'redux-form'
 import {
   init,
   ready,
@@ -17,23 +17,23 @@ import {
   submit,
   complete,
   fail
-} from "../../Proposals/Actions/RecordingFlowActions"
-import { RECORDING } from "../../Proposals/Constants/CommentTypes"
-import Recorder, { steps } from "../../Recorder"
-import QuestionForm from "../../Questions/Forms/QuestionForm"
-import { submitCommentForm } from "../../Proposals/Actions/CommentBoxFormActions"
-import SectionBlock from "../Components/SectionBlock/SectionBlock"
+} from '../../Proposals/Actions/RecordingFlowActions'
+import { RECORDING } from '../../Proposals/Constants/CommentTypes'
+import Recorder, { steps } from '../../Recorder'
+import QuestionForm from '../../Questions/Forms/QuestionForm'
+import { submitCommentForm } from '../../Proposals/Actions/CommentBoxFormActions'
+import SectionBlock from '../Components/SectionBlock/SectionBlock'
 
 class ContactUs extends React.Component {
   isSectionOpen = section => section === this.state.openSection
   toggleSection = section => {
     this.setState(prevState => ({
-      openSection: prevState.openSection === section ? "" : section
+      openSection: prevState.openSection === section ? '' : section
     }))
   }
   recordingReady = noDelay => {
     this.props.dispatch(ready(noDelay))
-    this.setState({ submittedUrl: "" })
+    this.setState({ submittedUrl: '' })
   }
   recorderRecording = () => {
     this.props.dispatch(recordingStart())
@@ -55,7 +55,7 @@ class ContactUs extends React.Component {
     this.props.dispatch(fail(error))
   }
   reset = () => {
-    this.setState({ submittedUrl: "" })
+    this.setState({ submittedUrl: '' })
     this.props.dispatch(reset(`question`))
   }
   questionSubmit = data => {
@@ -68,32 +68,32 @@ class ContactUs extends React.Component {
     const email = e.target.email.value
     const ocart = this.props.cart.toJS()
     const dispatch = this.props.dispatch
-    const token = ""
+    const token = ''
     const req = { email: email, token: token, set_active: true }
 
     dispatch({
-      type: "UPDATE_ADDRESS",
-      payload: { cls: "email", val: email }
+      type: 'UPDATE_ADDRESS',
+      payload: { cls: 'email', val: email }
     })
-    dispatch({ type: "SLACK_UPDATE", payload: { msg: "Sending..." } })
+    dispatch({ type: 'SLACK_UPDATE', payload: { msg: 'Sending...' } })
 
     var config = {}
     axios
-      .post("/api/slack/join", req, config)
+      .post('/api/slack/join', req, config)
       .then(function(resp) {
-        var data = resp["data"]
-        var msg = data["msg"]
-        dispatch({ type: "SLACK_UPDATE", payload: { msg } })
+        var data = resp['data']
+        var msg = data['msg']
+        dispatch({ type: 'SLACK_UPDATE', payload: { msg } })
       })
       .catch(function(err) {
-        var data = err["data"]
+        var data = err['data']
         var msg = "Sorry, we're having a problem getting that done :("
         if (data != undefined) {
-          if (data["msg"] != undefined) {
-            msg = data["msg"]
+          if (data['msg'] != undefined) {
+            msg = data['msg']
           }
         }
-        dispatch({ type: "SLACK_UPDATE", payload: { msg } })
+        dispatch({ type: 'SLACK_UPDATE', payload: { msg } })
         console.log(err)
       })
   }
@@ -102,16 +102,16 @@ class ContactUs extends React.Component {
     super(props)
 
     this.state = {
-      submittedUrl: "",
-      openSection: ""
+      submittedUrl: '',
+      openSection: ''
     }
   }
 
   static getPageMeta() {
     return {
-      title: "Contact Us | Data Skeptic",
+      title: 'Contact Us | Data Skeptic',
       description:
-        "We hope to respond to all inquiries, but sometimes the volume of incoming questions can cause our queue to explode. We prioritize responses to Data Skeptic members first, and to those who ask questions in a public forum like Twitter, our Facebook wall (not Facebook direct message), or Slack. Many people can benefit from responses in public places."
+        'We hope to respond to all inquiries, but sometimes the volume of incoming questions can cause our queue to explode. We prioritize responses to Data Skeptic members first, and to those who ask questions in a public forum like Twitter, our Facebook wall (not Facebook direct message), or Slack. Many people can benefit from responses in public places.'
     }
   }
 
@@ -143,26 +143,44 @@ class ContactUs extends React.Component {
 
         <Socials>
           <SocialBlock order={1}>
-            <SocialIcon src={'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/twitter-square+-+FontAwesome.svg'} />
+            <SocialIcon
+              src={
+                'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/twitter-square+-+FontAwesome.svg'
+              }
+            />
             <p>
               You can find us on Twitter via{' '}
-              <TwitterLink href="https://twitter.com/dataskeptic" className="no-line">
+              <TwitterLink
+                href="https://twitter.com/dataskeptic"
+                className="no-line"
+              >
                 @DataSkeptic
               </TwitterLink>
             </p>
           </SocialBlock>
           <SocialBlock order={3}>
-            <SocialIcon src={'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/facebook-square+-+FontAwesome.svg'} />
+            <SocialIcon
+              src={
+                'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/facebook-square+-+FontAwesome.svg'
+              }
+            />
             <p>
               We are on Facebook via{' '}
-              <FacebookLink href="https://www.facebook.com/dataskeptic" className="no-line">
+              <FacebookLink
+                href="https://www.facebook.com/dataskeptic"
+                className="no-line"
+              >
                 https://www.facebook.com/dataskeptic
               </FacebookLink>
             </p>
           </SocialBlock>
           <SocialBlock order={2}>
             <SocialForm onSubmit={this.subscribeSlack}>
-              <SocialIcon src={'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/logo-slack.svg'} />
+              <SocialIcon
+                src={
+                  'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/logo-slack.svg'
+                }
+              />
               <input name="email" id="email" />
               <button
                 type="submit"
@@ -175,7 +193,11 @@ class ContactUs extends React.Component {
             </SocialForm>
           </SocialBlock>
           <SocialBlock order={4}>
-            <SocialIcon src={'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/mail_outline+-+material+copy.svg'} />
+            <SocialIcon
+              src={
+                'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/mail_outline+-+material+copy.svg'
+              }
+            />
             <SocialForm
               action="//dataskeptic.us9.list-manage.com/subscribe/post?u=65e63d6f84f1d87759105d133&amp;id=dc60d554db"
               method="post"
@@ -216,7 +238,7 @@ class ContactUs extends React.Component {
           <QuestionFormWrapper>
             <QuestionForm
               allowSubmit={confirmPolicy}
-              showSubmit={activeStep === "REVIEW"}
+              showSubmit={activeStep === 'REVIEW'}
               initialValues={{
                 confirmPolicy: true
               }}
@@ -235,7 +257,7 @@ class ContactUs extends React.Component {
                 submittedUrl={submittedUrl}
                 reset={this.reset}
               />
-              {activeStep === "COMPLETE" && <p>Thanks for your question!</p>}
+              {activeStep === 'COMPLETE' && <p>Thanks for your question!</p>}
             </QuestionForm>
           </QuestionFormWrapper>
         </ListenerArea>
@@ -245,8 +267,8 @@ class ContactUs extends React.Component {
         <Sections>
           <SectionBlock
             title="General Inquiries"
-            open={this.isSectionOpen("general")}
-            onToggle={() => this.toggleSection("general")}
+            open={this.isSectionOpen('general')}
+            onToggle={() => this.toggleSection('general')}
           >
             <Text>
               We can no longer reply to every message we get. If your inquiry is
@@ -260,8 +282,8 @@ class ContactUs extends React.Component {
 
           <SectionBlock
             title="For Members"
-            open={this.isSectionOpen("members")}
-            onToggle={() => this.toggleSection("members")}
+            open={this.isSectionOpen('members')}
+            onToggle={() => this.toggleSection('members')}
           >
             <Text>
               Login to the Members' Portal <Link to="/login">here</Link> or send
@@ -272,25 +294,25 @@ class ContactUs extends React.Component {
 
           <SectionBlock
             title="Store / Orders"
-            open={this.isSectionOpen("orders")}
-            onToggle={() => this.toggleSection("orders")}
+            open={this.isSectionOpen('orders')}
+            onToggle={() => this.toggleSection('orders')}
           >
             <Text>
               If you have any issues with your order from our store, please
-              contact{" "}
+              contact{' '}
               <a href="mailto:orders@dataskeptic.com">orders@dataskeptic.com</a>.
             </Text>
           </SectionBlock>
 
           <SectionBlock
             title="For Advertisers"
-            open={this.isSectionOpen("advertise")}
-            onToggle={() => this.toggleSection("advertise")}
+            open={this.isSectionOpen('advertise')}
+            onToggle={() => this.toggleSection('advertise')}
           >
             <Text>
               Data Skeptic currently accepts one (1) advertising slot per show.
               We are often booked months in advance. For a rate sheet, please
-              contact{" "}
+              contact{' '}
               <a href="mailto:advertising@dataskeptic.com">
                 advertising@dataskeptic.com
               </a>.
@@ -299,12 +321,12 @@ class ContactUs extends React.Component {
 
           <SectionBlock
             title="For Media Inquiries"
-            open={this.isSectionOpen("media")}
-            onToggle={() => this.toggleSection("media")}
+            open={this.isSectionOpen('media')}
+            onToggle={() => this.toggleSection('media')}
           >
             <Text>
               Kyle is available for comment to the media. Please send a direct
-              email to{" "}
+              email to{' '}
               <a href="mailto:kyle@dataskeptic.com">kyle@dataskeptic.com</a> to
               make first contact. After connecting, we have a Calendly link to
               share that will allow you to book a time that suits your schedule.
@@ -455,12 +477,12 @@ const SlackStatus = styled.span`
   }
 `
 
-const selector = formValueSelector("question")
+const selector = formValueSelector('question')
 export default connect(state => ({
   cart: state.cart,
   site: state.site,
-  confirmPolicy: selector(state, "confirmPolicy"),
-  activeStep: state.questions.getIn(["form", "step"]),
-  errorMessage: state.questions.getIn(["form", "error"]),
-  aws_proposals_bucket: state.proposals.getIn(["aws_proposals_bucket"])
+  confirmPolicy: selector(state, 'confirmPolicy'),
+  activeStep: state.questions.getIn(['form', 'step']),
+  errorMessage: state.questions.getIn(['form', 'error']),
+  aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket'])
 }))(ContactUs)

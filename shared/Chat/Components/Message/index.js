@@ -1,16 +1,14 @@
-import React, { Component } from "react"
-import styled from "styled-components"
-import marked from "marked"
-import { BOT_ID } from "../../Constants/index"
+import React, { Component } from 'react'
+import styled from 'styled-components'
+import marked from 'marked'
+import { BOT_ID } from '../../Constants/index'
 
 const getMarkdown = text => {
   const rawMarkup = marked(text)
   return { __html: rawMarkup }
 }
 
-const renderText = text => (
-  <Text dangerouslySetInnerHTML={getMarkdown(text)} />
-)
+const renderText = text => <Text dangerouslySetInnerHTML={getMarkdown(text)} />
 
 export default class Message extends Component {
   render() {
@@ -83,7 +81,7 @@ const Bubble = styled.div`
 const Text = styled.span`
   a {
     border-bottom: 1px solid;
-    
+
     &:hover {
       border-bottom: 1px solid;
     }
