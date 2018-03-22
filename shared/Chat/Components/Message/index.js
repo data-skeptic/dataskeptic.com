@@ -54,8 +54,6 @@ const Author = styled.img`
 `
 
 const Content = styled.div`
-  padding-left: 15px;
-  flex: 1
 `
 
 const Bubble = styled.div`
