@@ -71,6 +71,8 @@ export const UserDetail = styled.div`
   padding-left: 12px;
   font-size: 14px;
   color: #4a4a4a;
+  align-items: center;
+  display: flex;
 
   a {
     border: none;
