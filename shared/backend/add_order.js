@@ -219,10 +219,13 @@ function add_order(req, res, base_url, stripe_key) {
       email
     ).then(function(resp) {
       res.status(200).end(JSON.stringify(resp))
+    }).catch((err) => {
+      console.error(err)
+      res.status(500).end(JSON.stringify({ status: 'failure', message: err.message }))
     })
   } catch (err) {
     var e = JSON.stringify(err)
-    res.status(500).end(JSON.stringify({ status: 'failure', msg: e }))
+    res.status(500).end(JSON.stringify({ status: 'failure', message: e }))
   }
 }
 
