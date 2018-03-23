@@ -54,9 +54,11 @@ class Feature extends Component {
                 <AuthorLink author={author.author}>
                   {author.prettyname}
                 </AuthorLink>
-                <UserInfo href={`https://twitter.com/${author.twitter}`}>
-                  @{author.twitter}
-                </UserInfo>
+                {author.twitter && (
+                  <UserInfo href={`https://twitter.com/${author.twitter}`}>
+                    @{author.twitter}
+                  </UserInfo>
+                )}
               </UserDetail>
             </UserBox>
           )}
