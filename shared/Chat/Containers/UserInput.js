@@ -37,10 +37,12 @@ export default class UserInput extends Component {
 
     this.clear()
     onSubmit(data)
+    this.focus()
   }
 
   focus() {
     this.ref.focus()
+    this.ref.click()
   }
 
   onFocus = () => {
