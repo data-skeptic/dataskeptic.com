@@ -62,7 +62,10 @@ export function checkout(data, redirect) {
               dispatch(checkoutRequestFailed(successData.msg))
             }
           })
-          .catch((error) => dispatch(checkoutRequestFailed(error.message)))
+          .catch((response) => {
+            const errorMessage = response.data.message
+            dispatch(checkoutRequestFailed(errorMessage))
+          })
       }
     })
   }
