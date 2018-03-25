@@ -263,12 +263,11 @@ app.use(
   })
 )
 
+app.set('trust proxy', 1)
 app.use(
   session({
     name: 'session',
     keys: ['datas', 'member'],
-    // resave: false,
-    // saveUninitialized: false,
 
     // Cookie Options
     maxAge: 24 * 60 * 60 * 1000 // 24 hours
@@ -618,7 +617,7 @@ function renderView(store, renderProps, location) {
  * Please update this key to
  * have latest request response data in the user session
  */
-const CURRENT_IP_REQ_VERSION = 5
+const CURRENT_IP_REQ_VERSION = 6
 const localIPs = ['127.0.0.1', '::1']
 
 function getIpData(ip) {
@@ -627,7 +626,7 @@ function getIpData(ip) {
     ip = ''
   }
 
-  const url = `https://ipinfo.io${ip && `/${ip}`}/json`
+  const url = `http://ipinfo.io${ip && `/${ip}`}/json`
 
   const safe = function(str) {
     if (str == undefined) {
@@ -685,20 +684,22 @@ async function tracking(req, res) {
     ipInfo = null
   }
 
+  req.session.ver = CURRENT_IP_REQ_VERSION
+
   if (!ipInfo) {
     console.log('ipInfo not defined')
     let ipData
     try {
       // wait for ip info request data
-      ipData = await getIpData(ip)
+      ipInfo = ipData = await getIpData(ip)
     } catch (err) {
       ipInfo = undefined
     }
 
     // save to current session if not empty
-    if (!!ipData) {
+    if (ipData) {
       console.log('save to current session if not empty')
-      req.session.ipInfo = ipInfo = ipData
+      req.session.ipInfo = { ...ipData }
     }
   }
 
@@ -778,6 +779,8 @@ const renderPage = async (req, res) => {
       return
     }
   }
+
+
   var redir = redirects_map['redirects_map'][req.url]
   var hostname = req.headers.host
   if (redir != undefined) {
