@@ -106,7 +106,7 @@ function get_jobs_query(q, location) {
   return es_query
 }
 
-export async function getJobs(q, location) {
+async function getJobs(q, location) {
   return new Promise((resolve, reject) => {
     const client = new elasticsearch.Client({
       host: elastic_search_endpoint,
@@ -137,5 +137,7 @@ const extractLocation = req => {
 
 module.exports = {
   getJobs,
-  extractLocation
+  extractLocation,
+  get_jobs_query,
+  format_results
 }

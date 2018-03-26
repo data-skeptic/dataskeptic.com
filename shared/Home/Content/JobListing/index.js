@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { Container, Box } from './style'
 import { click, impression } from '../../../Tracking/Jobs'
-import trackable from "../../../Tracking/hoc/trackable";
+import trackable from '../../../Tracking/hoc/trackable'
 
 const Text = ({ text }) => <span dangerouslySetInnerHTML={{ __html: text }} />
 
@@ -11,7 +11,7 @@ class JobListing extends Component {
   state = {
     viewMore: false
   }
-  
+
   componentWillReceiveProps = async nextProps => {
     if (nextProps.reveal) {
       return this.onReveal(nextProps)
@@ -20,7 +20,7 @@ class JobListing extends Component {
   isJobLoaded = props => {
     return !!this.getJobId(props)
   }
-  onReveal = async (nextProps) => {
+  onReveal = async nextProps => {
     if (!this.isJobLoaded(nextProps)) return
     const jobId = this.getJobId(nextProps)
     this.impression_id = await impression(jobId)
@@ -35,7 +35,7 @@ class JobListing extends Component {
 
     return jobs[0].id
   }
-  
+
   trackApply = id => {
     click(id, this.impression_id)
   }

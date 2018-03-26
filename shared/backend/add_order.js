@@ -1,6 +1,8 @@
 var axios = require('axios')
 
 function create_items_list(stripe, customer, products) {
+  console.log('products')
+  console.log(products)
   var items = []
   for (var product of products) {
     var p = product.product
@@ -14,6 +16,8 @@ function create_items_list(stripe, customer, products) {
     }
     if (p['type'] == 'membership') {
       sku = p['sku']
+      console.log("Going to signup for " + sku)
+      console.log(p)
       stripe.subscriptions.create(
         {
           customer: customer.id,
@@ -23,6 +27,9 @@ function create_items_list(stripe, customer, products) {
           if (err) {
             console.log('subscription error: ' + err)
             return null
+          } else {
+            console.log('subscription')
+            console.log(subscription)
           }
         }
       )
@@ -44,6 +51,8 @@ function create_items_list(stripe, customer, products) {
       items.push(item)
     }
   }
+  console.log('items')
+  console.log(items)
   return items
 }
 
@@ -187,8 +196,6 @@ function do_order(
 
 function add_order(req, res, base_url, stripe_key) {
   console.log('Begin add_order')
-  console.log(base_url)
-  console.log(stripe_key)
   var stripe = require('stripe')(stripe_key)
   var order = req.body
   var email = order['customer']['email']
@@ -219,10 +226,13 @@ function add_order(req, res, base_url, stripe_key) {
       email
     ).then(function(resp) {
       res.status(200).end(JSON.stringify(resp))
+    }).catch((err) => {
+      console.error(err)
+      res.status(500).end(JSON.stringify({ status: 'failure', message: err.message }))
     })
   } catch (err) {
     var e = JSON.stringify(err)
-    res.status(500).end(JSON.stringify({ status: 'failure', msg: e }))
+    res.status(500).end(JSON.stringify({ status: 'failure', message: e }))
   }
 }
 

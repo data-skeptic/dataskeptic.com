@@ -1,5 +1,5 @@
-import React from "react"
-import className from "classnames"
+import React from 'react'
+import className from 'classnames'
 
 export const renderField = ({
   input,
@@ -10,9 +10,9 @@ export const renderField = ({
   placeholder,
   required,
   meta: { touched, error, warning, invalid },
-  fieldWrapperClasses = "",
-  labelWrapperClasses = "",
-  inputWrapperStyles = "",
+  fieldWrapperClasses = '',
+  labelWrapperClasses = '',
+  inputWrapperStyles = '',
   ...rest
 }) => {
   const textareaType = (
@@ -20,7 +20,7 @@ export const renderField = ({
       {...input}
       placeholder={placeholder}
       className={`${inputWrapperStyles} ${
-        touched && invalid ? "has-danger" : ""
+        touched && invalid ? 'has-danger' : ''
       }`}
       {...rest}
     />
@@ -30,15 +30,19 @@ export const renderField = ({
       {...input}
       placeholder={placeholder}
       type={type}
-      className={`${touched && invalid ? "has-danger" : ""}`}
+      className={`${touched && invalid ? 'has-danger' : ''}`}
       {...rest}
     />
   )
 
   const CustomComponent = customComponent
-  const inputComponent = customComponent
-    ? <CustomComponent input={input} {...rest}/>
-    : textarea ? textareaType : inputType
+  const inputComponent = customComponent ? (
+    <CustomComponent input={input} {...rest} />
+  ) : textarea ? (
+    textareaType
+  ) : (
+    inputType
+  )
 
   return (
     <div className={`field-container ${fieldWrapperClasses}`}>

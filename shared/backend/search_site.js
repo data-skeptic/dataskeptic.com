@@ -23,6 +23,7 @@ module.exports = {
           includes: [
             'blog_id',
             'title',
+            'guid',
             'abstract',
             'prettyname',
             'publish_date'
@@ -30,7 +31,6 @@ module.exports = {
         }
       }
     }
-    console.log(es_query)
     client.search(es_query).then(
       function(resp) {
         var hits = resp['hits']['hits']
@@ -38,6 +38,7 @@ module.exports = {
         for (var hit of hits) {
           var blog_id = hit['_id']
           var title = hit['_source']['title']
+          var guid = hit['_source']['guid']
           var prettyname = hit['_source']['prettyname']
           var author = hit['_source']['author']
           var abstract = hit['_source']['abstract']
@@ -48,6 +49,7 @@ module.exports = {
             author,
             abstract,
             prettyname,
+            guid,
             date_created
           }
           results.push(result)

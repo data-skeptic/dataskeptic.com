@@ -1,6 +1,4 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
@@ -56,14 +54,14 @@ class ContactUs extends React.Component {
   recorderError = error => {
     this.props.dispatch(fail(error))
   }
+  reset = () => {
+    this.setState({ submittedUrl: '' })
+    this.props.dispatch(reset(`question`))
+  }
   questionSubmit = data => {
     data.recording = this.state.submittedUrl
     data.type = RECORDING
     this.props.dispatch(submitCommentForm(data))
-  }
-  reset = () => {
-    this.setState({ submittedUrl: '' })
-    this.props.dispatch(reset(`question`))
   }
   subscribeSlack = e => {
     e.preventDefault()
@@ -145,24 +143,44 @@ class ContactUs extends React.Component {
 
         <Socials>
           <SocialBlock order={1}>
+            <SocialIcon
+              src={
+                'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/twitter-square+-+FontAwesome.svg'
+              }
+            />
             <p>
               You can find us on Twitter via{' '}
-              <TwitterLink href="https://twitter.com/dataskeptic">
+              <TwitterLink
+                href="https://twitter.com/dataskeptic"
+                className="no-line"
+              >
                 @DataSkeptic
               </TwitterLink>
             </p>
           </SocialBlock>
           <SocialBlock order={3}>
+            <SocialIcon
+              src={
+                'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/facebook-square+-+FontAwesome.svg'
+              }
+            />
             <p>
               We are on Facebook via{' '}
-              <FacebookLink href="https://www.facebook.com/dataskeptic">
+              <FacebookLink
+                href="https://www.facebook.com/dataskeptic"
+                className="no-line"
+              >
                 https://www.facebook.com/dataskeptic
               </FacebookLink>
             </p>
           </SocialBlock>
           <SocialBlock order={2}>
             <SocialForm onSubmit={this.subscribeSlack}>
-              <SocialIcon src={'/img/png/contacts_slack.png'} />
+              <SocialIcon
+                src={
+                  'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/logo-slack.svg'
+                }
+              />
               <input name="email" id="email" />
               <button
                 type="submit"
@@ -175,6 +193,11 @@ class ContactUs extends React.Component {
             </SocialForm>
           </SocialBlock>
           <SocialBlock order={4}>
+            <SocialIcon
+              src={
+                'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/mail_outline+-+material+copy.svg'
+              }
+            />
             <SocialForm
               action="//dataskeptic.us9.list-manage.com/subscribe/post?u=65e63d6f84f1d87759105d133&amp;id=dc60d554db"
               method="post"
@@ -315,14 +338,6 @@ class ContactUs extends React.Component {
   }
 }
 
-/*
-				    <SectionBlock title="For PR Firms" open={this.isSectionOpen('pr')} onToggle={() => this.toggleSection('pr')}>
-					    <Text>pr</Text>
-
-					    <ContactFormContainer type/>
-						</SectionBlock>
-*/
-
 const SocialBlock = ({ left, children, order }) => (
   <Social order={order}>{children}</Social>
 )
@@ -378,7 +393,7 @@ const Social = styled.div`
 const SocialIcon = styled.img`
   width: 32px;
   height: 32px;
-  margin-right: 7px;
+  margin-right: 17px;
 `
 
 const Sections = styled.div`
@@ -404,7 +419,7 @@ const Sections = styled.div`
 const ListenerArea = styled.div``
 
 const SocialForm = styled.form`
-	width: 100%;
+  flex: 1;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;

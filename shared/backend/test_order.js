@@ -43,7 +43,7 @@ stripe.tokens.create({ card: cardData }, (status, response) => {
     country: country,
     postal_code: customer.zip
   }
-
+/*
   var product = {
     quantity: 1,
     product: {
@@ -57,6 +57,22 @@ stripe.tokens.create({ card: cardData }, (status, response) => {
       type: 'test'
     }
   }
+*/
+  var product = {
+    quantity: 1,
+    product: { 
+      active: 1,
+      desc: 'Help support Data Skeptic for $1 per episode.',
+      id: 1,
+      img: '/img/jpg/membership.jpg',
+      price: 4,
+      sku: 'sku_2',
+      title: 'Basic membership',
+      type: 'membership',
+      paypal: 'N7J6MNYYY79VU'
+    }
+  }
+
   var products = [product]
 
   add_order

@@ -80,11 +80,31 @@ export const ViewMore = styled(Link)`
   }
 `
 
+export const Authors = styled.div`
+  flex-direction: row;
+  display: flex;
+  flex-wrap: wrap;
+
+  > a {
+    flex-basis: 40%;
+    padding-top: 16px;
+    margin-right: 10%;
+  }
+
+  @media (max-width: 414px) {
+    flex-direction: column;
+
+    > a {
+      flex-basis: 100%;
+      margin-right: 0px;
+    }
+  }
+`
+
 export const Author = styled.div`
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  padding-top: 16px;
 `
 
 export const Avatar = styled.img`
@@ -94,9 +114,18 @@ export const Avatar = styled.img`
 
   padding: 4px;
   background-color: #ffffff;
-  border: 1px solid #dddddd;
+  border: 1px solid #dddddd !important;
 `
 
-export const Name = styled.div`
+export const Details = styled.div`
+  display: flex;
+  flex-direction: column;
   padding-left: 12px;
+`
+
+export const Name = styled.span``
+
+export const Contribution = styled.span`
+  font-size: 90%;
+  color: #7d8080;
 `

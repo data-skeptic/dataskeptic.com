@@ -1,43 +1,70 @@
 import React from 'react'
-import className from 'classnames'
 import { reduxForm } from 'redux-form'
 import { Field } from 'redux-form'
+import _ from 'lodash'
 
 import { FormController } from '../../Forms/Components'
 import { renderCheckbox } from '../../Forms/Components/Field'
 import { renderField } from '../../Forms/Components/Field/Field'
+import DragAndDropFileUploadField from '../../Forms/Components/DragAndDropFileUploadField'
 
 export const KEY = 'uploadResume'
 export const RESUME_FIELD = 'resume'
 export const NOTIFY_FIELD = 'notify'
+export const SUBSCRIBE_FIELD = 'subscribe'
+
+const isEmailValid = email =>
+  /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)
 
 const validate = values => {
   const errors = {}
 
-  if (values.emails && values.emails.length > 0) {
-    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+  if (values[NOTIFY_FIELD]) {
+    if (_.isEmpty(values.email)) {
+      errors.email = 'Email field is required'
+    } else if (!isEmailValid(values.email)) {
       errors.email = 'Invalid email address'
     }
   }
 
+  if (_.isEmpty(values.resume)) {
+    errors.resume = 'Please upload resume'
+  }
+
   return errors
+}
+
+const initialValues = {
+  [NOTIFY_FIELD]: true,
+  [SUBSCRIBE_FIELD]: true
 }
 
 const Form = ({
   handleSubmit,
   children,
   customError,
-  showEmail
+  showEmail,
+  bucket,
+  customSubmitting
 }) => (
   <FormController
     name="contacts"
     handleSubmit={handleSubmit}
-    submitValue={<span>Submit</span>}
+    submitValue={customSubmitting ? 'Uploading...' : 'Submit'}
     showSubmit={true}
     customError={customError}
     btnWrapperClasses={'submit-wrapper'}
+    customSubmitting={customSubmitting}
   >
-    {children}
+    <Field
+      label={`If you're concerned about privacy, feel free to remove your contact information from PDF you upload.`}
+      component={renderField}
+      customComponent={DragAndDropFileUploadField}
+      name={RESUME_FIELD}
+      accept="application/pdf"
+      bucket={bucket}
+      saveOrigin={true}
+    />
 
     <Field
       label="Notify me when there's news about this project"
@@ -53,15 +80,23 @@ const Form = ({
         label="Email"
         name="email"
         type="text"
-        placeholder="john@site.com"
+        placeholder="listener@dataskeptic.com"
       />
     )}
+
+    <Field
+      label="Please send me periodic curated career development information and good job matches (opt-out anytime)"
+      component={renderCheckbox}
+      name={SUBSCRIBE_FIELD}
+      type="checkbox"
+    />
   </FormController>
 )
 
 const UploadResume = reduxForm({
   form: KEY,
-  validate
+  validate,
+  initialValues
 })(Form)
 
 export default UploadResume
