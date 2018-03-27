@@ -1,16 +1,16 @@
 const express = require('express')
+const axios = require('axios')
 const jobs_util = require('./jobs_util')
 
 const c = require('../../../config/config.json')
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 const base_api = c[env]['base_api'] + env
 
-const addJob = (job) => {
-  const url =`${base_api}/careers/jobs/add`
+const addJob = data => {
+  const url = `${base_api}/careers/jobs/add`
   console.log(url)
-  
-  return axios.post(url)
-    .then((res) =>res.data )
+
+  return axios.post(url, data).then(res => res.data)
 }
 
 module.exports = cache => {
@@ -25,12 +25,21 @@ module.exports = cache => {
       .then(results => res.send(results))
       .catch(err => res.status(500).send(err.message))
   })
-  
+
   router.post('/', (req, res) => {
     const data = req.body
-
+    
     addJob(data)
-      .then(result => res.send(result))
+      .then(result => {
+        if (result.error) {
+          console.error(result)
+          res.status(500).send({
+            error: result.error
+          })
+        }
+        
+        return res.send(result)
+      })
       .catch(err => res.status(500).send(err.message))
   })
 

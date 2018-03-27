@@ -14,7 +14,7 @@ const urlRegex = new RegExp(
   /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi
 )
 
-const urlFields = ['company_url', 'company_logo', 'url']
+const urlFields = ['company_url', 'company_logo', 'job_url']
 
 const validate = values => {
   let errors = {}
@@ -33,8 +33,16 @@ const validate = values => {
     errors['title'] = 'Title must be less than 32 characters.'
   }
 
-  if (!values['created_at']) {
-    errors['created_at'] = 'Cannot be empty.'
+  if (!values['job_url']) {
+    errors['job_url'] = 'Cannot be empty.'
+  }
+
+  if (!values['description']) {
+    errors['description'] = 'Cannot be empty.'
+  }
+
+  if (!values['go_live_date']) {
+    errors['go_live_date'] = 'Cannot be empty.'
   }
 
   if (!values['location']) {
@@ -79,7 +87,9 @@ const QuestionForm = ({
   complete,
   submittedUrl,
   error,
-  showSubmit
+  showSubmit,
+  customError,
+  customSuccess
 }) => (
   <FormController
     name={`addJob`}
@@ -87,6 +97,8 @@ const QuestionForm = ({
     invalid={!allowSubmit}
     submitValue={`Submit`}
     handleSubmit={handleSubmit}
+    customError={customError}
+    customSuccess={customSuccess}
   >
     <Field
       label="Job Title"

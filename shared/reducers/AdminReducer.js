@@ -67,7 +67,12 @@ const init = {
     spError: ''
   },
   isAdmin: false,
-  loggedInAdmin: {}
+  loggedInAdmin: {},
+  jobs: {
+    processing: false,
+    success: false,
+    error: null
+  }
 }
 
 const defaultState = Immutable.fromJS(init)
@@ -332,10 +337,19 @@ export default function adminReducer(state = defaultState, action) {
       break
     
     case ADD_JOB:
+      nstate.jobs.processing = true
+      nstate.jobs.success = false
+      nstate.jobs.error = null
       break
     case ADD_JOB_SUCCESS:
+      nstate.jobs.processing = false
+      nstate.jobs.success = true
+      nstate.jobs.error = null
       break
     case ADD_JOB_FAIL:
+      nstate.jobs.processing = false
+      nstate.jobs.success = false
+      nstate.jobs.error = action.payload.error
       break
   }
   return Immutable.fromJS(nstate)
@@ -346,16 +360,16 @@ export const addJob = (job) => {
   return dispatch => {
     dispatch(addJobRequest(job))
 
-    Request.get(`/api/v1/jobs`)
+    Request.post(`/api/v1/jobs`, job)
       .then(result => dispatch(addJobSuccess(result.data)))
-      .catch(err => dispatch(addJobFail(err)))
+      .catch(err => dispatch(addJobFail(err.data.error)))
   }
 }
 
-export const addJobRequest = city => ({
+export const addJobRequest = job => ({
   type: ADD_JOB,
   payload: {
-    city
+    ...job
   }
 })
 
