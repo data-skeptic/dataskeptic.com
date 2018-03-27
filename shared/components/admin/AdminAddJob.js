@@ -8,19 +8,8 @@ import moment from 'moment/moment'
 
 class AdminAddJob extends Component {
   state = {
-    // initialValues: {
-    //   go_live_date: moment().format('YYYY-MM-DD')
-    // },
     initialValues: {
-      go_live_date: '2018-03-27',
-      company_logo: 'https://www.facebook.com/events/calendar/',
-      company_url: 'http://facebook.com',
-      type: 'full_time',
-      location: '12312',
-      job_url: 'https://www.facebook.com/events/calendar/',
-      title: '123',
-      company: 'http://facebook.com',
-      description: 'description'
+      go_live_date: moment().format('YYYY-MM-DD')
     }
   }
 
