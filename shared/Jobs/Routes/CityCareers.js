@@ -51,11 +51,6 @@ class CityCareers extends Component {
     const { loading, loaded, error, submitted, submitting, notify } = this.props
     let { jobs, events, blogs } = this.props
 
-    events = events
-      .concat(events)
-      .concat(events)
-      .concat(events)
-    
     return (
       <Container className="careers_city_page">
         <Layout>
@@ -148,12 +143,15 @@ const Row = styled.div`
 
   ${EventsWrapper} {
     margin: 10px;
-    flex-basis: 60%;
+    
+    width: 50%;
+    flex-basis: 50%;
   }
 `
 
 const Resume = styled.div`
-  flex-basis: 40%;
+  flex-basis: 48%;
+  width: 48%;
   margin: 10px;
 `
 
