@@ -8,9 +8,7 @@ import htmlToDraft from 'html-to-draftjs'
 
 export default class RichTextarea extends Component {
   state = {
-    editorState: EditorState.createWithContent(
-      ContentState.createFromBlockArray(htmlToDraft(this.props.input.value))
-    ),
+    editorState: EditorState.createEmpty(),
     value: this.props.input.value
   }
   onChange = editorState => {
@@ -26,6 +24,16 @@ export default class RichTextarea extends Component {
     })
   }
 
+  componentDidMount() {
+    const { input: {value }} = this.props
+
+    const editorState = EditorState.createWithContent(
+      ContentState.createFromBlockArray(htmlToDraft(value))
+    )
+
+    this.setState({ value, editorState })
+  }
+
   componentWillReceiveProps(nextProps) {
     if (this.props.input.value !== nextProps.input.value) {
       const editorState = EditorState.createWithContent(
@@ -39,7 +47,7 @@ export default class RichTextarea extends Component {
   render() {
     const { editorState } = this.state
     return (
-      <Wrapper>
+      <Wrapper suppressContentEditableWarning={true}>
         <Editor
           editorState={editorState}
           toolbarClassName="toolbarClassName"

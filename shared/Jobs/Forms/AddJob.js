@@ -1,6 +1,6 @@
 import React from 'react'
+import moment from 'moment'
 import { Field, reduxForm } from 'redux-form'
-import styled from 'styled-components'
 import FormController from '../../Forms/Components/FormController/FormController'
 import {
   renderField,
@@ -160,9 +160,5 @@ const QuestionForm = ({
 
 export default reduxForm({
   form: 'addJob',
-  validate,
-  initialValues: {
-    go_live_date: new Date(),
-    description: "<p>123123123</p>\n<p>123123</p>\n<p></p>\n<p>12313123</p>\n"
-  }
+  validate
 })(QuestionForm)

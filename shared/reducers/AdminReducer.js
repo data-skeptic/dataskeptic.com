@@ -4,6 +4,7 @@ import querystring from 'querystring'
 import axios from 'axios'
 import snserror from '../SnsUtil'
 import PrintfulClient from '../printful/printfulclient'
+import Request from "../Request";
 
 var env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
@@ -12,6 +13,10 @@ const config = require('../../config/config.json')
 var printful_key = config[env]['printful']['api']
 
 var base_url = 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/' + env
+
+export const ADD_JOB = 'ADD_JOB'
+export const ADD_JOB_SUCCESS = 'ADD_JOB_SUCCESS'
+export const ADD_JOB_FAIL = 'ADD_JOB_FAIL'
 
 const init = {
   email_send_msg: '',
@@ -325,6 +330,41 @@ export default function adminReducer(state = defaultState, action) {
           snserror('RELATED_CONTENT_DELETE', errorMsg)
         })
       break
+    
+    case ADD_JOB:
+      break
+    case ADD_JOB_SUCCESS:
+      break
+    case ADD_JOB_FAIL:
+      break
   }
   return Immutable.fromJS(nstate)
 }
+
+
+export const addJob = (job) => {
+  return dispatch => {
+    dispatch(addJobRequest(job))
+
+    Request.get(`/api/v1/jobs`)
+      .then(result => dispatch(addJobSuccess(result.data)))
+      .catch(err => dispatch(addJobFail(err)))
+  }
+}
+
+export const addJobRequest = city => ({
+  type: ADD_JOB,
+  payload: {
+    city
+  }
+})
+
+export const addJobSuccess = result => ({
+  type: ADD_JOB_SUCCESS,
+  payload: { result }
+})
+
+export const addJobFail = error => ({
+  type: ADD_JOB_FAIL,
+  payload: { error }
+})
