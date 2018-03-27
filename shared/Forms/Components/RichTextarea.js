@@ -11,27 +11,31 @@ export default class RichTextarea extends Component {
     editorState: EditorState.createEmpty(),
     value: this.props.input.value
   }
+
   onChange = editorState => {
-    this.setState({ editorState }, this.updateVal)
-  }
-  updateVal = () => {
-    const value = draftToHtml(
-      convertToRaw(this.state.editorState.getCurrentContent())
-    )
+    this.setState({ editorState })
+
+    const value = draftToHtml(convertToRaw(editorState.getCurrentContent()))
 
     this.setState({
       value
     })
   }
 
+  onBlur = () => {
+    let { value, editorState } = this.state
+    value = editorState.getCurrentContent().hasText() ? value : null
+    this.props.input.onChange(value)
+  }
+
   componentDidMount() {
-    const { input: {value }} = this.props
+    const { input: { value } } = this.props
 
     const editorState = EditorState.createWithContent(
       ContentState.createFromBlockArray(htmlToDraft(value))
     )
 
-    this.setState({ value, editorState })
+    this.setState({ value, editorState }, this.updateVal)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -40,7 +44,10 @@ export default class RichTextarea extends Component {
         ContentState.createFromBlockArray(htmlToDraft(nextProps.input.value))
       )
 
-      this.setState({ value: nextProps.input.value, editorState })
+      this.setState(
+        { value: nextProps.input.value, editorState },
+        this.updateVal
+      )
     }
   }
 
@@ -54,6 +61,7 @@ export default class RichTextarea extends Component {
           wrapperClassName="wrapperClassName"
           editorClassName="richEditor"
           onEditorStateChange={this.onChange}
+          onBlur={this.onBlur}
         />
       </Wrapper>
     )

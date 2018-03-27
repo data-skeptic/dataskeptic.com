@@ -67,6 +67,8 @@ const validate = values => {
     errors['company_logo_url'] = 'Cannot be empty.'
   }
 
+  
+  console.log(values)
   return errors
 }
 
