@@ -1,11 +1,14 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
+import styled from 'styled-components'
 import FormController from '../../Forms/Components/FormController/FormController'
 import {
   renderField,
   renderSelect,
   renderZip
 } from '../../Forms/Components/Field'
+
+import RichTextarea from '../../Forms/Components/RichTextarea'
 
 const urlRegex = new RegExp(
   /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi
@@ -26,6 +29,8 @@ const validate = values => {
 
   if (!values['title']) {
     errors['title'] = 'Cannot be empty.'
+  } else if (values['title'].length >= 32) {
+    errors['title'] = 'Title must be less than 32 characters.'
   }
 
   if (!values['created_at']) {
@@ -42,6 +47,8 @@ const validate = values => {
 
   if (!values['company']) {
     errors['company'] = 'Cannot be empty.'
+  } else if (values['company'].length >= 32) {
+    errors['company'] = 'Company must be less than 32 characters.'
   }
 
   if (!values['company_url']) {
@@ -82,7 +89,7 @@ const QuestionForm = ({
     handleSubmit={handleSubmit}
   >
     <Field
-      label="Title"
+      label="Job Title"
       component={renderField}
       name="title"
       type="text"
@@ -90,9 +97,24 @@ const QuestionForm = ({
     />
 
     <Field
-      label="Created At"
+      label="Company"
       component={renderField}
-      name="created_at"
+      name="company"
+      type="text"
+      required
+    />
+
+    <Field
+      label="'Apply now' link"
+      component={renderField}
+      name="job_url"
+      type="url"
+    />
+
+    <Field
+      label="Date to go live"
+      component={renderField}
+      name="go_live_date"
       type="date"
       required
     />
@@ -113,14 +135,6 @@ const QuestionForm = ({
     />
 
     <Field
-      label="Company"
-      component={renderField}
-      name="company"
-      type="text"
-      required
-    />
-
-    <Field
       label="Company Url"
       component={renderField}
       name="company_url"
@@ -135,11 +149,20 @@ const QuestionForm = ({
       type="url"
     />
 
-    <Field label="Url" component={renderField} name="url" type="url" />
+    <Field
+      label="Description"
+      component={renderField}
+      customComponent={RichTextarea}
+      name="description"
+    />
   </FormController>
 )
 
 export default reduxForm({
   form: 'addJob',
-  validate
+  validate,
+  initialValues: {
+    go_live_date: new Date(),
+    description: "<p>123123123</p>\n<p>123123</p>\n<p></p>\n<p>12313123</p>\n"
+  }
 })(QuestionForm)
