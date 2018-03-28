@@ -17,7 +17,7 @@ class TagUsers extends Component {
     selectedUser: null
   }
 
-  selectUser = user => this.dispatch(selectTagsUser(user))
+  selectUser = user => this.props.dispatch(selectTagsUser(user))
 
   render() {
     const { selectedUser } = this.props
@@ -28,8 +28,9 @@ class TagUsers extends Component {
           <UsersSearch onChange={this.selectUser} />
         </Box>
 
-        <Box title={selectedUser ? 'User tags' : 'Select user'}>
-          user tags form
+        <Box title={selectedUser ? 'User tags' : 'Please, select user'}>
+          <code>{JSON.stringify(selectedUser)}</code>
+          {selectedUser && <TagsSelect email={selectedUser} />}
         </Box>
       </Container>
     )
@@ -41,7 +42,13 @@ export default connect(state => ({
 }))(TagUsers)
 
 const Container = styled.section``
-const Heading = styled.h3``
-const BoxWrapper = styled.div``
+
+const Heading = styled.h4``
+
+const BoxWrapper = styled.div`
+  margin-top: 2em;
+`
+
 const BoxTitle = styled.div``
+
 const BoxContent = styled.div``

@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import ClearableInput from '../../../Forms/Common/ClearableInput'
 
 export default class UsersSearch extends Component {
   state = {
-    value: null,
     error: null
   }
 
@@ -11,21 +11,21 @@ export default class UsersSearch extends Component {
     onChange: () => {}
   }
 
-  setValue = value => this.setState({ value })
   setError = error => this.setState({ error })
 
   validate = val => {
-    const valid = !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val)
+    const valid = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val)
+
     if (!valid) {
       this.setError('Invalid email format')
+    } else {
+      this.setError(null)
     }
+
     return valid
   }
 
-  change = e => {
-    const value = e.target.value
-    this.setValue(value)
-
+  onChange = value => {
     if (this.validate(value)) {
       this.props.onChange(value)
     }
@@ -36,7 +36,11 @@ export default class UsersSearch extends Component {
 
     return (
       <Wrapper>
-        <Input onChange={this.change} error={error} />
+        <ClearableInput
+          onChange={this.onChange}
+          immediate={true}
+          error={error}
+        />
         {error && <Error>{error}</Error>}
       </Wrapper>
     )
@@ -44,7 +48,7 @@ export default class UsersSearch extends Component {
 }
 
 const Wrapper = styled.div``
-const Input = styled.input``
+
 const Error = styled.div`
-  color: red;
+  color: indianred;
 `
