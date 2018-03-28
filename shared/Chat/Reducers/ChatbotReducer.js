@@ -29,11 +29,6 @@ var env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 const config = require('../../../config/config.json')
 var base_url = config[env]['base_api'] + env + '/'
 
-//?var url = c['api']
-//?var url2 = c['api2'] + c['env'] + '/'
-//var url = "http://0.0.0.0:3500/"
-//var url2 = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/dev/"
-
 let start_survey = function() {
   return new Promise(function(resolve, reject) {
     var u = base_url + 'bot/survey/response/start'
@@ -274,3 +269,14 @@ export default function ChatbotReducer(state = defaultState, action) {
   }
   return Immutable.fromJS(nstate)
 }
+
+export const loggMessage = (message) => {
+  axios.post('/api/v1/chat/log', message)
+    .then(() => {})
+    .then((err) => console.error(err))
+  
+  return ({
+    type: 'LOG_MESSAGE',
+    payload: message
+  })
+} 

@@ -19,11 +19,12 @@ module.exports = cache => {
   router.use('/track', require('./track')(cache))
   router.use('/download', require('./download')(cache))
   router.use('/files', require('./files')(cache))
+  router.use('/chat', require('./chat')(cache))
 
   // lets map to the start of url request
   router.use('/tse', require('./tse')(cache))
   router.use('/jobs', require('./jobs')(cache))
-  router.use('/career', require('./career')(cache))
+  router.use('/careers', require('./careers')(cache))
 
   return router
 }

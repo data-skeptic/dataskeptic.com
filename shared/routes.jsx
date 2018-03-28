@@ -20,6 +20,7 @@ import Coaching2 from 'components/Coaching2'
 import CoachingBiWeekly from 'components/CoachingBiWeekly'
 import ContactUs from 'Contacts/Routes/ContactUs'
 import Careers from 'Jobs/Routes/Careers'
+import CityCareers from 'Jobs/Routes/CityCareers'
 import DontHackMe from 'components/DontHackMe'
 import Explorer from 'TimeSeriesExplorer/Components/Explorer'
 import Home from 'components/Home'
@@ -140,6 +141,11 @@ export default (
     <Route path="/contact-us" component={App} onEnter={loadData}>
       <IndexRoute component={ContactUs} />
     </Route>
+
+    <Route path="/careers/city/:id" component={App} onEnter={loadData}>
+      <IndexRoute component={CityCareers} />
+    </Route>
+
     <Route path="/careers" component={App} onEnter={loadData}>
       <IndexRoute component={Careers} />
     </Route>
@@ -223,9 +229,11 @@ export default (
     <Route path="/drip-result" showAds={true} component={App}>
       <IndexRoute component={DripThankYou} />
     </Route>
+
     <Route path="/drip-unsubscribe" showAds={true} component={App}>
       <IndexRoute component={DripUnsubscribe} />
     </Route>
+
     <Route path="/analytics" component={App}>
       <IndexRoute component={Analytics} />
     </Route>

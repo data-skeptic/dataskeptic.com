@@ -55,6 +55,7 @@ export const BlogViewMore = ViewMore.extend`
 export const UserBox = styled.div`
   padding-top: 16px;
   display: flex;
+  align-items: center;
 `
 
 export const UserImg = styled.img`
@@ -69,7 +70,6 @@ export const UserImg = styled.img`
 
 export const UserDetail = styled.div`
   padding-left: 12px;
-  font-size: 14px;
   color: #4a4a4a;
 
   a {
@@ -78,8 +78,6 @@ export const UserDetail = styled.div`
       border: none;
     }
   }
-
-  padding-top: 8px;
 `
 
 export const UserInfo = styled.a`

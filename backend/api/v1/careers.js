@@ -20,12 +20,16 @@ const registerUser = ({ email }) => {
   return axios.post(base_api + '/drip/user/add', data).then(res => res.data)
 }
 
+const getCityData = cityId => {
+  const url = base_api + `/careers/home?location=${cityId}`
+  return axios.get(url).then(res => res.data)
+}
+
 const commitResume = ({ email, resume, Bucket }) => {
   const subpath = env === 'dev' ? 'dev' : 'career_page1'
   const ObjectPath = resume.replace('https://s3.amazonaws.com/', '')
   const Key = ObjectPath.replace(Bucket + '/', '')
   let nextKey = `resumes/${subpath}/${moment().format('YYYY-MM')}/`
-
   if (email) {
     nextKey += email + '_'
   }
@@ -97,6 +101,14 @@ module.exports = cache => {
         res.redirect('/drip-unsubscribe')
       })
       .catch(error => res.send({ success: false, error: error.message }))
+  })
+
+  router.get('/city/:cityId', (req, res) => {
+    const { cityId } = req.params
+
+    return getCityData(cityId)
+      .then(data => res.send(data))
+      .then(error => res.status(404).send({ error }))
   })
 
   return router

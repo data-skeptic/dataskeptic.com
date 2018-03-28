@@ -123,12 +123,13 @@ const Chat = styled.div`
     left: 0px;
     right: 0px;
     bottom: 0px;
-    height: 100%;
+    height: calc(100% - 80px);
     width: 100%;
     border-radius: 0px;
     z-index: 4;
     box-shadow: none;
     min-height: auto;
+    max-height: none;
   }
 
   ${props =>
