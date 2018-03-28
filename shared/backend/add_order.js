@@ -1,8 +1,6 @@
 var axios = require('axios')
 
 function create_items_list(stripe, customer, products) {
-  console.log('products')
-  console.log(products)
   var items = []
   for (var product of products) {
     var p = product.product
@@ -14,26 +12,7 @@ function create_items_list(stripe, customer, products) {
         sku = sku + '_' + size
       }
     }
-    if (p['type'] == 'membership') {
-      sku = p['sku']
-      console.log("Going to signup for " + sku)
-      console.log(p)
-      stripe.subscriptions.create(
-        {
-          customer: customer.id,
-          items: [{ plan: sku }]
-        },
-        function(err, subscription) {
-          if (err) {
-            console.log('subscription error: ' + err)
-            return null
-          } else {
-            console.log('subscription')
-            console.log(subscription)
-          }
-        }
-      )
-    } else {
+    if (p['type'] != 'membership') {
       var item = {
         amount: p['price'],
         currency: 'usd',
@@ -51,8 +30,6 @@ function create_items_list(stripe, customer, products) {
       items.push(item)
     }
   }
-  console.log('items')
-  console.log(items)
   return items
 }
 
@@ -64,16 +41,65 @@ function create_stripe_customer(stripe, email, token) {
   })
 }
 
+function do_subscriptions(stripe, customer, products) {
+  for (var product of products) {
+    var p = product.product
+    if (p['type'] == 'membership') {
+      var sku = p['sku']
+      console.log("Going to signup for " + sku)
+      return new Promise(function (resolve, reject) {
+        stripe.subscriptions.create({
+          customer: customer.id,
+          items: [{ plan: sku }]
+        },
+        function(err, subscription) {
+          if (err) {
+            var msg = 'subscription error: ' + err
+            console.log(msg)
+            reject(msg)
+          } else {
+            resolve(subscription)
+          }
+        })        
+      })
+    }
+  }
+  return undefined
+}
+
 function create_stripe_order(stripe, customer, products, name, address, email) {
+  var promises = []
+  var subscribe_promise = do_subscriptions(stripe, customer,products)
+  if (subscribe_promise != undefined) {
+    promises.push(subscribe_promise)
+  }
   var items = create_items_list(stripe, customer, products)
-  return stripe.orders.create({
-    currency: 'usd',
-    items: items,
-    shipping: {
-      name,
-      address
-    },
-    email
+  if (items.length > 0) {
+    var product_promise = new Promise(function (resolve, reject) {
+      stripe.orders.create({
+        currency: 'usd',
+        items: items,
+        shipping: {
+          name,
+          address
+        },
+        email
+      }, function(err, order) {
+        if (err) {
+          var msg = 'order error: ' + err
+          console.log(msg)
+          reject(msg)
+        } else {
+          resolve(order)
+        }
+      })      
+    })
+    promises.push(product_promise)
+  }
+  return Promise.all(promises).then(function(data) {
+    console.log('===Promise.all===')
+    console.log(data)
+    return data
   })
 }
 
@@ -141,14 +167,21 @@ function do_order(
         address,
         email
       ).then(function(sorder) {
-        console.log('Created Stripe Order: ' + sorder['id'])
+        //console.log('Created Stripe Order: ' + JSON.stringify(sorder))
         sorder['customer_id'] = customer_id
-        return sorder
+        return {customer, sorder}
       })
     })
     .then(function(resp) {
-      var stripe_order_id = resp.id
-      var customer_id = resp.customer_id
+      var customer = resp['customer']
+      var sorder = resp['sorder']
+      var stripe_order_id = ""
+      for (var so of sorder) {
+        if (so['object'] != 'subscription') {
+          stripe_order_id = so['id']
+        }
+      }
+      var customer_id = customer.id
       return { stripe_order_id, customer_id }
     })
     .then(function(resp) {
@@ -168,9 +201,15 @@ function do_order(
     })
     .then(function(db_result) {
       console.log('Finalizing order')
+      console.log(db_result)
       var customer_id = db_result.customer_id
       var stripe_order_id = db_result.stripe_order_id
-      return finalize_order_with_stripe(stripe, stripe_order_id, customer_id)
+      if (stripe_order_id == "") {
+        // Subscription only, and it's already handled
+        return db_result
+      } else {
+        return finalize_order_with_stripe(stripe, stripe_order_id, customer_id)
+      }
     })
     .then(function(final_result) {
       console.log('Finishing up')

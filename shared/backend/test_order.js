@@ -43,9 +43,9 @@ stripe.tokens.create({ card: cardData }, (status, response) => {
     country: country,
     postal_code: customer.zip
   }
-/*
-  var product = {
-    quantity: 1,
+
+  var product2 = {
+    quantity: 2,
     product: {
       active: 1,
       desc: 'A testing product.',
@@ -57,7 +57,7 @@ stripe.tokens.create({ card: cardData }, (status, response) => {
       type: 'test'
     }
   }
-*/
+
   var product = {
     quantity: 1,
     product: { 
@@ -73,7 +73,8 @@ stripe.tokens.create({ card: cardData }, (status, response) => {
     }
   }
 
-  var products = [product]
+  var products = [product, product2]
+  //var products = [product2]
 
   add_order
     .do_order(
