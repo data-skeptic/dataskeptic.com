@@ -18,6 +18,8 @@ export const ADD_JOB = 'ADD_JOB'
 export const ADD_JOB_SUCCESS = 'ADD_JOB_SUCCESS'
 export const ADD_JOB_FAIL = 'ADD_JOB_FAIL'
 
+export const SELECT_TAGS_USER = 'SELECT_TAGS_USER'
+
 const init = {
   email_send_msg: '',
   pending_blogs: [],
@@ -351,6 +353,10 @@ export default function adminReducer(state = defaultState, action) {
       nstate.jobs.success = false
       nstate.jobs.error = action.payload.error
       break
+    
+    case SELECT_TAGS_USER:
+      nstate.tags.user = action.payload.user
+      break;
   }
   return Immutable.fromJS(nstate)
 }
@@ -381,4 +387,9 @@ export const addJobSuccess = result => ({
 export const addJobFail = error => ({
   type: ADD_JOB_FAIL,
   payload: { error }
+})
+
+export const selectTagsUser = user => ({
+  type: SELECT_TAGS_USER,
+  payload: { user }
 })
