@@ -33,7 +33,7 @@ stripe.tokens.create({ card: cardData }, (status, response) => {
     phone: '312-1791-0752'
   }
   var country = 'us'
-  var shipping = 1
+  var shipping = 0
   var name = customer['first_name'] + ' ' + customer['last_name']
   var address = {
     line1: customer.street_1,
@@ -45,16 +45,16 @@ stripe.tokens.create({ card: cardData }, (status, response) => {
   }
 
   var product2 = {
-    quantity: 2,
+    quantity: 1,
     product: {
       active: 1,
-      desc: 'A testing product.',
+      desc: 'Job Ad',
       id: 24,
       img: '',
-      price: 2.0,
-      sku: 'sku_4',
-      title: 'Testing',
-      type: 'test'
+      price: 199.0,
+      sku: 'sku_CZcnKMfDnPoSIw',
+      title: 'Job Ad',
+      type: 'ad'
     }
   }
 
@@ -73,8 +73,8 @@ stripe.tokens.create({ card: cardData }, (status, response) => {
     }
   }
 
-  var products = [product, product2]
-  //var products = [product2]
+  //var products = [product, product2]
+  var products = [product2]
 
   add_order
     .do_order(

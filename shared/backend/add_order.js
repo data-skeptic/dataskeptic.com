@@ -145,16 +145,6 @@ function do_order(
   for (var product of products) {
     total += product.product['price'] * (product.product['quantity'] || 1)
   }
-  var product = {
-    quantity: 1,
-    product: {
-      amount: shipping,
-      currency: 'usd',
-      sku: 'shipping',
-      description: 'shipping',
-      type: 'shipping'
-    }
-  }
   return create_stripe_customer(stripe, email, token)
     .then(function(customer) {
       var customer_id = customer.id
@@ -167,7 +157,7 @@ function do_order(
         address,
         email
       ).then(function(sorder) {
-        //console.log('Created Stripe Order: ' + JSON.stringify(sorder))
+        console.log('Created Stripe Order: ' + JSON.stringify(sorder))
         sorder['customer_id'] = customer_id
         return {customer, sorder}
       })
