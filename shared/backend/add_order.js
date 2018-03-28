@@ -1,5 +1,7 @@
 var axios = require('axios')
 
+// Remember that shipping happens as a callback thing handled in store_utils.js
+
 function create_items_list(stripe, customer, products) {
   var items = []
   for (var product of products) {
