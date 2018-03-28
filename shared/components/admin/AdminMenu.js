@@ -58,6 +58,9 @@ class AdminMenu extends Component {
                   <li>
                     <Link to="/admin/emails/send">Send</Link>
                   </li>
+                  <li>
+                    <Link to="/admin/emails/tag_users">Tag Users</Link>
+                  </li>
                 </ul>
               </div>
             </div>
