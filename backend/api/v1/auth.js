@@ -114,22 +114,10 @@ module.exports = () => {
     passport.use(
       new linkedinStrategy(
         c[env].linkedin,
-        (
-          accessToken,
-          refreshToken,
-          {
-            _json
-          },
-          done
-        ) => {
+        (accessToken, refreshToken, { _json }, done) => {
           console.dir('received LI user')
           console.dir(_json)
-          const {
-            id,
-            emailAddress,
-            formattedName,
-            pictureUrl
-          } = _json
+          const { id, emailAddress, formattedName, pictureUrl } = _json
           let user = {}
           user.id = id
           user.displayName = formattedName
@@ -267,7 +255,7 @@ module.exports = () => {
     redirectURL = req.headers.referer
     console.dir('login with linkedin')
     console.log('redirectUrl=', redirectURL)
-    passport.authenticate("linkedin")(req, res, next)
+    passport.authenticate('linkedin')(req, res, next)
   })
 
   router.all('/linkedin/activate', function(req, res) {
@@ -328,7 +316,7 @@ module.exports = () => {
         console.log('error', err)
         console.log('user data')
         console.dir(user)
-        
+
         if (err) {
           return res.status(403).send({ message: err.message })
         }
@@ -353,7 +341,7 @@ module.exports = () => {
           console.log('init user session')
           console.log('err', err)
           console.log('user data', user)
-          
+
           if (err) {
             return res.send({
               success: false,
@@ -365,7 +353,7 @@ module.exports = () => {
                 redirectURL = redirectURL.replace('/login', '')
               }
             }
-            
+
             console.log('flow end: redirect to', redirectURL)
             return res.redirect(redirectURL)
           }

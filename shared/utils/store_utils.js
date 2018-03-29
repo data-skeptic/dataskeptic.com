@@ -10,10 +10,12 @@ export function calculateShipping(items, short) {
   }
   for (var i = 0; i < items.length; i++) {
     var item = items[i]
-    if (item.product.type != 'membership') {
+    var is_shippable = 0
+    if (item.product.type != 'membership' && item.product.type != 'ad') {
       has_items = 1
+      is_shippable = 1
     }
-    if (item.product.type != 'membership' && item.product.price > 4) {
+    if (is_shippable == 1 && item.product.price > 4) {
       big_items = 1
     }
   }

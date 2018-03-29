@@ -4,23 +4,19 @@ import styled from 'styled-components'
 
 import { changePageTitle } from '../../Layout/Actions/LayoutActions'
 
-import Blogs, {
-  Wrapper as CarouselWrapper
-} from '../Containers/Blogs'
+import Blogs, { Wrapper as CarouselWrapper } from '../Containers/Blogs'
 
 import Events, { Wrapper as EventsWrapper } from '../Containers/Events'
 import Jobs from '../Containers/Jobs'
 
 import { loadCareersCity } from '../../reducers/JobsReducer'
-import UploadResume from "../Forms/UploadResume";
-
+import UploadResume from '../Forms/UploadResume'
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 const config = require('../../../config/config.json')
 const c = config[env]
 
 const FILES_BUCKET = c['files']['site_bucket']
-
 
 class CityCareers extends Component {
   static defaultProps = {
@@ -51,11 +47,6 @@ class CityCareers extends Component {
     const { loading, loaded, error, submitted, submitting, notify } = this.props
     let { jobs, events, blogs } = this.props
 
-    events = events
-      .concat(events)
-      .concat(events)
-      .concat(events)
-    
     return (
       <Container className="careers_city_page">
         <Layout>
@@ -65,7 +56,6 @@ class CityCareers extends Component {
             <Row>
               <Events events={events} />
               <Resume>
-            
                 {!submitted ? (
                   <UploadResume
                     showSubmit={true}
@@ -91,7 +81,6 @@ class CityCareers extends Component {
                     />
                   </Success>
                 )}
-                
               </Resume>
             </Row>
           </Left>
@@ -112,11 +101,11 @@ const Container = styled.div`
 `
 
 const Title = styled.h1`
-    color: #2d1454;
-    font-size: 24px;
-    line-height: 31px;
-    font-weight: bold;
-    text-transform: uppercase;
+  color: #2d1454;
+  font-size: 24px;
+  line-height: 31px;
+  font-weight: bold;
+  text-transform: uppercase;
 `
 
 const Layout = styled.div`
@@ -133,8 +122,7 @@ const Left = styled.div`
 
 const Right = styled.div`
   flex-basis: 420px;
-  
-  
+
   background-color: #f4f4f4;
   padding: 32px;
   margin: 10px;
@@ -148,12 +136,15 @@ const Row = styled.div`
 
   ${EventsWrapper} {
     margin: 10px;
-    flex-basis: 60%;
+
+    width: 50%;
+    flex-basis: 50%;
   }
 `
 
 const Resume = styled.div`
-  flex-basis: 40%;
+  flex-basis: 48%;
+  width: 48%;
   margin: 10px;
 `
 

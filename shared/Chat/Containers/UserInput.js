@@ -150,8 +150,8 @@ const SendButton = styled.button`
     `
     transform: scale(1.2);
   `};
-  
-   @media (max-width: 768px) {
-      padding: 0px;
-   }
+
+  @media (max-width: 768px) {
+    padding: 0px;
+  }
 `
