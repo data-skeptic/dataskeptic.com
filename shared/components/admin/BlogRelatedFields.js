@@ -1,25 +1,26 @@
-import React from "react"
-import { Field, FieldArray, reduxForm } from "redux-form"
+import React from 'react'
+import { Field, FieldArray, reduxForm } from 'redux-form'
 import {
   renderCheckbox,
   renderField,
   renderSelect
-} from "../../Forms/Components/Field"
-import styled from "styled-components"
-import BlogSearchSelect from "./BlogSearchSelect"
-import ImageUploadField from "../../Forms/Components/ImageUploadField"
+} from '../../Forms/Components/Field'
+import styled from 'styled-components'
+import BlogSearchSelect from './BlogSearchSelect'
+import ImageUploadField from '../../Forms/Components/ImageUploadField'
 
-const env = process.env.NODE_ENV === "dev" ? "dev" : "prod"
-const config = require("../../../config/config.json")
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const config = require('../../../config/config.json')
 const c = config[env]
 
-export const INTERNAL_LINK = "internal-link"
-export const EXTERNAL_LINK = "external-link"
-export const HOME_PAGE_IMAGE = "homepage-image"
-export const BLOG_HEADER_IMAGE = "blog-header-img"
-export const MP3 = "mp3"
-export const PERSON = "person"
-export const BLANK = "blank"
+export const CAREER_CAROUSEL = 'career-carousel'
+export const INTERNAL_LINK = 'internal-link'
+export const EXTERNAL_LINK = 'external-link'
+export const HOME_PAGE_IMAGE = 'homepage-image'
+export const BLOG_HEADER_IMAGE = 'blog-header-img'
+export const MP3 = 'mp3'
+export const PERSON = 'person'
+export const BLANK = 'blank'
 
 const validate = values => {
   let errors = {}
@@ -89,7 +90,7 @@ const renderExternalLinkFields = (member, disabled) => (
       name={`${member}.body`}
       textarea
       required
-      defaultValue={"https://"}
+      defaultValue={'https://'}
       disabled={disabled}
     />
   </div>
@@ -105,7 +106,7 @@ const renderHomePageImageFields = (member, disabled) => (
       customComponent={ImageUploadField}
       strictWidth={400}
       strictHeight={400}
-      bucket={c["files"]["site_bucket"]}
+      bucket={c['files']['site_bucket']}
       accept="image/jpeg, image/png"
       disabled={disabled}
     />
@@ -131,7 +132,7 @@ const renderBlogHeaderImageFields = (member, disabled) => (
       customComponent={ImageUploadField}
       strictWidth={800}
       strictHeight={150}
-      bucket={c["files"]["site_bucket"]}
+      bucket={c['files']['site_bucket']}
       accept="image/jpeg, image/png"
       disabled={disabled}
     />
@@ -211,10 +212,31 @@ const renderPersonFields = (member, disabled) => (
 
 const renderBlankFields = (member, disabled) => <div />
 
+const renderCareerCarouselFields = (member, disabled) => (
+  <div>
+    <Field
+      label="Carousel Image (1000x563)"
+      component={renderField}
+      name={`${member}.dest`}
+      required
+      customComponent={ImageUploadField}
+      strictWidth={1000}
+      strictHeight={563}
+      bucket={c['files']['site_bucket']}
+      accept="image/jpeg, image/png"
+      disabled={disabled}
+    />
+  </div>
+)
+
 const renderRelatedFields = ({ type, member, disabled }) => {
   let fieldsRenderer
 
   switch (type) {
+    case CAREER_CAROUSEL:
+      fieldsRenderer = renderCareerCarouselFields
+      break
+
     case INTERNAL_LINK:
       fieldsRenderer = renderInternalLinkFields
       break
@@ -254,14 +276,15 @@ const renderRelatedFields = ({ type, member, disabled }) => {
       <Field
         name={`${member}.type`}
         component={renderSelect}
-        label={"Type"}
+        label={'Type'}
         options={[
-          { label: "Internal Link", value: INTERNAL_LINK },
-          { label: "External Link", value: EXTERNAL_LINK },
-          { label: "Homepage Image", value: HOME_PAGE_IMAGE },
-          { label: "Blog Header Image", value: BLOG_HEADER_IMAGE },
-          { label: "Audio", value: MP3 },
-          { label: "Person", value: PERSON }
+          { label: 'Internal Link', value: INTERNAL_LINK },
+          { label: 'External Link', value: EXTERNAL_LINK },
+          { label: 'Homepage Image', value: HOME_PAGE_IMAGE },
+          { label: 'Blog Header Image', value: BLOG_HEADER_IMAGE },
+          { label: 'Audio', value: MP3 },
+          { label: 'Person', value: PERSON },
+          { label: 'Career Carousel', value: CAREER_CAROUSEL }
         ]}
         blankOption={true}
         disabled={disabled}
@@ -277,13 +300,13 @@ export const renderRelated = ({ fields, meta: { error, submitFailed } }) => (
     {submitFailed && error && <span>{error}</span>}
 
     {fields.map((member, index) => (
-      <RelatedEntry key={index} >
+      <RelatedEntry key={index}>
         <RelatedIndex removed={fields.get(index).remove}>
           <span>Related #{index + 1}</span>
 
           <Field
             label="remove"
-            fieldWrapperClasses={"remove"}
+            fieldWrapperClasses={'remove'}
             name={`${member}.remove`}
             type="checkbox"
             component={renderCheckbox}
@@ -332,13 +355,13 @@ const RelatedIndex = styled.div`
 
   display: flex;
   align-items: center;
-  
-   ${props =>
-  props.removed &&
-  `
+
+  ${props =>
+    props.removed &&
+    `
       text-decoration: line-through;
       overflow: hidden;
-  `}; 
+  `};
 `
 
 const ActionButton = styled.button`
