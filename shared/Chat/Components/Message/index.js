@@ -46,15 +46,15 @@ const Container = styled.div`
 const Author = styled.div`
   flex-basis: 40px;
   border: 1px;
-  
+
   img {
     width: 32px;
     height: 32px;
     margin-top: 6px;
-  
+
     ${props =>
-    !props.bot &&
-    `
+      !props.bot &&
+      `
   
       border-radius: 50%;  
     `};

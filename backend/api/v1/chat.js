@@ -1,10 +1,10 @@
-const express = require("express")
-const chat_utils = require("./chat_utils")
+const express = require('express')
+const chat_utils = require('./chat_utils')
 
 module.exports = cache => {
   const router = express.Router()
 
-  router.post("/log", (req, res) => {
+  router.post('/log', (req, res) => {
     const user = req.user
     try {
       const message = {

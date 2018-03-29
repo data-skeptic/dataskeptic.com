@@ -4,7 +4,7 @@ import querystring from 'querystring'
 import axios from 'axios'
 import snserror from '../SnsUtil'
 import PrintfulClient from '../printful/printfulclient'
-import Request from "../Request";
+import Request from '../Request'
 
 var env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
@@ -335,7 +335,7 @@ export default function adminReducer(state = defaultState, action) {
           snserror('RELATED_CONTENT_DELETE', errorMsg)
         })
       break
-    
+
     case ADD_JOB:
       nstate.jobs.processing = true
       nstate.jobs.success = false
@@ -355,8 +355,7 @@ export default function adminReducer(state = defaultState, action) {
   return Immutable.fromJS(nstate)
 }
 
-
-export const addJob = (job) => {
+export const addJob = job => {
   return dispatch => {
     dispatch(addJobRequest(job))
 

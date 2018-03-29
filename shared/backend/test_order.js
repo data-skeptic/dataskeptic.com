@@ -60,7 +60,7 @@ stripe.tokens.create({ card: cardData }, (status, response) => {
 
   var product = {
     quantity: 1,
-    product: { 
+    product: {
       active: 1,
       desc: 'Help support Data Skeptic for $1 per episode.',
       id: 1,

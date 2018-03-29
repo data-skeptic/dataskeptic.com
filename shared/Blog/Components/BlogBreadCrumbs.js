@@ -25,10 +25,7 @@ class BlogBreadCrumbs extends React.Component {
       items.push(item)
     }
     arr[0] = 'home'
-    return (
-      <div className="blog-bread-crumbs">
-      </div>
-    )
+    return <div className="blog-bread-crumbs" />
   }
 }
 

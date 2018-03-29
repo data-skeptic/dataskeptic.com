@@ -780,7 +780,6 @@ const renderPage = async (req, res) => {
     }
   }
 
-
   var redir = redirects_map['redirects_map'][req.url]
   var hostname = req.headers.host
   if (redir != undefined) {
