@@ -252,7 +252,6 @@ if (env == 'prod') {
  * WIRING UP APP
  */
 
-
 // MIDDLEWARES
 app.set('trust proxy', 1)
 app.set('view engine', 'ejs')
@@ -265,8 +264,22 @@ app.use(
     extended: true
   })
 )
+
+// CORS
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, authorization'
+  )
+  res.header('Access-Control-Allow-Methods', 'GET,POST,DELETE,PUT,OPTIONS')
+  next()
+})
+
 app.use(
   session({
+    secret: 'secret',
+    resave: true,
     name: 'session',
     keys: ['datas', 'member'],
 
@@ -278,7 +291,6 @@ app.use(
 // PASSPORT
 app.use(passport.initialize())
 app.use(passport.session())
-
 
 var challenge_response = 'not_set'
 
