@@ -117,19 +117,28 @@ module.exports = () => {
         (accessToken, refreshToken, { _json }, done) => {
           console.dir('received LI user')
           console.dir(_json)
-          const { id, emailAddress, formattedName, pictureUrl, positions } = _json
+          const {
+            id,
+            emailAddress,
+            formattedName,
+            pictureUrl,
+            positions
+          } = _json
           let user = {}
           user.id = id
           user.displayName = formattedName
           user.avatar = pictureUrl
           user.email = emailAddress
-          user.positions = positions
+
+          user.meta = JSON.stringify({
+            positions: positions.values
+          })
 
           user.linkedin = {}
           user.linkedin.id = id
           user.linkedin.accessToken = accessToken
           user.linkedin.refreshToken = refreshToken
-          
+
           console.log('success LI login')
           done(null, user)
         }
