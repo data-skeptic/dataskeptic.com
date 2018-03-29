@@ -1,5 +1,5 @@
-import React from "react"
-import className from "classnames"
+import React from 'react'
+import className from 'classnames'
 
 export const renderSelect = ({
   input,
@@ -8,9 +8,9 @@ export const renderSelect = ({
   placeholder,
   required,
   meta: { touched, error, warning, invalid },
-  fieldWrapperClasses = "",
-  labelWrapperClasses = "",
-  inputWrapperStyles = "",
+  fieldWrapperClasses = '',
+  labelWrapperClasses = '',
+  inputWrapperStyles = '',
   options = [],
   blankOption = false
 }) => {
@@ -23,7 +23,7 @@ export const renderSelect = ({
         <select
           {...input}
           className={`${inputWrapperStyles} ${
-            touched && invalid ? "has-danger" : ""
+            touched && invalid ? 'has-danger' : ''
           }`}
         >
           {blankOption && <option />}

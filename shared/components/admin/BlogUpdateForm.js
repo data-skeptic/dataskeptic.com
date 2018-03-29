@@ -1,18 +1,17 @@
-import React from "react"
-import {Field, FieldArray, reduxForm} from "redux-form"
-import FormController from "../../Forms/Components/FormController/FormController"
+import React from 'react'
+import { Field, FieldArray, reduxForm } from 'redux-form'
+import FormController from '../../Forms/Components/FormController/FormController'
 import {
   renderField,
   renderSelect,
   renderZip
-} from "../../Forms/Components/Field"
-import {renderRelated} from "./BlogRelatedFields";
+} from '../../Forms/Components/Field'
+import { renderRelated } from './BlogRelatedFields'
 
 export const FORM_KEY = 'blogUpdate'
 
 const validate = values => {
   let errors = {}
-
 
   return errors
 }
@@ -42,23 +41,22 @@ const BlogUpdateForm = ({
     invalid={!allowSubmit}
     handleSubmit={handleSubmit}
   >
-
     <Field
       label="Title"
       component={renderField}
       name="title"
       type="text"
       required
-    /> 
-    
+    />
+
     <Field
       label="Author"
       component={renderField}
       name="author"
       type="text"
       required
-    />   
-    
+    />
+
     <Field
       label="Abstract"
       component={renderField}
@@ -68,7 +66,7 @@ const BlogUpdateForm = ({
       rows={10}
       required
     />
-    
+
     <Field
       label="Publish Date"
       component={renderField}
@@ -82,7 +80,6 @@ const BlogUpdateForm = ({
       component={renderRelated}
       rerenderOnEveryChange={true}
     />
-    
   </FormController>
 )
 

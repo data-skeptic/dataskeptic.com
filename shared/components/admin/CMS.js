@@ -61,7 +61,9 @@ class CMS extends React.Component {
       <div className={cn}>
         <h3>CMS {mode}</h3>
         <div>
-          {blogs.map((blog, index) => <BlogUpdater blog={blog} odd={index % 2 === 0} key={blog.blog_id}/>)}
+          {blogs.map((blog, index) => (
+            <BlogUpdater blog={blog} odd={index % 2 === 0} key={blog.blog_id} />
+          ))}
         </div>
       </div>
     )

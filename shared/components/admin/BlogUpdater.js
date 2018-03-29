@@ -1,23 +1,23 @@
-import React, { Component } from "react"
-import { connect } from "react-redux"
-import { submit } from "redux-form"
-import styled from "styled-components"
-import moment from "moment"
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { submit } from 'redux-form'
+import styled from 'styled-components'
+import moment from 'moment'
 
-import BlogUpdateForm, { FORM_KEY } from "./BlogUpdateForm"
-import BlogRelatedForm, { INTERNAL_LINK } from "./BlogRelatedFields"
+import BlogUpdateForm, { FORM_KEY } from './BlogUpdateForm'
+import BlogRelatedForm, { INTERNAL_LINK } from './BlogRelatedFields'
 
-import BlogListItem from "../../Blog/Components/BlogListItem"
-import RelatedContent from "../../Blog/Components/RelatedContent"
+import BlogListItem from '../../Blog/Components/BlogListItem'
+import RelatedContent from '../../Blog/Components/RelatedContent'
 
-const normalizeDate = d => moment(d).format("YYYY-MM-DD")
+const normalizeDate = d => moment(d).format('YYYY-MM-DD')
 
 const fakeClick = e => {
   e.preventDefault()
   e.stopPropagation()
 }
 
-const formatRelated = (item) => {
+const formatRelated = item => {
   const {
     dest = '',
     source = '',
@@ -28,9 +28,9 @@ const formatRelated = (item) => {
     blog_id,
     type
   } = item
-  
+
   return { dest, source, title, body, content_id, blog_id2, blog_id, type }
-} 
+}
 
 class BlogUpdater extends Component {
   state = {
@@ -79,7 +79,7 @@ class BlogUpdater extends Component {
     return this.saveRelated(blogRelated)
       .then(() =>
         dispatch({
-          type: "CMS_UPDATE_BLOG",
+          type: 'CMS_UPDATE_BLOG',
           payload: {
             blog_id,
             title,
@@ -100,7 +100,7 @@ class BlogUpdater extends Component {
   delete = () => {
     const { dispatch, blog: { blog_id } } = this.props
 
-    dispatch({ type: "CMS_DELETE_BLOG", payload: { blog_id, dispatch } })
+    dispatch({ type: 'CMS_DELETE_BLOG', payload: { blog_id, dispatch } })
   }
 
   addRelatedItem = data => {
@@ -108,23 +108,23 @@ class BlogUpdater extends Component {
     data = formatRelated(data)
 
     dispatch({
-      type: "RELATED_CONTENT_ADD",
+      type: 'RELATED_CONTENT_ADD',
       payload: { data, dispatch }
     })
   }
 
   deleteRelatedItem = ({ content_id }) => {
     return this.props.dispatch({
-      type: "RELATED_CONTENT_DELETE",
+      type: 'RELATED_CONTENT_DELETE',
       payload: { content_id }
     })
   }
 
-  getAuthor = (author = "") =>
+  getAuthor = (author = '') =>
     this.props.contributors.filter(
       contributor =>
         contributor
-          .get("author")
+          .get('author')
           .toLowerCase()
           .trim() === author.toLowerCase().trim()
     )[0]
@@ -199,7 +199,7 @@ class BlogUpdater extends Component {
                 onSubmit={this.onSave}
                 showSubmit={false}
                 allowSubmit={true}
-                submitValue={"Add"}
+                submitValue={'Add'}
                 initialValues={blogFormData}
               />
 
@@ -221,7 +221,7 @@ class BlogUpdater extends Component {
 }
 
 export default connect(state => ({
-  contributors: state.site.get("contributors")
+  contributors: state.site.get('contributors')
 }))(BlogUpdater)
 
 const Wrapper = styled.div`
