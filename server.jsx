@@ -252,6 +252,9 @@ if (env == 'prod') {
  * WIRING UP APP
  */
 
+
+// MIDDLEWARES
+app.set('trust proxy', 1)
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 app.use(express.static(path.join(__dirname, 'public')))
@@ -262,8 +265,6 @@ app.use(
     extended: true
   })
 )
-
-app.set('trust proxy', 1)
 app.use(
   session({
     name: 'session',
@@ -273,8 +274,11 @@ app.use(
     maxAge: 24 * 60 * 60 * 1000 // 24 hours
   })
 )
+
+// PASSPORT
 app.use(passport.initialize())
 app.use(passport.session())
+
 
 var challenge_response = 'not_set'
 
@@ -562,13 +566,11 @@ async function updateState(store, pathname, req) {
     }
   })
 
-  const user = req.user
-
-  if (user) {
+  if (req.isAuthenticated()) {
     store.dispatch({
       type: 'AUTH_USER_SUCCESS',
       payload: {
-        data: user
+        data: req.user
       }
     })
   }
