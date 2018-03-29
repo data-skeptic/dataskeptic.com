@@ -54,4 +54,21 @@ const Container = styled.div`
       padding: 2px 6px !important;
     }
   }
+
+  @media (min-width: 768px) {
+    .onrow {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      .field-container {
+        flex: 1;
+        margin-right: 10px;
+      }
+      
+      &:last-child {
+        margin-right: 0px;
+      }
+    }
+  }
 `
