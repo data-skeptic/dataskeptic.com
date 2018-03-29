@@ -1,13 +1,13 @@
-const winston = require("winston")
-const S3StreamLogger = require("s3-streamlogger").S3StreamLogger
+const winston = require('winston')
+const S3StreamLogger = require('s3-streamlogger').S3StreamLogger
 
-const env = process.env.NODE_ENV === "dev" ? "dev" : "prod"
-const c = require("../../../config/config.json")
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const c = require('../../../config/config.json')
 const bucket_name = c[env]['chat']['logs']
 
 const ops = {
   bucket: bucket_name,
-  folder: "chat_logs/"
+  folder: 'chat_logs/'
 }
 
 const s3_stream = new S3StreamLogger(ops)
@@ -17,7 +17,7 @@ const transport = new winston.transports.File({
 })
 
 // see error handling section below
-transport.on("error", function(err) {
+transport.on('error', function(err) {
   /* ... */
 })
 
@@ -25,7 +25,7 @@ const logger = new winston.Logger({
   transports: [transport]
 })
 
-export const logMessage = (message) => {
+export const logMessage = message => {
   const s = JSON.stringify(message)
   logger.info(s)
 }

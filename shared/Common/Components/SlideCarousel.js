@@ -261,4 +261,6 @@ const styles = css`
   }
 `
 
-export const Wrapper = styled(Carousel)`${styles}`
+export const Wrapper = styled(Carousel)`
+  ${styles};
+`

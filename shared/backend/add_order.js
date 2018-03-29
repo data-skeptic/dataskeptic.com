@@ -48,21 +48,23 @@ function do_subscriptions(stripe, customer, products) {
     var p = product.product
     if (p['type'] == 'membership') {
       var sku = p['sku']
-      console.log("Going to signup for " + sku)
-      return new Promise(function (resolve, reject) {
-        stripe.subscriptions.create({
-          customer: customer.id,
-          items: [{ plan: sku }]
-        },
-        function(err, subscription) {
-          if (err) {
-            var msg = 'subscription error: ' + err
-            console.log(msg)
-            reject(msg)
-          } else {
-            resolve(subscription)
+      console.log('Going to signup for ' + sku)
+      return new Promise(function(resolve, reject) {
+        stripe.subscriptions.create(
+          {
+            customer: customer.id,
+            items: [{ plan: sku }]
+          },
+          function(err, subscription) {
+            if (err) {
+              var msg = 'subscription error: ' + err
+              console.log(msg)
+              reject(msg)
+            } else {
+              resolve(subscription)
+            }
           }
-        })        
+        )
       })
     }
   }
@@ -71,30 +73,33 @@ function do_subscriptions(stripe, customer, products) {
 
 function create_stripe_order(stripe, customer, products, name, address, email) {
   var promises = []
-  var subscribe_promise = do_subscriptions(stripe, customer,products)
+  var subscribe_promise = do_subscriptions(stripe, customer, products)
   if (subscribe_promise != undefined) {
     promises.push(subscribe_promise)
   }
   var items = create_items_list(stripe, customer, products)
   if (items.length > 0) {
-    var product_promise = new Promise(function (resolve, reject) {
-      stripe.orders.create({
-        currency: 'usd',
-        items: items,
-        shipping: {
-          name,
-          address
+    var product_promise = new Promise(function(resolve, reject) {
+      stripe.orders.create(
+        {
+          currency: 'usd',
+          items: items,
+          shipping: {
+            name,
+            address
+          },
+          email
         },
-        email
-      }, function(err, order) {
-        if (err) {
-          var msg = 'order error: ' + err
-          console.log(msg)
-          reject(msg)
-        } else {
-          resolve(order)
+        function(err, order) {
+          if (err) {
+            var msg = 'order error: ' + err
+            console.log(msg)
+            reject(msg)
+          } else {
+            resolve(order)
+          }
         }
-      })      
+      )
     })
     promises.push(product_promise)
   }
@@ -161,13 +166,13 @@ function do_order(
       ).then(function(sorder) {
         console.log('Created Stripe Order: ' + JSON.stringify(sorder))
         sorder['customer_id'] = customer_id
-        return {customer, sorder}
+        return { customer, sorder }
       })
     })
     .then(function(resp) {
       var customer = resp['customer']
       var sorder = resp['sorder']
-      var stripe_order_id = ""
+      var stripe_order_id = ''
       for (var so of sorder) {
         if (so['object'] != 'subscription') {
           stripe_order_id = so['id']
@@ -196,7 +201,7 @@ function do_order(
       console.log(db_result)
       var customer_id = db_result.customer_id
       var stripe_order_id = db_result.stripe_order_id
-      if (stripe_order_id == "") {
+      if (stripe_order_id == '') {
         // Subscription only, and it's already handled
         return db_result
       } else {
@@ -255,12 +260,16 @@ function add_order(req, res, base_url, stripe_key) {
       name,
       address,
       email
-    ).then(function(resp) {
-      res.status(200).end(JSON.stringify(resp))
-    }).catch((err) => {
-      console.error(err)
-      res.status(500).end(JSON.stringify({ status: 'failure', message: err.message }))
-    })
+    )
+      .then(function(resp) {
+        res.status(200).end(JSON.stringify(resp))
+      })
+      .catch(err => {
+        console.error(err)
+        res
+          .status(500)
+          .end(JSON.stringify({ status: 'failure', message: err.message }))
+      })
   } catch (err) {
     var e = JSON.stringify(err)
     res.status(500).end(JSON.stringify({ status: 'failure', message: e }))

@@ -114,7 +114,7 @@ const Slider = styled.div`
     justify-content: center;
     text-decoration: none;
     height: 400px;
-    
+
     &:hover {
       border: none !important;
     }
