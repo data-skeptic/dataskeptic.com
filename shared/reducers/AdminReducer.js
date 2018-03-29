@@ -20,6 +20,11 @@ export const ADD_JOB_FAIL = 'ADD_JOB_FAIL'
 
 export const SELECT_TAGS_USER = 'SELECT_TAGS_USER'
 
+export const CLEAR_USER_TAGS = 'CLEAR_USER_TAGS'
+export const LOAD_USER_TAGS = 'LOAD_USER_TAGS'
+export const LOAD_USER_TAGS_SUCCESS = 'LOAD_USER_TAGS_SUCCESS'
+export const LOAD_USER_TAGS_FAIL = 'LOAD_USER_TAGS_FAIL'
+
 const init = {
   email_send_msg: '',
   pending_blogs: [],
@@ -76,7 +81,8 @@ const init = {
     error: null
   },
   tags: {
-    user: null
+    user: null,
+    list: []
   }
 }
 
@@ -360,6 +366,15 @@ export default function adminReducer(state = defaultState, action) {
     case SELECT_TAGS_USER:
       nstate.tags.user = action.payload.user
       break
+
+    case LOAD_USER_TAGS_SUCCESS:
+      nstate.tags.list = action.payload.result
+      break
+
+    case LOAD_USER_TAGS:
+    case LOAD_USER_TAGS_FAIL:
+      nstate.tags.list = []
+      break
   }
   return Immutable.fromJS(nstate)
 }
@@ -394,4 +409,36 @@ export const addJobFail = error => ({
 export const selectTagsUser = user => ({
   type: SELECT_TAGS_USER,
   payload: { user }
+})
+
+export const clearUserTags = user => ({
+  type: CLEAR_USER_TAGS,
+  payload: { user }
+})
+
+export const loadUserTags = user => {
+  return dispatch => {
+    dispatch(loadUserTagsRequest(user))
+
+    Request.get(`/api/v1/admin/tags/user?email=${user}`)
+      .then(result => dispatch(loadUserTagsSuccess(result.data)))
+      .catch(err => dispatch(loadUserTagsFail(err.data.error)))
+  }
+}
+
+export const loadUserTagsRequest = user => ({
+  type: LOAD_USER_TAGS,
+  payload: {
+    ...user
+  }
+})
+
+export const loadUserTagsSuccess = result => ({
+  type: LOAD_USER_TAGS_SUCCESS,
+  payload: { result }
+})
+
+export const loadUserTagsFail = error => ({
+  type: LOAD_USER_TAGS_FAIL,
+  payload: { error }
 })
