@@ -1,15 +1,14 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import AdminLayout from './AdminLayout'
-import AddJob from '../../Jobs/Forms/AddJob'
+import AddJob, { tomorrow } from '../../Jobs/Forms/AddJob'
 import styled from 'styled-components'
 import { addJob } from '../../reducers/AdminReducer'
-import moment from 'moment/moment'
 
 class AdminAddJob extends Component {
   state = {
     initialValues: {
-      go_live_date: moment().format('YYYY-MM-DD')
+      go_live_date: tomorrow.format('YYYY-MM-DD')
     }
   }
 

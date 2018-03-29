@@ -16,6 +16,8 @@ const urlRegex = new RegExp(
 
 const urlFields = ['company_url', 'company_logo_url', 'job_url']
 
+export const tomorrow = moment(new Date()).add(1,'days');
+
 const validate = values => {
   let errors = {}
 
@@ -43,6 +45,12 @@ const validate = values => {
 
   if (!values['go_live_date']) {
     errors['go_live_date'] = 'Cannot be empty.'
+  } else {
+    const date = moment(values['go_live_date'])
+    console.log('diff', tomorrow.diff(date, 'days'))
+    if (tomorrow.diff(date, 'days') <= -1) {
+      errors['go_live_date'] = 'Please, set future date'
+    } 
   }
 
   if (!values['location']) {
@@ -67,7 +75,6 @@ const validate = values => {
     errors['company_logo_url'] = 'Cannot be empty.'
   }
 
-  console.log(values)
   return errors
 }
 
@@ -132,7 +139,7 @@ const QuestionForm = ({
       required
     />
 
-    <Field label="Location" component={renderZip} name="location" required />
+    <Field label="Postal code" component={renderZip} name="location" required />
 
     <Field
       label="Type"
