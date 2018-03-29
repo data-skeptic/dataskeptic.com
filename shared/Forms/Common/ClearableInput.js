@@ -59,6 +59,8 @@ export default class ClearableInput extends Component {
     this.state.value = this.props.value
   }
 
+  isEmpty = () => this.state.value.trim() === ''
+
   render() {
     const { error, placeholder } = this.props
     const { value } = this.state
@@ -72,7 +74,7 @@ export default class ClearableInput extends Component {
           onChange={this.handleChange}
           onKeyDown={this.handleKeyDown}
         />
-        <Close onClick={this.clear}>x</Close>
+        {!this.isEmpty() && <Close onClick={this.clear}>×</Close>}
       </Wrapper>
     )
   }
@@ -105,22 +107,18 @@ export const Input = styled.input`
 const Close = styled.button`
   position: absolute;
   right: 10px;
-  top: 12px;
+  top: 7px;
   width: 16px;
-  height: 16px;
-  background-color: #d7d9d9;
   border: none;
-  border-radius: 50%;
-  color: #3b3b3b;
+  color: #999;
   text-align: center;
   padding: 0px;
-  font-size: 8px;
+  font-size: 18px;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  text-align: center;
+  vertical-align: top;
 
   &:hover {
-    background-color: #eee;
+    color: #d0021b;
   }
 `

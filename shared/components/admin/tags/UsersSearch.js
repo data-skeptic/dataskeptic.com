@@ -26,9 +26,8 @@ export default class UsersSearch extends Component {
   }
 
   onChange = value => {
-    if (this.validate(value)) {
-      this.props.onChange(value)
-    }
+    const valid = this.validate(value)
+    this.props.onChange(value, valid)
   }
 
   render() {

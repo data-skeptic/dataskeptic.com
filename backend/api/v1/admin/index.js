@@ -4,9 +4,11 @@ module.exports = cache => {
   const router = express.Router()
 
   router.use((req, res, next) => {
-    if (req.isAuthenticated()) {
-      console.dir(req.user)
-      // prevent unauthorized access
+    const isAdmin = req.isAuthenticated() && req.user.type === 'admin'
+    return next()
+
+    // prevent unauthorized access
+    if (isAdmin) {
       return next()
     }
 
