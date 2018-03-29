@@ -7,6 +7,8 @@ import {
   renderZip
 } from '../../Forms/Components/Field'
 import { renderRelated } from './BlogRelatedFields'
+import BlogSearchSelect from "./BlogSearchSelect";
+import ContributorSelect from "./ContributorSelect";
 
 export const FORM_KEY = 'blogUpdate'
 
@@ -57,6 +59,14 @@ const BlogUpdateForm = ({
       required
     />
 
+    <Field
+      label="Author"
+      component={renderField}
+      customComponent={ContributorSelect}
+      name={`author`}
+      required
+    />
+    
     <Field
       label="Abstract"
       component={renderField}
