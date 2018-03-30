@@ -27,7 +27,6 @@ const formatRelated = item => {
 }
 
 class CmsBlogUpdate extends Component {
-
   save = async () => {
     await this.props.dispatch(submit(FORM_KEY))
   }
@@ -153,14 +152,14 @@ class CmsBlogUpdate extends Component {
           submitValue={'Add'}
           initialValues={blogFormData}
         />
-
+        
         <Buttons>
           <DeleteButton onClick={this.delete}>Delete</DeleteButton>
           <SaveButton onClick={this.save}>Save</SaveButton>
         </Buttons>
         
-        {error & <Error>{error}</Error>}
-        {success & <Success>Update success</Success>}
+        {error && <Error>{error}</Error>}
+        {success && <Success>Update success</Success>}
       </Container>
     )
   }
@@ -170,10 +169,10 @@ export default connect((state, ownProps) => ({
   admin: state.admin,
   blog: getBlog(state, ownProps.prettyname),
   error: state.cms.getIn(['blogs', 'error']),
-  success: state.cms.getIn(['blogs', 'error']),
+  success: state.cms.getIn(['blogs', 'success']),
   loaded:
     state.cms.get('recent_blogs_loaded') &&
-    state.cms.get('pending_blogs_loaded'),
+    state.cms.get('pending_blogs_loaded')
 }))(CmsBlogUpdate)
 
 const Container = styled.div`
@@ -191,7 +190,6 @@ const BlogForm = styled(BlogUpdateForm)`
 
 const Row = styled.div`
   display: flex;
-  
 `
 
 const Buttons = Row.extend`
@@ -229,11 +227,10 @@ const DeleteButton = ActionButton.extend`
   }
 `
 
-
-const Error = styled.p`
-  color: red;  
+const Error = styled.div`
+  color: red;
 `
 
-const Success = styled.p`
-  color: green;  
+const Success = styled.div`
+  color: green;
 `

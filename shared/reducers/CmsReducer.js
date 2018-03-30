@@ -167,14 +167,14 @@ export default function cmsReducer(state = defaultState, action) {
           var error = data['error']
           if (error) {
             dispatch({
-              action: 'CMS_UPDATE_BLOG_FAIL',
+              type: 'CMS_UPDATE_BLOG_FAIL',
               payload: {
                 error
               }
             })
           } else {
             dispatch({
-              action: 'CMS_UPDATE_BLOG_SUCCESS',
+              type: 'CMS_UPDATE_BLOG_SUCCESS',
               payload: {
                 data
               }
