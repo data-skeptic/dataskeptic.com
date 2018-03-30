@@ -27,49 +27,17 @@ export default class ContributorSelect extends Component {
     query = encodeURIComponent(query)
 
     return axios
-      .get(`/api/v1/contributors/list?q=${query}`)
+      .get(`/api/v1/contributors?q=${query}`)
       .then(res => res.data)
-      .then(data =>
-        orderBy(
-          Object.keys(data).map(id => ({
-            ...data[id],
-            id
-          })),
-          'sort_rank'
-        )
-      )
-      .then(contributors => {
-        if (this.state.firstInit) {
-          this.setState({
-            contributors,
-            firstInit: true
-          })
-        }
-
-        return contributors
-      })
       .then((options = []) => ({ options }))
   }
 
-  renderOption = option => {
-    const { prettyname, img } = option
-    const { query } = this.state
-    return (
-      <Item>
-        <Avatar src={img} alt={prettyname} />
-        <Title>{prettyname}</Title>
-      </Item>
-    )
-  }
-
-  renderValue = ({ img, prettyname }) => {
-    return (
-      <Item>
-        <Avatar src={img} alt={prettyname} />
-        <Title>{prettyname}</Title>
-      </Item>
-    )
-  }
+  renderOption = ({ prettyname, img }) => (
+    <Item>
+      <Avatar src={img} alt={prettyname} />
+      <Title>{prettyname}</Title>
+    </Item>
+  )
 
   render() {
     const { selectedOption } = this.state
@@ -85,7 +53,7 @@ export default class ContributorSelect extends Component {
         onChange={this.handleChange}
         loadOptions={this.getOptions}
         optionRenderer={this.renderOption}
-        valueRenderer={this.renderValue}
+        valueRenderer={this.renderOption}
       />
     )
   }

@@ -50,15 +50,7 @@ const BlogUpdateForm = ({
       type="text"
       required
     />
-
-    <Field
-      label="Author"
-      component={renderField}
-      name="author"
-      type="text"
-      required
-    />
-
+    
     <Field
       label="Author"
       component={renderField}
