@@ -190,7 +190,10 @@ const BlogForm = styled(BlogUpdateForm)`
   flex-direction: column;
 `
 
-const Row = styled.div``
+const Row = styled.div`
+  display: flex;
+  
+`
 
 const Buttons = Row.extend`
   justify-content: flex-end;
@@ -225,15 +228,4 @@ const DeleteButton = ActionButton.extend`
   &:hover {
     opacity: 1;
   }
-`
-
-const Details = styled.div`
-  padding-top: 60px;
-`
-
-const ShowRelatedButton = styled.button`
-  display: flex;
-  height: 50px;
-  justify-content: center;
-  border: none;
 `

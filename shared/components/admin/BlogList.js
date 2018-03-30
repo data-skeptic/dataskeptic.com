@@ -129,18 +129,21 @@ const ID = styled.span`
   color: #000;
 `
 
-const ActionButton = styled(Link)`
+const EditButton = styled(Link)`
   width: 160px;
-  height: 40px;
   font-size: 16px;
-  color: #fff;
   border: none;
   border-radius: 5px;
-`
-
-const EditButton = ActionButton.extend`
   margin-left: 10px;
   background: #f0d943;
   display: inline-block;
-  height: 27px;
+  border: none;
+  line-height: 27px;
+  text-align: center;
+  color: #fff !important;
+
+  &:hover {
+    color: #fff;
+    border: none;
+  }
 `
