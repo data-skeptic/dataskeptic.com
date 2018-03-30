@@ -56,6 +56,7 @@ import AdminCmsPending from 'components/admin/AdminCmsPending'
 import AdminCmsAddRelated from 'components/admin/AdminCmsAddRelated'
 import AdminCmsRecent from 'components/admin/AdminCmsRecent'
 import AdminCmsFeature from 'components/admin/AdminCmsFeature'
+import AdminCmsBlogUpdate from 'components/admin/AdminCmsBlogUpdate'
 import AdminCmsRecentRelated from 'components/admin/AdminCmsRecentRelated'
 import AdminEmailsSend from 'components/admin/AdminEmailsSend'
 import AdminOrdersNew from 'components/admin/AdminOrdersNew'
@@ -258,6 +259,10 @@ export default (
 
     <Route path="/admin/cms/recent" component={App}>
       <IndexRoute component={AdminCmsRecent} />
+    </Route>
+
+    <Route path="/admin/cms/blog/:category/:year/:slug" component={App}>
+      <IndexRoute component={AdminCmsBlogUpdate} />
     </Route>
 
     <Route path="/admin/cms/feature" component={App}>

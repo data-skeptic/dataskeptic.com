@@ -4,13 +4,13 @@ import {
   renderCheckbox,
   renderField,
   renderSelect
-} from '../../Forms/Components/Field'
+} from '../../../Forms/Components/Field'
 import styled from 'styled-components'
 import BlogSearchSelect from './BlogSearchSelect'
-import ImageUploadField from '../../Forms/Components/ImageUploadField'
+import ImageUploadField from '../../../Forms/Components/ImageUploadField'
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const config = require('../../../config/config.json')
+const config = require('../../../../config/config.json')
 const c = config[env]
 
 export const CAREER_CAROUSEL = 'career-carousel'

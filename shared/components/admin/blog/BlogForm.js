@@ -1,11 +1,11 @@
 import React from 'react'
 import { Field, FieldArray, reduxForm } from 'redux-form'
-import FormController from '../../Forms/Components/FormController/FormController'
+import FormController from '../../../Forms/Components/FormController/FormController'
 import {
   renderField,
   renderSelect,
   renderZip
-} from '../../Forms/Components/Field'
+} from '../../../Forms/Components/Field'
 import { renderRelated } from './BlogRelatedFields'
 import BlogSearchSelect from "./BlogSearchSelect";
 import ContributorSelect from "./ContributorSelect";
@@ -18,7 +18,7 @@ const validate = values => {
   return errors
 }
 
-const BlogUpdateForm = ({
+const BlogForm = ({
   children,
   handleSubmit,
   pristine,
@@ -88,4 +88,4 @@ const BlogUpdateForm = ({
 export default reduxForm({
   form: FORM_KEY,
   validate
-})(BlogUpdateForm)
+})(BlogForm)

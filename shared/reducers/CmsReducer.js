@@ -295,3 +295,17 @@ export default function cmsReducer(state = defaultState, action) {
   }
   return Immutable.fromJS(nstate)
 }
+
+export const getBlog = (state, prettyname) => {
+  const pendingBlog = state.cms
+    .get('pending_blogs')
+    .find(item => item.get('prettyname') === prettyname)
+  
+  const recentBlog = state.cms
+    .get('recent_blogs')
+    .find(item => item.get('prettyname') === prettyname)
+
+  const blog = pendingBlog || recentBlog
+
+  return blog ? blog.toJS() : blog
+}

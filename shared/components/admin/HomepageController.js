@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import querystring from 'querystring'
 import { connect } from 'react-redux'
-import BlogSearchSelect from './BlogSearchSelect'
+import BlogSearchSelect from './blog/BlogSearchSelect'
 
 class HomepageController extends React.Component {
   change = (f, val) => {

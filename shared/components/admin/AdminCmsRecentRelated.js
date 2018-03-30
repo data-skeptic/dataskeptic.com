@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import AdminLayout from './AdminLayout'
-import RelatedContentList from './RelatedContentList'
+import RelatedContentList from './blog/RelatedContentList'
 
 class AdminCmsRecentRelated extends Component {
   render() {
