@@ -1,8 +1,10 @@
+const express = require('express')
 import { orderBy } from 'lodash'
 
-const express = require('express')
+const c = require('../../../config/config.json')
 
-const ContributorsService = require('../../modules/contributors/services/ContributorsService')
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const base_api = c[env]['base_api'] + env
 
 const filterItems = (items, query) => {
   if (!query) {
@@ -22,30 +24,25 @@ module.exports = cache => {
 
   router.get('/', (req, res) => {
     const { q } = req.query
+    let contributors = cache().contributors
+    
+    contributors = filterItems(
+      orderBy(
+        Object.keys(contributors).map(id => ({
+          ...contributors[id],
+          id
+        })),
+        'sort_rank'
+      ),
+      q
+    )
 
-    ContributorsService.getAllContributors()
-      .then(data =>
-        orderBy(
-          Object.keys(data).map(id => ({
-            ...data[id],
-            id
-          })),
-          'sort_rank'
-        )
-      )
-      .then(contributors => filterItems(contributors, q))
-      .then(contributors => {
-        res.send(contributors)
-      })
-      .catch(err => {
-        res.send(err)
-      })
+    return res.send(contributors)
   })
 
   router.get('/list', (req, res) => {
-    ContributorsService.getAllContributors()
-      .then(contributors => res.send(contributors))
-      .catch(err => res.send(err))
+    const contributors = cache().contributors
+    res.send(contributors)
   })
 
   return router
