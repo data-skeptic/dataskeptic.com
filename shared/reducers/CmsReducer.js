@@ -29,7 +29,11 @@ const init = {
   pending_blogs: [],
   pending_blogs_loaded: false,
   blog_state: '',
-  blog_content: {}
+  blog_content: {},
+  blogs: {
+    error: null,
+    success: false
+  }
 }
 
 const defaultState = Immutable.fromJS(init)
@@ -153,6 +157,8 @@ export default function cmsReducer(state = defaultState, action) {
       var dispatch = payload.dispatch
       //payload['title'] = payload['title']
       //payload['abstract'] = payload['abstract']
+      nstate.blogs.success = false
+      nstate.blogs.error = null
       var url = base_url + '/blog/update'
       axios
         .post(url, payload)
@@ -160,17 +166,41 @@ export default function cmsReducer(state = defaultState, action) {
           var data = result['data']
           var error = data['error']
           if (error) {
-            alert('ERROR:  ' + JSON.stringify(result))
+            dispatch({
+              action: 'CMS_UPDATE_BLOG_FAIL',
+              payload: {
+                error
+              }
+            })
           } else {
-            alert('SUCCESS:  ' + JSON.stringify(result))
+            dispatch({
+              action: 'CMS_UPDATE_BLOG_SUCCESS',
+              payload: {
+                data
+              }
+            })
           }
         })
         .catch(err => {
           console.log(err)
           var errorMsg = JSON.stringify(err)
           snserror('CMS_UPDATE_BLOG', errorMsg)
+          dispatch({
+            action: 'CMS_UPDATE_BLOG_FAIL',
+            payload: {
+              error: errorMsg
+            }
+          })
         })
       break
+    case 'CMS_UPDATE_BLOG_SUCCESS':
+      nstate.blogs.success = true
+      nstate.blogs.error = null
+      break
+    case 'CMS_UPDATE_BLOG_FAIL':
+      nstate.blogs.error = action.payload.error
+      break
+
     case 'CMS_SET_HOMEPAGE_FEATURE':
       nstate.featured_blog_state = 'submit'
       var blog_id = nstate.featured_blog.blog_id
@@ -300,7 +330,7 @@ export const getBlog = (state, prettyname) => {
   const pendingBlog = state.cms
     .get('pending_blogs')
     .find(item => item.get('prettyname') === prettyname)
-  
+
   const recentBlog = state.cms
     .get('recent_blogs')
     .find(item => item.get('prettyname') === prettyname)

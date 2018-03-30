@@ -27,9 +27,6 @@ const formatRelated = item => {
 }
 
 class CmsBlogUpdate extends Component {
-  cancel = () => {
-    console.log('123')
-  }
 
   save = async () => {
     await this.props.dispatch(submit(FORM_KEY))
@@ -121,7 +118,7 @@ class CmsBlogUpdate extends Component {
   }
 
   render() {
-    const { blog, loaded } = this.props
+    const { blog, loaded, error, success } = this.props
 
     if (!loaded) {
       return <Loading />
@@ -158,12 +155,12 @@ class CmsBlogUpdate extends Component {
         />
 
         <Buttons>
-          <CancelButton onClick={this.cancel}>
-            <span>Cancel</span>
-          </CancelButton>
           <DeleteButton onClick={this.delete}>Delete</DeleteButton>
           <SaveButton onClick={this.save}>Save</SaveButton>
         </Buttons>
+        
+        {error & <Error>{error}</Error>}
+        {success & <Success>Update success</Success>}
       </Container>
     )
   }
@@ -172,9 +169,11 @@ class CmsBlogUpdate extends Component {
 export default connect((state, ownProps) => ({
   admin: state.admin,
   blog: getBlog(state, ownProps.prettyname),
+  error: state.cms.getIn(['blogs', 'error']),
+  success: state.cms.getIn(['blogs', 'error']),
   loaded:
     state.cms.get('recent_blogs_loaded') &&
-    state.cms.get('pending_blogs_loaded')
+    state.cms.get('pending_blogs_loaded'),
 }))(CmsBlogUpdate)
 
 const Container = styled.div`
@@ -228,4 +227,13 @@ const DeleteButton = ActionButton.extend`
   &:hover {
     opacity: 1;
   }
+`
+
+
+const Error = styled.p`
+  color: red;  
+`
+
+const Success = styled.p`
+  color: green;  
 `
