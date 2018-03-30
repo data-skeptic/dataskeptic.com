@@ -2,37 +2,26 @@ import React, { Component } from 'react'
 import { Async } from 'react-select'
 import axios from 'axios'
 import styled from 'styled-components'
-import Highlighter from 'react-highlight-words'
+import { find, orderBy } from 'lodash'
+
+const normalizeKey = key => key.toLowerCase() 
 
 export default class ContributorSelect extends Component {
   state = {
     firstInit: false,
     query: '',
-    selectedOption: this.props.input.value
+    selectedOption: normalizeKey(this.props.input.value)
   }
 
-  handleChange = selectedOption => {
+  handleChange = option => {
+    const selectedOption = normalizeKey(option.id)
     this.setState({ selectedOption })
 
-    const blog_id = selectedOption ? selectedOption.blog_id : null
-
     const { input: { onChange } } = this.props
-    onChange(blog_id)
+    onChange(selectedOption)
   }
 
   inputChange = query => this.setState({ query })
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.input.value !== nextProps.input.value) {
-      if (this.state.firstInit) return
-
-      this.setState({
-        firstInit: true
-      })
-
-      this.handleChange(nextProps.input.value)
-    }
-  }
 
   getOptions = query => {
     query = encodeURIComponent(query)
@@ -40,48 +29,44 @@ export default class ContributorSelect extends Component {
     return axios
       .get(`/api/v1/contributors/list?q=${query}`)
       .then(res => res.data)
-      .then(data => {
-        const items = Object.keys(data).map(id => {
-          const contributor = data[id]
-          return {
-            ...contributor,
+      .then(data =>
+        orderBy(
+          Object.keys(data).map(id => ({
+            ...data[id],
             id
-          }
-        })
-        debugger
+          })),
+          'sort_rank'
+        )
+      )
+      .then(contributors => {
+        if (this.state.firstInit) {
+          this.setState({
+            contributors,
+            firstInit: true
+          })
+        }
 
-        return items
+        return contributors
       })
       .then((options = []) => ({ options }))
   }
 
   renderOption = option => {
-    const { title, abstract } = option
+    const { prettyname, img } = option
     const { query } = this.state
     return (
       <Item>
-        <Title>
-          <Highlighter
-            highlightClassName="matching"
-            searchWords={[query]}
-            textToHighlight={title}
-          />
-        </Title>
-        <Abstract>
-          <Highlighter
-            highlightClassName="matching"
-            searchWords={[query]}
-            textToHighlight={abstract}
-          />
-        </Abstract>
+        <Avatar src={img} alt={prettyname} />
+        <Title>{prettyname}</Title>
       </Item>
     )
   }
 
-  renderValue = ({ title }) => {
+  renderValue = ({ img, prettyname }) => {
     return (
       <Item>
-        <Title>{title}</Title>
+        <Avatar src={img} alt={prettyname} />
+        <Title>{prettyname}</Title>
       </Item>
     )
   }
@@ -106,10 +91,26 @@ export default class ContributorSelect extends Component {
   }
 }
 
-const Item = styled.div``
+const Item = styled.div`
+  display: flex;
+  flex-direction: wrap;
+  align-items: center;
+`
 
 const Title = styled.p`
   font-weight: bold;
+  margin: 0px;
+  padding: 0px;
 `
 
-const Abstract = styled.p``
+const Avatar = styled.img`
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  padding: 2px;
+  background-color: #ffffff;
+  border: 1px solid #dddddd !important;
+  margin-right: 0.3em;
+  overflow: hidden;
+  margin-top: 2px;
+`
