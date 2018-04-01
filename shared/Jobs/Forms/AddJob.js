@@ -16,6 +16,8 @@ const urlRegex = new RegExp(
 
 const urlFields = ['company_url', 'company_logo_url', 'job_url']
 
+export const tomorrow = moment(new Date()).add(1, 'days')
+
 const validate = values => {
   let errors = {}
 
@@ -43,10 +45,18 @@ const validate = values => {
 
   if (!values['go_live_date']) {
     errors['go_live_date'] = 'Cannot be empty.'
+  } else {
+    const date = moment(values['go_live_date'])
+    const diff = date.diff(tomorrow, 'days')
+    if (diff < 0) {
+      errors['go_live_date'] = 'Please, choose future date'
+    }
   }
 
   if (!values['location']) {
     errors['location'] = 'Cannot be empty.'
+  } else if (values['location'].length > 12) {
+    errors['location'] = 'Zip is invalid.'
   }
 
   if (!values['type']) {
@@ -67,7 +77,6 @@ const validate = values => {
     errors['company_logo_url'] = 'Cannot be empty.'
   }
 
-  console.log(values)
   return errors
 }
 
@@ -101,49 +110,59 @@ const QuestionForm = ({
     customError={customError}
     customSuccess={customSuccess}
   >
-    <Field
-      label="Job Title"
-      component={renderField}
-      name="title"
-      type="text"
-      required
-    />
+    <div className="onrow">
+      <Field
+        label="Job Title"
+        component={renderField}
+        name="title"
+        type="text"
+        required
+      />
 
-    <Field
-      label="Company"
-      component={renderField}
-      name="company_name"
-      type="text"
-      required
-    />
+      <Field
+        label="Company"
+        component={renderField}
+        name="company_name"
+        type="text"
+        required
+      />
+    </div>
 
-    <Field
-      label="'Apply now' link"
-      component={renderField}
-      name="job_url"
-      type="url"
-    />
+    <div className="onrow">
+      <Field
+        label="'Apply now' link"
+        component={renderField}
+        name="job_url"
+        type="url"
+      />
+
+      <Field
+        label="Type"
+        component={renderSelect}
+        options={[
+          { label: 'Full time', value: 'full_time' },
+          { label: 'Part time', value: 'part_time' },
+          { label: 'Internship', value: 'internship' },
+          { label: 'Other', value: 'other' }
+        ]}
+        name="type"
+        required
+      />
+
+      <Field
+        label="Postal code"
+        component={renderField}
+        name="location"
+        type="text"
+        required
+      />
+    </div>
 
     <Field
       label="Date to go live"
       component={renderField}
       name="go_live_date"
       type="date"
-      required
-    />
-
-    <Field label="Location" component={renderZip} name="location" required />
-
-    <Field
-      label="Type"
-      component={renderSelect}
-      options={[
-        { label: 'Full time', value: 'full_time' },
-        { label: 'Part time', value: 'part_time' },
-        { label: 'Internship', value: 'internship' },
-        { label: 'Other', value: 'other' }
-      ]}
-      name="type"
       required
     />
 

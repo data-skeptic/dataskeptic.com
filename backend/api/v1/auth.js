@@ -117,14 +117,28 @@ module.exports = () => {
         (accessToken, refreshToken, { _json }, done) => {
           console.dir('received LI user')
           console.dir(_json)
-          const { id, emailAddress, formattedName, pictureUrl } = _json
+          const {
+            id,
+            emailAddress,
+            formattedName,
+            pictureUrl,
+            positions
+          } = _json
           let user = {}
           user.id = id
           user.displayName = formattedName
           user.avatar = pictureUrl
           user.email = emailAddress
 
-          user.linkedin = _json
+          user.meta = JSON.stringify({
+            positions: positions.values
+          })
+
+          user.linkedin = {}
+          user.linkedin.id = id
+          user.linkedin.accessToken = accessToken
+          user.linkedin.refreshToken = refreshToken
+
           console.log('success LI login')
           done(null, user)
         }
@@ -149,7 +163,8 @@ module.exports = () => {
           user.displayName = profile.displayName
           user.google = {}
           user.google.id = profile.id
-          user.google.token = accessToken
+          user.google.accessToken = accessToken
+          user.google.refreshToken = refreshToken
           user.email = profile.emails[0].value
           done(null, user)
         }
@@ -328,7 +343,8 @@ module.exports = () => {
         const userAccount = await getUserAccount(user.email)
         if (!userAccount) {
           const userData = {
-            email: user.email
+            email: user.email,
+            positions: user.positions
           }
 
           console.log('create user with LI data')
@@ -337,6 +353,7 @@ module.exports = () => {
           notifyOnJoin(user)
         }
 
+        delete user.positions
         req.logIn(user, err => {
           console.log('init user session')
           console.log('err', err)
