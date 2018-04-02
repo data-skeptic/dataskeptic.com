@@ -70,7 +70,9 @@ module.exports = cache => {
       .then(() => {
         res.send({ success: true })
       })
-      .catch(result => res.send({ success: false, error: result.data.message }))
+      .catch(result => res.send({ success: false, error: 
+        `${result.data.message}. Please contact kyle@dataskeptic.com for assistance. `
+       }))
   })
 
   router.get('/drip/content/rate', (req, res) => {
