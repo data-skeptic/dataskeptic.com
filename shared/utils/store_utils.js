@@ -15,7 +15,7 @@ export function calculateShipping(items, short) {
       has_items = 1
       is_shippable = 1
     }
-    if (is_shippable==1 && item.product.price > 4) {
+    if (is_shippable == 1 && item.product.price > 4) {
       big_items = 1
     }
   }

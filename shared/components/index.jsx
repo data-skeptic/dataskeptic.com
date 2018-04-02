@@ -21,10 +21,10 @@ import MobileMenu from '../MobileMenu/Components/MobileMenu'
 import { getItemsCount as getCartItemsCount } from '../Cart/Helpers/getItemsCount'
 import { toggleCart } from '../Cart/Actions/CartActions'
 
-import Launcher from "../Chat/Containers/Launcher"
-import { BOT_ID, THINKING_MESSAGE } from "../Chat/Constants"
-import ConversationHandler from "../Chat/Dialogs/ConversationHandler"
-import {loggMessage} from "../Chat/Reducers/ChatbotReducer";
+import Launcher from '../Chat/Containers/Launcher'
+import { BOT_ID, THINKING_MESSAGE } from '../Chat/Constants'
+import ConversationHandler from '../Chat/Dialogs/ConversationHandler'
+import { loggMessage } from '../Chat/Reducers/ChatbotReducer'
 
 class MainView extends React.Component {
   addMessage = message =>
@@ -50,7 +50,6 @@ class MainView extends React.Component {
     ConversationHandler.get_reply(dispatch, this.reply, cstate, message)
   }
   onInactivity = () => {
-    
     this.reply(
       {
         text:
@@ -58,7 +57,6 @@ class MainView extends React.Component {
       },
       'kyle'
     )
-    
   }
 
   loadState() {

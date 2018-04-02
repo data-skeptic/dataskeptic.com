@@ -28,7 +28,7 @@ module.exports = cache => {
 
   router.post('/', (req, res) => {
     const data = req.body
-    
+
     addJob(data)
       .then(result => {
         if (result.error) {
@@ -37,7 +37,7 @@ module.exports = cache => {
             error: result.error
           })
         }
-        
+
         return res.send(result)
       })
       .catch(err => res.status(500).send(err.message))

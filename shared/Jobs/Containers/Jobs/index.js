@@ -32,14 +32,14 @@ export default class Jobs extends Component {
         </CompanyName>
       </Types>
       {/*<Description>*/}
-        {/*{!viewMore ? (*/}
-          {/*<span>*/}
-            {/*<Text text={description.substring(0, 120) + '...'} />*/}
-            {/*<ViewMore onClick={this.toggleViewMore}>View More</ViewMore>*/}
-          {/*</span>*/}
-        {/*) : (*/}
-          {/*<Text text={full_description} />*/}
-        {/*)}*/}
+      {/*{!viewMore ? (*/}
+      {/*<span>*/}
+      {/*<Text text={description.substring(0, 120) + '...'} />*/}
+      {/*<ViewMore onClick={this.toggleViewMore}>View More</ViewMore>*/}
+      {/*</span>*/}
+      {/*) : (*/}
+      {/*<Text text={full_description} />*/}
+      {/*)}*/}
       {/*</Description>*/}
       <Apply href={url} target="_blank" onClick={() => this.trackApply(id)}>
         Apply now
