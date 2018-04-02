@@ -37,6 +37,7 @@ const commitResume = ({ email, resume, Bucket }) => {
   nextKey += Key
 
   return move(Bucket, ObjectPath, Key, nextKey)
+  
 }
 
 module.exports = cache => {
@@ -69,7 +70,7 @@ module.exports = cache => {
       .then(() => {
         res.send({ success: true })
       })
-      .catch(error => res.send({ success: false, error: error.message }))
+      .catch(result => res.send({ success: false, error: result.data.message }))
   })
 
   router.get('/drip/content/rate', (req, res) => {
@@ -84,7 +85,7 @@ module.exports = cache => {
         console.log(result)
         res.redirect('/drip-result?rate=true')
       })
-      .catch(error => res.send({ success: false, error: error.message }))
+      .catch(result => res.send({ success: false, error: result.data.message }))
   })
 
   router.get('/drip/unsubscribe', (req, res) => {
@@ -100,7 +101,7 @@ module.exports = cache => {
         console.log(result)
         res.redirect('/drip-unsubscribe')
       })
-      .catch(error => res.send({ success: false, error: error.message }))
+      .catch(result => res.send({ success: false, error: result.data.message }))
   })
 
   router.get('/city/:cityId', (req, res) => {
@@ -108,7 +109,7 @@ module.exports = cache => {
 
     return getCityData(cityId)
       .then(data => res.send(data))
-      .then(error => res.status(404).send({ error }))
+      .catch(result => res.status(404).send({ error: result.data.message }))
   })
 
   return router
