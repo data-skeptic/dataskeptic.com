@@ -9,7 +9,7 @@ import MiniPlayer from '../Components/MiniPlayer'
 import VolumeBarContainer from './VolumeBarContainer'
 import { isPlayed, markAsPlayed } from '../../Auth/Reducers/AuthReducer'
 import { initialize as initializePlayer } from '../../../shared/reducers/PlayerReducer'
-import { setVolume } from '../../reducers/PlayerReducer'
+import { setVolume, setMuted } from '../../reducers/PlayerReducer'
 
 const URL = '/api/v1/player'
 
@@ -49,7 +49,6 @@ class PlayerContainer extends Component {
       position: 0,
       loaded: false,
       howler: undefined,
-      muted: false,
       ready: false
     }
 
@@ -354,21 +353,21 @@ class PlayerContainer extends Component {
     const howler = this.getHowler()
 
     howler.volume(volume)
-    this.props.dispatch(setVolume())
+    this.props.dispatch(setVolume(volume))
   }
 
   mute() {
-    this.state.muted = true
+    this.props.dispatch(setMuted(true))
   }
 
   unmute() {
-    this.state.muted = false
+    this.props.dispatch(setMuted(false))
   }
 
   render() {
     const { player, oepisode } = this.props
-    const { is_playing, has_shown, position, playback_loaded, volume } = player
-    const playerVolume = this.props.muted ? 0 : volume
+    const { is_playing, has_shown, position, playback_loaded, volume, muted } = player
+    const playerVolume = muted ? 0 : volume
 
     if (!has_shown) {
       return null

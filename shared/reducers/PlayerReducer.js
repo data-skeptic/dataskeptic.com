@@ -10,12 +10,13 @@ const init = {
   position: 0,
   position_updated: false,
   volume: 0.8,
+  muted: false,
   episode: {}
 }
 
 export const INITIALIZE_PLAYER = 'INITIALIZE_PLAYER'
 export const SET_VOLUME = 'SET_VOLUME'
-
+//ZHOPA
 const IS_CLIENT = (() => {
   let isDefined = false
   try {
@@ -25,11 +26,12 @@ const IS_CLIENT = (() => {
   return isDefined
 })()
 
-const normalizeState = ({ is_playing, position, episode, volume }) => ({
+const normalizeState = ({ is_playing, position, episode, volume, muted }) => ({
   is_playing,
   position,
   episode,
-  volume
+  volume,
+  muted
 })
 
 const getKey = key => {
@@ -54,7 +56,13 @@ const savePlaying = meta => {
   localStorage.setItem(PLAYER_PLAYING_KEY, JSON.stringify(data))
 }
 
-const savePlayingMeta = ({ position, has_shown, is_playing, volume }) => {
+const savePlayingMeta = ({
+  position,
+  has_shown,
+  is_playing,
+  volume,
+  muted
+}) => {
   if (!IS_CLIENT) return null
 
   const data = {
@@ -62,7 +70,8 @@ const savePlayingMeta = ({ position, has_shown, is_playing, volume }) => {
     seekPosition: position,
     has_shown,
     is_playing,
-    volume
+    volume,
+    muted
   }
 
   localStorage.setItem(PLAYER_META_KEY, JSON.stringify(data))
@@ -77,9 +86,15 @@ const getCachePlaying = () => {
   const playing = getKey(PLAYER_META_KEY)
   const episode = getKey(PLAYER_PLAYING_KEY)
 
+  let has_shown = false
+  if (!isEmpty(episode)) {
+    has_shown = true
+  }
+
   return {
     ...playing,
-    episode
+    episode,
+    has_shown
   }
 }
 
@@ -199,10 +214,10 @@ export default function PlayerReducer(state = defaultState, action) {
     case 'MARK_AS_PLAYED':
       removePlaying(nstate)
       break
-    
+
     case SET_VOLUME:
       nstate.volume = action.payload.volume
-      break;
+      break
   }
 
   return Immutable.fromJS(nstate)
@@ -212,9 +227,16 @@ export const initialize = () => ({
   type: INITIALIZE_PLAYER
 })
 
-export const setVolume = (volume) => ({
+export const setVolume = volume => ({
   type: SET_VOLUME,
   payload: {
     volume
+  }
+})
+
+export const setMuted = muted => ({
+  type: SET_VOLUME,
+  payload: {
+    muted
   }
 })
