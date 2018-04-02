@@ -8,6 +8,8 @@ import { connect } from 'react-redux'
 import MiniPlayer from '../Components/MiniPlayer'
 import VolumeBarContainer from './VolumeBarContainer'
 import { isPlayed, markAsPlayed } from '../../Auth/Reducers/AuthReducer'
+import { initialize as initializePlayer } from '../../../shared/reducers/PlayerReducer'
+import { setVolume } from '../../reducers/PlayerReducer'
 
 const URL = '/api/v1/player'
 
@@ -47,22 +49,28 @@ class PlayerContainer extends Component {
       position: 0,
       loaded: false,
       howler: undefined,
-      volume: 0.8,
-      muted: false
+      muted: false,
+      ready: false
     }
 
     this.player = null
   }
 
   componentDidMount() {
+    this.setState({ ready: true })
     // start update timer
     this.updater = setInterval(this.update, 1000)
+    this.props.dispatch(initializePlayer())
   }
 
   componentWillUnmount() {
     // clear the memory
     this.player = null
     clearInterval(this.updater)
+  }
+
+  initRef = ref => {
+    this.player = ref
   }
 
   /**
@@ -163,6 +171,14 @@ class PlayerContainer extends Component {
    *
    */
   onReady() {
+    const seekPosition = this.props.player.seekPosition
+    const duration = this.getDuration()
+
+    if (seekPosition) {
+      const realPosition = 1.0 * seekPosition / 100 * duration
+      this.player.seek(realPosition)
+    }
+
     this.props.dispatch({ type: 'PLAYBACK_LOADED', payload: true })
     this.update()
   }
@@ -212,20 +228,18 @@ class PlayerContainer extends Component {
     const { isAuthorized, loggedIn } = this.props
     const uid = v4()
 
-    if (isAuthorized) {
-      const metaId = `${uid}_playerMeta`
-      localStorage.setItem(metaId, JSON.stringify(meta))
-      axios
-        .post(URL, { type, meta })
-        .then(data => {})
-        .catch(err => console.error(err))
-    }
+    // if (isAuthorized) {
+    //   const metaId = `${uid}_playerMeta`
+    //   localStorage.setItem(metaId, JSON.stringify(meta))
+    //   axios
+    //     .post(URL, { type, meta })
+    //     .then(data => {})
+    //     .catch(err => console.error(err))
+    // }
 
-    if (loggedIn && type === CAPTURE_TYPES.POS) {
-      console.dir(meta)
-      const { position } = meta
-
-      if (position >= 90 && !this.props.played) {
+    const { position } = meta
+    if (type === CAPTURE_TYPES.POS) {
+      if (loggedIn && (position >= 90 && !this.props.played)) {
         console.dir('mark as played')
         const episode = this.props.oepisode.toJS()
         const { blog_id, guid, media } = episode
@@ -236,6 +250,10 @@ class PlayerContainer extends Component {
         })
 
         markAsPlayed(blog_id, media, guid, played)
+      } else if (position >= 90) {
+        this.props.dispatch({
+          type: 'PLAYED'
+        })
       }
     }
   }
@@ -336,7 +354,7 @@ class PlayerContainer extends Component {
     const howler = this.getHowler()
 
     howler.volume(volume)
-    this.state.volume = volume
+    this.props.dispatch(setVolume())
   }
 
   mute() {
@@ -349,9 +367,8 @@ class PlayerContainer extends Component {
 
   render() {
     const { player, oepisode } = this.props
-    const volume = this.state.muted ? 0 : this.state.volume
-
-    const { is_playing, has_shown, position, playback_loaded } = player
+    const { is_playing, has_shown, position, playback_loaded, volume } = player
+    const playerVolume = this.props.muted ? 0 : volume
 
     if (!has_shown) {
       return null
@@ -374,7 +391,7 @@ class PlayerContainer extends Component {
         src={mp3}
         html5={true}
         playing={is_playing}
-        ref={ref => (this.player = ref)}
+        ref={this.initRef}
         onEnd={this.onEnd}
         onLoad={this.onReady}
       />
@@ -382,7 +399,7 @@ class PlayerContainer extends Component {
 
     const volumeController = (
       <VolumeBarContainer
-        volume={volume}
+        volume={playerVolume}
         onChange={this.setVolume}
         onMute={this.mute}
         onUnmute={this.unmute}

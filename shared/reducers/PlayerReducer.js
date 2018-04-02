@@ -9,8 +9,12 @@ const init = {
   playback_loaded: false,
   position: 0,
   position_updated: false,
+  volume: 0.8,
   episode: {}
 }
+
+export const INITIALIZE_PLAYER = 'INITIALIZE_PLAYER'
+export const SET_VOLUME = 'SET_VOLUME'
 
 const IS_CLIENT = (() => {
   let isDefined = false
@@ -55,6 +59,7 @@ const savePlayingMeta = ({ position, has_shown, is_playing, volume }) => {
 
   const data = {
     position,
+    seekPosition: position,
     has_shown,
     is_playing,
     volume
@@ -69,14 +74,11 @@ const removePlaying = () => {
 }
 
 const getCachePlaying = () => {
-  const { position, is_playing, volume } = getKey(PLAYER_META_KEY)
-
+  const playing = getKey(PLAYER_META_KEY)
   const episode = getKey(PLAYER_PLAYING_KEY)
 
   return {
-    position,
-    is_playing,
-    volume,
+    ...playing,
     episode
   }
 }
@@ -86,10 +88,11 @@ const defaultState = Immutable.fromJS(init)
 export default function PlayerReducer(state = defaultState, action) {
   var nstate = state.toJS()
   switch (action.type) {
-    case '@@redux/INIT':
+    case INITIALIZE_PLAYER:
+      const cache = getCachePlaying()
       nstate = {
         ...nstate,
-        ...getCachePlaying()
+        ...cache
       }
       break
     case 'PLAY_EPISODE_FROM_GUID':
@@ -127,7 +130,7 @@ export default function PlayerReducer(state = defaultState, action) {
       if (isEmpty(episode)) {
         nstate.is_playing = false
         nstate.playback_loaded = false
-        nstate.position = init.position
+        nstate.position = nstate.position || init.position
       } else {
         nstate.has_shown = true
         if (nstate.is_playing) {
@@ -138,14 +141,14 @@ export default function PlayerReducer(state = defaultState, action) {
             nstate.episode = episode
             nstate.is_playing = true
             nstate.playback_loaded = false
-            nstate.position = init.position
+            nstate.position = nstate.position || init.position
           } else {
             if (episode.guid == nstate.episode.guid) {
               nstate.is_playing = false
             } else {
               nstate.episode = episode
               nstate.playback_loaded = false
-              nstate.position = init.position
+              nstate.position = nstate.position || init.position
               nstate.is_playing = true
             }
           }
@@ -192,10 +195,26 @@ export default function PlayerReducer(state = defaultState, action) {
       nstate.position_updated = false
       break
 
+    case 'PLAYED':
     case 'MARK_AS_PLAYED':
       removePlaying(nstate)
       break
+    
+    case SET_VOLUME:
+      nstate.volume = action.payload.volume
+      break;
   }
 
   return Immutable.fromJS(nstate)
 }
+
+export const initialize = () => ({
+  type: INITIALIZE_PLAYER
+})
+
+export const setVolume = (volume) => ({
+  type: SET_VOLUME,
+  payload: {
+    volume
+  }
+})
