@@ -14,7 +14,15 @@
 .blog-top-nav {
   clear: both;
 
-  margin: auto auto 1em;
+  padding: 22px 24px;
+
+  margin: 0px auto;
+  max-width: 950px;
+
+  @media (max-width: 768px) {
+    margin: auto auto 1em;
+    max-width: 100%;
+  }
 }
 
 .blog-bread-crumbs-item {
