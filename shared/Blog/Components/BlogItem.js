@@ -200,13 +200,13 @@ class BlogItem extends React.Component {
 }
 
 const By = styled.section`
-  padding: 12px 0px 0px 0px;
+  padding: 22px 0px 0px 0px;
   display: flex;
   align-items: center;
 `
 
 const AuthorsTop = styled.div`
-  padding-left: 0.3em;
+  margin-left: -0.3em;
   display: flex;
 `
 
