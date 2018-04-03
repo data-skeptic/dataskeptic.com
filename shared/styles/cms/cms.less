@@ -98,6 +98,10 @@
   background-color: #f4f4f4;
   padding: 32px;
 
+  @media (max-width: 414px) {
+    padding: 24px 20px;
+  }
+
   h3 {
     font-size: 32px;
     line-height: 40px;
@@ -109,10 +113,13 @@
 
   .blog-share-container__wrapper {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
+
+    flex-direction: row;
+    flex-wrap: wrap;
 
     .blog-share-container {
-      margin: 5px;
+      margin: 12px 12px 0px 0px;
     }
   }
 }

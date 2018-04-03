@@ -173,7 +173,7 @@ class BlogItem extends React.Component {
     }
 
     return (
-      <div className="blog-item-wrapper">
+      <Wrapper>
         <BlogBreadCrumbs prettyname={prettyname} exampleImage={exampleImage} />
         {renderTopContributors(blog.contributors)}
         {top}
@@ -194,10 +194,21 @@ class BlogItem extends React.Component {
           url={url}
           onNewComment={this.handleNewComment}
         />
-      </div>
+      </Wrapper>
     )
   }
 }
+
+const Wrapper = styled.div`
+  margin: auto;
+  clear: both;
+  max-width: 600px;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    padding: 0 1.1111111111111112rem 1.6666666666666667rem 1.1111111111111112rem;
+  }
+`
 
 const By = styled.section`
   padding: 22px 0px 0px 0px;
