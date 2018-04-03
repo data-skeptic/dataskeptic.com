@@ -65,7 +65,7 @@ const Container = styled.div`
         flex: 1;
         margin-right: 10px;
       }
-      
+
       &:last-child {
         margin-right: 0px;
       }
