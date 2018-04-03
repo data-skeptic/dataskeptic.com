@@ -15,7 +15,7 @@ export const AddressForm = ({ title = 'Shipping Information' }) => (
         <Field
           fieldWrapperClasses="col-md-6"
           component={renderField}
-          autocomplete="false"
+          autoComplete="false"
           required
           label="First Name"
           name="first_name"
@@ -27,7 +27,7 @@ export const AddressForm = ({ title = 'Shipping Information' }) => (
         <Field
           fieldWrapperClasses="col-md-6"
           component={renderField}
-          autocomplete="false"
+          autoComplete="false"
           required
           label="Last Name"
           name="last_name"
@@ -41,7 +41,7 @@ export const AddressForm = ({ title = 'Shipping Information' }) => (
         <Field
           fieldWrapperClasses="col-md-8"
           component={renderField}
-          autocomplete="false"
+          autoComplete="false"
           required
           label="Street Address"
           name="street_1"
@@ -53,7 +53,7 @@ export const AddressForm = ({ title = 'Shipping Information' }) => (
         <Field
           fieldWrapperClasses="col-md-4"
           component={renderField}
-          autocomplete="false"
+          autoComplete="false"
           label="Apt, suite, etc."
           name="street_2"
           type="text"
@@ -66,7 +66,7 @@ export const AddressForm = ({ title = 'Shipping Information' }) => (
         <Field
           fieldWrapperClasses="col-md-12"
           component={renderField}
-          autocomplete="false"
+          autoComplete="false"
           required
           label="City / Town"
           name="city"
@@ -89,7 +89,7 @@ export const AddressForm = ({ title = 'Shipping Information' }) => (
         <Field
           fieldWrapperClasses="col-md-4"
           component={renderField}
-          autocomplete="false"
+          autoComplete="false"
           required
           label="State / Province"
           name="state"
@@ -100,7 +100,7 @@ export const AddressForm = ({ title = 'Shipping Information' }) => (
 
         <Field
           fieldWrapperClasses="col-md-3"
-          autocomplete="false"
+          autoComplete="false"
           required
           label="Postal Code"
           name="zip"
@@ -114,7 +114,7 @@ export const AddressForm = ({ title = 'Shipping Information' }) => (
       <div className="row">
         <Field
           fieldWrapperClasses="col-md-6"
-          autocomplete="false"
+          autoComplete="false"
           required
           label="Email"
           name="email"
@@ -126,7 +126,7 @@ export const AddressForm = ({ title = 'Shipping Information' }) => (
 
         <Field
           fieldWrapperClasses="col-md-6"
-          autocomplete="false"
+          autoComplete="false"
           required
           label="Phone"
           name="phone"

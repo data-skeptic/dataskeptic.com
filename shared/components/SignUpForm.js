@@ -26,7 +26,7 @@ const SignUpForm = ({
       type="email"
       className="contact-name"
       placeholder="j.smith@work.com"
-      autocomplete="false"
+      autoComplete="false"
       labelWrapperClasses="col-xs-12 col-sm-12"
       inputWrapperStyles="col-xs-12 col-sm-12"
       required
@@ -38,7 +38,7 @@ const SignUpForm = ({
       type="password"
       className="contact-name"
       placeholder="password"
-      autocomplete="false"
+      autoComplete="false"
       labelWrapperClasses="col-xs-12 col-sm-12"
       inputWrapperStyles="col-xs-12 col-sm-12"
       required

@@ -11,7 +11,7 @@ export const CreditCard = ({ title = 'Billing Details' }) => (
     <div className="row">
       <Field
         fieldWrapperClasses="col-md-12"
-        autocomplete="false"
+        autoComplete="false"
         label="Credit Card Number"
         name="card_number"
         type="text"
@@ -26,7 +26,7 @@ export const CreditCard = ({ title = 'Billing Details' }) => (
     <div className="row">
       <Field
         fieldWrapperClasses="col-md-5"
-        autocomplete="false"
+        autoComplete="false"
         label="Cardholder Name"
         name="card_name"
         type="text"
@@ -38,7 +38,7 @@ export const CreditCard = ({ title = 'Billing Details' }) => (
 
       <Field
         fieldWrapperClasses="col-md-2"
-        autocomplete="false"
+        autoComplete="false"
         required
         label="Month"
         name="card_month"
@@ -51,7 +51,7 @@ export const CreditCard = ({ title = 'Billing Details' }) => (
 
       <Field
         fieldWrapperClasses="col-md-2"
-        autocomplete="false"
+        autoComplete="false"
         required
         label="Year"
         name="card_year"
@@ -64,7 +64,7 @@ export const CreditCard = ({ title = 'Billing Details' }) => (
 
       <Field
         fieldWrapperClasses="col-md-3"
-        autocomplete="false"
+        autoComplete="false"
         required
         label="CVV"
         name="card_cvv"
