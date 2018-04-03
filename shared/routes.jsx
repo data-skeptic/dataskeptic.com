@@ -21,6 +21,7 @@ import CoachingBiWeekly from 'components/CoachingBiWeekly'
 import ContactUs from 'Contacts/Routes/ContactUs'
 import Careers from 'Jobs/Routes/Careers'
 import CityCareers from 'Jobs/Routes/CityCareers'
+import CareersJobsAdd from 'Jobs/Routes/CareersJobsAdd'
 import DontHackMe from 'components/DontHackMe'
 import Explorer from 'TimeSeriesExplorer/Components/Explorer'
 import Home from 'components/Home'
@@ -149,6 +150,11 @@ export default (
     <Route path="/careers" component={App} onEnter={loadData}>
       <IndexRoute component={Careers} />
     </Route>
+
+    <Route path="/careers/jobs/add" component={App} onEnter={loadData}>
+      <IndexRoute component={CareersJobsAdd} />
+    </Route>
+
     <Route path="/loading" component={App} onEnter={loadData}>
       <IndexRoute component={Loading} />
     </Route>
