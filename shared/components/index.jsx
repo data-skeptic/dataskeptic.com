@@ -21,8 +21,9 @@ import MobileMenu from '../MobileMenu/Components/MobileMenu'
 import { getItemsCount as getCartItemsCount } from '../Cart/Helpers/getItemsCount'
 import { toggleCart } from '../Cart/Actions/CartActions'
 
-class MainView extends React.Component {
+import Launcher, { reduxChatBot } from '../../chatbot_lib/client'
 
+class MainView extends React.Component {
   loadState() {
     var cart_items = []
     var country = { short: 'us', long: 'United State of America' }
@@ -191,7 +192,6 @@ class MainView extends React.Component {
     this.onFooterItemClick = this.onFooterItemClick.bind(this)
   }
 
-
   render() {
     this.logPageView()
     const {
@@ -208,6 +208,8 @@ class MainView extends React.Component {
     const { pathname } = this.props.location
     const itemsCount = getCartItemsCount(cart.toJS().cart_items)
     const isOverflowMode = isCartVisible
+
+    const thinking = false
     return (
       <div
         className={classNames('site', {
@@ -239,10 +241,24 @@ class MainView extends React.Component {
           banner={this.props.bannerContent}
         />
         <Overflow visible={isOverflowMode} onClick={this.onOverflowClick} />
+
+        <ChatBotLauncher
+          thinking={thinking}
+          inactivityDelay={1000 * 1}
+          bot="bot"
+          operators={contributors}
+          initialContext={{
+            contributors
+          }}
+        />
       </div>
     )
   }
 }
+
+const ChatBotLauncher = reduxChatBot({
+  publicKey: 'datas_chatbot'
+})(Launcher)
 
 export default connect(state => ({
   cart: state.cart,

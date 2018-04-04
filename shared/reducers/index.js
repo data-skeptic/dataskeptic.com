@@ -19,3 +19,4 @@ export {
   default as timeseries
 } from '../TimeSeriesExplorer/Reducers/TimeSeriesReducer'
 export { default as chatbot } from '../Chat/Reducers/ChatbotReducer'
+export { default as bot } from '../../chatbot_lib/client/reducer'

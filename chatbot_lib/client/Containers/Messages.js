@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 
-import { THINKING_MESSAGE } from '../Constants'
+import { THINKING_MESSAGE } from '../../shared/messageTypes'
 import Message from '../Components/Message'
 import Thinking from '../Components/Thinking'
 

@@ -1,6 +1,5 @@
 export {
   init,
   destroy,
-  sendMessage,
-  recieveMessage
+  sendMessage
 } from '../client/reducer'

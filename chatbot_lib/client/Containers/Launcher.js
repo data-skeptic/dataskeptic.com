@@ -2,9 +2,8 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import UserInput from './UserInput'
 import Messages from './Messages'
-import { REGULAR_MESSAGE, THINKING_MESSAGE } from '../Constants'
-
-export { BOT_AUTHOR, BOT_ID } from '../Constants'
+import { REGULAR_MESSAGE, THINKING_MESSAGE } from '../../shared/messageTypes'
+export { BOT_ID } from '../constants'
 
 export default class Launcher extends Component {
   static defaultProps = {
