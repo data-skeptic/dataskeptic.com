@@ -9,7 +9,7 @@ export default class Launcher extends Component {
   static defaultProps = {
     placeholder: 'Send a message...',
     header: 'DataSkeptic Bot',
-    messages: [],
+    history: [],
     onMessage: () => {},
     onInactivity: () => {},
     defaultBot: {},
@@ -66,10 +66,10 @@ export default class Launcher extends Component {
   render() {
     const { open } = this.state
     const { placeholder, header, thinking } = this.props
-    let { messages } = this.props
+    let { history } = this.props
 
     if (thinking) {
-      messages = [...messages, this.getThinkingMessage()]
+      history = [...history, this.getThinkingMessage()]
     }
 
     return (
@@ -79,7 +79,7 @@ export default class Launcher extends Component {
             {header}
             <Close onClick={this.close} />
           </Header>
-          <Messages messages={messages} />
+          <Messages messages={history} />
           <UserInput
             placeholder={placeholder}
             onSubmit={this.handleMessage}
