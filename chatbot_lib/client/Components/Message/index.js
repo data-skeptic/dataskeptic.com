@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import marked from 'marked'
-import { BOT_ID } from '../../Constants/index'
+import { BOT_ID } from '../../constants'
 
 const getMarkdown = text => {
   const rawMarkup = marked(text)

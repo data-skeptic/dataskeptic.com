@@ -21,7 +21,7 @@ import MobileMenu from '../MobileMenu/Components/MobileMenu'
 import { getItemsCount as getCartItemsCount } from '../Cart/Helpers/getItemsCount'
 import { toggleCart } from '../Cart/Actions/CartActions'
 
-import Launcher from '../Chat/Containers/Launcher'
+import Launcher from '../../chatbot_lib/client'
 import { BOT_ID, THINKING_MESSAGE } from '../Chat/Constants'
 import ConversationHandler from '../Chat/Dialogs/ConversationHandler'
 import { loggMessage } from '../Chat/Reducers/ChatbotReducer'
