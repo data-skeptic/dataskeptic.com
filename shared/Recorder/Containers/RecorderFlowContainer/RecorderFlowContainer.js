@@ -107,8 +107,6 @@ class RecorderFlowContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('[RECORDER FLOW CONTAINER] will receive props')
-
     if (this.isStepChanged(this.props.activeStep, nextProps.activeStep)) {
       this.controlFlow(nextProps)
     }
@@ -123,15 +121,10 @@ class RecorderFlowContainer extends Component {
   }
 
   nextFlowStep(nextStep) {
-    console.log('[RECORDER FLOW CONTAINER] next flow step')
-    console.dir(nextStep)
-
     this.stepsActionHandlers[nextStep]()
   }
 
   onInit() {
-    console.log('onInit()')
-
     if (this.isBrowserSupportRecording()) {
       this.props.ready()
     } else {
@@ -275,8 +268,9 @@ class RecorderFlowContainer extends Component {
 
     return (
       <p className="text-muted">
-        Recording will start when you hit the button below.<br />You will have a
-        chance to review your recording before submitting.
+        Recording will start when you click the record button to the left of
+        this message.<br />You will have a chance to review your recording
+        before submitting.
       </p>
     )
   }
@@ -447,7 +441,7 @@ class RecorderFlowContainer extends Component {
           <div key={[READY, RECORDING]} className="recording-step">
             <Recorder
               recording={this.isRecording()}
-              startComponent={<i className="fa fa-microphone icon">&nbsp;</i>}
+              startComponent={<i className="microphone icon" />}
               stopComponent={<i className="fa fa-circle icon">&nbsp;</i>}
               onClick={this.toggleRecording}
               info={this.getInfoMessage()}

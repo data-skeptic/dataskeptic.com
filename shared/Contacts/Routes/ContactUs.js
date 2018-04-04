@@ -7,7 +7,7 @@ import styled from 'styled-components'
 
 import ContactFormContainer from '../Containers/ContactFormContainer/ContactFormContainer'
 import { changePageTitle } from '../../Layout/Actions/LayoutActions'
-import { formValueSelector, reduxForm, reset } from 'redux-form'
+import { formValueSelector, reset } from 'redux-form'
 import {
   init,
   ready,
@@ -24,13 +24,8 @@ import QuestionForm from '../../Questions/Forms/QuestionForm'
 import { submitCommentForm } from '../../Proposals/Actions/CommentBoxFormActions'
 import SectionBlock from '../Components/SectionBlock/SectionBlock'
 
-import Launcher, { reduxChatBot } from '../../../chatbot_lib/client'
-
-const ChatBotLauncher = reduxChatBot({
-  publicKey: 'datas_chatbot'
-})(Launcher)
-
 class ContactUs extends React.Component {
+  isSectionOpen = section => section === this.state.openSection
   toggleSection = section => {
     this.setState(prevState => ({
       openSection: prevState.openSection === section ? '' : section
@@ -40,9 +35,33 @@ class ContactUs extends React.Component {
     this.props.dispatch(ready(noDelay))
     this.setState({ submittedUrl: '' })
   }
+  recorderRecording = () => {
+    this.props.dispatch(recordingStart())
+  }
+  recorderStop = id => {
+    this.props.dispatch(recordingFinish(id))
+    this.setState({ submittedUrl: id })
+  }
+  recorderReview = id => {
+    this.props.dispatch(review())
+  }
+  recorderSubmit = id => {
+    this.props.dispatch(submit())
+  }
+  recorderComplete = id => {
+    this.props.dispatch(complete(id))
+  }
+  recorderError = error => {
+    this.props.dispatch(fail(error))
+  }
   reset = () => {
     this.setState({ submittedUrl: '' })
     this.props.dispatch(reset(`question`))
+  }
+  questionSubmit = data => {
+    data.recording = this.state.submittedUrl
+    data.type = RECORDING
+    this.props.dispatch(submitCommentForm(data))
   }
   subscribeSlack = e => {
     e.preventDefault()
@@ -79,10 +98,6 @@ class ContactUs extends React.Component {
       })
   }
 
-  isSectionOpen = section => section === this.state.openSection
-
-  handleInactivity = () => {}
-
   constructor(props) {
     super(props)
 
@@ -90,37 +105,6 @@ class ContactUs extends React.Component {
       submittedUrl: '',
       openSection: ''
     }
-  }
-
-  recorderRecording = () => {
-    this.props.dispatch(recordingStart())
-  }
-
-  recorderStop = id => {
-    this.props.dispatch(recordingFinish(id))
-    this.setState({ submittedUrl: id })
-  }
-
-  recorderReview = id => {
-    this.props.dispatch(review())
-  }
-
-  recorderSubmit = id => {
-    this.props.dispatch(submit())
-  }
-
-  recorderComplete = id => {
-    this.props.dispatch(complete(id))
-  }
-
-  recorderError = error => {
-    this.props.dispatch(fail(error))
-  }
-
-  questionSubmit = data => {
-    data.recording = this.state.submittedUrl
-    data.type = RECORDING
-    this.props.dispatch(submitCommentForm(data))
   }
 
   static getPageMeta() {
@@ -138,13 +122,7 @@ class ContactUs extends React.Component {
   }
 
   render() {
-    const {
-      confirmPolicy,
-      activeStep,
-      errorMessage,
-      contributors,
-      thinking
-    } = this.props
+    const { confirmPolicy, activeStep, errorMessage } = this.props
     const { submittedUrl } = this.state
 
     const osite = this.props.site.toJS()
@@ -153,19 +131,6 @@ class ContactUs extends React.Component {
 
     return (
       <Container>
-        <code>{JSON.stringify(this.state.messages)}</code>
-
-        <ChatBotLauncher
-          thinking={thinking}
-          onInactivity={this.handleInactivity}
-          inactivityDelay={1000 * 1}
-          bot="bot"
-          operators={contributors}
-          initialContext={{
-            contributors
-          }}
-        />
-
         <Title>Contact Us</Title>
         <Text>
           We hope to respond to all inquiries, but sometimes the volume of
@@ -178,24 +143,44 @@ class ContactUs extends React.Component {
 
         <Socials>
           <SocialBlock order={1}>
+            <SocialIcon
+              src={
+                'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/twitter-square+-+FontAwesome.svg'
+              }
+            />
             <p>
               You can find us on Twitter via{' '}
-              <TwitterLink href="https://twitter.com/dataskeptic">
+              <TwitterLink
+                href="https://twitter.com/dataskeptic"
+                className="no-line"
+              >
                 @DataSkeptic
               </TwitterLink>
             </p>
           </SocialBlock>
           <SocialBlock order={3}>
+            <SocialIcon
+              src={
+                'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/facebook-square+-+FontAwesome.svg'
+              }
+            />
             <p>
               We are on Facebook via{' '}
-              <FacebookLink href="https://www.facebook.com/dataskeptic">
+              <FacebookLink
+                href="https://www.facebook.com/dataskeptic"
+                className="no-line"
+              >
                 https://www.facebook.com/dataskeptic
               </FacebookLink>
             </p>
           </SocialBlock>
           <SocialBlock order={2}>
             <SocialForm onSubmit={this.subscribeSlack}>
-              <SocialIcon src={'/img/png/contacts_slack.png'} />
+              <SocialIcon
+                src={
+                  'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/logo-slack.svg'
+                }
+              />
               <input name="email" id="email" />
               <button
                 type="submit"
@@ -208,6 +193,11 @@ class ContactUs extends React.Component {
             </SocialForm>
           </SocialBlock>
           <SocialBlock order={4}>
+            <SocialIcon
+              src={
+                'https://s3.amazonaws.com/dataskeptic.com/img/2018/contact-us/mail_outline+-+material+copy.svg'
+              }
+            />
             <SocialForm
               action="//dataskeptic.us9.list-manage.com/subscribe/post?u=65e63d6f84f1d87759105d133&amp;id=dc60d554db"
               method="post"
@@ -348,14 +338,6 @@ class ContactUs extends React.Component {
   }
 }
 
-/*
-				    <SectionBlock title="For PR Firms" open={this.isSectionOpen('pr')} onToggle={() => this.toggleSection('pr')}>
-					    <Text>pr</Text>
-
-					    <ContactFormContainer type/>
-						</SectionBlock>
-*/
-
 const SocialBlock = ({ left, children, order }) => (
   <Social order={order}>{children}</Social>
 )
@@ -411,7 +393,7 @@ const Social = styled.div`
 const SocialIcon = styled.img`
   width: 32px;
   height: 32px;
-  margin-right: 7px;
+  margin-right: 17px;
 `
 
 const Sections = styled.div`
@@ -437,7 +419,7 @@ const Sections = styled.div`
 const ListenerArea = styled.div``
 
 const SocialForm = styled.form`
-	width: 100%;
+  flex: 1;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -499,12 +481,8 @@ const selector = formValueSelector('question')
 export default connect(state => ({
   cart: state.cart,
   site: state.site,
-  chatbot: state.chatbot,
   confirmPolicy: selector(state, 'confirmPolicy'),
   activeStep: state.questions.getIn(['form', 'step']),
   errorMessage: state.questions.getIn(['form', 'error']),
-  aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket']),
-  // ChatBotNext
-  contributors: state.site.get('contributors').toJS(),
-  thinking: state.chatbot.get('thinking')
+  aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket'])
 }))(ContactUs)

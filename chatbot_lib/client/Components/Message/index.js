@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import marked from 'marked'
-import { BOT_ID } from '../../constants'
+import { BOT_ID } from '../../Constants/index'
 
 const getMarkdown = text => {
   const rawMarkup = marked(text)
@@ -16,12 +16,13 @@ export default class Message extends Component {
 
     return (
       <Container sent={sent}>
-        {author && <Author src={author.img} bot={author.author === BOT_ID} />}
-        
+        {author && (
+          <Author>
+            <img src={author.img} bot={author.author === BOT_ID} />
+          </Author>
+        )}
         <Content>
-          {text && <Bubble sent={sent}>{renderText(text)}</Bubble>}
-          {(text && children) && <Spacer />  }
-          {children}
+          <Bubble sent={sent}>{children ? children : renderText(text)}</Bubble>
         </Content>
       </Container>
     )
@@ -42,37 +43,34 @@ const Container = styled.div`
 			`};
 `
 
-const Author = styled.img`
-  width: 32px;
-  height: 32px;
-  margin-top: 6px;
+const Author = styled.div`
+  flex-basis: 40px;
+  border: 1px;
 
-  ${props =>
-    !props.bot &&
-    `
-    border-radius: 50%;  
-  `};
-`
+  img {
+    width: 32px;
+    height: 32px;
+    margin-top: 6px;
 
-const content = css`
-  margin-left: 15px;
-  display: inline-block;
-  max-width: 100%;
-  min-width: 40px;
-  overflow: hidden;
+    ${props =>
+      !props.bot &&
+      `
+  
+      border-radius: 50%;  
+    `};
+  }
 `
 
 const Content = styled.div`
-  ${content};
-`
-
-const Spacer = styled.div`
-  margin-top: 12px;
+  flex: 1;
 `
 
 const Bubble = styled.div`
   border-radius: 5px;
   padding: 12px;
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
   word-wrap: break-word;
 
   * {
@@ -80,23 +78,24 @@ const Bubble = styled.div`
     padding: 0px;
     max-width: 100%;
   }
-  
-  mark[type=exit] {
-    border: 1px solid #d7d9d9;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 4px;
-    padding: 1px 4px;
-  }
-    
 
   ${props =>
     props.sent
       ? `
 	    background: rgba(240, 217, 67, 0.1);
+	    float: right;
 			`
       : `
 			background: #F9FAF9;
 	`};
 `
 
-const Text = styled.span``
+const Text = styled.span`
+  a {
+    border-bottom: 1px solid;
+
+    &:hover {
+      border-bottom: 1px solid;
+    }
+  }
+`

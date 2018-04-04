@@ -7,7 +7,7 @@ import { Provider } from 'react-redux'
 import * as reducers from 'reducers'
 import doRefresh from 'daos/doRefresh'
 import routes from 'routes'
-import Immutable, {fromJS} from 'immutable'
+import Immutable from 'immutable'
 import thunk from 'redux-thunk'
 import promiseMiddleware from 'lib/promiseMiddleware'
 import immutifyState from 'lib/immutifyState'
@@ -22,14 +22,6 @@ import { SCHEMA_VER } from '../shared/reducers/SiteReducer'
 
 import initCart from '../shared/Cart/Helpers/initCart'
 import persistCart from '../shared/Cart/Helpers/persistCart'
-
-/**
- * Chatbot/Client API
- */
-import {
-  reducer as chatBotReducer,
-  middleware as chatBotMiddleware
-} from '../chatbot_lib/client'
 
 /**
  * Validate cached store schema version
@@ -53,14 +45,10 @@ const history = createBrowserHistory()
 
 const reducer = combineReducers({
   form: formReducer,
-  // dirty hacks for immutable
-  bot: chatBotReducer,
   ...reducers
 })
 
-const store = applyMiddleware(thunk, chatBotMiddleware, promiseMiddleware)(
-  createStore
-)(
+const store = applyMiddleware(thunk, promiseMiddleware)(createStore)(
   reducer,
   initialState,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
@@ -68,7 +56,7 @@ const store = applyMiddleware(thunk, chatBotMiddleware, promiseMiddleware)(
 
 var env = 'prod'
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV != 'production') {
   env = 'dev'
 } else {
   console.log('index.jsx env=' + process.env.NODE_ENV)

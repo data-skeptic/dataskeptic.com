@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { map, isEmpty, orderBy } from 'lodash'
 import marked from 'marked'
+import styled from 'styled-components'
 
 import { changePageTitle } from '../Layout/Actions/LayoutActions'
 import AuthorLink from './AuthorLink'
@@ -17,8 +18,8 @@ class About extends Component {
   renderContributor = contributor => (
     <div className="media" key={contributor.contributor_id}>
       <div className="media-left">
-        <AuthorLink author={contributor.author}>
-          <img
+        <AuthorLink author={contributor.author} className="no-line">
+          <Avatar
             width={AVATAR_SIZE}
             height={AVATAR_SIZE}
             className="media-object img-circle img-thumbnail"
@@ -29,7 +30,7 @@ class About extends Component {
       </div>
       <div className="media-body">
         <h4 className="media-heading">
-          <AuthorLink author={contributor.author}>
+          <AuthorLink author={contributor.author} className="no-line">
             {contributor.prettyname}
           </AuthorLink>
         </h4>
@@ -125,6 +126,10 @@ class About extends Component {
     )
   }
 }
+
+const Avatar = styled.img`
+  border: 1px solid #dddddd;
+`
 
 export default connect(state => ({
   contributors: state.site.get('contributors').toJS()

@@ -2,25 +2,32 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import UserInput from './UserInput'
 import Messages from './Messages'
+import { REGULAR_MESSAGE, THINKING_MESSAGE } from '../Constants'
 
-import defaultBotProps from '../../shared/props'
-
-import { REGULAR_MESSAGE, THINKING_MESSAGE } from '../../shared/messageTypes'
-export { BOT_ID } from '../constants'
+export { BOT_AUTHOR, BOT_ID } from '../Constants'
 
 export default class Launcher extends Component {
   static defaultProps = {
-    ...defaultBotProps
+    placeholder: 'Send a message...',
+    header: 'DataSkeptic Bot',
+    messages: [],
+    onMessage: () => {},
+    onInactivity: () => {},
+    defaultBot: {},
+    inactivityDelay: 3000
   }
 
   state = {
     open: false
   }
-
   triggerInactivity = () => {
     this.props.onInactivity()
-  }
 
+    if (this.timer) {
+      clearTimeout(this.timer)
+      this.timer = null
+    }
+  }
   handleMessage = message => {
     this.resetInactivityTimer()
     const { onMessage } = this.props
@@ -54,16 +61,16 @@ export default class Launcher extends Component {
   }
 
   getThinkingMessage() {
-    return { type: THINKING_MESSAGE, author: this.props.bot }
+    return { type: THINKING_MESSAGE, author: this.props.defaultBot }
   }
 
   render() {
     const { open } = this.state
     const { placeholder, header, thinking } = this.props
-    let { history } = this.props
+    let { messages } = this.props
 
     if (thinking) {
-      history = [...history, this.getThinkingMessage()]
+      messages = [...messages, this.getThinkingMessage()]
     }
 
     return (
@@ -73,7 +80,7 @@ export default class Launcher extends Component {
             {header}
             <Close onClick={this.close} />
           </Header>
-          <Messages messages={history} />
+          <Messages messages={messages} />
           <UserInput
             placeholder={placeholder}
             onSubmit={this.handleMessage}
@@ -111,6 +118,20 @@ const Chat = styled.div`
   transition: 0.3s ease-in-out;
   border-radius: 10px;
 
+  @media (max-width: 768px) {
+    top: 80px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    height: calc(100% - 80px);
+    width: 100%;
+    border-radius: 0px;
+    z-index: 4;
+    box-shadow: none;
+    min-height: auto;
+    max-height: none;
+  }
+
   ${props =>
     props.inactive &&
     `
@@ -137,6 +158,7 @@ const Close = styled.button`
   right: 26px;
   top: 16px;
 
+  background-color: transparent;
   background-image: url(/img/chat/close.svg);
   width: 20px;
   height: 20px;
@@ -182,6 +204,10 @@ const Button = styled.div`
   &:hover {
     box-shadow: 0 1px 1px 0 rgba(56, 56, 58, 0.1),
       0 10px 20px 0 rgba(56, 56, 58, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    z-index: 2;
   }
 `
 

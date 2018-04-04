@@ -37,6 +37,8 @@ export default function CheckoutReducer(state = initialState, action) {
     case CHECKOUT_REQUEST_FAILED:
       nstate.success = ''
       nstate.error = action.payload.error
+      nstate.processing = false
+      nstate.loaded = false
       break
 
     case RECEIPT_REQUEST_START:

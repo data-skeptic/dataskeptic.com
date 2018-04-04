@@ -6,21 +6,23 @@ export const renderField = ({
   label,
   type,
   textarea,
+  customComponent,
   placeholder,
   required,
   meta: { touched, error, warning, invalid },
   fieldWrapperClasses = '',
   labelWrapperClasses = '',
-  inputWrapperStyles = ''
+  inputWrapperStyles = '',
+  ...rest
 }) => {
   const textareaType = (
     <textarea
       {...input}
       placeholder={placeholder}
-      type={type}
       className={`${inputWrapperStyles} ${
         touched && invalid ? 'has-danger' : ''
       }`}
+      {...rest}
     />
   )
   const inputType = (
@@ -29,7 +31,17 @@ export const renderField = ({
       placeholder={placeholder}
       type={type}
       className={`${touched && invalid ? 'has-danger' : ''}`}
+      {...rest}
     />
+  )
+
+  const CustomComponent = customComponent
+  const inputComponent = customComponent ? (
+    <CustomComponent input={input} {...rest} />
+  ) : textarea ? (
+    textareaType
+  ) : (
+    inputType
   )
 
   return (
@@ -38,7 +50,7 @@ export const renderField = ({
         {label}&nbsp;{required ? <span className="required">*</span> : null}
       </div>
       <div className={`field-input ${inputWrapperStyles}`}>
-        {textarea ? textareaType : inputType}
+        {inputComponent}
 
         <p className="error-message">
           {touched &&

@@ -1,12 +1,10 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import { Link } from 'react-router'
+import styled from 'styled-components'
 import { connect } from 'react-redux'
 import ReactDisqusComments from 'react-disqus-comments'
 import snserror from '../../SnsUtil'
 import EpisodePlayer from '../../components/EpisodePlayer'
 import MailingListBlogFooter from './MailingListBlogFooter'
-import BlogLink from './BlogLink'
 import RelatedContent from './RelatedContent'
 import BlogBreadCrumbs from './BlogBreadCrumbs'
 import BlogAuthorTop from './BlogAuthorTop'
@@ -36,6 +34,29 @@ const injectImage = (content, preview) => {
 
   return insertAt(content, at, injectedImage)
 }
+
+const renderTopContributors = (contributors = []) => (
+  <By>
+    <AuthorsTop>
+      {contributors.map((contributor, index) => (
+        <BlogAuthorTop
+          {...contributor}
+          isFirst={index === 0}
+          isLast={index === contributors.length - 1}
+          key={contributor.contributor_id}
+        />
+      ))}
+    </AuthorsTop>
+  </By>
+)
+
+const renderBottomContributors = (contributors = []) => (
+  <div>
+    {contributors.map(contributor => (
+      <BlogAuthorBottom {...contributor} key={contributor.contributor_id} />
+    ))}
+  </div>
+)
 
 class BlogItem extends React.Component {
   constructor(props) {
@@ -86,10 +107,6 @@ class BlogItem extends React.Component {
     var title = blog['title']
     var top = <div />
     var bot = <div />
-    if (contributor != undefined) {
-      top = <BlogAuthorTop contributor={contributor} />
-      bot = <BlogAuthorBottom contributor={contributor} />
-    }
     var guid = blog.guid
     if (guid) {
       var episode = undefined
@@ -137,9 +154,16 @@ class BlogItem extends React.Component {
       content = injectImage(content, preview)
     }
 
+    const multipleContributors =
+      blog.contributors && blog.contributors.length > 0
+    if (!multipleContributors && contributor) {
+      blog.contributors = [contributor]
+    }
+
     return (
       <div className="blog-item-wrapper">
         <BlogBreadCrumbs prettyname={prettyname} exampleImage={exampleImage} />
+        {renderTopContributors(blog.contributors)}
         {top}
         <div
           className="content"
@@ -151,6 +175,7 @@ class BlogItem extends React.Component {
           title={title}
           exampleImage={exampleImage}
         />
+        {renderBottomContributors(blog.contributors)}
         {bot}
         <MailingListBlogFooter />
         <ReactDisqusComments
@@ -164,6 +189,18 @@ class BlogItem extends React.Component {
     )
   }
 }
+
+const By = styled.section`
+  padding: 12px 0px 0px 0px;
+  display: flex;
+  align-items: center;
+`
+
+const AuthorsTop = styled.div`
+  padding-left: 0.3em;
+  display: flex;
+`
+
 export default connect(state => ({
   site: state.site,
   cms: state.cms,

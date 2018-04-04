@@ -12,7 +12,7 @@ export const UserInfoBox = () => (
       type="text"
       className="contact-name"
       placeholder="John Smith"
-      autocomplete="false"
+      autoComplete="false"
     />
     <Field
       label="Email"
@@ -21,7 +21,7 @@ export const UserInfoBox = () => (
       type="email"
       className="contact-name"
       placeholder="j.smith@work.com"
-      autocomplete="false"
+      autoComplete="false"
     />
   </div>
 )

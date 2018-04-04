@@ -33,8 +33,7 @@ import {
   loadProducts,
   load,
   get_contributors,
-  loadCurrentRFC,
-  get_bot_status
+  loadCurrentRFC
 } from 'daos/serverInit'
 import place_order from 'printful/wrapper'
 import { getProducts } from 'daos/products'
@@ -64,15 +63,6 @@ import { get_podcasts_from_cache } from 'utils/redux_loader'
 import redirects_map from './redirects'
 
 import { reducer as formReducer } from 'redux-form'
-
-/**
- * Chatbot/Client API
- */
-import {
-  reducer as chatBotReducer,
-  middleware as chatBotMiddleware
-} from './shared/ChatBotNext/client'
-
 import axios from 'axios'
 
 import Rollbar from 'rollbar'
@@ -159,7 +149,6 @@ const resetCache = () => {
 
 const reducer = combineReducers({
   ...reducers,
-  bot: chatBotReducer,
   form: formReducer
 })
 
@@ -178,13 +167,12 @@ const doRefresh = () => {
     loadEpisodes(),
     loadProducts(),
     get_contributors(),
-    loadCurrentRFC(),
-    get_bot_status()
+    loadCurrentRFC()
   ])
     .then(results => {
       // but wait until all of them will be done
 
-      const [episodes, products, contributors, rfc, bot] = results
+      const [episodes, products, contributors, rfc] = results
       console.log('-[All cache data fetched]-')
 
       // episodes
@@ -211,9 +199,6 @@ const doRefresh = () => {
 
       // RFC
       Cache.rfc = rfc
-
-      // bot
-      Cache.bot = bot
     })
     .then(() => console.log('-[Refreshing Complete]-'))
     .catch(err => {
@@ -250,7 +235,7 @@ if (env == 'prod') {
 } else {
   require('./webpack.dev').default(app)
   const proxy = require('http-proxy-middleware')
-  const recordingServerProxy = proxy('/recording', {
+  const wsProxy = proxy('/recording', {
     target: 'ws://127.0.0.1:9001',
     // pathRewrite: {
     //  '^/websocket' : '/socket',          // rewrite path.
@@ -260,25 +245,15 @@ if (env == 'prod') {
     ws: true, // enable websocket proxy
     logLevel: 'debug'
   })
-  app.use(recordingServerProxy)
-
-  const chatBotServerProxy = proxy('/socket.io', {
-    target: 'ws://127.0.0.1:9004',
-    // pathRewrite: {
-    //  '^/websocket' : '/socket',          // rewrite path.
-    //  '^/removepath' : ''                 // remove path.
-    // },
-    changeOrigin: true, // for vhosted sites, changes host header to match to target's host
-    ws: true, // enable websocket proxy
-    logLevel: 'debug'
-  })
-  app.use(chatBotServerProxy)
+  app.use(wsProxy)
 }
 
 /*
  * WIRING UP APP
  */
 
+// MIDDLEWARES
+app.set('trust proxy', 1)
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 app.use(express.static(path.join(__dirname, 'public')))
@@ -290,17 +265,30 @@ app.use(
   })
 )
 
+// CORS
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, authorization'
+  )
+  res.header('Access-Control-Allow-Methods', 'GET,POST,DELETE,PUT,OPTIONS')
+  next()
+})
+
 app.use(
   session({
+    secret: 'secret',
+    resave: true,
     name: 'session',
     keys: ['datas', 'member'],
-    // resave: false,
-    // saveUninitialized: false,
 
     // Cookie Options
     maxAge: 24 * 60 * 60 * 1000 // 24 hours
   })
 )
+
+// PASSPORT
 app.use(passport.initialize())
 app.use(passport.session())
 
@@ -568,11 +556,6 @@ async function updateState(store, pathname, req) {
       payload: Cache.contributors
     })
   }
-  console.log('on to bot')
-  var bot = Cache.bot
-  if (bot) {
-    store.dispatch({ type: 'SET_BOT', payload: bot })
-  }
   if (pathname === '' || pathname === '/') {
     const location = extractLocation(req)
     await inject_homepage(store, Cache, location)
@@ -595,13 +578,11 @@ async function updateState(store, pathname, req) {
     }
   })
 
-  const user = req.user
-
-  if (user) {
+  if (req.isAuthenticated()) {
     store.dispatch({
       type: 'AUTH_USER_SUCCESS',
       payload: {
-        data: user
+        data: req.user
       }
     })
   }
@@ -650,7 +631,7 @@ function renderView(store, renderProps, location) {
  * Please update this key to
  * have latest request response data in the user session
  */
-const CURRENT_IP_REQ_VERSION = 5
+const CURRENT_IP_REQ_VERSION = 6
 const localIPs = ['127.0.0.1', '::1']
 
 function getIpData(ip) {
@@ -659,16 +640,29 @@ function getIpData(ip) {
     ip = ''
   }
 
-  const url = `https://ipinfo.io${ip && `/${ip}`}/json`
+  const url = `http://ipinfo.io${ip && `/${ip}`}/json`
 
-  const safe = str => str.replace(/'/g, '"')
+  const safe = function(str) {
+    if (str == undefined) {
+      return ''
+    } else {
+      return str.replace(/'/g, '"')
+    }
+  }
 
   return axios
     .get(url)
     .then(res => res.data)
     .then(data => {
+      if (data['postal'] == undefined) {
+        data['postal'] = ''
+      }
       const { ip, city, region, country, loc, org, postal } = data
-      const [lat, lng] = loc.split(',')
+      var lat = -1
+      var lng = -1
+      if (loc != undefined) {
+        ;[lat, lng] = loc.split(',')
+      }
 
       return {
         ip,
@@ -677,8 +671,8 @@ function getIpData(ip) {
         country: safe(country),
         lat,
         lng,
-        org,
-        postal,
+        org: safe(org),
+        postal: safe(postal),
         version: CURRENT_IP_REQ_VERSION
       }
     })
@@ -704,20 +698,22 @@ async function tracking(req, res) {
     ipInfo = null
   }
 
+  req.session.ver = CURRENT_IP_REQ_VERSION
+
   if (!ipInfo) {
     console.log('ipInfo not defined')
     let ipData
     try {
       // wait for ip info request data
-      ipData = await getIpData(ip)
+      ipInfo = ipData = await getIpData(ip)
     } catch (err) {
       ipInfo = undefined
     }
 
     // save to current session if not empty
-    if (!!ipData) {
+    if (ipData) {
       console.log('save to current session if not empty')
-      req.session.ipInfo = ipInfo = ipData
+      req.session.ipInfo = { ...ipData }
     }
   }
 
@@ -797,6 +793,7 @@ const renderPage = async (req, res) => {
       return
     }
   }
+
   var redir = redirects_map['redirects_map'][req.url]
   var hostname = req.headers.host
   if (redir != undefined) {
@@ -823,9 +820,7 @@ const renderPage = async (req, res) => {
       res.render('error')
     }
 
-    let store = applyMiddleware(thunk, chatBotMiddleware, promiseMiddleware)(
-      createStore
-    )(reducer)
+    let store = applyMiddleware(thunk, promiseMiddleware)(createStore)(reducer)
     await updateState(store, location.pathname, req)
 
     await tracking(req, res)

@@ -125,7 +125,11 @@ class Episode extends React.Component {
       <div className="row episode">
         <div className="col-xs-12 col-sm-3 episode-left">
           <LinkArea>
-            <Link to={episodeLink} onClick={this.onEpisodeClick}>
+            <Link
+              to={episodeLink}
+              onClick={this.onEpisodeClick}
+              className="no-line"
+            >
               <img className="episode-img" src={ep.img} />
             </Link>
           </LinkArea>
@@ -141,7 +145,7 @@ class Episode extends React.Component {
           <div className="blog-date">{date}</div>
           <Title>
             <Link
-              className="blog-title"
+              className="blog-title no-line"
               to={episodeLink}
               onClick={this.onEpisodeClick}
             >
@@ -192,7 +196,7 @@ class Episode extends React.Component {
           <div className="episode-desc">
             <p>{desc}</p>
             {'  '}
-            <Link to={episodeLink} className="episode-view-more">
+            <Link to={episodeLink} className="episode-view-more no-line">
               View More{' '}
               <i className="glyphicon glyphicon-more glyphicon-chevron-right" />
             </Link>

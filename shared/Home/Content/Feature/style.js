@@ -55,6 +55,7 @@ export const BlogViewMore = ViewMore.extend`
 export const UserBox = styled.div`
   padding-top: 16px;
   display: flex;
+  align-items: center;
 `
 
 export const UserImg = styled.img`
@@ -62,14 +63,13 @@ export const UserImg = styled.img`
   width: 60px;
   height: 60px;
 
-  padding: 4px;
+  padding: 4px !important;
   background-color: #ffffff;
-  border: 1px solid #dddddd;
+  border: 1px solid #dddddd !important;
 `
 
 export const UserDetail = styled.div`
   padding-left: 12px;
-  font-size: 14px;
   color: #4a4a4a;
 
   a {
@@ -78,8 +78,6 @@ export const UserDetail = styled.div`
       border: none;
     }
   }
-
-  padding-top: 8px;
 `
 
 export const UserInfo = styled.a`

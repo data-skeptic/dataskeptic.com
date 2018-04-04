@@ -7,8 +7,6 @@ export { default as player } from './PlayerReducer'
 export { default as site } from './SiteReducer'
 export { default as search } from './SearchReducer'
 export { default as jobs } from './JobsReducer'
-
-// TODO: migrate these to /shared/reducers folder
 export { default as auth } from '../Auth/Reducers/AuthReducer'
 export { default as cart } from '../Cart/Reducers/CartReducer'
 export { default as checkout } from '../Checkout/Reducers/CheckoutReducer'
@@ -17,8 +15,7 @@ export { default as layout } from '../Layout/Reducers/LayoutReducer'
 export { default as proposals } from '../Proposals/Reducers/ProposalsReducer'
 export { default as recorder } from '../Recorder/Reducers/RecorderReducer'
 export { default as questions } from '../Questions/Reducers/QuestionsReducer'
-
 export {
   default as timeseries
 } from '../TimeSeriesExplorer/Reducers/TimeSeriesReducer'
-export { default as chatbot } from '../ChatBotNext/Reducers/ChatbotReducer'
+export { default as chatbot } from '../Chat/Reducers/ChatbotReducer'
