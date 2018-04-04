@@ -21,43 +21,7 @@ import MobileMenu from '../MobileMenu/Components/MobileMenu'
 import { getItemsCount as getCartItemsCount } from '../Cart/Helpers/getItemsCount'
 import { toggleCart } from '../Cart/Actions/CartActions'
 
-import Launcher from '../../chatbot_lib/client'
-import { BOT_ID, THINKING_MESSAGE } from '../Chat/Constants'
-import ConversationHandler from '../Chat/Dialogs/ConversationHandler'
-import { loggMessage } from '../Chat/Reducers/ChatbotReducer'
-
 class MainView extends React.Component {
-  addMessage = message =>
-    this.setState(prevState => ({
-      messages: [...prevState.messages, message]
-    }))
-  reply = (message, operatorId) => {
-    operatorId = !!this.props.contributors[operatorId] ? operatorId : BOT_ID
-    const author = this.props.contributors[operatorId]
-
-    this.addMessage({
-      ...message,
-      author
-    })
-  }
-  onMessage = message => {
-    this.addMessage(message)
-    let cstate = this.props.chatbot.toJS()
-    const dispatch = this.props.dispatch
-
-    dispatch(loggMessage(message))
-    cstate.contributors = this.props.contributors
-    ConversationHandler.get_reply(dispatch, this.reply, cstate, message)
-  }
-  onInactivity = () => {
-    this.reply(
-      {
-        text:
-          'Still there?  Let me know what you think of the bot by DMing me on Slack!  I would appreciate your candid feedback'
-      },
-      'kyle'
-    )
-  }
 
   loadState() {
     var cart_items = []
@@ -225,16 +189,8 @@ class MainView extends React.Component {
     this.onNavigationItemClick = this.onNavigationItemClick.bind(this)
     this.onOverflowClick = this.onOverflowClick.bind(this)
     this.onFooterItemClick = this.onFooterItemClick.bind(this)
-
-    this.state = {
-      ready: false,
-      messages: []
-    }
   }
 
-  componentDidMount() {
-    this.reply({ text: 'What would you like to talk about?' })
-  }
 
   render() {
     this.logPageView()
@@ -252,9 +208,6 @@ class MainView extends React.Component {
     const { pathname } = this.props.location
     const itemsCount = getCartItemsCount(cart.toJS().cart_items)
     const isOverflowMode = isCartVisible
-    const thinking = chatbot.get('thinking')
-    var dispatch = this.props.dispatch
-
     return (
       <div
         className={classNames('site', {
@@ -286,14 +239,6 @@ class MainView extends React.Component {
           banner={this.props.bannerContent}
         />
         <Overflow visible={isOverflowMode} onClick={this.onOverflowClick} />
-        <Launcher
-          defaultBot={contributors[BOT_ID]}
-          thinking={thinking}
-          messages={this.state.messages}
-          onMessage={this.onMessage}
-          onInactivity={this.onInactivity}
-          inactivityDelay={1000 * 60 * 5}
-        />
       </div>
     )
   }
