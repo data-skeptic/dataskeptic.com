@@ -51,7 +51,7 @@ const run = (server, { dialogs = [], greeting = () => {} }) => {
     console.log('User connected')
 
     const agent = Agent(socket)
-
+    
     // handle dialogs logic
     handleLogic(
       agent,

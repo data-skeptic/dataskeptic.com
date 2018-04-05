@@ -62,6 +62,7 @@ import getContentWrapper from 'utils/content_wrapper'
 import { get_podcasts_from_cache } from 'utils/redux_loader'
 import redirects_map from './redirects'
 
+import { reducer as chatBotReducer, middleware as chatBotMiddleware } from './chatbot_lib/client'
 import { reducer as formReducer } from 'redux-form'
 import axios from 'axios'
 
@@ -148,8 +149,9 @@ const resetCache = () => {
 }
 
 const reducer = combineReducers({
-  ...reducers,
-  form: formReducer
+  bot: chatBotReducer,
+  form: formReducer,
+  ...reducers
 })
 
 global.my_cache = Cache = resetCache()
@@ -832,7 +834,9 @@ const renderPage = async (req, res) => {
       res.render('error')
     }
 
-    let store = applyMiddleware(thunk, promiseMiddleware)(createStore)(reducer)
+    let store = applyMiddleware(thunk, chatBotMiddleware, promiseMiddleware)(
+      createStore
+    )(reducer)
     await updateState(store, location.pathname, req)
 
     await tracking(req, res)

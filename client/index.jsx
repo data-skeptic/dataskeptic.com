@@ -12,6 +12,10 @@ import thunk from 'redux-thunk'
 import promiseMiddleware from 'lib/promiseMiddleware'
 import immutifyState from 'lib/immutifyState'
 import { createStore, combineReducers, applyMiddleware } from 'redux'
+import {
+  reducer as chatBotReducer,
+  middleware as chatBotMiddleware
+} from '../chatbot_lib/client'
 
 import axios from 'axios'
 
@@ -45,10 +49,13 @@ const history = createBrowserHistory()
 
 const reducer = combineReducers({
   form: formReducer,
+  bot: chatBotReducer,
   ...reducers
 })
 
-const store = applyMiddleware(thunk, promiseMiddleware)(createStore)(
+const store = applyMiddleware(thunk, chatBotMiddleware, promiseMiddleware)(
+  createStore
+)(
   reducer,
   initialState,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
