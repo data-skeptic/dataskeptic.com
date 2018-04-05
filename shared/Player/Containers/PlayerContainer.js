@@ -366,7 +366,14 @@ class PlayerContainer extends Component {
 
   render() {
     const { player, oepisode } = this.props
-    const { is_playing, has_shown, position, playback_loaded, volume, muted } = player
+    const {
+      is_playing,
+      has_shown,
+      position,
+      playback_loaded,
+      volume,
+      muted
+    } = player
     const playerVolume = muted ? 0 : volume
 
     if (!has_shown) {
