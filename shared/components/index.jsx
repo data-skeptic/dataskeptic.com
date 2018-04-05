@@ -292,7 +292,7 @@ class MainView extends React.Component {
           messages={this.state.messages}
           onMessage={this.onMessage}
           onInactivity={this.onInactivity}
-          inactivityDelay={1000 * 60 * 5}
+          inactivityDelay={1000 * 60 * 1}
         />
       </div>
     )
