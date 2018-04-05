@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import isUndefined from 'lodash/isUndefined'
+import styled from 'styled-components'
 import { redirects_map } from '../../../redirects'
 import { get_podcasts_by_guid } from '../../utils/redux_loader'
 import { snserror } from '../../SnsUtil'
@@ -161,12 +162,12 @@ class BlogRouter extends React.Component {
     } else {
       console.log('BlogList')
       return (
-        <div className="center">
+        <Wrapper>
           <BlogTopNav pathname={pathname} blogs={blogs} />
           <div className="center">
             <BlogList blogs={blogs} contributors={contributors} />
           </div>
-        </div>
+        </Wrapper>
       )
     }
   }
@@ -179,3 +180,14 @@ export default connect((state, ownProps) => ({
   episodes: state.episodes,
   site: state.site
 }))(BlogRouter)
+
+const Wrapper = styled.div`
+  @media (max-width: 768px) {
+    padding: 1.1111111111111112rem;
+
+    .center {
+      margin-left: -20px;
+      margin-right: -20px;
+    }
+  }
+`
