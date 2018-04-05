@@ -67,12 +67,9 @@ if (process.env.NODE_ENV != 'production') {
 }
 
 var country = 'us'
-var player = { episode: undefined, is_playing: false, has_shown: false }
-
 store.dispatch({ type: 'SET_STORE_ENVIRONMENT', payload: env })
 store.dispatch({ type: 'SET_BLOG_ENVIRONMENT', payload: env })
 store.dispatch({ type: 'SET_COUNTRY', payload: country })
-store.dispatch({ type: 'INITIALIZE_PLAYER', payload: player })
 store.dispatch({
   type: 'INITIALIZE_SITE',
   payload: { dispatch: store.dispatch }

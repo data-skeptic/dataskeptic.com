@@ -107,7 +107,7 @@ class EpisodePlayer extends Component {
         <PlayBox onClick={this.onClick.bind(this, episode)}>
           <Arrow>{play_symb}</Arrow>
           <PlayText>Play</PlayText>
-          <PlayText>{oplayer.episode.duration}</PlayText>
+          <PlayText>{oplayer.episode && oplayer.episode.duration}</PlayText>
         </PlayBox>
         {this.getViewMoreTextDiv(desc)}
         <Guests>

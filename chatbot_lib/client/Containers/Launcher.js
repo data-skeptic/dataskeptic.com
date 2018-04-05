@@ -56,7 +56,7 @@ export default class Launcher extends Component {
       this.timer = null
     }
 
-    setTimeout(this.triggerInactivity, this.props.inactivityDelay)
+    this.timer = setTimeout(this.triggerInactivity, this.props.inactivityDelay)
   }
 
   getThinkingMessage() {
