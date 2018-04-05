@@ -34,7 +34,7 @@ const Form = ({
       type="text"
       className="contact-name"
       placeholder="John Smith"
-      autocomplete="false"
+      autoComplete="false"
       labelWrapperClasses="col-xs-12 col-sm-12"
       inputWrapperStyles="col-xs-12 col-sm-12"
       required
@@ -46,7 +46,7 @@ const Form = ({
       type="email"
       className="contact-name"
       placeholder="j.smith@work.com"
-      autocomplete="false"
+      autoComplete="false"
       labelWrapperClasses="col-xs-12 col-sm-12"
       inputWrapperStyles="col-xs-12 col-sm-12"
       required
@@ -58,7 +58,7 @@ const Form = ({
       type="message"
       className="contact-name"
       textarea
-      autocomplete="false"
+      autoComplete="false"
       labelWrapperClasses="col-xs-12 col-sm-12"
       inputWrapperStyles="col-xs-12 col-sm-12"
       required
