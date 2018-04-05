@@ -1,6 +1,6 @@
 import chatbotServer from './chatbot_lib/server/index'
 
-import bot from './shared/Chatbot/Dialogs/BotDialog'
+import BotDialog from './shared/Chatbot/Dialogs/BotDialog'
 
 const PORT = process.env.CHAT_PORT || 9004
 const app = require('http').createServer((req, res) => {
@@ -27,6 +27,7 @@ const greeting = (session, reply) => {
   })
 }
 
+const bot = new BotDialog()
 const dialogs = [bot]
 
 chatbotServer(app, {
