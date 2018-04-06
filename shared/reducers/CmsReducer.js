@@ -4,6 +4,14 @@ import querystring from 'querystring'
 import axios from 'axios'
 import snserror from '../SnsUtil'
 import { load_blogs } from '../daos/serverInit'
+import Request from '../Request'
+import {
+  ADD_JOB,
+  ADD_JOB_FAIL,
+  ADD_JOB_SUCCESS,
+  addJobFail,
+  addJobSuccess
+} from './AdminReducer'
 const aws = require('aws-sdk')
 
 var env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
@@ -11,6 +19,10 @@ var env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 const config = require('../../config/config.json')
 
 var base_url = config[env]['base_api'] + env
+
+export const ADD_CONTRIBUTOR = 'ADD_CONTRIBUTOR'
+export const ADD_CONTRIBUTOR_FAIL = 'ADD_CONTRIBUTOR_FAIL'
+export const ADD_CONTRIBUTOR_SUCCESS = 'ADD_CONTRIBUTOR_SUCCESS'
 
 const init = {
   home_loaded: false,
@@ -31,6 +43,11 @@ const init = {
   blog_state: '',
   blog_content: {},
   blogs: {
+    error: null,
+    success: false
+  },
+  contributors: {
+    processing: false,
     error: null,
     success: false
   }
@@ -322,6 +339,24 @@ export default function cmsReducer(state = defaultState, action) {
       nstate.jobListing.loaded = true
       nstate.jobListing.jobs = action.payload.data
       break
+
+    case ADD_CONTRIBUTOR:
+      nstate.contributors.processing = true
+      nstate.contributors.success = false
+      nstate.contributors.error = null
+      break
+
+    case ADD_CONTRIBUTOR_SUCCESS:
+      nstate.contributors.processing = false
+      nstate.contributors.success = true
+      nstate.contributors.error = null
+      break
+
+    case ADD_CONTRIBUTOR_FAIL:
+      nstate.contributors.processing = false
+      nstate.contributors.success = false
+      nstate.contributors.error = action.payload.error
+      break
   }
   return Immutable.fromJS(nstate)
 }
@@ -339,3 +374,27 @@ export const getBlog = (state, prettyname) => {
 
   return blog ? blog.toJS() : blog
 }
+
+export const addContributor = contributor => {
+  return dispatch => {
+    dispatch(addContributorRequest)
+
+    Request.post(`/api/v1/contributors`, contributor)
+      .then(result => dispatch(addContributorSuccess(result.data)))
+      .catch(err => dispatch(addContributorFail(err.data.error)))
+  }
+}
+
+export const addContributorRequest = () => ({
+  type: ADD_CONTRIBUTOR
+})
+
+export const addContributorFail = error => ({
+  type: ADD_CONTRIBUTOR_FAIL,
+  payload: { error }
+})
+
+export const addContributorSuccess = result => ({
+  type: ADD_CONTRIBUTOR_SUCCESS,
+  payload: { result }
+})

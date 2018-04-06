@@ -45,5 +45,11 @@ module.exports = cache => {
     res.send(contributors)
   })
 
+  router.post('/', (req, res) => {
+    const data = req.body
+    
+    res.send(data)
+  })
+  
   return router
 }

@@ -43,8 +43,6 @@ export default class RichTextarea extends Component {
   componentDidMount() {
     const { input: { value } } = this.props
 
-    console.dir(this.decode(value))
-    debugger
     const editorState = EditorState.createWithContent(
       ContentState.createFromBlockArray(this.decode(value))
     )
@@ -66,12 +64,6 @@ export default class RichTextarea extends Component {
     const { editorState } = this.state
     return (
       <Wrapper>
-        <code>
-          {JSON.stringify({
-            v: this.props.input.value
-          })}
-        </code>
-
         <Editor
           editorState={editorState}
           toolbarClassName="toolbarClassName"

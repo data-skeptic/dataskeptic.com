@@ -6,39 +6,63 @@ import AddContributor, {
   FORM_KEY
 } from '../../../Contributors/Forms/AddContributor'
 import { strictForm } from '../../../styles'
+import { addContributor } from '../../../reducers/CmsReducer'
 
 class ContributorAddFormController extends Component {
   state = {
-    defaultValues: {
+    defaultValuesOld: {
       sort_rank: 0
+    },
+    defaultValues: {
+      author: '123',
+      bio: '<p>123123123</p>↵',
+      img:
+        'https://s3.amazonaws.com/dev.dataskeptic.com/Screen Shot 2018-04-06 at 4.48.59 PM.png',
+      linkedin: '123',
+      prettyname: '2123132',
+      sort_rank: '2',
+      twitter: '123'
     }
   }
-  
+
   save = () => this.props.dispatch(submit(FORM_KEY))
 
-  submit = data => console.dir(data)
+  submit = data => this.props.dispatch(addContributor(data))
 
   render() {
-    const { error, success } = this.props
+    const { loading, error, success } = this.props
 
     return (
       <Container>
+        <code>
+          {JSON.stringify({
+            loading,
+            error,
+            success
+          })}
+        </code>
         <AddContributor
-          initialValues={this.state.defaultValues}  
+          initialValues={this.state.defaultValues}
           onSubmit={this.submit}
         />
         <Buttons>
-          <SaveButton onClick={this.save}>Create</SaveButton>
+          <SaveButton onClick={this.save} disabled={loading}>
+            {loading ? 'Creating...' : 'Create'}
+          </SaveButton>
         </Buttons>
 
         {error && <Error>{error}</Error>}
-        {success && <Success>Update success</Success>}
+        {success && <Success>Success</Success>}
       </Container>
     )
   }
 }
 
-export default connect((state, ownProps) => ({}))(ContributorAddFormController)
+export default connect((state, ownProps) => ({
+  loading: state.cms.getIn(['contributors', 'processing']),
+  error: state.cms.getIn(['contributors', 'error']),
+  success: state.cms.getIn(['contributors', 'success'])
+}))(ContributorAddFormController)
 
 const Container = styled.div`
   ${strictForm};
