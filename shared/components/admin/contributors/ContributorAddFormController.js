@@ -8,6 +8,12 @@ import AddContributor, {
 import { strictForm } from '../../../styles'
 
 class ContributorAddFormController extends Component {
+  state = {
+    defaultValues: {
+      sort_rank: 0
+    }
+  }
+  
   save = () => this.props.dispatch(submit(FORM_KEY))
 
   submit = data => console.dir(data)
@@ -17,7 +23,10 @@ class ContributorAddFormController extends Component {
 
     return (
       <Container>
-        <AddContributor onSubmit={this.submit} />
+        <AddContributor
+          initialValues={this.state.defaultValues}  
+          onSubmit={this.submit}
+        />
         <Buttons>
           <SaveButton onClick={this.save}>Create</SaveButton>
         </Buttons>
