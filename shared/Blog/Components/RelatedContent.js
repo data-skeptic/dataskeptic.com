@@ -1,13 +1,7 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { connect } from 'react-redux'
+import React, { Component } from 'react'
 import { Link } from 'react-router'
 
-class RelatedContent extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
+class RelatedContent extends Component {
   render() {
     var { items } = this.props
     if (!items) {
@@ -26,7 +20,10 @@ class RelatedContent extends React.Component {
           var type = item.type
           if (type == 'person') {
             return (
-              <div className="related-content-container row" key={item.content_id}>
+              <div
+                className="related-content-container row"
+                key={item.content_id}
+              >
                 <div className="related-content-person-left col-xs-12 col-sm-4">
                   <img className="related-content-person-img" src={dest} />
                 </div>
@@ -76,7 +73,7 @@ class RelatedContent extends React.Component {
               </div>
             )
           } else {
-            return <div className="related-content" />
+            return <div className="related-content" key={item.content_id} />
           }
         })}
       </div>

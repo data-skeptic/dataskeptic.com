@@ -15,14 +15,7 @@ const fakeClick = e => {
 const normalizeDate = d => moment(d).format('YYYY-MM-DD')
 
 class BlogList extends Component {
-  getAuthor = (author = '') =>
-    this.props.contributors.filter(
-      contributor =>
-        contributor
-          .get('author')
-          .toLowerCase()
-          .trim() === author.toLowerCase().trim()
-    )[0]
+  getAuthor = (author = '') => this.props.contributors.get(author.toLowerCase().trim()).toJS()
 
   renderPreview() {
     const { blog } = this.props
