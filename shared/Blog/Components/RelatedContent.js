@@ -19,14 +19,14 @@ class RelatedContent extends React.Component {
     }
     return (
       <div>
-        {items.map(function(item) {
+        {items.map((item, index) => {
           var dest = item.dest
           var title = item.title
           var body = item.body
           var type = item.type
           if (type == 'person') {
             return (
-              <div className="related-content-container row">
+              <div className="related-content-container row" key={item.content_id}>
                 <div className="related-content-person-left col-xs-12 col-sm-4">
                   <img className="related-content-person-img" src={dest} />
                 </div>
@@ -45,7 +45,7 @@ class RelatedContent extends React.Component {
             var publish_date = item.publish_date
             var guid = item.guid
             return (
-              <div className="related-content-container">
+              <div className="related-content-container" key={item.content_id}>
                 <div className="related-content-imageless-inner">
                   <Link to={to}>
                     <h3 className="related-content-h3">{title}</h3>
@@ -63,7 +63,7 @@ class RelatedContent extends React.Component {
             var publish_date = item.publish_date
             var guid = item.guid
             return (
-              <div className="related-content-container">
+              <div className="related-content-container" key={item.content_id}>
                 <div className="related-content-imageless-inner">
                   <Link to={to}>
                     <h3 className="related-content-h3">{title}</h3>
