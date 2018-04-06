@@ -1,10 +1,12 @@
 const express = require('express')
 import { orderBy } from 'lodash'
 
+const axios = require('axios')
 const c = require('../../../config/config.json')
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 const base_api = c[env]['base_api'] + env
+
 
 const filterItems = (items, query) => {
   if (!query) {
@@ -17,6 +19,10 @@ const filterItems = (items, query) => {
       item.bio.toLowerCase().indexOf(query) > -1
     )
   })
+}
+
+const addContributor = (data ) => {
+  return axios.post(base_api + '/blog/contributors/add', data).then(res => res.data)
 }
 
 module.exports = cache => {
@@ -46,9 +52,11 @@ module.exports = cache => {
   })
 
   router.post('/', (req, res) => {
-    const data = req.body
-    
-    res.send(data)
+    const contributor = req.body
+
+    addContributor(contributor)
+      .then(data => res.send(data))
+      .catch(error => res.send({ success: false, error: error.message }))
   })
   
   return router
