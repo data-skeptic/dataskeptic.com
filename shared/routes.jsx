@@ -1,15 +1,6 @@
 import React from 'react'
-import { Provider } from 'react-redux'
 import { Router, Route, IndexRoute, History } from 'react-router'
 import ReactGA from 'react-ga'
-import {
-  reduxReactRouter,
-  routerStateReducer,
-  ReduxRouter
-} from 'redux-react-router'
-import createBrowserHistory from 'history/lib/createBrowserHistory'
-import configureStore from './store'
-
 import About from 'components/About'
 import Advertising from 'components/Advertising'
 import App from 'components/index'
@@ -29,7 +20,6 @@ import Loading from 'Common/Components/Loading.js'
 import Login from 'components/Login'
 import SignUp from 'components/SignUp'
 import Logout from 'components/Logout'
-import Menu from 'components/Menu'
 import Membership from 'components/Membership'
 import MembershipPortal from 'components/MembershipPortal'
 import ChangeMembership from 'components/membership/ChangeMembership'
@@ -53,11 +43,9 @@ import ContributorPage from './Contributors/Routes/ContributorPage'
 
 import AdminHome from 'components/admin/AdminHome'
 import AdminCmsPending from 'components/admin/AdminCmsPending'
-import AdminCmsAddRelated from 'components/admin/AdminCmsAddRelated'
 import AdminCmsRecent from 'components/admin/AdminCmsRecent'
 import AdminCmsFeature from 'components/admin/AdminCmsFeature'
 import AdminCmsBlogUpdate from 'components/admin/AdminCmsBlogUpdate'
-import AdminCmsRecentRelated from 'components/admin/AdminCmsRecentRelated'
 import AdminEmailsSend from 'components/admin/AdminEmailsSend'
 import AdminOrdersNew from 'components/admin/AdminOrdersNew'
 import AdminOrdersProcessing from 'components/admin/AdminOrdersProcessing'
@@ -99,18 +87,23 @@ export default (
     <Route path="/about" name="app" component={App} onEnter={loadData}>
       <IndexRoute component={About} />
     </Route>
+
     <Route path="/advertising" name="app" component={App} onEnter={loadData}>
       <IndexRoute component={Advertising} />
     </Route>
+
     <Route path="/blog*" component={App} onEnter={loadData}>
       <IndexRoute component={BlogRouter} />
     </Route>
+
     <Route path="/coaching" name="app" component={App} onEnter={loadData}>
       <IndexRoute component={Coaching} />
     </Route>
+
     <Route path="/coaching2" name="app" component={App} onEnter={loadData}>
       <IndexRoute component={Coaching2} />
     </Route>
+
     <Route
       path="/coaching-weekly"
       name="app"
@@ -119,6 +112,7 @@ export default (
     >
       <IndexRoute component={Coaching2} />
     </Route>
+
     <Route
       path="/coaching-biweekly"
       name="app"
@@ -127,18 +121,23 @@ export default (
     >
       <IndexRoute component={CoachingBiWeekly} />
     </Route>
+
     <Route path="/" name="app" component={App} onEnter={loadData}>
       <IndexRoute component={Home} />
     </Route>
+
     <Route path="/checkout" name="app" component={App} onEnter={loadData}>
       <IndexRoute component={Checkout} />
     </Route>
+
     <Route path="/thank-you" component={App} onEnter={loadData}>
       <IndexRoute component={CheckoutThankYouPage} />
     </Route>
+
     <Route path="/checkout/thank-you" component={App} onEnter={loadData}>
       <IndexRoute component={CheckoutThankYouPage} />
     </Route>
+
     <Route path="/contact-us" component={App} onEnter={loadData}>
       <IndexRoute component={ContactUs} />
     </Route>
@@ -150,15 +149,19 @@ export default (
     <Route path="/careers" component={App} onEnter={loadData}>
       <IndexRoute component={Careers} />
     </Route>
+
     <Route path="/loading" component={App} onEnter={loadData}>
       <IndexRoute component={Loading} />
     </Route>
+
     <Route path="/lightsout" component={App} onEnter={loadData}>
       <IndexRoute component={LightsOut} />
     </Route>
+
     <Route path="/members" component={App} onEnter={loadData}>
       <IndexRoute component={Membership} />
     </Route>
+
     <Route path="/podcast*" component={App} onEnter={loadData}>
       <IndexRoute component={Podcast} />
     </Route>
@@ -167,18 +170,23 @@ export default (
         component={props => <Services foo="value" bar="v2" location={props} />}
       />
     </Route>
+
     <Route path="/store" component={App} onEnter={loadData}>
       <IndexRoute component={Store} />
     </Route>
+
     <Route path="/press" component={App} onEnter={loadData}>
       <IndexRoute component={Press} />
     </Route>
+
     <Route path="/projects" component={App} onEnter={loadData}>
       <IndexRoute component={Projects} />
     </Route>
+
     <Route path="/rfc" showAds={false} component={App} onEnter={loadData}>
       <IndexRoute component={Proposals} />
     </Route>
+
     <Route
       path="/rfc/thank-you"
       showAds={false}
@@ -187,6 +195,7 @@ export default (
     >
       <IndexRoute component={ProposalsThankYouPage} />
     </Route>
+
     <Route path="/rfc/example" component={App} onEnter={loadData}>
       <IndexRoute component={AudioExample} />
     </Route>
@@ -210,15 +219,19 @@ export default (
     <Route path="/membership" showAds={false} component={App}>
       <IndexRoute component={MembershipPortal} />
     </Route>
+
     <Route path="/membership/change" showAds={false} component={App}>
       <IndexRoute component={ChangeMembership} />
     </Route>
+
     <Route path="/membership/inbox" showAds={false} component={App}>
       <IndexRoute component={MembershipInbox} />
     </Route>
+
     <Route path="/membership/analytics" showAds={false} component={App}>
       <IndexRoute component={MembershipAnalytics} />
     </Route>
+
     <Route path="/membership/downloads" showAds={false} component={App}>
       <IndexRoute component={MembershipDownloads} />
     </Route>
@@ -242,9 +255,11 @@ export default (
     <Route path="/wp-login.php" component={App} onEnter={loadData}>
       <IndexRoute component={DontHackMe} />
     </Route>
+
     <Route path="/l/snl-impact" component={App} onEnter={loadData}>
       <IndexRoute component={SnlImpact} />
     </Route>
+
     <Route path="/privacy-policy" component={App} onEnter={loadData}>
       <IndexRoute component={PrivacyPageContainer} />
     </Route>
@@ -267,14 +282,6 @@ export default (
 
     <Route path="/admin/cms/feature" component={App}>
       <IndexRoute component={AdminCmsFeature} />
-    </Route>
-
-    <Route path="/admin/cms/add_related" component={App}>
-      <IndexRoute component={AdminCmsAddRelated} />
-    </Route>
-
-    <Route path="/admin/cms/recent_related" component={App}>
-      <IndexRoute component={AdminCmsRecentRelated} />
     </Route>
 
     <Route path="/admin/orders/new" component={App}>

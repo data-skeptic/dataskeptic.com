@@ -76,10 +76,7 @@ class Admin extends Component {
 
             <RelatedContent />
             <hr />
-
-            <RelatedContentList items={relatedcontent} />
-            <hr />
-
+            
             <OrderProcessing admin={this.props.admin} />
             <hr />
 
