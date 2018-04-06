@@ -4,6 +4,7 @@ import AdminLayout from './AdminLayout'
 import AddJob, { tomorrow } from '../../Jobs/Forms/AddJob'
 import styled from 'styled-components'
 import { addJob } from '../../reducers/AdminReducer'
+import {strictForm} from "../../styles";
 
 class AdminAddJob extends Component {
   state = {
@@ -44,31 +45,5 @@ export default connect(state => ({
 }))(AdminAddJob)
 
 const Container = styled.div`
-  .field-label {
-    margin: 0px !important;
-    font-weight: bold;
-  }
-
-  .field-input {
-    input {
-      padding: 2px 6px !important;
-    }
-  }
-
-  @media (min-width: 768px) {
-    .onrow {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-
-      .field-container {
-        flex: 1;
-        margin-right: 10px;
-      }
-
-      &:last-child {
-        margin-right: 0px;
-      }
-    }
-  }
+  ${strictForm};
 `

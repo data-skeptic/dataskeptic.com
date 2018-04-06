@@ -16,6 +16,7 @@ class AdminCmsContributorAdd extends Component {
     )
   }
 }
+
 export default connect(state => ({
   admin: state.admin
 }))(AdminCmsContributorAdd)

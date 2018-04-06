@@ -10,6 +10,8 @@ import {
 import RichTextarea from "../../Forms/Components/RichTextarea";
 
 
+export const FORM_KEY = 'addContributor'
+
 const validate = values => {
   let errors = {}
 
@@ -105,6 +107,6 @@ const AddContributorForm = ({
 )
 
 export default reduxForm({
-  form: 'addContributor',
+  form: FORM_KEY,
   validate
 })(AddContributorForm)
