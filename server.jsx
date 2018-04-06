@@ -252,6 +252,8 @@ if (env == 'prod') {
  * WIRING UP APP
  */
 
+// MIDDLEWARES
+app.set('trust proxy', 1)
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 app.use(express.static(path.join(__dirname, 'public')))
@@ -263,9 +265,21 @@ app.use(
   })
 )
 
-app.set('trust proxy', 1)
+// CORS
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, authorization'
+  )
+  res.header('Access-Control-Allow-Methods', 'GET,POST,DELETE,PUT,OPTIONS')
+  next()
+})
+
 app.use(
   session({
+    secret: 'secret',
+    resave: true,
     name: 'session',
     keys: ['datas', 'member'],
 
@@ -273,6 +287,8 @@ app.use(
     maxAge: 24 * 60 * 60 * 1000 // 24 hours
   })
 )
+
+// PASSPORT
 app.use(passport.initialize())
 app.use(passport.session())
 
@@ -562,13 +578,11 @@ async function updateState(store, pathname, req) {
     }
   })
 
-  const user = req.user
-
-  if (user) {
+  if (req.isAuthenticated()) {
     store.dispatch({
       type: 'AUTH_USER_SUCCESS',
       payload: {
-        data: user
+        data: req.user
       }
     })
   }
