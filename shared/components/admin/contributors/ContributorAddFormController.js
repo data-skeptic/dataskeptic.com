@@ -10,18 +10,8 @@ import { addContributor } from '../../../reducers/CmsReducer'
 
 class ContributorAddFormController extends Component {
   state = {
-    defaultValuesOld: {
-      sort_rank: 0
-    },
     defaultValues: {
-      author: '123',
-      bio: '<p>123123123</p>↵',
-      img:
-        'https://s3.amazonaws.com/dev.dataskeptic.com/Screen Shot 2018-04-06 at 4.48.59 PM.png',
-      linkedin: '123',
-      prettyname: '2123132',
-      sort_rank: '2',
-      twitter: '123'
+      sort_rank: 0
     }
   }
 
