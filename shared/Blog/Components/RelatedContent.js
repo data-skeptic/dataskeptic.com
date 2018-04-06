@@ -76,7 +76,6 @@ class RelatedContent extends React.Component {
               </div>
             )
           } else {
-            console.log('UNSUPPORTED TYPE: ' + type)
             return <div className="related-content" />
           }
         })}
