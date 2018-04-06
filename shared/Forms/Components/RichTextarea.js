@@ -7,15 +7,27 @@ import draftToHtml from 'draftjs-to-html'
 import htmlToDraft from 'html-to-draftjs'
 
 export default class RichTextarea extends Component {
+  defaultProps = {
+    markdown: false
+  }
+
   state = {
     editorState: EditorState.createEmpty(),
     value: this.props.input.value
   }
 
+  encode = rawObject => {
+    return draftToHtml(rawObject)
+  }
+
+  decode = val => {
+    return htmlToDraft(val)
+  }
+
   onChange = editorState => {
     this.setState({ editorState })
 
-    const value = draftToHtml(convertToRaw(editorState.getCurrentContent()))
+    const value = this.encode(convertToRaw(editorState.getCurrentContent()))
 
     this.setState({
       value
@@ -31,30 +43,35 @@ export default class RichTextarea extends Component {
   componentDidMount() {
     const { input: { value } } = this.props
 
+    console.dir(this.decode(value))
+    debugger
     const editorState = EditorState.createWithContent(
-      ContentState.createFromBlockArray(htmlToDraft(value))
+      ContentState.createFromBlockArray(this.decode(value))
     )
 
-    this.setState({ value, editorState }, this.updateVal)
+    this.setState({ value, editorState })
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.input.value !== nextProps.input.value) {
       const editorState = EditorState.createWithContent(
-        ContentState.createFromBlockArray(htmlToDraft(nextProps.input.value))
+        ContentState.createFromBlockArray(this.decode(nextProps.input.value))
       )
 
-      this.setState(
-        { value: nextProps.input.value, editorState },
-        this.updateVal
-      )
+      this.setState({ value: nextProps.input.value, editorState })
     }
   }
 
   render() {
     const { editorState } = this.state
     return (
-      <Wrapper suppressContentEditableWarning={true}>
+      <Wrapper>
+        <code>
+          {JSON.stringify({
+            v: this.props.input.value
+          })}
+        </code>
+
         <Editor
           editorState={editorState}
           toolbarClassName="toolbarClassName"
@@ -62,6 +79,7 @@ export default class RichTextarea extends Component {
           editorClassName="richEditor"
           onEditorStateChange={this.onChange}
           onBlur={this.onBlur}
+          suppressContentEditableWarning={true}
         />
       </Wrapper>
     )

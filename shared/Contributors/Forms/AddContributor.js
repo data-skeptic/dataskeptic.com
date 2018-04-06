@@ -11,6 +11,10 @@ import {
 import RichTextarea from '../../Forms/Components/RichTextarea'
 import ImageUploadField from '../../Forms/Components/ImageUploadField'
 
+const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const config = require('../../../config/config.json')
+const c = config[env]
+
 export const FORM_KEY = 'addContributor'
 
 const validate = values => {
@@ -95,7 +99,6 @@ const AddContributorForm = ({
       customComponent={ImageUploadField}
       bucket={c['files']['site_bucket']}
       accept="image/jpeg, image/png"
-      disabled={disabled}
     />
 
     <Field
