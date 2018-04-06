@@ -50,6 +50,7 @@ import AdminEmailsSend from 'components/admin/AdminEmailsSend'
 import AdminOrdersNew from 'components/admin/AdminOrdersNew'
 import AdminOrdersProcessing from 'components/admin/AdminOrdersProcessing'
 import AdminAddJob from 'components/admin/AdminAddJob'
+import AdminCmsContributorAdd from 'components/admin/AdminCmsContributorAdd'
 
 import UserPlaylist from 'components/UserPlaylist'
 
@@ -282,6 +283,10 @@ export default (
 
     <Route path="/admin/cms/feature" component={App}>
       <IndexRoute component={AdminCmsFeature} />
+    </Route>
+
+    <Route path="/admin/cms/contributors/add" component={App}>
+      <IndexRoute component={AdminCmsContributorAdd} />
     </Route>
 
     <Route path="/admin/orders/new" component={App}>
