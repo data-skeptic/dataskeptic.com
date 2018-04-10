@@ -4,11 +4,10 @@ import AddJob, { tomorrow } from '../../Jobs/Forms/AddJob'
 import styled from 'styled-components'
 import { container, strictForm } from '../../styles'
 import { changePageTitle } from '../../Layout/Actions/LayoutActions'
-import { toggleCart } from '../../Cart/Actions/CartActions'
 
 class PublicAddJob extends Component {
   state = {
-    oinitialValues: {
+    initialValues: {
       go_live_date: tomorrow.format('YYYY-MM-DD')
     },
     advertise: null
