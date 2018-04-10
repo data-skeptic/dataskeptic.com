@@ -4,10 +4,18 @@ import axios from 'axios'
 import styled from 'styled-components'
 import Highlighter from 'react-highlight-words'
 
+const Dollar = () => <Sign>$</Sign>
+
+const formatPrice = price => (
+  <Price>
+    <Dollar />
+    {(price / 100).toFixed(2)}
+  </Price>
+)
+
 export default class JobAdvertiseField extends Component {
   state = {
     firstInit: false,
-    query: '',
     selectedOption: this.props.value
   }
 
@@ -22,59 +30,43 @@ export default class JobAdvertiseField extends Component {
     }
   }
 
-  inputChange = query => this.setState({ query })
+  getOptions = () =>
+    axios
+      .get(`/api/v1/jobs/ads`)
+      .then(res => res.data)
+      .then((options = []) => ({ options }))
+
+  renderOption = ({ desc, price }) => {
+    return (
+      <Item>
+        <Title>
+          {formatPrice(price)}
+          {' – '}
+          {desc}
+        </Title>
+      </Item>
+    )
+  }
+
+  renderValue = ({ desc, price }) => {
+    return (
+      <Item>
+        <Title>
+          {formatPrice(price)}
+          {' – '}
+          {desc}
+        </Title>
+      </Item>
+    )
+  }
 
   handleChange = selectedOption => {
     this.setState({ selectedOption })
 
-    const blog_id = selectedOption ? selectedOption.blog_id : null
-    const { id, onChange = () => {} } = this.props
+    const sku = selectedOption ? selectedOption.sku : null
+    const { onChange = () => {} } = this.props
 
-    onChange(id, blog_id)
-  }
-
-  getOptions = query => {
-    if (!query) {
-      return Promise.resolve([])
-    }
-
-    query = encodeURIComponent(query)
-
-    return axios
-      .get(`/api/jobs/ads?q=${query}`)
-      .then(res => res.data)
-      .then((options = []) => ({ options }))
-  }
-
-  renderOption = option => {
-    const { title, abstract } = option
-    const { query } = this.state
-    return (
-      <Item>
-        <Title>
-          <Highlighter
-            highlightClassName="matching"
-            searchWords={[query]}
-            textToHighlight={title}
-          />
-        </Title>
-        <Abstract>
-          <Highlighter
-            highlightClassName="matching"
-            searchWords={[query]}
-            textToHighlight={abstract}
-          />
-        </Abstract>
-      </Item>
-    )
-  }
-
-  renderValue = ({ title }) => {
-    return (
-      <Item>
-        <Title>{title}</Title>
-      </Item>
-    )
+    onChange(sku)
   }
 
   render() {
@@ -83,16 +75,15 @@ export default class JobAdvertiseField extends Component {
     return (
       <Async
         name="form-field-name"
-        autoload={false}
         value={selectedOption}
+        autoload={true}
+        searchable={false}
         valueKey="sku"
         labelKey="title"
-        onInputChange={this.inputChange}
         onChange={this.handleChange}
         loadOptions={this.getOptions}
         optionRenderer={this.renderOption}
         valueRenderer={this.renderValue}
-        searchable={false}
       />
     )
   }
@@ -104,4 +95,12 @@ const Title = styled.p`
   font-weight: bold;
 `
 
-const Abstract = styled.p``
+const Price = styled.span`
+  font-weight: bold;
+`
+
+const Sign = styled.span`
+  font-size: 80%;
+`
+
+const Desc = styled.p``

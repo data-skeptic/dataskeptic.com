@@ -29,13 +29,13 @@ export const container = css`
 `
 
 export const strictForm = css`
-.field-label {
+  .field-label {
     margin: 0px !important;
     font-weight: bold;
   }
 
   .field-input {
-    input {
+    > input {
       padding: 2px 6px !important;
     }
   }
