@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Async } from 'react-select'
 import axios from 'axios'
 import styled from 'styled-components'
-import Highlighter from 'react-highlight-words'
 
 const Dollar = () => <Sign>$</Sign>
 
@@ -62,11 +61,8 @@ export default class JobAdvertiseField extends Component {
 
   handleChange = selectedOption => {
     this.setState({ selectedOption })
-
-    const sku = selectedOption ? selectedOption.sku : null
-    const { onChange = () => {} } = this.props
-
-    onChange(sku)
+    const { handleChange = () => {} } = this.props
+    handleChange(selectedOption)
   }
 
   render() {

@@ -2,15 +2,16 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import AddJob, { tomorrow } from '../../Jobs/Forms/AddJob'
 import styled from 'styled-components'
-import { addJob } from '../../reducers/AdminReducer'
-import {container, strictForm} from '../../styles'
-import {changePageTitle} from "../../Layout/Actions/LayoutActions";
+import { container, strictForm } from '../../styles'
+import { changePageTitle } from '../../Layout/Actions/LayoutActions'
+import { toggleCart } from '../../Cart/Actions/CartActions'
 
 class PublicAddJob extends Component {
   state = {
-    initialValues: {
+    oinitialValues: {
       go_live_date: tomorrow.format('YYYY-MM-DD')
-    }
+    },
+    advertise: null
   }
 
   static getPageMeta() {
@@ -25,12 +26,34 @@ class PublicAddJob extends Component {
 
     dispatch(changePageTitle(title))
   }
-  
-  add = data => this.props.dispatch(addJob(data))
+
+  redirect = to => this.props.history.push(to)
+
+  addProduct = (details, size = 1) => {
+    const title = `Job add "${details.title}"`
+
+    const product = {
+      ...this.state.advertise,
+      title,
+      details
+    }
+
+    this.props.dispatch({
+      type: 'ADD_TO_CART',
+      payload: { product, size }
+    })
+  }
+
+  handleSubmit = product => {
+    this.addProduct(product)
+    this.redirect('/checkout')
+  }
+
+  changeAdvertise = advertise => this.setState({ advertise })
 
   render() {
     const { history, error, success, request } = this.props
-    const { initialValues } = this.state
+    const { initialValues, advertise } = this.state
 
     return (
       <Container history={history}>
@@ -39,13 +62,14 @@ class PublicAddJob extends Component {
         <Wrapper>
           <AddJob
             customError={error}
-            onSubmit={this.add}
+            onSubmit={this.handleSubmit}
             showSubmit={true}
             showAdvertiseOptions={true}
             allowSubmit={!request}
             submitValue={request ? 'Processing...' : 'Add'}
             initialValues={initialValues}
             customSuccess={success ? 'Job added.' : null}
+            changeAdvertise={this.changeAdvertise}
           />
         </Wrapper>
       </Container>
@@ -63,5 +87,5 @@ const Container = styled.div`
 `
 
 const Wrapper = styled.div`
-  ${strictForm}
- `
+  ${strictForm};
+`

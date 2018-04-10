@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { changePageTitle } from '../../Layout/Actions/LayoutActions'
 import { container } from '../../styles'
-import {connect} from "react-redux";
+import { connect } from 'react-redux'
 
 class CareersJobsAdd extends Component {
   componentDidMount() {
