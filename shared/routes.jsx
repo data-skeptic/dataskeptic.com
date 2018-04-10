@@ -63,6 +63,7 @@ import AdminOrdersNew from 'components/admin/AdminOrdersNew'
 import AdminOrdersProcessing from 'components/admin/AdminOrdersProcessing'
 import AdminAddJob from 'components/admin/AdminAddJob'
 import PublicAddJob from 'components/jobs/PublicAddJob'
+import CareersAdsCheckout from 'components/jobs/CareersAdsCheckout'
 
 import UserPlaylist from 'components/UserPlaylist'
 
@@ -295,8 +296,12 @@ export default (
       <IndexRoute component={AdminAddJob} />
     </Route>
 
-    <Route path="/job/add" component={App}>
+    <Route path="/careers/job/add" component={App}>
       <IndexRoute component={PublicAddJob} />
+    </Route>
+
+    <Route path="/careers/ads/checkout" component={App}>
+      <IndexRoute component={CareersAdsCheckout} />
     </Route>
 
     <Route path="/admin/login" component={App}>

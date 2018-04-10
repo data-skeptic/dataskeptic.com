@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import AddJob, { tomorrow } from '../../Jobs/Forms/AddJob'
 import styled from 'styled-components'
 import { addJob } from '../../reducers/AdminReducer'
-import { container } from '../../styles'
+import {container, strictForm} from '../../styles'
+import {changePageTitle} from "../../Layout/Actions/LayoutActions";
 
 class PublicAddJob extends Component {
   state = {
@@ -12,6 +13,19 @@ class PublicAddJob extends Component {
     }
   }
 
+  static getPageMeta() {
+    return {
+      title: 'Add Job | Data Skeptic'
+    }
+  }
+
+  componentWillMount() {
+    const { dispatch } = this.props
+    const { title } = PublicAddJob.getPageMeta()
+
+    dispatch(changePageTitle(title))
+  }
+  
   add = data => this.props.dispatch(addJob(data))
 
   render() {
@@ -48,4 +62,6 @@ const Container = styled.div`
   ${container};
 `
 
-const Wrapper = styled.div``
+const Wrapper = styled.div`
+  ${strictForm}
+ `
