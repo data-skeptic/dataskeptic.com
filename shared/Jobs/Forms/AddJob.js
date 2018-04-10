@@ -99,7 +99,8 @@ const QuestionForm = ({
   error,
   showSubmit,
   customError,
-  customSuccess
+  customSuccess,
+                        showAdvertiseOptions
 }) => (
   <FormController
     name={`addJob`}
@@ -187,6 +188,10 @@ const QuestionForm = ({
       customComponent={RichTextarea}
       name="description"
     />
+    
+    {showAdvertiseOptions && <div>
+      advertise field
+    </div>}
   </FormController>
 )
 
