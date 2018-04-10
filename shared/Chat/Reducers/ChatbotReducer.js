@@ -274,7 +274,7 @@ export const loggMessage = message => {
   axios
     .post('/api/v1/chat/log', message)
     .then(() => {})
-    .then(err => console.error(err))
+    .catch(err => console.error(err))
 
   return {
     type: 'LOG_MESSAGE',

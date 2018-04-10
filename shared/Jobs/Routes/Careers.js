@@ -67,9 +67,7 @@ class Careers extends Component {
 
     return (
       <Container className="careers_page">
-        <Title>
-          Enter to win a copy of "The Master Algorithm" by Pedro Domingos
-        </Title>
+        <Title>Resume corpus submission system</Title>
         <Row>
           <Column>
             <Text>
@@ -95,7 +93,7 @@ class Careers extends Component {
                 <p>We're planning about two weeks of data collection.</p>
                 <p>After that, our analysis phase will begin.</p>
                 <p>
-                  You should expect your personalized report in the next 3-4
+                  You should expect your personalized report in the next 1-2
                   weeks.
                 </p>
                 <img
@@ -105,21 +103,7 @@ class Careers extends Component {
               </Success>
             )}
           </Column>
-          <Right>
-            <Img src="https://s3.amazonaws.com/dataskeptic.com/img/2018/kyle-reading-the-master-algorithm.jpg" />
-            <Text>
-              We are going to randomly select two submitters to win a copy of
-              "The Master Algorithm" by Pedro Domingos.
-            </Text>
-            {due_date_str && (
-              <Text>
-                <b>
-                  To be entered, submit your PDF resume/CV by the end of March
-                </b>
-                <Countdown to={due_date_str} />
-              </Text>
-            )}
-          </Right>
+          <Right />
         </Row>
       </Container>
     )

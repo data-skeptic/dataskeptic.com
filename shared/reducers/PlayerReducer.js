@@ -9,7 +9,93 @@ const init = {
   playback_loaded: false,
   position: 0,
   position_updated: false,
+  volume: 0.8,
+  muted: false,
   episode: {}
+}
+
+export const INITIALIZE_PLAYER = 'INITIALIZE_PLAYER'
+export const SET_VOLUME = 'SET_VOLUME'
+//ZHOPA
+const IS_CLIENT = (() => {
+  let isDefined = false
+  try {
+    window
+    isDefined = true
+  } catch (x) {}
+  return isDefined
+})()
+
+const normalizeState = ({ is_playing, position, episode, volume, muted }) => ({
+  is_playing,
+  position,
+  episode,
+  volume,
+  muted
+})
+
+const getKey = key => {
+  let data = {}
+  if (!IS_CLIENT) return data
+  try {
+    data = JSON.parse(localStorage.getItem(key))
+  } catch (err) {}
+  return data
+}
+
+const PLAYER_PLAYING_KEY = 'player_playing'
+const PLAYER_META_KEY = 'player_meta'
+
+const savePlaying = meta => {
+  if (!IS_CLIENT) return
+
+  const data = {
+    ...meta.episode
+  }
+
+  localStorage.setItem(PLAYER_PLAYING_KEY, JSON.stringify(data))
+}
+
+const savePlayingMeta = ({
+  position,
+  has_shown,
+  is_playing,
+  volume,
+  muted
+}) => {
+  if (!IS_CLIENT) return null
+
+  const data = {
+    position,
+    seekPosition: position,
+    has_shown,
+    is_playing,
+    volume,
+    muted
+  }
+
+  localStorage.setItem(PLAYER_META_KEY, JSON.stringify(data))
+}
+
+const removePlaying = () => {
+  localStorage.removeItem(PLAYER_PLAYING_KEY)
+  localStorage.removeItem(PLAYER_META_KEY)
+}
+
+const getCachePlaying = () => {
+  const playing = getKey(PLAYER_META_KEY)
+  const episode = getKey(PLAYER_PLAYING_KEY)
+
+  let has_shown = false
+  if (!isEmpty(episode)) {
+    has_shown = true
+  }
+
+  return {
+    ...playing,
+    episode,
+    has_shown
+  }
 }
 
 const defaultState = Immutable.fromJS(init)
@@ -17,6 +103,13 @@ const defaultState = Immutable.fromJS(init)
 export default function PlayerReducer(state = defaultState, action) {
   var nstate = state.toJS()
   switch (action.type) {
+    case INITIALIZE_PLAYER:
+      const cache = getCachePlaying()
+      nstate = {
+        ...nstate,
+        ...cache
+      }
+      break
     case 'PLAY_EPISODE_FROM_GUID':
       // This is used by the bot
       console.log('PLAY_EPISODE_FROM_GUID')
@@ -52,7 +145,7 @@ export default function PlayerReducer(state = defaultState, action) {
       if (isEmpty(episode)) {
         nstate.is_playing = false
         nstate.playback_loaded = false
-        nstate.position = init.position
+        nstate.position = nstate.position || init.position
       } else {
         nstate.has_shown = true
         if (nstate.is_playing) {
@@ -63,14 +156,14 @@ export default function PlayerReducer(state = defaultState, action) {
             nstate.episode = episode
             nstate.is_playing = true
             nstate.playback_loaded = false
-            nstate.position = init.position
+            nstate.position = nstate.position || init.position
           } else {
             if (episode.guid == nstate.episode.guid) {
               nstate.is_playing = false
             } else {
               nstate.episode = episode
               nstate.playback_loaded = false
-              nstate.position = init.position
+              nstate.position = nstate.position || init.position
               nstate.is_playing = true
             }
           }
@@ -79,34 +172,71 @@ export default function PlayerReducer(state = defaultState, action) {
           nstate.is_playing = true
         }
       }
+      savePlaying(nstate)
+      savePlayingMeta(nstate)
       break
+
     case 'STOP_PLAYBACK':
       nstate.is_player = false
+      savePlayingMeta(nstate)
       break
 
     case 'STOP_PLAYING':
       nstate.is_playing = false
+      savePlayingMeta(normalizeState(nstate))
       break
 
     case 'RESUME_PLAYING':
       nstate.is_playing = true
+      savePlayingMeta(nstate)
       break
 
     case 'PLAYBACK_LOADED':
       nstate.playback_loaded = action.payload
+      savePlayingMeta(nstate)
       break
     case 'PROGRESS_UPDATE':
       var pos = action.payload
       nstate.position = pos
+      savePlayingMeta(nstate)
       break
     case 'PLAYER_SEEK':
       var pos = action.payload
       nstate.position = pos
       nstate.position_updated = true
+      savePlayingMeta(nstate)
       break
     case 'SEEK_SET':
       nstate.position_updated = false
       break
+
+    case 'PLAYED':
+    case 'MARK_AS_PLAYED':
+      removePlaying(nstate)
+      break
+
+    case SET_VOLUME:
+      nstate.volume = action.payload.volume
+      break
   }
+
   return Immutable.fromJS(nstate)
 }
+
+export const initialize = () => ({
+  type: INITIALIZE_PLAYER
+})
+
+export const setVolume = volume => ({
+  type: SET_VOLUME,
+  payload: {
+    volume
+  }
+})
+
+export const setMuted = muted => ({
+  type: SET_VOLUME,
+  payload: {
+    muted
+  }
+})
