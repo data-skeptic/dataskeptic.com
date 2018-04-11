@@ -93,8 +93,8 @@ function create_stripe_order(stripe, customer, products, name, address, email) {
         function(err, order) {
           if (err) {
             var msg = 'order error: ' + err
-            console.log(msg)
-            reject(msg)
+            console.error(msg)
+            reject(err.raw)
           } else {
             resolve(order)
           }
