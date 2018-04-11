@@ -8,7 +8,7 @@ const Dollar = () => <Sign>$</Sign>
 const formatPrice = price => (
   <Price>
     <Dollar />
-    {(price / 100).toFixed(2)}
+    {(price).toFixed(2)}
   </Price>
 )
 
