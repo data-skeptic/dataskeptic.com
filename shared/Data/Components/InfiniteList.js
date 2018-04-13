@@ -13,10 +13,7 @@ export default class InfiniteList extends Component {
 
     return (
       <section>
-        {items.map((item, index) => {
-          return <ItemComponent {...item} key={index} />
-          // return <div>{index}</div>
-        })}
+        {items.map((item, index) => <ItemComponent {...item} key={index} />)}
       </section>
     )
   }

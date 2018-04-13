@@ -63,7 +63,7 @@ export default function EpisodesReducer(state = defaultState, action) {
     case LOAD_SUCCESS:
       nstate.loading = false
       nstate.error = null
-      nstate.list = [nstate.list, ...action.payload.data]
+      nstate.list = [...nstate.list, ...action.payload.data]
       break
 
     case LOAD_FAIL:
