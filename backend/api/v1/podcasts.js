@@ -861,7 +861,14 @@ module.exports = cache => {
     const { limit = 10, offset = 0 } = req.query
 
     return fakeGetEpisode(limit, offset)
-      .then(list => res.send(list))
+      .then(list => {
+        res.send({
+          list,
+          limit,
+          offset,
+          total: list.length
+        })
+      })
       .catch(error =>
         res.status(500).send({ success: false, error: error.data.errorMessage })
       )

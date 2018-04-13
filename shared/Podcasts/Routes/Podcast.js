@@ -11,10 +11,14 @@ import Content from '../../Layout/Components/Content/Content'
 import SideBar from '../../Layout/Components/SideBar/SideBar'
 
 import { changePageTitle } from '../../Layout/Actions/LayoutActions'
-import InfiniteList from '../../Data/Components/InfiniteList'
 
 import { year_from_path } from '../../utils/redux_loader'
 import { load as loadEpisodes } from '../../reducers/EpisodesReducer'
+import infiniteList from '../../Data/hoc/infiniteList'
+
+const EpisodesList = infiniteList({
+  key: 'episodes' // redux reducer key
+})
 
 class Podcast extends Component {
   constructor(props) {
@@ -32,12 +36,15 @@ class Podcast extends Component {
     const { isLoaded } = this.props
     const pathname = this.props.location.pathname
 
-    const limit = 10,
-      offset = 0
-    dispatch(loadEpisodes(limit, offset))
-
     const { title } = Podcast.getPageMeta()
     dispatch(changePageTitle(title))
+  }
+
+  updateLocation = () => {}
+
+  loadMore = (limit, offset) => {
+    this.updateLocation(limit, offset)
+    this.props.dispatch(loadEpisodes(limit, offset))
   }
 
   render() {
@@ -58,9 +65,12 @@ class Podcast extends Component {
                 <Loading />
               </div>
             ) : (
-              <InfiniteList
+              <EpisodesList
+                autoLoad={true}
                 items={list}
                 Item={(item, index) => <Episode episode={item} key={index} />}
+                loadMore={this.loadMore}
+                test={true}
               />
             )}
           </Content>

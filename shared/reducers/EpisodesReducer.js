@@ -1,28 +1,19 @@
 import Immutable, { fromJS } from 'immutable'
-import {
-  loadCareersCityJobsFail,
-  loadCareersCityJobsRequest,
-  loadCareersCityJobsSuccess
-} from './JobsReducer'
 import Request from '../Request'
+import list from '../Data/helpers/list'
 
 const init = {
   episodes: [],
   ep_map: {},
   loaded: false,
-  years: [],
-
-  loading: false,
-  error: null,
-  list: [],
-  single: null
+  years: []
 }
 
 export const LOAD = 'EPISODES//LOAD'
 export const LOAD_SUCCESS = 'EPISODES//LOAD_SUCCESS'
 export const LOAD_FAIL = 'EPISODES//LOAD_FAIL'
 
-const defaultState = fromJS(init)
+const defaultState = fromJS(list(init))
 
 export default function EpisodesReducer(state = defaultState, action) {
   let nstate = state.toJS()
@@ -63,7 +54,11 @@ export default function EpisodesReducer(state = defaultState, action) {
     case LOAD_SUCCESS:
       nstate.loading = false
       nstate.error = null
-      nstate.list = [...nstate.list, ...action.payload.data]
+      nstate.list = [...nstate.list, ...action.payload.data.list]
+      debugger
+      nstate.hasMore =
+        action.payload.req.limit + action.payload.req.offset <=
+        action.payload.data.list
       break
 
     case LOAD_FAIL:
