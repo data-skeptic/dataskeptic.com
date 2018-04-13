@@ -851,7 +851,7 @@ const getEpisodes = (limit, offset) => {
 
 const fakeGetEpisode = (limit, offset) =>
   Promise.resolve(
-    MOCKED_LIST.filter((i, index) => index >= offset && index <= offset+limit)
+    MOCKED_LIST.filter((i, index) => index >= offset && index <= offset + limit)
   )
 
 module.exports = cache => {
@@ -861,12 +861,7 @@ module.exports = cache => {
     const { limit = 10, offset = 0 } = req.query
 
     return fakeGetEpisode(limit, offset)
-      .then(list =>
-        res.send({
-          success: true,
-          list
-        })
-      )
+      .then(list => res.send(list))
       .catch(error =>
         res.status(500).send({ success: false, error: error.data.errorMessage })
       )
