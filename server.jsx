@@ -631,7 +631,7 @@ function renderView(store, renderProps, location) {
  * Please update this key to
  * have latest request response data in the user session
  */
-const CURRENT_IP_REQ_VERSION = 6
+const CURRENT_IP_REQ_VERSION = 7
 const localIPs = ['127.0.0.1', '::1']
 
 function getIpData(ip) {
@@ -676,12 +676,6 @@ function getIpData(ip) {
         version: CURRENT_IP_REQ_VERSION
       }
     })
-    .catch(error => {
-      console.log('problem with tracking')
-      console.log(ip)
-      console.log(ipinfo_token)
-      console.log(error)
-    })
 }
 
 async function tracking(req, res) {
@@ -706,8 +700,16 @@ async function tracking(req, res) {
     try {
       // wait for ip info request data
       ipInfo = ipData = await getIpData(ip)
-    } catch (err) {
-      ipInfo = undefined
+      console.log('success getIpData')
+    } catch (error) {
+      console.log('problem with tracking')
+      console.log(ip)
+      console.log(ipinfo_token)
+      console.log(error)
+      ipInfo = ipData = {
+        error: true,
+        version: CURRENT_IP_REQ_VERSION
+      }
     }
 
     // save to current session if not empty
