@@ -19,11 +19,10 @@ export default function(options) {
 
     componentDidMount() {
       if (options.autoLoad) {
-        this.loadMore()
+        
+        this.props.loadMore()
       }
     }
-
-    loadMore() {}
 
     render() {
       const {
@@ -49,19 +48,23 @@ export default function(options) {
               items
             })}
           </code>
-          <InfiniteList {...rest} />
+          {/*<InfiniteList {...rest} />*/}
         </div>
       )
     }
   }
 
-  return connect(state => ({
-    loading: getItems(state[options.key]),
-    loaded: getLoading(state[options.key]),
-    error: getLoaded(state[options.key]),
-    offset: getError(state[options.key]),
-    limit: getLimit(state[options.key]),
-    hasMore: getOffset(state[options.key]),
-    items: getHasMore(state[options.key])
-  }))(WrappedList)
+  return connect(state => {
+    const store = options.dataSource(state)
+    
+    return {
+      loading: getItems(store),
+      loaded: getLoading(store),
+      error: getLoaded(store),
+      offset: getError(store),
+      limit: getLimit(store),
+      hasMore: getOffset(store),
+      items: getHasMore(store)
+    }
+  })(WrappedList)
 }

@@ -17,7 +17,7 @@ import { load as loadEpisodes } from '../../reducers/EpisodesReducer'
 import infiniteList from '../../Data/hoc/infiniteList'
 
 const EpisodesList = infiniteList({
-  key: 'episodes' // redux reducer key
+  dataSource: (state) => state.episodes.toJS()
 })
 
 class Podcast extends Component {

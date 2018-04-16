@@ -49,16 +49,18 @@ export default function EpisodesReducer(state = defaultState, action) {
     case LOAD:
       nstate.loading = true
       nstate.error = false
+      nstate.list.limit = action.payload.meta.limit
+      nstate.list.offset = action.payload.meta.offset
       break
 
     case LOAD_SUCCESS:
       nstate.loading = false
       nstate.error = null
-      nstate.list = [...nstate.list, ...action.payload.data.list]
-      debugger
+      nstate.list.items = [...nstate.list.items, ...action.payload.data.list]
+      debugger;
       nstate.hasMore =
         action.payload.req.limit + action.payload.req.offset <=
-        action.payload.data.list
+        action.payload.data.total
       break
 
     case LOAD_FAIL:
@@ -75,7 +77,14 @@ export const load = (limit, offset) => {
     dispatch(loadRequest(location))
 
     Request.get(`/api/v1/podcasts?limit=${limit}&offset=${offset}`)
-      .then(result => dispatch(loadSuccess(result.data)))
+      .then(result =>
+        dispatch(
+          loadSuccess(result.data, {
+            limit,
+            offset
+          })
+        )
+      )
       .catch(err => dispatch(loadFail(err)))
   }
 }
@@ -88,10 +97,11 @@ export const loadRequest = (limit, offset) => ({
   }
 })
 
-export const loadSuccess = data => ({
+export const loadSuccess = (data, meta) => ({
   type: LOAD_SUCCESS,
   payload: {
-    data
+    data,
+    meta
   }
 })
 
