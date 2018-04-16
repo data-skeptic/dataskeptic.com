@@ -13,16 +13,27 @@ import {
 
 export default function(options) {
   class WrappedList extends Component {
+    static defaultProps = {
+      loadMore: () => {}
+    }
+
     constructor(props) {
       super(props)
     }
 
     componentDidMount() {
-      if (options.autoLoad) {
-        
-        this.props.loadMore()
+      if (this.props.autoLoad) {
+        this.firstLoad()
       }
     }
+
+    loadMore = (limit, offset) => {
+      if (this.props.hasMore) {
+        this.props.loadMore(limit, offset)
+      }
+    }
+
+    firstLoad = () => this.loadMore(this.props.limit, this.props.offset)
 
     render() {
       const {
@@ -56,15 +67,15 @@ export default function(options) {
 
   return connect(state => {
     const store = options.dataSource(state)
-    
+
     return {
-      loading: getItems(store),
-      loaded: getLoading(store),
-      error: getLoaded(store),
-      offset: getError(store),
+      items: getItems(store),
+      loading: getLoading(store),
+      loaded: getLoaded(store),
+      error: getError(store),
       limit: getLimit(store),
-      hasMore: getOffset(store),
-      items: getHasMore(store)
+      offset: getOffset(store),
+      hasMore: getHasMore(store)
     }
   })(WrappedList)
 }

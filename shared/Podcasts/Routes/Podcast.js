@@ -71,6 +71,7 @@ class Podcast extends Component {
                 Item={(item, index) => <Episode episode={item} key={index} />}
                 loadMore={this.loadMore}
                 test={true}
+                
               />
             )}
           </Content>
