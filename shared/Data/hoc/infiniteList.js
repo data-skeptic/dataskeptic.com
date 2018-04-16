@@ -43,7 +43,8 @@ export default function(options) {
         offset,
         limit,
         hasMore,
-        items
+        items,
+        total
       } = this.props
       const { ...rest } = this.props
       return (
@@ -56,10 +57,10 @@ export default function(options) {
               offset,
               limit,
               hasMore,
-              items
+              total
             })}
           </code>
-          {/*<InfiniteList {...rest} />*/}
+          <InfiniteList {...rest} />
         </div>
       )
     }

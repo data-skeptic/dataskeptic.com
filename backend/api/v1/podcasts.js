@@ -21,11 +21,12 @@ module.exports = cache => {
     getEpisodes(limit, offset)
       .then(({ total, episodes }) => {
         const hasMore = limit + offset <= total
+        const realOffset = +limit + +offset
 
         res.send({
-          list: episodes,
+          items: episodes,
           limit: +limit,
-          offset: +offset,
+          offset: realOffset,
           total,
           hasMore
         })

@@ -47,19 +47,21 @@ export default function EpisodesReducer(state = defaultState, action) {
       break
 
     case LOAD:
-      nstate.loading = true
-      nstate.error = false
+      nstate.list.loading = true
+      nstate.list.error = false
       nstate.list.limit = action.payload.limit
       nstate.list.offset = action.payload.offset
       break
 
     case LOAD_SUCCESS:
-      nstate.loading = false
-      nstate.error = null
-      nstate.list.items = [...nstate.list.items, ...action.payload.data.list]
-      nstate.hasMore =
-        action.payload.req.limit + action.payload.req.offset <=
-        action.payload.data.total
+      debugger
+      nstate.list.loading = false
+      nstate.list.error = null
+      nstate.list.items = [...nstate.list.items, ...action.payload.items]
+      nstate.list.hasMore = action.payload.hasMore
+      nstate.list.limit = action.payload.limit
+      nstate.list.offset = action.payload.offset
+      nstate.list.total = action.payload.total
       break
 
     case LOAD_FAIL:
@@ -73,18 +75,10 @@ export default function EpisodesReducer(state = defaultState, action) {
 
 export const load = (limit, offset) => {
   return dispatch => {
-    debugger;
     dispatch(loadRequest(limit, offset))
 
     Request.get(`/api/v1/podcasts?limit=${limit}&offset=${offset}`)
-      .then(result =>
-        dispatch(
-          loadSuccess(result.data, {
-            limit,
-            offset
-          })
-        )
-      )
+      .then(result => dispatch(loadSuccess(result.data)))
       .catch(err => dispatch(loadFail(err)))
   }
 }
@@ -97,11 +91,10 @@ export const loadRequest = (limit, offset) => ({
   }
 })
 
-export const loadSuccess = (data, meta) => ({
+export const loadSuccess = (data) => ({
   type: LOAD_SUCCESS,
   payload: {
-    data,
-    meta
+    ...data
   }
 })
 
