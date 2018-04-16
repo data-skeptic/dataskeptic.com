@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
+import ListLoader from './ListLoader'
+import ListError from './ListError'
+
 export default class InfiniteList extends Component {
   static defaultProps = {
     loadMore: () => {},
@@ -31,12 +34,8 @@ export default class InfiniteList extends Component {
         refreshFunction={this.refresh}
         next={this.loadMore}
         hasMore={hasMore}
-        loader={<h4>Loading...</h4>}
-        endMessage={
-          <p style={{ textAlign: 'center' }}>
-            <b>Yay! You have seen it all</b>
-          </p>
-        }
+        loader={<ListError />}
+        endMessage={<ListError />}
       >
         {items.map((item, index) => <ItemComponent {...item} key={index} />)}
       </InfiniteScroll>
