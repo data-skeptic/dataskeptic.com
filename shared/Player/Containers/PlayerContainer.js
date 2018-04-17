@@ -9,7 +9,7 @@ import MiniPlayer from '../Components/MiniPlayer'
 import VolumeBarContainer from './VolumeBarContainer'
 import { isPlayed, markAsPlayed } from '../../Auth/Reducers/AuthReducer'
 import { initialize as initializePlayer } from '../../../shared/reducers/PlayerReducer'
-import { setVolume, setMuted } from '../../reducers/PlayerReducer'
+import { setVolume, setMuted, reset } from '../../reducers/PlayerReducer'
 
 const URL = '/api/v1/player'
 
@@ -227,14 +227,12 @@ class PlayerContainer extends Component {
     const { isAuthorized, loggedIn } = this.props
     const uid = v4()
 
-    // if (isAuthorized) {
-    //   const metaId = `${uid}_playerMeta`
-    //   localStorage.setItem(metaId, JSON.stringify(meta))
-    //   axios
-    //     .post(URL, { type, meta })
-    //     .then(data => {})
-    //     .catch(err => console.error(err))
-    // }
+    if (isAuthorized) {
+      axios
+        .post(URL, { type, meta })
+        .then(data => {})
+        .catch(err => console.error(err))
+    }
 
     const { position } = meta
     if (type === CAPTURE_TYPES.POS) {
@@ -364,9 +362,18 @@ class PlayerContainer extends Component {
     this.props.dispatch(setMuted(false))
   }
 
+  close = () => this.props.dispatch(reset())
+
   render() {
     const { player, oepisode } = this.props
-    const { is_playing, has_shown, position, playback_loaded, volume, muted } = player
+    const {
+      is_playing,
+      has_shown,
+      position,
+      playback_loaded,
+      volume,
+      muted
+    } = player
     const playerVolume = muted ? 0 : volume
 
     if (!has_shown) {
@@ -422,6 +429,7 @@ class PlayerContainer extends Component {
         onPlayToggle={this.onPlayToggle}
         loaded={playback_loaded}
         volumeSlider={volumeController}
+        onClose={this.close}
       />
     )
   }

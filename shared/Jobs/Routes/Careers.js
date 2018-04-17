@@ -67,9 +67,7 @@ class Careers extends Component {
 
     return (
       <Container className="careers_page">
-        <Title>
-          Resume corpus submission system
-        </Title>
+        <Title>Resume corpus submission system</Title>
         <Row>
           <Column>
             <Text>
@@ -105,8 +103,7 @@ class Careers extends Component {
               </Success>
             )}
           </Column>
-          <Right>
-          </Right>
+          <Right />
         </Row>
       </Container>
     )
