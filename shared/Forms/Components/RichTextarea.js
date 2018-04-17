@@ -6,6 +6,19 @@ import { Editor } from 'react-draft-wysiwyg'
 import draftToHtml from 'draftjs-to-html'
 import htmlToDraft from 'html-to-draftjs'
 
+const DEFAULT_TOOLBAR = {
+  options: [
+    'inline',
+    'blockType',
+    'fontSize',
+    'fontFamily',
+    'list',
+    'textAlign',
+    'colorPicker',
+    'link'
+  ]
+}
+
 export default class RichTextarea extends Component {
   state = {
     editorState: EditorState.createEmpty(),
@@ -52,6 +65,7 @@ export default class RichTextarea extends Component {
   }
 
   render() {
+    const { toolbar = DEFAULT_TOOLBAR } = this.props
     const { editorState } = this.state
     return (
       <Wrapper suppressContentEditableWarning={true}>
@@ -62,6 +76,7 @@ export default class RichTextarea extends Component {
           editorClassName="richEditor"
           onEditorStateChange={this.onChange}
           onBlur={this.onBlur}
+          toolbar={toolbar}
         />
       </Wrapper>
     )
