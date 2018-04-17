@@ -30,7 +30,6 @@ import Loading from 'Common/Components/Loading.js'
 import Login from 'components/Login'
 import SignUp from 'components/SignUp'
 import Logout from 'components/Logout'
-import Menu from 'components/Menu'
 import Membership from 'components/Membership'
 import MembershipPortal from 'components/MembershipPortal'
 import ChangeMembership from 'components/membership/ChangeMembership'
@@ -63,7 +62,6 @@ import AdminOrdersNew from 'components/admin/AdminOrdersNew'
 import AdminOrdersProcessing from 'components/admin/AdminOrdersProcessing'
 import AdminAddJob from 'components/admin/AdminAddJob'
 import PublicAddJob from 'components/jobs/PublicAddJob'
-import CareersAdsCheckout from 'components/jobs/CareersAdsCheckout'
 
 import UserPlaylist from 'components/UserPlaylist'
 
@@ -154,7 +152,7 @@ export default (
     </Route>
 
     <Route path="/careers/jobs/add" component={App} onEnter={loadData}>
-      <IndexRoute component={CareersJobsAdd} />
+      <IndexRoute component={PublicAddJob} />
     </Route>
 
     <Route path="/loading" component={App} onEnter={loadData}>
@@ -294,14 +292,6 @@ export default (
 
     <Route path="/admin/job/add" component={App}>
       <IndexRoute component={AdminAddJob} />
-    </Route>
-
-    <Route path="/careers/job/add" component={App}>
-      <IndexRoute component={PublicAddJob} />
-    </Route>
-
-    <Route path="/careers/ads/checkout" component={App}>
-      <IndexRoute component={CareersAdsCheckout} />
     </Route>
 
     <Route path="/admin/login" component={App}>
