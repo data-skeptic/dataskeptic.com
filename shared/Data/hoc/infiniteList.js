@@ -10,8 +10,8 @@ import {
   getOffset,
   getHasMore
 } from '../helpers/list'
-import ListLoader from "../Components/ListLoader";
-import ListError from "../Components/ListError";
+import ListLoader from '../Components/ListLoader'
+import ListError from '../Components/ListError'
 
 export default function(options) {
   class WrappedList extends Component {
@@ -49,24 +49,8 @@ export default function(options) {
         total
       } = this.props
       const { ...rest } = this.props
-      return (
-        <div>
-          <code>
-            {JSON.stringify({
-              loading,
-              loaded,
-              error,
-              offset,
-              limit,
-              hasMore,
-              total
-            })}
-          </code>
-          <ListLoader />
-          <ListError />
-          <InfiniteList {...rest} />
-        </div>
-      )
+      
+      return <InfiniteList {...rest} error={error} />
     }
   }
 

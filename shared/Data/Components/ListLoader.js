@@ -16,7 +16,16 @@ export default () => (
 const Box = styled.div`
   background-color: #f4f4f4;
   padding: 32px;
-  margin-top: 24px;
+  margin-top: 84px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
+
+const Bot = styled.img`
+  margin-top: -60px;
 `
 
 const Container = styled.div``

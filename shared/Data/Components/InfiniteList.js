@@ -25,7 +25,7 @@ export default class InfiniteList extends Component {
   }
 
   render() {
-    const { items, Item, hasMore } = this.props
+    const { items, Item, hasMore, error } = this.props
     const ItemComponent = Item
 
     return (
@@ -35,7 +35,8 @@ export default class InfiniteList extends Component {
         next={this.loadMore}
         hasMore={hasMore}
         loader={<ListError />}
-        endMessage={<ListError />}
+        endMessage={<ListError error={error
+        }/>}
       >
         {items.map((item, index) => <ItemComponent {...item} key={index} />)}
       </InfiniteScroll>

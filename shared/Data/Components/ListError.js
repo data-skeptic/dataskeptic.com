@@ -8,7 +8,6 @@ export default ({ error }) => (
       width="120"
     />
     <Container>
-      <Title>Error</Title>
       <Subtitle>{error}</Subtitle>
     </Container>
   </Box>
@@ -16,15 +15,22 @@ export default ({ error }) => (
 
 const Box = styled.div`
   background-color: #f4f4f4;
-  margin-top: 24px;
-  padding: 32px;
+  padding: 12px;
+  margin-top: 84px;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `
 
 const Container = styled.div`
   
 `
 
-const Bot = styled.img``
+const Bot = styled.img`
+    margin-top: -60px;
+`
 
 const Title = styled.h2``
 
