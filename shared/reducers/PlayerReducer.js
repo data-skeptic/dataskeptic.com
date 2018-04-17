@@ -16,6 +16,8 @@ const init = {
 
 export const INITIALIZE_PLAYER = 'INITIALIZE_PLAYER'
 export const SET_VOLUME = 'SET_VOLUME'
+export const RESET = 'RESET'
+
 //ZHOPA
 const IS_CLIENT = (() => {
   let isDefined = false
@@ -218,6 +220,13 @@ export default function PlayerReducer(state = defaultState, action) {
     case SET_VOLUME:
       nstate.volume = action.payload.volume
       break
+    
+    case RESET: 
+      nstate = {
+        ...init
+      }
+      removePlaying(nstate)
+      break;
   }
 
   return Immutable.fromJS(nstate)
@@ -239,4 +248,8 @@ export const setMuted = muted => ({
   payload: {
     muted
   }
+})
+
+export const reset = () => ({
+  type: RESET
 })
