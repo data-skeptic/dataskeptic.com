@@ -208,6 +208,7 @@ export default function PlayerReducer(state = defaultState, action) {
       nstate.position_updated = true
       savePlayingMeta(nstate)
       break
+    
     case 'SEEK_SET':
       nstate.position_updated = false
       break
@@ -219,13 +220,13 @@ export default function PlayerReducer(state = defaultState, action) {
 
     case SET_VOLUME:
       nstate.volume = action.payload.volume
+      savePlayingMeta(nstate)
       break
     
     case RESET: 
-      nstate = {
-        ...init
-      }
-      removePlaying(nstate)
+      nstate.is_playing = false
+      nstate.has_shown = false
+      savePlayingMeta(nstate)
       break;
   }
 
