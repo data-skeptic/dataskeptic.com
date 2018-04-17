@@ -9,6 +9,7 @@ import {
 } from '../../Forms/Components/Field'
 
 import RichTextarea from '../../Forms/Components/RichTextarea'
+import JobAdvertiseField from '../../components/jobs/JobAdvertiseField'
 
 const urlRegex = new RegExp(
   /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi
@@ -99,13 +100,16 @@ const QuestionForm = ({
   error,
   showSubmit,
   customError,
-  customSuccess
+  customSuccess,
+  showAdvertiseOptions,
+  submitValue,
+                        changeAdvertise
 }) => (
   <FormController
     name={`addJob`}
     showSubmit={showSubmit}
     invalid={!allowSubmit}
-    submitValue={`Submit`}
+    submitValue={submitValue}
     handleSubmit={handleSubmit}
     customError={customError}
     customSuccess={customSuccess}
@@ -187,6 +191,16 @@ const QuestionForm = ({
       customComponent={RichTextarea}
       name="description"
     />
+
+    {showAdvertiseOptions && (
+      <Field
+        label="Advertise Type"
+        component={renderField}
+        customComponent={JobAdvertiseField}
+        name="adv"
+        handleChange={changeAdvertise}
+      />
+    )}
   </FormController>
 )
 
