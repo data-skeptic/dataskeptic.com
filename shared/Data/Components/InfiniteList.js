@@ -7,16 +7,17 @@ import ListError from './ListError'
 export default class InfiniteList extends Component {
   static defaultProps = {
     loadMore: () => {},
+    init: () => {},
     Item: () => {},
     items: [],
     limit: 10,
     offset: 0
   }
 
-  loadMore = () => {
+  loadMore = (reset = false) => {
     const { loadMore, limit, offset } = this.props
-    const nextOffset = offset + limit
-    loadMore(limit, nextOffset)
+    const nextOffset = +offset + +limit
+    loadMore(limit, nextOffset, reset)
   }
 
   refresh() {
@@ -35,10 +36,14 @@ export default class InfiniteList extends Component {
         next={this.loadMore}
         hasMore={hasMore}
         loader={<ListError />}
-        endMessage={<ListError error={error
-        }/>}
+        endMessage={<ListError error={error} />}
       >
-        {items.map((item, index) => <ItemComponent {...item} key={index} />)}
+        {items.map((item, index) => (
+          <div key={index}>
+            <b>{index}</b>
+            <ItemComponent {...item} key={index} />
+          </div>
+        ))}
       </InfiniteScroll>
     )
   }

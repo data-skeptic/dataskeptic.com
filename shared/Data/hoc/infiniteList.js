@@ -49,8 +49,23 @@ export default function(options) {
         total
       } = this.props
       const { ...rest } = this.props
-      
-      return <InfiniteList {...rest} error={error} />
+
+      return (
+        <div>
+          <code>{JSON.stringify({
+            loading,
+            loaded,
+            error,
+            offset,
+            limit,
+            hasMore,
+            total
+          })}</code>
+          <ListLoader />
+          <ListError error={"Server error"} />
+          <InfiniteList {...rest} error={error} />
+        </div>
+      )
     }
   }
 

@@ -16,15 +16,16 @@ module.exports = cache => {
   const router = express.Router()
 
   router.get('/', (req, res) => {
-    const { limit = 10, offset = 0 } = req.query
-
+    const limit = +req.query.limit || 10
+    const offset = 0
+    
     getEpisodes(limit, offset)
       .then(({ total, episodes }) => {
         const hasMore = limit + offset <= total
 
         res.send({
           items: episodes,
-          limit: +limit,
+          limit,
           offset,
           total,
           hasMore
