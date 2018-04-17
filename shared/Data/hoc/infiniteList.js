@@ -53,19 +53,7 @@ export default function(options) {
 
       return (
         <Wrapper>
-          <code>
-            {JSON.stringify({
-              offset,
-              limit
-            })}
-          </code>
           <InfiniteList {...rest} endMessage={endMessage} />
-          <code>
-            {JSON.stringify({
-              offset,
-              limit
-            })}
-          </code>
           {error && <ListError error={error} />}
         </Wrapper>
       )
