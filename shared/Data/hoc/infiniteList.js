@@ -10,7 +10,7 @@ import {
   getOffset,
   getHasMore
 } from '../helpers/list'
-import ListLoader from '../Components/ListLoader'
+import styled from 'styled-components'
 import ListError from '../Components/ListError'
 
 export default function(options) {
@@ -46,25 +46,16 @@ export default function(options) {
         limit,
         hasMore,
         items,
-        total
+        total,
+        endMessage
       } = this.props
       const { ...rest } = this.props
 
       return (
-        <div>
-          <code>{JSON.stringify({
-            loading,
-            loaded,
-            error,
-            offset,
-            limit,
-            hasMore,
-            total
-          })}</code>
-          <ListLoader />
-          <ListError error={"Server error"} />
-          <InfiniteList {...rest} error={error} />
-        </div>
+        <Wrapper>
+          <InfiniteList {...rest} endMessage={endMessage} />
+          {error && <ListError error={error} />}
+        </Wrapper>
       )
     }
   }
@@ -83,3 +74,5 @@ export default function(options) {
     }
   })(WrappedList)
 }
+
+const Wrapper = styled.div``

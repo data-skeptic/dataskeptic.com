@@ -3,6 +3,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 
 import ListLoader from './ListLoader'
 import ListError from './ListError'
+import ListEnd from './ListEnd'
 
 export default class InfiniteList extends Component {
   static defaultProps = {
@@ -11,7 +12,8 @@ export default class InfiniteList extends Component {
     Item: () => {},
     items: [],
     limit: 10,
-    offset: 0
+    offset: 0,
+    endMessage: 'No more items.'
   }
 
   loadMore = (reset = false) => {
@@ -26,7 +28,7 @@ export default class InfiniteList extends Component {
   }
 
   render() {
-    const { items, Item, hasMore, error } = this.props
+    const { items, Item, hasMore, endMessage } = this.props
     const ItemComponent = Item
 
     return (
@@ -35,13 +37,13 @@ export default class InfiniteList extends Component {
         refreshFunction={this.refresh}
         next={this.loadMore}
         hasMore={hasMore}
-        loader={<ListError />}
-        endMessage={<ListError error={error} />}
+        loader={<ListLoader />}
+        endMessage={<ListEnd message={endMessage} />}
       >
-        {items.map((item, index) => (
-          <div key={index}>
-            <b>{index}</b>
-            <ItemComponent {...item} key={index} />
+        {items.map(item => (
+          <div key={item.blog_id}>
+            <b>{endMessage}</b>
+            <ItemComponent {...item} key={item.blog_id} />
           </div>
         ))}
       </InfiniteScroll>
