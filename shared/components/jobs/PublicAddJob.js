@@ -28,7 +28,7 @@ class PublicAddJob extends Component {
 
   redirect = to => this.props.history.push(to)
 
-  addProduct = (details, size = 1) => {
+  addProduct = (details) => {
     const title = `Job add "${details.title}"`
 
     const product = {
@@ -39,7 +39,7 @@ class PublicAddJob extends Component {
 
     this.props.dispatch({
       type: 'ADD_TO_CART',
-      payload: { product, size }
+      payload: { product }
     })
   }
 
