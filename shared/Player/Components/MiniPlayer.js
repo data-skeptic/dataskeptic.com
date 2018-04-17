@@ -32,7 +32,7 @@ export const MiniPlayer = ({
           <p className="title">{title}</p>
         </div>
       </div>
-      <div className="col-xs-4 col-sm-5 col-md-5 slider">
+      <div className="col-xs-4 col-sm-5 col-md-6 slider">
         <PlayerProgressBar
           playing={playing}
           progress={position}
@@ -47,12 +47,12 @@ export const MiniPlayer = ({
         {howler}
       </div>
       <div className="hidden-xs col-sm-2 col-md-2 volume">{volumeSlider}</div>
-      <div className="close-player-button-wrapper pull-right">
-        <button className="close-player-button" onClick={onClose}>
-          <img src="https://s3.amazonaws.com/dataskeptic.com/img/svg/x.svg" />
-        </button>
-      </div>
       <div className="col-xs-3 col-sm-1 col-md-1 pull-right button">
+        <div className="close-player-button-wrapper">
+          <button className="close-player-button" onClick={onClose}>
+            <img src="https://s3.amazonaws.com/dataskeptic.com/img/svg/x.svg" />
+          </button>
+        </div>
         <TogglePlayButton playing={playing} onClick={onPlayToggle} />
       </div>
     </div>

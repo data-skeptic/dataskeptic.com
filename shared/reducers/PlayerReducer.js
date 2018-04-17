@@ -28,7 +28,13 @@ const IS_CLIENT = (() => {
   return isDefined
 })()
 
-const normalizeState = ({ is_playing, position, episode, volume, muted }) => ({
+const normalizeState = ({
+  is_playing = false,
+  position = 0,
+  episode = null,
+  volume = 0.8,
+  muted = false
+}) => ({
   is_playing,
   position,
   episode,
@@ -208,7 +214,7 @@ export default function PlayerReducer(state = defaultState, action) {
       nstate.position_updated = true
       savePlayingMeta(nstate)
       break
-    
+
     case 'SEEK_SET':
       nstate.position_updated = false
       break
@@ -222,12 +228,12 @@ export default function PlayerReducer(state = defaultState, action) {
       nstate.volume = action.payload.volume
       savePlayingMeta(nstate)
       break
-    
-    case RESET: 
+
+    case RESET:
       nstate.is_playing = false
       nstate.has_shown = false
       savePlayingMeta(nstate)
-      break;
+      break
   }
 
   return Immutable.fromJS(nstate)
