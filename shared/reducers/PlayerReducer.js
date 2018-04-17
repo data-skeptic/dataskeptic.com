@@ -232,6 +232,7 @@ export default function PlayerReducer(state = defaultState, action) {
     case RESET:
       nstate.is_playing = false
       nstate.has_shown = false
+      nstate.playback_loaded = false
       savePlayingMeta(nstate)
       break
   }
