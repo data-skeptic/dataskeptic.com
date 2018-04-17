@@ -40,12 +40,7 @@ export default class InfiniteList extends Component {
         loader={<ListLoader />}
         endMessage={<ListEnd message={endMessage} />}
       >
-        {items.map(item => (
-          <div key={item.blog_id}>
-            <b>{endMessage}</b>
-            <ItemComponent {...item} key={item.blog_id} />
-          </div>
-        ))}
+        {items.map((item, index) => <ItemComponent {...item} key={index} />)}
       </InfiniteScroll>
     )
   }

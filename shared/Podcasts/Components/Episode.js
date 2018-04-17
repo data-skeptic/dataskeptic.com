@@ -76,7 +76,7 @@ class Episode extends React.Component {
     var oplayer = this.props.player.toJS()
     var oblogs = this.props.blogs.toJS()
     var player = oplayer.player
-    var desc = ep.desc || ''
+    var desc = ep.abstract || ''
     var i = desc.indexOf('</p>')
     if (i > 0) {
       desc = desc.substring(0, i)
