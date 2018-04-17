@@ -61,7 +61,9 @@ export default function EpisodesReducer(state = defaultState, action) {
         : [...nstate.list.items, ...action.payload.items]
       nstate.list.hasMore = action.payload.hasMore
       nstate.list.limit = action.payload.limit
-      nstate.list.offset = action.payload.offset
+      nstate.list.offset = action.payload.reset
+        ? action.payload.offset
+        : action.payload.offset + action.payload.limit
       nstate.list.total = action.payload.total
       break
 

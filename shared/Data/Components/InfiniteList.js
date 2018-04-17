@@ -22,11 +22,6 @@ export default class InfiniteList extends Component {
     loadMore(limit, nextOffset, reset)
   }
 
-  refresh() {
-    console.dir(arguments)
-    console.info('refresh')
-  }
-
   render() {
     const { items, Item, hasMore, endMessage } = this.props
     const ItemComponent = Item
