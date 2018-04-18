@@ -25,6 +25,13 @@ const getCityData = cityId => {
   return axios.get(url).then(res => res.data)
 }
 
+const verifyDiscount = code => {
+  const url = base_api + `/careers/jobs/verify_discount`
+  return axios.post(url, {
+    code
+  }).then(res => res.data)
+}
+
 const commitResume = ({ email, resume, Bucket }) => {
   const subpath = env === 'dev' ? 'dev' : 'career_page1'
   const ObjectPath = resume.replace('https://s3.amazonaws.com/', '')
@@ -109,6 +116,14 @@ module.exports = cache => {
     return getCityData(cityId)
       .then(data => res.send(data))
       .then(error => res.status(404).send({ error }))
+  })
+
+  router.post('/verify_discount', (req, res) => {
+    const { code } = req.body
+
+    res.send({
+      code
+    })
   })
 
   return router

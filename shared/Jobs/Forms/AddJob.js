@@ -10,6 +10,7 @@ import {
 
 import RichTextarea from '../../Forms/Components/RichTextarea'
 import JobAdvertiseField from '../../components/jobs/JobAdvertiseField'
+import DiscountingField from '../../components/jobs/DiscountingField'
 
 const urlRegex = new RegExp(
   /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi
@@ -81,7 +82,7 @@ const validate = values => {
   return errors
 }
 
-const QuestionForm = ({
+const AddJobForm = ({
   children,
   handleSubmit,
   pristine,
@@ -103,7 +104,8 @@ const QuestionForm = ({
   customSuccess,
   showAdvertiseOptions,
   submitValue,
-  changeAdvertise
+  changeAdvertise,
+  showDiscountOptions
 }) => (
   <FormController
     name={`addJob`}
@@ -201,10 +203,25 @@ const QuestionForm = ({
         handleChange={changeAdvertise}
       />
     )}
+
+    {showDiscountOptions && (
+      <div>
+        <br />
+        <Field
+          label="Coupon C
+          ode"
+          component={renderField}
+          customComponent={DiscountingField}
+          name="discount_amount
+        "
+          handleChange={changeAdvertise}
+        />
+      </div>
+    )}
   </FormController>
 )
 
 export default reduxForm({
   form: 'addJob',
   validate
-})(QuestionForm)
+})(AddJobForm)

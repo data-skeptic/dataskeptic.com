@@ -64,8 +64,9 @@ class PublicAddJob extends Component {
             onSubmit={this.handleSubmit}
             showSubmit={true}
             showAdvertiseOptions={true}
+            showDiscountOptions={true}
             allowSubmit={!request}
-            submitValue={request ? 'Processing...' : 'Add'}
+            submitValue={request ? 'Processing...' : 'Add to Cart'}
             initialValues={initialValues}
             customSuccess={success ? 'Job added.' : null}
             changeAdvertise={this.changeAdvertise}
