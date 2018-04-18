@@ -28,7 +28,7 @@ class PublicAddJob extends Component {
 
   redirect = to => this.props.history.push(to)
 
-  addProduct = (details) => {
+  addProduct = details => {
     const title = `Job add "${details.title}"`
 
     const product = {

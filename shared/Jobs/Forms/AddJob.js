@@ -103,7 +103,7 @@ const QuestionForm = ({
   customSuccess,
   showAdvertiseOptions,
   submitValue,
-                        changeAdvertise
+  changeAdvertise
 }) => (
   <FormController
     name={`addJob`}
