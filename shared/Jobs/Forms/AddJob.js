@@ -208,13 +208,12 @@ const AddJobForm = ({
       <div>
         <br />
         <Field
-          label="Coupon C
-          ode"
+          label="Coupon Code"
           component={renderField}
           customComponent={DiscountingField}
-          name="discount_amount
-        "
+          name="discount_amount"
           handleChange={changeAdvertise}
+          className="field"
         />
       </div>
     )}

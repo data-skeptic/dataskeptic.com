@@ -4,34 +4,35 @@ import axios from 'axios'
 import styled from 'styled-components'
 
 export default class DiscountingField extends Component {
-  static state = {
-    validationValue: this.props.input.value
+  state = {
+    value: '',
+    valid: false
   }
 
   validate = code =>
     axios
-      .get(`/api/v1/careers/verify_discount`)
+      .post(`/api/v1/careers/verify_discount`, { code })
       .then(res => res.data)
-      .then((options = []) => ({ options }))
 
   handleChange = e => this.setState({ value: e.target.value })
 
   render() {
-    const { value } = this.props
-    const { validationValue } = this.state
+    const { value, valid } = this.state
+    const { className } = this.props
 
     return (
-      <div>
-        <code>
-          {JSON.stringify({
-            value,
-            validationValue
-          })}
-        </code>
-        <Input onChange={this.handleChange} />
-      </div>
+      <Input onBlur={this.handleChange} className={className} valid={true} />
     )
   }
 }
 
-const Input = styled.input``
+const Input = styled.input`
+  position: relative;
+
+  ${props =>
+    props.valid &&
+    `
+    
+    border-color: green;
+  `};
+`
