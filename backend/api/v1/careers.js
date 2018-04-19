@@ -124,12 +124,19 @@ module.exports = cache => {
     const { code } = req.body
 
     return verifyDiscount(code)
+      .then(data => {
+        if (data.error) {
+          return res.status(500).send({ error: data.msg })
+        } else {
+          return data
+        }
+      })
       .then(({ discount_amount }) => ({
         valid: discount_amount !== 0,
         discount_amount
       }))
       .then(data => res.send(data))
-      .then(error => res.status(404).send({ error: error.message }))
+      .catch(error => res.status(500).send({ error: error.message }))
   })
 
   return router

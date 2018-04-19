@@ -36,6 +36,7 @@ export default class DiscountingField extends Component {
           discount_amount
         })
       })
+      .catch(data => console.error(data.error))
 
   handleChange = e => {
     const value = e.target.value
@@ -45,7 +46,7 @@ export default class DiscountingField extends Component {
   handleBlur = e => {
     const value = e.target.value
     const { input: { onChange } } = this.props
-    
+
     this.validate(value)
     onChange(value)
   }
