@@ -22,11 +22,15 @@ export default class DiscountingField extends Component {
     }
   }
 
-  validate = code =>
+  validate = (code = '') => {
+    code = code.trim()
+    
+    if (isEmpty(code)) return
+      
     axios
-      .post(`/api/v1/careers/verify_discount`, { code })
+      .post(`/api/v1/careers/verify_discount`, {code})
       .then(res => res.data)
-      .then(({ valid, discount_amount }) => {
+      .then(({valid, discount_amount}) => {
         this.setState({
           valid
         })
@@ -37,6 +41,7 @@ export default class DiscountingField extends Component {
         })
       })
       .catch(data => console.error(data.error))
+  }
 
   handleChange = e => {
     const value = e.target.value
@@ -67,11 +72,14 @@ export default class DiscountingField extends Component {
   }
 }
 
+const validColor = '#1CC865'
+
 const Input = styled.input`
   ${props =>
     props.valid &&
     `
-    
-    border-color: green !important;
+    border-color: ${validColor} !important;
+    font-style: italic;
+    color: ${validColor};
   `};
 `
