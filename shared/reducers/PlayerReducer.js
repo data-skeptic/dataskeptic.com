@@ -187,11 +187,10 @@ export default function PlayerReducer(state = defaultState, action) {
               ...nstate,
               ...cache,
               is_playing: true,
-              playback_loaded: false,
+              playback_loaded: nstate.playback_loaded,
               has_shown: true
             }
           } else {
-            nstate.has_shown = true
             nstate.episode = episode
             nstate.is_playing = true
             nstate.playback_loaded = false
