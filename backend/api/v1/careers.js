@@ -27,9 +27,11 @@ const getCityData = cityId => {
 
 const verifyDiscount = code => {
   const url = base_api + `/careers/jobs/verify_discount`
-  return axios.post(url, {
-    code
-  }).then(res => res.data)
+  return axios
+    .post(url, {
+      code
+    })
+    .then(res => res.data)
 }
 
 const commitResume = ({ email, resume, Bucket }) => {
@@ -115,15 +117,19 @@ module.exports = cache => {
 
     return getCityData(cityId)
       .then(data => res.send(data))
-      .then(error => res.status(404).send({ error }))
+      .then(error => res.status(404).send({ error: error.message }))
   })
 
   router.post('/verify_discount', (req, res) => {
     const { code } = req.body
 
-    res.send({
-      code
-    })
+    return verifyDiscount(code)
+      .then(({ discount_amount }) => ({
+        valid: discount_amount !== 0,
+        discount_amount
+      }))
+      .then(data => res.send(data))
+      .then(error => res.status(404).send({ error: error.message }))
   })
 
   return router

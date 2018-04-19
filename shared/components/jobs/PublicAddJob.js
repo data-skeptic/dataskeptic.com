@@ -8,7 +8,8 @@ import { changePageTitle } from '../../Layout/Actions/LayoutActions'
 class PublicAddJob extends Component {
   state = {
     initialValues: {
-      go_live_date: tomorrow.format('YYYY-MM-DD')
+      go_live_date: tomorrow.format('YYYY-MM-DD'),
+      coupon: 'FRIENDS_AND_FAMILY'
     },
     advertise: null
   }
@@ -50,6 +51,10 @@ class PublicAddJob extends Component {
 
   changeAdvertise = advertise => this.setState({ advertise })
 
+  applyDiscount = data => {
+    console.log(data)
+  }
+
   render() {
     const { history, error, success, request } = this.props
     const { initialValues, advertise } = this.state
@@ -70,6 +75,7 @@ class PublicAddJob extends Component {
             initialValues={initialValues}
             customSuccess={success ? 'Job added.' : null}
             changeAdvertise={this.changeAdvertise}
+            applyDiscount={this.applyDiscount}
           />
         </Wrapper>
       </Container>

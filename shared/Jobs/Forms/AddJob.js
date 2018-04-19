@@ -105,7 +105,8 @@ const AddJobForm = ({
   showAdvertiseOptions,
   submitValue,
   changeAdvertise,
-  showDiscountOptions
+  showDiscountOptions,
+                      applyDiscount
 }) => (
   <FormController
     name={`addJob`}
@@ -211,9 +212,10 @@ const AddJobForm = ({
           label="Coupon Code"
           component={renderField}
           customComponent={DiscountingField}
-          name="discount_amount"
+          name="coupon"
           handleChange={changeAdvertise}
           className="field"
+          onDiscount={applyDiscount}
         />
       </div>
     )}
