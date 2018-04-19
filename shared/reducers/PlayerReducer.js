@@ -18,7 +18,6 @@ export const INITIALIZE_PLAYER = 'INITIALIZE_PLAYER'
 export const SET_VOLUME = 'SET_VOLUME'
 export const RESET = 'RESET'
 
-//ZHOPA
 const IS_CLIENT = (() => {
   let isDefined = false
   try {
@@ -150,6 +149,7 @@ export default function PlayerReducer(state = defaultState, action) {
       break
     case 'PLAY_EPISODE':
       var episode = action.payload
+      nstate.seekPosition = null
       if (isEmpty(episode)) {
         nstate.is_playing = false
         nstate.playback_loaded = false
@@ -164,20 +164,39 @@ export default function PlayerReducer(state = defaultState, action) {
             nstate.episode = episode
             nstate.is_playing = true
             nstate.playback_loaded = false
-            nstate.position = nstate.position || init.position
+            nstate.position = init.position
           } else {
-            if (episode.guid == nstate.episode.guid) {
+            if (episode.guid === nstate.episode.guid) {
               nstate.is_playing = false
             } else {
               nstate.episode = episode
               nstate.playback_loaded = false
-              nstate.position = nstate.position || init.position
+              nstate.position = init.position
               nstate.is_playing = true
             }
           }
         } else {
-          nstate.episode = episode
-          nstate.is_playing = true
+          const cache = getCachePlaying()
+          const theSameCacheEpisode =
+            cache &&
+            cache.episode &&
+            cache.episode.num === episode.num
+
+          if (theSameCacheEpisode) {
+            nstate = {
+              ...nstate,
+              ...cache,
+              is_playing: true,
+              playback_loaded: false,
+              has_shown: true
+            }
+          } else {
+            nstate.has_shown = true
+            nstate.episode = episode
+            nstate.is_playing = true
+            nstate.playback_loaded = false
+            nstate.position = init.position
+          }
         }
       }
       savePlaying(nstate)
