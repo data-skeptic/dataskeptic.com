@@ -25,6 +25,7 @@ import DontHackMe from 'components/DontHackMe'
 import Explorer from 'TimeSeriesExplorer/Components/Explorer'
 import Home from 'components/Home'
 import LightsOut from 'components/LightsOut'
+import Live from 'components/Live'
 import Loading from 'Common/Components/Loading.js'
 import Login from 'components/Login'
 import SignUp from 'components/SignUp'
@@ -307,6 +308,10 @@ export default (
 
     <Route path="/search" component={App}>
       <IndexRoute component={SERP} />
+    </Route>
+
+    <Route path="/live" component={App}>
+      <IndexRoute component={Live} />
     </Route>
 
     <Route path="/*" component={App} onEnter={loadData}>
