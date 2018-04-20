@@ -89,11 +89,11 @@ export function checkoutRequestSuccess(successData, data) {
       ...successData
     }
   }
-
-  axios
-    .post('/api/v1/mail', emailData)
-    .then(() => console.info('Email delivered '))
-    .catch(err => console.error(err))
+  //
+  // axios
+  //   .post('/api/v1/mail', emailData)
+  //   .then(() => console.info('Email delivered '))
+  //   .catch(err => console.error(err))
 
   return {
     type: CHECKOUT_REQUEST_SUCCESS,
@@ -114,11 +114,11 @@ export function checkoutRequestFailed(error, data) {
     to: 'kyle@dataskeptic.com',
     subject: 'Error in Order Processing'
   }
-
-  axios
-    .post('/api/v1/mail', emailData)
-    .then(() => console.info('Email delivered '))
-    .catch(err => console.error(err))
+  //
+  // axios
+  //   .post('/api/v1/mail', emailData)
+  //   .then(() => console.info('Email delivered '))
+  //   .catch(err => console.error(err))
 
   return {
     type: CHECKOUT_REQUEST_FAILED,
@@ -164,6 +164,7 @@ export function loadReceiptFailed(error) {
 }
 
 export function checkoutMakeOrder(data, token, prod) {
+  debugger;
   console.log('checkoutMakeOrder----')
   var email = data.email
   var shipping = data.shipping

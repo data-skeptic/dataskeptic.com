@@ -4,13 +4,14 @@ import AddJob, { tomorrow } from '../../Jobs/Forms/AddJob'
 import styled from 'styled-components'
 import { container, strictForm } from '../../styles'
 import { changePageTitle } from '../../Layout/Actions/LayoutActions'
+import { applyDiscount } from '../../Cart/Reducers/CartReducer'
 
 class PublicAddJob extends Component {
   state = {
     initialValues: {
-      go_live_date: tomorrow.format('YYYY-MM-DD'),
-      coupon: 'FRIENDS_AND_FAMILY'
+      go_live_date: tomorrow.format('YYYY-MM-DD')
     },
+    discount: 0,
     advertise: null
   }
 
@@ -39,7 +40,9 @@ class PublicAddJob extends Component {
     }
 
     const size = 0
-    
+
+    this.props.dispatch(applyDiscount(this.state.discount))
+
     this.props.dispatch({
       type: 'ADD_TO_CART',
       payload: { product, size }
@@ -53,9 +56,8 @@ class PublicAddJob extends Component {
 
   changeAdvertise = advertise => this.setState({ advertise })
 
-  applyDiscount = data => {
-    console.log(data)
-  }
+  applyDiscount = ({ valid, discount_amount }) =>
+    this.setState({ discount: discount_amount * 100 })
 
   render() {
     const { history, error, success, request } = this.props

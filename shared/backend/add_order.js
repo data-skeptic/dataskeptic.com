@@ -145,13 +145,20 @@ function do_order(
   name,
   address,
   email,
-  res
+  res,
+  discount = null
 ) {
   console.log('Beginning order processing')
-  var total = shipping
+  let total = shipping
   for (var product of products) {
     total += product.product['price'] * (product.product['quantity'] || 1)
   }
+  
+  if (discount) {
+    console.log('Apply discount for price', discount)
+    total = total * discount
+  }
+  
   return create_stripe_customer(stripe, email, token)
     .then(function(customer) {
       var customer_id = customer.id

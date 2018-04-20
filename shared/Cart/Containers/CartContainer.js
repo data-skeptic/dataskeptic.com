@@ -3,10 +3,12 @@ import { connect } from 'react-redux'
 
 import { Link } from 'react-router'
 
-import CartQuantity from '../Components/CartQuantity'
 import CountrySelector from '../../Common/Components/CountrySelector'
 import EmptyCart from '../Components/EmptyCart'
 import CartItem from '../Components/CartItem'
+
+const calculateDiscountedPrice = (price, discount) =>
+  price - price * discount / 100
 
 class CartContainer extends React.Component {
   constructor() {
@@ -61,7 +63,9 @@ class CartContainer extends React.Component {
       subtotal += item.product.price * item.quantity
     }
 
-    const finalPrice = showDiscount ? total * discount_amount : total
+    const finalPrice = showDiscount
+      ? calculateDiscountedPrice(total, discount_amount)
+      : total
 
     if (!cart_items || cart_items.length == 0) {
       return <EmptyCart />
@@ -98,7 +102,7 @@ class CartContainer extends React.Component {
                 <CountrySelector />
               </div>
             </div>
-            
+
             {showDiscount && (
               <div>
                 <div className="cart-value title">
@@ -112,7 +116,7 @@ class CartContainer extends React.Component {
                 </div>
                 <div className="cart-value subtotal">
                   <div className="discount">
-                    <span>{discount_amount * 100}%</span>
+                    <span>{discount_amount}%</span>
                   </div>
                   <div className="attribute">
                     <span>Discount</span>
@@ -124,7 +128,11 @@ class CartContainer extends React.Component {
             <div className="cart-value title">
               <div className="price">
                 <span className="usd">usd</span>
-                <span>${finalPrice.toFixed(2)}</span>
+                {finalPrice === 0 ? (
+                  <span className="free">Free</span>
+                ) : (
+                  <span>${finalPrice.toFixed(2)}</span>
+                )}
               </div>
               <div className="attribute">
                 <span>Order Total</span>

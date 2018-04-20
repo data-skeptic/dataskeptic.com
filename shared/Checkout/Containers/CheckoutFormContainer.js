@@ -18,6 +18,7 @@ export class CheckoutFormContainer extends Component {
   handleSubmit(data) {
     data.country = this.props.country
     data.total = this.props.total
+    data.discount = this.props.discount
     data.shipping = this.props.shipping
     data.products = this.props.products
     console.log('data.products')
@@ -50,6 +51,7 @@ export default connect(
     country: state.cart.getIn(['country_short']) || 'us',
     shipping: state.cart.getIn(['shipping']),
     total: state.cart.getIn(['total']),
+    discount: state.cart.getIn(['discount']),
     products: state.cart.getIn(['cart_items'])
   }),
   dispatch =>
