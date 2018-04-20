@@ -61,15 +61,22 @@
   color: #7D7F7F;
   clear: both;
   min-height: 32px;
+  line-height: 14px;
 }
 .sidebar .cart-end .cart-value .attribute {
   margin-right: 100px;
 }
-.cart-end .cart-value .price {
+.cart-end .cart-value .price,
+.cart-end .cart-value .discount {
   float: right;
   text-align: right;
   width: 100px;
 }
+
+.cart-end .cart-value .discount {
+  color: #1CC865;
+}
+
 .cart-end .cart-value .country-selector {
   display: inline-block;
   max-width: 50%;
@@ -79,6 +86,7 @@
 }
 .cart-end .cart-value.shipping {
   margin-top: 16px;
+  margin-bottom: 16px;
   height: 32px;
 }
 .cart-end .cart-value.title {

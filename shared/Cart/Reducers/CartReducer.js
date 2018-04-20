@@ -20,12 +20,15 @@ import {
   CLEAR_FOCUS
 } from '../Actions/CartActions'
 
+const APPLY_DISCOUNT = 'CART//APPLY_DISCOUNT'
+
 import { calculateShipping, calculateTotal } from '../../utils/store_utils'
 
 const init = {
   cart_items: [],
   total: 0,
   shipping: 0,
+  discount: 0.1,
   cart_visible: false,
   prod: true, // client/index.jsx will dispatch SET_STORE_ENVIRONMENT on init
   go_to_checkout: false,
@@ -227,6 +230,7 @@ function validate_address(nstate) {
 function clearCart(nstate) {
   nstate.total = 0
   nstate.shipping = 0
+  nstate.discount = -1
   nstate.cart_items = []
   return nstate
 }
@@ -381,6 +385,7 @@ export default function CartReducer(state = defaultState, action) {
       }
       nstate.submitDisabled = false
       break
+    
     case CLEAR_FOCUS:
       nstate.focus = ''
       break
@@ -393,3 +398,10 @@ export default function CartReducer(state = defaultState, action) {
   nstate.shipping = calculateShipping(nstate.cart_items, nstate.country_short)
   return Immutable.fromJS(nstate)
 }
+
+export const applyDiscount = (discount) => ({
+  type: APPLY_DISCOUNT,
+  payload: {
+    discount
+  }
+})

@@ -51,6 +51,8 @@ class CartContainer extends React.Component {
     var cart_items = ocart.cart_items || []
     var shipping = ocart.shipping
     var total = ocart.total
+    const discount_amount = ocart.discount
+    const showDiscount = discount_amount > 0
 
     const { onCheckoutClick, needCheckout } = this.props
 
@@ -58,6 +60,9 @@ class CartContainer extends React.Component {
     for (var item of cart_items) {
       subtotal += item.product.price * item.quantity
     }
+
+    const finalPrice = showDiscount ? total * discount_amount : total
+
     if (!cart_items || cart_items.length == 0) {
       return <EmptyCart />
     } else {
@@ -93,13 +98,36 @@ class CartContainer extends React.Component {
                 <CountrySelector />
               </div>
             </div>
+            
+            {showDiscount && (
+              <div>
+                <div className="cart-value title">
+                  <div className="price">
+                    <span className="usd">usd</span>
+                    <span>${total.toFixed(2)}</span>
+                  </div>
+                  <div className="attribute">
+                    <span>Total</span>
+                  </div>
+                </div>
+                <div className="cart-value subtotal">
+                  <div className="discount">
+                    <span>{discount_amount * 100}%</span>
+                  </div>
+                  <div className="attribute">
+                    <span>Discount</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="cart-value title">
               <div className="price">
                 <span className="usd">usd</span>
-                <span>${total.toFixed(2)}</span>
+                <span>${finalPrice.toFixed(2)}</span>
               </div>
               <div className="attribute">
-                <span>Total</span>
+                <span>Order Total</span>
               </div>
             </div>
 

@@ -38,9 +38,11 @@ class PublicAddJob extends Component {
       details
     }
 
+    const size = 0
+    
     this.props.dispatch({
       type: 'ADD_TO_CART',
-      payload: { product }
+      payload: { product, size }
     })
   }
 
