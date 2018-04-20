@@ -58,6 +58,7 @@ import AdminCmsRecent from 'components/admin/AdminCmsRecent'
 import AdminCmsFeature from 'components/admin/AdminCmsFeature'
 import AdminCmsRecentRelated from 'components/admin/AdminCmsRecentRelated'
 import AdminEmailsSend from 'components/admin/AdminEmailsSend'
+import AdminTagUsers from 'components/admin/AdminTagUsers'
 import AdminOrdersNew from 'components/admin/AdminOrdersNew'
 import AdminOrdersProcessing from 'components/admin/AdminOrdersProcessing'
 import AdminAddJob from 'components/admin/AdminAddJob'
@@ -288,6 +289,10 @@ export default (
 
     <Route path="/admin/emails/send" component={App}>
       <IndexRoute component={AdminEmailsSend} />
+    </Route>
+
+    <Route path="/admin/emails/tag_users" component={App}>
+      <IndexRoute component={AdminTagUsers} />
     </Route>
 
     <Route path="/admin/job/add" component={App}>

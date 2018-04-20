@@ -21,10 +21,10 @@ module.exports = cache => {
   router.use('/files', require('./files')(cache))
   router.use('/chat', require('./chat')(cache))
 
-  // lets map to the start of url request
   router.use('/tse', require('./tse')(cache))
   router.use('/jobs', require('./jobs')(cache))
   router.use('/careers', require('./careers')(cache))
+  router.use('/admin', require('./admin')(cache))
 
   return router
 }
