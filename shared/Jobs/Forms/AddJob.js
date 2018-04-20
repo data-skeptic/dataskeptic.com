@@ -190,6 +190,7 @@ const QuestionForm = ({
       component={renderField}
       customComponent={RichTextarea}
       name="description"
+      minHeight={300}
     />
 
     {showAdvertiseOptions && (
