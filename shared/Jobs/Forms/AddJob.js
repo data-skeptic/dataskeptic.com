@@ -15,7 +15,7 @@ const urlRegex = new RegExp(
   /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi
 )
 
-const urlFields = ['company_url', 'company_logo_url', 'job_url']
+const urlFields = ['company_url', 'job_url']
 
 export const tomorrow = moment(new Date()).add(1, 'days')
 
@@ -72,10 +72,6 @@ const validate = values => {
 
   if (!values['company_url']) {
     errors['company_url'] = 'Cannot be empty.'
-  }
-
-  if (!values['company_logo_url']) {
-    errors['company_logo_url'] = 'Cannot be empty.'
   }
 
   return errors
