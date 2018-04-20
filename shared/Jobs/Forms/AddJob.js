@@ -74,10 +74,6 @@ const validate = values => {
     errors['company_url'] = 'Cannot be empty.'
   }
 
-  if (!values['company_logo_url']) {
-    errors['company_logo_url'] = 'Cannot be empty.'
-  }
-
   return errors
 }
 
