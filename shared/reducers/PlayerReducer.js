@@ -178,9 +178,7 @@ export default function PlayerReducer(state = defaultState, action) {
         } else {
           const cache = getCachePlaying()
           const theSameCacheEpisode =
-            cache &&
-            cache.episode &&
-            cache.episode.num === episode.num
+            cache && cache.episode && cache.episode.num === episode.num
 
           if (theSameCacheEpisode) {
             nstate = {

@@ -285,7 +285,7 @@ export default function adminReducer(state = defaultState, action) {
             dispatch({
               type: 'RELATED_CONTENT_LIST',
               payload: { dispatch, add_related_msg: 'Saved!' }
-            }) 
+            })
           }
         })
         .catch(err => {
