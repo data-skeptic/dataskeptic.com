@@ -55,8 +55,8 @@ export function checkout(data, redirect) {
             console.log('success')
             console.log(successData)
             if (successData.status !== 'failure') {
-              redirect(successData)
-              dispatch(clearCart())
+              // redirect(successData)
+              // dispatch(clearCart())
               dispatch(checkoutRequestSuccess(successData, data, redirect))
             } else {
               dispatch(checkoutRequestFailed(successData.msg))
@@ -164,10 +164,10 @@ export function loadReceiptFailed(error) {
 }
 
 export function checkoutMakeOrder(data, token, prod) {
-  debugger;
   console.log('checkoutMakeOrder----')
   var email = data.email
   var shipping = data.shipping
+  const discount = data.discount
   const customer = {
     first_name: data.first_name,
     last_name: data.last_name,
@@ -194,7 +194,8 @@ export function checkoutMakeOrder(data, token, prod) {
     total,
     token,
     country: data.country,
-    shipping
+    shipping,
+    discount
   }
   console.log(JSON.stringify(order))
   console.log('CheckoutActions starting with stripe')

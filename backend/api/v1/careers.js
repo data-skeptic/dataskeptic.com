@@ -131,7 +131,7 @@ module.exports = cache => {
           return data
         }
       })
-      .then(({ discount_amount }) => ({
+      .then(({ discount_amount=0 }) => ({
         valid: discount_amount !== 0,
         discount_amount
       }))

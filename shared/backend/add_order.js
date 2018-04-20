@@ -2,6 +2,10 @@ var axios = require('axios')
 
 // Remember that shipping happens as a callback thing handled in store_utils.js
 
+const calculateDiscountedPrice = (price, discount) =>
+  price - price * discount / 100
+
+
 function create_items_list(stripe, customer, products) {
   var items = []
   for (var product of products) {
@@ -145,8 +149,7 @@ function do_order(
   name,
   address,
   email,
-  res,
-  discount = null
+  discount = 0
 ) {
   console.log('Beginning order processing')
   let total = shipping
@@ -154,9 +157,9 @@ function do_order(
     total += product.product['price'] * (product.product['quantity'] || 1)
   }
   
-  if (discount) {
-    console.log('Apply discount for price', discount)
-    total = total * discount
+  if (discount > 0) {
+    console.log('Apply discount for price', `${discount}%`)
+    total = calculateDiscountedPrice(total, discount)
   }
   
   return create_stripe_customer(stripe, email, token)
@@ -208,7 +211,9 @@ function do_order(
       console.log(db_result)
       var customer_id = db_result.customer_id
       var stripe_order_id = db_result.stripe_order_id
-      if (stripe_order_id == '') {
+      const free_order = total === 0
+      if (stripe_order_id === '' || free_order) {
+        console.log('Bypass Stripe payment process')
         // Subscription only, and it's already handled
         return db_result
       } else {
@@ -247,6 +252,7 @@ function add_order(req, res, base_url, stripe_key) {
   var products = order['products']
   var shipping = order['shipping']
   var country = order['country']
+  var discount = +order['discount']
   var name = customer['first_name'] + ' ' + customer['last_name']
   var address = {
     line1: customer.street_1,
@@ -256,6 +262,7 @@ function add_order(req, res, base_url, stripe_key) {
     country: country,
     postal_code: customer.zip
   }
+  
   try {
     do_order(
       base_url,
@@ -266,7 +273,8 @@ function add_order(req, res, base_url, stripe_key) {
       shipping,
       name,
       address,
-      email
+      email,
+      discount
     )
       .then(function(resp) {
         res.status(200).end(JSON.stringify(resp))
