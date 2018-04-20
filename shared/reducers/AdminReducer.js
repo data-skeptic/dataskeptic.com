@@ -276,10 +276,17 @@ export default function adminReducer(state = defaultState, action) {
       axios
         .post(url, payload['data'])
         .then(function(result) {
-          dispatch({
-            type: 'RELATED_CONTENT_LIST',
-            payload: { dispatch, add_related_msg: 'Saved!' }
-          })
+          if (result.data.error) {
+            dispatch({
+              type: 'RELATED_CONTENT_LIST',
+              payload: { dispatch, add_related_msg: result.data.error }
+            })
+          } else {
+            dispatch({
+              type: 'RELATED_CONTENT_LIST',
+              payload: { dispatch, add_related_msg: 'Saved!' }
+            }) 
+          }
         })
         .catch(err => {
           console.log(err)
