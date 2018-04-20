@@ -55,7 +55,14 @@ class Podcast extends Component {
                 <Loading />
               </div>
             ) : (
-              list.map(function(episode, index) {
+              list.map(function(
+                episode = {
+                  blog_id: '',
+                  guid: '',
+                  mp3: ''
+                },
+                index
+              ) {
                 return <Episode key={index} episode={episode} />
               })
             )}
