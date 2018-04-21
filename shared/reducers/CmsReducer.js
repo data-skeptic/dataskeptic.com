@@ -42,7 +42,6 @@ const init = {
   pending_blogs_loaded: false,
   blog_state: '',
   blog_content: {},
-<<<<<<< HEAD
   blogs: {
     error: null,
     success: false
@@ -51,10 +50,8 @@ const init = {
     processing: false,
     error: null,
     success: false
-  }
-=======
+  },
   live: 'loading'
->>>>>>> dev
 }
 
 const defaultState = Immutable.fromJS(init)
