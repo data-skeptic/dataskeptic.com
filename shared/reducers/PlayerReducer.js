@@ -16,7 +16,8 @@ const init = {
 
 export const INITIALIZE_PLAYER = 'INITIALIZE_PLAYER'
 export const SET_VOLUME = 'SET_VOLUME'
-//ZHOPA
+export const RESET = 'RESET'
+
 const IS_CLIENT = (() => {
   let isDefined = false
   try {
@@ -26,7 +27,13 @@ const IS_CLIENT = (() => {
   return isDefined
 })()
 
-const normalizeState = ({ is_playing, position, episode, volume, muted }) => ({
+const normalizeState = ({
+  is_playing = false,
+  position = 0,
+  episode = null,
+  volume = 0.8,
+  muted = false
+}) => ({
   is_playing,
   position,
   episode,
@@ -141,7 +148,9 @@ export default function PlayerReducer(state = defaultState, action) {
       }
       break
     case 'PLAY_EPISODE':
+      console.log("here!")
       var episode = action.payload
+      nstate.seekPosition = null
       if (isEmpty(episode)) {
         nstate.is_playing = false
         nstate.playback_loaded = false
@@ -156,20 +165,36 @@ export default function PlayerReducer(state = defaultState, action) {
             nstate.episode = episode
             nstate.is_playing = true
             nstate.playback_loaded = false
-            nstate.position = nstate.position || init.position
+            nstate.position = init.position
           } else {
-            if (episode.guid == nstate.episode.guid) {
+            if (episode.guid === nstate.episode.guid) {
               nstate.is_playing = false
             } else {
               nstate.episode = episode
               nstate.playback_loaded = false
-              nstate.position = nstate.position || init.position
+              nstate.position = init.position
               nstate.is_playing = true
             }
           }
         } else {
-          nstate.episode = episode
-          nstate.is_playing = true
+          const cache = getCachePlaying()
+          const theSameCacheEpisode =
+            cache && cache.episode && cache.episode.num === episode.num
+
+          if (theSameCacheEpisode) {
+            nstate = {
+              ...nstate,
+              ...cache,
+              is_playing: true,
+              playback_loaded: nstate.playback_loaded,
+              has_shown: true
+            }
+          } else {
+            nstate.episode = episode
+            nstate.is_playing = true
+            nstate.playback_loaded = false
+            nstate.position = init.position
+          }
         }
       }
       savePlaying(nstate)
@@ -206,6 +231,7 @@ export default function PlayerReducer(state = defaultState, action) {
       nstate.position_updated = true
       savePlayingMeta(nstate)
       break
+
     case 'SEEK_SET':
       nstate.position_updated = false
       break
@@ -217,6 +243,14 @@ export default function PlayerReducer(state = defaultState, action) {
 
     case SET_VOLUME:
       nstate.volume = action.payload.volume
+      savePlayingMeta(nstate)
+      break
+
+    case RESET:
+      nstate.is_playing = false
+      nstate.has_shown = false
+      nstate.playback_loaded = false
+      savePlayingMeta(nstate)
       break
   }
 
@@ -239,4 +273,8 @@ export const setMuted = muted => ({
   payload: {
     muted
   }
+})
+
+export const reset = () => ({
+  type: RESET
 })

@@ -70,19 +70,34 @@ class Episode extends React.Component {
     }
   }
 
+  format_duration(duration) {
+    var minutes = duration / 60
+    var m = "" + Math.floor(minutes)
+    if (m.length == 1) {
+      m = "0" + m
+    }
+    var sec = "" + Math.floor((minutes - Math.floor(minutes))*60)
+    if (sec.length == 1) {
+      sec = "0" + sec
+    }
+    var dur = m + ":" + sec
+    return dur
+  }
+
   render() {
     const { loggedIn } = this.props
     var ep = this.props.episode
+    //console.log(ep)
     var oplayer = this.props.player.toJS()
     var oblogs = this.props.blogs.toJS()
     var player = oplayer.player
-    var desc = ep.desc || ''
+    var desc = ep.abstract || ''
     var i = desc.indexOf('</p>')
     if (i > 0) {
       desc = desc.substring(0, i)
     }
     desc = desc.replace(/(<([^>]+)>)/gi, '')
-    var duration = ep.duration
+    var duration = ep.duration || 0
     var play_symb = <span>&#9658;</span>
     if (oplayer.is_playing) {
       if (oplayer.episode.guid == ep.guid) {
@@ -97,6 +112,19 @@ class Episode extends React.Component {
         &#9658; <span className="episode-duration">{duration}</span>
       </button>
     )
+    const guests = ep.related && ep.related.filter(r => r.type === 'person')
+    const images = ep.related && ep.related.filter(r => r.type === 'homepage-image')
+    const mp3s   = ep.related && ep.related.filter(r => r.type === 'mp3')
+    var img = "https://s3.amazonaws.com/dataskeptic.com/img/2018/ai-cover.png"
+    if (images.length > 0) {
+      img = images[0]['dest']
+    }
+    var mp3 = ""
+    if (mp3s.length > 0) {
+      mp3 = mp3s[0]['dest']
+      duration = mp3s[0]['duration'] || 1
+    }
+    duration = this.format_duration(duration)
     if (oplayer.is_playing) {
       if (oplayer.episode.guid == ep.guid) {
         playing_symbol = (
@@ -111,13 +139,12 @@ class Episode extends React.Component {
       }
     }
 
-    const date = moment(ep.pubDate).format('MMMM D, YYYY')
+    const date = moment(ep.publish_date).format('MMMM D, YYYY')
 
     var transcript = <div />
     var tep = undefined
     var ep_link = ep.link || '/blog' + ep['prettyname']
     const episodeLink = this.formatLink(ep_link)
-    const guests = ep.related && ep.related.filter(r => r.type === 'person')
 
     const { played, favorited, playlisted } = this.props.states
 
@@ -130,7 +157,7 @@ class Episode extends React.Component {
               onClick={this.onEpisodeClick}
               className="no-line"
             >
-              <img className="episode-img" src={ep.img} />
+              <img className="episode-img" src={img} />
             </Link>
           </LinkArea>
 
@@ -174,7 +201,7 @@ class Episode extends React.Component {
             </EpisodePlayButton>
 
             <DownloadEpisode>
-              <DownloadLink href={ep.mp3} download>
+              <DownloadLink href={mp3} download>
                 <span>Download</span>
               </DownloadLink>
             </DownloadEpisode>

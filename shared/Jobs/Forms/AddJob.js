@@ -9,12 +9,13 @@ import {
 } from '../../Forms/Components/Field'
 
 import RichTextarea from '../../Forms/Components/RichTextarea'
+import JobAdvertiseField from '../../components/jobs/JobAdvertiseField'
 
 const urlRegex = new RegExp(
   /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi
 )
 
-const urlFields = ['company_url', 'company_logo_url', 'job_url']
+const urlFields = ['company_url', 'job_url']
 
 export const tomorrow = moment(new Date()).add(1, 'days')
 
@@ -73,10 +74,6 @@ const validate = values => {
     errors['company_url'] = 'Cannot be empty.'
   }
 
-  if (!values['company_logo_url']) {
-    errors['company_logo_url'] = 'Cannot be empty.'
-  }
-
   return errors
 }
 
@@ -99,13 +96,16 @@ const QuestionForm = ({
   error,
   showSubmit,
   customError,
-  customSuccess
+  customSuccess,
+  showAdvertiseOptions,
+  submitValue,
+  changeAdvertise
 }) => (
   <FormController
     name={`addJob`}
     showSubmit={showSubmit}
     invalid={!allowSubmit}
-    submitValue={`Submit`}
+    submitValue={submitValue}
     handleSubmit={handleSubmit}
     customError={customError}
     customSuccess={customSuccess}
@@ -186,7 +186,18 @@ const QuestionForm = ({
       component={renderField}
       customComponent={RichTextarea}
       name="description"
+      minHeight={300}
     />
+
+    {showAdvertiseOptions && (
+      <Field
+        label="Advertise Type"
+        component={renderField}
+        customComponent={JobAdvertiseField}
+        name="adv"
+        handleChange={changeAdvertise}
+      />
+    )}
   </FormController>
 )
 

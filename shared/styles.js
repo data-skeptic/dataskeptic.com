@@ -18,6 +18,16 @@ theme.container = {
 
 export default theme
 
+export const container = css`
+  max-width: 960px;
+  margin: 0px auto;
+  padding: 15px;
+
+  @media (max-width: 768px) {
+    padding: 1.1111111111111112rem;
+  }
+`
+
 export const strictForm = css`
   .field-label {
     margin: 0px !important;

@@ -53,6 +53,7 @@ export default class Player extends Component {
     if (!isVisible) {
       return <div />
     }
+    var mp3 = currentPlaying.mp3
 
     return (
       <PlayerWrapper show={isVisible}>
@@ -69,7 +70,7 @@ export default class Player extends Component {
         </PodcastBlock>
         <PlayerBlock>
           <Howler
-            mp3={currentPlaying.mp3}
+            mp3={mp3}
             isPlaying={isPlaying}
             position={position}
             setPosition={this.setPosition}

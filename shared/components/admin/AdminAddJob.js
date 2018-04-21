@@ -4,7 +4,7 @@ import AdminLayout from './AdminLayout'
 import AddJob, { tomorrow } from '../../Jobs/Forms/AddJob'
 import styled from 'styled-components'
 import { addJob } from '../../reducers/AdminReducer'
-import {strictForm} from "../../styles";
+import { strictForm } from '../../styles'
 
 class AdminAddJob extends Component {
   state = {

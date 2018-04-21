@@ -8,10 +8,12 @@ const base_api = c[env]['base_api'] + env
 
 const addJob = data => {
   const url = `${base_api}/careers/jobs/add`
-  console.log(url)
 
   return axios.post(url, data).then(res => res.data)
 }
+
+const getJobsAdds = () =>
+  axios.get(`${base_api}/store/ads/list`).then(res => res.data)
 
 module.exports = cache => {
   const router = express.Router()
@@ -41,6 +43,14 @@ module.exports = cache => {
         return res.send(result)
       })
       .catch(err => res.status(500).send(err.message))
+  })
+
+  router.get('/ads', (req, res) => {
+    getJobsAdds()
+      .then(results => res.send(results.Items))
+      .catch(error =>
+        res.status(500).send({ success: false, error: error.message })
+      )
   })
 
   return router

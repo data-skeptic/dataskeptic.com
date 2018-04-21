@@ -9,7 +9,7 @@ import MiniPlayer from '../Components/MiniPlayer'
 import VolumeBarContainer from './VolumeBarContainer'
 import { isPlayed, markAsPlayed } from '../../Auth/Reducers/AuthReducer'
 import { initialize as initializePlayer } from '../../../shared/reducers/PlayerReducer'
-import { setVolume, setMuted } from '../../reducers/PlayerReducer'
+import { setVolume, setMuted, reset } from '../../reducers/PlayerReducer'
 
 const URL = '/api/v1/player'
 
@@ -83,7 +83,14 @@ class PlayerContainer extends Component {
    * Return playing duration
    */
   getDuration() {
-    return this.player.duration()
+    if (this.player == null) {
+      return 1
+    }
+    try {
+      return this.player.duration()
+    } catch (e) {
+      return 1
+    }
   }
 
   /**
@@ -227,14 +234,12 @@ class PlayerContainer extends Component {
     const { isAuthorized, loggedIn } = this.props
     const uid = v4()
 
-    // if (isAuthorized) {
-    //   const metaId = `${uid}_playerMeta`
-    //   localStorage.setItem(metaId, JSON.stringify(meta))
-    //   axios
-    //     .post(URL, { type, meta })
-    //     .then(data => {})
-    //     .catch(err => console.error(err))
-    // }
+    if (isAuthorized) {
+      axios
+        .post(URL, { type, meta })
+        .then(data => {})
+        .catch(err => console.error(err))
+    }
 
     const { position } = meta
     if (type === CAPTURE_TYPES.POS) {
@@ -364,6 +369,8 @@ class PlayerContainer extends Component {
     this.props.dispatch(setMuted(false))
   }
 
+  close = () => this.props.dispatch(reset())
+
   render() {
     const { player, oepisode } = this.props
     const {
@@ -385,11 +392,26 @@ class PlayerContainer extends Component {
     }
 
     const episode = oepisode.toJS()
-
-    let { title, img, pubDate, mp3 } = episode
-
+    let { title, pubDate } = episode
+    const mp3s = episode.related && episode.related.filter(r => r.type === 'mp3')
+    var mp3 = ""
+    var duration = 1
+    if (mp3s.length > 0) {
+      mp3 = mp3s[0]['dest']
+      duration = mp3s[0]['duration']
+    }
+    var img = "https://s3.amazonaws.com/dataskeptic.com/img/2017/primary-logo-400.jpg"
+    const imgs = episode.related && episode.related.filter(r => r.type === 'homepage-image')
+    if (imgs.length > 0) {
+      img = imgs[0]['dest']
+    }
     if (pubDate) {
       pubDate = moment(pubDate).format('MMMM D, YYYY')
+    }
+    if (mp3 == undefined) {
+      return (
+        <div></div>
+      )
     }
 
     const howler = (
@@ -429,6 +451,7 @@ class PlayerContainer extends Component {
         onPlayToggle={this.onPlayToggle}
         loaded={playback_loaded}
         volumeSlider={volumeController}
+        onClose={this.close}
       />
     )
   }
