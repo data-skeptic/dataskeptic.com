@@ -29,7 +29,8 @@ const init = {
   pending_blogs: [],
   pending_blogs_loaded: false,
   blog_state: '',
-  blog_content: {}
+  blog_content: {},
+  live: 'loading'
 }
 
 const defaultState = Immutable.fromJS(init)
@@ -47,7 +48,6 @@ export default function cmsReducer(state = defaultState, action) {
     case 'CMS_LOAD_BLOG_CONTENT':
       var dispatch = action.payload.dispatch
       var src_file = action.payload.src_file
-      console.log('CMS_LOAD_BLOG_CONTENT ' + src_file)
       var check = nstate.blog_content[src_file]
       if (check == undefined) {
         console.log('Not in memory, going to get from s3')
@@ -215,6 +215,33 @@ export default function cmsReducer(state = defaultState, action) {
       var val = payload.val
       nstate[f]['blog_id'] = val
       break
+    case 'CMS_CHECK_LIVE':
+      var payload = action.payload
+      var dispatch = payload.dispatch
+      var url = base_url + '/cms/live'
+      axios
+        .get(url, payload)
+        .then(function(result) {
+          var data = result['data']
+          if (JSON.stringify(data) == "{}") {
+            data = ""
+          }
+          dispatch({
+            type: 'CMS_SET_LIVE',
+            payload: { data, dispatch }
+          })
+        })
+        .catch(err => {
+          console.log(err)
+          var errorMsg = JSON.stringify(err)
+          snserror('CMS_GET_HOMEPAGE_CONTENT', errorMsg)
+        })
+      break
+    case 'CMS_SET_LIVE':
+      var payload = action.payload
+      var data = payload.data
+      nstate.live = data
+      break
     case 'CMS_GET_HOMEPAGE_CONTENT':
       var payload = action.payload
       var dispatch = payload.dispatch
@@ -248,7 +275,6 @@ export default function cmsReducer(state = defaultState, action) {
         })
       break
     case 'CMS_INJECT_HOMEPAGE_CONTENT':
-      console.log('CMS_INJECT_HOMEPAGE_CONTENT')
       var payload = action.payload
       var data = payload.data
       var le = data['latest_episode']

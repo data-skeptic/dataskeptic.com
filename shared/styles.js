@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 const theme = {}
 
@@ -17,6 +17,46 @@ theme.container = {
 }
 
 export default theme
+
+export const container = css`
+  max-width: 960px;
+  margin: 0px auto;
+  padding: 15px;
+
+  @media (max-width: 768px) {
+    padding: 1.1111111111111112rem;
+  }
+`
+
+export const strictForm = css`
+  .field-label {
+    margin: 0px !important;
+    font-weight: bold;
+  }
+
+  .field-input {
+    > input {
+      padding: 2px 6px !important;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .onrow {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      .field-container {
+        flex: 1;
+        margin-right: 10px;
+      }
+
+      &:last-child {
+        margin-right: 0px;
+      }
+    }
+  }
+`
 
 export const Wrapper = styled.section`
   flex: 0 0 31%;

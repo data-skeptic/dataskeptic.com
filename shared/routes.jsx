@@ -25,11 +25,11 @@ import DontHackMe from 'components/DontHackMe'
 import Explorer from 'TimeSeriesExplorer/Components/Explorer'
 import Home from 'components/Home'
 import LightsOut from 'components/LightsOut'
+import Live from 'components/Live'
 import Loading from 'Common/Components/Loading.js'
 import Login from 'components/Login'
 import SignUp from 'components/SignUp'
 import Logout from 'components/Logout'
-import Menu from 'components/Menu'
 import Membership from 'components/Membership'
 import MembershipPortal from 'components/MembershipPortal'
 import ChangeMembership from 'components/membership/ChangeMembership'
@@ -61,6 +61,7 @@ import AdminEmailsSend from 'components/admin/AdminEmailsSend'
 import AdminOrdersNew from 'components/admin/AdminOrdersNew'
 import AdminOrdersProcessing from 'components/admin/AdminOrdersProcessing'
 import AdminAddJob from 'components/admin/AdminAddJob'
+import PublicAddJob from 'components/jobs/PublicAddJob'
 
 import UserPlaylist from 'components/UserPlaylist'
 
@@ -149,6 +150,11 @@ export default (
     <Route path="/careers" component={App} onEnter={loadData}>
       <IndexRoute component={Careers} />
     </Route>
+
+    <Route path="/careers/jobs/add" component={App} onEnter={loadData}>
+      <IndexRoute component={PublicAddJob} />
+    </Route>
+
     <Route path="/loading" component={App} onEnter={loadData}>
       <IndexRoute component={Loading} />
     </Route>
@@ -302,6 +308,10 @@ export default (
 
     <Route path="/search" component={App}>
       <IndexRoute component={SERP} />
+    </Route>
+
+    <Route path="/live" component={App}>
+      <IndexRoute component={Live} />
     </Route>
 
     <Route path="/*" component={App} onEnter={loadData}>

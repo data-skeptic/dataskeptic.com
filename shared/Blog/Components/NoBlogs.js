@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
+import styled from 'styled-components'
 import LightsOut from '../../components/LightsOut'
 
 class NoBlogs extends React.Component {
@@ -11,7 +12,7 @@ class NoBlogs extends React.Component {
 
   render() {
     return (
-      <div className="blog-item-wrapper">
+      <Container>
         <h2>Request not found</h2>
         <p>
           I'm sorry Dave, I'm not going to be able to retrieve that blog post
@@ -24,7 +25,7 @@ class NoBlogs extends React.Component {
         <LightsOut />
         <br />
         <br />
-      </div>
+      </Container>
     )
   }
 }
@@ -33,3 +34,8 @@ export default connect(state => ({
   episodes: state.episodes,
   blogs: state.blogs
 }))(NoBlogs)
+
+const Container = styled.div`
+  width: 400px;
+  margin: 0px auto;
+`

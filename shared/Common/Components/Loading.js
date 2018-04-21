@@ -6,8 +6,8 @@ const Loading = () => {
       <center>
         <h2>Loading...</h2>
         <img
-          className="media-object img-circle img-thumbnail"
-          src="https://s3.amazonaws.com/dataskeptic.com/contributors/yoshi.gif"
+          className="media-ozbject img-thzumbnail"
+          src="https://s3.amazonaws.com/dataskeptic.com/img/2018/Loading-animation_v2.5.gif"
         />
       </center>
     </div>

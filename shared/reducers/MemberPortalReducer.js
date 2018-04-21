@@ -187,9 +187,11 @@ export default function memberPortalReducer(state = defaultState, action) {
       nstate.downloads.loaded = false
       nstate.downloads.loading = true
       nstate.downloads.list = []
+      console.log(address)
       axios
         .get('/api/v1/user/downloads', address)
         .then(result => {
+          console.log(result.data)
           dispatch({
             type: 'LOAD_MEMBER_DOWNLOADS_SUCCESS',
             payload: { data: result.data }
@@ -197,6 +199,10 @@ export default function memberPortalReducer(state = defaultState, action) {
         })
         .catch(err => {
           console.log(err)
+          dispatch({
+            type: 'LOAD_MEMBER_DOWNLOADS_SUCCESS',
+            payload: { data: [] }
+          })
           snserror(
             'LOAD_MEMBER_DOWNLOADS',
             'Failed!  Please email kyle@dataskeptic.com to get assistance.'
@@ -204,6 +210,8 @@ export default function memberPortalReducer(state = defaultState, action) {
         })
       break
     case 'LOAD_MEMBER_DOWNLOADS_SUCCESS':
+      console.log('action.payload')
+      console.log(action.payload)
       nstate.downloads.loaded = true
       nstate.downloads.loading = false
       nstate.downloads.list = action.payload.data
