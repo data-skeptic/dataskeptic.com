@@ -3,7 +3,7 @@ git pull
 read -p "Press enter to continue"
 npm i
 read -p "Press enter to continue"
-#npm run build
+npm run build
 read -p "Press enter to continue"
 docker build -t $1 .
 read -p "Press enter to continue"
