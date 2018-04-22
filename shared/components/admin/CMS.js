@@ -3,7 +3,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import querystring from 'querystring'
 import { connect } from 'react-redux'
-import BlogUpdater from './BlogUpdater'
+import BlogList from './BlogList'
 
 class CMS extends React.Component {
   constructor(props) {
@@ -61,9 +61,9 @@ class CMS extends React.Component {
       <div className={cn}>
         <h3>CMS {mode}</h3>
         <div>
-          {blogs.map(blog => {
-            return <BlogUpdater blog={blog} />
-          })}
+          {blogs.map((blog, index) => (
+            <BlogList blog={blog} odd={index % 2 === 0} key={blog.blog_id} />
+          ))}
         </div>
       </div>
     )

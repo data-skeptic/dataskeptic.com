@@ -34,7 +34,11 @@ const Container = styled.div`
   height: 100%;
   max-width: 100%;
   text-align: center;
+<<<<<<< HEAD
+  position: relative
+=======
   position: relative;
+>>>>>>> dev
 `
 
 const Preview = styled.img`

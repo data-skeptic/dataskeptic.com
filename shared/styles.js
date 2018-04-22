@@ -35,7 +35,7 @@ export const strictForm = css`
   }
 
   .field-input {
-    > input {
+    input {
       padding: 2px 6px !important;
     }
   }

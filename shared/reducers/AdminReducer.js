@@ -321,17 +321,6 @@ export default function adminReducer(state = defaultState, action) {
       break
     case 'RELATED_CONTENT_DELETE':
       var payload = action.payload
-      var nlist = []
-      var content_id = payload['content_id']
-      var i = 0
-      while (i < nstate.relatedcontent.length) {
-        var rc = nstate.relatedcontent[i]
-        if (rc['content_id'] != content_id) {
-          nlist.push(rc)
-        }
-        i += 1
-      }
-      nstate.relatedcontent = nlist
       var url = base_url + '/blog/relatedcontent/delete'
       axios
         .post(url, payload)

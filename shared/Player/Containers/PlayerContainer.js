@@ -409,8 +409,6 @@ class PlayerContainer extends Component {
       pubDate = moment(pubDate).format('MMMM D, YYYY')
     }
     if (mp3 == undefined) {
-      console.log("ERROR")
-      console.log(episode)
       return (
         <div></div>
       )

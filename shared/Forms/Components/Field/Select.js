@@ -11,7 +11,8 @@ export const renderSelect = ({
   fieldWrapperClasses = '',
   labelWrapperClasses = '',
   inputWrapperStyles = '',
-  options = []
+  options = [],
+  blankOption = false
 }) => {
   return (
     <div className={`field-container ${fieldWrapperClasses}`}>
@@ -25,7 +26,7 @@ export const renderSelect = ({
             touched && invalid ? 'has-danger' : ''
           }`}
         >
-          <option value="" />
+          {blankOption && <option />}
           {options.map(op => (
             <option value={op.value} key={op.value}>
               {op.label}

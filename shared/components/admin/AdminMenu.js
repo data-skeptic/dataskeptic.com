@@ -19,15 +19,10 @@ class AdminMenu extends Component {
                     <Link to="/admin/cms/recent">CMS recent</Link>
                   </li>
                   <li>
+                    <Link to="/admin/cms/contributors/add">Add Contributor</Link>
+                  </li>
+                  <li>
                     <Link to="/admin/cms/feature">Homepage</Link>
-                  </li>
-                  <li>
-                    <Link to="/admin/cms/add_related">Add Related Content</Link>
-                  </li>
-                  <li>
-                    <Link to="/admin/cms/recent_related">
-                      Recent Related Content
-                    </Link>
                   </li>
                 </ul>
               </div>

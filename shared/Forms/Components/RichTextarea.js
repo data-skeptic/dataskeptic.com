@@ -20,15 +20,27 @@ const DEFAULT_TOOLBAR = {
 }
 
 export default class RichTextarea extends Component {
+  defaultProps = {
+    markdown: false
+  }
+
   state = {
     editorState: EditorState.createEmpty(),
     value: this.props.input.value
   }
 
+  encode = rawObject => {
+    return draftToHtml(rawObject)
+  }
+
+  decode = val => {
+    return htmlToDraft(val)
+  }
+
   onChange = editorState => {
     this.setState({ editorState })
 
-    const value = draftToHtml(convertToRaw(editorState.getCurrentContent()))
+    const value = this.encode(convertToRaw(editorState.getCurrentContent()))
 
     this.setState({
       value
@@ -45,22 +57,19 @@ export default class RichTextarea extends Component {
     const { input: { value } } = this.props
 
     const editorState = EditorState.createWithContent(
-      ContentState.createFromBlockArray(htmlToDraft(value))
+      ContentState.createFromBlockArray(this.decode(value))
     )
 
-    this.setState({ value, editorState }, this.updateVal)
+    this.setState({ value, editorState })
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.input.value !== nextProps.input.value) {
       const editorState = EditorState.createWithContent(
-        ContentState.createFromBlockArray(htmlToDraft(nextProps.input.value))
+        ContentState.createFromBlockArray(this.decode(nextProps.input.value))
       )
 
-      this.setState(
-        { value: nextProps.input.value, editorState },
-        this.updateVal
-      )
+      this.setState({ value: nextProps.input.value, editorState })
     }
   }
 
@@ -76,6 +85,7 @@ export default class RichTextarea extends Component {
           editorClassName="richEditor"
           onEditorStateChange={this.onChange}
           onBlur={this.onBlur}
+          suppressContentEditableWarning={true}
           toolbar={toolbar}
           minHeight={minHeight}
         />

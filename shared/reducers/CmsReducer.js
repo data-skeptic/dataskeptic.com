@@ -4,6 +4,14 @@ import querystring from 'querystring'
 import axios from 'axios'
 import snserror from '../SnsUtil'
 import { load_blogs } from '../daos/serverInit'
+import Request from '../Request'
+import {
+  ADD_JOB,
+  ADD_JOB_FAIL,
+  ADD_JOB_SUCCESS,
+  addJobFail,
+  addJobSuccess
+} from './AdminReducer'
 const aws = require('aws-sdk')
 
 var env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
@@ -11,6 +19,10 @@ var env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 const config = require('../../config/config.json')
 
 var base_url = config[env]['base_api'] + env
+
+export const ADD_CONTRIBUTOR = 'ADD_CONTRIBUTOR'
+export const ADD_CONTRIBUTOR_FAIL = 'ADD_CONTRIBUTOR_FAIL'
+export const ADD_CONTRIBUTOR_SUCCESS = 'ADD_CONTRIBUTOR_SUCCESS'
 
 const init = {
   home_loaded: false,
@@ -30,6 +42,15 @@ const init = {
   pending_blogs_loaded: false,
   blog_state: '',
   blog_content: {},
+  blogs: {
+    error: null,
+    success: false
+  },
+  contributors: {
+    processing: false,
+    error: null,
+    success: false
+  },
   live: 'loading'
 }
 
@@ -153,6 +174,8 @@ export default function cmsReducer(state = defaultState, action) {
       var dispatch = payload.dispatch
       //payload['title'] = payload['title']
       //payload['abstract'] = payload['abstract']
+      nstate.blogs.success = false
+      nstate.blogs.error = null
       var url = base_url + '/blog/update'
       axios
         .post(url, payload)
@@ -160,17 +183,41 @@ export default function cmsReducer(state = defaultState, action) {
           var data = result['data']
           var error = data['error']
           if (error) {
-            alert('ERROR:  ' + JSON.stringify(result))
+            dispatch({
+              type: 'CMS_UPDATE_BLOG_FAIL',
+              payload: {
+                error
+              }
+            })
           } else {
-            alert('SUCCESS:  ' + JSON.stringify(result))
+            dispatch({
+              type: 'CMS_UPDATE_BLOG_SUCCESS',
+              payload: {
+                data
+              }
+            })
           }
         })
         .catch(err => {
           console.log(err)
           var errorMsg = JSON.stringify(err)
           snserror('CMS_UPDATE_BLOG', errorMsg)
+          dispatch({
+            action: 'CMS_UPDATE_BLOG_FAIL',
+            payload: {
+              error: errorMsg
+            }
+          })
         })
       break
+    case 'CMS_UPDATE_BLOG_SUCCESS':
+      nstate.blogs.success = true
+      nstate.blogs.error = null
+      break
+    case 'CMS_UPDATE_BLOG_FAIL':
+      nstate.blogs.error = action.payload.error
+      break
+
     case 'CMS_SET_HOMEPAGE_FEATURE':
       nstate.featured_blog_state = 'submit'
       var blog_id = nstate.featured_blog.blog_id
@@ -318,6 +365,62 @@ export default function cmsReducer(state = defaultState, action) {
       nstate.jobListing.loaded = true
       nstate.jobListing.jobs = action.payload.data
       break
+
+    case ADD_CONTRIBUTOR:
+      nstate.contributors.processing = true
+      nstate.contributors.success = false
+      nstate.contributors.error = null
+      break
+
+    case ADD_CONTRIBUTOR_SUCCESS:
+      nstate.contributors.processing = false
+      nstate.contributors.success = true
+      nstate.contributors.error = null
+      break
+
+    case ADD_CONTRIBUTOR_FAIL:
+      nstate.contributors.processing = false
+      nstate.contributors.success = false
+      nstate.contributors.error = action.payload.error
+      break
   }
   return Immutable.fromJS(nstate)
 }
+
+export const getBlog = (state, prettyname) => {
+  const pendingBlog = state.cms
+    .get('pending_blogs')
+    .find(item => item.get('prettyname') === prettyname)
+
+  const recentBlog = state.cms
+    .get('recent_blogs')
+    .find(item => item.get('prettyname') === prettyname)
+
+  const blog = pendingBlog || recentBlog
+
+  return blog ? blog.toJS() : blog
+}
+
+export const addContributor = contributor => {
+  return dispatch => {
+    dispatch(addContributorRequest)
+
+    Request.post(`/api/v1/contributors`, contributor)
+      .then(result => dispatch(addContributorSuccess(result.data)))
+      .catch(err => dispatch(addContributorFail(err.data.error)))
+  }
+}
+
+export const addContributorRequest = () => ({
+  type: ADD_CONTRIBUTOR
+})
+
+export const addContributorFail = error => ({
+  type: ADD_CONTRIBUTOR_FAIL,
+  payload: { error }
+})
+
+export const addContributorSuccess = result => ({
+  type: ADD_CONTRIBUTOR_SUCCESS,
+  payload: { result }
+})
