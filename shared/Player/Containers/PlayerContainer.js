@@ -76,7 +76,6 @@ class PlayerContainer extends Component {
    * Return howler pointer
    */
   getHowler() {
-    console.log("gethowler")
     return this.player.howler
   }
 
@@ -87,7 +86,6 @@ class PlayerContainer extends Component {
     if (this.player == null) {
       return 1
     }
-    console.log(this.player)
     try {
       return this.player.duration()
     } catch (e) {
@@ -299,8 +297,6 @@ class PlayerContainer extends Component {
     let hr = 0
 
     const arr = duration.split(':')
-    console.log('arr')
-    console.log(arr)
     if (arr.length === 2) {
       min = +arr[0]
       sec = +arr[1]
@@ -312,7 +308,6 @@ class PlayerContainer extends Component {
 
     const d = min * 60 + sec
     const p = 1.0 * d * position / 100
-    console.log(d, p, hr, min, sec)
 
     return this.formatPosition(p)
   }
@@ -398,9 +393,6 @@ class PlayerContainer extends Component {
 
     const episode = oepisode.toJS()
     let { title, pubDate } = episode
-    console.log('=================================================')
-    console.log(episode)
-    console.log(episode.related)
     const mp3s = episode.related && episode.related.filter(r => r.type === 'mp3')
     var mp3 = ""
     var duration = 1
