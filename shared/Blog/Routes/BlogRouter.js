@@ -16,7 +16,7 @@ import NoBlogs from '../Components/NoBlogs'
 import Loading from '../../Common/Components/Loading'
 import transform_pathname from '../../utils/transform_pathname'
 
-const normalizePathname = path => path.replace(/\/\//g, "/")
+const normalizePathname = path => path.replace(/\/\//g, '/')
 
 class BlogRouter extends React.Component {
   constructor(props) {
@@ -90,15 +90,15 @@ class BlogRouter extends React.Component {
     var npathname = nextProps.location.pathname
     this.handle_reload(npathname, opathname)
   }
-  
+
   componentDidMount() {
     const pathname = this.props.location.pathname
     const hormalizedPath = normalizePathname(pathname)
-    
+
     if (pathname !== hormalizedPath) {
       return this.redirect(hormalizedPath)
     }
-    
+
     this.handle_reload(pathname, '')
   }
 
@@ -130,7 +130,7 @@ class BlogRouter extends React.Component {
   }
 
   redirect = to => this.props.history.push(to)
-  
+
   missing() {
     var location = this.props.location.pathname
     console.log(location)

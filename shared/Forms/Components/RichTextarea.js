@@ -65,10 +65,10 @@ export default class RichTextarea extends Component {
   }
 
   render() {
-    const { toolbar = DEFAULT_TOOLBAR } = this.props
+    const { toolbar = DEFAULT_TOOLBAR, minHeight } = this.props
     const { editorState } = this.state
     return (
-      <Wrapper suppressContentEditableWarning={true}>
+      <Wrapper suppressContentEditableWarning={true} minHeight={minHeight}>
         <Editor
           editorState={editorState}
           toolbarClassName="toolbarClassName"
@@ -77,6 +77,7 @@ export default class RichTextarea extends Component {
           onEditorStateChange={this.onChange}
           onBlur={this.onBlur}
           toolbar={toolbar}
+          minHeight={minHeight}
         />
       </Wrapper>
     )
@@ -87,6 +88,11 @@ const Wrapper = styled.div`
   .richEditor {
     padding: 6px 5px 0;
     border-radius: 2px;
-    border: 1px solid #f1f1f1;
+
+    ${props =>
+      props.minHeight &&
+      `
+		 min-height: ${props.minHeight}px;
+`};
   }
 `

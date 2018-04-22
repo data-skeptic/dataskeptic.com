@@ -7,7 +7,7 @@ import { clone } from 'lodash'
  * Whenever some reducer initial state have been changed update current schema version
  * Unique version number is total count of commits in `master`
  */
-export const SCHEMA_VER = 'v1954'
+export const SCHEMA_VER = 'v1956'
 
 const randomSessionId = () => v4()
 

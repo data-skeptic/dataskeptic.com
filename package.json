@@ -20,7 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "autoprefixer-loader": "^3.1.0",
-    "aws-sdk": "^2.224.1",
+    "aws-sdk": "^2.226.1",
     "axios": "^0.8.1",
     "babel-core": "^6.3.21",
     "babel-loader": "^6.2.0",
@@ -46,7 +46,7 @@
     "e164": "0.0.5",
     "echarts": "^4.0.4",
     "echarts-for-react": "^2.0.7",
-    "ejs": "^2.5.8",
+    "ejs": "^2.5.9",
     "elasticsearch": "^14.2.2",
     "exports-loader": "^0.6.2",
     "express": "^4.16.3",
@@ -64,7 +64,7 @@
     "less": "^2.7.2",
     "less-loader": "^2.2.3",
     "less-plugin-clean-css": "^1.5.1",
-    "letsencrypt-express": "^2.0.5",
+    "letsencrypt-express": "^2.0.7",
     "lodash": "^4.17.4",
     "lodash.isarray": "^4.0.0",
     "marked": "^0.3.19",
@@ -91,11 +91,12 @@
     "react-dom": "^0.14.9",
     "react-draft-wysiwyg": "^1.12.12",
     "react-dropzone": "^3.13.1",
-    "react-ga": "^2.1.2",
+    "react-ga": "^2.5.0",
     "react-highlight-words": "^0.10.0",
     "react-howler": "^3.3.0",
+    "react-infinite-scroll-component": "^4.0.2",
     "react-logger": "^1.1.0",
-    "react-modal": "^3.4.1",
+    "react-modal": "^3.4.2",
     "react-redux": "^4.4.9",
     "react-responsive-carousel": "^3.1.35",
     "react-router": "^1.0.3",
@@ -103,7 +104,7 @@
     "react-share": "^1.19.0",
     "react-slick": "^0.14.11",
     "react-slider": "^0.7.0",
-    "react-tabs": "^2.2.1",
+    "react-tabs": "^2.2.2",
     "react-thunk": "^1.0.0",
     "react-zipcode": "^1.0.0",
     "redis": "^2.7.1",
@@ -130,7 +131,7 @@
     "uuid": "^3.0.1",
     "wav": "^1.0.1",
     "webpack": "^1.12.9",
-    "winston": "^2.4.1",
+    "winston": "^2.4.2",
     "xml2js": "^0.4.17"
   },
   "devDependencies": {
@@ -150,6 +151,6 @@
     "react-transform-hmr": "^1.0.1",
     "style-loader": "^0.13.2",
     "webpack-dev-middleware": "^1.4.0",
-    "webpack-hot-middleware": "^2.22.0"
+    "webpack-hot-middleware": "^2.22.1"
   }
 }

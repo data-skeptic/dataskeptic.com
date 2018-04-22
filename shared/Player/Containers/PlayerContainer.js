@@ -76,6 +76,7 @@ class PlayerContainer extends Component {
    * Return howler pointer
    */
   getHowler() {
+    console.log("gethowler")
     return this.player.howler
   }
 
@@ -83,7 +84,15 @@ class PlayerContainer extends Component {
    * Return playing duration
    */
   getDuration() {
-    return this.player.duration()
+    if (this.player == null) {
+      return 1
+    }
+    console.log(this.player)
+    try {
+      return this.player.duration()
+    } catch (e) {
+      return 1
+    }
   }
 
   /**
@@ -290,6 +299,8 @@ class PlayerContainer extends Component {
     let hr = 0
 
     const arr = duration.split(':')
+    console.log('arr')
+    console.log(arr)
     if (arr.length === 2) {
       min = +arr[0]
       sec = +arr[1]
@@ -301,6 +312,7 @@ class PlayerContainer extends Component {
 
     const d = min * 60 + sec
     const p = 1.0 * d * position / 100
+    console.log(d, p, hr, min, sec)
 
     return this.formatPosition(p)
   }
@@ -385,11 +397,31 @@ class PlayerContainer extends Component {
     }
 
     const episode = oepisode.toJS()
-
-    let { title, img, pubDate, mp3 } = episode
-
+    let { title, pubDate } = episode
+    console.log('=================================================')
+    console.log(episode)
+    console.log(episode.related)
+    const mp3s = episode.related && episode.related.filter(r => r.type === 'mp3')
+    var mp3 = ""
+    var duration = 1
+    if (mp3s.length > 0) {
+      mp3 = mp3s[0]['dest']
+      duration = mp3s[0]['duration']
+    }
+    var img = "https://s3.amazonaws.com/dataskeptic.com/img/2017/primary-logo-400.jpg"
+    const imgs = episode.related && episode.related.filter(r => r.type === 'homepage-image')
+    if (imgs.length > 0) {
+      img = imgs[0]['dest']
+    }
     if (pubDate) {
       pubDate = moment(pubDate).format('MMMM D, YYYY')
+    }
+    if (mp3 == undefined) {
+      console.log("ERROR")
+      console.log(episode)
+      return (
+        <div></div>
+      )
     }
 
     const howler = (
