@@ -1,9 +1,9 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+import ReactDOM from 'react-dom'
 import Loading from '../Common/Components/Loading'
 
-class Live extends React.Component {
+class Live extends Component {
   	constructor(props) {
     	super(props)
  	}
@@ -20,7 +20,7 @@ class Live extends React.Component {
 	  	var ocms = this.props.cms.toJS()
 	  	var live = ocms['live']
 	  	if (live == "loading") {
-  			<Loading />
+  			return (<Loading />)
 	  	}
 	  	else if (live != "") {
 	  		var src = "https://www.youtube.com/embed/" + live
