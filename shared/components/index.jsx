@@ -27,6 +27,17 @@ import ConversationHandler from '../Chat/Dialogs/ConversationHandler'
 import { loggMessage } from '../Chat/Reducers/ChatbotReducer'
 
 class MainView extends React.Component {
+
+  componentDidMount() {
+    console.log('DATAS')
+    console.dir(process.env.BASE_URL)
+  }
+
+  componentWillMount() {
+    console.log('DATAS')
+    console.dir(process.env.BASE_URL)
+  }
+
   addMessage = message =>
     this.setState(prevState => ({
       messages: [...prevState.messages, message]
@@ -233,6 +244,8 @@ class MainView extends React.Component {
   }
 
   componentDidMount() {
+    console.log('DATAS_ENV=')
+    console.dir(process.env.BASE_API)
     this.reply({ text: 'What would you like to talk about?' })
   }
 

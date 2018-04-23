@@ -4,6 +4,8 @@ import webpackDevMiddleware from 'webpack-dev-middleware'
 import webpackHotMiddleware from 'webpack-hot-middleware'
 import prodCfg from './webpack.prod.config.js'
 
+const DotenvPlugin = require('webpack-dotenv-plugin')
+
 Object.assign = assign
 
 const BABEL_QUERY = {
@@ -50,14 +52,12 @@ export default function(app) {
       ]
     },
     plugins: [
-      new webpack.optimize.OccurenceOrderPlugin(),
+      new DotenvPlugin({
+        sample: './.env.example',
+        path: './.env'
+      }),
       new webpack.HotModuleReplacementPlugin(),
-      new webpack.NoErrorsPlugin(),
-      new webpack.DefinePlugin({
-        'process.env': {
-          NODE_ENV: JSON.stringify(process.env.NODE_ENV)
-        }
-      })
+      new webpack.NoErrorsPlugin()
     ]
   })
 
