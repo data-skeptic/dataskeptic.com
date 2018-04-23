@@ -1,9 +1,7 @@
 const winston = require('winston')
 const S3StreamLogger = require('s3-streamlogger').S3StreamLogger
 
-const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const c = require('../../../config/config.json')
-const bucket_name = c[env]['chat']['logs']
+const bucket_name = process.env.CHAT_LOGS
 
 const ops = {
   bucket: bucket_name,

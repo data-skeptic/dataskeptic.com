@@ -30,15 +30,17 @@ module.exports = {
   plugins: [
     extractLESS,
 
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: '"production"'
-      }
-    }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false
       }
+    }),
+    
+    new webpack.DefinePlugin({
+      'process.env': path.join(__dirname, 'build/config.js')
     })
-  ]
+  ],
+  node: {
+    fs: 'empty'
+  }
 }

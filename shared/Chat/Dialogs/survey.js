@@ -2,9 +2,7 @@ import axios from 'axios'
 
 var chatter = require('./chatter')
 
-var env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const config = require('../../../config/config.json')
-var base_url = config[env]['base_api'] + env + '/'
+var base_url = process.env.BASE_API
 
 function get_opening_remark(dispatch, reply, cstate) {
   var msg = chatter.get_message('SURVEY>WELCOME')

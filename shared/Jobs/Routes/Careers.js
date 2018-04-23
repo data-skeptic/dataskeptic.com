@@ -13,13 +13,8 @@ import UploadResume, {
 } from '../Forms/UploadResume'
 
 import { submitResume } from '../../reducers/JobsReducer'
-import Countdown from '../../Common/Components/Countdown'
 
-const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const config = require('../../../config/config.json')
-const c = config[env]
-
-const FILES_BUCKET = c['files']['site_bucket']
+const FILES_BUCKET = process.env.SITE_BUCKET
 
 class Careers extends Component {
   onResumeUpload = data => {
