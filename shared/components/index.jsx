@@ -28,16 +28,6 @@ import { loggMessage } from '../Chat/Reducers/ChatbotReducer'
 
 class MainView extends React.Component {
 
-  componentDidMount() {
-    console.log('DATAS')
-    console.dir(process.env.BASE_URL)
-  }
-
-  componentWillMount() {
-    console.log('DATAS')
-    console.dir(process.env.BASE_URL)
-  }
-
   addMessage = message =>
     this.setState(prevState => ({
       messages: [...prevState.messages, message]
