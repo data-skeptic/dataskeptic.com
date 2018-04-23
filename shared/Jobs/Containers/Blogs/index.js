@@ -74,7 +74,8 @@ class BlogsSlider extends Component {
     const { blogs } = this.props
     const settings = {
       showArrows: true,
-      showStatus: false
+      showStatus: false,
+      showThumbs: false
     }
 
     return (
