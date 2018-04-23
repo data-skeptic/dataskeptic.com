@@ -1,8 +1,6 @@
 import axios from 'axios'
 
-const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const c = require('../../config/config.json')
-var base_url = c[env]['base_api'] + env
+var base_url = process.env.BASE_API
 
 export function getProducts(store, env) {
   console.log('Network: retrieving all products')

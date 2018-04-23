@@ -234,8 +234,6 @@ class MainView extends React.Component {
   }
 
   componentDidMount() {
-    console.log('DATAS_ENV=')
-    console.dir(process.env.BASE_API)
     this.reply({ text: 'What would you like to talk about?' })
   }
 

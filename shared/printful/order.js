@@ -1,7 +1,5 @@
 var wrapper = require('./wrapper.js')
 
-var config = require('../../config/config.json')
-
 var PrintfulClient = require('./printfulclient.js')
 var key = config['prod']['printful']['api']
 

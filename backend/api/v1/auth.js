@@ -12,9 +12,8 @@ let redirectURL
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
-const c = require('../../../config/config.json')
-const salt = c[env]['auth']['salt']
-const base_url = c[env]['base_api'] + env
+const salt = process.env.AUTH_SALT
+const base_url = process.env.BASE_API
 
 const checkIfAdmin = email => {
   const email_reg_exp = /^.*@dataskeptic\.com/i
@@ -109,11 +108,19 @@ module.exports = () => {
     done(null, id)
   })
 
-  if (c[env]['linkedin']) {
+  if (process.env.AUTH_LINKEDIN_ON) {
+    const linkedinConfig = {
+      clientID: process.env.AUTH_LINKEDIN_CLIENT_ID,
+      clientSecret: process.env.AUTH_LINKEDIN_CLIENT_SECRET,
+      callbackURL: process.env.AUTH_LINKEDIN_CLIENT_CALLBACK_URL,
+      scope: ["r_emailaddress", "r_basicprofile"],
+      state: true
+    }
+    
     console.log('AUTH: allowing Linkedin Login')
     passport.use(
       new linkedinStrategy(
-        c[env].linkedin,
+        linkedinConfig,
         (accessToken, refreshToken, { _json }, done) => {
           console.dir('received LI user')
           console.dir(_json)
@@ -146,15 +153,15 @@ module.exports = () => {
     )
   }
 
-  var gp = c[env]['googlePassport']
+  var gp = process.env.AUTH_GOOGLE_ON
   if (gp) {
     console.log('AUTH: allowing Google Login')
     passport.use(
       new googleStrategy(
         {
-          clientID: gp.clientId,
-          clientSecret: gp.clientSecret,
-          callbackURL: '/api/v1/auth/google/callback',
+          clientID: process.env.AUTH_GOOGLE_CLIENT_ID,
+          clientSecret: process.env.AUTH_GOOGLE_CLIENT_SECRET,
+          callbackURL: process.env.AUTH_GOOGLE_CLIENT_CALLBACK_URL,
           passReqToCallback: true
         },
         function(req, accessToken, refreshToken, profile, done) {

@@ -8,9 +8,7 @@ const aws = require('aws-sdk')
 
 var env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
-const config = require('../../config/config.json')
-
-var base_url = config[env]['base_api'] + env
+var base_url = process.env.BASE_API
 
 const init = {
   home_loaded: false,

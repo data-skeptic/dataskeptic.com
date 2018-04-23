@@ -4,10 +4,9 @@ import { move } from './filesUtils'
 const express = require('express')
 const axios = require('axios')
 
-const c = require('../../../config/config.json')
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const base_api = c[env]['base_api'] + env
-const EMAIL_ADDRESS = c[env]['careers']['email']
+const base_api = process.env.BASE_API
+const EMAIL_ADDRESS = process.env.CAREERS_EMAIL_ADMIN
 
 const formatResumeLink = resume => `https://s3.amazonaws.com/${resume}`
 

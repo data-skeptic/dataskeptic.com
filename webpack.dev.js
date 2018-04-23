@@ -56,6 +56,7 @@ export default function(app) {
         sample: './.env.example',
         path: './.env'
       }),
+      new webpack.optimize.OccurenceOrderPlugin(),
       new webpack.HotModuleReplacementPlugin(),
       new webpack.NoErrorsPlugin()
     ]

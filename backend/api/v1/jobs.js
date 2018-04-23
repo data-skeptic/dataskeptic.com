@@ -2,9 +2,7 @@ const express = require('express')
 const axios = require('axios')
 const jobs_util = require('./jobs_util')
 
-const c = require('../../../config/config.json')
-const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const base_api = c[env]['base_api'] + env
+const base_api = process.env.BASE_API
 
 const addJob = data => {
   const url = `${base_api}/careers/jobs/add`

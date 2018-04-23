@@ -7,9 +7,7 @@ var chatter = require('./chatter')
 var e164 = require('e164')
 var assert = require('assert')
 
-var env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const config = require('../../../config/config.json')
-var base_url = config[env]['base_api'] + env + '/'
+var base_url = process.env.BASE_API
 
 function get_opening_remark(dispatch, reply, cstate) {
   return 'Ok, reminders.  When would you like to get the reminder?'

@@ -1,9 +1,7 @@
 const express = require('express')
 const OrdersServices = require('../../modules/orders/services/OrdersServices')
 
-const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const c = require('../../../config/config.json')
-const stripe_key = c[env]['stripe']
+const stripe_key = process.env.STRIPE
 
 module.exports = cache => {
   const router = express.Router()

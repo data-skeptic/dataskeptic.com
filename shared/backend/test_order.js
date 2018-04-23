@@ -2,8 +2,6 @@ var add_order = require('./add_order')
 
 console.log('Starting test')
 
-//const c = require('../../config/config.json')
-const c = require('./config.json')
 var env = 'dev'
 var stripe_key = c[env]['stripe']
 var stripe = require('stripe')(stripe_key)

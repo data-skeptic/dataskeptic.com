@@ -1,5 +1,4 @@
 import axios from 'axios'
-import isEmpty from 'lodash/isEmpty'
 
 import { clearCart } from '../../Cart/Actions/CartActions'
 
@@ -10,14 +9,6 @@ export const CHECKOUT_REQUEST_FAILED = 'CHECKOUT_REQUEST_FAILED'
 export const RECEIPT_REQUEST_START = 'RECEIPT_REQUEST_START'
 export const RECEIPT_REQUEST_SUCCESS = 'RECEIPT_REQUEST_SUCCESS'
 export const RECEIPT_REQUEST_FAILED = 'RECEIPT_REQUEST_FAILED'
-
-export const CHECKOUT_MAKE_ORDER = 'CHECKOUT_MAKE_ORDER'
-
-const SUCCESS_REDIRECT_DELAY = 1000
-
-const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const c = require('../../../config/config.json')
-var base_url = c[env] + env
 
 export function checkout(data, redirect) {
   return (dispatch, getState) => {

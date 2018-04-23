@@ -8,8 +8,6 @@ import Request from '../Request'
 
 var env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
-const config = require('../../config/config.json')
-
 var base_url = 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/' + env
 
 export const ADD_JOB = 'ADD_JOB'

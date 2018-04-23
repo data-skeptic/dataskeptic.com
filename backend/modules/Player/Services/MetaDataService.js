@@ -1,5 +1,3 @@
-import fs from 'fs'
-const config = require('../../../../config/config.json')
 const AWS = require('aws-sdk')
 const uuidV4 = require('uuid/v4')
 const moment = require('moment')
@@ -7,9 +5,9 @@ const docClient = new AWS.DynamoDB.DocumentClient()
 
 var env = process.env.NODE_ENV === 'production' ? 'prod' : 'dev'
 
-var tablename = config[env]['player_metadata']['player_metadata']
+var tablename = process.env.PLAYER_METADATA
 console.log(env)
-console.log(config[env]['player_metadata'])
+console.log(process.env.PLAYER_METADATA)
 console.log('TB: ' + tablename)
 
 export const getMeta = () => {

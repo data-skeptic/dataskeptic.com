@@ -25,9 +25,7 @@ const init = {
 
 const defaultState = Immutable.fromJS(init)
 
-var env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const config = require('../../../config/config.json')
-var base_url = config[env]['base_api'] + env + '/'
+var base_url = process.env.BASE_API
 
 let start_survey = function() {
   return new Promise(function(resolve, reject) {

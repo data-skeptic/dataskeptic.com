@@ -1,6 +1,6 @@
 var elasticsearch = require('elasticsearch')
 
-const c = require('../../../config/config.json')
+
 const env = 'dev'
 console.log(c[env])
 var elastic_search_endpoint = c[env]['elastic_search_endpoint']
