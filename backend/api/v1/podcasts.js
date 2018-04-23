@@ -18,7 +18,7 @@ module.exports = cache => {
   router.get('/', (req, res) => {
     const limit = +req.query.limit || 10
     const offset = +req.query.offset || 0
-    
+
     getEpisodes(limit, offset)
       .then(({ total, episodes }) => {
         const hasMore = limit + offset <= total

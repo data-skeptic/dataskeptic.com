@@ -223,8 +223,8 @@ export default function cmsReducer(state = defaultState, action) {
         .get(url, payload)
         .then(function(result) {
           var data = result['data']
-          if (JSON.stringify(data) == "{}") {
-            data = ""
+          if (JSON.stringify(data) == '{}') {
+            data = ''
           }
           dispatch({
             type: 'CMS_SET_LIVE',

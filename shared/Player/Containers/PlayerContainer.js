@@ -393,15 +393,19 @@ class PlayerContainer extends Component {
 
     const episode = oepisode.toJS()
     let { title, pubDate } = episode
-    const mp3s = episode.related && episode.related.filter(r => r.type === 'mp3')
-    var mp3 = ""
+    const mp3s =
+      episode.related && episode.related.filter(r => r.type === 'mp3')
+    var mp3 = ''
     var duration = 1
     if (mp3s.length > 0) {
       mp3 = mp3s[0]['dest']
       duration = mp3s[0]['duration']
     }
-    var img = "https://s3.amazonaws.com/dataskeptic.com/img/2017/primary-logo-400.jpg"
-    const imgs = episode.related && episode.related.filter(r => r.type === 'homepage-image')
+    var img =
+      'https://s3.amazonaws.com/dataskeptic.com/img/2017/primary-logo-400.jpg'
+    const imgs =
+      episode.related &&
+      episode.related.filter(r => r.type === 'homepage-image')
     if (imgs.length > 0) {
       img = imgs[0]['dest']
     }
@@ -409,11 +413,9 @@ class PlayerContainer extends Component {
       pubDate = moment(pubDate).format('MMMM D, YYYY')
     }
     if (mp3 == undefined) {
-      console.log("ERROR")
+      console.log('ERROR')
       console.log(episode)
-      return (
-        <div></div>
-      )
+      return <div />
     }
 
     const howler = (
