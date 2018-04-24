@@ -124,7 +124,7 @@ console.log('server.jsx', {
 })
 
 var influxdb = undefined
-const influx_config = process.env.INFLUXDB_ON
+const influx_config = JSON.parse(process.env.INFLUXDB_ON)
 console.log('influx_config', process.env.INFLUXDB_ON)
 if (influx_config) {
   console.log('initializing influxdb')

@@ -2,6 +2,7 @@ import React from 'react'
 import cn from 'classnames'
 import PlayerProgressBar from '../Components/PlayerProgressBar'
 import TogglePlayButton from '../Components/TogglePlayButton'
+import moment from "moment/moment";
 
 const ignore = e => {
   e.preventDefault()
@@ -30,7 +31,7 @@ export const MiniPlayer = ({
       <div className="col-xs-9 col-sm-4 col-md-3 preview">
         <img src={preview} alt={title} />
         <div className="description">
-          <p className="date">{date}</p>
+          <p className="date">{moment(date).format('MMMM D, Y')}</p>
           <p className="title">{title}</p>
         </div>
       </div>

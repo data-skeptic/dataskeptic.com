@@ -392,7 +392,7 @@ class PlayerContainer extends Component {
     }
 
     const episode = oepisode.toJS()
-    let { title, pubDate } = episode
+    let { title, pubDate, publish_date } = episode
     const mp3s =
       episode.related && episode.related.filter(r => r.type === 'mp3')
     var mp3 = ''
@@ -447,7 +447,7 @@ class PlayerContainer extends Component {
         episode={episode}
         title={title}
         duration={realDur}
-        date={pubDate}
+        date={pubDate || publish_date}
         position={position}
         realPos={realPos}
         howler={howler}
