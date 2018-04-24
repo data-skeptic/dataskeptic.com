@@ -117,15 +117,8 @@ aws.config.update({
   region: aws_region
 })
 
-console.log('server.jsx', {
-  accessKeyId: aws_accessKeyId,
-  secretAccessKey: aws_secretAccessKey,
-  region: aws_region
-})
-
 var influxdb = undefined
-const influx_config = JSON.parse(process.env.INFLUXDB_ON)
-console.log('influx_config', process.env.INFLUXDB_ON)
+const influx_config = process.env.INFLUXDB_ON === 'true'
 if (influx_config) {
   console.log('initializing influxdb')
   influxdb = new Influx.InfluxDB({
