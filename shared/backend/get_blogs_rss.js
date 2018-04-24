@@ -1,15 +1,9 @@
 const RSS = require('rss')
-var axios = require('axios')
-var fs = require('fs')
-const map = require('lodash/map')
+const axios = require('axios')
 const each = require('lodash/each')
-const filter = require('lodash/filter')
-
-const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const c = require('../../config/config.json')
 
 const BASE_URL = 'https://dataskeptic.com/'
-var api_url = c[env]['base_api'] + env
+var api_url = process.env.BASE_API
 
 const BlogItemModel = ({
   title,

@@ -5,15 +5,11 @@ import snserror from '../SnsUtil'
 const aws = require('aws-sdk')
 const s3 = new aws.S3()
 
-const c = require('../../config/config.json')
-
 const proposalsDocs = new aws.DynamoDB.DocumentClient()
 
 import { convert_items_to_json } from 'daos/episodes'
-import { extractFolders } from '../utils/blog_utils'
 
-var env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-var base_api = c[env]['base_api'] + env
+var base_api = process.env.BASE_API
 
 export function get_contributors() {
   console.log('-[Refreshing Contributors]-')

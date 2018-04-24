@@ -66,3 +66,4 @@ temp_files/*
 *.log
 *.map
 *.swp
+.env

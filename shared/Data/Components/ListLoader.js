@@ -9,7 +9,7 @@ export default () => (
       width="120"
     />
     <Container>
-      <Spinner src="/img/spinner.gif" width="20"/>
+      <Spinner src="/img/spinner.gif" width="20" />
       <SubTitle>Loading...</SubTitle>
     </Container>
   </Box>
@@ -19,13 +19,12 @@ const Box = styled.div`
   background-color: #f4f4f4;
   padding: 12px;
   margin-top: 84px;
-  
+
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 `
-
 
 const Bot = styled.img`
   margin-top: -60px;
@@ -37,9 +36,7 @@ const Container = styled.div`
   color: #5d5a5b;
 `
 
-const Spinner = styled.img`
-  
-`
+const Spinner = styled.img``
 
 const SubTitle = styled.span`
   font-weight: bold;

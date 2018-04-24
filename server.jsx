@@ -72,6 +72,11 @@ var Influx = require('influx')
 console.log('server.jsx : starting')
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+
+if (process.env.NODE_ENV === 'dev') {
+  require('./build/config.js')
+}
+
 const base_url = 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/' + env
 
 const app = express()
@@ -79,6 +84,10 @@ const app = express()
 /*
  * CONFIGURATION
  */
+if (process.env.NODE_ENV === 'dev') {
+  console.log('wepback.dev')
+  require('./webpack.dev').default(app)
+}
 
 var aws_accessKeyId = ''
 var aws_secretAccessKey = ''
@@ -91,35 +100,41 @@ var rfc_table_name = 'rfc'
 var latest_rfc_id = 'test-request'
 var itunesId = 'xxxx'
 
-const c = require('./config/config.json')
 console.dir('env = ' + env)
-var ipinfo_token = c[env]['ipinfo_token']
-itunesId = c[env]['itunes']
-stripe_key = c[env]['stripe']
-sp_key = c[env]['sp']
-slack_key = c[env]['slack']
-var elastic_search_endpoint = c[env]['elastic_search_endpoint']
-aws_accessKeyId = c[env]['aws']['accessKeyId']
-aws_secretAccessKey = c[env]['aws']['secretAccessKey']
-aws_region = c[env]['aws']['region']
-aws_proposals_bucket = c[env]['recording']['aws_proposals_bucket']
+var ipinfo_token = process.env.IPINFO_TOKEN
+itunesId = process.env.ITUNES
+stripe_key = process.env.STRIPE
+sp_key = process.env.SP
+slack_key = process.env.SLACK
+var elastic_search_endpoint = process.env.ELASTIC_SEARCH_ENDPOINT
+aws_accessKeyId = process.env.AWS_ACCESS_KEY_ID
+aws_secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
+aws_region = process.env.AWS_REGION
+aws_proposals_bucket = process.env.RECORDING_AWS_PROPOSALS_BUCKET
 aws.config.update({
   accessKeyId: aws_accessKeyId,
   secretAccessKey: aws_secretAccessKey,
   region: aws_region
 })
 
+console.log('server.jsx', {
+  accessKeyId: aws_accessKeyId,
+  secretAccessKey: aws_secretAccessKey,
+  region: aws_region
+})
+
 var influxdb = undefined
-const influx_config = c[env]['influxdb']
+const influx_config = process.env.INFLUXDB_ON
+console.log('influx_config', process.env.INFLUXDB_ON)
 if (influx_config) {
   console.log('initializing influxdb')
   influxdb = new Influx.InfluxDB({
     protocol: 'https',
-    host: influx_config['host'],
-    database: influx_config['database'],
-    port: influx_config['port'],
-    username: influx_config['user'],
-    password: influx_config['password']
+    host: process.env.INFLUXDB_HOST,
+    database: process.env.INFLUXDB_DATABASE,
+    port: process.env.INFLUXDB_PORT,
+    username: process.env.INFLUXDB_USER,
+    password: process.env.INFLUXDB_PASSWORD
   })
   //  options: { ca: ca },
 } else {

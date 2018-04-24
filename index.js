@@ -1,31 +1,33 @@
 'use strict'
 
-const express = require('express')
 const fs = require('fs')
 const http = require('http')
 const https = require('https')
-const path = require('path')
-const passport = require('passport')
 const aws = require('aws-sdk')
-const snsalert = require('./shared/SnsUtil').snsalert
-const stripe = require('stripe')
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
-const recordingServer = require('./recordingServer').default
 const app = require('./server').default
 
-const c = require('./config/config.json')
+if (process.env.NODE_ENV === 'dev') {
+  console.log('wepback.dev')
+  require('./webpack.dev').default(app)
+}
+
+const snsalert = require('./shared/SnsUtil').snsalert
+const recordingServer = require('./recordingServer').default
+
 console.log('index.js : env = ' + env)
-var aws_accessKeyId = c[env]['aws']['accessKeyId']
-var aws_secretAccessKey = c[env]['aws']['secretAccessKey']
-var aws_region = c[env]['aws']['region']
+const aws_accessKeyId = process.env.AWS_ACCESS_KEY_ID
+const aws_secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
+const aws_region = process.env.AWS_REGION
 
 aws.config.update({
   accessKeyId: aws_accessKeyId,
   secretAccessKey: aws_secretAccessKey,
   region: aws_region
 })
+
 const s3 = new aws.S3()
 
 if (env == 'prod') {
@@ -155,8 +157,4 @@ if (env == 'prod') {
 } else {
   console.log('Loading as dev')
   launch_without_ssl()
-}
-
-if (process.env.NODE_ENV === 'dev') {
-  require('./webpack.dev').default(app)
 }

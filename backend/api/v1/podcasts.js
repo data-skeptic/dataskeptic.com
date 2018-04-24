@@ -1,10 +1,7 @@
 const express = require('express')
 
 const axios = require('axios')
-
-const c = require('../../../config/config.json')
-const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const base_api = c[env]['base_api'] + env
+const base_api = process.env.BASE_API
 
 const getEpisodes = (limit, offset) => {
   const url =
@@ -18,7 +15,7 @@ module.exports = cache => {
   router.get('/', (req, res) => {
     const limit = +req.query.limit || 10
     const offset = +req.query.offset || 0
-    
+
     getEpisodes(limit, offset)
       .then(({ total, episodes }) => {
         const hasMore = limit + offset <= total

@@ -12,11 +12,7 @@ import Jobs from '../Containers/Jobs'
 import { loadCareersCity } from '../../reducers/JobsReducer'
 import UploadResume from '../Forms/UploadResume'
 
-const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const config = require('../../../config/config.json')
-const c = config[env]
-
-const FILES_BUCKET = c['files']['site_bucket']
+const FILES_BUCKET = process.env.SITE_BUCKET
 
 class CityCareers extends Component {
   static defaultProps = {

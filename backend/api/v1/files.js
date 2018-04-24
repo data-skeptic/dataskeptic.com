@@ -12,8 +12,7 @@ import {
 } from './filesUtils'
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const c = require('../../../config/config.json')
-const temp_files = c[env]['files']['folder']
+const temp_files = process.env.TEMP_FILES
 const dest = path.resolve(__dirname, '../../../', temp_files)
 
 const s3 = new aws.S3()

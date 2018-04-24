@@ -4,6 +4,8 @@ const multer = require('multer')
 const mime = require('mime')
 const moment = require('moment')
 
+require('dotenv').config()
+
 const uuid = require('uuid').v4
 const aws = require('aws-sdk')
 const send = require('../modules/emails').send
@@ -15,17 +17,22 @@ const PROPOSALS_TABLE_NAME = 'proposals'
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
 //=========== CONFIG
-const c = require('../../../config/config.json')
-const aws_accessKeyId = c[env]['aws']['accessKeyId']
-const aws_secretAccessKey = c[env]['aws']['secretAccessKey']
-const aws_region = c[env]['aws']['region']
-const AWS_FILES_BUCKET = c[env]['recording']['aws_files_bucket']
-const AWS_RECORDS_BUCKET = c[env]['recording']['aws_proposals_bucket']
+const aws_accessKeyId = process.env.AWS_ACCESS_KEY_ID
+const aws_secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
+const aws_region = process.env.AWS_REGION
+const AWS_FILES_BUCKET = process.env.AWS_CONFIG_S3_BUCKET
+const AWS_RECORDS_BUCKET = process.env.AWS_CONFIG_S3_KEY
 
-const temp_files = c[env]['recording']['temp_files']
-const EMAIL_ADDRESS = c[env]['recording']['emails']['admin']
+const temp_files = process.env.RECORDING_TEMP_FILES
+const EMAIL_ADDRESS = process.env.RECORDING_EMAILS_ADMIN
 
 aws.config.update({
+  accessKeyId: aws_accessKeyId,
+  secretAccessKey: aws_secretAccessKey,
+  region: aws_region
+})
+
+console.log('proposals', {
   accessKeyId: aws_accessKeyId,
   secretAccessKey: aws_secretAccessKey,
   region: aws_region

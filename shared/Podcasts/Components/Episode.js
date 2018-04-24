@@ -72,15 +72,15 @@ class Episode extends React.Component {
 
   format_duration(duration) {
     var minutes = duration / 60
-    var m = "" + Math.floor(minutes)
+    var m = '' + Math.floor(minutes)
     if (m.length == 1) {
-      m = "0" + m
+      m = '0' + m
     }
-    var sec = "" + Math.floor((minutes - Math.floor(minutes))*60)
+    var sec = '' + Math.floor((minutes - Math.floor(minutes)) * 60)
     if (sec.length == 1) {
-      sec = "0" + sec
+      sec = '0' + sec
     }
-    var dur = m + ":" + sec
+    var dur = m + ':' + sec
     return dur
   }
 
@@ -113,13 +113,14 @@ class Episode extends React.Component {
       </button>
     )
     const guests = ep.related && ep.related.filter(r => r.type === 'person')
-    const images = ep.related && ep.related.filter(r => r.type === 'homepage-image')
-    const mp3s   = ep.related && ep.related.filter(r => r.type === 'mp3')
-    var img = "https://s3.amazonaws.com/dataskeptic.com/img/2018/ai-cover.png"
+    const images =
+      ep.related && ep.related.filter(r => r.type === 'homepage-image')
+    const mp3s = ep.related && ep.related.filter(r => r.type === 'mp3')
+    var img = 'https://s3.amazonaws.com/dataskeptic.com/img/2018/ai-cover.png'
     if (images.length > 0) {
       img = images[0]['dest']
     }
-    var mp3 = ""
+    var mp3 = ''
     if (mp3s.length > 0) {
       mp3 = mp3s[0]['dest']
       duration = mp3s[0]['duration'] || 1

@@ -2,19 +2,14 @@ const fs = require('fs')
 const fse = require('fs-extra')
 const path = require('path')
 
-const sys = require('util')
 const exec = require('child_process').exec
 
 const AWS = require('aws-sdk')
 
 //=========== CONFIG
-const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-
-const c = require('./config/config.json')
-const aws_accessKeyId = c[env]['aws']['accessKeyId']
-const aws_secretAccessKey = c[env]['aws']['secretAccessKey']
-const aws_region = c[env]['aws']['region']
-const recordingConfig = c[env]['recording']
+var aws_accessKeyId = process.env.AWS_ACCESS_KEY_ID
+var aws_secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
+var aws_region = process.env.AWS_REGION
 
 AWS.config.update({
   accessKeyId: aws_accessKeyId,
@@ -23,9 +18,9 @@ AWS.config.update({
 })
 //=========== CONFIG
 
-const LOCKED_FILE_NAME = recordingConfig.locked_file_name
-const AWS_RECORDS_BUCKET = recordingConfig.aws_proposals_bucket
-const BASE_RECORDS_PATH = path.join(__dirname, recordingConfig.source)
+const LOCKED_FILE_NAME = process.env.RECORDING_LOCKED_FILE_NAME
+const AWS_RECORDS_BUCKET = process.env.RECORDING_AWS_PROPOSALS_BUCKET
+const BASE_RECORDS_PATH = '' //path.join(__dirname, process.env.RECORDING_SOURCE)
 
 export const generateRecordPath = recordId =>
   path.join(BASE_RECORDS_PATH, recordId)

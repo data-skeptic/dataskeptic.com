@@ -5,8 +5,6 @@ var AWS = require('aws-sdk')
 var pdfUtil = require('pdf-to-text')
 var pdf_path = "test2.pdf"
  
-const config = require("./config.json")
-
 AWS.config = new AWS.Config();
 AWS.config.accessKeyId = config["accessKey"];
 AWS.config.secretAccessKey = config["secretKey"];
