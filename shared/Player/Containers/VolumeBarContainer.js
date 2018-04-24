@@ -36,7 +36,7 @@ class VolumeBarContainer extends Component {
   }
 
   render() {
-    const { onChange, volume } = this.props
+    const { onChange, volume, disabled } = this.props
     const { muted } = this.state
 
     const value = volume * 100

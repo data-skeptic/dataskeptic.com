@@ -1,6 +1,14 @@
 import React from 'react'
+import cn from 'classnames'
 import PlayerProgressBar from '../Components/PlayerProgressBar'
 import TogglePlayButton from '../Components/TogglePlayButton'
+
+const ignore = e => {
+  e.preventDefault()
+  e.stopImmediatePropagation()
+  e.stopPropagation()
+  return false
+}
 
 export const MiniPlayer = ({
   realPos = 0,
@@ -13,17 +21,11 @@ export const MiniPlayer = ({
   onPlayToggle,
   howler,
   onSeek,
-  loaded,
+  loaded = false,
   volumeSlider,
   onClose
 }) => (
-  <div className="thin-player-container">
-    {!loaded && 
-      <div className="loading">
-        <div className="playback-loading preloader" />
-      </div>
-    }
-
+  <div className={cn('thin-player-container', { loading: !loaded })}>
     <div className="">
       <div className="col-xs-9 col-sm-4 col-md-3 preview">
         <img src={preview} alt={title} />
@@ -32,11 +34,17 @@ export const MiniPlayer = ({
           <p className="title">{title}</p>
         </div>
       </div>
-      <div className="col-xs-4 col-sm-5 col-md-6 slider">
+      <div
+        className={cn('col-xs-4 col-sm-5 col-md-6 slider', {
+          disabled: !loaded
+        })}
+        onClick={e => !loaded && ignore(e)}
+      >
         <PlayerProgressBar
           playing={playing}
           progress={position}
           onChange={onSeek}
+          disabled={!loaded}
         />
         <div className="player-position-container">
           <span className="player-position">{realPos}</span>
@@ -46,14 +54,25 @@ export const MiniPlayer = ({
         </div>
         {howler}
       </div>
-      <div className="hidden-xs col-sm-2 col-md-2 volume">{volumeSlider}</div>
+      <div
+        onClick={e => !loaded && ignore(e)}
+        className={cn('hidden-xs col-sm-2 col-md-2 volume', {
+          disabled: !loaded
+        })}
+      >
+        {volumeSlider}
+      </div>
       <div className="col-xs-3 col-sm-1 col-md-1 pull-right button">
         <div className="close-player-button-wrapper">
           <button className="close-player-button" onClick={onClose}>
             <img src="https://s3.amazonaws.com/dataskeptic.com/img/svg/x.svg" />
           </button>
         </div>
-        <TogglePlayButton playing={playing} onClick={onPlayToggle} />
+        <TogglePlayButton
+          playing={playing}
+          disabled={!loaded}
+          onClick={onPlayToggle}
+        />
       </div>
     </div>
   </div>

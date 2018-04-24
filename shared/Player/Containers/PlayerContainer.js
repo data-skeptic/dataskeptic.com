@@ -373,7 +373,7 @@ class PlayerContainer extends Component {
 
   render() {
     const { player, oepisode } = this.props
-    const {
+    let {
       is_playing,
       has_shown,
       position,
