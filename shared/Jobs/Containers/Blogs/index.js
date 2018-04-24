@@ -81,9 +81,9 @@ class BlogsSlider extends Component {
     return (
       <Wrapper>
         <Slider>
-          <SlideCarousel {...settings}>
+          {blogs.length > 0 && <SlideCarousel {...settings}>
             {blogs.map(this.renderSlide)}
-          </SlideCarousel>
+          </SlideCarousel>}
         </Slider>
       </Wrapper>
     )
