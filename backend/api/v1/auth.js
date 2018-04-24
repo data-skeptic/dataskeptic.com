@@ -113,10 +113,10 @@ module.exports = () => {
       clientID: process.env.AUTH_LINKEDIN_CLIENT_ID,
       clientSecret: process.env.AUTH_LINKEDIN_CLIENT_SECRET,
       callbackURL: process.env.AUTH_LINKEDIN_CLIENT_CALLBACK_URL,
-      scope: ["r_emailaddress", "r_basicprofile"],
+      scope: ['r_emailaddress', 'r_basicprofile'],
       state: true
     }
-    
+
     console.log('AUTH: allowing Linkedin Login')
     passport.use(
       new linkedinStrategy(

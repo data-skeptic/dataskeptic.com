@@ -27,7 +27,6 @@ import ConversationHandler from '../Chat/Dialogs/ConversationHandler'
 import { loggMessage } from '../Chat/Reducers/ChatbotReducer'
 
 class MainView extends React.Component {
-
   addMessage = message =>
     this.setState(prevState => ({
       messages: [...prevState.messages, message]

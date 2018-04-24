@@ -86,7 +86,7 @@ const app = express()
  */
 if (process.env.NODE_ENV === 'dev') {
   console.log('wepback.dev')
-  require('./webpack.dev').default(app);
+  require('./webpack.dev').default(app)
 }
 
 var aws_accessKeyId = ''
