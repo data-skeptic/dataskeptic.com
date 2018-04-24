@@ -231,15 +231,16 @@ class PlayerContainer extends Component {
   }
 
   capture(type, meta = {}) {
+    return 
     const { isAuthorized, loggedIn } = this.props
     const uid = v4()
 
-    // if (isAuthorized) {
-    //   axios
-    //     .post(URL, { type, meta })
-    //     .then(data => {})
-    //     .catch(err => console.error(err))
-    // }
+    if (isAuthorized) {
+      axios
+        .post(URL, { type, meta })
+        .then(data => {})
+        .catch(err => console.error(err))
+    }
 
     const { position } = meta
     if (type === CAPTURE_TYPES.POS) {
