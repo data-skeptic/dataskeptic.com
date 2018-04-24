@@ -18,11 +18,11 @@ export const MiniPlayer = ({
   onClose
 }) => (
   <div className="thin-player-container">
-    {!loaded && (
+    {!loaded && 
       <div className="loading">
         <div className="playback-loading preloader" />
       </div>
-    )}
+    }
 
     <div className="">
       <div className="col-xs-9 col-sm-4 col-md-3 preview">

@@ -40,7 +40,7 @@
 
   .playback-loading {
     position: absolute;
-    top: -1px;
+    top: 0px;
     bottom: -1px;
     left: -1px;
     right: -1px;
@@ -102,7 +102,7 @@
 
 .thin-player-container .preview,
 .thin-player-container .slider,
-.thin-player-container .button {
+.thin-player-container .player-btn {
   z-index: 1;
 }
 
@@ -230,6 +230,9 @@
 }
 
 .close-player-button-wrapper {
+  position: relative;
+  z-index: 2;
+
   float: right;
   margin-left: 4px;
   width: 50px;
@@ -239,6 +242,7 @@
   justify-content: center;
 
   .close-player-button {
+    background: transparent;
     border: none;
     width: 40px;
     border-radius: 12px;
