@@ -148,7 +148,6 @@ export default function PlayerReducer(state = defaultState, action) {
       }
       break
     case 'PLAY_EPISODE':
-      console.log('here!')
       var episode = action.payload
       nstate.seekPosition = null
       if (isEmpty(episode)) {
