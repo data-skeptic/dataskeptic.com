@@ -22,11 +22,11 @@ docker run -d \
     -e STRIPE_PUBLISHABLE=$(cat creds.txt | awk '{print $21}') \
 	-e SP=$(cat creds.txt | awk '{print $22}') \
     -e SLACK=$(cat creds.txt | awk '{print $23}') \
-    -e LINKEDIN_CLIENT_ID=$(cat creds.txt | awk '{print $24}') \
-    -e LINKEDIN_CLIENT_SECRET=$(cat creds.txt | awk '{print $25}') \
-    -e LINKEDIN_CLIENT_CALLBACK_URL=$(cat creds.txt | awk '{print $26}') \
-	-e GOOGLE_CLIENT_ID=$(cat creds.txt | awk '{print $27}') \
-    -e GOOGLE_CLIENT_SECRET=$(cat creds.txt | awk '{print $28}') \
+    -e AUTH_LINKEDIN_CLIENT_ID=$(cat creds.txt | awk '{print $24}') \
+    -e AUTH_LINKEDIN_CLIENT_SECRET=$(cat creds.txt | awk '{print $25}') \
+    -e AUTH_LINKEDIN_CLIENT_CALLBACK_URL=$(cat creds.txt | awk '{print $26}') \
+	-e AUTH_GOOGLE_CLIENT_ID=$(cat creds.txt | awk '{print $27}') \
+    -e AUTH_GOOGLE_CLIENT_SECRET=$(cat creds.txt | awk '{print $28}') \
     -e PLAYER_METADATA_USERS=$(cat creds.txt | awk '{print $29}') \
     -e PLAYER_METADATA=$(cat creds.txt | awk '{print $30}') \
     -e AWS_ACCESS_KEY_ID=$(cat creds.txt | awk '{print $31}') \
@@ -44,4 +44,6 @@ docker run -d \
     -e PORT=$(cat creds.txt | awk '{print $43}') \
     -e SITE_BUCKET=$(cat creds.txt | awk '{print $44}') \
     -e INFLUXDB_ON=$(cat creds.txt | awk '{print $45}') \
+    -e AUTH_LINKEDIN_ON=$(cat creds.txt | awk '{print $46}') \
+    -e AUTH_GOOGLE_ON=$(cat creds.txt | awk '{print $47}') \
     $(cat latest.txt) > container_id.txt
