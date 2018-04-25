@@ -15,6 +15,7 @@ const init = {
 
 export const INITIALIZE_PLAYER = 'INITIALIZE_PLAYER'
 export const SET_VOLUME = 'SET_VOLUME'
+export const SET_MUTED = 'SET_MUTED'
 export const RESET = 'RESET'
 
 const IS_CLIENT = (() => {
@@ -147,7 +148,6 @@ export default function PlayerReducer(state = defaultState, action) {
       }
       break
     case 'PLAY_EPISODE':
-      debugger
       var episode = action.payload
       nstate.seekPosition = null
       if (isEmpty(episode)) {
@@ -214,6 +214,10 @@ export default function PlayerReducer(state = defaultState, action) {
       nstate.is_playing = true
       savePlayingMeta(nstate)
       break
+    
+    case SET_MUTED:
+      nstate.muted = action.payload.muted
+      break
 
     case 'PLAYBACK_LOADED':
       nstate.playback_loaded = action.payload
@@ -242,7 +246,6 @@ export default function PlayerReducer(state = defaultState, action) {
 
     case SET_VOLUME:
       nstate.volume = action.payload.volume
-      savePlayingMeta(nstate)
       break
 
     case RESET:
@@ -268,7 +271,7 @@ export const setVolume = volume => ({
 })
 
 export const setMuted = muted => ({
-  type: SET_VOLUME,
+  type: SET_MUTED,
   payload: {
     muted
   }

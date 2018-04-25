@@ -231,6 +231,7 @@ class PlayerContainer extends Component {
   }
 
   capture(type, meta = {}) {
+    return
     const { isAuthorized, loggedIn } = this.props
     const uid = v4()
 
@@ -381,7 +382,6 @@ class PlayerContainer extends Component {
       volume,
       muted
     } = player
-    const playerVolume = muted ? 0 : volume
 
     if (!has_shown) {
       return null
@@ -426,15 +426,18 @@ class PlayerContainer extends Component {
         ref={this.initRef}
         onEnd={this.onEnd}
         onLoad={this.onReady}
+        volume={volume}
+        mute={muted}
       />
     )
 
     const volumeController = (
       <VolumeBarContainer
-        volume={playerVolume}
+        volume={volume}
         onChange={this.setVolume}
         onMute={this.mute}
         onUnmute={this.unmute}
+        muted={muted}
       />
     )
 
