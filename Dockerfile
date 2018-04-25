@@ -9,7 +9,10 @@ WORKDIR /usr/src/app
 COPY package.json /usr/src/app/
 RUN npm install --loglevel=verbose
 
+
 COPY . /usr/src/app
+
+RUN npm run-script build
 
 EXPOSE 443 80 9001
 

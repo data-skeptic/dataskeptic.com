@@ -54,7 +54,7 @@ var launch_with_ssl = function() {
 
   var server = https
     .createServer(httpsOptions, app)
-    .listen(443, '0.0.0.0', function() {
+    .listen(4430, '0.0.0.0', function() {
       console.log('Serving in https')
     })
   server.on('error', err => {
@@ -69,7 +69,7 @@ var launch_with_ssl = function() {
       res.writeHead(301, { Location: 'https://' + host + req.url })
       res.end()
     })
-    .listen(80, '0.0.0.0')
+    .listen(3000, '0.0.0.0')
 
   recordingServer(server)
   console.log('Attempt to load SSL 3')
@@ -151,10 +151,11 @@ function config_load_promise() {
   )
 }
 
-if (env == 'prod') {
-  console.log('Loading as prod')
-  config_load_promise()
-} else {
+// Disable for testing reasons
+// if (env == 'prod') {
+//   console.log('Loading as prod')
+//   config_load_promise()
+// } else {
   console.log('Loading as dev')
   launch_without_ssl()
-}
+// }
