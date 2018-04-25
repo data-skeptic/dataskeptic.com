@@ -1,6 +1,5 @@
 import Immutable from 'immutable'
-import { fromJS } from 'immutable'
-import isEmpty from 'lodash/isEmpty'
+import { isEmpty, clone } from 'lodash'
 import axios from 'axios'
 
 const init = {
@@ -148,6 +147,7 @@ export default function PlayerReducer(state = defaultState, action) {
       }
       break
     case 'PLAY_EPISODE':
+      debugger
       var episode = action.payload
       nstate.seekPosition = null
       if (isEmpty(episode)) {
@@ -157,11 +157,11 @@ export default function PlayerReducer(state = defaultState, action) {
       } else {
         nstate.has_shown = true
         if (nstate.is_playing) {
-          if (episode == undefined) {
+          if (episode === undefined) {
             console.log(
               'Unusual situation for player to be in, but I can fix it'
             )
-            nstate.episode = episode
+            nstate.episode = clone(episode)
             nstate.is_playing = true
             nstate.playback_loaded = false
             nstate.position = init.position
@@ -169,7 +169,7 @@ export default function PlayerReducer(state = defaultState, action) {
             if (episode.guid === nstate.episode.guid) {
               nstate.is_playing = false
             } else {
-              nstate.episode = episode
+              nstate.episode = clone(episode)
               nstate.playback_loaded = false
               nstate.position = init.position
               nstate.is_playing = true
@@ -178,7 +178,7 @@ export default function PlayerReducer(state = defaultState, action) {
         } else {
           const cache = getCachePlaying()
           const theSameCacheEpisode =
-            cache && cache.episode && cache.episode.num === episode.num
+            cache && cache.episode && cache.episode.blog_id === episode.blog_id
 
           if (theSameCacheEpisode) {
             nstate = {
@@ -189,7 +189,7 @@ export default function PlayerReducer(state = defaultState, action) {
               has_shown: true
             }
           } else {
-            nstate.episode = episode
+            nstate.episode = clone(episode)
             nstate.is_playing = true
             nstate.playback_loaded = false
             nstate.position = init.position
