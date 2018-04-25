@@ -231,7 +231,6 @@ class PlayerContainer extends Component {
   }
 
   capture(type, meta = {}) {
-    return
     const { isAuthorized, loggedIn } = this.props
     const uid = v4()
 
