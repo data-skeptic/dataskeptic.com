@@ -11,7 +11,7 @@ const app = require('./server').default
 
 if (process.env.NODE_ENV === 'dev') {
   console.log('wepback.dev')
-  require('./webpack.dev').default(app);
+  require('./webpack.dev').default(app)
 }
 
 const snsalert = require('./shared/SnsUtil').snsalert

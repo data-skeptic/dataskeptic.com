@@ -86,7 +86,7 @@ const app = express()
  */
 if (process.env.NODE_ENV === 'dev') {
   console.log('wepback.dev')
-  require('./webpack.dev').default(app);
+  require('./webpack.dev').default(app)
 }
 
 var aws_accessKeyId = ''
@@ -117,15 +117,8 @@ aws.config.update({
   region: aws_region
 })
 
-console.log('server.jsx', {
-  accessKeyId: aws_accessKeyId,
-  secretAccessKey: aws_secretAccessKey,
-  region: aws_region
-})
-
 var influxdb = undefined
-const influx_config = process.env.INFLUXDB_ON
-console.log('influx_config', process.env.INFLUXDB_ON)
+const influx_config = process.env.INFLUXDB_ON === 'true'
 if (influx_config) {
   console.log('initializing influxdb')
   influxdb = new Influx.InfluxDB({

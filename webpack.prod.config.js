@@ -35,7 +35,7 @@ module.exports = {
         warnings: false
       }
     }),
-    
+
     new webpack.DefinePlugin({
       'process.env': path.join(__dirname, 'build/config.js')
     })
