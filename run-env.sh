@@ -39,4 +39,9 @@ docker run -d \
     -e RECORDING_LOCKED_FILE_NAME=$(cat creds.txt | awk '{print $38}') \
     -e RECORDING_TEMP_FILES=$(cat creds.txt | awk '{print $39}') \
     -e RECORDING_EMAILS_ADMIN=$(cat creds.txt | awk '{print $40}') \
+    -e BASE_URL=$(cat creds.txt | awk '{print $41}') \
+    -e HOST=$(cat creds.txt | awk '{print $42}') \
+    -e PORT=$(cat creds.txt | awk '{print $43}') \
+    -e SITE_BUCKET=$(cat creds.txt | awk '{print $44}') \
+    -e INFLUXDB_ON=$(cat creds.txt | awk '{print $45}') \
     $(cat latest.txt) > container_id.txt
