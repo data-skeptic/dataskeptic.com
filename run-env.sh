@@ -46,4 +46,5 @@ docker run -d \
     -e INFLUXDB_ON=$(cat creds.txt | awk '{print $45}') \
     -e AUTH_LINKEDIN_ON=$(cat creds.txt | awk '{print $46}') \
     -e AUTH_GOOGLE_ON=$(cat creds.txt | awk '{print $47}') \
+    -e AWS_CONFIG_S3_BUCKET=$(cat creds.txt | awk '{print $48}') \
     $(cat latest.txt) > container_id.txt
