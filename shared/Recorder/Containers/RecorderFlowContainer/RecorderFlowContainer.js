@@ -469,7 +469,7 @@ class RecorderFlowContainer extends Component {
             <TogglePlayButton
               onClick={this.togglePlaying}
               playing={isPlaying}
-              disabled={!isMetaReady}
+              proposalsDisabled={!isMetaReady}
             />
 
             {isMetaReady && (
