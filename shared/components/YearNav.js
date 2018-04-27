@@ -7,7 +7,7 @@ import { setYear } from '../reducers/EpisodesReducer'
 class YearNav extends React.Component {
   onClick(e) {
     e.preventDefault()
-    const { year } = this.props
+    const year = this.props.year === -1 ? null : this.props.year
     this.props.dispatch(setYear(year))
   }
   getClassNames(isActive) {
@@ -18,8 +18,7 @@ class YearNav extends React.Component {
     return selectors
   }
   render() {
-    var year = this.props.year
-    var active = this.props.active
+    const { year, label, active } = this.props
     var down = 'menu-button-up'
     if (active) {
       down = 'menu-button-down'
@@ -34,7 +33,7 @@ class YearNav extends React.Component {
           className="menu-year"
           to={to}
         >
-          {year}
+          {label ? label : year}
         </Link>
       </div>
     )

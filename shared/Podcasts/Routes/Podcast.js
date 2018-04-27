@@ -39,7 +39,7 @@ class Podcast extends Component {
 
   initFromParams = (params) => {
     if (params.year) {
-      this.props.dispatch(setYear(params.year))
+      this.props.dispatch(setYear(+params.year))
     }
   }
 

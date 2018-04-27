@@ -75,7 +75,7 @@ export default function EpisodesReducer(state = defaultState, action) {
       break
 
     case SET_YEAR:
-      nstate.currentYear = +action.payload.year
+      nstate.currentYear = action.payload.year
       break
   }
 

@@ -24,7 +24,7 @@ module.exports = cache => {
     let realLimit = limit
     let realOffset = offset
     
-    if (firstLoad) {
+    if (firstLoad && offset !== 0) {
       realLimit = realOffset
       realOffset = 0
     }
