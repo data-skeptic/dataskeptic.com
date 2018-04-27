@@ -12,6 +12,7 @@ const init = {
   currentYear: null
 }
 
+export const RESET = 'EPISODES//RESET'
 export const LOAD = 'EPISODES//LOAD'
 export const LOAD_SUCCESS = 'EPISODES//LOAD_SUCCESS'
 export const LOAD_FAIL = 'EPISODES//LOAD_FAIL'
@@ -74,6 +75,10 @@ export default function EpisodesReducer(state = defaultState, action) {
       nstate.error = action.payload.error
       break
 
+    case RESET:
+      nstate = list(nstate)
+      break
+    
     case SET_YEAR:
       nstate.currentYear = action.payload.year
       break
@@ -120,6 +125,10 @@ export const loadFail = error => ({
   payload: {
     error
   }
+})
+
+export const reset = () => ({
+  type: RESET
 })
 
 export const setYear = year => ({
