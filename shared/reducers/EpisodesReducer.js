@@ -1,17 +1,22 @@
 import Immutable, { fromJS } from 'immutable'
 import Request from '../Request'
+import clone from 'lodash'
 import list from '../Data/helpers/list'
+import formatRequest from '../utils/formatRequest'
 
 const init = {
   episodes: [],
   ep_map: {},
   loaded: false,
-  years: []
+  years: [],
+  currentYear: null
 }
 
 export const LOAD = 'EPISODES//LOAD'
 export const LOAD_SUCCESS = 'EPISODES//LOAD_SUCCESS'
 export const LOAD_FAIL = 'EPISODES//LOAD_FAIL'
+
+export const SET_YEAR = 'EPISODES//SET_YEAR'
 
 const defaultState = fromJS(list(init))
 
@@ -42,6 +47,7 @@ export default function EpisodesReducer(state = defaultState, action) {
       }
       nstate.loaded = true
       break
+
     case 'SET_YEARS':
       nstate.years = action.payload
       break
@@ -51,14 +57,14 @@ export default function EpisodesReducer(state = defaultState, action) {
       nstate.list.error = false
       nstate.list.limit = action.payload.limit
       nstate.list.offset = action.payload.offset
+      nstate.list.props = clone(action.payload.props)
+      nstate.list.items = action.payload.reset ? [] : nstate.list.items
       break
 
     case LOAD_SUCCESS:
       nstate.list.loading = false
       nstate.list.error = null
-      nstate.list.items = action.payload.reset
-        ? action.payload.items
-        : [...nstate.list.items, ...action.payload.items]
+      nstate.list.items = [...nstate.list.items, ...action.payload.items]
       nstate.list.hasMore = action.payload.hasMore
       nstate.list.total = action.payload.total
       break
@@ -67,34 +73,45 @@ export default function EpisodesReducer(state = defaultState, action) {
       nstate.loading = false
       nstate.error = action.payload.error
       break
+
+    case SET_YEAR:
+      nstate.currentYear = +action.payload.year
+      break
   }
 
   return fromJS(nstate)
 }
 
-export const load = (limit, offset, reset) => {
+export const load = (limit, offset, props, reset) => {
   return dispatch => {
-    dispatch(loadRequest(limit, offset))
+    dispatch(loadRequest(limit, offset, props, reset))
+    
+    const query = formatRequest({
+      limit,
+      offset,
+      ...props
+    })
 
-    Request.get(`/api/v1/podcasts?limit=${limit}&offset=${offset}`)
-      .then(result => dispatch(loadSuccess(result.data, reset)))
-      .catch(err => dispatch(loadFail(err)))
+    Request.get(`/api/v1/podcasts?${query}`)
+      .then(result => dispatch(loadSuccess(result.data)))
+      .catch(err => dispatch(loadFail(err.message)))
   }
 }
 
-export const loadRequest = (limit, offset) => ({
+export const loadRequest = (limit, offset, props, reset) => ({
   type: LOAD,
   payload: {
     limit,
-    offset
+    offset,
+    props,
+    reset
   }
 })
 
-export const loadSuccess = (data, reset) => ({
+export const loadSuccess = data => ({
   type: LOAD_SUCCESS,
   payload: {
-    ...data,
-    reset
+    ...data
   }
 })
 
@@ -102,5 +119,12 @@ export const loadFail = error => ({
   type: LOAD_FAIL,
   payload: {
     error
+  }
+})
+
+export const setYear = year => ({
+  type: SET_YEAR,
+  payload: {
+    year
   }
 })

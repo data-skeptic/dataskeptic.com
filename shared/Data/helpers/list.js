@@ -8,6 +8,7 @@ export default state => ({
     limit: 10,
     total: 0,
     hasMore: true,
+    props: {},
     items: []
   }
 })
@@ -19,4 +20,5 @@ export const getError = state => state.list && state.list.error
 export const getLimit = state => state.list && state.list.limit
 export const getOffset = state => state.list && state.list.offset
 export const getHasMore = state => state.list && state.list.hasMore
+export const getProps = state => state.list && state.list.props
 export const getTotal = state => state.list && state.list.total
