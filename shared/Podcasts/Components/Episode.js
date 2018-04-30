@@ -120,6 +120,8 @@ class Episode extends React.Component {
     if (images.length > 0) {
       img = images[0]['dest']
     }
+    img = img.replace('http://', 'https://')
+    
     var mp3 = ''
     if (mp3s.length > 0) {
       mp3 = mp3s[0]['dest']
