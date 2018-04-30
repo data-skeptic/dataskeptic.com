@@ -45,11 +45,13 @@ export const SubTitle = styled.p`
 export const Desc = styled.span`
   color: #3a3b3b;
   font-size: 20px;
+  line-height: 30px;
 `
 
 export const BlogViewMore = ViewMore.extend`
   color: #3a3b3b;
   font-size: 20px;
+  line-height: 30px;
 `
 
 export const UserBox = styled.div`
