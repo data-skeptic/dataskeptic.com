@@ -4,6 +4,10 @@ import Rcslider from 'rc-slider'
 import { connect } from 'react-redux'
 
 class PlayerProgressBar extends React.Component {
+  static defaultProps = {
+    disabled: false
+  }
+
   constructor(props) {
     super(props)
   }
@@ -13,6 +17,8 @@ class PlayerProgressBar extends React.Component {
   }
 
   render() {
+    const { disabled } = this.props
+
     return (
       <div className="player-progress-bar">
         <Rcslider
@@ -21,7 +27,7 @@ class PlayerProgressBar extends React.Component {
           range={false}
           defaultValue={this.props.progress}
           value={this.props.progress}
-          disabled={false}
+          disabled={disabled}
           onChange={this.onUpdate.bind(this)}
         />
       </div>

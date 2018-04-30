@@ -1,6 +1,5 @@
 import Immutable from 'immutable'
-import { fromJS } from 'immutable'
-import isEmpty from 'lodash/isEmpty'
+import { isEmpty, clone } from 'lodash'
 import axios from 'axios'
 
 const init = {
@@ -16,6 +15,7 @@ const init = {
 
 export const INITIALIZE_PLAYER = 'INITIALIZE_PLAYER'
 export const SET_VOLUME = 'SET_VOLUME'
+export const SET_MUTED = 'SET_MUTED'
 export const RESET = 'RESET'
 
 const IS_CLIENT = (() => {
@@ -148,7 +148,6 @@ export default function PlayerReducer(state = defaultState, action) {
       }
       break
     case 'PLAY_EPISODE':
-      console.log('here!')
       var episode = action.payload
       nstate.seekPosition = null
       if (isEmpty(episode)) {
@@ -158,11 +157,11 @@ export default function PlayerReducer(state = defaultState, action) {
       } else {
         nstate.has_shown = true
         if (nstate.is_playing) {
-          if (episode == undefined) {
+          if (episode === undefined) {
             console.log(
               'Unusual situation for player to be in, but I can fix it'
             )
-            nstate.episode = episode
+            nstate.episode = clone(episode)
             nstate.is_playing = true
             nstate.playback_loaded = false
             nstate.position = init.position
@@ -170,7 +169,7 @@ export default function PlayerReducer(state = defaultState, action) {
             if (episode.guid === nstate.episode.guid) {
               nstate.is_playing = false
             } else {
-              nstate.episode = episode
+              nstate.episode = clone(episode)
               nstate.playback_loaded = false
               nstate.position = init.position
               nstate.is_playing = true
@@ -179,7 +178,7 @@ export default function PlayerReducer(state = defaultState, action) {
         } else {
           const cache = getCachePlaying()
           const theSameCacheEpisode =
-            cache && cache.episode && cache.episode.num === episode.num
+            cache && cache.episode && cache.episode.blog_id === episode.blog_id
 
           if (theSameCacheEpisode) {
             nstate = {
@@ -190,7 +189,7 @@ export default function PlayerReducer(state = defaultState, action) {
               has_shown: true
             }
           } else {
-            nstate.episode = episode
+            nstate.episode = clone(episode)
             nstate.is_playing = true
             nstate.playback_loaded = false
             nstate.position = init.position
@@ -214,6 +213,10 @@ export default function PlayerReducer(state = defaultState, action) {
     case 'RESUME_PLAYING':
       nstate.is_playing = true
       savePlayingMeta(nstate)
+      break
+
+    case SET_MUTED:
+      nstate.muted = action.payload.muted
       break
 
     case 'PLAYBACK_LOADED':
@@ -243,7 +246,6 @@ export default function PlayerReducer(state = defaultState, action) {
 
     case SET_VOLUME:
       nstate.volume = action.payload.volume
-      savePlayingMeta(nstate)
       break
 
     case RESET:
@@ -269,7 +271,7 @@ export const setVolume = volume => ({
 })
 
 export const setMuted = muted => ({
-  type: SET_VOLUME,
+  type: SET_MUTED,
   payload: {
     muted
   }

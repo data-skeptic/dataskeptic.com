@@ -373,7 +373,7 @@ class PlayerContainer extends Component {
 
   render() {
     const { player, oepisode } = this.props
-    const {
+    let {
       is_playing,
       has_shown,
       position,
@@ -381,7 +381,6 @@ class PlayerContainer extends Component {
       volume,
       muted
     } = player
-    const playerVolume = muted ? 0 : volume
 
     if (!has_shown) {
       return null
@@ -392,7 +391,7 @@ class PlayerContainer extends Component {
     }
 
     const episode = oepisode.toJS()
-    let { title, pubDate } = episode
+    let { title, pubDate, publish_date } = episode
     const mp3s =
       episode.related && episode.related.filter(r => r.type === 'mp3')
     var mp3 = ''
@@ -426,15 +425,18 @@ class PlayerContainer extends Component {
         ref={this.initRef}
         onEnd={this.onEnd}
         onLoad={this.onReady}
+        volume={volume}
+        mute={muted}
       />
     )
 
     const volumeController = (
       <VolumeBarContainer
-        volume={playerVolume}
+        volume={volume}
         onChange={this.setVolume}
         onMute={this.mute}
         onUnmute={this.unmute}
+        muted={muted}
       />
     )
 
@@ -447,7 +449,7 @@ class PlayerContainer extends Component {
         episode={episode}
         title={title}
         duration={realDur}
-        date={pubDate}
+        date={pubDate || publish_date}
         position={position}
         realPos={realPos}
         howler={howler}
