@@ -1,5 +1,5 @@
 const aws = require('aws-sdk')
-require('dotenv').config()
+// require('dotenv').config()
 /*
 Member signup		ds-new-mbr
 Member login		ds-mem-log

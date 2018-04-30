@@ -14,6 +14,6 @@ COPY . /usr/src/app
 
 RUN npm run-script build
 
-EXPOSE 443 80 9001
+EXPOSE 4430 3000 9001
 
 CMD ["npm", "run", "start"]
