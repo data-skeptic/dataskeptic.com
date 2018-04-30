@@ -85,7 +85,7 @@
   padding-left: 15px;
 }
 .related-content-h3 {
-  font-size: 12pt;  
+  font-size: 12pt;
 }
 
 
@@ -94,9 +94,33 @@
 }
 
 .blog-share-bar-container {
-  padding: 5px;
-  padding-bottom: 15px;
-  background: #eee;
-  margin-bottom: 15px;
+  margin-bottom: 24px;
+  background-color: #f4f4f4;
+  padding: 32px;
+
+  @media (max-width: 414px) {
+    padding: 24px 20px;
+  }
+
+  h3 {
+    font-size: 32px;
+    line-height: 40px;
+    color: #3a3b3b;
+    margin: 0px;
+    padding-bottom: 12px;
+    font-weight: normal;
+  }
+
+  .blog-share-container__wrapper {
+    display: flex;
+    justify-content: flex-start;
+
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    .blog-share-container {
+      margin: 12px 12px 0px 0px;
+    }
+  }
 }
 

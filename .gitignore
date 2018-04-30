@@ -2,7 +2,10 @@
 logs
 *.log
 npm-debug.log*
-
+*.pdf
+*.doc
+*.docx
+__pycache__
 *.Rhistory
 
 .ipynb_checkpoints/
@@ -63,3 +66,4 @@ temp_files/*
 *.log
 *.map
 *.swp
+.env

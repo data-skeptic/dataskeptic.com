@@ -2,8 +2,6 @@ var add_order = require('./add_order')
 
 console.log('Starting test')
 
-//const c = require('../../config/config.json')
-const c = require('./config.json')
 var env = 'dev'
 var stripe_key = c[env]['stripe']
 var stripe = require('stripe')(stripe_key)
@@ -33,7 +31,7 @@ stripe.tokens.create({ card: cardData }, (status, response) => {
     phone: '312-1791-0752'
   }
   var country = 'us'
-  var shipping = 1
+  var shipping = 0
   var name = customer['first_name'] + ' ' + customer['last_name']
   var address = {
     line1: customer.street_1,
@@ -44,20 +42,37 @@ stripe.tokens.create({ card: cardData }, (status, response) => {
     postal_code: customer.zip
   }
 
+  var product2 = {
+    quantity: 1,
+    product: {
+      active: 1,
+      desc: 'Job Ad',
+      id: 24,
+      img: '',
+      price: 199.0,
+      sku: 'sku_CZcnKMfDnPoSIw',
+      title: 'Job Ad',
+      type: 'ad'
+    }
+  }
+
   var product = {
     quantity: 1,
     product: {
       active: 1,
-      desc: 'A testing product.',
-      id: 24,
-      img: '',
-      price: 2.0,
-      sku: 'sku_4',
-      title: 'Testing',
-      type: 'test'
+      desc: 'Help support Data Skeptic for $1 per episode.',
+      id: 1,
+      img: '/img/jpg/membership.jpg',
+      price: 4,
+      sku: 'sku_2',
+      title: 'Basic membership',
+      type: 'membership',
+      paypal: 'N7J6MNYYY79VU'
     }
   }
-  var products = [product]
+
+  //var products = [product, product2]
+  var products = [product2]
 
   add_order
     .do_order(

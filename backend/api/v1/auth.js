@@ -4,7 +4,7 @@ import sha1 from 'sha1'
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 let googleStrategy = require('passport-google-oauth').OAuth2Strategy
-const LinkedinStrategy = require('../../modules/Auth/LinkedinStrategy').default
+import { Strategy as linkedinStrategy } from 'passport-linkedin-oauth2'
 const UserServices = require('../../modules/Users/Services/UserServices')
 const MailServices = require('../../modules/mail/services/MailServices')
 
@@ -12,9 +12,8 @@ let redirectURL
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
-const c = require('../../../config/config.json')
-const salt = c[env]['auth']['salt']
-const base_url = c[env]['base_api'] + env
+const salt = process.env.AUTH_SALT
+const base_url = process.env.BASE_API
 
 const checkIfAdmin = email => {
   const email_reg_exp = /^.*@dataskeptic\.com/i
@@ -109,19 +108,60 @@ module.exports = () => {
     done(null, id)
   })
 
-  if (c[env]['linkedin']) {
+  if (process.env.AUTH_LINKEDIN_ON) {
+    const linkedinConfig = {
+      clientID: process.env.AUTH_LINKEDIN_CLIENT_ID,
+      clientSecret: process.env.AUTH_LINKEDIN_CLIENT_SECRET,
+      callbackURL: process.env.AUTH_LINKEDIN_CLIENT_CALLBACK_URL,
+      scope: ['r_emailaddress', 'r_basicprofile'],
+      state: true
+    }
+
     console.log('AUTH: allowing Linkedin Login')
-    passport.use(LinkedinStrategy(global.env))
+    passport.use(
+      new linkedinStrategy(
+        linkedinConfig,
+        (accessToken, refreshToken, { _json }, done) => {
+          console.dir('received LI user')
+          console.dir(_json)
+          const {
+            id,
+            emailAddress,
+            formattedName,
+            pictureUrl,
+            positions
+          } = _json
+          let user = {}
+          user.id = id
+          user.displayName = formattedName
+          user.avatar = pictureUrl
+          user.email = emailAddress
+
+          user.meta = JSON.stringify({
+            positions: positions.values
+          })
+
+          user.linkedin = {}
+          user.linkedin.id = id
+          user.linkedin.accessToken = accessToken
+          user.linkedin.refreshToken = refreshToken
+
+          console.log('success LI login')
+          done(null, user)
+        }
+      )
+    )
   }
-  var gp = c[env]['googlePassport']
+
+  var gp = process.env.AUTH_GOOGLE_ON
   if (gp) {
     console.log('AUTH: allowing Google Login')
     passport.use(
       new googleStrategy(
         {
-          clientID: gp.clientId,
-          clientSecret: gp.clientSecret,
-          callbackURL: '/api/v1/auth/google/callback',
+          clientID: process.env.AUTH_GOOGLE_CLIENT_ID,
+          clientSecret: process.env.AUTH_GOOGLE_CLIENT_SECRET,
+          callbackURL: process.env.AUTH_GOOGLE_CLIENT_CALLBACK_URL,
           passReqToCallback: true
         },
         function(req, accessToken, refreshToken, profile, done) {
@@ -130,7 +170,8 @@ module.exports = () => {
           user.displayName = profile.displayName
           user.google = {}
           user.google.id = profile.id
-          user.google.token = accessToken
+          user.google.accessToken = accessToken
+          user.google.refreshToken = refreshToken
           user.email = profile.emails[0].value
           done(null, user)
         }
@@ -230,8 +271,15 @@ module.exports = () => {
       ]
     })(req, res, next)
   })
+
   // LINKEDIN
-  router.all('/login/linkedin', passport.authenticate('linkedin'))
+  router.all('/login/linkedin', (req, res, next) => {
+    redirectURL = req.headers.referer
+    console.dir('login with linkedin')
+    console.log('redirectUrl=', redirectURL)
+    passport.authenticate('linkedin')(req, res, next)
+  })
+
   router.all('/linkedin/activate', function(req, res) {
     UserServices.changeActiveStatus(req.body).then(status => {
       res.redirect('/')
@@ -286,22 +334,51 @@ module.exports = () => {
         failWithError: true,
         failureFlash: true
       },
-      function(err, user, info) {
-        return res.send(user)
-        /*  if (err) {
+      async (err, user, info) => {
+        console.log('error', err)
+        console.log('user data')
+        console.dir(user)
 
-             return res.status(403).send({message: err})
-             }*/
-
+        if (err) {
+          return res.status(403).send({ message: err.message })
+        }
         if (!user) {
           return res.status(403).send({ message: 'System Error' })
         }
 
+        console.log('check user with same LI email address')
+        const userAccount = await getUserAccount(user.email)
+        if (!userAccount) {
+          const userData = {
+            email: user.email,
+            positions: user.positions
+          }
+
+          console.log('create user with LI data')
+          await createUserAccount(userData)
+          console.log('notify new user')
+          notifyOnJoin(user)
+        }
+
+        delete user.positions
         req.logIn(user, err => {
+          console.log('init user session')
+          console.log('err', err)
+          console.log('user data', user)
+
           if (err) {
-            return res.status(403).send({ message: err.message })
+            return res.send({
+              success: false,
+              message: err
+            })
           } else {
-            redirectURL = redirectURL + 'token?user=' + JSON.stringify(user)
+            if (checkRoute(redirectURL)) {
+              if (checkIfAdmin(user.email)) {
+                redirectURL = redirectURL.replace('/login', '')
+              }
+            }
+
+            console.log('flow end: redirect to', redirectURL)
             return res.redirect(redirectURL)
           }
         })

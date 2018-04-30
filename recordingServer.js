@@ -2,8 +2,6 @@ const BinaryServer = require('binaryjs').BinaryServer
 const wav = require('wav')
 const isEmpty = require('lodash').isEmpty
 
-const AWS = require('aws-sdk')
-
 import {
   generateChunkPath,
   startRecording,

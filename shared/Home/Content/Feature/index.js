@@ -63,6 +63,26 @@ class Feature extends Component {
             </Link>
           </SubTitle>
           <Desc>{feature_blog.abstract}</Desc>
+          <BlogViewMore to={href}>View More</BlogViewMore>
+          {author && (
+            <UserBox author={author.author}>
+              <UserImgArea>
+                <AuthorLink author={author.author} className="no-line">
+                  <UserImg src={author.img} />
+                </AuthorLink>
+              </UserImgArea>
+              <UserDetail>
+                <AuthorLink author={author.author}>
+                  {author.prettyname}
+                </AuthorLink>
+                {author.twitter && (
+                  <UserInfo href={`https://twitter.com/${author.twitter}`}>
+                    @{author.twitter}
+                  </UserInfo>
+                )}
+              </UserDetail>
+            </UserBox>
+          )}
           <BlogViewMore to={formatLink(feature_blog.prettyname)}>
             View More
           </BlogViewMore>

@@ -1,8 +1,8 @@
-import React, { Component } from "react"
-import { connect } from "react-redux"
-import moment from "moment"
-import styled from "styled-components"
-import { Link } from "react-router"
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import moment from 'moment'
+import styled from 'styled-components'
+import { Link } from 'react-router'
 
 import {
   Container,
@@ -11,15 +11,15 @@ import {
   Arrow,
   PlayText,
   PodViewMore
-} from "../../shared/Home/Content/Podcast/style"
+} from '../../shared/Home/Content/Podcast/style'
 
 import {
   ItemDate,
   ItemTitle,
   ItemDesc
-} from "../../shared/Home/Content/Blog/style"
+} from '../../shared/Home/Content/Blog/style'
 
-import GuestImage from "../Podcasts/Components/GuestImage"
+import GuestImage from '../Podcasts/Components/GuestImage'
 
 class EpisodePlayer extends Component {
   constructor(props) {
@@ -34,7 +34,7 @@ class EpisodePlayer extends Component {
     this.setState({ expanded: true })
   }
 
-  getViewMoreTextDiv(text = "") {
+  getViewMoreTextDiv(text = '') {
     if (text.length > 200) {
       if (this.state.expanded) {
         return (
@@ -61,7 +61,7 @@ class EpisodePlayer extends Component {
 
   onClick(episode) {
     var episode = this.props.episode
-    this.props.dispatch({ type: "PLAY_EPISODE", payload: episode })
+    this.props.dispatch({ type: 'PLAY_EPISODE', payload: episode })
   }
 
   render() {
@@ -88,24 +88,26 @@ class EpisodePlayer extends Component {
     const date = moment(episode.pubDate).fromNow()
     var link = episode.link
     if (link == undefined) {
-      link = ""
+      link = ''
     }
-    var i = link.indexOf("/blog/")
+    var i = link.indexOf('/blog/')
     link = link.substring(i, link.length)
 
     const guests =
-      episode.related && episode.related.filter(r => r.type === "person")
+      episode.related && episode.related.filter(r => r.type === 'person')
 
     return (
       <PodcastBox>
-        <ItemDate>{moment(episode.pubDate).format("MMMM D, Y")}</ItemDate>
+        <ItemDate>{moment(episode.pubDate).format('MMMM D, Y')}</ItemDate>
         <ItemTitle>
-          <Link to={link} className="no-line">{episode.title}</Link>
+          <Link to={link} className="no-line">
+            {episode.title}
+          </Link>
         </ItemTitle>
         <PlayBox onClick={this.onClick.bind(this, episode)}>
           <Arrow>{play_symb}</Arrow>
           <PlayText>Play</PlayText>
-          <PlayText>{oplayer.episode.duration}</PlayText>
+          <PlayText>{oplayer.episode && oplayer.episode.duration}</PlayText>
         </PlayBox>
         {this.getViewMoreTextDiv(desc)}
         <Guests>

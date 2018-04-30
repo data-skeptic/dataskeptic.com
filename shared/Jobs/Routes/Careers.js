@@ -1,23 +1,27 @@
-import React, { Component } from "react"
-import { connect } from "react-redux"
-import { change, formValueSelector } from "redux-form"
-import styled from "styled-components"
-import { changePageTitle } from "../../Layout/Actions/LayoutActions"
-import UploadFileTypeBox from "../../Proposals/Components/UploadFileTypeBox/UploadFileTypeBox"
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { change, formValueSelector } from 'redux-form'
+import styled from 'styled-components'
+import moment from 'moment'
+
+import { changePageTitle } from '../../Layout/Actions/LayoutActions'
+import UploadFileTypeBox from '../../Proposals/Components/UploadFileTypeBox/UploadFileTypeBox'
 import UploadResume, {
   KEY,
   RESUME_FIELD,
   NOTIFY_FIELD
-} from "../Forms/UploadResume"
+} from '../Forms/UploadResume'
 
-import { submitResume } from "../../reducers/JobsReducer"
+import { submitResume } from '../../reducers/JobsReducer'
+
+const FILES_BUCKET = process.env.SITE_BUCKET
 
 class Careers extends Component {
   onResumeUpload = data => {
     const value = data[0]
     this.setResume(value)
     this.props.dispatch({
-      type: "UPLOAD_RESUME",
+      type: 'UPLOAD_RESUME',
       payload: data
     })
   }
@@ -28,6 +32,11 @@ class Careers extends Component {
     dispatch(changePageTitle(title))
   }
   submit = data => {
+    data = {
+      ...data,
+      Bucket: FILES_BUCKET
+    }
+
     return submitResume(this.props.dispatch, data)
   }
 
@@ -41,19 +50,19 @@ class Careers extends Component {
 
   static getPageMeta() {
     return {
-      title: "Careers | Data Skeptic"
+      title: 'Careers | Data Skeptic'
     }
   }
 
   render() {
-    const { resume, notify, submitted, error } = this.props
+    const { resume, notify, submitted, error, submitting } = this.props
     const files = resume ? [resume] : []
-    var due_date = new Date(2018,4,2)
+    var due_date = new Date(2018, 4, 1)
     var due_date_str = due_date.toString()
 
     return (
       <Container className="careers_page">
-        <Title>Enter to win a copy of "The Master Algorithm" by Pedro Domingos</Title>
+        <Title>Resume corpus submission system</Title>
         <Row>
           <Column>
             <Text>
@@ -69,26 +78,19 @@ class Careers extends Component {
                 onSubmit={this.submit}
                 customError={error}
                 showEmail={notify}
-              >
-                <Text>
-                  If you're concerned about privacy, feel free to remove your
-                  contact information from PDF you upload.
-                </Text>
-                <UploadBox
-                  wrapperClass="resume_upload"
-                  multiple={false}
-                  files={files}
-                  onDrop={this.onResumeUpload}
-                  onRemove={this.onResumeRemove}
-                />
-              </UploadResume>
+                bucket={FILES_BUCKET}
+                customSubmitting={submitting}
+              />
             ) : (
               <Success>
                 <h3>Thank you!</h3>
                 <p>Resume Uploaded.</p>
                 <p>We're planning about two weeks of data collection.</p>
                 <p>After that, our analysis phase will begin.</p>
-                <p>You should expect your personalized report in the next 3-4 weeks.</p>
+                <p>
+                  You should expect your personalized report in the next 1-2
+                  weeks.
+                </p>
                 <img
                   src="https://s3.amazonaws.com/dataskeptic.com/img/bot/bot-image.png"
                   width="200"
@@ -96,14 +98,7 @@ class Careers extends Component {
               </Success>
             )}
           </Column>
-          <Right>
-            <Img src="https://s3.amazonaws.com/dataskeptic.com/img/2018/kyle-reading-the-master-algorithm.jpg" />
-            <Text>
-              We are going to randomly select two submitters to win a copy of "The Master Algorithm" by Pedro Domingos.
-              <br/><br/>
-              <b>To be entered, submit your PDF resume/CV by {due_date_str}</b>
-            </Text>
-          </Right>
+          <Right />
         </Row>
       </Container>
     )
@@ -128,9 +123,9 @@ const Row = styled.div`
 const Column = styled.div`
   margin-right: 2em;
   margin-bottom: 2em;
-  
+
   @media (max-width: 500px) {
-     margin-right: 0;
+    margin-right: 0;
   }
 `
 
@@ -138,7 +133,7 @@ const Column = styled.div`
 // flex: 0 0 230px; // side right
 const Right = Column.extend`
   flex: 0 0 230px;
-  
+
   @media (max-width: 768px) {
     flex-basis: auto;
   }
@@ -168,6 +163,7 @@ const selector = formValueSelector(KEY)
 export default connect(state => ({
   resume: selector(state, RESUME_FIELD),
   notify: selector(state, NOTIFY_FIELD),
-  submitted: state.jobs.getIn(["resume", "submitted"]),
-  error: state.jobs.getIn(["resume", "error"])
+  submitted: state.jobs.getIn(['resume', 'submitted']),
+  submitting: state.jobs.getIn(['resume', 'submitting']),
+  error: state.jobs.getIn(['resume', 'error'])
 }))(Careers)

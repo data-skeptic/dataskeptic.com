@@ -10,10 +10,15 @@ import Container from '../../Layout/Components/Container/Container'
 import Content from '../../Layout/Components/Content/Content'
 import SideBar from '../../Layout/Components/SideBar/SideBar'
 
-import { get_podcasts } from '../../utils/redux_loader'
-import { year_from_path } from '../../utils/redux_loader'
-
 import { changePageTitle } from '../../Layout/Actions/LayoutActions'
+
+import { year_from_path } from '../../utils/redux_loader'
+import { load as loadEpisodes } from '../../reducers/EpisodesReducer'
+import infiniteList from '../../Data/hoc/infiniteList'
+
+const EpisodesList = infiniteList({
+  dataSource: state => state.episodes.toJS()
+})
 
 class Podcast extends Component {
   constructor(props) {
@@ -31,10 +36,15 @@ class Podcast extends Component {
     const { isLoaded } = this.props
     const pathname = this.props.location.pathname
 
-    get_podcasts(dispatch, pathname)
-
     const { title } = Podcast.getPageMeta()
     dispatch(changePageTitle(title))
+  }
+
+  updateLocation = () => {}
+
+  loadMore = (limit, offset) => {
+    this.updateLocation(limit, offset)
+    this.props.dispatch(loadEpisodes(limit, offset))
   }
 
   render() {
@@ -55,9 +65,12 @@ class Podcast extends Component {
                 <Loading />
               </div>
             ) : (
-              list.map(function(episode, index) {
-                return <Episode key={index} episode={episode} />
-              })
+              <EpisodesList
+                autoLoad={true}
+                items={list}
+                Item={(item, index) => <Episode episode={item} key={index} />}
+                loadMore={this.loadMore}
+              />
             )}
           </Content>
           <SideBar title="Year">

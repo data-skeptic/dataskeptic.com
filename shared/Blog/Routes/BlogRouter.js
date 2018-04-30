@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import isUndefined from 'lodash/isUndefined'
+import styled from 'styled-components'
 import { redirects_map } from '../../../redirects'
 import { get_podcasts_by_guid } from '../../utils/redux_loader'
 import { snserror } from '../../SnsUtil'
@@ -14,6 +15,8 @@ import BlogBreadCrumbs from '../Components/BlogBreadCrumbs'
 import NoBlogs from '../Components/NoBlogs'
 import Loading from '../../Common/Components/Loading'
 import transform_pathname from '../../utils/transform_pathname'
+
+const normalizePathname = path => path.replace(/\/\//g, '/')
 
 class BlogRouter extends React.Component {
   constructor(props) {
@@ -89,7 +92,13 @@ class BlogRouter extends React.Component {
   }
 
   componentDidMount() {
-    var pathname = this.props.location.pathname
+    const pathname = this.props.location.pathname
+    const hormalizedPath = normalizePathname(pathname)
+
+    if (pathname !== hormalizedPath) {
+      return this.redirect(hormalizedPath)
+    }
+
     this.handle_reload(pathname, '')
   }
 
@@ -119,6 +128,8 @@ class BlogRouter extends React.Component {
     }
     return blogs
   }
+
+  redirect = to => this.props.history.push(to)
 
   missing() {
     var location = this.props.location.pathname
@@ -161,12 +172,12 @@ class BlogRouter extends React.Component {
     } else {
       console.log('BlogList')
       return (
-        <div className="center">
+        <Wrapper>
           <BlogTopNav pathname={pathname} blogs={blogs} />
           <div className="center">
             <BlogList blogs={blogs} contributors={contributors} />
           </div>
-        </div>
+        </Wrapper>
       )
     }
   }
@@ -179,3 +190,14 @@ export default connect((state, ownProps) => ({
   episodes: state.episodes,
   site: state.site
 }))(BlogRouter)
+
+const Wrapper = styled.div`
+  @media (max-width: 768px) {
+    padding: 1.1111111111111112rem;
+
+    .center {
+      margin-left: -20px;
+      margin-right: -20px;
+    }
+  }
+`

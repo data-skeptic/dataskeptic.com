@@ -1,16 +1,14 @@
-import React, { Component } from "react"
-import styled from "styled-components"
-import marked from "marked"
-import { BOT_ID } from "../../Constants/index"
+import React, { Component } from 'react'
+import styled from 'styled-components'
+import marked from 'marked'
+import { BOT_ID } from '../../Constants/index'
 
 const getMarkdown = text => {
   const rawMarkup = marked(text)
   return { __html: rawMarkup }
 }
 
-const renderText = text => (
-  <Text dangerouslySetInnerHTML={getMarkdown(text)} />
-)
+const renderText = text => <Text dangerouslySetInnerHTML={getMarkdown(text)} />
 
 export default class Message extends Component {
   render() {
@@ -18,7 +16,11 @@ export default class Message extends Component {
 
     return (
       <Container sent={sent}>
-        {author && <Author src={author.img} bot={author.author === BOT_ID} />}
+        {author && (
+          <Author>
+            <img src={author.img} bot={author.author === BOT_ID} />
+          </Author>
+        )}
         <Content>
           <Bubble sent={sent}>{children ? children : renderText(text)}</Bubble>
         </Content>
@@ -41,21 +43,26 @@ const Container = styled.div`
 			`};
 `
 
-const Author = styled.img`
-  width: 32px;
-  height: 32px;
-  margin-top: 6px;
+const Author = styled.div`
+  flex-basis: 40px;
+  border: 1px;
 
-  ${props =>
-    !props.bot &&
-    `
-    border-radius: 50%;  
-  `};
+  img {
+    width: 32px;
+    height: 32px;
+    margin-top: 6px;
+
+    ${props =>
+      !props.bot &&
+      `
+  
+      border-radius: 50%;  
+    `};
+  }
 `
 
 const Content = styled.div`
-  padding-left: 15px;
-  flex: 1
+  flex: 1;
 `
 
 const Bubble = styled.div`
@@ -76,6 +83,7 @@ const Bubble = styled.div`
     props.sent
       ? `
 	    background: rgba(240, 217, 67, 0.1);
+	    float: right;
 			`
       : `
 			background: #F9FAF9;
@@ -85,7 +93,7 @@ const Bubble = styled.div`
 const Text = styled.span`
   a {
     border-bottom: 1px solid;
-    
+
     &:hover {
       border-bottom: 1px solid;
     }

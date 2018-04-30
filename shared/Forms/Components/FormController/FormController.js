@@ -1,6 +1,13 @@
 import React, { PropTypes } from 'react'
 import { isEmpty } from 'lodash'
 
+const DefaultError = () => (
+  <p>
+    <i className="glyphicon glyphicon-warning-sign"> </i> Server error, please
+    contact kyle@dataskeptic.com for support
+  </p>
+)
+
 export const FormController = ({
   name,
   children,
@@ -35,14 +42,11 @@ export const FormController = ({
       </div>
     ) : null}
 
-    <div className="col-md-12 error">
-      {isEmpty(customError) ? null : (
-        <p>
-          <i className="glyphicon glyphicon-warning-sign"> </i> Server error,
-          please contact kyle@dataskeptic.com for support
-        </p>
-      )}
-    </div>
+    {customError && (
+      <div className="col-md-12 error">
+        {customError ? customError : <DefaultError />}
+      </div>
+    )}
 
     <div className="col-md-12 success">
       {customSuccess ? (

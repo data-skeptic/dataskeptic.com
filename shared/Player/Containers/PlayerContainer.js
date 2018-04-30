@@ -8,6 +8,8 @@ import { connect } from 'react-redux'
 import MiniPlayer from '../Components/MiniPlayer'
 import VolumeBarContainer from './VolumeBarContainer'
 import { isPlayed, markAsPlayed } from '../../Auth/Reducers/AuthReducer'
+import { initialize as initializePlayer } from '../../../shared/reducers/PlayerReducer'
+import { setVolume, setMuted, reset } from '../../reducers/PlayerReducer'
 
 const URL = '/api/v1/player'
 
@@ -47,22 +49,27 @@ class PlayerContainer extends Component {
       position: 0,
       loaded: false,
       howler: undefined,
-      volume: 0.8,
-      muted: false
+      ready: false
     }
 
     this.player = null
   }
 
   componentDidMount() {
+    this.setState({ ready: true })
     // start update timer
     this.updater = setInterval(this.update, 1000)
+    this.props.dispatch(initializePlayer())
   }
 
   componentWillUnmount() {
     // clear the memory
     this.player = null
     clearInterval(this.updater)
+  }
+
+  initRef = ref => {
+    this.player = ref
   }
 
   /**
@@ -76,7 +83,14 @@ class PlayerContainer extends Component {
    * Return playing duration
    */
   getDuration() {
-    return this.player.duration()
+    if (this.player == null) {
+      return 1
+    }
+    try {
+      return this.player.duration()
+    } catch (e) {
+      return 1
+    }
   }
 
   /**
@@ -163,6 +177,14 @@ class PlayerContainer extends Component {
    *
    */
   onReady() {
+    const seekPosition = this.props.player.seekPosition
+    const duration = this.getDuration()
+
+    if (seekPosition) {
+      const realPosition = 1.0 * seekPosition / 100 * duration
+      this.player.seek(realPosition)
+    }
+
     this.props.dispatch({ type: 'PLAYBACK_LOADED', payload: true })
     this.update()
   }
@@ -213,19 +235,15 @@ class PlayerContainer extends Component {
     const uid = v4()
 
     if (isAuthorized) {
-      const metaId = `${uid}_playerMeta`
-      localStorage.setItem(metaId, JSON.stringify(meta))
       axios
         .post(URL, { type, meta })
         .then(data => {})
         .catch(err => console.error(err))
     }
 
-    if (loggedIn && type === CAPTURE_TYPES.POS) {
-      console.dir(meta)
-      const { position } = meta
-
-      if (position >= 90 && !this.props.played) {
+    const { position } = meta
+    if (type === CAPTURE_TYPES.POS) {
+      if (loggedIn && (position >= 90 && !this.props.played)) {
         console.dir('mark as played')
         const episode = this.props.oepisode.toJS()
         const { blog_id, guid, media } = episode
@@ -236,6 +254,10 @@ class PlayerContainer extends Component {
         })
 
         markAsPlayed(blog_id, media, guid, played)
+      } else if (position >= 90) {
+        this.props.dispatch({
+          type: 'PLAYED'
+        })
       }
     }
   }
@@ -336,22 +358,29 @@ class PlayerContainer extends Component {
     const howler = this.getHowler()
 
     howler.volume(volume)
-    this.state.volume = volume
+    this.props.dispatch(setVolume(volume))
   }
 
   mute() {
-    this.state.muted = true
+    this.props.dispatch(setMuted(true))
   }
 
   unmute() {
-    this.state.muted = false
+    this.props.dispatch(setMuted(false))
   }
+
+  close = () => this.props.dispatch(reset())
 
   render() {
     const { player, oepisode } = this.props
-    const volume = this.state.muted ? 0 : this.state.volume
-
-    const { is_playing, has_shown, position, playback_loaded } = player
+    let {
+      is_playing,
+      has_shown,
+      position,
+      playback_loaded,
+      volume,
+      muted
+    } = player
 
     if (!has_shown) {
       return null
@@ -362,11 +391,30 @@ class PlayerContainer extends Component {
     }
 
     const episode = oepisode.toJS()
-
-    let { title, img, pubDate, mp3 } = episode
-
+    let { title, pubDate, publish_date } = episode
+    const mp3s =
+      episode.related && episode.related.filter(r => r.type === 'mp3')
+    var mp3 = ''
+    var duration = 1
+    if (mp3s.length > 0) {
+      mp3 = mp3s[0]['dest']
+      duration = mp3s[0]['duration']
+    }
+    var img =
+      'https://s3.amazonaws.com/dataskeptic.com/img/2017/primary-logo-400.jpg'
+    const imgs =
+      episode.related &&
+      episode.related.filter(r => r.type === 'homepage-image')
+    if (imgs.length > 0) {
+      img = imgs[0]['dest']
+    }
     if (pubDate) {
       pubDate = moment(pubDate).format('MMMM D, YYYY')
+    }
+    if (mp3 == undefined) {
+      console.log('ERROR')
+      console.log(episode)
+      return <div />
     }
 
     const howler = (
@@ -374,9 +422,11 @@ class PlayerContainer extends Component {
         src={mp3}
         html5={true}
         playing={is_playing}
-        ref={ref => (this.player = ref)}
+        ref={this.initRef}
         onEnd={this.onEnd}
         onLoad={this.onReady}
+        volume={volume}
+        mute={muted}
       />
     )
 
@@ -386,6 +436,7 @@ class PlayerContainer extends Component {
         onChange={this.setVolume}
         onMute={this.mute}
         onUnmute={this.unmute}
+        muted={muted}
       />
     )
 
@@ -398,7 +449,7 @@ class PlayerContainer extends Component {
         episode={episode}
         title={title}
         duration={realDur}
-        date={pubDate}
+        date={pubDate || publish_date}
         position={position}
         realPos={realPos}
         howler={howler}
@@ -406,6 +457,7 @@ class PlayerContainer extends Component {
         onPlayToggle={this.onPlayToggle}
         loaded={playback_loaded}
         volumeSlider={volumeController}
+        onClose={this.close}
       />
     )
   }

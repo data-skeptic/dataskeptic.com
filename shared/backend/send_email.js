@@ -1,11 +1,11 @@
 import aws from 'aws-sdk'
 import { getEmail } from '../../shared/Emails/template'
-const config = require('../../config/config.json')
+
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
 if (!aws.config.region) {
   aws.config.update({
-    region: 'us-east-1'
+    region: process.env.AWS_REGION
   })
 }
 

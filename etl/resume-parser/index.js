@@ -5,8 +5,6 @@ var AWS = require('aws-sdk')
 var pdfUtil = require('pdf-to-text')
 var pdf_path = "test2.pdf"
  
-const config = require("./config.json")
-
 AWS.config = new AWS.Config();
 AWS.config.accessKeyId = config["accessKey"];
 AWS.config.secretAccessKey = config["secretKey"];
@@ -31,7 +29,7 @@ var client = new elasticsearch.Client({
 var params = { 
  Bucket: bucket,
  Delimiter: '.pdf',
- Prefix: s3path
+ Prefix: 'resumes/unsourced/2fab213d'
 }
 
 String.prototype.replaceAll = function (find, replace) {
@@ -83,7 +81,6 @@ function convert_pdf_to_text_promise(pdf_absfile) {
 				})
 		  	} finally { 
 				cleanup(pdf_absfile)
-				console.log(pdf_absfile + '!!!')
 			}
 		});		
 	})
@@ -108,7 +105,7 @@ function move_text_to_s3_promise(Bucket, Key, txt_file) {
 		 		}
 	 		})
 		} finally {
-			cleanup(txt_file+'!!!')
+			cleanup(txt_file)
 		}
 
 	})
@@ -201,6 +198,7 @@ s3.listObjects(params, function (err, data) {
  	console.log('err!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
  }
  var Contents = data['CommonPrefixes']
+ console.log(Object.keys(Contents).length + '<>')
  var promises = []
  for (var item of Contents) {
  	var Prefix = item['Prefix']

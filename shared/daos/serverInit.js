@@ -5,15 +5,11 @@ import snserror from '../SnsUtil'
 const aws = require('aws-sdk')
 const s3 = new aws.S3()
 
-const c = require('../../config/config.json')
-
 const proposalsDocs = new aws.DynamoDB.DocumentClient()
 
 import { convert_items_to_json } from 'daos/episodes'
-import { extractFolders } from '../utils/blog_utils'
 
-var env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-var base_api = c[env]['base_api'] + env
+var base_api = process.env.BASE_API
 
 export function get_contributors() {
   console.log('-[Refreshing Contributors]-')
@@ -166,7 +162,7 @@ function xml_to_list(xml) {
   var guid_to_media_link = {}
   parser.parseString(xml, function(err, rss) {
     if (err) {
-      console.log("Error on rss")
+      console.log('Error on rss')
       console.log(err)
     } else {
       var items = rss['rss']['channel'][0]['item']
@@ -186,7 +182,7 @@ function xml_to_list(xml) {
         episodes_map[guid] = episode
         episodes_content[prettyname] = episode
         episodes_list.push(episode.guid)
-      }      
+      }
     }
   })
 
@@ -330,19 +326,4 @@ export function loadProducts() {
 export function apiMemberFeed(req, res, feed) {
   console.log(feed.length)
   res.status(200).end(feed)
-}
-
-export function get_bot_status() {
-  console.log('-[Refreshing Bot]-')
-  var url = base_api + '/bot/status'
-
-  return axios
-    .get(url)
-    .then(function(result) {
-      var resp = result.data
-      return resp
-    })
-    .catch(err => {
-      console.log(err)
-    })
 }

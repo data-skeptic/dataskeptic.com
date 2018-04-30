@@ -4,17 +4,17 @@ import querystring from 'querystring'
 import axios from 'axios'
 import snserror from '../SnsUtil'
 import PrintfulClient from '../printful/printfulclient'
+import Request from '../Request'
 
 var env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
-const config = require('../../config/config.json')
-
-var printful_key = config[env]['printful']['api']
-
 var base_url = 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/' + env
 
+export const ADD_JOB = 'ADD_JOB'
+export const ADD_JOB_SUCCESS = 'ADD_JOB_SUCCESS'
+export const ADD_JOB_FAIL = 'ADD_JOB_FAIL'
+
 const init = {
-  bot: false,
   email_send_msg: '',
   pending_blogs: [],
   recent_blogs: [],
@@ -63,7 +63,12 @@ const init = {
     spError: ''
   },
   isAdmin: false,
-  loggedInAdmin: {}
+  loggedInAdmin: {},
+  jobs: {
+    processing: false,
+    success: false,
+    error: null
+  }
 }
 
 const defaultState = Immutable.fromJS(init)
@@ -72,8 +77,6 @@ export default function adminReducer(state = defaultState, action) {
   var nstate = state.toJS()
   var apromise = undefined
   switch (action.type) {
-    case 'SET_BOT':
-      nstate.bot = action.payload.ison
     case 'SET_EMAIL_FROM':
       nstate.from = action.payload
       break
@@ -269,10 +272,17 @@ export default function adminReducer(state = defaultState, action) {
       axios
         .post(url, payload['data'])
         .then(function(result) {
-          dispatch({
-            type: 'RELATED_CONTENT_LIST',
-            payload: { dispatch, add_related_msg: 'Saved!' }
-          })
+          if (result.data.error) {
+            dispatch({
+              type: 'RELATED_CONTENT_LIST',
+              payload: { dispatch, add_related_msg: result.data.error }
+            })
+          } else {
+            dispatch({
+              type: 'RELATED_CONTENT_LIST',
+              payload: { dispatch, add_related_msg: 'Saved!' }
+            })
+          }
         })
         .catch(err => {
           console.log(err)
@@ -328,6 +338,49 @@ export default function adminReducer(state = defaultState, action) {
           snserror('RELATED_CONTENT_DELETE', errorMsg)
         })
       break
+
+    case ADD_JOB:
+      nstate.jobs.processing = true
+      nstate.jobs.success = false
+      nstate.jobs.error = null
+      break
+    case ADD_JOB_SUCCESS:
+      nstate.jobs.processing = false
+      nstate.jobs.success = true
+      nstate.jobs.error = null
+      break
+    case ADD_JOB_FAIL:
+      nstate.jobs.processing = false
+      nstate.jobs.success = false
+      nstate.jobs.error = action.payload.error
+      break
   }
   return Immutable.fromJS(nstate)
 }
+
+export const addJob = job => {
+  return dispatch => {
+    dispatch(addJobRequest(job))
+
+    Request.post(`/api/v1/jobs`, job)
+      .then(result => dispatch(addJobSuccess(result.data)))
+      .catch(err => dispatch(addJobFail(err.data.error)))
+  }
+}
+
+export const addJobRequest = job => ({
+  type: ADD_JOB,
+  payload: {
+    ...job
+  }
+})
+
+export const addJobSuccess = result => ({
+  type: ADD_JOB_SUCCESS,
+  payload: { result }
+})
+
+export const addJobFail = error => ({
+  type: ADD_JOB_FAIL,
+  payload: { error }
+})

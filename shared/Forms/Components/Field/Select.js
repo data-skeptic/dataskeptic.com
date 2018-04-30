@@ -25,6 +25,7 @@ export const renderSelect = ({
             touched && invalid ? 'has-danger' : ''
           }`}
         >
+          <option value="" />
           {options.map(op => (
             <option value={op.value} key={op.value}>
               {op.label}
