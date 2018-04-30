@@ -1,6 +1,6 @@
-import React, { Component } from "react"
-import { Link } from "react-router"
-import styled from "styled-components"
+import React, { Component } from 'react'
+import { Link } from 'react-router'
+import styled from 'styled-components'
 import {
   Container,
   LogoContainer,
@@ -15,15 +15,22 @@ import {
   UserInfo,
   BlogViewMore,
   UserImgArea
-} from "./style"
+} from './style'
 
-import { ArrowRight } from "../Blog/style"
-import AuthorLink from "../../../components/AuthorLink"
+import { ArrowRight } from '../Blog/style'
+import AuthorLink from '../../../components/AuthorLink'
 
 const formatLink = prettyname => `blog${prettyname}`
 
 class Feature extends Component {
-  renderContributor = ({ contributor_id, author, img, prettyname, twitter, contribution }) => (
+  renderContributor = ({
+    contributor_id,
+    author,
+    img,
+    prettyname,
+    twitter,
+    contribution
+  }) => (
     <UserBox author={author} key={contributor_id}>
       <UserImgArea>
         <AuthorLink author={author} className="no-line">
@@ -33,7 +40,11 @@ class Feature extends Component {
       <UserDetail>
         <AuthorLink author={author}>{prettyname}</AuthorLink>
         {contribution && <Contribution>{contribution}</Contribution>}
-        {twitter && <UserInfo href={`https://twitter.com/${twitter}`}>@{twitter}</UserInfo>}
+        {twitter && (
+          <UserInfo href={`https://twitter.com/${twitter}`}>
+            @{twitter}
+          </UserInfo>
+        )}
       </UserDetail>
     </UserBox>
   )
@@ -63,26 +74,6 @@ class Feature extends Component {
             </Link>
           </SubTitle>
           <Desc>{feature_blog.abstract}</Desc>
-          <BlogViewMore to={href}>View More</BlogViewMore>
-          {author && (
-            <UserBox author={author.author}>
-              <UserImgArea>
-                <AuthorLink author={author.author} className="no-line">
-                  <UserImg src={author.img} />
-                </AuthorLink>
-              </UserImgArea>
-              <UserDetail>
-                <AuthorLink author={author.author}>
-                  {author.prettyname}
-                </AuthorLink>
-                {author.twitter && (
-                  <UserInfo href={`https://twitter.com/${author.twitter}`}>
-                    @{author.twitter}
-                  </UserInfo>
-                )}
-              </UserDetail>
-            </UserBox>
-          )}
           <BlogViewMore to={formatLink(feature_blog.prettyname)}>
             View More
           </BlogViewMore>
@@ -98,7 +89,7 @@ class Feature extends Component {
 export default Feature
 
 const Contributors = styled.div`
-   flex-direction: row;
+  flex-direction: row;
   display: flex;
   flex-wrap: wrap;
 
