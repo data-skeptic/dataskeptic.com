@@ -11,7 +11,7 @@ docker build -t dataskeptic ./
 ## Running Locally
 
 ```
-docker run -t -i -p 4000:4000 -p 4430:4430 -p 9001:9001 dataskeptic:latest
+docker run -t -i -p 4000:5000 -p 4430:4430 -p 9001:9001 --env-file .env IMAGE_ID
 ```
 
 ## Running Production

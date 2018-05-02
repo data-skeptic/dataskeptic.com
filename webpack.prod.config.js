@@ -1,7 +1,7 @@
 var path = require('path')
 var webpack = require('webpack')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
-var BabiliPlugin = require("babili-webpack-plugin");
+
 var extractLESS = new ExtractTextPlugin('[name].css')
 
 module.exports = {
@@ -28,21 +28,19 @@ module.exports = {
     ]
   },
   plugins: [
-    // new BabiliPlugin({
-    //   regexpConstructors: false
-    // }),
-
-    new webpack.DefinePlugin({
-      'process.env': path.join(__dirname, 'build/config.js')
-    }),
-    
     extractLESS,
 
-    // new webpack.optimize.UglifyJsPlugin({
-    //   compress: {
-    //     warnings: false
-    //   }
-    // })
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: '"production"'
+      }
+    }),
+    
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    })
   ],
   node: {
     fs: 'empty'
