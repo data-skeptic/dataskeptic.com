@@ -14,7 +14,7 @@ if (process.env.NODE_ENV === 'dev') {
   require('./webpack.dev').default(app)
 }
 
-const snsalert = require('./sharServer listeninged/SnsUtil').snsalert
+const snsalert = require('./shared/SnsUtil').snsalert
 const recordingServer = require('./recordingServer').default
 
 console.log('index.js : env = ' + env)
