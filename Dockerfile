@@ -23,7 +23,7 @@ COPY . /usr/src/app
 RUN npm run-script build
 
 ## Expose used ports
-EXPOSE 4430 4000 3000 9001
+EXPOSE 4430 3000 3000 9001
 
 ## Run
 CMD ["npm", "run", "start"]

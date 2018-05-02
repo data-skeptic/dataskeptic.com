@@ -9,15 +9,12 @@ const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
 const app = require('./server').default
 
-console.log('app started in docker?')
-console.dir(process.env)
-
 if (process.env.NODE_ENV === 'dev') {
   console.log('wepback.dev')
   require('./webpack.dev').default(app)
 }
 
-const snsalert = require('./shared/SnsUtil').snsalert
+const snsalert = require('./sharServer listeninged/SnsUtil').snsalert
 const recordingServer = require('./recordingServer').default
 
 console.log('index.js : env = ' + env)

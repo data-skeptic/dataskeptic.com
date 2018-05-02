@@ -11,14 +11,16 @@ docker build -t dataskeptic ./
 ## Running Locally
 
 ```
-docker run -t -i -p 4000:5000 -p 4430:4430 -p 9001:9001 --env-file .env IMAGE_ID
+docker run -t -i -p 3000:3000 -p 4430:4430 -p 9001:9001 --env-file .env IMAGE_ID
 ```
 
 ## Running Production
 
 ```
-docker run -t -i -p 80:80 -p 443:443 -p 9001:9001 dataskeptic:latest
+docker run -t -i -p 8080:3000 -p 4430:4430 -p 9001:9001 --env-file .env 3dd193b7710e```
 ```
+
+
 
 ## Configure bucket
 Create buckets:
