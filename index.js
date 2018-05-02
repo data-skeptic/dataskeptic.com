@@ -151,11 +151,10 @@ function config_load_promise() {
   )
 }
 
-// Disable for testing reasons
-// if (env == 'prod') {
-//   console.log('Loading as prod')
-//   config_load_promise()
-// } else {
+if (env == 'prod') {
+  console.log('Loading as prod')
+  config_load_promise()
+} else {
   console.log('Loading as dev')
   launch_without_ssl()
-// }
+}

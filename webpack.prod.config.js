@@ -41,10 +41,6 @@ module.exports = {
       'process.env.AWS_REGION': JSON.stringify(dotenv.parsed['AWS_REGION']),
       'process.env.AWS_CONFIG_S3_BUCKET': JSON.stringify(dotenv.parsed['AWS_CONFIG_S3_BUCKET']),
     }),
-    //
-    // new webpack.DefinePlugin({
-    //   'process.env.NODE_ENV': JSON.stringify('production')
-    // }),
 
     new webpack.optimize.UglifyJsPlugin({
       compress: {
