@@ -105,9 +105,21 @@ store.subscribe(() => {
   persistCart(nstate)
 })
 
+class Root extends React.Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <Router children={routes} history={history} />
+      </Provider>
+    )
+  }
+}
+
 render(
-  <Provider store={store}>
-    <Router children={routes} history={history} />
-  </Provider>,
+  <Root />,
   document.getElementById('react-view')
 )
+
+if (module.hot) {
+  module.hot.accept()
+}

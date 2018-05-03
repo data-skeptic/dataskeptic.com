@@ -1,5 +1,9 @@
 const aws = require('aws-sdk')
-require('dotenv').config()
+
+if (process.env.NODE_ENV === 'dev') {
+  require('dotenv').config()
+}
+
 /*
 Member signup		ds-new-mbr
 Member login		ds-mem-log
