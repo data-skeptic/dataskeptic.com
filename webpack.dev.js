@@ -12,7 +12,6 @@ Object.assign = assign
 export default function(app) {
   const config = Object.assign(prodCfg, {
     devtool: 'inline-source-map',
-    // devtool: 'eval',
     entry: ['babel-polyfill', 'webpack-hot-middleware/client', './client'],
     module: {
       rules: [
@@ -51,8 +50,8 @@ export default function(app) {
         path: './.env'
       }),
 
-      new webpack.optimize.OccurrenceOrderPlugin(),
       new webpack.HotModuleReplacementPlugin(),
+      new webpack.optimize.OccurrenceOrderPlugin(),
       new webpack.NoEmitOnErrorsPlugin()
     ]
   })
