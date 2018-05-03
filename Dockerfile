@@ -10,9 +10,9 @@ COPY package.json /usr/src/app/
 
 # Expose variables
 COPY .env /usr/src/app/
-COPY build_env.sh /usr/src/app/
-RUN chmod +x build_env.sh
-RUN ./build_env.sh
+COPY webpack_env.sh /usr/src/app/
+RUN chmod +x webpack_env.sh
+RUN ./webpack_env.sh
 
 ## Install app dependencies
 RUN npm install --loglevel=verbose
