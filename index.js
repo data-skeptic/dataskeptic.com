@@ -153,7 +153,7 @@ function config_load_promise() {
 
 if (env == 'prod') {
   console.log('Loading as prod')
-  launch_without_ssl()
+  config_load_promise()
 } else {
   console.log('Loading as dev')
   launch_without_ssl()
