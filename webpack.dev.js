@@ -20,7 +20,7 @@ export default function(app) {
           test: /\.jsx?$/,
           exclude: /node_modules/,
           use: {
-            loader: 'babel-loader'
+            loader: 'babel-loader?cacheDirectory=true'
           }
         },
         {
