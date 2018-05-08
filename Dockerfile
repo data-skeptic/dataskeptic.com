@@ -9,12 +9,6 @@ WORKDIR /usr/src/app
 COPY package.json /usr/src/app/
 COPY package-lock.json /usr/src/app/
 
-# Expose variables
-COPY .env /usr/src/app/
-COPY webpack_env.sh /usr/src/app/
-RUN chmod +x webpack_env.sh
-RUN ./webpack_env.sh
-
 ## Specify NPM version
 RUN npm i -g npm@5.6.0
 
