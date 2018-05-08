@@ -30,6 +30,7 @@ RUN npm run-script build
 EXPOSE 4430 3000 3000 9001
 
 ## TODO remove all config/env files in terms of security
+RUN rm -rf /usr/src/app/.env
 
 ## Run
 CMD ["npm", "run", "start"]
