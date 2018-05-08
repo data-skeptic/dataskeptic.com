@@ -5,6 +5,8 @@ const http = require('http')
 const https = require('https')
 const aws = require('aws-sdk')
 
+console.log('process.env.NODE_ENV')
+console.log(process.env.NODE_ENV)
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
 const app = require('./server').default
