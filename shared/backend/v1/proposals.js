@@ -8,7 +8,6 @@ if (process.env.NODE_ENV === 'dev') {
   require('dotenv').config()
 }
 
-
 const uuid = require('uuid').v4
 const aws = require('aws-sdk')
 const send = require('../modules/emails').send

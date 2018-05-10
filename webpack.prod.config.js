@@ -3,7 +3,14 @@ const webpack = require('webpack')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin');
 
-const dotenv = require('dotenv').config({ path: __dirname + '/.env' })
+const env = {
+  'process.env.NODE_ENV': JSON.stringify(process.env['NODE_ENV']),
+  'process.env.BASE_API': JSON.stringify(process.env['BASE_API']),
+  'process.env.AWS_ACCESS_KEY_ID': JSON.stringify(process.env['AWS_ACCESS_KEY_ID']),
+  'process.env.AWS_SECRET_ACCESS_KEY': JSON.stringify(process.env['AWS_SECRET_ACCESS_KEY']),
+  'process.env.AWS_REGION': JSON.stringify(process.env['AWS_REGION']),
+  'process.env.AWS_CONFIG_S3_BUCKET': JSON.stringify(process.env['AWS_CONFIG_S3_BUCKET']),
+}
 
 module.exports = {
   entry: ['babel-polyfill', './client'],
@@ -51,17 +58,10 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(dotenv.parsed['NODE_ENV']),
-      'process.env.BASE_API': JSON.stringify(dotenv.parsed['BASE_API']),
-      'process.env.AWS_ACCESS_KEY_ID': JSON.stringify(dotenv.parsed['AWS_ACCESS_KEY_ID']),
-      'process.env.AWS_SECRET_ACCESS_KEY': JSON.stringify(dotenv.parsed['AWS_SECRET_ACCESS_KEY']),
-      'process.env.AWS_REGION': JSON.stringify(dotenv.parsed['AWS_REGION']),
-      'process.env.AWS_CONFIG_S3_BUCKET': JSON.stringify(dotenv.parsed['AWS_CONFIG_S3_BUCKET']),
-    }),
-
     new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.HashedModuleIdsPlugin(),
+
+    new webpack.DefinePlugin(env),
 
     new webpack.optimize.UglifyJsPlugin({
       compress: {

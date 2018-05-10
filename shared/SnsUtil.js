@@ -23,12 +23,6 @@ aws.config.update({
   region: aws_region
 })
 
-console.log('sns', {
-  accessKeyId: aws_accessKeyId,
-  secretAccessKey: aws_secretAccessKey,
-  region: aws_region
-})
-
 function snserror(location, msg, topic) {
   // For now errors and alert are the same,
   // but eventually it will be two separate Topics
