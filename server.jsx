@@ -73,10 +73,6 @@ console.log('server.jsx : starting')
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
-if (process.env.NODE_ENV === 'dev') {
-  require('./build/config.js')
-}
-
 const base_url = 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/' + env
 
 const app = express()

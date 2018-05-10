@@ -6,7 +6,9 @@ import PauseButton from './PauseButton'
 
 import ProposalLoading from '../../Proposals/Components/ProposalLoading/ProposalLoading'
 
-const DisabledSymbol = () => <img src="/img/spinner.gif" width="14" height="14" />
+const DisabledSymbol = () => (
+  <img src="/img/spinner.gif" width="14" height="14" />
+)
 
 export const TogglePlayButton = ({
   playing = false,
