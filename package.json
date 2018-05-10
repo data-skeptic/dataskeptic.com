@@ -76,6 +76,7 @@
     "multer": "^1.3.0",
     "ncp": "^2.0.0",
     "node-stripe": "^1.0.9",
+    "npm": "^6.0.0",
     "object-assign": "^4.0.1",
     "passport": "^0.3.2",
     "passport-google-oauth": "^1.0.0",
