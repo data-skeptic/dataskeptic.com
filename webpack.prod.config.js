@@ -4,6 +4,17 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 var extractLESS = new ExtractTextPlugin('[name].css')
 
+const env = {
+  'process.env.NODE_ENV': JSON.stringify(process.env['NODE_ENV']),
+  'process.env.BASE_API': JSON.stringify(process.env['BASE_API']),
+  'process.env.AWS_ACCESS_KEY_ID': JSON.stringify(process.env['AWS_ACCESS_KEY_ID']),
+  'process.env.AWS_SECRET_ACCESS_KEY': JSON.stringify(process.env['AWS_SECRET_ACCESS_KEY']),
+  'process.env.AWS_REGION': JSON.stringify(process.env['AWS_REGION']),
+  'process.env.AWS_CONFIG_S3_BUCKET': JSON.stringify(process.env['AWS_CONFIG_S3_BUCKET']),
+}
+
+console.dir(env)
+
 module.exports = {
   entry: ['babel-polyfill', './client'],
   resolve: {
@@ -30,14 +41,12 @@ module.exports = {
   plugins: [
     extractLESS,
 
+    new webpack.DefinePlugin(env),
+
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false
       }
-    }),
-
-    new webpack.DefinePlugin({
-      'process.env': path.join(__dirname, 'build/config.js')
     })
   ],
   node: {
