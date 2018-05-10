@@ -2,6 +2,14 @@
 
 Source for the web app powering dataskeptic.com
 
+## Simulate environment configuration locally
+
+! Be sure that you have own `.env` file
+
+```
+export $(cat .env | grep -v ^# | xargs)
+```
+
 ## Building
 
 ```
