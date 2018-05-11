@@ -126,9 +126,7 @@ class Membership extends Component {
                 return (
                   <div
                     key={pid}
-                    className={`col-xs-12 col-sm-4 membership-container membership-${
-                      uid
-                    }`}
+                    className={`col-xs-12 col-sm-4 membership-container membership-${uid}`}
                   >
                     <div className="membership-inner">
                       <div className="membership-title">{product.title}</div>

@@ -89,7 +89,7 @@ function requireAuth(nextState, replaceState) {
 }
 
 export default (
-  <Router >
+  <Router>
     <Route path="/about" name="app" component={App} onEnter={loadData}>
       <IndexRoute component={About} />
     </Route>

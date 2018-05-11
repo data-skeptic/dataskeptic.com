@@ -37,9 +37,7 @@ function make_recommendation_handler(dispatch, reply, cstate, message) {
   }
   if (blog != undefined) {
     var title = blog.title
-    var msg = `How about the episode "${
-      title
-    }"?  You can say 'play it', 'remind me', 'exit', or say another topic.`
+    var msg = `How about the episode "${title}"?  You can say 'play it', 'remind me', 'exit', or say another topic.`
     var handler = module.exports.recommendation_action_handler
     var note = 'make_recommendation_handler'
     var obj = blog

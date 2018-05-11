@@ -17,7 +17,7 @@ const initHot = (app, config) => {
   )
 
   app.use(whm(compiler))
-  
+
   console.log('Enable hotreload')
 }
 

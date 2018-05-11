@@ -42,7 +42,9 @@ export default class RichTextarea extends Component {
   }
 
   componentDidMount() {
-    const { input: { value } } = this.props
+    const {
+      input: { value }
+    } = this.props
 
     const editorState = EditorState.createWithContent(
       ContentState.createFromBlockArray(htmlToDraft(value))

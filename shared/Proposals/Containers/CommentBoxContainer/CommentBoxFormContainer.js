@@ -124,7 +124,9 @@ class CommentBoxFormContainer extends Component {
 
   shouldShowSubmitButton() {
     const { messageType, activeStep } = this.props
-    const { values: { files } } = this.props
+    const {
+      values: { files }
+    } = this.props
 
     if (messageType === RECORDING) {
       return activeStep === 'REVIEW'

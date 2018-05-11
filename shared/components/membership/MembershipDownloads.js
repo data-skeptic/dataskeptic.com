@@ -32,7 +32,9 @@ class MembershipDownloads extends Component {
   }
 
   renderContent() {
-    const { downloads: { loaded, list } } = this.props
+    const {
+      downloads: { loaded, list }
+    } = this.props
 
     if (!loaded) {
       return <Loading />

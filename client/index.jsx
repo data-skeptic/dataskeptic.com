@@ -115,10 +115,7 @@ class Root extends React.Component {
   }
 }
 
-render(
-  <Root />,
-  document.getElementById('react-view')
-)
+render(<Root />, document.getElementById('react-view'))
 
 if (module.hot) {
   module.hot.accept()
