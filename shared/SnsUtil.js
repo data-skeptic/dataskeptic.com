@@ -1,5 +1,9 @@
 const aws = require('aws-sdk')
-require('dotenv').config()
+
+if (process.env.NODE_ENV === 'dev') {
+  require('dotenv').config()
+}
+
 /*
 Member signup		ds-new-mbr
 Member login		ds-mem-log
@@ -14,12 +18,6 @@ var aws_secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
 var aws_region = process.env.AWS_REGION
 
 aws.config.update({
-  accessKeyId: aws_accessKeyId,
-  secretAccessKey: aws_secretAccessKey,
-  region: aws_region
-})
-
-console.log('sns', {
   accessKeyId: aws_accessKeyId,
   secretAccessKey: aws_secretAccessKey,
   region: aws_region

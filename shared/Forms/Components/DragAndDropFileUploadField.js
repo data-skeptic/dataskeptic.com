@@ -142,9 +142,7 @@ export default class DragAndDropFileUploadField extends Component {
 
   upload(files) {
     const { bucket, prefix, saveOrigin } = this.props
-    const url = `/api/v1/files/upload?bucket=${bucket}&prefix=${
-      prefix
-    }&saveOrigin=${saveOrigin}`
+    const url = `/api/v1/files/upload?bucket=${bucket}&prefix=${prefix}&saveOrigin=${saveOrigin}`
 
     return Request.upload(url, files).then(res => res.data.files)
   }
@@ -210,7 +208,10 @@ export default class DragAndDropFileUploadField extends Component {
   renderRejectedErrors() {
     const { rejectedFiles } = this.state
     return rejectedFiles.map((rejectedFile, index) => {
-      const { file: { name }, reason } = rejectedFile
+      const {
+        file: { name },
+        reason
+      } = rejectedFile
 
       return (
         <RejectedError key={index}>

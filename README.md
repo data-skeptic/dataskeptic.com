@@ -2,6 +2,31 @@
 
 Source for the web app powering dataskeptic.com
 
+## Simulate environment configuration locally
+
+! Be sure that you have own `.env` file
+
+```
+export $(cat .env | grep -v ^# | xargs)
+```
+
+## Building
+
+```
+docker build -t dataskeptic ./
+```
+
+## Running Locally
+
+```
+docker run -t -i -p 3000:3000 -p 4430:4430 -p 9001:9001 --env-file .env IMcAGE_ID
+```
+
+## Running Production
+
+```
+docker run -t -i -p 80:3000 -p 443:4430 -p 9001:9001 --env-file .env IMAGE_ID
+```
 
 ## Configure bucket
 Create buckets:

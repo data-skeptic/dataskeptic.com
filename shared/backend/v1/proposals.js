@@ -4,7 +4,9 @@ const multer = require('multer')
 const mime = require('mime')
 const moment = require('moment')
 
-require('dotenv').config()
+if (process.env.NODE_ENV === 'dev') {
+  require('dotenv').config()
+}
 
 const uuid = require('uuid').v4
 const aws = require('aws-sdk')

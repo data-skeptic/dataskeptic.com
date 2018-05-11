@@ -56,9 +56,18 @@ store.dispatch({
   payload: { dispatch: store.dispatch }
 })
 
-render(
-  <Provider store={store}>
-    <Router children={routes} history={history} />
-  </Provider>,
-  document.getElementById('react-view')
-)
+class Root extends React.Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <Router children={routes} history={history} />
+      </Provider>
+    )
+  }
+}
+
+render(<Root />, document.getElementById('react-view'))
+
+if (module.hot) {
+  module.hot.accept()
+}

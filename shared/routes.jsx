@@ -7,8 +7,6 @@ import {
   routerStateReducer,
   ReduxRouter
 } from 'redux-react-router'
-import createBrowserHistory from 'history/lib/createBrowserHistory'
-import configureStore from './store'
 
 import About from 'components/About'
 import Advertising from 'components/Advertising'
@@ -86,16 +84,12 @@ function loadData() {
   }
 }
 
-function onUpdate() {
-  console.log('onUpdate')
-}
-
 function requireAuth(nextState, replaceState) {
   replaceState({ nextPathname: nextState.location.pathname }, '/login')
 }
 
 export default (
-  <Router onUpdate={onUpdate}>
+  <Router>
     <Route path="/about" name="app" component={App} onEnter={loadData}>
       <IndexRoute component={About} />
     </Route>
