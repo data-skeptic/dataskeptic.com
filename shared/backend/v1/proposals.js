@@ -4,7 +4,9 @@ const multer = require('multer')
 const mime = require('mime')
 const moment = require('moment')
 
-require('dotenv').config()
+if (process.env.NODE_ENV === 'dev') {
+  require('dotenv').config()
+}
 
 const uuid = require('uuid').v4
 const aws = require('aws-sdk')
@@ -27,12 +29,6 @@ const temp_files = process.env.RECORDING_TEMP_FILES
 const EMAIL_ADDRESS = process.env.RECORDING_EMAILS_ADMIN
 
 aws.config.update({
-  accessKeyId: aws_accessKeyId,
-  secretAccessKey: aws_secretAccessKey,
-  region: aws_region
-})
-
-console.log('proposals', {
   accessKeyId: aws_accessKeyId,
   secretAccessKey: aws_secretAccessKey,
   region: aws_region

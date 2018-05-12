@@ -54,7 +54,7 @@ var launch_with_ssl = function() {
 
   var server = https
     .createServer(httpsOptions, app)
-    .listen(443, '0.0.0.0', function() {
+    .listen(process.env.HTTPS_PORT, '0.0.0.0', function() {
       console.log('Serving in https')
     })
   server.on('error', err => {
@@ -69,7 +69,7 @@ var launch_with_ssl = function() {
       res.writeHead(301, { Location: 'https://' + host + req.url })
       res.end()
     })
-    .listen(80, '0.0.0.0')
+    .listen(process.env.PORT, process.env.HOST)
 
   recordingServer(server)
   console.log('Attempt to load SSL 3')
@@ -77,8 +77,8 @@ var launch_with_ssl = function() {
 
 var launch_without_ssl = function() {
   console.log('Launch without SSL')
-  app.listen(3000, function() {
-    console.log('Server listening on 3000')
+  app.listen(process.env.PORT, function() {
+    console.log(`Server listening on ${process.env.PORT}`)
   })
 }
 
@@ -87,12 +87,9 @@ function config_load_promise() {
     var files = ['cert.pem', 'fullchain.pem', 'privkey.pem', 'config.jsn']
     var bucket = 'config-dataskeptic.com'
     var promises = []
-    console.log('start')
     if (!fs.existsSync(cert_path)) {
       console.log('Creating cert directory')
       fs.mkdirSync(cert_path, 777)
-    } else {
-      console.log('Cert path exists')
     }
     for (var file of files) {
       var s3Key = file
