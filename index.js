@@ -5,8 +5,6 @@ const http = require('http')
 const https = require('https')
 const aws = require('aws-sdk')
 
-console.log('process.env.NODE_ENV')
-console.log(process.env.NODE_ENV)
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
 const app = require('./server').default
@@ -89,12 +87,9 @@ function config_load_promise() {
     var files = ['cert.pem', 'fullchain.pem', 'privkey.pem', 'config.jsn']
     var bucket = 'config-dataskeptic.com'
     var promises = []
-    console.log('start')
     if (!fs.existsSync(cert_path)) {
       console.log('Creating cert directory')
       fs.mkdirSync(cert_path, 777)
-    } else {
-      console.log('Cert path exists')
     }
     for (var file of files) {
       var s3Key = file
