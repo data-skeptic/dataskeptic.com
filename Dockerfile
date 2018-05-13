@@ -13,19 +13,20 @@ COPY package-lock.json /usr/src/app/
 RUN npm i -g npm@5.6.0
 
 ## Install app dependencies
-RUN npm install --loglevel=verbose
+RUN npm install --production --loglevel=verbose
 
 ## Copy app sources
 COPY . /usr/src/app
 COPY startup.sh /
+RUN ./bin/info.sh
 
 ## TODO remove all config/env files in terms of security
-RUN rm -rf /usr/src/app/.env
+#RUN rm -rf /usr/src/app/.env
 
 #RUN npm run-script build
 
 ## Expose used ports
-EXPOSE 80 443 4430 3000 9001
+#EXPOSE 80 443 4430 3000 9001
 
 ## Run
-CMD ["/bin/sh", "-c", "/usr/src/app/startup.sh"]
+#CMD ["/bin/sh", "-c", "/usr/src/app/startup.sh"]
