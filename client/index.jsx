@@ -5,7 +5,6 @@ import { Router } from 'react-router'
 import createBrowserHistory from 'history/lib/createBrowserHistory'
 import { Provider } from 'react-redux'
 import * as reducers from 'reducers'
-import doRefresh from 'daos/doRefresh'
 import routes from 'routes'
 import Immutable from 'immutable'
 import thunk from 'redux-thunk'
@@ -18,26 +17,8 @@ import axios from 'axios'
 import '../shared/styles/main.less'
 
 import { reducer as formReducer } from 'redux-form'
-import { SCHEMA_VER } from '../shared/reducers/SiteReducer'
 
-import initCart from '../shared/Cart/Helpers/initCart'
-import persistCart from '../shared/Cart/Helpers/persistCart'
-
-/**
- * Validate cached store schema version
- *
- */
-const validateVersion = state => {
-  const valid = state.site && state.site.schemaVersion === SCHEMA_VER
-
-  return valid ? state : {}
-}
-
-const getInitialState = state => {
-  state = initCart(state)
-
-  return validateVersion(state)
-}
+const getInitialState = state => state
 
 const initialState = immutifyState(getInitialState(window.__INITIAL_STATE__))
 
@@ -75,39 +56,18 @@ store.dispatch({
   payload: { dispatch: store.dispatch }
 })
 
-setTimeout(function() {
-  doRefresh(store, env)
-}, 500)
-
-store.subscribe(() => {
-  const state = store.getState()
-  const nstate = {}
-  const keys = Object.keys(state)
-  for (let i = 0; i < keys.length; i++) {
-    const key = keys[i]
-    const val = state[key]
-    try {
-      // fix for non immutable states
-      // f.e. redux-forms
-      nstate[key] = val.toJS()
-      if (key === 'player') {
-        nstate[key].is_playing = false
-      }
-    } catch (e) {}
+class Root extends React.Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <Router children={routes} history={history} />
+      </Provider>
+    )
   }
+}
 
-  delete nstate.checkout
-  delete nstate.recording
+render(<Root />, document.getElementById('react-view'))
 
-  const s = JSON.stringify(nstate)
-  localStorage.setItem('reduxState', s)
-
-  persistCart(nstate)
-})
-
-render(
-  <Provider store={store}>
-    <Router children={routes} history={history} />
-  </Provider>,
-  document.getElementById('react-view')
-)
+if (module.hot) {
+  module.hot.accept()
+}

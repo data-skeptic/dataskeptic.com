@@ -22,9 +22,8 @@ const renderAddress = ({
   postal_code = '',
   state = ''
 }) =>
-  `${line1}${' ' + line2}, ${city}, ${country.toUpperCase()}, ${state}, ${
-    postal_code
-  }`
+  `${line1}${' ' +
+    line2}, ${city}, ${country.toUpperCase()}, ${state}, ${postal_code}`
 
 const renderProduct = (product, key) => (
   <Product key={key}>

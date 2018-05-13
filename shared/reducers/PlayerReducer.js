@@ -220,7 +220,7 @@ export default function PlayerReducer(state = defaultState, action) {
       nstate.is_playing = true
       savePlayingMeta(nstate)
       break
-    
+
     case SET_MUTED:
       nstate.muted = action.payload.muted
       break

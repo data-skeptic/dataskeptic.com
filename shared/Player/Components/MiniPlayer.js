@@ -2,7 +2,7 @@ import React from 'react'
 import cn from 'classnames'
 import PlayerProgressBar from '../Components/PlayerProgressBar'
 import TogglePlayButton from '../Components/TogglePlayButton'
-import moment from "moment/moment";
+import moment from 'moment/moment'
 
 const ignore = e => {
   e.preventDefault()
