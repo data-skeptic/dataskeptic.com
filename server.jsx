@@ -66,6 +66,8 @@ import redirects_map from './redirects'
 import { reducer as formReducer } from 'redux-form'
 import axios from 'axios'
 
+import minifyHTML from 'express-minify-html'
+
 import Rollbar from 'rollbar'
 import http from 'http'
 var Influx = require('influx')
@@ -771,6 +773,18 @@ if (env === 'prod') {
   })
 
   app.use(rollbar.errorHandler())
+  app.use(minifyHTML({
+    override:      true,
+    exception_url: false,
+    htmlMinifier: {
+      removeComments:            false,
+      collapseWhitespace:        true,
+      collapseBooleanAttributes: true,
+      removeAttributeQuotes:     true,
+      removeEmptyAttributes:     false,
+      minifyJS:                  false
+    }
+  }));
 }
 
 const renderPage = async (req, res) => {
