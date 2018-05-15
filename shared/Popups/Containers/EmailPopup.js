@@ -9,8 +9,12 @@ const KEY = `email`
 class EmailPopup extends Component {
   
   componentDidMount() {
-    this.props.dispatch(open(KEY))
+    if (this.shouldOpen()) {
+      this.props.dispatch(open(KEY))
+    }
   }
+  
+  shouldOpen = () => true
   
   render() {
     return <div>email</div>

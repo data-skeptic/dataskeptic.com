@@ -15,7 +15,7 @@ export default (WrappedComponent, options) => {
     }
     
     componentWillUnmount() {
-      this.props._dispatch(deinit(options.key))
+      this.props.dispatch(deinit(options.key))
     }
     
     close = () => this.props.dispatch(close(options.key))
@@ -38,7 +38,7 @@ export default (WrappedComponent, options) => {
     const popups = state.popups
     
     return {
-      isOpen: isOpen(popups, options.key) 
+      isOpen: true //isOpen(popups, options.key) 
     }
   })(WrappedPopup)
 }
