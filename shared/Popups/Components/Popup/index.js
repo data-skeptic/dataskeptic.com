@@ -1,6 +1,20 @@
 import React, { Component } from 'react'
 import Modal from 'react-modal'
 
+const DEFAULT_STYLES = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
+  }
+}
+
+if (typeof(window) !== 'undefined') {
+  Modal.setAppElement('#react-view')
+}
 
 export default class Popup extends Component {
   defaultProps = {
@@ -9,10 +23,19 @@ export default class Popup extends Component {
   }
   
   render() {
-    const { children, isOpen, onClose } = this.props
+    const { children, isOpen, onClose, width, height } = this.props
+    const styles = {
+      ...DEFAULT_STYLES,
+      width,
+      height
+    }
     
     return (
-      <Modal isOpen={isOpen} onRequestClose={onClose}>{children}</Modal>
+      <Modal isOpen={isOpen} onRequestClose={onClose} style={styles} className="datas-popup"
+             overlayClassName="datas-overlay">
+        Code
+        {children}
+      </Modal>
     )
   }
   
