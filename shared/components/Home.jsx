@@ -57,7 +57,9 @@ class Home extends Component {
       //   <div className="clear"></div>
       // </div>
       <div>
-        <button onClick={this.props.dispatch(toggle('email'))}>email</button>
+        <button onClick={() => {
+          this.props.dispatch(toggle('email'))
+        }}>email</button>
         <EmailPopup />
 
         <HomeContainer />

@@ -1,16 +1,17 @@
+import {fromJS, Set} from 'immutable' 
 import initPopup, {INIT, OPEN} from "../helpers/popup";
 
 const defaultState = {
-  registeredKeys: []
+  registeredKeys: Set([])
 }
 
-const initialState = defaultState
+const initialState = fromJS(defaultState)
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case INIT:
-      state = initPopup(state.toJS(), action.payload)
-      state.registeredKeys = [...state.registeredKeys, action.payload.key]
+      state = state.update('registeredKeys', keys => keys.push(action.payload.key))
+      state = fromJS(initPopup(state.toJS(), action.payload))
       return state
     
     case OPEN:

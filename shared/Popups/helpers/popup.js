@@ -42,7 +42,16 @@ export const close = (key) => ({
 
 export const toggle = (key) => {
   return (dispatch, getState) => {
-    debugger;
+    dispatch({
+      type: TOGGLE,
+      payload: { key }
+    })
+    
+    if (isOpen(getState(), key)) {
+      dispatch(close(key))
+    } else {
+      dispatch(open(key))
+    }
   }
 }
 

@@ -10,7 +10,7 @@ export default (WrappedComponent, options) => {
       
     }
     
-    componentWillMount() {
+    componentDidMount() {
       this.props.dispatch(init(options.key))
     }
     
@@ -33,8 +33,10 @@ export default (WrappedComponent, options) => {
   }
 
   return connect(state => {
+    const popups = state.popups
+    
     return {
-      open: isOpen(state(options.key)) 
+      open: isOpen(popups, options.key) 
     }
   })(WrappedPopup)
 }
