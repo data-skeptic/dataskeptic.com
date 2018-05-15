@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import {init, deinit, open, close, isOpen} from "../helpers/popup"
 
 export default (WrappedComponent, options) => {
+  const {key, ...rest} = options
   
   class WrappedPopup extends Component {
     static defaultProps = {
@@ -11,23 +12,20 @@ export default (WrappedComponent, options) => {
     }
     
     componentDidMount() {
-      this.props.dispatch(init(options.key))
+      this.props.dispatch(init(key))
     }
     
     componentWillUnmount() {
-      this.props.dispatch(deinit(options.key))
+      this.props.dispatch(deinit(key))
     }
     
     close = () => this.props.dispatch(close(options.key))
     
     render() {
-      const { isOpen,...rest } = this.props
+      const { isOpen } = this.props
 
       return (
         <Popup {...rest} isOpen={isOpen} onClose={this.close}>
-          <code>{JSON.stringify({
-            isOpen
-          })}</code>
           <WrappedComponent  />
         </Popup>
       )
@@ -38,7 +36,7 @@ export default (WrappedComponent, options) => {
     const popups = state.popups
     
     return {
-      isOpen: true //isOpen(popups, options.key) 
+      isOpen: true//isOpen(popups, options.key) 
     }
   })(WrappedPopup)
 }

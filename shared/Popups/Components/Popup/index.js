@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import Modal from 'react-modal'
 
+import CloseButton from '../CloseButton'
+
 const DEFAULT_STYLES = {
   content : {
     top                   : '50%',
@@ -26,14 +28,17 @@ export default class Popup extends Component {
     const { children, isOpen, onClose, width, height } = this.props
     const styles = {
       ...DEFAULT_STYLES,
-      width,
-      height
+      content: {
+        ...DEFAULT_STYLES.content,
+        width,
+        height
+      }
     }
-    
+       
     return (
       <Modal isOpen={isOpen} onRequestClose={onClose} style={styles} className="datas-popup"
              overlayClassName="datas-overlay">
-        Code
+        <CloseButton />
         {children}
       </Modal>
     )
