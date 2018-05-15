@@ -25,7 +25,7 @@ export const deinit = (key) => ({
   payload: {key}
 })
 
-export const open = (key, safe) => ({
+export const open = (key, safe = true) => ({
   type: OPEN,
   payload: {
     key,
@@ -47,7 +47,7 @@ export const toggle = (key) => {
       payload: { key }
     })
     
-    if (isOpen(getState(), key)) {
+    if (isOpen(getState().popups  , key)) {
       dispatch(close(key))
     } else {
       dispatch(open(key))

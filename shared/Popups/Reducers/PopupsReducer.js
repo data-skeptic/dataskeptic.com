@@ -16,9 +16,8 @@ export default (state = initialState, action) => {
     
     case OPEN:
       state = state.setIn([action.payload.key, 'open'], true)
-      if (!action.payload.safe) {
-        debugger
-      }
+      // TODO: unsafe close case
+      // if (!action.payload.safe) {
       return state
     
     default:

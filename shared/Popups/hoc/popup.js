@@ -18,15 +18,17 @@ export default (WrappedComponent, options) => {
       this.props._dispatch(deinit(options.key))
     }
     
+    close = () => this.props.dispatch(close(options.key))
+    
     render() {
-      const { open,...rest } = this.props
+      const { isOpen,...rest } = this.props
 
       return (
-        <Popup {...rest}>
+        <Popup {...rest} isOpen={isOpen} onClose={this.close}>
           <code>{JSON.stringify({
-            open
+            isOpen
           })}</code>
-          <WrappedComponent />
+          <WrappedComponent  />
         </Popup>
       )
     }
@@ -36,7 +38,7 @@ export default (WrappedComponent, options) => {
     const popups = state.popups
     
     return {
-      open: isOpen(popups, options.key) 
+      isOpen: isOpen(popups, options.key) 
     }
   })(WrappedPopup)
 }

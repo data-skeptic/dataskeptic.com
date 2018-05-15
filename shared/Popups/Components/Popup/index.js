@@ -1,12 +1,18 @@
 import React, { Component } from 'react'
+import Modal from 'react-modal'
+
 
 export default class Popup extends Component {
+  defaultProps = {
+    isOpen: false,
+    onClose: () => {}
+  }
   
   render() {
-    const { children } = this.props
+    const { children, isOpen, onClose } = this.props
     
     return (
-      <div>{children}</div>
+      <Modal isOpen={isOpen} onRequestClose={onClose}>{children}</Modal>
     )
   }
   
