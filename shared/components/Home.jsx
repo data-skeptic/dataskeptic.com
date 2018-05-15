@@ -6,6 +6,7 @@ import { changePageTitle } from '../Layout/Actions/LayoutActions'
 
 import HomeContainer from '../../shared/Home'
 import { parseQuery } from '../utils/parseQuery'
+import EmailPopup from "../Popups/Containers/EmailPopup";
 
 class Home extends Component {
   static getPageMeta() {
@@ -55,6 +56,8 @@ class Home extends Component {
       //   <div className="clear"></div>
       // </div>
       <div>
+        <EmailPopup />
+
         <HomeContainer />
         <div className="clear" />
         <div className="home-mailing-list-outer">
