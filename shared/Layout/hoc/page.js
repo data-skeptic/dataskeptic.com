@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import { Helmet } from 'react-helmet'
 import styled from 'styled-components'
 
-export default function(WrappedComponent, options) {
+export default (WrappedComponent, options) => {
+  console.info('page')
+  debugger
   return class Page extends Component {
     static defaultProps = {}
 
@@ -26,7 +28,7 @@ export default function(WrappedComponent, options) {
       })
 
     render() {
-      const { children, ...rest } = this.props
+      const { ...rest } = this.props
       const {
         meta: { title, description, author, keywords }
       } = this.state
@@ -41,8 +43,7 @@ export default function(WrappedComponent, options) {
             <meta property="og:title" content={title} />
             <meta property="og:description" content={``} />
           </Helmet>
-          page =>>
-          <WrappedComponent updateMeta={this.updateMeta} />
+          <WrappedComponent {...rest} updateMeta={this.updateMeta} />
         </Wrapper>
       )
     }
