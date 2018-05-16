@@ -50,7 +50,7 @@ import path from 'path'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
 import { Provider } from 'react-redux'
-import { RoutingContext, match } from 'react-router'
+import { RouterContext, match } from 'react-router'
 import isFunction from 'lodash/isFunction'
 import extend from 'lodash/extend'
 import isEmpty from 'lodash/isEmpty'
@@ -599,7 +599,7 @@ async function updateState(store, pathname, req) {
 function renderView(store, renderProps, location) {
   const InitialView = (
     <Provider store={store}>
-      <RoutingContext {...renderProps} />
+      <RouterContext {...renderProps} />
     </Provider>
   )
 

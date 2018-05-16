@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
-import ReactDOM from 'react/lib/ReactDOM'
+import ReactDOM from 'react-dom'
 
 function isElementInViewport(el) {
   const rect = el.getBoundingClientRect()
