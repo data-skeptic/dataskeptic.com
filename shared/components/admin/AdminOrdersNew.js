@@ -5,7 +5,7 @@ import OpenOrders from './OpenOrders'
 import Loading from '../../Common/Components/Loading'
 
 class AdminOrdersNew extends Component {
-  redirect = to => this.props.history.push(to)
+  redirect = to => this.props.router.push(to)
 
   render() {
     const { history } = this.props

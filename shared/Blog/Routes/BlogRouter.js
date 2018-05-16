@@ -129,7 +129,7 @@ class BlogRouter extends React.Component {
     return blogs
   }
 
-  redirect = to => this.props.history.push(to)
+  redirect = to => this.props.router.push(to)
 
   missing() {
     var location = this.props.location.pathname

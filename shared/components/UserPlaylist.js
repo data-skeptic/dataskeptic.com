@@ -49,7 +49,7 @@ class UserPlaylist extends Component {
       addPlaylist(blog_id, guid, playlisted)
     }, debounce)
   }
-  goToPodcasts = () => this.props.history.push('/podcast')
+  goToPodcasts = () => this.props.router.push('/podcast')
   renderEpisode = episode => (
     <Episode key={episode.blog_id}>
       <Inner>

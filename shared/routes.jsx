@@ -107,11 +107,10 @@ export default (
 
       <Route path="/contact-us" component={ContactUs} />
 
-      <Route path="/careers/city/:id" component={CityCareers} />
-
-      <Route path="/careers" component={Careers} />
-
-      <Route path="/careers/jobs/add" component={PublicAddJob} />
+      <Route path="/careers" component={Careers}>
+        <Route path="/city/:id" component={CityCareers} />
+        <Route path="/jobs/add" component={PublicAddJob} />
+      </Route>
 
       <Route path="/blog" component={BlogRouter} />
 
@@ -128,67 +127,52 @@ export default (
 
       <Route path="/projects" component={Projects} />
 
-      <Route path="/rfc" component={Proposals} />
+      <Route path="/rfc" component={Proposals}>
+        <Route path="thank-you" component={ProposalsThankYouPage} />
+        <Route path="example" component={AudioExample} />
+      </Route>
 
-      <Route path="/rfc/thank-you" component={ProposalsThankYouPage} />
+      <Route path="/login" component={Login} />
 
-      <Route path="/rfc/example" component={AudioExample} />
-
-      <Route path="/login" component={AudioExample} />
-
-      <Route path="/signup" component={AudioExample} />
+      <Route path="/signup" component={SignUp} />
 
       <Route path="/logout" component={Logout} />
 
       <Route path="/questions" component={QuestionsContainer} />
 
-      <Route path="/membership" component={MembershipPortal} showAds={true} />
+      <Route path="/membership" component={MembershipPortal} showAds={true}>
+        <Route path="change" component={ChangeMembership} showAds={true} />
 
-      <Route
-        path="/membership/change"
-        component={ChangeMembership}
-        showAds={true}
-      />
+        <Route path="inbox" component={MembershipInbox} showAds={true} />
 
-      <Route
-        path="/membership/inbox"
-        component={MembershipInbox}
-        showAds={true}
-      />
+        <Route
+          path="analytics"
+          component={MembershipAnalytics}
+          showAds={true}
+        />
 
-      <Route
-        path="/membership/analytics"
-        component={MembershipAnalytics}
-        showAds={true}
-      />
-
-      <Route
-        path="/membership/downloads"
-        component={MembershipDownloads}
-        showAds={true}
-      />
+        <Route
+          path="downloads"
+          component={MembershipDownloads}
+          showAds={true}
+        />
+      </Route>
 
       <Route path="/profile/playlist" component={UserPlaylist} showAds={true} />
 
-      <Route path="/admin" component={UserPlaylist} />
-
-      <Route path="/admin/cms/pending" component={AdminCmsPending} />
-      <Route path="/admin/cms/recent" component={AdminCmsRecent} />
-      <Route path="/admin/cms/feature" component={AdminCmsFeature} />
-      <Route path="/admin/cms/add_related" component={AdminCmsAddRelated} />
-      <Route
-        path="/admin/cms/recent_related"
-        component={AdminCmsRecentRelated}
-      />
-      <Route path="/admin/orders/new" component={AdminOrdersNew} />
-      <Route
-        path="/admin/orders/processing"
-        component={AdminOrdersProcessing}
-      />
-      <Route path="/admin/emails/send" component={AdminEmailsSend} />
-      <Route path="/admin/job/add" component={AdminAddJob} />
-      <Route path="/admin/login" component={Login} />
-      <Route path="/admin/tse" component={Explorer} />
+      <Route path="/admin" component={AdminHome}>
+        <Route path="cms/pending" component={AdminCmsPending} />
+        <Route path="cms/recent" component={AdminCmsRecent} />
+        <Route path="cms/feature" component={AdminCmsFeature} />
+        <Route path="cms/add_related" component={AdminCmsAddRelated} />
+        <Route path="cms/recent_related" component={AdminCmsRecentRelated} />
+        <Route path="orders/new" component={AdminOrdersNew} />
+        <Route path="orders/processing" component={AdminOrdersProcessing} />
+        <Route path="emails/send" component={AdminEmailsSend} />
+        <Route path="job/add" component={AdminAddJob} />
+        <Route path="login" component={Login} />
+        <Route path="tse" component={Explorer} />
+      </Route>
 
       <Route path="/drip-result" component={DripThankYou} showAds={true} />
 

@@ -25,7 +25,7 @@ class Logout extends Component {
       axios.get('/api/v1/auth/logout')
     }
 
-    return this.props.history.push('/')
+    return this.props.router.push('/')
   }
 
   render() {

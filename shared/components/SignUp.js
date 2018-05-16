@@ -12,7 +12,7 @@ class SignUp extends Component {
     this.setState({ error: '' })
     axios.post(SIGNUP_ENDPOINT, data).then(result => {
       if (result.data.success) {
-        return this.props.history.push('/login')
+        return this.props.router.push('/login')
       } else {
         this.setState({ error: result.data.message })
       }
@@ -40,7 +40,7 @@ class SignUp extends Component {
 
   componentDidMount() {
     if (this.props.loggedIn) {
-      return this.props.history.push('/membership')
+      return this.props.router.push('/membership')
     }
   }
 

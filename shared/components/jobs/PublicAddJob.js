@@ -26,7 +26,7 @@ class PublicAddJob extends Component {
     dispatch(changePageTitle(title))
   }
 
-  redirect = to => this.props.history.push(to)
+  redirect = to => this.props.router.push(to)
 
   addProduct = details => {
     const title = `Job add "${details.title}"`

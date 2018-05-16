@@ -27,11 +27,12 @@ class MembershipPortal extends Component {
   componentDidMount() {
     var dispatch = this.props.dispatch
     if (!this.props.loggedIn) {
-      return this.props.history.push('/login')
+      return this.props.router.push('/login')
     }
+    
     var user = this.props.user
     var p = { dispatch, user }
-    console.log('DISPATCHING')
+    
     dispatch({ type: 'CHECK_MEMBERSHIP', payload: p })
 
     const script = document.createElement('script')
@@ -44,10 +45,10 @@ class MembershipPortal extends Component {
   }
 
   render() {
-    const { user, loggedIn } = this.props
-    var pmembership = this.props.memberportal.toJS()
-    var mode = pmembership['mode']
-    console.log(mode)
+    const { user, loggedIn, children } = this.props
+    const pmembership = this.props.memberportal.toJS()
+    const mode = pmembership['mode']
+    
     if (!loggedIn) {
       return (
         <div className="member-not-found-outer">
@@ -57,6 +58,10 @@ class MembershipPortal extends Component {
           </div>
         </div>
       )
+    }
+    
+    if (children) {
+      return children
     }
 
     if (mode == 'loading') {

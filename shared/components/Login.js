@@ -18,7 +18,7 @@ class Login extends Component {
           type: 'AUTH_USER_SUCCESS',
           payload: { data: result.data.user }
         })
-        return this.props.history.push('/membership')
+        return this.props.router.push('/membership')
       } else {
         this.setState({ error: result.data.message })
       }

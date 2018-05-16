@@ -26,7 +26,7 @@ class ThankYouRoute extends Component {
   componentDidMount() {
     const id = getLocationQuery(this.props.location.search)
     if (isEmpty(id)) {
-      return this.props.history.push('/')
+      return this.props.router.push('/')
     }
 
     if (isEmpty(this.props.receipt)) {

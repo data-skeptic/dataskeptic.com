@@ -4,11 +4,11 @@ import AdminLayout from './AdminLayout'
 
 class AdminHome extends Component {
   render() {
-    const { history } = this.props
+    const { history, children } = this.props
 
     return (
       <AdminLayout history={history}>
-        <h3>Welcome to dataskeptic.com administration portal.</h3>
+        {children ? children : <h3>Welcome to dataskeptic.com administration portal.</h3>}
       </AdminLayout>
     )
   }

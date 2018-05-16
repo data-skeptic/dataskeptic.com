@@ -21,7 +21,7 @@ class MembershipDownloads extends Component {
 
   componentDidMount() {
     if (!this.props.loggedIn) {
-      return this.props.history.push('/login')
+      return this.props.router.push('/login')
     }
 
     const { dispatch } = this.props

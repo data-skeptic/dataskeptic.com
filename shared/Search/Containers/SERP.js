@@ -114,7 +114,7 @@ class SERP extends Component {
 
     if (query.length === 0) {
       // redirect to home
-      this.props.history.push('/')
+      this.props.router.push('/')
     }
 
     title = `Search - ${query} | Data Skeptic`
