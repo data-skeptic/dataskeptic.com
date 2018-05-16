@@ -108,13 +108,17 @@ export default (
       <Route path="/contact-us" component={ContactUs} />
 
       <Route path="/careers" component={Careers}>
-        <Route path="/city/:id" component={CityCareers} />
-        <Route path="/jobs/add" component={PublicAddJob} />
+        <Route path="city/:id" component={CityCareers} />
+        <Route path="jobs/add" component={PublicAddJob} />
       </Route>
 
-      <Route path="/blog" component={BlogRouter} />
+      <Route path="/blog" component={BlogRouter}>
+        <Route path="*" component={BlogRouter} />
+      </Route>
 
-      <Route path="/podcast*" component={Podcast} />
+      <Route path="/podcast" component={Podcast}>
+        <Route path="*" component={Podcast} />
+      </Route>
 
       <Route
         path="/services*"
@@ -161,15 +165,24 @@ export default (
       <Route path="/profile/playlist" component={UserPlaylist} showAds={true} />
 
       <Route path="/admin" component={AdminHome}>
-        <Route path="cms/pending" component={AdminCmsPending} />
-        <Route path="cms/recent" component={AdminCmsRecent} />
-        <Route path="cms/feature" component={AdminCmsFeature} />
-        <Route path="cms/add_related" component={AdminCmsAddRelated} />
-        <Route path="cms/recent_related" component={AdminCmsRecentRelated} />
-        <Route path="orders/new" component={AdminOrdersNew} />
-        <Route path="orders/processing" component={AdminOrdersProcessing} />
-        <Route path="emails/send" component={AdminEmailsSend} />
-        <Route path="job/add" component={AdminAddJob} />
+        <Route path="cms">
+          <Route path="pending" component={AdminCmsPending} />
+          <Route path="recent" component={AdminCmsRecent} />
+          <Route path="feature" component={AdminCmsFeature} />
+          <Route path="add_related" component={AdminCmsAddRelated} />
+          <Route path="recent_related" component={AdminCmsRecentRelated} />
+        </Route>
+        <Route path="orders">
+          <Route path="new" component={AdminOrdersNew} />
+          <Route path="processing" component={AdminOrdersProcessing} />
+        </Route>
+        <Route path="emails">
+          <Route path="send" component={AdminEmailsSend} />
+        </Route>
+        <Route path="job">
+          <Route path="add" component={AdminAddJob} />
+        </Route>
+
         <Route path="login" component={Login} />
         <Route path="tse" component={Explorer} />
       </Route>
