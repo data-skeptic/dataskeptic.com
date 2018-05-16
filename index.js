@@ -1,14 +1,13 @@
 'use strict'
 
-
 const fs = require('fs')
 const http = require('http')
 const https = require('https')
 const aws = require('aws-sdk')
-const checkEnv = require("./shared/utils/checkEnv").default
+const checkEnv = require('./shared/utils/checkEnv').default
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-console.log('NODE_ENV','=', env)
+console.log('NODE_ENV', '=', env)
 
 // validate env config
 try {
@@ -16,13 +15,10 @@ try {
 } catch (e) {
   throw e
 
-  process.exit(1);
+  process.exit(1)
 }
 
-
 const app = require('./server').default
-
-
 
 if (process.env.NODE_ENV === 'dev') {
   console.log('wepback.dev')
@@ -84,7 +80,7 @@ var launch_with_ssl = function() {
       res.writeHead(301, { Location: 'https://' + host + req.url })
       res.end()
     })
-    .listen(process.env.PORT, process.env.HOST, (err) => {
+    .listen(process.env.PORT, process.env.HOST, err => {
       if (err) throw err
       console.dir()
     })
