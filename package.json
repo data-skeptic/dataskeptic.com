@@ -52,6 +52,7 @@
     "cookie-parser": "^1.4.3",
     "cookie-session": "^2.0.0-beta.3",
     "css-loader": "^0.26.2",
+    "dotenv-safe": "^5.0.1",
     "draft-js": "^0.10.5",
     "draftjs-to-html": "^0.8.3",
     "e164": "0.0.5",
