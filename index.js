@@ -7,6 +7,7 @@ const aws = require('aws-sdk')
 const checkEnv = require('./shared/utils/checkEnv').default
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const isHeroku = JSON.parse(process.env.IS_HEROKU)
 console.log('NODE_ENV', '=', env)
 
 // validate env config
@@ -165,9 +166,14 @@ function config_load_promise() {
   )
 }
 
-if (env == 'prod') {
+if (env === 'prod') {
   console.log('Loading as prod')
-  config_load_promise()
+  console.log('Heroku mode?', isHeroku)
+  if (isHeroku) {
+    launch_without_ssl()
+  } else {
+    config_load_promise()
+  }
 } else {
   console.log('Loading as dev')
   launch_without_ssl()
