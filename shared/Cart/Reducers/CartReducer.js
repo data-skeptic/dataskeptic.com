@@ -4,6 +4,9 @@ import axios from 'axios'
 
 import contact_form_send from '../../daos/contact_form_send'
 
+import initCart from '../Helpers/initCart'
+import persistCart from '../Helpers/persistCart'
+
 import {
   ADD_TO_CART,
   CHANGE_CART_QUANTITY,
@@ -239,6 +242,10 @@ export default function CartReducer(state = defaultState, action) {
     nstate.country_long = 'United States of America'
   }
   switch (action.type) {
+    case '@@INIT':
+      nstate = initCart(nstate)
+      break
+
     case ADD_TO_CART:
       nstate.paymentComplete = false
       var found_index = -1
@@ -259,7 +266,9 @@ export default function CartReducer(state = defaultState, action) {
       } else {
         nstate.cart_items[found_index].quantity += 1
       }
+      persistCart(nstate)
       break
+
     case CHANGE_CART_QUANTITY:
       var delta = action.payload.delta
       var product = action.payload.product
@@ -281,7 +290,10 @@ export default function CartReducer(state = defaultState, action) {
           nstate.cart_items.splice(found_index, 1)
         }
       }
+
+      persistCart(nstate)
       break
+
     case REMOVE_CART_PRODUCT:
       var product = action.payload.product
       var size = action.payload.size
@@ -303,7 +315,10 @@ export default function CartReducer(state = defaultState, action) {
       if (found_index > -1) {
         nstate.cart_items.splice(found_index, 1)
       }
+
+      persistCart(nstate)
       break
+
     case SET_STORE_ENVIRONMENT:
       var env = action.payload
       if (env == 'prod') {
@@ -311,16 +326,20 @@ export default function CartReducer(state = defaultState, action) {
       } else {
         nstate.prod = false
       }
+
     case 'CHANGE_COUNTRY':
       if (action.payload.short != undefined) {
         console.log('Change country to ' + action.payload.short)
         nstate.country_short = action.payload.short
         nstate.country_long = action.payload.long
       }
+      persistCart(nstate)
       break
+
     case TOGGLE_CART:
       nstate.cart_visible = !nstate.cart_visible
       break
+
     case SHOW_CART:
       nstate.cart_visible = action.payload
       break
@@ -330,6 +349,7 @@ export default function CartReducer(state = defaultState, action) {
       nstate.address[cls] = val
       nstate.focus_msg = ''
       break
+
     case 'DO_CHECKOUT':
       var dispatch = action.payload.dispatch
       var event = action.payload.event
@@ -365,6 +385,7 @@ export default function CartReducer(state = defaultState, action) {
         nstate.submitDisabled = false
       }
       break
+
     case PROCESS_CHECKOUT:
       var dispatch = action.payload.dispatch
       nstate.paymentComplete = action.payload.paymentComplete
@@ -381,12 +402,14 @@ export default function CartReducer(state = defaultState, action) {
       }
       nstate.submitDisabled = false
       break
+
     case CLEAR_FOCUS:
       nstate.focus = ''
       break
 
     case CLEAR_CART:
       nstate = clearCart(nstate)
+      persistCart(nstate)
       break
   }
   nstate.total = calculateTotal(nstate.cart_items, nstate.country_short)

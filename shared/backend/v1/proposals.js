@@ -34,12 +34,6 @@ aws.config.update({
   region: aws_region
 })
 
-console.log('proposals', {
-  accessKeyId: aws_accessKeyId,
-  secretAccessKey: aws_secretAccessKey,
-  region: aws_region
-})
-
 import {
   uploadToS3,
   generateChunkPath,
