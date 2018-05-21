@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import ReactDisqusComments from 'react-disqus-comments'
@@ -11,6 +11,7 @@ import BlogAuthorTop from './BlogAuthorTop'
 import BlogAuthorBottom from './BlogAuthorBottom'
 import BlogShareBar from './BlogShareBar'
 import Loading from '../../Common/Components/Loading'
+import { isEmpty } from 'lodash'
 
 const INJECTABLE_PARAGRAPH = 2
 
@@ -68,12 +69,9 @@ const renderBottomContributors = (contributors = []) => (
   </div>
 )
 
-class BlogItem extends React.Component {
-  constructor(props) {
-    super(props)
-    var title = this.props.title
-    var dispatch = this.props.dispatch
-    var pathname = this.props.pathname
+class BlogItem extends Component {
+  static defaultProps = {
+    updateMeta: () => {}
   }
 
   componentWillMount() {
@@ -91,6 +89,25 @@ class BlogItem extends React.Component {
     snserror('Blog comment', comment.text, 'ds-newblog')
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.loading) return
+    
+    const src_file = this.props.blog.src_file
+    const hasContent = !isEmpty(nextProps.cms.getIn([`blog_content`, src_file]))
+    
+    if (hasContent) {
+      const title = nextProps.blog.title
+      const description = nextProps.blog.abstract
+
+      const meta = {
+        title,
+        description
+      }
+      
+      this.props.updateMeta(meta)
+    }
+  }
+
   render() {
     var osite = this.props.site.toJS()
     var ocms = this.props.cms.toJS()
@@ -102,8 +119,8 @@ class BlogItem extends React.Component {
     var prettyname = blog.prettyname
     var src_file = blog.src_file
     var content = ocms.blog_content[src_file]
-    console.log(loading, src_file, content == undefined)
-    if (content == undefined || loading) {
+    console.log(loading, src_file, content === undefined)
+    if (content === undefined || loading) {
       console.log('Waiting for content to load')
       return <Loading />
     }
@@ -111,7 +128,7 @@ class BlogItem extends React.Component {
     var contributors = osite.contributors
     var contributor = contributors[author.toLowerCase()]
     var url = 'http://dataskeptic.com/blog' + prettyname
-    if (prettyname.indexOf('/episodes/') == 0) {
+    if (prettyname.indexOf('/episodes/') === 0) {
       contributor = undefined
     }
     var title = blog['title']
