@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router'
+import page from "../../Layout/hoc/page";
 
 const SnlImpact = () => {
   /*
@@ -32,4 +32,6 @@ const SnlImpact = () => {
   )
 }
 
-export default SnlImpact
+export default page(SnlImpact, {
+  title: 'Causal Impact'
+})

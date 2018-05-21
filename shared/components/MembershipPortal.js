@@ -1,47 +1,27 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
+import { isEmpty } from 'lodash'
 import Loading from '../Common/Components/Loading'
 import { Link } from 'react-router'
 import MembershipHeader from './membership/MembershipHeader'
-import ChangeMembership from './membership/ChangeMembership'
-
-import { changePageTitle } from '../Layout/Actions/LayoutActions'
+import authPage from '../Layout/hoc/authPage'
 
 class MembershipPortal extends Component {
-  constructor(props) {
-    super(props)
-  }
-
-  static getPageMeta() {
-    return {
-      title: 'Membership Portal | Data Skeptic'
-    }
-  }
-
-  componentWillMount() {
-    const { title } = MembershipPortal.getPageMeta()
-    this.props.dispatch(changePageTitle(title))
-  }
-
   componentDidMount() {
-    var dispatch = this.props.dispatch
-    if (!this.props.loggedIn) {
-      return this.props.router.push('/login')
-    }
-
-    var user = this.props.user
-    var p = { dispatch, user }
+    const { user, dispatch } = this.props
+    const p = { dispatch, user }
 
     dispatch({ type: 'CHECK_MEMBERSHIP', payload: p })
 
-    const script = document.createElement('script')
-    script.type = 'text/javascript'
-    script.async = true
-    script['data-cfasync'] = false
-    script.innerHTML =
-      "window.purechatApi = { l: [], t: [], on: function () { this.l.push(arguments); } }; (function () { var done = false; var script = document.createElement('script'); script.async = true; script.type = 'text/javascript'; script.src = 'https://app.purechat.com/VisitorWidget/WidgetScript'; document.getElementsByTagName('HEAD').item(0).appendChild(script); script.onreadystatechange = script.onload = function (e) { if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) { var w = new PCWidget({c: 'dddd526a-c56a-4f86-8985-6e36310b9b21', f: true }); done = true; } }; })();"
-    document.body.appendChild(script)
+    if (isEmpty(window.purechatApi)) {
+      const script = document.createElement('script')
+      script.type = 'text/javascript'
+      script.async = true
+      script['data-cfasync'] = false
+      script.innerHTML =
+        "window.purechatApi = { l: [], t: [], on: function () { this.l.push(arguments); } }; (function () { var done = false; var script = document.createElement('script'); script.async = true; script.type = 'text/javascript'; script.src = 'https://app.purechat.com/VisitorWidget/WidgetScript'; document.getElementsByTagName('HEAD').item(0).appendChild(script); script.onreadystatechange = script.onload = function (e) { if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) { var w = new PCWidget({c: 'dddd526a-c56a-4f86-8985-6e36310b9b21', f: true }); done = true; } }; })();"
+      document.body.appendChild(script)
+    }
   }
 
   render() {
@@ -49,25 +29,14 @@ class MembershipPortal extends Component {
     const pmembership = this.props.memberportal.toJS()
     const mode = pmembership['mode']
 
-    if (!loggedIn) {
-      return (
-        <div className="member-not-found-outer">
-          <div className="member-not-found">
-            <p>You are not logged in. Please start with that.</p>
-            <a href="/login" />
-          </div>
-        </div>
-      )
-    }
-
     if (children) {
       return children
     }
 
-    if (mode == 'loading') {
+    if (mode === 'loading') {
       return <Loading />
     }
-    if (mode == 'not-found') {
+    if (mode === 'not-found') {
       return (
         <div className="member-not-found-outer">
           <div className="member-not-found">
@@ -142,8 +111,13 @@ class MembershipPortal extends Component {
   }
 }
 
-export default connect(state => ({
-  user: state.auth.getIn(['user']).toJS(),
-  loggedIn: state.auth.getIn(['loggedIn']),
-  memberportal: state.memberportal
-}))(MembershipPortal)
+export default authPage(
+  connect(state => ({
+    user: state.auth.getIn(['user']).toJS(),
+    loggedIn: state.auth.getIn(['loggedIn']),
+    memberportal: state.memberportal
+  }))(MembershipPortal),
+  {
+    title: `Membership Portal`
+  }
+)

@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
 import Episode from '../Components/Episode'
@@ -10,36 +9,16 @@ import Container from '../../Layout/Components/Container/Container'
 import Content from '../../Layout/Components/Content/Content'
 import SideBar from '../../Layout/Components/SideBar/SideBar'
 
-import { changePageTitle } from '../../Layout/Actions/LayoutActions'
-
 import { year_from_path } from '../../utils/redux_loader'
 import { load as loadEpisodes } from '../../reducers/EpisodesReducer'
 import infiniteList from '../../Data/hoc/infiniteList'
+import page from "../../Layout/hoc/page";
 
 const EpisodesList = infiniteList({
   dataSource: state => state.episodes.toJS()
 })
 
 class Podcast extends Component {
-  constructor(props) {
-    super(props)
-  }
-
-  static getPageMeta() {
-    return {
-      title: 'Podcasts | Data Skeptic'
-    }
-  }
-
-  componentDidMount() {
-    const dispatch = this.props.dispatch
-    const { isLoaded } = this.props
-    const pathname = this.props.location.pathname
-
-    const { title } = Podcast.getPageMeta()
-    dispatch(changePageTitle(title))
-  }
-
   updateLocation = () => {}
 
   loadMore = (limit, offset) => {
@@ -82,9 +61,11 @@ class Podcast extends Component {
   }
 }
 
-export default connect(state => ({
+export default page(connect(state => ({
   eps: state.episodes.toJS(),
   list: state.episodes.getIn(['episodes']).toJS(),
   years: state.episodes.getIn(['years']).toJS(),
   isLoaded: state.episodes.getIn(['loaded'])
-}))(Podcast)
+}))(Podcast), {
+  title: 'Podcasts'
+})

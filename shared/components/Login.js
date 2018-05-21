@@ -1,11 +1,9 @@
-import React, { Component, PropTypes } from 'react'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-
-import { changePageTitle } from '../Layout/Actions/LayoutActions'
+import React, { Component } from 'react'
 import LoginForm from './LoginForm'
 import { Link } from 'react-router'
 import axios from 'axios'
+import page from '../Layout/hoc/page'
+import withUser from "../Layout/hoc/withUser";
 
 const LOGIN_ENDPOINT = '/api/v1/auth/login/'
 
@@ -31,17 +29,6 @@ class Login extends Component {
     this.state = {
       error: ''
     }
-  }
-
-  static getPageMeta() {
-    return {
-      title: 'Login | Data Skeptic'
-    }
-  }
-
-  componentWillMount() {
-    const { title } = Login.getPageMeta()
-    this.props.dispatch(changePageTitle(title))
   }
 
   googleLogin() {
@@ -120,7 +107,6 @@ class Login extends Component {
   }
 }
 
-export default connect(state => ({
-  user: state.auth.getIn(['user']).toJS(),
-  loggedIn: state.auth.getIn(['loggedIn'])
-}))(Login)
+export default withUser(page(Login, {
+  title: 'Admin Login'
+}))

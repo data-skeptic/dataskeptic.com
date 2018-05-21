@@ -1,13 +1,13 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { Link } from 'react-router'
 
 import { getPlaylistEpisodes, addEpisodes } from '../utils/redux_loader'
-import { changePageTitle } from '../Layout/Actions/LayoutActions'
 import moment from 'moment/moment'
 import { addPlaylist, isPlaylistLoaded } from '../Auth/Reducers/AuthReducer'
 import Loading from '../Common/Components/Loading'
+import authPage from '../Layout/hoc/authPage'
 
 const renderDate = date => moment(date).format('MMMM D, YYYY')
 const CURRENT_YEAR = new Date()
@@ -93,17 +93,7 @@ class UserPlaylist extends Component {
     }
   }
 
-  componentWillMount() {
-    const { title } = UserPlaylist.getPageMeta()
-    this.props.dispatch(changePageTitle(title))
-  }
-
   componentDidMount() {
-    var dispatch = this.props.dispatch
-    if (!this.props.loggedIn) {
-      window.location.href = '/login'
-    }
-
     const playlist =
       this.props.user && this.props.user.lists && this.props.user.lists.playlist
     if (playlist) {
@@ -177,9 +167,6 @@ class UserPlaylist extends Component {
   }
 
   render() {
-    const { loggedIn } = this.props
-    if (!loggedIn) return <div />
-
     return (
       <Container>
         <PageTitle>My playlist</PageTitle>
@@ -189,13 +176,16 @@ class UserPlaylist extends Component {
   }
 }
 
-export default connect(state => ({
-  user: state.auth.getIn(['user']).toJS(),
-  loggedIn: state.auth.getIn(['loggedIn']),
-  isPlaying: state.player.getIn(['is_playing']),
-  playerEpisodeGuid: state.player.getIn(['episode', 'guid']),
-  playlistLoaded: isPlaylistLoaded(state)
-}))(UserPlaylist)
+export default authPage(
+  connect(state => ({
+    isPlaying: state.player.getIn(['is_playing']),
+    playerEpisodeGuid: state.player.getIn(['episode', 'guid']),
+    playlistLoaded: isPlaylistLoaded(state)
+  }))(UserPlaylist),
+  {
+    title: `My Playlist`
+  }
+)
 
 const Container = styled.div`
   margin: 25px auto;

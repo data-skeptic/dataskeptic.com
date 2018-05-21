@@ -1,12 +1,10 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import AdminLayout from './AdminLayout'
 import CMS from './CMS'
+import page from "../../Layout/hoc/page";
 
 class AdminCmsPending extends Component {
   render() {
-    const { history } = this.props
-
     return (
       <div>
         <h3>Pending</h3>
@@ -16,6 +14,8 @@ class AdminCmsPending extends Component {
     )
   }
 }
-export default connect(state => ({
+export default page(connect(state => ({
   admin: state.admin
-}))(AdminCmsPending)
+}))(AdminCmsPending), {
+  title: `Admin Pending`
+})

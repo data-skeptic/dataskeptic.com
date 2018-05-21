@@ -2,22 +2,13 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import MailingList from '../Common/Components/MailingList'
 
-import { changePageTitle } from '../Layout/Actions/LayoutActions'
-
 import HomeContainer from '../../shared/Home'
 import { parseQuery } from '../utils/parseQuery'
+import page from '../Layout/hoc/page'
 
 class Home extends Component {
-  static getPageMeta() {
-    return {
-      title: 'Data Skeptic'
-    }
-  }
-
   componentWillMount() {
-    var dispatch = this.props.dispatch
-    const { title } = Home.getPageMeta()
-    dispatch(changePageTitle(title))
+    const dispatch = this.props.dispatch
 
     if (!this.props.cms.get('home_loaded')) {
       dispatch({
@@ -35,12 +26,6 @@ class Home extends Component {
   }
 
   render() {
-    var ocms = this.props.cms.toJS()
-    var latest_episode_blog = ocms.latest_episode
-    var guid = latest_episode_blog['guid']
-    var oepisodes = this.props.episodes.toJS()
-    var ep_map = oepisodes.ep_map
-    var latest_episode = ep_map[guid]
     return (
       // <div className="center">
       //   <div className="row">
@@ -70,7 +55,6 @@ class Home extends Component {
   }
 }
 
-export default connect(state => ({
-  episodes: state.episodes,
-  cms: state.cms
-}))(Home)
+export default page(connect(state => ({ cms: state.cms }))(Home), {
+  title: 'Data Skeptic'
+})

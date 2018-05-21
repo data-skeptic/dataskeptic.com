@@ -1,12 +1,10 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import AdminLayout from './AdminLayout'
 import HomepageController from './HomepageController'
+import page from '../../Layout/hoc/page'
 
 class AdminCmsFeature extends Component {
   render() {
-    const { history } = this.props
-
     return (
       <div>
         <h3>Feature</h3>
@@ -16,4 +14,8 @@ class AdminCmsFeature extends Component {
     )
   }
 }
-export default connect(state => ({}))(AdminCmsFeature)
+
+export default page(connect(state => ({}))(AdminCmsFeature), {
+  title: `Admin 
+  Feature`
+})

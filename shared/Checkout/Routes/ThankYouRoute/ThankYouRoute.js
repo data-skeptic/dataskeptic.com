@@ -1,10 +1,10 @@
-import React, { Component, PropTypes } from 'react'
-import styled from 'styled-components'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { isEmpty } from 'lodash'
 import { changePageTitle } from '../../../Layout/Actions/LayoutActions'
 import { loadReceipt } from '../../Actions/CheckoutActions'
 import Receipt from '../../Components/Receipt'
+import page from "../../../Layout/hoc/page";
 
 const getLocationQuery = search => {
   const params = search.replace('?', '').split('=')
@@ -17,12 +17,7 @@ const getLocationQuery = search => {
 }
 
 class ThankYouRoute extends Component {
-  static getPageMeta() {
-    return {
-      title: `Payment Complete | Data Skeptic`
-    }
-  }
-
+ 
   componentDidMount() {
     const id = getLocationQuery(this.props.location.search)
     if (isEmpty(id)) {
@@ -32,9 +27,6 @@ class ThankYouRoute extends Component {
     if (isEmpty(this.props.receipt)) {
       this.props.dispatch(loadReceipt(id))
     }
-
-    const { title } = ThankYouRoute.getPageMeta()
-    this.props.dispatch(changePageTitle(title))
   }
 
   render() {
@@ -62,9 +54,11 @@ class ThankYouRoute extends Component {
   }
 }
 
-export default connect(state => ({
+export default page(connect(state => ({
   error: state.checkout.get('error'),
   loaded: state.checkout.get('loaded'),
   processing: state.checkout.get('processing'),
   receipt: state.checkout.get('receipt').toJS()
-}))(ThankYouRoute)
+}))(ThankYouRoute), {
+  title: `Payment Complete | Data Skeptic`
+})

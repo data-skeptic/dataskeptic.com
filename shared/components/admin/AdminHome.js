@@ -1,6 +1,7 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import AdminLayout from './AdminLayout'
+import adminPage from '../../Layout/hoc/adminPage'
 
 class AdminHome extends Component {
   render() {
@@ -17,4 +18,6 @@ class AdminHome extends Component {
     )
   }
 }
-export default connect(state => ({}))(AdminHome)
+export default adminPage(connect(state => ({}))(AdminHome), {
+  title: `Admin Dashboard`
+})

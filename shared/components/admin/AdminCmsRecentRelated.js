@@ -1,11 +1,9 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import AdminLayout from './AdminLayout'
 import RelatedContentList from './RelatedContentList'
 
 class AdminCmsRecentRelated extends Component {
   render() {
-    const { history } = this.props
     const oadmin = this.props.admin.toJS()
     const relatedcontent = oadmin['relatedcontent'] || []
 
@@ -20,6 +18,8 @@ class AdminCmsRecentRelated extends Component {
     )
   }
 }
-export default connect(state => ({
+export default page(connect(state => ({
   admin: state.admin
-}))(AdminCmsRecentRelated)
+}))(AdminCmsRecentRelated), {
+  title: `Admin Recent Related`
+})

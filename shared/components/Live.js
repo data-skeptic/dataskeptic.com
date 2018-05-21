@@ -1,13 +1,9 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import ReactDOM from 'react-dom'
 import Loading from '../Common/Components/Loading'
+import page from "../Layout/hoc/page";
 
 class Live extends Component {
-  constructor(props) {
-    super(props)
-  }
-
   componentDidMount() {
     var dispatch = this.props.dispatch
     dispatch({
@@ -19,7 +15,7 @@ class Live extends Component {
   render() {
     var ocms = this.props.cms.toJS()
     var live = ocms['live']
-    if (live == 'loading') {
+    if (live === 'loading') {
       return <Loading />
     } else if (live != '') {
       var src = 'https://www.youtube.com/embed/' + live
@@ -55,6 +51,8 @@ class Live extends Component {
   }
 }
 
-export default connect(state => ({
+export default page(connect(state => ({
   cms: state.cms
-}))(Live)
+}))(Live), {
+  title: 'Live'
+})

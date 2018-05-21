@@ -7,24 +7,15 @@ import CartContainer from '../Cart/Containers/CartContainer'
 import StoreItem from './StoreItem'
 
 import { get_products } from '../utils/redux_loader'
-
-import { changePageTitle } from '../Layout/Actions/LayoutActions'
+import page from "../Layout/hoc/page";
 
 class Store extends React.Component {
-  static getPageMeta() {
-    return {
-      title: 'Store | Data Skeptic'
-    }
-  }
-
   componentWillMount() {
     const { dispatch } = this.props
     const loaded = this.props.products.get('products_loaded')
     if (!loaded) {
       get_products(dispatch)
     }
-    const { title } = Store.getPageMeta()
-    dispatch(changePageTitle(title))
   }
 
   render() {
@@ -41,7 +32,7 @@ class Store extends React.Component {
         </div>
       )
     } else {
-      var products = oproducts.products || []
+      const products = oproducts.products || []
       return (
         <div className="">
           <div className="col-md-8 col-sm-12 store-items">
@@ -64,7 +55,12 @@ class Store extends React.Component {
   }
 }
 
-export default connect(state => ({
-  products: state.products,
-  cart: state.cart
-}))(Store)
+export default page(
+  connect(state => ({
+    products: state.products,
+    cart: state.cart
+  }))(Store),
+  {
+    title: 'Store'
+  }
+)

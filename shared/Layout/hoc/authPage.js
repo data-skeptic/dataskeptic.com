@@ -6,9 +6,10 @@ import {
   isAdministratorUser,
   isStandartUser
 } from '../../Auth/Helpers/UserTypes'
+import withUser from './withUser'
 
-export default (WrappedComponent, options) => {
-  const { redirectTo = '/404' } = options
+export default (WrappedComponent, options = {}) => {
+  const { redirectTo = '/login' } = options
 
   const authPage = class AuthPage extends Component {
     componentWillMount() {
@@ -25,7 +26,7 @@ export default (WrappedComponent, options) => {
     render() {
       const { ...rest } = this.props
 
-      return <WrappedComponent {...rest} />
+      return this.hasAccess(this.props.user) && <WrappedComponent {...rest} />
     }
   }
 

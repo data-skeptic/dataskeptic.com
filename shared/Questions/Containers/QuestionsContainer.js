@@ -13,6 +13,7 @@ import {
   complete,
   fail
 } from '../../Proposals/Actions/RecordingFlowActions'
+import page from "../../Layout/hoc/page";
 
 class QuestionsContainer extends Component {
   recordingReady = noDelay => {
@@ -69,7 +70,7 @@ class QuestionsContainer extends Component {
 
 const selector = formValueSelector('question')
 
-export default connect(
+export default page(connect(
   state => ({
     confirmPolicy: selector(state, 'confirmPolicy'),
     activeStep: state.questions.getIn(['form', 'step']),
@@ -91,4 +92,6 @@ export default connect(
       },
       dispatch
     )
-)(QuestionsContainer)
+)(QuestionsContainer), {
+  title: `Questions`
+})

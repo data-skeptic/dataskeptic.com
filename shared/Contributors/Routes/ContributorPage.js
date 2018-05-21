@@ -9,6 +9,7 @@ import marked from 'marked'
 import moment from 'moment/moment'
 import { get_contributor_posts } from '../../utils/redux_loader'
 import Loading from '../../Common/Components/Loading'
+import page from "../../Layout/hoc/page";
 
 const markdown = text => {
   const rawMarkup = marked(text)
@@ -33,12 +34,6 @@ const renderPostsCount = count =>
   count > MAX_POSTS_COUNT ? `${MAX_POSTS_COUNT}+` : count
 
 class ContributorPage extends Component {
-  static getPageMeta() {
-    return {
-      title: `Contributors Page | Data Skeptic`
-    }
-  }
-
   componentWillMount() {
     const contributor = getContributorInfo(
       this.props.params.contributor,
@@ -49,7 +44,7 @@ class ContributorPage extends Component {
       this.missing()
     } else {
       const { prettyname, posts } = contributor
-      title = `${prettyname} | Data Skeptic`
+      title = `${prettyname}`
 
       if (!posts) {
         get_contributor_posts(
@@ -59,7 +54,9 @@ class ContributorPage extends Component {
       }
     }
 
-    this.props.dispatch(changePageTitle(title))
+    this.props.updateMeta({
+      title
+    })
   }
 
   missing() {
@@ -264,6 +261,8 @@ const Abstract = styled.div`
   line-height: 24px;
 `
 
-export default connect(state => ({
+export default page(connect(state => ({
   contributors: state.site.get('contributors').toJS()
-}))(ContributorPage)
+}))(ContributorPage), {
+  title: 'Contributor Page'
+})

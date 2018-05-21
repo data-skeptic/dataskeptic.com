@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
-import { changePageTitle } from '../../Layout/Actions/LayoutActions'
-
 import Blogs, { Wrapper as CarouselWrapper } from '../Containers/Blogs'
 
 import Events, { Wrapper as EventsWrapper } from '../Containers/Events'
@@ -11,6 +9,7 @@ import Jobs from '../Containers/Jobs'
 
 import { loadCareersCity } from '../../reducers/JobsReducer'
 import UploadResume from '../Forms/UploadResume'
+import page from "../../Layout/hoc/page";
 
 const FILES_BUCKET = process.env.SITE_BUCKET
 
@@ -24,17 +23,7 @@ class CityCareers extends Component {
     error: null
   }
 
-  static getPageMeta() {
-    return {
-      title: 'Careers | Data Skeptic'
-    }
-  }
-
   componentDidMount() {
-    const { dispatch } = this.props
-    const { title } = CityCareers.getPageMeta(this.props)
-    dispatch(changePageTitle(title))
-
     const cityId = this.props.params.id
     this.props.dispatch(loadCareersCity(cityId))
   }
@@ -144,11 +133,13 @@ const Resume = styled.div`
   margin: 10px;
 `
 
-export default connect(state => ({
+export default page(connect(state => ({
   loading: state.jobs.getIn(['city', 'loading']),
   loaded: state.jobs.getIn(['city', 'loaded']),
   error: state.jobs.getIn(['city', 'error']),
   jobs: state.jobs.getIn(['city', 'jobs']),
   events: state.jobs.getIn(['city', 'events']),
   blogs: state.jobs.getIn(['city', 'blogs'])
-}))(CityCareers)
+}))(CityCareers), { 
+  title: 'Careers'
+})

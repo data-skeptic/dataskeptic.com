@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { change, formValueSelector } from 'redux-form'
 import styled from 'styled-components'
-import moment from 'moment'
 
-import { changePageTitle } from '../../Layout/Actions/LayoutActions'
 import UploadFileTypeBox from '../../Proposals/Components/UploadFileTypeBox/UploadFileTypeBox'
 import UploadResume, {
   KEY,
@@ -13,10 +11,12 @@ import UploadResume, {
 } from '../Forms/UploadResume'
 
 import { submitResume } from '../../reducers/JobsReducer'
+import page from "../../Layout/hoc/page";
 
 const FILES_BUCKET = process.env.SITE_BUCKET
 
 class Careers extends Component {
+  
   onResumeUpload = data => {
     const value = data[0]
     this.setResume(value)
@@ -25,12 +25,7 @@ class Careers extends Component {
       payload: data
     })
   }
-
-  componentDidMount() {
-    const { dispatch } = this.props
-    const { title } = Careers.getPageMeta(this.props)
-    dispatch(changePageTitle(title))
-  }
+  
   submit = data => {
     data = {
       ...data,
@@ -46,12 +41,6 @@ class Careers extends Component {
 
   setResume = value => {
     this.props.dispatch(change(KEY, RESUME_FIELD, value))
-  }
-
-  static getPageMeta() {
-    return {
-      title: 'Careers | Data Skeptic'
-    }
   }
 
   render() {
@@ -171,10 +160,15 @@ const UploadBox = styled(UploadFileTypeBox)`
 `
 
 const selector = formValueSelector(KEY)
-export default connect(state => ({
-  resume: selector(state, RESUME_FIELD),
-  notify: selector(state, NOTIFY_FIELD),
-  submitted: state.jobs.getIn(['resume', 'submitted']),
-  submitting: state.jobs.getIn(['resume', 'submitting']),
-  error: state.jobs.getIn(['resume', 'error'])
-}))(Careers)
+export default page(
+  connect(state => ({
+    resume: selector(state, RESUME_FIELD),
+    notify: selector(state, NOTIFY_FIELD),
+    submitted: state.jobs.getIn(['resume', 'submitted']),
+    submitting: state.jobs.getIn(['resume', 'submitting']),
+    error: state.jobs.getIn(['resume', 'error'])
+  }))(Careers),
+  {
+    title: 'Careers'
+  }
+)

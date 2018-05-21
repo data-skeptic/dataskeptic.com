@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import page from '../../Layout/hoc/page'
 
 class DripUnsubscribe extends Component {
   render() {
@@ -17,7 +18,11 @@ class DripUnsubscribe extends Component {
   }
 }
 
-export default connect(
-  state => ({}),
-  dispatch => bindActionCreators({}, dispatch)
-)(DripUnsubscribe)
+export default page(
+  connect(state => ({}), dispatch => bindActionCreators({}, dispatch))(
+    DripUnsubscribe
+  ),
+  {
+    title: `Drip Unsubscribe`
+  }
+)

@@ -1,8 +1,13 @@
 import React, { Component } from 'react'
 import { Helmet } from 'react-helmet'
+import { isEmpty } from 'lodash'
 import styled from 'styled-components'
 
-export default (WrappedComponent, options) => {
+export default (WrappedComponent, options = {}) => {
+  if (isEmpty(options)) {
+    throw Error(`options couldn't be empty`)
+  }
+  
   return class Page extends Component {
     static defaultProps = {}
 

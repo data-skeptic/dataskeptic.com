@@ -38,7 +38,6 @@ import Services from 'components/Services'
 import Store from 'components/Store'
 import CheckoutThankYouPage from 'Checkout/Routes/ThankYouRoute/ThankYouRoute'
 import ProposalsThankYouPage from 'Proposals/Routes/ThankYou/ThankYouPage'
-import AudioExample from 'Proposals/Routes/AudioExample'
 import PrivacyPageContainer from 'Privacy/Containers/PrivacyPageContainer'
 import QuestionsContainer from './Questions/Containers/QuestionsContainer'
 import ContributorPage from './Contributors/Routes/ContributorPage'
@@ -133,7 +132,6 @@ export default (
 
       <Route path="/rfc" component={Proposals}>
         <Route path="thank-you" component={ProposalsThankYouPage} />
-        <Route path="example" component={AudioExample} />
       </Route>
 
       <Route path="/login" component={Login} />

@@ -14,7 +14,7 @@ import Container from '../../Layout/Components/Container/Container'
 import Content from '../../Layout/Components/Content/Content'
 import CommentBoxFormContainer from '../Containers/CommentBoxContainer/CommentBoxFormContainer'
 import Countdown from '../../Common/Components/Countdown'
-import { changePageTitle } from '../../Layout/Actions/LayoutActions'
+import page from "../../Layout/hoc/page";
 
 class Proposals extends Component {
   constructor(props) {
@@ -28,19 +28,7 @@ class Proposals extends Component {
       authorizedUser: null,
       ready: false
     }
-  }
-
-  static getPageMeta() {
-    return {
-      title: 'Request for Comment | Data Skeptic'
-    }
-  }
-
-  componentWillMount() {
-    const { title } = Proposals.getPageMeta()
-    this.props.changePageTitle(title)
-  }
-
+  } 
   componentWillReceiveProps(nextProps) {
     if (nextProps.user && this.state.authorizedUser) {
       this.setState({ ready: true })
@@ -191,7 +179,7 @@ class Proposals extends Component {
   }
 }
 
-export default connect(
+export default page(connect(
   state => ({
     aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket']),
     proposal: state.proposals.getIn(['proposal']).toJS(),
@@ -202,9 +190,10 @@ export default connect(
       {
         fetchCurrentProposal,
         proposalDeadlineReached,
-        changePageTitle,
         authorize
       },
       dispatch
     )
-)(Proposals)
+)(Proposals), {
+  title: 'Request for Comment'
+})
