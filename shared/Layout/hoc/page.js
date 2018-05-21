@@ -3,8 +3,6 @@ import { Helmet } from 'react-helmet'
 import styled from 'styled-components'
 
 export default (WrappedComponent, options) => {
-  console.info('page')
-  debugger
   return class Page extends Component {
     static defaultProps = {}
 
