@@ -8,9 +8,7 @@ import MobileSearchArea from '../../Search/Containers/MobileSearchArea'
 export const MobileMenu = ({
   pathname,
   visible = false,
-  itemClick,
-  loggedIn,
-  user
+  itemClick
 }) => {
   const classList = 'mobile-menu ' + (visible ? 'overlay' : '')
 
@@ -30,9 +28,7 @@ export const MobileMenu = ({
           pathname={pathname}
           itemClick={itemClick}
           cartButton={false}
-          loggedIn={loggedIn}
           mobile={true}
-          user={user}
         />
       </div>
     </div>
