@@ -11,11 +11,11 @@ class AdminCmsRecentRelated extends Component {
 
     return (
       relatedcontent && (
-        <AdminLayout history={history}>
+        <div>
           <h3>Recent Related</h3>
 
           <RelatedContentList items={relatedcontent} />
-        </AdminLayout>
+        </div>
       )
     )
   }

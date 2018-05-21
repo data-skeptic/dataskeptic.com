@@ -8,11 +8,11 @@ class AdminCmsAddRelated extends Component {
     const { history } = this.props
 
     return (
-      <AdminLayout history={history}>
+      <div history={history}>
         <h3>Related Content</h3>
 
         <RelatedContent />
-      </AdminLayout>
+      </div>
     )
   }
 }

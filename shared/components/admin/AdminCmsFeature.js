@@ -8,11 +8,11 @@ class AdminCmsFeature extends Component {
     const { history } = this.props
 
     return (
-      <AdminLayout history={history}>
+      <div>
         <h3>Feature</h3>
 
         <HomepageController />
-      </AdminLayout>
+      </div>
     )
   }
 }

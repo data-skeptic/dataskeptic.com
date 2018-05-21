@@ -8,11 +8,11 @@ class AdminEmailsSend extends Component {
     const { history } = this.props
 
     return (
-      <AdminLayout history={history}>
+      <div>
         <h3>Send Email</h3>
 
         <SendEmail />
-      </AdminLayout>
+      </div>
     )
   }
 }

@@ -14,9 +14,9 @@ class AdminOrdersProcessing extends Component {
     }
 
     return (
-      <AdminLayout history={history}>
+      <div>
         <OrderProcessing admin={this.props.admin} />
-      </AdminLayout>
+      </div>
     )
   }
 }

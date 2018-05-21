@@ -8,11 +8,11 @@ class AdminCmsPending extends Component {
     const { history } = this.props
 
     return (
-      <AdminLayout history={history}>
+      <div>
         <h3>Pending</h3>
 
         <CMS admin={this.props.admin} mode="pending" />
-      </AdminLayout>
+      </div>
     )
   }
 }

@@ -18,7 +18,7 @@ class AdminOrdersNew extends Component {
     var errorMsg = order.errorMsg
 
     return (
-      <AdminLayout history={history}>
+      <div>
         <h3>Orders [NEW]</h3>
 
         <hr />
@@ -27,7 +27,7 @@ class AdminOrdersNew extends Component {
         <hr />
 
         <OpenOrders redirect={this.redirect} />
-      </AdminLayout>
+      </div>
     )
   }
 }

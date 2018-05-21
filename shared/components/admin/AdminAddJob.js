@@ -20,7 +20,7 @@ class AdminAddJob extends Component {
     const { initialValues } = this.state
 
     return (
-      <AdminLayout history={history}>
+      <div>
         <h3>Add job</h3>
 
         <Container>
@@ -34,7 +34,7 @@ class AdminAddJob extends Component {
             customSuccess={success ? 'Job added.' : null}
           />
         </Container>
-      </AdminLayout>
+      </div>
     )
   }
 }
