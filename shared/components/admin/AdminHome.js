@@ -8,7 +8,11 @@ class AdminHome extends Component {
 
     return (
       <AdminLayout history={history}>
-        {children ? children : <h3>Welcome to dataskeptic.com administration portal.</h3>}
+        {children ? (
+          children
+        ) : (
+          <h3>Welcome to dataskeptic.com administration portal.</h3>
+        )}
       </AdminLayout>
     )
   }

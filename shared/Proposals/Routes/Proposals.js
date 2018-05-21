@@ -78,7 +78,7 @@ class Proposals extends Component {
 
   render() {
     const { ready, authorizedUser } = this.state
-    
+
     if (this.props.children) {
       return this.props.children
     }

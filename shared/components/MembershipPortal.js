@@ -29,10 +29,10 @@ class MembershipPortal extends Component {
     if (!this.props.loggedIn) {
       return this.props.router.push('/login')
     }
-    
+
     var user = this.props.user
     var p = { dispatch, user }
-    
+
     dispatch({ type: 'CHECK_MEMBERSHIP', payload: p })
 
     const script = document.createElement('script')
@@ -48,7 +48,7 @@ class MembershipPortal extends Component {
     const { user, loggedIn, children } = this.props
     const pmembership = this.props.memberportal.toJS()
     const mode = pmembership['mode']
-    
+
     if (!loggedIn) {
       return (
         <div className="member-not-found-outer">
@@ -59,7 +59,7 @@ class MembershipPortal extends Component {
         </div>
       )
     }
-    
+
     if (children) {
       return children
     }

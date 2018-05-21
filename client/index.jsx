@@ -60,7 +60,7 @@ class Root extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <Router children={routes} history={browserHistory}  />
+        <Router children={routes} history={browserHistory} />
       </Provider>
     )
   }

@@ -8,8 +8,7 @@ class AdminCmsRecent extends Component {
     const { history } = this.props
 
     return (
-      <div
-      >
+      <div>
         <h3>Recent</h3>
 
         <CMS admin={this.props.admin} mode="recent" />

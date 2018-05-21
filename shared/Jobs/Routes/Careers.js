@@ -55,7 +55,13 @@ class Careers extends Component {
   }
 
   render() {
-    const { resume, notify, submitted, error, submitting, children
+    const {
+      resume,
+      notify,
+      submitted,
+      error,
+      submitting,
+      children
     } = this.props
     const files = resume ? [resume] : []
     var due_date = new Date(2018, 4, 1)
@@ -64,7 +70,7 @@ class Careers extends Component {
     if (children) {
       return children
     }
-    
+
     return (
       <Container className="careers_page">
         <Title>Resume corpus submission system</Title>

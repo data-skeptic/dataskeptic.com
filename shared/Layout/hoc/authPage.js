@@ -29,12 +29,13 @@ export default (WrappedComponent, options) => {
     }
   }
 
-  return page(
-    connect(state => ({
-      admin: state.admin,
-      isAdmin: state.admin.isAdmin,
-      user: state.auth.getIn(['user']).toJS()
-    }))(authPage),
-    options
+  return withUser(
+    page(
+      connect(state => ({
+        admin: state.admin,
+        isAdmin: state.admin.isAdmin
+      }))(authPage),
+      options
+    )
   )
 }
