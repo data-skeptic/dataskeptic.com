@@ -12,7 +12,7 @@ import SideBar from '../../Layout/Components/SideBar/SideBar'
 import { year_from_path } from '../../utils/redux_loader'
 import { load as loadEpisodes } from '../../reducers/EpisodesReducer'
 import infiniteList from '../../Data/hoc/infiniteList'
-import page from "../../Layout/hoc/page";
+import page from '../../Layout/hoc/page'
 
 const EpisodesList = infiniteList({
   dataSource: state => state.episodes.toJS()
@@ -61,11 +61,14 @@ class Podcast extends Component {
   }
 }
 
-export default page(connect(state => ({
-  eps: state.episodes.toJS(),
-  list: state.episodes.getIn(['episodes']).toJS(),
-  years: state.episodes.getIn(['years']).toJS(),
-  isLoaded: state.episodes.getIn(['loaded'])
-}))(Podcast), {
-  title: 'Podcasts'
-})
+export default page(
+  connect(state => ({
+    eps: state.episodes.toJS(),
+    list: state.episodes.getIn(['episodes']).toJS(),
+    years: state.episodes.getIn(['years']).toJS(),
+    isLoaded: state.episodes.getIn(['loaded'])
+  }))(Podcast),
+  {
+    title: 'Podcasts'
+  }
+)

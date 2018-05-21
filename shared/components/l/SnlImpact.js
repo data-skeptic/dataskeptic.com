@@ -1,5 +1,5 @@
 import React from 'react'
-import page from "../../Layout/hoc/page";
+import page from '../../Layout/hoc/page'
 
 const SnlImpact = () => {
   /*

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import RelatedContent from './RelatedContent'
-import page from "../../Layout/hoc/page";
+import page from '../../Layout/hoc/page'
 
 class AdminCmsAddRelated extends Component {
   render() {

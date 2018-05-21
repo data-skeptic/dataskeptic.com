@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import page from "../Layout/hoc/page";
+import page from '../Layout/hoc/page'
 
 class Coaching extends Component {
   addToCart() {
@@ -112,7 +112,9 @@ class Coaching extends Component {
   }
 }
 
-export default page(connect(state => ({ products: state.products }))(Coaching), { 
-  title: 'Professional development coaching'
-})
-
+export default page(
+  connect(state => ({ products: state.products }))(Coaching),
+  {
+    title: 'Professional development coaching'
+  }
+)

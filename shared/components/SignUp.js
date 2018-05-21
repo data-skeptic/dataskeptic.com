@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import SignUpForm from './SignUpForm'
 import axios from 'axios'
-import page from "../Layout/hoc/page";
-import withUser from "../Layout/hoc/withUser";
+import page from '../Layout/hoc/page'
+import withUser from '../Layout/hoc/withUser'
 
 const SIGNUP_ENDPOINT = '/api/v1/auth/signup/'
 
@@ -70,6 +70,8 @@ class SignUp extends Component {
   }
 }
 
-export default withUser(page(connect(state => ({}))(SignUp), {
-  title: `Sign Up`
-}))
+export default withUser(
+  page(connect(state => ({}))(SignUp), {
+    title: `Sign Up`
+  })
+)

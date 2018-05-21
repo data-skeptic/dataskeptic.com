@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import page from "../Layout/hoc/page";
+import page from '../Layout/hoc/page'
 
 class Advertising extends Component {
   render() {
@@ -156,6 +156,9 @@ class Advertising extends Component {
   }
 }
 
-export default page(connect(state => ({ products: state.products }))(Advertising), {
-  title: 'Advertising'
-})
+export default page(
+  connect(state => ({ products: state.products }))(Advertising),
+  {
+    title: 'Advertising'
+  }
+)

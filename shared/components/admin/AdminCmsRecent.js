@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import CMS from './CMS'
+import page from '../../Layout/hoc/page'
 
 class AdminCmsRecent extends Component {
   render() {
@@ -13,8 +14,12 @@ class AdminCmsRecent extends Component {
     )
   }
 }
-export default page(connect(state => ({
-  admin: state.admin
-}))(AdminCmsRecent), {
-  title: `Recent`
-})
+
+export default page(
+  connect(state => ({
+    admin: state.admin
+  }))(AdminCmsRecent),
+  {
+    title: `Recent`
+  }
+)

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import SendEmail from './SendEmail'
-import page from "../../Layout/hoc/page";
+import page from '../../Layout/hoc/page'
 
 class AdminEmailsSend extends Component {
   render() {

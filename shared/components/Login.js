@@ -3,7 +3,7 @@ import LoginForm from './LoginForm'
 import { Link } from 'react-router'
 import axios from 'axios'
 import page from '../Layout/hoc/page'
-import withUser from "../Layout/hoc/withUser";
+import withUser from '../Layout/hoc/withUser'
 
 const LOGIN_ENDPOINT = '/api/v1/auth/login/'
 
@@ -107,6 +107,8 @@ class Login extends Component {
   }
 }
 
-export default withUser(page(Login, {
-  title: 'Admin Login'
-}))
+export default withUser(
+  page(Login, {
+    title: 'Admin Login'
+  })
+)

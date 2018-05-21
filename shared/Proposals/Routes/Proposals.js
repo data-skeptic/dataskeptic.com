@@ -14,7 +14,7 @@ import Container from '../../Layout/Components/Container/Container'
 import Content from '../../Layout/Components/Content/Content'
 import CommentBoxFormContainer from '../Containers/CommentBoxContainer/CommentBoxFormContainer'
 import Countdown from '../../Common/Components/Countdown'
-import page from "../../Layout/hoc/page";
+import page from '../../Layout/hoc/page'
 
 class Proposals extends Component {
   constructor(props) {
@@ -28,7 +28,7 @@ class Proposals extends Component {
       authorizedUser: null,
       ready: false
     }
-  } 
+  }
   componentWillReceiveProps(nextProps) {
     if (nextProps.user && this.state.authorizedUser) {
       this.setState({ ready: true })
@@ -179,21 +179,24 @@ class Proposals extends Component {
   }
 }
 
-export default page(connect(
-  state => ({
-    aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket']),
-    proposal: state.proposals.getIn(['proposal']).toJS(),
-    user: state.auth.getIn(['user']).toJS()
-  }),
-  dispatch =>
-    bindActionCreators(
-      {
-        fetchCurrentProposal,
-        proposalDeadlineReached,
-        authorize
-      },
-      dispatch
-    )
-)(Proposals), {
-  title: 'Request for Comment'
-})
+export default page(
+  connect(
+    state => ({
+      aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket']),
+      proposal: state.proposals.getIn(['proposal']).toJS(),
+      user: state.auth.getIn(['user']).toJS()
+    }),
+    dispatch =>
+      bindActionCreators(
+        {
+          fetchCurrentProposal,
+          proposalDeadlineReached,
+          authorize
+        },
+        dispatch
+      )
+  )(Proposals),
+  {
+    title: 'Request for Comment'
+  }
+)

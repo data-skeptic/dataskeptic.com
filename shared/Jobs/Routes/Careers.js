@@ -11,12 +11,11 @@ import UploadResume, {
 } from '../Forms/UploadResume'
 
 import { submitResume } from '../../reducers/JobsReducer'
-import page from "../../Layout/hoc/page";
+import page from '../../Layout/hoc/page'
 
 const FILES_BUCKET = process.env.SITE_BUCKET
 
 class Careers extends Component {
-  
   onResumeUpload = data => {
     const value = data[0]
     this.setResume(value)
@@ -25,7 +24,7 @@ class Careers extends Component {
       payload: data
     })
   }
-  
+
   submit = data => {
     data = {
       ...data,

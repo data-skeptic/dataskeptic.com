@@ -7,10 +7,9 @@ import Loading from '../../../Common/Components/Loading'
 import CheckoutThankYouRoute from '../ThankYouRoute/ThankYouRoute'
 
 import CheckoutFormContainer from '../../Containers/CheckoutFormContainer'
-import page from "../../../Layout/hoc/page";
+import page from '../../../Layout/hoc/page'
 
 class Checkout extends Component {
-  
   redirectToSuccessPage = ({ stripe_order_id }) => {
     window.scrollTo(0, 0)
     return (window.location.href = `/checkout/thank-you?num=${stripe_order_id}`)

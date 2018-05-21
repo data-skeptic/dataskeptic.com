@@ -9,7 +9,7 @@ import marked from 'marked'
 import moment from 'moment/moment'
 import { get_contributor_posts } from '../../utils/redux_loader'
 import Loading from '../../Common/Components/Loading'
-import page from "../../Layout/hoc/page";
+import page from '../../Layout/hoc/page'
 
 const markdown = text => {
   const rawMarkup = marked(text)
@@ -261,8 +261,11 @@ const Abstract = styled.div`
   line-height: 24px;
 `
 
-export default page(connect(state => ({
-  contributors: state.site.get('contributors').toJS()
-}))(ContributorPage), {
-  title: 'Contributor Page'
-})
+export default page(
+  connect(state => ({
+    contributors: state.site.get('contributors').toJS()
+  }))(ContributorPage),
+  {
+    title: 'Contributor Page'
+  }
+)

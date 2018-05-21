@@ -8,12 +8,11 @@ import BlogItem from '../Components/BlogItem'
 import BlogList from '../Components/BlogList'
 import NoBlogs from '../Components/NoBlogs'
 import Loading from '../../Common/Components/Loading'
-import page from "../../Layout/hoc/page";
+import page from '../../Layout/hoc/page'
 
 const normalizePathname = path => path.replace(/\/\//g, '/')
 
 class BlogRouter extends Component {
-
   // static getPageMeta(state) {
   //   const isExists = state.blogs.getIn(['blog_focus', 'blog'])
   //   if (!isExists) {
@@ -169,15 +168,18 @@ class BlogRouter extends Component {
   }
 }
 
-export default page(connect((state, ownProps) => ({
-  player: state.player,
-  blogs: state.blogs,
-  cms: state.cms,
-  episodes: state.episodes,
-  site: state.site
-}))(BlogRouter), {
-  title: 'Data Skeptic Blog',
-})
+export default page(
+  connect((state, ownProps) => ({
+    player: state.player,
+    blogs: state.blogs,
+    cms: state.cms,
+    episodes: state.episodes,
+    site: state.site
+  }))(BlogRouter),
+  {
+    title: 'Data Skeptic Blog'
+  }
+)
 
 const Wrapper = styled.div`
   @media (max-width: 768px) {

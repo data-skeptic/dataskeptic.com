@@ -8,7 +8,7 @@ import Plot from './Plot'
 import Alerts from './Alerts'
 import QueryConsole from './QueryConsole'
 import ScheduledReport from './ScheduledReport'
-import page from "../../Layout/hoc/page";
+import page from '../../Layout/hoc/page'
 
 class Explorer extends React.Component {
   constructor(props) {
@@ -98,8 +98,10 @@ class Explorer extends React.Component {
   }
 }
 
-export default page(connect(state => ({ timeseries: state.timeseries }))(Explorer), {
-  title: `Admin Explorer
+export default page(
+  connect(state => ({ timeseries: state.timeseries }))(Explorer),
+  {
+    title: `Admin Explorer
   `
-})
-
+  }
+)

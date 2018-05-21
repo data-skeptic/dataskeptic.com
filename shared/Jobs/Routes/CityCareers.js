@@ -9,7 +9,7 @@ import Jobs from '../Containers/Jobs'
 
 import { loadCareersCity } from '../../reducers/JobsReducer'
 import UploadResume from '../Forms/UploadResume'
-import page from "../../Layout/hoc/page";
+import page from '../../Layout/hoc/page'
 
 const FILES_BUCKET = process.env.SITE_BUCKET
 
@@ -133,13 +133,16 @@ const Resume = styled.div`
   margin: 10px;
 `
 
-export default page(connect(state => ({
-  loading: state.jobs.getIn(['city', 'loading']),
-  loaded: state.jobs.getIn(['city', 'loaded']),
-  error: state.jobs.getIn(['city', 'error']),
-  jobs: state.jobs.getIn(['city', 'jobs']),
-  events: state.jobs.getIn(['city', 'events']),
-  blogs: state.jobs.getIn(['city', 'blogs'])
-}))(CityCareers), { 
-  title: 'Careers'
-})
+export default page(
+  connect(state => ({
+    loading: state.jobs.getIn(['city', 'loading']),
+    loaded: state.jobs.getIn(['city', 'loaded']),
+    error: state.jobs.getIn(['city', 'error']),
+    jobs: state.jobs.getIn(['city', 'jobs']),
+    events: state.jobs.getIn(['city', 'events']),
+    blogs: state.jobs.getIn(['city', 'blogs'])
+  }))(CityCareers),
+  {
+    title: 'Careers'
+  }
+)

@@ -4,7 +4,7 @@ import AddJob, { tomorrow } from '../../Jobs/Forms/AddJob'
 import styled from 'styled-components'
 import { addJob } from '../../reducers/AdminReducer'
 import { strictForm } from '../../styles'
-import page from "../../Layout/hoc/page";
+import page from '../../Layout/hoc/page'
 
 class AdminAddJob extends Component {
   state = {
@@ -38,13 +38,16 @@ class AdminAddJob extends Component {
     )
   }
 }
-export default page(connect(state => ({
-  error: state.admin.getIn(['jobs', 'error']),
-  request: state.admin.getIn(['jobs', 'request']),
-  success: state.admin.getIn(['jobs', 'success'])
-}))(AdminAddJob), {
-  title: `Admin Add Job`
-})
+export default page(
+  connect(state => ({
+    error: state.admin.getIn(['jobs', 'error']),
+    request: state.admin.getIn(['jobs', 'request']),
+    success: state.admin.getIn(['jobs', 'success'])
+  }))(AdminAddJob),
+  {
+    title: `Admin Add Job`
+  }
+)
 
 const Container = styled.div`
   ${strictForm};

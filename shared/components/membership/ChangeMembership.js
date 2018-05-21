@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import MembershipHeader from './MembershipHeader'
 import axios from 'axios'
-import page from "../../Layout/hoc/page";
-import withUser from "../../Layout/hoc/withUser";
+import page from '../../Layout/hoc/page'
+import withUser from '../../Layout/hoc/withUser'
 
 class ChangeMembership extends Component {
   componentDidMount() {
@@ -220,8 +220,13 @@ class ChangeMembership extends Component {
   }
 }
 
-export default withUser(page(connect(state => ({
-  memberportal: state.memberportal
-}))(ChangeMembership), {
-  title: `Change Membership`
-}))
+export default withUser(
+  page(
+    connect(state => ({
+      memberportal: state.memberportal
+    }))(ChangeMembership),
+    {
+      title: `Change Membership`
+    }
+  )
+)

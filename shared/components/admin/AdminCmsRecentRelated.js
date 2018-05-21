@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import RelatedContentList from './RelatedContentList'
+import page from '../../Layout/hoc/page'
 
 class AdminCmsRecentRelated extends Component {
   render() {
@@ -18,8 +19,12 @@ class AdminCmsRecentRelated extends Component {
     )
   }
 }
-export default page(connect(state => ({
-  admin: state.admin
-}))(AdminCmsRecentRelated), {
-  title: `Admin Recent Related`
-})
+
+export default page(
+  connect(state => ({
+    admin: state.admin
+  }))(AdminCmsRecentRelated),
+  {
+    title: `Admin Recent Related`
+  }
+)

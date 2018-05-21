@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Loading from '../Common/Components/Loading'
-import page from "../Layout/hoc/page";
+import page from '../Layout/hoc/page'
 
 class Live extends Component {
   componentDidMount() {
@@ -51,8 +51,11 @@ class Live extends Component {
   }
 }
 
-export default page(connect(state => ({
-  cms: state.cms
-}))(Live), {
-  title: 'Live'
-})
+export default page(
+  connect(state => ({
+    cms: state.cms
+  }))(Live),
+  {
+    title: 'Live'
+  }
+)

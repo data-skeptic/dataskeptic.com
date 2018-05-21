@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import Loading from '../../Common/Components/Loading'
 import OrderProcessing from './OrderProcessing'
 import page from '../../Layout/hoc/page'
-import {isEmtpy} from 'lodash'
+import { isEmtpy } from 'lodash'
 
 class AdminOrdersProcessing extends Component {
   render() {

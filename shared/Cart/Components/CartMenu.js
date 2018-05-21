@@ -4,7 +4,7 @@ import NavLink from '../../components/NavLink'
 import CartLink from './CartLink'
 import AccountDropdownMenu from './AccountDropdownMenu'
 import SearchArea from '../../Search/Containers/SearchArea'
-import withUser from "../../Layout/hoc/withUser";
+import withUser from '../../Layout/hoc/withUser'
 
 export const CartMenu = ({
   pathname,

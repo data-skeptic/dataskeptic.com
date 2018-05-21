@@ -7,7 +7,7 @@ import CartContainer from '../Cart/Containers/CartContainer'
 import StoreItem from './StoreItem'
 
 import { get_products } from '../utils/redux_loader'
-import page from "../Layout/hoc/page";
+import page from '../Layout/hoc/page'
 
 class Store extends React.Component {
   componentWillMount() {

@@ -8,7 +8,7 @@ export default WrappedComponent => {
   const withUser = class WithUser extends Component {
     render() {
       const { isAuthorized, loggedIn, user, ...rest } = this.props
-      
+
       return (
         <WrappedComponent
           {...rest}

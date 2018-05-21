@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import page from "../Layout/hoc/page";
+import page from '../Layout/hoc/page'
 
 class Logout extends Component {
   componentDidMount() {

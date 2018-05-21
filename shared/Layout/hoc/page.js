@@ -7,7 +7,7 @@ export default (WrappedComponent, options = {}) => {
   if (isEmpty(options)) {
     throw Error(`options couldn't be empty`)
   }
-  
+
   return class Page extends Component {
     static defaultProps = {}
 

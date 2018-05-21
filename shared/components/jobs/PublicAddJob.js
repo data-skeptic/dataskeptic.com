@@ -4,7 +4,7 @@ import AddJob, { tomorrow } from '../../Jobs/Forms/AddJob'
 import styled from 'styled-components'
 import { container, strictForm } from '../../styles'
 import { changePageTitle } from '../../Layout/Actions/LayoutActions'
-import page from "../../Layout/hoc/page";
+import page from '../../Layout/hoc/page'
 
 class PublicAddJob extends Component {
   state = {
@@ -64,13 +64,16 @@ class PublicAddJob extends Component {
   }
 }
 
-export default page(connect(state => ({
-  error: state.admin.getIn(['jobs', 'error']),
-  request: state.admin.getIn(['jobs', 'request']),
-  success: state.admin.getIn(['jobs', 'success'])
-}))(PublicAddJob), {
-  title: `Add Job`
-})
+export default page(
+  connect(state => ({
+    error: state.admin.getIn(['jobs', 'error']),
+    request: state.admin.getIn(['jobs', 'request']),
+    success: state.admin.getIn(['jobs', 'success'])
+  }))(PublicAddJob),
+  {
+    title: `Add Job`
+  }
+)
 
 const Container = styled.div`
   ${container};

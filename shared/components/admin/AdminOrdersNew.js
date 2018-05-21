@@ -1,9 +1,9 @@
-import React, { Component} from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import OpenOrders from './OpenOrders'
 import Loading from '../../Common/Components/Loading'
-import {isEmpty} from 'lodash'
-import page from "../../Layout/hoc/page";
+import { isEmpty } from 'lodash'
+import page from '../../Layout/hoc/page'
 
 class AdminOrdersNew extends Component {
   redirect = to => this.props.router.push(to)
@@ -31,8 +31,11 @@ class AdminOrdersNew extends Component {
     )
   }
 }
-export default page(connect(state => ({
-  admin: state.admin
-}))(AdminOrdersNew), {
-  
-})
+export default page(
+  connect(state => ({
+    admin: state.admin
+  }))(AdminOrdersNew),
+  {
+    title: `Admin Orders New`
+  }
+)
