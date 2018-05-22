@@ -130,8 +130,12 @@ export default (
 
       <Route path="/projects" component={Projects} />
 
-      <Route path="/rfc" component={Proposals}>
-        <Route path="thank-you" component={ProposalsThankYouPage} />
+      <Route path="/rfc" component={Proposals} showAds={false}>
+        <Route
+          path="thank-you"
+          component={ProposalsThankYouPage}
+          showAds={false}
+        />
       </Route>
 
       <Route path="/login" component={Login} />
@@ -142,56 +146,56 @@ export default (
 
       <Route path="/questions" component={QuestionsContainer} />
 
-      <Route path="/membership" component={MembershipPortal} showAds={true}>
-        <Route path="change" component={ChangeMembership} showAds={true} />
+      <Route path="/membership" component={MembershipPortal}>
+        <Route path="change" component={ChangeMembership} />
 
-        <Route path="inbox" component={MembershipInbox} showAds={true} />
+        <Route path="inbox" component={MembershipInbox} />
 
-        <Route
-          path="analytics"
-          component={MembershipAnalytics}
-          showAds={true}
-        />
+        <Route path="analytics" component={MembershipAnalytics} />
 
-        <Route
-          path="downloads"
-          component={MembershipDownloads}
-          showAds={true}
-        />
+        <Route path="downloads" component={MembershipDownloads} />
       </Route>
 
-      <Route path="/profile/playlist" component={UserPlaylist} showAds={true} />
+      <Route path="/profile/playlist" component={UserPlaylist} />
 
-      <Route path="/admin" component={AdminHome}>
+      <Route path="/admin" component={AdminHome} showAds={false}>
         <Route path="cms">
-          <Route path="pending" component={AdminCmsPending} />
-          <Route path="recent" component={AdminCmsRecent} />
-          <Route path="feature" component={AdminCmsFeature} />
-          <Route path="add_related" component={AdminCmsAddRelated} />
-          <Route path="recent_related" component={AdminCmsRecentRelated} />
+          <Route path="pending" component={AdminCmsPending} showAds={false} />
+          <Route path="recent" component={AdminCmsRecent} showAds={false} />
+          <Route path="feature" component={AdminCmsFeature} showAds={false} />
+          <Route
+            path="add_related"
+            component={AdminCmsAddRelated}
+            showAds={false}
+          />
+          <Route
+            path="recent_related"
+            component={AdminCmsRecentRelated}
+            showAds={false}
+          />
         </Route>
         <Route path="orders">
-          <Route path="new" component={AdminOrdersNew} />
-          <Route path="processing" component={AdminOrdersProcessing} />
+          <Route path="new" component={AdminOrdersNew} showAds={false} />
+          <Route
+            path="processing"
+            component={AdminOrdersProcessing}
+            showAds={false}
+          />
         </Route>
         <Route path="emails">
-          <Route path="send" component={AdminEmailsSend} />
+          <Route path="send" component={AdminEmailsSend} showAds={false} />
         </Route>
         <Route path="job">
-          <Route path="add" component={AdminAddJob} />
+          <Route path="add" component={AdminAddJob} showAds={false} />
         </Route>
 
         <Route path="login" component={Login} />
         <Route path="tse" component={Explorer} />
       </Route>
 
-      <Route path="/drip-result" component={DripThankYou} showAds={true} />
+      <Route path="/drip-result" component={DripThankYou} />
 
-      <Route
-        path="/drip-unsubscribe"
-        component={DripUnsubscribe}
-        showAds={true}
-      />
+      <Route path="/drip-unsubscribe" component={DripUnsubscribe} />
 
       <Route path="/analytics" component={Analytics} />
 

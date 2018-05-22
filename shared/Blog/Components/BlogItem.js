@@ -91,10 +91,10 @@ class BlogItem extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.loading) return
-    
+
     const src_file = this.props.blog.src_file
     const hasContent = !isEmpty(nextProps.cms.getIn([`blog_content`, src_file]))
-    
+
     if (hasContent) {
       const title = nextProps.blog.title
       const description = nextProps.blog.abstract
@@ -103,7 +103,7 @@ class BlogItem extends Component {
         title,
         description
       }
-      
+
       this.props.updateMeta(meta)
     }
   }

@@ -243,9 +243,9 @@ class MainView extends React.Component {
       cart,
       isCartVisible,
       chatbot,
-      contributors
+      contributors,
+      showAds = true
     } = this.props
-    const { showAds = true } = this.props.route
     const { pathname } = this.props.location
     const itemsCount = getCartItemsCount(cart.toJS().cart_items)
     const isOverflowMode = isCartVisible
@@ -298,6 +298,7 @@ export default connect(state => ({
   isCartVisible: state.cart.getIn(['cart_visible']),
   site: state.site,
   isMobileMenuVisible: state.layout.getIn(['isMobileMenuVisible']),
+  showAds: state.layout.getIn(['showAds']),
   chatbot: state.chatbot,
   contributors: state.site.get('contributors').toJS()
 }))(MainView)

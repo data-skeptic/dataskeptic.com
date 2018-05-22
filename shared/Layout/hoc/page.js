@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
 import { Helmet } from 'react-helmet'
-import { isEmpty } from 'lodash'
+import { isEmpty, isUndefined } from 'lodash'
 import styled from 'styled-components'
+import { setAdvertiseVisibility } from '../Actions/LayoutActions'
+import { connect } from 'react-redux'
 
 export default (WrappedComponent, options = {}) => {
   if (isEmpty(options)) {
     throw Error(`options couldn't be empty`)
   }
 
-  return class Page extends Component {
+  const page = class Page extends Component {
     static defaultProps = {}
 
     state = {
@@ -20,6 +22,13 @@ export default (WrappedComponent, options = {}) => {
         author: options.author || 'Kyle Polich',
         keywords: options.keywords || 'data skeptic, podcast,'
       }
+    }
+
+    componentDidMount() {
+      const { showAds } = this.props.route
+
+      debugger
+      this.props.dispatch(setAdvertiseVisibility(showAds))
     }
 
     updateMeta = nextMeta =>
@@ -51,6 +60,8 @@ export default (WrappedComponent, options = {}) => {
       )
     }
   }
+
+  return connect(state => ({}))(page)
 }
 
 const Wrapper = styled.section``

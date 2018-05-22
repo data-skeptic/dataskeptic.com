@@ -153,7 +153,13 @@ class BlogRouter extends Component {
     }
     if (blogs.length === 1) {
       console.log('One to show')
-      return <BlogItem blog={blogs[0]} loading={blog_state === 'loading'} updateMeta={this.props.updateMeta} />
+      return (
+        <BlogItem
+          blog={blogs[0]}
+          loading={blog_state === 'loading'}
+          updateMeta={this.props.updateMeta}
+        />
+      )
     } else {
       console.log('BlogList')
       return (
