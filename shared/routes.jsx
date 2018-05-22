@@ -88,7 +88,7 @@ export default (
 
       <Route path="/members" component={Membership} />
 
-      <Route path="/about" component={About} />
+      <Route path="/about" component={About} showAds={false} />
 
       <Route path="/advertising" component={Advertising} />
 
@@ -119,10 +119,7 @@ export default (
         <Route path="*" component={Podcast} />
       </Route>
 
-      <Route
-        path="/services*"
-        component={props => <Services foo="value" bar="v2" location={props} />}
-      />
+      <Route path="/services*" component={Services} />
 
       <Route path="/store" component={Store} />
 
@@ -211,9 +208,9 @@ export default (
 
       <Route path="/live" component={Live} />
 
-      <Route path="/404" component={NotFound} notFound={true}/>
+      <Route path="/404" component={NotFound} notFound={true} />
 
-      <Route path="*" component={NotFound} notFound={true}/>
+      <Route path="*" component={NotFound} notFound={true} />
     </Route>
   </Router>
 )

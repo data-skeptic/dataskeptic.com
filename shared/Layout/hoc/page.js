@@ -24,7 +24,7 @@ export default (WrappedComponent, options = {}) => {
       }
     }
 
-    componentWillMount() {
+    componentDidMount() {
       const { showAds } = this.props.route
       this.props.dispatch(setAdvertiseVisibility(showAds))
     }
