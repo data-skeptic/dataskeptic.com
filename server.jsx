@@ -51,14 +51,11 @@ import React from 'react'
 import { renderToString } from 'react-dom/server'
 import { Provider } from 'react-redux'
 import { RouterContext, match } from 'react-router'
-import isFunction from 'lodash/isFunction'
-import extend from 'lodash/extend'
-import isEmpty from 'lodash/isEmpty'
-import clone from 'lodash/clone'
+import { isEmpty, clone, some, includes } from 'lodash'
 import routes from 'routes'
 import * as reducers from 'reducers'
 import { createStore, combineReducers, applyMiddleware } from 'redux'
-import getContentWrapper from 'utils/content_wrapper'
+import Helmet from 'react-helmet'
 import { get_podcasts_from_cache } from 'utils/redux_loader'
 import redirects_map from './redirects'
 
@@ -603,30 +600,18 @@ function renderView(store, renderProps, location) {
     </Provider>
   )
 
-  let meta = {
-    title: 'Data Skeptic',
-    description:
-      'Data Skeptic is your source for a perspective of scientific skepticism on topics in statistics, machine learning, big data, artificial intelligence, and data science. Our weekly podcast and blog bring you stories and tutorials to help understand our data-driven world.',
-    author: 'Kyle Polich',
-    keywoards: 'data skeptic, podcast,'
-  }
-
   const componentHTML = renderToString(InitialView)
+  const helmet = Helmet.renderStatic()
 
-  let state = store.getState()
-  let activePageComponent = InitialView.props.children.props.components.filter(
-    comp => comp && isFunction(comp.getPageMeta)
-  )
-  activePageComponent =
-    activePageComponent.length > 0 ? activePageComponent[0] : null
-  if (activePageComponent) {
-    meta = extend(meta, activePageComponent.getPageMeta(state))
-  }
+  const state = store.getState()
+  const route = renderProps.matchContext.router.routes.slice(-1)[0]
+  const notFound = route.notFound
 
   return {
     state: state,
     html: componentHTML,
-    meta: meta
+    helmet: helmet,
+    notFound
   }
 }
 
@@ -837,12 +822,12 @@ const renderPage = async (req, res) => {
       renderProps.params
     )
       .then(() => renderView(store, renderProps, location))
-      .then(({ html, state, meta }) => {
-        if (meta.notFoundPage) {
+      .then(({ html, state, helmet, notFound }) => {
+        if (notFound) {
           return res.status(404).render('index', {
             staticHTML: html,
             initialState: state,
-            meta,
+            helmet,
             env,
             itunesId
           })
@@ -851,7 +836,7 @@ const renderPage = async (req, res) => {
         return res.render('index', {
           staticHTML: html,
           initialState: state,
-          meta,
+          helmet,
           env,
           itunesId
         })

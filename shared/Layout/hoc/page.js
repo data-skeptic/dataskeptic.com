@@ -24,7 +24,7 @@ export default (WrappedComponent, options = {}) => {
       }
     }
 
-    componentDidMount() {
+    componentWillMount() {
       const { showAds } = this.props.route
       this.props.dispatch(setAdvertiseVisibility(showAds))
     }
@@ -51,7 +51,7 @@ export default (WrappedComponent, options = {}) => {
             <meta name="description" content={description} />
             <meta name="keywords" content={keywords} />
             <meta property="og:title" content={title} />
-            <meta property="og:description" content={``} />
+            <meta property="og:description" content={description} />
           </Helmet>
           <WrappedComponent {...rest} updateMeta={this.updateMeta} />
         </Wrapper>

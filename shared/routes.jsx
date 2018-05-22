@@ -211,9 +211,9 @@ export default (
 
       <Route path="/live" component={Live} />
 
-      <Route path="/404" component={NotFound} />
+      <Route path="/404" component={NotFound} notFound={true}/>
 
-      <Route path="*" component={NotFound} />
+      <Route path="*" component={NotFound} notFound={true}/>
     </Route>
   </Router>
 )
