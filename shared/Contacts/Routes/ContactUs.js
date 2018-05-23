@@ -134,7 +134,7 @@ class ContactUs extends React.Component {
         <Title>Contact Us</Title>
         <Text>
           We hope to respond to all inquiries, but sometimes the volume of
-          incoming questions can cause our queue to explode. We prioritize
+          incoming questions can cause our queue to get backed us. We prioritize
           responses to Data Skeptic members first, and to those who ask
           questions in a public forum like Twitter, our Facebook wall (not
           Facebook direct message), or Slack. Many people can benefit from
