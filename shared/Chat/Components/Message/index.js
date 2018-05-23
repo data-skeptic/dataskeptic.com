@@ -18,7 +18,7 @@ export default class Message extends Component {
       <Container sent={sent}>
         {author && (
           <Author>
-            <img src={author.img} bot={author.author === BOT_ID} />
+            <img src={author.img} />
           </Author>
         )}
         <Content>

@@ -43,7 +43,7 @@ class BlogTopNav extends React.Component {
             {cats.map(cat => {
               var url = '/blog/' + cat
               return (
-                <span className="category">
+                <span className="category" key={url}>
                   &nbsp;<Link to={url}>{cat}</Link>&nbsp;|
                 </span>
               )
