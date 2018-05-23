@@ -49,6 +49,7 @@ import morgan from 'morgan'
 import path from 'path'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
+import { ServerStyleSheet } from 'styled-components'
 import { Provider } from 'react-redux'
 import { RoutingContext, match } from 'react-router'
 import isFunction from 'lodash/isFunction'
@@ -64,6 +65,8 @@ import redirects_map from './redirects'
 
 import { reducer as formReducer } from 'redux-form'
 import axios from 'axios'
+
+import minifyHTML from 'express-minify-html'
 
 import Rollbar from 'rollbar'
 import http from 'http'
@@ -611,7 +614,9 @@ function renderView(store, renderProps, location) {
     keywoards: 'data skeptic, podcast,'
   }
 
-  const componentHTML = renderToString(InitialView)
+  const sheet = new ServerStyleSheet();
+  const componentHTML = renderToString(sheet.collectStyles(InitialView))
+  const styles = sheet.getStyleTags();
 
   let state = store.getState()
   let activePageComponent = InitialView.props.children.props.components.filter(
@@ -626,7 +631,8 @@ function renderView(store, renderProps, location) {
   return {
     state: state,
     html: componentHTML,
-    meta: meta
+    meta: meta,
+    styles: styles
   }
 }
 
@@ -767,6 +773,18 @@ if (env === 'prod') {
   })
 
   app.use(rollbar.errorHandler())
+  app.use(minifyHTML({
+    override:      true,
+    exception_url: false,
+    htmlMinifier: {
+      removeComments:            false,
+      collapseWhitespace:        true,
+      collapseBooleanAttributes: true,
+      removeAttributeQuotes:     true,
+      removeEmptyAttributes:     false,
+      minifyJS:                  false
+    }
+  }));
 }
 
 const renderPage = async (req, res) => {
@@ -806,6 +824,7 @@ const renderPage = async (req, res) => {
     console.log('Redirecting to ' + hostname + redir)
     return res.redirect(301, 'http://' + hostname + redir)
   }
+
   if (req.url == '/feed.rss') {
     return res.redirect(307, 'http://dataskeptic.libsyn.com/rss')
   }
@@ -837,14 +856,15 @@ const renderPage = async (req, res) => {
       renderProps.params
     )
       .then(() => renderView(store, renderProps, location))
-      .then(({ html, state, meta }) => {
+      .then(({ html, state, meta, styles }) => {
         if (meta.notFoundPage) {
           return res.status(404).render('index', {
             staticHTML: html,
             initialState: state,
             meta,
             env,
-            itunesId
+            itunesId,
+            styles
           })
         }
 
@@ -853,7 +873,8 @@ const renderPage = async (req, res) => {
           initialState: state,
           meta,
           env,
-          itunesId
+          itunesId,
+          styles
         })
       })
       .catch(err => {

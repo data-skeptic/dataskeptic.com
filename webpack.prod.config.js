@@ -18,7 +18,7 @@ const env = {
 }
 
 module.exports = {
-  entry: ['babel-polyfill', './client'],
+  entry: ['babel-polyfill', './client/index.jsx'],
   resolve: {
     modules: ['node_modules', 'shared'],
     extensions: ['.js', '.json', '.jsx', '.css']
@@ -69,6 +69,8 @@ module.exports = {
     new webpack.DefinePlugin(env),
 
     new webpack.optimize.UglifyJsPlugin({
+      test: /\.js($|\?)/i,
+      parallel: true,
       compress: {
         warnings: false,
         screw_ie8: true,
