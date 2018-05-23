@@ -603,10 +603,10 @@ function renderView(store, renderProps, location) {
     </Provider>
   )
 
-  const sheet = new ServerStyleSheet();
+  const sheet = new ServerStyleSheet()
   const componentHTML = renderToString(sheet.collectStyles(InitialView))
   const helmet = Helmet.renderStatic()
-  const styles = sheet.getStyleTags();
+  const styles = sheet.getStyleTags()
 
   const state = store.getState()
   const route = renderProps.matchContext.router.routes.slice(-1)[0]
@@ -758,18 +758,20 @@ if (env === 'prod') {
   })
 
   app.use(rollbar.errorHandler())
-  app.use(minifyHTML({
-    override:      true,
-    exception_url: false,
-    htmlMinifier: {
-      removeComments:            false,
-      collapseWhitespace:        true,
-      collapseBooleanAttributes: true,
-      removeAttributeQuotes:     true,
-      removeEmptyAttributes:     false,
-      minifyJS:                  false
-    }
-  }));
+  app.use(
+    minifyHTML({
+      override: true,
+      exception_url: false,
+      htmlMinifier: {
+        removeComments: false,
+        collapseWhitespace: true,
+        collapseBooleanAttributes: true,
+        removeAttributeQuotes: true,
+        removeEmptyAttributes: false,
+        minifyJS: false
+      }
+    })
+  )
 }
 
 const renderPage = async (req, res) => {

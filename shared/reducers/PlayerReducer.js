@@ -18,10 +18,10 @@ export const SET_VOLUME = 'SET_VOLUME'
 export const SET_MUTED = 'SET_MUTED'
 export const RESET = 'RESET'
 
-const normalizeEpisode = (episode) => {
+const normalizeEpisode = episode => {
   episode.img = episode.img.replace('http://', 'https://')
   episode.mp3 = episode.mp3.replace('http://', 'https://')
-  return episode      
+  return episode
 }
 
 const IS_CLIENT = (() => {

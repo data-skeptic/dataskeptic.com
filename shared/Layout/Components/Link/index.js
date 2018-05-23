@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router'
 
-const wrapClick = (fn) => {
+const wrapClick = fn => {
   window.scrollTo(0, 0)
   fn()
 }
