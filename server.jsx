@@ -614,9 +614,9 @@ function renderView(store, renderProps, location) {
     keywoards: 'data skeptic, podcast,'
   }
 
-  const sheet = new ServerStyleSheet();
+  const sheet = new ServerStyleSheet()
   const componentHTML = renderToString(sheet.collectStyles(InitialView))
-  const styles = sheet.getStyleTags();
+  const styles = sheet.getStyleTags()
 
   let state = store.getState()
   let activePageComponent = InitialView.props.children.props.components.filter(
@@ -773,18 +773,20 @@ if (env === 'prod') {
   })
 
   app.use(rollbar.errorHandler())
-  app.use(minifyHTML({
-    override:      true,
-    exception_url: false,
-    htmlMinifier: {
-      removeComments:            false,
-      collapseWhitespace:        true,
-      collapseBooleanAttributes: true,
-      removeAttributeQuotes:     true,
-      removeEmptyAttributes:     false,
-      minifyJS:                  false
-    }
-  }));
+  app.use(
+    minifyHTML({
+      override: true,
+      exception_url: false,
+      htmlMinifier: {
+        removeComments: false,
+        collapseWhitespace: true,
+        collapseBooleanAttributes: true,
+        removeAttributeQuotes: true,
+        removeEmptyAttributes: false,
+        minifyJS: false
+      }
+    })
+  )
 }
 
 const renderPage = async (req, res) => {
