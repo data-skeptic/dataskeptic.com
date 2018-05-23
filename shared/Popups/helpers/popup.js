@@ -47,7 +47,7 @@ export const toggle = (key) => {
       payload: { key }
     })
     
-    if (isOpen(getState().popups  , key)) {
+    if (isOpen(getState().popups, key)) {
       dispatch(close(key))
     } else {
       dispatch(open(key))

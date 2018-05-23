@@ -20,7 +20,7 @@ if (typeof window !== 'undefined') {
 }
 
 export default class Popup extends Component {
-  defaultProps = {
+  static defaultProps = {
     isOpen: false,
     onClose: () => {}
   }
@@ -44,7 +44,7 @@ export default class Popup extends Component {
         className="datas-popup"
         overlayClassName="datas-overlay"
       >
-        <CloseButton />
+        <CloseButton onClick={onClose} />
         <Container>{children}</Container>
       </Modal>
     )

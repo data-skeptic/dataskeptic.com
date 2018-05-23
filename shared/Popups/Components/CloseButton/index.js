@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
-export default () => (
-  <Button>
+export default ({ onClick = () => {}}) => (
+  <Button onClick={onClick}>
     <Inner>
       <Line right />
       <Line left />
