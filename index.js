@@ -4,10 +4,20 @@ const fs = require('fs')
 const http = require('http')
 const https = require('https')
 const aws = require('aws-sdk')
+const checkEnv = require('./shared/utils/checkEnv').default
 
-console.log('process.env.NODE_ENV')
-console.log(process.env.NODE_ENV)
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const isHeroku = JSON.parse(process.env.IS_HEROKU)
+console.log('NODE_ENV', '=', env)
+
+// validate env config
+try {
+  checkEnv()
+} catch (e) {
+  throw e
+
+  process.exit(1)
+}
 
 const app = require('./server').default
 
@@ -71,7 +81,10 @@ var launch_with_ssl = function() {
       res.writeHead(301, { Location: 'https://' + host + req.url })
       res.end()
     })
-    .listen(process.env.PORT, process.env.HOST)
+    .listen(process.env.PORT, process.env.HOST, err => {
+      if (err) throw err
+      console.dir()
+    })
 
   recordingServer(server)
   console.log('Attempt to load SSL 3')
@@ -89,12 +102,9 @@ function config_load_promise() {
     var files = ['cert.pem', 'fullchain.pem', 'privkey.pem', 'config.jsn']
     var bucket = 'config-dataskeptic.com'
     var promises = []
-    console.log('start')
     if (!fs.existsSync(cert_path)) {
       console.log('Creating cert directory')
       fs.mkdirSync(cert_path, 777)
-    } else {
-      console.log('Cert path exists')
     }
     for (var file of files) {
       var s3Key = file
@@ -153,10 +163,20 @@ function config_load_promise() {
   )
 }
 
-if (env == 'prod') {
+if (env === 'prod') {
   console.log('Loading as prod')
-  config_load_promise()
+  console.log('Heroku mode?', isHeroku)
+  if (isHeroku) {
+    launch_without_ssl()
+  } else {
+    config_load_promise()
+  }
 } else {
   console.log('Loading as dev')
   launch_without_ssl()
 }
+
+// safe debug information
+console.log('RUNNING CONFIG ===>')
+console.log(`Starting on ${process.env.PORT}`)
+console.log(`Host is ${process.env.HOST}`)
