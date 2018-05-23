@@ -7,7 +7,7 @@ const wrapClick = (fn, e) => {
 }
 
 export default ({ children, onClick = () => {}, ...rest }) => (
-  <Link {...rest} onClick={(e) => wrapClick(onClick, e)}>
+  <Link {...rest} onClick={e => wrapClick(onClick, e)}>
     {children}
   </Link>
 )
