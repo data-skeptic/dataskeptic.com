@@ -7,6 +7,7 @@ const aws = require('aws-sdk')
 const checkEnv = require('./shared/utils/checkEnv').default
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const isHeroku = JSON.parse(process.env.IS_HEROKU)
 console.log('NODE_ENV', '=', env)
 
 // validate env config
@@ -101,12 +102,9 @@ function config_load_promise() {
     var files = ['cert.pem', 'fullchain.pem', 'privkey.pem', 'config.jsn']
     var bucket = 'config-dataskeptic.com'
     var promises = []
-    console.log('start')
     if (!fs.existsSync(cert_path)) {
       console.log('Creating cert directory')
       fs.mkdirSync(cert_path, 777)
-    } else {
-      console.log('Cert path exists')
     }
     for (var file of files) {
       var s3Key = file
@@ -165,9 +163,14 @@ function config_load_promise() {
   )
 }
 
-if (env == 'prod') {
+if (env === 'prod') {
   console.log('Loading as prod')
-  config_load_promise()
+  console.log('Heroku mode?', isHeroku)
+  if (isHeroku) {
+    launch_without_ssl()
+  } else {
+    config_load_promise()
+  }
 } else {
   console.log('Loading as dev')
   launch_without_ssl()
