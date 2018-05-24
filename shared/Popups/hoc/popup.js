@@ -30,7 +30,7 @@ export default (WrappedComponent, options) => {
 
       return (
         <Popup {...rest} isOpen={isOpen} onClose={this.close}>
-          <WrappedComponent />
+          <WrappedComponent onClose={this.close}/>
         </Popup>
       )
     }

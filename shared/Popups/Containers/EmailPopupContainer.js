@@ -5,7 +5,7 @@ import { read, write } from '../../Tracking/storage'
 import EmailPopup, { KEY as EMAIL_POPUP_KEY } from './EmailPopup'
 
 const TIME_DELAY = 5 * 1000
-const OFFSET_POS = 520
+const OFFSET_POS = 320
 
 class EmailPopupContainer extends Component {
   state = {
@@ -79,7 +79,7 @@ class EmailPopupContainer extends Component {
     this.props.dispatch(open(EMAIL_POPUP_KEY))
   }
 
-  markSeen = () => {}//write(EMAIL_POPUP_KEY, true)
+  markSeen = () => write(EMAIL_POPUP_KEY, true)
 
   render() {
     return <EmailPopup onClose={this.markSeen} />

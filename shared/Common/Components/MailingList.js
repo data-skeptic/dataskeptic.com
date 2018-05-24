@@ -2,20 +2,23 @@ import React from 'react'
 import styled from 'styled-components'
 
 export default class MailingList extends React.Component {
+  static defaultProps = {
+    onSubmit: () => {},
+    id: '',
+    heading: 'Subscribe to our mailing list'
+  }
+  
+  state = {
+    email: ``
+  }
+
   onChange = e => {
-    var email = e.target.value
+    const email = e.target.value
     this.setState({ email })
   }
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      email: ''
-    }
-  }
-
   render() {
-    const { heading = 'Subscribe to our mailing list' } = this.props
+    const { heading, id, onSubmit } = this.props
     return (
       <Wrapper>
         <Form
@@ -25,15 +28,16 @@ export default class MailingList extends React.Component {
           name="mc-embedded-subscribe-form"
           className="validate"
           target="_blank"
+          onSubmit={onSubmit}
         >
-          <Heading htmlFor="mce-EMAIL">{heading}</Heading>
+          <Heading htmlFor={`mce-EMAIL${id}`}>{heading}</Heading>
           <Inner>
             <Input
               type="input"
               value={this.state.email}
               onChange={this.onChange}
               name="EMAIL"
-              id="mce-EMAIL"
+              id={`mce-EMAIL${id}`}
               placeholder="Email address"
               required
             />
