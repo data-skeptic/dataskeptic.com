@@ -240,20 +240,16 @@ class MainView extends React.Component {
     this.logPageView()
     const {
       isMobileMenuVisible,
-      admin,
       cart,
       isCartVisible,
-      loggedIn,
-      user,
       chatbot,
-      contributors
+      contributors,
+      showAds = true
     } = this.props
-    const { showAds = true } = this.props.route
     const { pathname } = this.props.location
     const itemsCount = getCartItemsCount(cart.toJS().cart_items)
     const isOverflowMode = isCartVisible
     const thinking = chatbot.get('thinking')
-    var dispatch = this.props.dispatch
 
     return (
       <div
@@ -267,8 +263,6 @@ class MainView extends React.Component {
             pathname={pathname}
             cartItemsCount={itemsCount}
             visible={isMobileMenuVisible}
-            loggedIn={loggedIn}
-            user={user}
           />
 
           <div className="row row-centered">
@@ -301,12 +295,10 @@ class MainView extends React.Component {
 
 export default connect(state => ({
   cart: state.cart,
-  admin: state.admin,
   isCartVisible: state.cart.getIn(['cart_visible']),
   site: state.site,
   isMobileMenuVisible: state.layout.getIn(['isMobileMenuVisible']),
-  loggedIn: state.auth.getIn(['loggedIn']),
-  user: state.auth.getIn(['user']).toJS(),
+  showAds: state.layout.getIn(['showAds']),
   chatbot: state.chatbot,
   contributors: state.site.get('contributors').toJS()
 }))(MainView)

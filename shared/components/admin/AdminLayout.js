@@ -8,7 +8,7 @@ class AdminLayout extends Component {
   componentDidMount() {
     const dispatch = this.props.dispatch
     if (!this.hasAccess()) {
-      return this.props.history.push('/admin/login')
+      return this.props.router.push('/admin/login')
     }
 
     dispatch({ type: 'INIT_ORDERS', payload: { dispatch } })

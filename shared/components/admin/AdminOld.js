@@ -23,7 +23,7 @@ class Admin extends Component {
   componentDidMount() {
     var dispatch = this.props.dispatch
     if (!this.hasAccess()) {
-      this.props.history.push('/admin/login')
+      this.props.router.push('/admin/login')
       return
     } else {
       this.setState({ ready: true })

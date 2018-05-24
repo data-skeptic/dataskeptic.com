@@ -1,7 +1,8 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import Loading from '../../Common/Components/Loading'
+import page from '../../Layout/hoc/page'
 
 const formatLink = (bucket, s3key) =>
   `/api/v1/download?bucket=${bucket}&path=${s3key}`
@@ -20,10 +21,6 @@ class MembershipDownloads extends Component {
   renderEmpty = () => <Empty>Empty?</Empty>
 
   componentDidMount() {
-    if (!this.props.loggedIn) {
-      return this.props.history.push('/login')
-    }
-
     const { dispatch } = this.props
     this.props.dispatch({
       type: 'LOAD_MEMBER_DOWNLOADS',
@@ -43,9 +40,6 @@ class MembershipDownloads extends Component {
   }
 
   render() {
-    const { loggedIn } = this.props
-
-    if (!loggedIn) return <div />
     return (
       <Container>
         <PageTitle>Downloads</PageTitle>
@@ -55,10 +49,14 @@ class MembershipDownloads extends Component {
   }
 }
 
-export default connect(state => ({
-  loggedIn: state.auth.getIn(['loggedIn']),
-  downloads: state.memberportal.get('downloads').toJS()
-}))(MembershipDownloads)
+export default page(
+  connect(state => ({
+    downloads: state.memberportal.get('downloads').toJS()
+  }))(MembershipDownloads),
+  {
+    title: `Membership Downloads`
+  }
+)
 
 const Container = styled.div`
   margin: 25px auto;

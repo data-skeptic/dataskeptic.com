@@ -1,7 +1,7 @@
-import Immutable, { fromJS } from 'immutable'
+import { fromJS } from 'immutable'
 import {
+  SHOW_ADD,
   TOGGLE_MOBILE_MENU,
-  CHANGE_PAGE_TITLE,
   TOGGLE_SEARCH_AREA
 } from '../Actions/LayoutActions'
 
@@ -19,15 +19,11 @@ export const DEFAULT_APP_TITLE = 'Data Skeptic'
 const init = {
   isMobileMenuVisible: false,
   searchAreaVisible: false,
-  title: DEFAULT_APP_TITLE
+  title: DEFAULT_APP_TITLE,
+  showAds: true
 }
 
 const defaultState = fromJS(init)
-const setWindowTitle = title => {
-  if (!IS_CLIENT) return // not server side rendering
-
-  document.title = title
-}
 
 export default function LayoutReducer(state = defaultState, action) {
   const { type } = action
@@ -45,9 +41,8 @@ export default function LayoutReducer(state = defaultState, action) {
       )
       return state
 
-    case CHANGE_PAGE_TITLE:
-      state = state.set('title', action.payload.title)
-      setWindowTitle(action.payload.title)
+    case SHOW_ADD:
+      state = state.set('showAds', action.payload.showAds)
       return state
 
     default:

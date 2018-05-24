@@ -5,13 +5,7 @@ import NavLink from '../../components/NavLink'
 import CartMenu from '../../Cart/Components/CartMenu'
 import MobileSearchArea from '../../Search/Containers/MobileSearchArea'
 
-export const MobileMenu = ({
-  pathname,
-  visible = false,
-  itemClick,
-  loggedIn,
-  user
-}) => {
+export const MobileMenu = ({ pathname, visible = false, itemClick }) => {
   const classList = 'mobile-menu ' + (visible ? 'overlay' : '')
 
   return (
@@ -30,9 +24,7 @@ export const MobileMenu = ({
           pathname={pathname}
           itemClick={itemClick}
           cartButton={false}
-          loggedIn={loggedIn}
           mobile={true}
-          user={user}
         />
       </div>
     </div>
