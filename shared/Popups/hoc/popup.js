@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import Popup from '../Components/Popup'
 import { connect } from 'react-redux'
-import { init, deinit, open, close, isOpen } from '../helpers/popup'
+import { isFunction } from 'lodash'
+import { init, deinit, close, isOpen } from '../helpers/popup'
 
 export default (WrappedComponent, options) => {
   const { key, ...rest } = options
@@ -17,7 +18,12 @@ export default (WrappedComponent, options) => {
       this.props.dispatch(deinit(key))
     }
 
-    close = () => this.props.dispatch(close(options.key))
+    close = () => {
+      this.props.dispatch(close(options.key))
+      if (this.props.onClose) {
+        this.props.onClose()
+      }
+    }
 
     render() {
       const { isOpen } = this.props

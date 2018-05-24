@@ -6,8 +6,7 @@ import { changePageTitle } from '../Layout/Actions/LayoutActions'
 
 import HomeContainer from '../../shared/Home'
 import { parseQuery } from '../utils/parseQuery'
-import EmailPopup from "../Popups/Containers/EmailPopup"
-import {toggle} from "../Popups/helpers/popup";
+import EmailPopupContainer from '../Popups/Containers/EmailPopupContainer'
 
 class Home extends Component {
   static getPageMeta() {
@@ -57,8 +56,7 @@ class Home extends Component {
       //   <div className="clear"></div>
       // </div>
       <div>
-        <button onClick={() => this.props.dispatch(toggle('email'))}>toggle email</button>
-        <EmailPopup />
+        <EmailPopupContainer />
 
         <HomeContainer />
         <div className="clear" />
