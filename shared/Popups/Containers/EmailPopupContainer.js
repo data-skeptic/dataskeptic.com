@@ -5,7 +5,7 @@ import { read, write } from '../../Tracking/storage'
 import EmailPopup, { KEY as EMAIL_POPUP_KEY } from './EmailPopup'
 
 const TIME_DELAY = 5 * 1000
-const OFFSET_POS = 320
+const OFFSET_POS = 520
 
 class EmailPopupContainer extends Component {
   state = {
@@ -39,22 +39,17 @@ class EmailPopupContainer extends Component {
   }
 
   startListener() {
-    console.log(`startListener`)
-
     window.addEventListener('scroll', this.listenScroll)
     this.timer = setTimeout(this.idleTimer, TIME_DELAY)
   }
 
   stopListener() {
-    console.log(`stopListener`)
-
     clearTimeout(this.timer)
     window.removeEventListener('scroll', this.listenScroll)
   }
 
   listenScroll = e => {
     if (!this.state.ticking) {
-      console.log(`scroll`, window.scrollY)
       if (window.scrollY >= OFFSET_POS) {
         window.requestAnimationFrame(() =>
           this.setState({
@@ -70,12 +65,10 @@ class EmailPopupContainer extends Component {
     }
   }
 
-  idleTimer = () => {
-    console.info(`idleTimer`)
+  idleTimer = () =>
     this.setState({
       idleTimeFinished: true
     })
-  }
 
   trigger = () => {
     this.stopListener()
@@ -86,7 +79,7 @@ class EmailPopupContainer extends Component {
     this.props.dispatch(open(EMAIL_POPUP_KEY))
   }
 
-  markSeen = () => write(EMAIL_POPUP_KEY, true)
+  markSeen = () => {}//write(EMAIL_POPUP_KEY, true)
 
   render() {
     return <EmailPopup onClose={this.markSeen} />
