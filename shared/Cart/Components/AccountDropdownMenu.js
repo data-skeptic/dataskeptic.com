@@ -3,9 +3,9 @@ import classNames from 'classnames'
 import { Link } from 'react-router'
 import NavLink from '../../components/NavLink'
 
-const isAdmin = user => user && user.type === 'admin'
+import withUser from '../../Layout/hoc/withUser'
 
-export default class AccountDropdownMenu extends Component {
+class AccountDropdownMenu extends Component {
   setWrapperRef = node => (this.filterWrapper = node)
   handleClickOutside = e => {
     if (this.filterWrapper && !this.filterWrapper.contains(e.target)) {
@@ -37,7 +37,7 @@ export default class AccountDropdownMenu extends Component {
   }
 
   render() {
-    const { mobile, onClick, user } = this.props
+    const { mobile, onClick, isAdmin } = this.props
     const { show } = this.state
 
     if (mobile) {
@@ -91,8 +91,8 @@ export default class AccountDropdownMenu extends Component {
             </Link>
           </li>
 
-          {isAdmin(user) && <li role="separator" className="divider" />}
-          {isAdmin(user) && (
+          {isAdmin && <li role="separator" className="divider" />}
+          {isAdmin && (
             <li>
               <Link to="/admin" onClick={this.itemClick}>
                 Admin
@@ -111,3 +111,5 @@ export default class AccountDropdownMenu extends Component {
     )
   }
 }
+
+export default withUser(AccountDropdownMenu)

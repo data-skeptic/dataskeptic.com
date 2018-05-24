@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router'
+import page from '../Layout/hoc/page'
 
-export default class DontHackMe extends Component {
+class DontHackMe extends Component {
   render() {
     return (
       <div className="center">
@@ -21,3 +21,7 @@ export default class DontHackMe extends Component {
     )
   }
 }
+
+export default page(DontHackMe, {
+  title: `Don't Hack Me!`
+})

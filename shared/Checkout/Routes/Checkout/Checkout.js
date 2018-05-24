@@ -7,37 +7,12 @@ import Loading from '../../../Common/Components/Loading'
 import CheckoutThankYouRoute from '../ThankYouRoute/ThankYouRoute'
 
 import CheckoutFormContainer from '../../Containers/CheckoutFormContainer'
-
-import { changePageTitle } from '../../../Layout/Actions/LayoutActions'
+import page from '../../../Layout/hoc/page'
 
 class Checkout extends Component {
   redirectToSuccessPage = ({ stripe_order_id }) => {
     window.scrollTo(0, 0)
     return (window.location.href = `/checkout/thank-you?num=${stripe_order_id}`)
-  }
-
-  constructor(props) {
-    super(props)
-  }
-
-  static getPageMeta() {
-    return {
-      title: 'Checkout | Data Skeptic'
-    }
-  }
-
-  componentDidMount() {
-    const { dispatch } = this.props
-    const { title } = Checkout.getPageMeta(this.props)
-    dispatch(changePageTitle(title))
-  }
-
-  onScriptLoaded() {
-    console.log('onScriptLoaded')
-  }
-
-  onScriptError() {
-    console.log('onScriptError')
   }
 
   render() {
@@ -83,4 +58,6 @@ class Checkout extends Component {
   }
 }
 
-export default connect(state => ({ cart: state.cart }))(Checkout)
+export default page(connect(state => ({ cart: state.cart }))(Checkout), {
+  title: 'Checkout | Data Skeptic'
+})

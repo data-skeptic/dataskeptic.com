@@ -1,9 +1,8 @@
 export const TOGGLE_MOBILE_MENU = 'TOGGLE_MOBILE_MENU'
-export const TOGGLE_SCROLL_LOCK = 'TOGGLE_SCROLL_LOCK'
 
 export const TOGGLE_SEARCH_AREA = 'TOGGLE_SEARCH_AREA'
 
-export const CHANGE_PAGE_TITLE = 'CHANGE_PAGE_TITLE'
+export const SHOW_ADD = 'SHOW_ADD'
 
 /**
  * Change site mobile menu visibility
@@ -25,14 +24,11 @@ export function toggleSearchArea() {
   }
 }
 
-/**
- * Change title
- */
-export function changePageTitle(title) {
+export function setAdvertiseVisibility(showAds = true) {
   return {
-    type: CHANGE_PAGE_TITLE,
+    type: SHOW_ADD,
     payload: {
-      title
+      showAds
     }
   }
 }

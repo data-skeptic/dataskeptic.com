@@ -1,12 +1,6 @@
 import React from 'react'
-import { Provider } from 'react-redux'
-import { Router, Route, IndexRoute, History } from 'react-router'
+import { Router, Route, IndexRoute } from 'react-router'
 import ReactGA from 'react-ga'
-import {
-  reduxReactRouter,
-  routerStateReducer,
-  ReduxRouter
-} from 'redux-react-router'
 
 import About from 'components/About'
 import Advertising from 'components/Advertising'
@@ -44,7 +38,6 @@ import Services from 'components/Services'
 import Store from 'components/Store'
 import CheckoutThankYouPage from 'Checkout/Routes/ThankYouRoute/ThankYouRoute'
 import ProposalsThankYouPage from 'Proposals/Routes/ThankYou/ThankYouPage'
-import AudioExample from 'Proposals/Routes/AudioExample'
 import PrivacyPageContainer from 'Privacy/Containers/PrivacyPageContainer'
 import QuestionsContainer from './Questions/Containers/QuestionsContainer'
 import ContributorPage from './Contributors/Routes/ContributorPage'
@@ -84,232 +77,140 @@ function loadData() {
   }
 }
 
-function requireAuth(nextState, replaceState) {
-  replaceState({ nextPathname: nextState.location.pathname }, '/login')
-}
-
 export default (
   <Router>
-    <Route path="/about" name="app" component={App} onEnter={loadData}>
-      <IndexRoute component={About} />
-    </Route>
-    <Route path="/advertising" name="app" component={App} onEnter={loadData}>
-      <IndexRoute component={Advertising} />
-    </Route>
-    <Route path="/blog*" component={App} onEnter={loadData}>
-      <IndexRoute component={BlogRouter} />
-    </Route>
-    <Route path="/coaching" name="app" component={App} onEnter={loadData}>
-      <IndexRoute component={Coaching} />
-    </Route>
-    <Route path="/coaching2" name="app" component={App} onEnter={loadData}>
-      <IndexRoute component={Coaching2} />
-    </Route>
-    <Route
-      path="/coaching-weekly"
-      name="app"
-      component={App}
-      onEnter={loadData}
-    >
-      <IndexRoute component={Coaching2} />
-    </Route>
-    <Route
-      path="/coaching-biweekly"
-      name="app"
-      component={App}
-      onEnter={loadData}
-    >
-      <IndexRoute component={CoachingBiWeekly} />
-    </Route>
     <Route path="/" name="app" component={App} onEnter={loadData}>
       <IndexRoute component={Home} />
-    </Route>
-    <Route path="/checkout" name="app" component={App} onEnter={loadData}>
-      <IndexRoute component={Checkout} />
-    </Route>
-    <Route path="/thank-you" component={App} onEnter={loadData}>
-      <IndexRoute component={CheckoutThankYouPage} />
-    </Route>
-    <Route path="/checkout/thank-you" component={App} onEnter={loadData}>
-      <IndexRoute component={CheckoutThankYouPage} />
-    </Route>
-    <Route path="/contact-us" component={App} onEnter={loadData}>
-      <IndexRoute component={ContactUs} />
-    </Route>
 
-    <Route path="/careers/city/:id" component={App} onEnter={loadData}>
-      <IndexRoute component={CityCareers} />
-    </Route>
+      <Route path="/loading" component={Loading} />
 
-    <Route path="/careers" component={App} onEnter={loadData}>
-      <IndexRoute component={Careers} />
-    </Route>
+      <Route path="/lightsout" component={LightsOut} />
 
-    <Route path="/careers/jobs/add" component={App} onEnter={loadData}>
-      <IndexRoute component={PublicAddJob} />
-    </Route>
+      <Route path="/members" component={Membership} />
 
-    <Route path="/loading" component={App} onEnter={loadData}>
-      <IndexRoute component={Loading} />
-    </Route>
-    <Route path="/lightsout" component={App} onEnter={loadData}>
-      <IndexRoute component={LightsOut} />
-    </Route>
-    <Route path="/members" component={App} onEnter={loadData}>
-      <IndexRoute component={Membership} />
-    </Route>
-    <Route path="/podcast*" component={App} onEnter={loadData}>
-      <IndexRoute component={Podcast} />
-    </Route>
-    <Route path="/services" component={App} onEnter={loadData}>
-      <IndexRoute
-        component={props => <Services foo="value" bar="v2" location={props} />}
-      />
-    </Route>
-    <Route path="/store" component={App} onEnter={loadData}>
-      <IndexRoute component={Store} />
-    </Route>
-    <Route path="/press" component={App} onEnter={loadData}>
-      <IndexRoute component={Press} />
-    </Route>
-    <Route path="/projects" component={App} onEnter={loadData}>
-      <IndexRoute component={Projects} />
-    </Route>
-    <Route path="/rfc" showAds={false} component={App} onEnter={loadData}>
-      <IndexRoute component={Proposals} />
-    </Route>
-    <Route
-      path="/rfc/thank-you"
-      showAds={false}
-      component={App}
-      onEnter={loadData}
-    >
-      <IndexRoute component={ProposalsThankYouPage} />
-    </Route>
-    <Route path="/rfc/example" component={App} onEnter={loadData}>
-      <IndexRoute component={AudioExample} />
-    </Route>
+      <Route path="/about" component={About} showAds={false} />
 
-    <Route path="/login" component={App}>
-      <IndexRoute component={Login} />
-    </Route>
+      <Route path="/advertising" component={Advertising} />
 
-    <Route path="/signup" component={App}>
-      <IndexRoute component={SignUp} />
-    </Route>
+      <Route path="/coaching" component={Coaching} />
 
-    <Route path="/questions" component={App}>
-      <IndexRoute component={QuestionsContainer} />
-    </Route>
+      <Route path="/coaching2" component={Coaching2} />
 
-    <Route path="/logout" component={App}>
-      <IndexRoute component={Logout} />
-    </Route>
+      <Route path="/coaching-weekly" component={CoachingBiWeekly} />
 
-    <Route path="/membership" showAds={false} component={App}>
-      <IndexRoute component={MembershipPortal} />
-    </Route>
-    <Route path="/membership/change" showAds={false} component={App}>
-      <IndexRoute component={ChangeMembership} />
-    </Route>
-    <Route path="/membership/inbox" showAds={false} component={App}>
-      <IndexRoute component={MembershipInbox} />
-    </Route>
-    <Route path="/membership/analytics" showAds={false} component={App}>
-      <IndexRoute component={MembershipAnalytics} />
-    </Route>
-    <Route path="/membership/downloads" showAds={false} component={App}>
-      <IndexRoute component={MembershipDownloads} />
-    </Route>
+      <Route path="/coaching-biweekly" component={CoachingBiWeekly} />
 
-    <Route path="/profile/playlist" showAds={false} component={App}>
-      <IndexRoute component={UserPlaylist} />
-    </Route>
+      <Route path="/checkout" component={Checkout} />
 
-    <Route path="/drip-result" showAds={true} component={App}>
-      <IndexRoute component={DripThankYou} />
-    </Route>
+      <Route path="/thank-you" component={CheckoutThankYouPage} />
 
-    <Route path="/drip-unsubscribe" showAds={true} component={App}>
-      <IndexRoute component={DripUnsubscribe} />
-    </Route>
+      <Route path="/contact-us" component={ContactUs} />
 
-    <Route path="/analytics" component={App}>
-      <IndexRoute component={Analytics} />
-    </Route>
+      <Route path="/careers" component={Careers}>
+        <Route path="city/:id" component={CityCareers} />
+        <Route path="jobs/add" component={PublicAddJob} />
+      </Route>
 
-    <Route path="/wp-login.php" component={App} onEnter={loadData}>
-      <IndexRoute component={DontHackMe} />
-    </Route>
-    <Route path="/l/snl-impact" component={App} onEnter={loadData}>
-      <IndexRoute component={SnlImpact} />
-    </Route>
-    <Route path="/privacy-policy" component={App} onEnter={loadData}>
-      <IndexRoute component={PrivacyPageContainer} />
-    </Route>
+      <Route path="/blog" component={BlogRouter}>
+        <Route path="*" component={BlogRouter} />
+      </Route>
 
-    <Route path="/admin" component={App}>
-      <IndexRoute component={AdminHome} />
-    </Route>
+      <Route path="/podcast" component={Podcast}>
+        <Route path="*" component={Podcast} />
+      </Route>
 
-    <Route path="/admin/cms/pending" component={App}>
-      <IndexRoute component={AdminCmsPending} />
-    </Route>
+      <Route path="/services*" component={Services} />
 
-    <Route path="/admin/cms/recent" component={App}>
-      <IndexRoute component={AdminCmsRecent} />
-    </Route>
+      <Route path="/store" component={Store} />
 
-    <Route path="/admin/cms/feature" component={App}>
-      <IndexRoute component={AdminCmsFeature} />
-    </Route>
+      <Route path="/press" component={Press} />
 
-    <Route path="/admin/cms/add_related" component={App}>
-      <IndexRoute component={AdminCmsAddRelated} />
-    </Route>
+      <Route path="/projects" component={Projects} />
 
-    <Route path="/admin/cms/recent_related" component={App}>
-      <IndexRoute component={AdminCmsRecentRelated} />
-    </Route>
+      <Route path="/rfc" component={Proposals} showAds={false}>
+        <Route
+          path="thank-you"
+          component={ProposalsThankYouPage}
+          showAds={false}
+        />
+      </Route>
 
-    <Route path="/admin/orders/new" component={App}>
-      <IndexRoute component={AdminOrdersNew} />
-    </Route>
+      <Route path="/login" component={Login} />
 
-    <Route path="/admin/orders/processing" component={App}>
-      <IndexRoute component={AdminOrdersProcessing} />
-    </Route>
+      <Route path="/signup" component={SignUp} />
 
-    <Route path="/admin/emails/send" component={App}>
-      <IndexRoute component={AdminEmailsSend} />
-    </Route>
+      <Route path="/logout" component={Logout} />
 
-    <Route path="/admin/job/add" component={App}>
-      <IndexRoute component={AdminAddJob} />
-    </Route>
+      <Route path="/questions" component={QuestionsContainer} />
 
-    <Route path="/admin/login" component={App}>
-      <IndexRoute component={Login} />
-    </Route>
+      <Route path="/membership" component={MembershipPortal}>
+        <Route path="change" component={ChangeMembership} />
 
-    <Route path="/admin/tse" component={App}>
-      <IndexRoute component={Explorer} />
-    </Route>
+        <Route path="inbox" component={MembershipInbox} />
 
-    <Route path="/contributors/:contributor" component={App}>
-      <IndexRoute component={ContributorPage} />
-    </Route>
+        <Route path="analytics" component={MembershipAnalytics} />
 
-    <Route path="/search" component={App}>
-      <IndexRoute component={SERP} />
-    </Route>
+        <Route path="downloads" component={MembershipDownloads} />
+      </Route>
 
-    <Route path="/live" component={App}>
-      <IndexRoute component={Live} />
-    </Route>
+      <Route path="/profile/playlist" component={UserPlaylist} />
 
-    <Route path="/*" component={App} onEnter={loadData}>
-      <IndexRoute component={NotFound} />
+      <Route path="/admin" component={AdminHome} showAds={false}>
+        <Route path="cms">
+          <Route path="pending" component={AdminCmsPending} showAds={false} />
+          <Route path="recent" component={AdminCmsRecent} showAds={false} />
+          <Route path="feature" component={AdminCmsFeature} showAds={false} />
+          <Route
+            path="add_related"
+            component={AdminCmsAddRelated}
+            showAds={false}
+          />
+          <Route
+            path="recent_related"
+            component={AdminCmsRecentRelated}
+            showAds={false}
+          />
+        </Route>
+        <Route path="orders">
+          <Route path="new" component={AdminOrdersNew} showAds={false} />
+          <Route
+            path="processing"
+            component={AdminOrdersProcessing}
+            showAds={false}
+          />
+        </Route>
+        <Route path="emails">
+          <Route path="send" component={AdminEmailsSend} showAds={false} />
+        </Route>
+        <Route path="job">
+          <Route path="add" component={AdminAddJob} showAds={false} />
+        </Route>
+
+        <Route path="login" component={Login} />
+        <Route path="tse" component={Explorer} />
+      </Route>
+
+      <Route path="/drip-result" component={DripThankYou} />
+
+      <Route path="/drip-unsubscribe" component={DripUnsubscribe} />
+
+      <Route path="/analytics" component={Analytics} />
+
+      <Route path="/wp-login.php" component={DontHackMe} />
+
+      <Route path="/l/snl-impact" component={SnlImpact} />
+
+      <Route path="/privacy" component={PrivacyPageContainer} />
+
+      <Route path="/contributors/:contributor" component={ContributorPage} />
+
+      <Route path="/search" component={SERP} />
+
+      <Route path="/live" component={Live} />
+
+      <Route path="/404" component={NotFound} notFound={true} />
+
+      <Route path="*" component={NotFound} notFound={true} />
     </Route>
   </Router>
 )

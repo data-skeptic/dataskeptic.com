@@ -13,6 +13,7 @@ import {
   complete,
   fail
 } from '../../Proposals/Actions/RecordingFlowActions'
+import page from '../../Layout/hoc/page'
 
 class QuestionsContainer extends Component {
   recordingReady = noDelay => {
@@ -69,26 +70,31 @@ class QuestionsContainer extends Component {
 
 const selector = formValueSelector('question')
 
-export default connect(
-  state => ({
-    confirmPolicy: selector(state, 'confirmPolicy'),
-    activeStep: state.questions.getIn(['form', 'step']),
-    errorMessage: state.questions.getIn(['form', 'error']),
-    submittedUrl: state.questions.getIn(['review', 'url']),
-    aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket'])
-  }),
-  dispatch =>
-    bindActionCreators(
-      {
-        init,
-        ready,
-        recordingStart,
-        recordingFinish,
-        submit,
-        review,
-        complete,
-        fail
-      },
-      dispatch
-    )
-)(QuestionsContainer)
+export default page(
+  connect(
+    state => ({
+      confirmPolicy: selector(state, 'confirmPolicy'),
+      activeStep: state.questions.getIn(['form', 'step']),
+      errorMessage: state.questions.getIn(['form', 'error']),
+      submittedUrl: state.questions.getIn(['review', 'url']),
+      aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket'])
+    }),
+    dispatch =>
+      bindActionCreators(
+        {
+          init,
+          ready,
+          recordingStart,
+          recordingFinish,
+          submit,
+          review,
+          complete,
+          fail
+        },
+        dispatch
+      )
+  )(QuestionsContainer),
+  {
+    title: `Questions`
+  }
+)

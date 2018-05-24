@@ -4,6 +4,7 @@ import NavLink from '../../components/NavLink'
 import CartLink from './CartLink'
 import AccountDropdownMenu from './AccountDropdownMenu'
 import SearchArea from '../../Search/Containers/SearchArea'
+import withUser from '../../Layout/hoc/withUser'
 
 export const CartMenu = ({
   pathname,
@@ -12,12 +13,11 @@ export const CartMenu = ({
   cartButton = true,
   itemClick,
   mobile,
-  loggedIn,
-  user
+  loggedIn
 }) => (
   <div className="nav">
     {loggedIn ? (
-      <AccountDropdownMenu onClick={itemClick} mobile={mobile} user={user} />
+      <AccountDropdownMenu onClick={itemClick} mobile={mobile} />
     ) : (
       <NavLink active={pathname} to="/members" onClick={itemClick}>
         <span className="membership-link">Membership</span>
@@ -34,4 +34,4 @@ export const CartMenu = ({
   </div>
 )
 
-export default CartMenu
+export default withUser(CartMenu)

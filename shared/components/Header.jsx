@@ -63,7 +63,6 @@ class Header extends React.Component {
         <div className="hidden-xs desktop">
           <div className="cart-menu pull-right">
             <CartMenu
-              loggedIn={loggedIn}
               pathname={pathname}
               cartItemsCount={itemsCount}
               cartClick={this.onCartClick}
@@ -110,8 +109,6 @@ class Header extends React.Component {
 
 export default connect(
   state => ({
-    user: state.auth.getIn(['user']).toJS(),
-    loggedIn: state.auth.getIn(['loggedIn']),
     isMobileMenuVisible: state.layout.getIn(['isMobileMenuVisible']),
     cart: state.cart
   }),

@@ -1,11 +1,8 @@
 import React, { Component } from 'react'
 import PrivacyText from '../Components/PrivacyText'
+import page from '../../Layout/hoc/page'
 
 class PrivacyPageContainer extends Component {
-  constructor() {
-    super()
-  }
-
   render() {
     return (
       <div className="center">
@@ -15,4 +12,6 @@ class PrivacyPageContainer extends Component {
   }
 }
 
-export default PrivacyPageContainer
+export default page(PrivacyPageContainer, {
+  title: 'Privacy Policy'
+})

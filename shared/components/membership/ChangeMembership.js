@@ -1,16 +1,11 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import Loading from '../../Common/Components/Loading'
-import { Link } from 'react-router'
 import MembershipHeader from './MembershipHeader'
 import axios from 'axios'
+import page from '../../Layout/hoc/page'
+import withUser from '../../Layout/hoc/withUser'
 
 class ChangeMembership extends Component {
-  constructor(props) {
-    super(props)
-  }
-
   componentDidMount() {
     var dispatch = this.props.dispatch
     const { user } = this.props
@@ -225,8 +220,13 @@ class ChangeMembership extends Component {
   }
 }
 
-export default connect(state => ({
-  user: state.auth.getIn(['user']).toJS(),
-  loggedIn: state.auth.getIn(['loggedIn']),
-  memberportal: state.memberportal
-}))(ChangeMembership)
+export default withUser(
+  page(
+    connect(state => ({
+      memberportal: state.memberportal
+    }))(ChangeMembership),
+    {
+      title: `Change Membership`
+    }
+  )
+)

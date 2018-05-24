@@ -1,11 +1,11 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { map, isEmpty, orderBy } from 'lodash'
 import marked from 'marked'
 import styled from 'styled-components'
 
-import { changePageTitle } from '../Layout/Actions/LayoutActions'
 import AuthorLink from './AuthorLink'
+import page from '../Layout/hoc/page'
 
 const AVATAR_SIZE = 60
 
@@ -44,11 +44,6 @@ class About extends Component {
     </div>
   )
   sortContributors = contributors => orderBy(contributors, 'sort_rank')
-
-  componentWillMount() {
-    const { dispatch } = this.props
-    dispatch(changePageTitle('About Data Skeptic'))
-  }
 
   render() {
     const { contributors } = this.props
@@ -131,6 +126,11 @@ const Avatar = styled.img`
   border: 1px solid #dddddd;
 `
 
-export default connect(state => ({
-  contributors: state.site.get('contributors').toJS()
-}))(About)
+export default page(
+  connect(state => ({
+    contributors: state.site.get('contributors').toJS()
+  }))(About),
+  {
+    title: 'About Data Skeptic'
+  }
+)

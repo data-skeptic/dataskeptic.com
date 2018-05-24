@@ -1,22 +1,8 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-
-import { changePageTitle } from '../Layout/Actions/LayoutActions'
+import page from '../Layout/hoc/page'
 
 class Coaching extends Component {
-  static getPageMeta() {
-    return {
-      title: 'Coaching | Data Skeptic'
-    }
-  }
-
-  componentWillMount() {
-    const { dispatch } = this.props
-    const { title } = Coaching.getPageMeta()
-
-    dispatch(changePageTitle(title))
-  }
-
   addToCart() {
     var product = {
       active: 1,
@@ -91,4 +77,9 @@ class Coaching extends Component {
   }
 }
 
-export default connect(state => ({ products: state.products }))(Coaching)
+export default page(
+  connect(state => ({ products: state.products }))(Coaching),
+  {
+    title: 'Coaching'
+  }
+)

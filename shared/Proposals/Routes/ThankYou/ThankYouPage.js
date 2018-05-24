@@ -1,26 +1,7 @@
 import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-
-import { changePageTitle } from '../../../Layout/Actions/LayoutActions'
+import page from '../../../Layout/hoc/page'
 
 class ProposalsThankYouPage extends Component {
-  constructor(props) {
-    super(props)
-  }
-
-  static getPageMeta() {
-    return {
-      title: 'Thank you | Data Skeptic'
-    }
-  }
-
-  componentWillMount() {
-    const dispatch = this.props.dispatch
-    const { title } = ProposalsThankYouPage.getPageMeta()
-    this.props.changePageTitle(title)
-  }
-
   render() {
     return (
       <div className="thank-you">
@@ -34,13 +15,6 @@ class ProposalsThankYouPage extends Component {
   }
 }
 
-export default connect(
-  state => ({}),
-  dispatch =>
-    bindActionCreators(
-      {
-        changePageTitle
-      },
-      dispatch
-    )
-)(ProposalsThankYouPage)
+export default page(ProposalsThankYouPage, {
+  title: 'Thank you'
+})

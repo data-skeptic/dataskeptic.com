@@ -1,19 +1,19 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import AdminLayout from './AdminLayout'
 import SendEmail from './SendEmail'
+import page from '../../Layout/hoc/page'
 
 class AdminEmailsSend extends Component {
   render() {
-    const { history } = this.props
-
     return (
-      <AdminLayout history={history}>
+      <div>
         <h3>Send Email</h3>
 
         <SendEmail />
-      </AdminLayout>
+      </div>
     )
   }
 }
-export default connect(state => ({}))(AdminEmailsSend)
+export default page(connect(state => ({}))(AdminEmailsSend), {
+  title: `Send Email`
+})

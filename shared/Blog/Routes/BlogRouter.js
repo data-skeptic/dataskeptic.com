@@ -1,52 +1,42 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import isUndefined from 'lodash/isUndefined'
 import styled from 'styled-components'
-import { redirects_map } from '../../../redirects'
-import { get_podcasts_by_guid } from '../../utils/redux_loader'
 import { snserror } from '../../SnsUtil'
 
-import NotFound from '../../NotFound/Components/NotFound'
 import BlogTopNav from '../Components/BlogTopNav'
 import BlogItem from '../Components/BlogItem'
 import BlogList from '../Components/BlogList'
-import BlogBreadCrumbs from '../Components/BlogBreadCrumbs'
 import NoBlogs from '../Components/NoBlogs'
 import Loading from '../../Common/Components/Loading'
-import transform_pathname from '../../utils/transform_pathname'
+import page from '../../Layout/hoc/page'
 
 const normalizePathname = path => path.replace(/\/\//g, '/')
 
-class BlogRouter extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
-  static getPageMeta(state) {
-    const isExists = state.blogs.getIn(['blog_focus', 'blog'])
-    if (!isExists) {
-      return {
-        title: 'Data Skeptic',
-        description: ''
-      }
-    }
-
-    const post = state.blogs.getIn(['blog_focus', 'blog']).toJS()
-    const isEpisode = !isUndefined(post.guid)
-
-    let meta = {
-      //title: `${post.title} | Data Skeptic`,
-      title: `Data Skeptic`,
-      description: post.desc
-    }
-
-    if (isEpisode) {
-      meta.image = post.preview
-    }
-
-    return meta
-  }
+class BlogRouter extends Component {
+  // static getPageMeta(state) {
+  //   const isExists = state.blogs.getIn(['blog_focus', 'blog'])
+  //   if (!isExists) {
+  //     return {
+  //       title: 'Data Skeptic',
+  //       description: ''
+  //     }
+  //   }
+  //
+  //   const post = state.blogs.getIn(['blog_focus', 'blog']).toJS()
+  //   const isEpisode = !isUndefined(post.guid)
+  //
+  //   let meta = {
+  //     //title: `${post.title} | Data Skeptic`,
+  //     title: `Data Skeptic`,
+  //     description: post.desc
+  //   }
+  //
+  //   if (isEpisode) {
+  //     meta.image = post.preview
+  //   }
+  //
+  //   return meta
+  // }
 
   handle_reload(pathname, oldpathname) {
     console.log('handle_reload of ' + pathname + ' over ' + oldpathname)
@@ -63,26 +53,21 @@ class BlogRouter extends React.Component {
     }
     var request_reload = pathname != oldpathname
     if (exact) {
-      console.log('Exact match')
-      console.log(blogs.length)
       if (blogs.length != 1) {
-        var blogs = [exact]
-        var prefix = pname
-        var payload = { blogs, prefix }
+        const blogs = [exact]
+        const prefix = pname
+        const payload = { blogs, prefix }
         console.log(['CMS_SET_RECENT_BLOGS', blogs])
         dispatch({ type: 'CMS_SET_RECENT_BLOGS', payload: payload })
-      } else if (blogs[0]['blog_id'] != exact['blog_id']) {
+      } else if (blogs[0]['blog_id'] !== exact['blog_id']) {
         request_reload = true
       }
     }
     if (request_reload) {
       console.log('Asking blogs to reload')
       var payload = { limit: 10, offset: 0, prefix: pname, dispatch }
-      var loaded_prettyname = ocms.loaded_prettyname
       dispatch({ type: 'CMS_LOAD_RECENT_BLOGS', payload })
     }
-    //const {title} = BlogRouter.getPageMeta(this.props);
-    //dispatch(changePageTitle(title));
   }
 
   componentWillReceiveProps(nextProps) {
@@ -129,7 +114,7 @@ class BlogRouter extends React.Component {
     return blogs
   }
 
-  redirect = to => this.props.history.push(to)
+  redirect = to => this.props.router.push(to)
 
   missing() {
     var location = this.props.location.pathname
@@ -166,9 +151,15 @@ class BlogRouter extends React.Component {
       this.missing()
       return <NoBlogs />
     }
-    if (blogs.length == 1) {
+    if (blogs.length === 1) {
       console.log('One to show')
-      return <BlogItem blog={blogs[0]} loading={blog_state === 'loading'} />
+      return (
+        <BlogItem
+          blog={blogs[0]}
+          loading={blog_state === 'loading'}
+          updateMeta={this.props.updateMeta}
+        />
+      )
     } else {
       console.log('BlogList')
       return (
@@ -183,13 +174,18 @@ class BlogRouter extends React.Component {
   }
 }
 
-export default connect((state, ownProps) => ({
-  player: state.player,
-  blogs: state.blogs,
-  cms: state.cms,
-  episodes: state.episodes,
-  site: state.site
-}))(BlogRouter)
+export default page(
+  connect((state, ownProps) => ({
+    player: state.player,
+    blogs: state.blogs,
+    cms: state.cms,
+    episodes: state.episodes,
+    site: state.site
+  }))(BlogRouter),
+  {
+    title: 'Data Skeptic Blog'
+  }
+)
 
 const Wrapper = styled.div`
   @media (max-width: 768px) {

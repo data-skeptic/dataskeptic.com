@@ -1,4 +1,5 @@
 export function parseQuery(queryString) {
+  console.info('This feature should be refactored.')
   var query = {}
   var pairs = (queryString[0] === '?'
     ? queryString.substr(1)

@@ -1,21 +1,8 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-
-import { changePageTitle } from '../Layout/Actions/LayoutActions'
+import page from '../Layout/hoc/page'
 
 class Advertising extends Component {
-  static getPageMeta() {
-    return {
-      title: 'Advertising | Data Skeptic'
-    }
-  }
-
-  componentWillMount() {
-    const { dispatch } = this.props
-    const { title } = Advertising.getPageMeta()
-    dispatch(changePageTitle(title))
-  }
-
   render() {
     return (
       <div className="advertise-page center">
@@ -169,4 +156,9 @@ class Advertising extends Component {
   }
 }
 
-export default connect(state => ({ products: state.products }))(Advertising)
+export default page(
+  connect(state => ({ products: state.products }))(Advertising),
+  {
+    title: 'Advertising'
+  }
+)

@@ -6,7 +6,6 @@ import axios from 'axios'
 import styled from 'styled-components'
 
 import ContactFormContainer from '../Containers/ContactFormContainer/ContactFormContainer'
-import { changePageTitle } from '../../Layout/Actions/LayoutActions'
 import { formValueSelector, reset } from 'redux-form'
 import {
   init,
@@ -23,6 +22,7 @@ import Recorder, { steps } from '../../Recorder'
 import QuestionForm from '../../Questions/Forms/QuestionForm'
 import { submitCommentForm } from '../../Proposals/Actions/CommentBoxFormActions'
 import SectionBlock from '../Components/SectionBlock/SectionBlock'
+import page from '../../Layout/hoc/page'
 
 class ContactUs extends React.Component {
   isSectionOpen = section => section === this.state.openSection
@@ -105,20 +105,6 @@ class ContactUs extends React.Component {
       submittedUrl: '',
       openSection: ''
     }
-  }
-
-  static getPageMeta() {
-    return {
-      title: 'Contact Us | Data Skeptic',
-      description:
-        'We hope to respond to all inquiries, but sometimes the volume of incoming questions can cause our queue to explode. We prioritize responses to Data Skeptic members first, and to those who ask questions in a public forum like Twitter, our Facebook wall (not Facebook direct message), or Slack. Many people can benefit from responses in public places.'
-    }
-  }
-
-  componentDidMount() {
-    const { dispatch } = this.props
-    const { title } = ContactUs.getPageMeta(this.props)
-    dispatch(changePageTitle(title))
   }
 
   render() {
@@ -478,11 +464,19 @@ const SlackStatus = styled.span`
 `
 
 const selector = formValueSelector('question')
-export default connect(state => ({
-  cart: state.cart,
-  site: state.site,
-  confirmPolicy: selector(state, 'confirmPolicy'),
-  activeStep: state.questions.getIn(['form', 'step']),
-  errorMessage: state.questions.getIn(['form', 'error']),
-  aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket'])
-}))(ContactUs)
+
+export default page(
+  connect(state => ({
+    cart: state.cart,
+    site: state.site,
+    confirmPolicy: selector(state, 'confirmPolicy'),
+    activeStep: state.questions.getIn(['form', 'step']),
+    errorMessage: state.questions.getIn(['form', 'error']),
+    aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket'])
+  }))(ContactUs),
+  {
+    title: 'Contact Us',
+    description:
+      'We hope to respond to all inquiries, but sometimes the volume of incoming questions can cause our queue to explode. We prioritize responses to Data Skeptic members first, and to those who ask questions in a public forum like Twitter, our Facebook wall (not Facebook direct message), or Slack. Many people can benefit from responses in public places.'
+  }
+)
