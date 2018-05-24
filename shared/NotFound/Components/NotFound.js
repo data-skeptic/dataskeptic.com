@@ -1,21 +1,9 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { changePageTitle } from '../../Layout/Actions/LayoutActions'
 import ContactFormContainer from '../../Contacts/Containers/ContactFormContainer/ContactFormContainer'
+import page from '../../Layout/hoc/page'
 
 class NotFound extends Component {
-  static getPageMeta() {
-    return {
-      notFoundPage: true,
-      title: 'Page Not Found'
-    }
-  }
-
-  componentWillMount() {
-    const { dispatch } = this.props
-    dispatch(changePageTitle('Page Not Found'))
-  }
-
   render() {
     const { url } = this.props
     const missedMessage = `I was looking for a page on your site at ${url}\n`
@@ -40,6 +28,12 @@ class NotFound extends Component {
   }
 }
 
-export default connect((state, ownProps) => ({
-  url: ownProps.location.pathname
-}))(NotFound)
+export default page(
+  connect((state, ownProps) => ({
+    url: ownProps.location.pathname
+  }))(NotFound),
+  {
+    notFoundPage: true,
+    title: 'Page Not Found'
+  }
+)

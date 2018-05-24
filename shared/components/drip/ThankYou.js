@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import page from '../../Layout/hoc/page'
 
 class DripThankYou extends Component {
   render() {
@@ -20,7 +21,11 @@ class DripThankYou extends Component {
   }
 }
 
-export default connect(
-  state => ({}),
-  dispatch => bindActionCreators({}, dispatch)
-)(DripThankYou)
+export default page(
+  connect(state => ({}), dispatch => bindActionCreators({}, dispatch))(
+    DripThankYou
+  ),
+  {
+    title: 'Thank You'
+  }
+)

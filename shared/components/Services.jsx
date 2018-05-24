@@ -1,28 +1,10 @@
-import React from 'react'
-import { bindActionCreators } from 'redux'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import ContactFormContainer from '../Contacts/Containers/ContactFormContainer/ContactFormContainer'
+import page from '../Layout/hoc/page'
 
-import { changePageTitle } from '../Layout/Actions/LayoutActions'
-
-class Services extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
-  static getPageMeta() {
-    return {
-      title: 'Services | Data Skeptic'
-    }
-  }
-
-  componentDidMount() {
-    const { dispatch } = this.props
-    const { title } = Services.getPageMeta(this.props)
-    dispatch(changePageTitle(title))
-  }
-
+class Services extends Component {
   render() {
     return (
       <div className="center services-outer">
@@ -85,4 +67,6 @@ class Services extends React.Component {
   }
 }
 
-export default connect(state => ({}))(Services)
+export default page(connect(state => ({}))(Services), {
+  title: 'Services'
+})

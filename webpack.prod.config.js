@@ -17,6 +17,9 @@ const env = {
   )
 }
 
+console.dir('CLIENT ENV!!')
+console.dir(env)
+
 module.exports = {
   entry: ['babel-polyfill', './client/index.jsx'],
   resolve: {

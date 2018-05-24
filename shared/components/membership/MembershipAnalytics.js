@@ -1,17 +1,13 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import Loading from '../../Common/Components/Loading'
 import { Link } from 'react-router'
 import MembershipHeader from './MembershipHeader'
 
-import { changePageTitle } from '../../Layout/Actions/LayoutActions'
+import page from '../../Layout/hoc/page'
+import withUser from '../../Layout/hoc/withUser'
 
 class MembershipAnalytics extends Component {
-  constructor(props) {
-    super(props)
-  }
-
   componentDidMount() {
     var dispatch = this.props.dispatch
     dispatch({ type: 'LOAD_MEMBER_ANALYTICS', payload: { dispatch } })
@@ -70,8 +66,13 @@ class MembershipAnalytics extends Component {
   }
 }
 
-export default connect(state => ({
-  user: state.auth.getIn(['user']).toJS(),
-  loggedIn: state.auth.getIn(['loggedIn']),
-  memberportal: state.memberportal
-}))(MembershipAnalytics)
+export default withUser(
+  page(
+    connect(state => ({
+      memberportal: state.memberportal
+    }))(MembershipAnalytics),
+    {
+      title: `Analytics`
+    }
+  )
+)

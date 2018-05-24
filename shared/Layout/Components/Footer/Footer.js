@@ -1,10 +1,9 @@
 import React from 'react'
 import AdSense from 'react-adsense'
-import { Link } from 'react-router'
-import ReactDOM from 'react-dom'
 import sha1 from 'sha1'
 
 import NavLink from '../../../components/NavLink'
+import Link from '../Link'
 
 const LINKS = {
   ITUNES:

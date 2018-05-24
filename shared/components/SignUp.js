@@ -1,9 +1,9 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { changePageTitle } from '../Layout/Actions/LayoutActions'
 import SignUpForm from './SignUpForm'
-import { Link } from 'react-router'
 import axios from 'axios'
+import page from '../Layout/hoc/page'
+import withUser from '../Layout/hoc/withUser'
 
 const SIGNUP_ENDPOINT = '/api/v1/auth/signup/'
 
@@ -12,7 +12,7 @@ class SignUp extends Component {
     this.setState({ error: '' })
     axios.post(SIGNUP_ENDPOINT, data).then(result => {
       if (result.data.success) {
-        return this.props.history.push('/login')
+        return this.props.router.push('/login')
       } else {
         this.setState({ error: result.data.message })
       }
@@ -33,14 +33,9 @@ class SignUp extends Component {
     }
   }
 
-  componentWillMount() {
-    const { title } = SignUp.getPageMeta()
-    this.props.dispatch(changePageTitle(title))
-  }
-
   componentDidMount() {
     if (this.props.loggedIn) {
-      return this.props.history.push('/membership')
+      return this.props.router.push('/membership')
     }
   }
 
@@ -75,7 +70,8 @@ class SignUp extends Component {
   }
 }
 
-export default connect(state => ({
-  user: state.auth.getIn(['user']).toJS(),
-  loggedIn: state.auth.getIn(['loggedIn'])
-}))(SignUp)
+export default withUser(
+  page(connect(state => ({}))(SignUp), {
+    title: `Sign Up`
+  })
+)

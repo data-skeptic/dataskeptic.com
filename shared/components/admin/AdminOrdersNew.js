@@ -1,24 +1,24 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import AdminLayout from './AdminLayout'
 import OpenOrders from './OpenOrders'
 import Loading from '../../Common/Components/Loading'
+import { isEmpty } from 'lodash'
+import page from '../../Layout/hoc/page'
 
 class AdminOrdersNew extends Component {
-  redirect = to => this.props.history.push(to)
+  redirect = to => this.props.router.push(to)
 
   render() {
-    const { history } = this.props
     const oadmin = this.props.admin.toJS()
-    var order = oadmin.order
-    if (order == undefined) {
+    const order = oadmin.order
+    if (isEmpty(order)) {
       return <Loading />
     }
-    var step = order.step
-    var errorMsg = order.errorMsg
+    const step = order.step
+    const errorMsg = order.errorMsg
 
     return (
-      <AdminLayout history={history}>
+      <div>
         <h3>Orders [NEW]</h3>
 
         <hr />
@@ -27,10 +27,15 @@ class AdminOrdersNew extends Component {
         <hr />
 
         <OpenOrders redirect={this.redirect} />
-      </AdminLayout>
+      </div>
     )
   }
 }
-export default connect(state => ({
-  admin: state.admin
-}))(AdminOrdersNew)
+export default page(
+  connect(state => ({
+    admin: state.admin
+  }))(AdminOrdersNew),
+  {
+    title: `Admin Orders New`
+  }
+)

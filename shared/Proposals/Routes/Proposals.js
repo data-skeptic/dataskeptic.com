@@ -14,7 +14,7 @@ import Container from '../../Layout/Components/Container/Container'
 import Content from '../../Layout/Components/Content/Content'
 import CommentBoxFormContainer from '../Containers/CommentBoxContainer/CommentBoxFormContainer'
 import Countdown from '../../Common/Components/Countdown'
-import { changePageTitle } from '../../Layout/Actions/LayoutActions'
+import page from '../../Layout/hoc/page'
 
 class Proposals extends Component {
   constructor(props) {
@@ -29,18 +29,6 @@ class Proposals extends Component {
       ready: false
     }
   }
-
-  static getPageMeta() {
-    return {
-      title: 'Request for Comment | Data Skeptic'
-    }
-  }
-
-  componentWillMount() {
-    const { title } = Proposals.getPageMeta()
-    this.props.changePageTitle(title)
-  }
-
   componentWillReceiveProps(nextProps) {
     if (nextProps.user && this.state.authorizedUser) {
       this.setState({ ready: true })
@@ -78,6 +66,10 @@ class Proposals extends Component {
 
   render() {
     const { ready, authorizedUser } = this.state
+
+    if (this.props.children) {
+      return this.props.children
+    }
 
     if (ready) {
       const { proposal = {}, aws_proposals_bucket } = this.props
@@ -187,20 +179,24 @@ class Proposals extends Component {
   }
 }
 
-export default connect(
-  state => ({
-    aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket']),
-    proposal: state.proposals.getIn(['proposal']).toJS(),
-    user: state.auth.getIn(['user']).toJS()
-  }),
-  dispatch =>
-    bindActionCreators(
-      {
-        fetchCurrentProposal,
-        proposalDeadlineReached,
-        changePageTitle,
-        authorize
-      },
-      dispatch
-    )
-)(Proposals)
+export default page(
+  connect(
+    state => ({
+      aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket']),
+      proposal: state.proposals.getIn(['proposal']).toJS(),
+      user: state.auth.getIn(['user']).toJS()
+    }),
+    dispatch =>
+      bindActionCreators(
+        {
+          fetchCurrentProposal,
+          proposalDeadlineReached,
+          authorize
+        },
+        dispatch
+      )
+  )(Proposals),
+  {
+    title: 'Request for Comment'
+  }
+)

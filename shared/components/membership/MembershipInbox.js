@@ -1,10 +1,9 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import Loading from '../../Common/Components/Loading'
 import ContactFormContainer from '../../Contacts/Containers/ContactFormContainer/ContactFormContainer'
-import { Link } from 'react-router'
 import MembershipHeader from './MembershipHeader'
+import page from '../../Layout/hoc/page'
+import withUser from '../../Layout/hoc/withUser'
 
 class MembershipInbox extends Component {
   constructor(props) {
@@ -12,7 +11,7 @@ class MembershipInbox extends Component {
   }
 
   render() {
-    const { user, loggedIn } = this.props
+    const { user } = this.props
     return (
       <div className="member-portal-container">
         <MembershipHeader user={user} />
@@ -26,8 +25,13 @@ class MembershipInbox extends Component {
   }
 }
 
-export default connect(state => ({
-  user: state.auth.getIn(['user']).toJS(),
-  loggedIn: state.auth.getIn(['loggedIn']),
-  memberportal: state.memberportal
-}))(MembershipInbox)
+export default withUser(
+  page(
+    connect(state => ({
+      memberportal: state.memberportal
+    }))(MembershipInbox),
+    {
+      title: 'Membership Inbox'
+    }
+  )
+)
