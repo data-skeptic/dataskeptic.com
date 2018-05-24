@@ -16,8 +16,7 @@ function parse_git_hash() {
 GIT_BRANCH=$(parse_git_branch)_$(parse_git_hash)
 
 VERSION=$(date +"%Y%m%d").git.$GIT_BRANCH
-IMAGE=currency/scoring-api
-docker build -t $IMAGE:$VERSION .
+IMAGE=data-skeptic/dataskeptic.com
 echo $IMAGE:$VERSION > latest.txt
 echo $IMAGE:$VERSION
 
