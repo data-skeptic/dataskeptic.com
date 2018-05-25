@@ -5,6 +5,7 @@ import MailingList from '../Common/Components/MailingList'
 import HomeContainer from '../../shared/Home'
 import { parseQuery } from '../utils/parseQuery'
 import page from '../Layout/hoc/page'
+import EmailPopupContainer from '../Popups/Containers/EmailPopupContainer'
 
 class Home extends Component {
   componentWillMount() {
@@ -40,6 +41,8 @@ class Home extends Component {
       //   <div className="clear"></div>
       // </div>
       <div>
+        <EmailPopupContainer />
+
         <HomeContainer />
         <div className="clear" />
         <div className="home-mailing-list-outer">
