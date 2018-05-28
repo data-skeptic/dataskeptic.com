@@ -15,8 +15,10 @@ const IS_CLIENT = (() => {
 })()
 
 export const DEFAULT_APP_TITLE = 'Data Skeptic'
+export const SET_MOBILE = 'SET_MOBILE'
 
 const init = {
+  isMobile: false,
   isMobileMenuVisible: false,
   searchAreaVisible: false,
   title: DEFAULT_APP_TITLE,
@@ -45,7 +47,18 @@ export default function LayoutReducer(state = defaultState, action) {
       state = state.set('showAds', action.payload.showAds)
       return state
 
+    case SET_MOBILE:
+      state = state.set('isMobile', action.payload.isMobile)
+      return state
+
     default:
       return state
   }
 }
+
+export const setMobile = isMobile => ({
+  type: SET_MOBILE,
+  payload: {
+    isMobile
+  }
+})

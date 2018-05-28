@@ -10,7 +10,7 @@ export const DELAY = 300
 class EmailPopup extends Component {
   render() {
     const { onClose } = this.props
-    
+
     return (
       <Inner>
         <Bot>
@@ -35,7 +35,9 @@ export default connect((state, ownProps) => ({}))(
   popup(EmailPopup, {
     key: KEY,
     height: '360px',
-    width: '400px'
+    width: '400px',
+    message: "Sign up for our mailing list and don't miss any updates",
+    callToAction: 'Subscribe'
   })
 )
 
@@ -49,11 +51,17 @@ const Bot = styled.div`
     width: 180px;
     height: 180px;
   }
+
+  @media (max-width: 768px) {
+    img {
+      margin-top: 0px;
+    }
+  }
 `
 
 const Container = styled.div`
   display: flex;
   flex-direction: row;
   text-align: center;
-  padding: 40px 20px;
+  padding: 20px;
 `
