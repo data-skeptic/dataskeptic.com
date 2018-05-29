@@ -219,7 +219,7 @@ setInterval(doRefresh, 60 * 60 * 1000)
 if (env == 'prod') {
   // https redirect
   app.use((req, res, next) => {
-    if (!req.secure && req.headers['x-forwarded-proto'] !== 'https') {
+    if (req.headers['x-forwarded-proto'] !== 'https') {
       const redirect = 'https://' + req.headers['host'] + req.url
       return res.redirect(redirect)
     }
