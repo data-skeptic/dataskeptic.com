@@ -16,10 +16,10 @@ export default class InfiniteList extends Component {
     endMessage: 'No more items.'
   }
 
-  loadMore = (reset = false) => {
+  loadMore = () => {
     const { loadMore, limit, offset } = this.props
     const nextOffset = +offset + +limit
-    loadMore(limit, nextOffset, reset)
+    loadMore({ limit, offset: nextOffset })
   }
 
   render() {

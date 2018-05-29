@@ -10,14 +10,16 @@ const initialState = fromJS(defaultState)
 export default (state = initialState, action) => {
   switch (action.type) {
     case INIT:
-      state = state.update('registeredKeys', keys => keys.push(action.payload.key))
+      state = state.update('registeredKeys', keys =>
+        keys.push(action.payload.key)
+      )
       state = fromJS(initPopup(state.toJS(), action.payload))
       return state
-    
+
     case OPEN:
       state = state.setIn([action.payload.key, 'open'], true)
       return state
-       
+
     case CLOSE:
       state = state.setIn([action.payload.key, 'open'], false)
       state = state.setIn([action.payload.key, 'accepted'], false)

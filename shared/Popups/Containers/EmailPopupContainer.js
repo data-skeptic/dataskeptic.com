@@ -75,7 +75,7 @@ class EmailPopupContainer extends Component {
     this.setState({
       triggered: true
     })
-    
+
     this.props.dispatch(open(EMAIL_POPUP_KEY))
   }
 

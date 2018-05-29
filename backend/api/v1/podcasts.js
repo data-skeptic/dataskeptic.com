@@ -3,9 +3,12 @@ const express = require('express')
 const axios = require('axios')
 const base_api = process.env.BASE_API
 
-const getEpisodes = (limit, offset) => {
-  const url =
-    base_api + `/podcast/episodes/list?limit=${limit}&offset=${offset}`
+const getEpisodes = (limit, offset, year) => {
+  let url = base_api + `/podcast/episodes/list?limit=${limit}&offset=${offset}`
+
+  if (year) {
+    url += `&year=${year}`
+  }
   return axios.get(url).then(res => res.data)
 }
 
@@ -15,8 +18,17 @@ module.exports = cache => {
   router.get('/', (req, res) => {
     const limit = +req.query.limit || 10
     const offset = +req.query.offset || 0
+    const { year, firstLoad } = req.query
 
-    getEpisodes(limit, offset)
+    let realLimit = limit
+    let realOffset = offset
+
+    if (firstLoad && offset !== 0) {
+      realLimit = realOffset
+      realOffset = 0
+    }
+
+    getEpisodes(realLimit, realOffset, year)
       .then(({ total, episodes }) => {
         const hasMore = limit + offset <= total
 

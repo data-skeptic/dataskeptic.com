@@ -2,14 +2,14 @@ import React from 'react'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
 
-import { get_podcasts } from '../utils/redux_loader'
+import { reset, setYear } from '../reducers/EpisodesReducer'
 
 class YearNav extends React.Component {
-  onClick() {
-    var dispatch = this.props.dispatch
-    var year = this.props.year
-    var pathname = '/podcast/' + year
-    get_podcasts(dispatch, pathname)
+  onClick(e) {
+    e.preventDefault()
+    const year = this.props.year === -1 ? null : this.props.year
+    this.props.dispatch(reset(year))
+    this.props.dispatch(setYear(year))
   }
   getClassNames(isActive) {
     var selectors = 'episode-year-container'
@@ -19,23 +19,22 @@ class YearNav extends React.Component {
     return selectors
   }
   render() {
-    var year = this.props.year
-    var active = this.props.active
+    const { year, label, active } = this.props
     var down = 'menu-button-up'
     if (active) {
       down = 'menu-button-down'
     }
-    var to = '/podcast/' + year
+    var to = '/podcast&year=' + year
     var selectors = this.getClassNames(active)
     return (
-      <div className={selectors}>
+      <div className={selectors} key={year}>
         <Link
           key={to}
           onClick={this.onClick.bind(this)}
           className="menu-year"
           to={to}
         >
-          {year}
+          {label ? label : year}
         </Link>
       </div>
     )

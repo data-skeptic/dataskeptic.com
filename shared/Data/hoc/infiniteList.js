@@ -8,34 +8,137 @@ import {
   getError,
   getLimit,
   getOffset,
-  getHasMore
+  getHasMore,
+  getProps
 } from '../helpers/list'
+import { forEach, isEqual } from 'lodash'
 import styled from 'styled-components'
 import ListError from '../Components/ListError'
+
+const decodePath = path => {
+  const params = {}
+  let attrs = path.split('?')
+
+  if (attrs.length === 0 || attrs.length === 1) return params
+
+  attrs = attrs[1].split('&').map(attr => attr.split('='))
+
+  forEach(attrs, ([key, val]) => {
+    params[key] = decodeURIComponent(val)
+  })
+
+  return params
+}
 
 export default function(options) {
   class WrappedList extends Component {
     static defaultProps = {
-      loadMore: () => {}
+      initFromParams: () => {},
+      loadMore: () => {},
+      params: {}
     }
 
-    constructor(props) {
-      super(props)
+    state = {
+      initialLimit: this.props.limit,
+      initialOffset: this.props.offset
     }
 
     componentDidMount() {
+      // We use old React-Router version
+      // so we should parse params from location string manually
+      const params = decodePath(this.props.location.search)
+
       if (this.props.autoLoad) {
-        this.firstLoad()
+        this.firstLoad({
+          ...params
+        })
       }
     }
 
-    loadMore = (limit, offset) => {
+    componentWillMount() {
+      const params = decodePath(this.props.location.search)
+      this.props.initFromParams(params)
+    }
+
+    componentWillReceiveProps(nextProps) {
+      if (!isEqual(nextProps.params, this.props.params)) {
+        this.onParamsChanged(nextProps.params)
+      }
+    }
+
+    onParamsChanged = nextParams => {
+      const { limit, offset } = this.props
+
+      this.loadMore(
+        {
+          limit: Number(limit),
+          offset: Number(offset),
+          ...nextParams
+        },
+        true
+      )
+    }
+
+    loadMore = (params, reset = false) => {
+      params = {
+        ...this.props.params,
+        ...params
+      }
+
       if (this.props.hasMore) {
-        this.props.loadMore(limit, offset)
+        if (reset) {
+          params.limit = this.state.initialLimit
+          params.offset = this.state.initialOffset
+        }
+
+        this.props.loadMore(params, reset)
       }
     }
 
-    firstLoad = () => this.loadMore(this.props.limit, this.props.offset)
+    firstLoad = params => {
+      const {
+        limit = this.props.limit,
+        offset = this.props.offset,
+        ...rest
+      } = params
+
+      this.loadMore({
+        limit: Number(limit),
+        offset: Number(offset),
+        ...rest,
+        firstLoad: true
+      })
+    }
+
+    renderDebug = () => {
+      const {
+        loading,
+        loaded,
+        error,
+        offset,
+        limit,
+        hasMore,
+        items,
+        total,
+        params,
+        endMessage
+      } = this.props
+
+      return (
+        <code>
+          {JSON.stringify({
+            loading,
+            loaded,
+            error,
+            offset,
+            limit,
+            hasMore,
+            total,
+            params
+          })}
+        </code>
+      )
+    }
 
     render() {
       const {
@@ -53,8 +156,14 @@ export default function(options) {
 
       return (
         <Wrapper>
-          <InfiniteList {...rest} endMessage={endMessage} />
+          {options.debug && this.renderDebug()}
+          <InfiniteList
+            {...rest}
+            loadMore={this.loadMore}
+            endMessage={endMessage}
+          />
           {error && <ListError error={error} />}
+          {options.debug && this.renderDebug()}
         </Wrapper>
       )
     }
@@ -70,7 +179,8 @@ export default function(options) {
       error: getError(store),
       limit: getLimit(store),
       offset: getOffset(store),
-      hasMore: getHasMore(store)
+      hasMore: getHasMore(store),
+      props: getProps(store)
     }
   })(WrappedList)
 }

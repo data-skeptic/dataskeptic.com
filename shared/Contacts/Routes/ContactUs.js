@@ -212,42 +212,6 @@ class ContactUs extends React.Component {
           </SocialBlock>
         </Socials>
 
-        <ListenerArea>
-          <Title>Listener Questions</Title>
-          <Text>
-            We love hearing from our listeners! If you have a question about one
-            of our episodes or a general question that's relevant to Data
-            Skeptic, please ask via the in-browser recording system below. Try
-            to keep your question to 30 seconds or less and make sure your
-            question is a question.
-          </Text>
-          <QuestionFormWrapper>
-            <QuestionForm
-              allowSubmit={confirmPolicy}
-              showSubmit={activeStep === 'REVIEW'}
-              initialValues={{
-                confirmPolicy: true
-              }}
-              onSubmit={this.questionSubmit}
-            >
-              <Recorder
-                activeStep={activeStep}
-                errorMessage={errorMessage}
-                ready={this.recordingReady}
-                recording={this.recorderRecording}
-                stop={this.recorderStop}
-                review={this.recorderReview}
-                submit={this.recorderSubmit}
-                complete={this.recorderComplete}
-                error={this.recorderError}
-                submittedUrl={submittedUrl}
-                reset={this.reset}
-              />
-              {activeStep === 'COMPLETE' && <p>Thanks for your question!</p>}
-            </QuestionForm>
-          </QuestionFormWrapper>
-        </ListenerArea>
-
         <hr />
 
         <Sections>
@@ -480,3 +444,41 @@ export default page(
       'We hope to respond to all inquiries, but sometimes the volume of incoming questions can cause our queue to explode. We prioritize responses to Data Skeptic members first, and to those who ask questions in a public forum like Twitter, our Facebook wall (not Facebook direct message), or Slack. Many people can benefit from responses in public places.'
   }
 )
+
+/*
+<ListenerArea>
+          <Title>Listener Questions</Title>
+          <Text>
+            We love hearing from our listeners! If you have a question about one
+            of our episodes or a general question that's relevant to Data
+            Skeptic, please ask via the in-browser recording system below. Try
+            to keep your question to 30 seconds or less and make sure your
+            question is a question.
+          </Text>
+          <QuestionFormWrapper>
+            <QuestionForm
+              allowSubmit={confirmPolicy}
+              showSubmit={activeStep === 'REVIEW'}
+              initialValues={{
+                confirmPolicy: true
+              }}
+              onSubmit={this.questionSubmit}
+            >
+              <Recorder
+                activeStep={activeStep}
+                errorMessage={errorMessage}
+                ready={this.recordingReady}
+                recording={this.recorderRecording}
+                stop={this.recorderStop}
+                review={this.recorderReview}
+                submit={this.recorderSubmit}
+                complete={this.recorderComplete}
+                error={this.recorderError}
+                submittedUrl={submittedUrl}
+                reset={this.reset}
+              />
+              {activeStep === 'COMPLETE' && <p>Thanks for your question!</p>}
+            </QuestionForm>
+          </QuestionFormWrapper>
+        </ListenerArea>
+*/

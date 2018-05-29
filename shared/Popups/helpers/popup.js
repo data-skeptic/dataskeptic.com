@@ -56,7 +56,7 @@ export const toggle = (key) => {
       type: TOGGLE,
       payload: { key }
     })
-    
+
     if (isOpen(getState().popups, key)) {
       dispatch(close(key))
     } else {
