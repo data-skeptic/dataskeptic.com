@@ -34,7 +34,7 @@ class Podcast extends Component {
     const dispatch = this.props.dispatch
 
     const { title } = Podcast.getPageMeta()
-    dispatch(changePageTitle(title))
+    //dispatch(changePageTitle(title))
   }
 
   initFromParams = (params) => {
@@ -46,7 +46,10 @@ class Podcast extends Component {
   updateLocation = params => {
     delete params.firstLoad
     const query = formatRequest(params)
-    this.props.history.replace(`/podcasts?${query}`)
+    var history = this.props.history
+    if (history) {
+      history.replace(`/podcasts?${query}`)      
+    }
   }
 
   loadMore = (attributes, reset) => {
