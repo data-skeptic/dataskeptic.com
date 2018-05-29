@@ -16,7 +16,7 @@ function parse_git_hash() {
 GIT_BRANCH=$(parse_git_branch)_$(parse_git_hash)
 
 VERSION=$(date +"%Y%m%d").git.$GIT_BRANCH
-IMAGE=data-skeptic/dataskeptic.com
+IMAGE=dataskeptic/dataskeptic.com
 echo $IMAGE:$VERSION > latest.txt
 echo $IMAGE:$VERSION
 
@@ -48,7 +48,7 @@ docker build --build-arg NODE_ENV=$NODE_ENV \
 	--build-arg AUTH_GOOGLE_CLIENT_CALLBACK_URL=$AUTH_GOOGLE_CLIENT_CALLBACK_URL \
 	--build-arg PLAYER_METADATA=$PLAYER_METADATA --build-arg CHAT_LOGS=$CHAT_LOGS \
 	--build-arg CAREERS_EMAIL_ADMIN=$CAREERS_EMAIL_ADMIN --build-arg CAREERS_FILES_BUCKET=$CAREERS_FILES_BUCKET \
-	-t $IMAGE:$VERSION .
+	-t $(cat latest.txt) .
 
 
 echo "push image to heroku"

@@ -18,12 +18,6 @@ export const SET_VOLUME = 'SET_VOLUME'
 export const SET_MUTED = 'SET_MUTED'
 export const RESET = 'RESET'
 
-const normalizeEpisode = episode => {
-  episode.img = episode.img.replace('http://', 'https://')
-  episode.mp3 = episode.mp3.replace('http://', 'https://')
-  return episode
-}
-
 const IS_CLIENT = (() => {
   let isDefined = false
   try {
@@ -154,7 +148,7 @@ export default function PlayerReducer(state = defaultState, action) {
       }
       break
     case 'PLAY_EPISODE':
-      var episode = normalizeEpisode(action.payload)
+      var episode = action.payload
       nstate.seekPosition = null
       if (isEmpty(episode)) {
         nstate.is_playing = false
