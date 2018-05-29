@@ -9,7 +9,6 @@ const getEpisodes = (limit, offset, year) => {
   if (year) {
     url += `&year=${year}`
   }
-  
   return axios.get(url).then(res => res.data)
 }
 
@@ -23,12 +22,12 @@ module.exports = cache => {
 
     let realLimit = limit
     let realOffset = offset
-    
+
     if (firstLoad && offset !== 0) {
       realLimit = realOffset
       realOffset = 0
     }
-    
+
     getEpisodes(realLimit, realOffset, year)
       .then(({ total, episodes }) => {
         const hasMore = limit + offset <= total

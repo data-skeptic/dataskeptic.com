@@ -78,7 +78,7 @@ export default function EpisodesReducer(state = defaultState, action) {
     case RESET:
       nstate = list(nstate)
       break
-    
+
     case SET_YEAR:
       nstate.currentYear = action.payload.year
       break
@@ -90,7 +90,7 @@ export default function EpisodesReducer(state = defaultState, action) {
 export const load = (limit, offset, props, reset) => {
   return dispatch => {
     dispatch(loadRequest(limit, offset, props, reset))
-    
+
     const query = formatRequest({
       limit,
       offset,

@@ -212,8 +212,6 @@ class ContactUs extends React.Component {
           </SocialBlock>
         </Socials>
 
-        
-
         <hr />
 
         <Sections>

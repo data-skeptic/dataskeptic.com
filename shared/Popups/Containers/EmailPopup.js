@@ -10,7 +10,7 @@ export const DELAY = 300
 class EmailPopup extends Component {
   render() {
     const { onClose } = this.props
-    
+
     return (
       <Inner>
         <Bot>

@@ -11,9 +11,9 @@ import Content from '../../Layout/Components/Content/Content'
 import SideBar from '../../Layout/Components/SideBar/SideBar'
 
 import { changePageTitle } from '../../Layout/Actions/LayoutActions'
-import {load as loadEpisodes, setYear} from '../../reducers/EpisodesReducer'
+import { load as loadEpisodes, setYear } from '../../reducers/EpisodesReducer'
 import infiniteList from '../../Data/hoc/infiniteList'
-import formatRequest from "../../utils/formatRequest";
+import formatRequest from '../../utils/formatRequest'
 
 const EpisodesList = infiniteList({
   dataSource: state => state.episodes.toJS()
@@ -37,7 +37,7 @@ class Podcast extends Component {
     //dispatch(changePageTitle(title))
   }
 
-  initFromParams = (params) => {
+  initFromParams = params => {
     if (params.year) {
       this.props.dispatch(setYear(+params.year))
     }
@@ -48,7 +48,7 @@ class Podcast extends Component {
     const query = formatRequest(params)
     var history = this.props.history
     if (history) {
-      history.replace(`/podcasts?${query}`)      
+      history.replace(`/podcasts?${query}`)
     }
   }
 
@@ -84,7 +84,7 @@ class Podcast extends Component {
             )}
           </Content>
           <SideBar title="Year">
-            <YearSelector years={years} year={year}/>
+            <YearSelector years={years} year={year} />
           </SideBar>
         </Container>
       </div>
@@ -99,4 +99,3 @@ export default connect(state => ({
   year: state.episodes.getIn(['currentYear']),
   isLoaded: state.episodes.getIn(['loaded'])
 }))(Podcast)
-

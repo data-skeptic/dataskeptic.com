@@ -7,7 +7,7 @@ export default class MailingList extends React.Component {
     id: '',
     heading: 'Subscribe to our mailing list'
   }
-  
+
   state = {
     email: ``
   }
