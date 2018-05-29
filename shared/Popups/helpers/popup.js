@@ -1,6 +1,7 @@
 const initPopup = (key, store = {}) => ({
   ...store,
   key,
+  accepted: false,
   open: false
 })
 
@@ -12,6 +13,7 @@ export default (state, { key }) => ({
 export const INIT = 'POPUPS//INIT'
 export const DEINIT = 'POPUPS//DEINIT'
 export const OPEN = 'POPUPS//OPEN'
+export const ACCEPT = 'POPUPS//ACCEPT'
 export const CLOSE = 'POPUPS//CLOSE'
 export const TOGGLE = 'POPUPS//TOGGLE'
 
@@ -40,6 +42,13 @@ export const close = key => ({
   }
 })
 
+export const accept = key => ({
+  type: ACCEPT,
+  payload: {
+    key
+  }
+})
+
 export const toggle = key => {
   return (dispatch, getState) => {
     dispatch({
@@ -56,3 +65,4 @@ export const toggle = key => {
 }
 
 export const isOpen = (state, key) => state.getIn([key, 'open'])
+export const isAccepted = (state, key) => state.getIn([key, 'accepted'])

@@ -25,6 +25,9 @@ import Launcher from '../Chat/Containers/Launcher'
 import { BOT_ID, THINKING_MESSAGE } from '../Chat/Constants'
 import ConversationHandler from '../Chat/Dialogs/ConversationHandler'
 import { loggMessage } from '../Chat/Reducers/ChatbotReducer'
+import { setMobile } from '../Layout/Reducers/LayoutReducer'
+
+const MOBILE_WIDTH = 768
 
 class MainView extends React.Component {
   addMessage = message =>
@@ -234,11 +237,28 @@ class MainView extends React.Component {
 
   componentDidMount() {
     this.reply({ text: 'What would you like to talk about?' })
+
+    this.listenResize()
+    window.addEventListener('resize', this.listenResize)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.listenResize)
+  }
+
+  listenResize = () => {
+    const width = window.innerWidth
+    const isMobile = width <= MOBILE_WIDTH
+
+    if (this.props.isMobile !== isMobile) {
+      this.props.dispatch(setMobile(isMobile))
+    }
   }
 
   render() {
     this.logPageView()
     const {
+      isMobile,
       isMobileMenuVisible,
       cart,
       isCartVisible,
@@ -287,6 +307,7 @@ class MainView extends React.Component {
           onMessage={this.onMessage}
           onInactivity={this.onInactivity}
           inactivityDelay={1000 * 60 * 1}
+          isMobile={isMobile}
         />
       </div>
     )
@@ -298,6 +319,7 @@ export default connect(state => ({
   isCartVisible: state.cart.getIn(['cart_visible']),
   site: state.site,
   isMobileMenuVisible: state.layout.getIn(['isMobileMenuVisible']),
+  isMobile: state.layout.get('isMobile'),
   showAds: state.layout.getIn(['showAds']),
   chatbot: state.chatbot,
   contributors: state.site.get('contributors').toJS()
