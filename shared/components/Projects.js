@@ -2,21 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
-import { changePageTitle } from '../Layout/Actions/LayoutActions'
+import page from '../Layout/hoc/page'
 
 class Projects extends Component {
-  static getPageMeta() {
-    return {
-      title: 'Projects | Data Skeptic'
-    }
-  }
-
-  componentWillMount() {
-    const { dispatch } = this.props
-    const { title } = Projects.getPageMeta()
-    dispatch(changePageTitle(title))
-  }
-
   render() {
     return (
       <div className="center">
@@ -65,4 +53,6 @@ class Projects extends Component {
   }
 }
 
-export default connect(state => ({}))(Projects)
+export default page(connect(state => ({}))(Projects), {
+  title: 'Projects'
+})

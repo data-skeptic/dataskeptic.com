@@ -6,7 +6,6 @@ import axios from 'axios'
 import styled from 'styled-components'
 
 import ContactFormContainer from '../Containers/ContactFormContainer/ContactFormContainer'
-import { changePageTitle } from '../../Layout/Actions/LayoutActions'
 import { formValueSelector, reset } from 'redux-form'
 import {
   init,
@@ -23,6 +22,7 @@ import Recorder, { steps } from '../../Recorder'
 import QuestionForm from '../../Questions/Forms/QuestionForm'
 import { submitCommentForm } from '../../Proposals/Actions/CommentBoxFormActions'
 import SectionBlock from '../Components/SectionBlock/SectionBlock'
+import page from '../../Layout/hoc/page'
 
 class ContactUs extends React.Component {
   isSectionOpen = section => section === this.state.openSection
@@ -107,20 +107,6 @@ class ContactUs extends React.Component {
     }
   }
 
-  static getPageMeta() {
-    return {
-      title: 'Contact Us | Data Skeptic',
-      description:
-        'We hope to respond to all inquiries, but sometimes the volume of incoming questions can cause our queue to explode. We prioritize responses to Data Skeptic members first, and to those who ask questions in a public forum like Twitter, our Facebook wall (not Facebook direct message), or Slack. Many people can benefit from responses in public places.'
-    }
-  }
-
-  componentDidMount() {
-    const { dispatch } = this.props
-    const { title } = ContactUs.getPageMeta(this.props)
-    dispatch(changePageTitle(title))
-  }
-
   render() {
     const { confirmPolicy, activeStep, errorMessage } = this.props
     const { submittedUrl } = this.state
@@ -133,7 +119,7 @@ class ContactUs extends React.Component {
       <Container>
         <Title>Contact Us</Title>
         <Text>
-          We hope to respond to all inquiries, but sometimes the volume of
+          We try to respond to all inquiries, but sometimes the volume of
           incoming questions can cause our queue to explode. We prioritize
           responses to Data Skeptic members first, and to those who ask
           questions in a public forum like Twitter, our Facebook wall (not
@@ -226,41 +212,7 @@ class ContactUs extends React.Component {
           </SocialBlock>
         </Socials>
 
-        <ListenerArea>
-          <Title>Listener Questions</Title>
-          <Text>
-            We love hearing from our listeners! If you have a question about one
-            of our episodes or a general question that's relevant to Data
-            Skeptic, please ask via the in-browser recording system below. Try
-            to keep your question to 30 seconds or less and make sure your
-            question is a question.
-          </Text>
-          <QuestionFormWrapper>
-            <QuestionForm
-              allowSubmit={confirmPolicy}
-              showSubmit={activeStep === 'REVIEW'}
-              initialValues={{
-                confirmPolicy: true
-              }}
-              onSubmit={this.questionSubmit}
-            >
-              <Recorder
-                activeStep={activeStep}
-                errorMessage={errorMessage}
-                ready={this.recordingReady}
-                recording={this.recorderRecording}
-                stop={this.recorderStop}
-                review={this.recorderReview}
-                submit={this.recorderSubmit}
-                complete={this.recorderComplete}
-                error={this.recorderError}
-                submittedUrl={submittedUrl}
-                reset={this.reset}
-              />
-              {activeStep === 'COMPLETE' && <p>Thanks for your question!</p>}
-            </QuestionForm>
-          </QuestionFormWrapper>
-        </ListenerArea>
+        
 
         <hr />
 
@@ -478,11 +430,57 @@ const SlackStatus = styled.span`
 `
 
 const selector = formValueSelector('question')
-export default connect(state => ({
-  cart: state.cart,
-  site: state.site,
-  confirmPolicy: selector(state, 'confirmPolicy'),
-  activeStep: state.questions.getIn(['form', 'step']),
-  errorMessage: state.questions.getIn(['form', 'error']),
-  aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket'])
-}))(ContactUs)
+
+export default page(
+  connect(state => ({
+    cart: state.cart,
+    site: state.site,
+    confirmPolicy: selector(state, 'confirmPolicy'),
+    activeStep: state.questions.getIn(['form', 'step']),
+    errorMessage: state.questions.getIn(['form', 'error']),
+    aws_proposals_bucket: state.proposals.getIn(['aws_proposals_bucket'])
+  }))(ContactUs),
+  {
+    title: 'Contact Us',
+    description:
+      'We hope to respond to all inquiries, but sometimes the volume of incoming questions can cause our queue to explode. We prioritize responses to Data Skeptic members first, and to those who ask questions in a public forum like Twitter, our Facebook wall (not Facebook direct message), or Slack. Many people can benefit from responses in public places.'
+  }
+)
+
+/*
+<ListenerArea>
+          <Title>Listener Questions</Title>
+          <Text>
+            We love hearing from our listeners! If you have a question about one
+            of our episodes or a general question that's relevant to Data
+            Skeptic, please ask via the in-browser recording system below. Try
+            to keep your question to 30 seconds or less and make sure your
+            question is a question.
+          </Text>
+          <QuestionFormWrapper>
+            <QuestionForm
+              allowSubmit={confirmPolicy}
+              showSubmit={activeStep === 'REVIEW'}
+              initialValues={{
+                confirmPolicy: true
+              }}
+              onSubmit={this.questionSubmit}
+            >
+              <Recorder
+                activeStep={activeStep}
+                errorMessage={errorMessage}
+                ready={this.recordingReady}
+                recording={this.recorderRecording}
+                stop={this.recorderStop}
+                review={this.recorderReview}
+                submit={this.recorderSubmit}
+                complete={this.recorderComplete}
+                error={this.recorderError}
+                submittedUrl={submittedUrl}
+                reset={this.reset}
+              />
+              {activeStep === 'COMPLETE' && <p>Thanks for your question!</p>}
+            </QuestionForm>
+          </QuestionFormWrapper>
+        </ListenerArea>
+*/

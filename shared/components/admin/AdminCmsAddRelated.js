@@ -1,19 +1,19 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import AdminLayout from './AdminLayout'
 import RelatedContent from './RelatedContent'
+import page from '../../Layout/hoc/page'
 
 class AdminCmsAddRelated extends Component {
   render() {
-    const { history } = this.props
-
     return (
-      <AdminLayout history={history}>
+      <div>
         <h3>Related Content</h3>
 
         <RelatedContent />
-      </AdminLayout>
+      </div>
     )
   }
 }
-export default connect(state => ({}))(AdminCmsAddRelated)
+export default page(connect(state => ({}))(AdminCmsAddRelated), {
+  title: `Admin Related Content`
+})

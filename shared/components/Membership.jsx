@@ -1,12 +1,11 @@
-import React, { Component, PropTypes } from 'react'
-import { Link } from 'react-router'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import Loading from '../Common/Components/Loading'
 import Error from '../Common/Components/Error'
 import { get_products } from '../utils/redux_loader'
 
-import { changePageTitle } from '../Layout/Actions/LayoutActions'
+import page from '../Layout/hoc/page'
 
 class Membership extends Component {
   constructor(props, context) {
@@ -14,22 +13,11 @@ class Membership extends Component {
     this.addToCart = this.addToCart.bind(this)
   }
 
-  static getPageMeta() {
-    return {
-      title: 'Membership | Data Skeptic'
-    }
-  }
-
   componentWillMount() {
     var oproducts = this.props.products.toJS()
     if (!oproducts.products || oproducts.products.length == 0) {
       get_products(this.props.dispatch)
     }
-
-    const { dispatch } = this.props
-    const { title } = Membership.getPageMeta()
-
-    dispatch(changePageTitle(title))
   }
 
   addToCart(product) {
@@ -126,9 +114,7 @@ class Membership extends Component {
                 return (
                   <div
                     key={pid}
-                    className={`col-xs-12 col-sm-4 membership-container membership-${
-                      uid
-                    }`}
+                    className={`col-xs-12 col-sm-4 membership-container membership-${uid}`}
                   >
                     <div className="membership-inner">
                       <div className="membership-title">{product.title}</div>
@@ -185,7 +171,12 @@ class Membership extends Component {
   }
 }
 
-export default connect(state => ({
-  products: state.products,
-  cart: state.cart
-}))(Membership)
+export default page(
+  connect(state => ({
+    products: state.products,
+    cart: state.cart
+  }))(Membership),
+  {
+    title: 'Membership'
+  }
+)

@@ -49,21 +49,21 @@ import morgan from 'morgan'
 import path from 'path'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
+import { ServerStyleSheet } from 'styled-components'
 import { Provider } from 'react-redux'
-import { RoutingContext, match } from 'react-router'
-import isFunction from 'lodash/isFunction'
-import extend from 'lodash/extend'
-import isEmpty from 'lodash/isEmpty'
-import clone from 'lodash/clone'
+import { RouterContext, match } from 'react-router'
+import { isEmpty, clone, some, includes } from 'lodash'
 import routes from 'routes'
 import * as reducers from 'reducers'
 import { createStore, combineReducers, applyMiddleware } from 'redux'
-import getContentWrapper from 'utils/content_wrapper'
+import Helmet from 'react-helmet'
 import { get_podcasts_from_cache } from 'utils/redux_loader'
 import redirects_map from './redirects'
 
 import { reducer as formReducer } from 'redux-form'
 import axios from 'axios'
+
+import minifyHTML from 'express-minify-html'
 
 import Rollbar from 'rollbar'
 import http from 'http'
@@ -72,10 +72,6 @@ var Influx = require('influx')
 console.log('server.jsx : starting')
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-
-if (process.env.NODE_ENV === 'dev') {
-  require('./build/config.js')
-}
 
 const base_url = 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/' + env
 
@@ -603,34 +599,25 @@ async function updateState(store, pathname, req) {
 function renderView(store, renderProps, location) {
   const InitialView = (
     <Provider store={store}>
-      <RoutingContext {...renderProps} />
+      <RouterContext {...renderProps} />
     </Provider>
   )
 
-  let meta = {
-    title: 'Data Skeptic',
-    description:
-      'Data Skeptic is your source for a perspective of scientific skepticism on topics in statistics, machine learning, big data, artificial intelligence, and data science. Our weekly podcast and blog bring you stories and tutorials to help understand our data-driven world.',
-    author: 'Kyle Polich',
-    keywoards: 'data skeptic, podcast,'
-  }
+  const sheet = new ServerStyleSheet()
+  const componentHTML = renderToString(sheet.collectStyles(InitialView))
+  const helmet = Helmet.renderStatic()
+  const styles = sheet.getStyleTags()
 
-  const componentHTML = renderToString(InitialView)
-
-  let state = store.getState()
-  let activePageComponent = InitialView.props.children.props.components.filter(
-    comp => comp && isFunction(comp.getPageMeta)
-  )
-  activePageComponent =
-    activePageComponent.length > 0 ? activePageComponent[0] : null
-  if (activePageComponent) {
-    meta = extend(meta, activePageComponent.getPageMeta(state))
-  }
+  const state = store.getState()
+  const route = renderProps.matchContext.router.routes.slice(-1)[0]
+  const notFound = route.notFound
 
   return {
     state: state,
     html: componentHTML,
-    meta: meta
+    helmet: helmet,
+    styles: styles,
+    notFound: notFound
   }
 }
 
@@ -771,6 +758,20 @@ if (env === 'prod') {
   })
 
   app.use(rollbar.errorHandler())
+  app.use(
+    minifyHTML({
+      override: true,
+      exception_url: false,
+      htmlMinifier: {
+        removeComments: false,
+        collapseWhitespace: true,
+        collapseBooleanAttributes: true,
+        removeAttributeQuotes: true,
+        removeEmptyAttributes: false,
+        minifyJS: false
+      }
+    })
+  )
 }
 
 const renderPage = async (req, res) => {
@@ -810,6 +811,7 @@ const renderPage = async (req, res) => {
     console.log('Redirecting to ' + hostname + redir)
     return res.redirect(301, 'http://' + hostname + redir)
   }
+
   if (req.url == '/feed.rss') {
     return res.redirect(307, 'http://dataskeptic.libsyn.com/rss')
   }
@@ -841,23 +843,25 @@ const renderPage = async (req, res) => {
       renderProps.params
     )
       .then(() => renderView(store, renderProps, location))
-      .then(({ html, state, meta }) => {
-        if (meta.notFoundPage) {
+      .then(({ html, state, helmet, notFound, styles }) => {
+        if (notFound) {
           return res.status(404).render('index', {
             staticHTML: html,
             initialState: state,
-            meta,
+            helmet,
             env,
-            itunesId
+            itunesId,
+            styles
           })
         }
 
         return res.render('index', {
           staticHTML: html,
           initialState: state,
-          meta,
+          helmet,
           env,
-          itunesId
+          itunesId,
+          styles
         })
       })
       .catch(err => {

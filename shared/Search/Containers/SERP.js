@@ -10,6 +10,7 @@ import moment from 'moment/moment'
 import Highlighter from 'react-highlight-words'
 
 import redirectToSearch from '../Helpers/redirectToSearch'
+import page from '../../Layout/hoc/page'
 
 const formatDate = date => moment(date).format('MMMM D, Y')
 
@@ -101,24 +102,16 @@ class SERP extends Component {
     </div>
   )
 
-  static getPageMeta() {
-    return {
-      title: 'Search | Data Skeptic'
-    }
-  }
-
   componentWillMount() {
     const query = getLocationQuery(this.props.location.search)
-    let { title } = SERP.getPageMeta()
-    this.props.dispatch(changePageTitle(title))
 
     if (query.length === 0) {
       // redirect to home
-      this.props.history.push('/')
+      this.props.router.push('/')
     }
 
-    title = `Search - ${query} | Data Skeptic`
-    this.props.dispatch(changePageTitle(title))
+    const title = `Search - ${query}`
+    this.props.updateMeta({ title })
 
     if (!this.props.loaded) {
       this.loadResults(query)
@@ -154,12 +147,17 @@ class SERP extends Component {
     )
   }
 }
-export default connect(state => ({
-  loaded: state.search.get('loaded'),
-  query: state.search.get('query'),
-  isLoading: state.search.get('loading'),
-  results: state.search.get('results').toJS()
-}))(SERP)
+export default page(
+  connect(state => ({
+    loaded: state.search.get('loaded'),
+    query: state.search.get('query'),
+    isLoading: state.search.get('loading'),
+    results: state.search.get('results').toJS()
+  }))(SERP),
+  {
+    title: 'Search | Data Skeptic'
+  }
+)
 
 const Post = styled(Link)`
   display: flex;

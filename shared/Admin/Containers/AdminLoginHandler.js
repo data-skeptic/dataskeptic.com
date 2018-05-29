@@ -18,7 +18,7 @@ class AdminLoginHandler extends Component {
     const user = JSON.parse(location.query.user)
     if (user.hasAccess) {
       this.props.login(user)
-      this.props.history.push('/admin')
+      this.props.router.push('/admin')
     }
   }
 

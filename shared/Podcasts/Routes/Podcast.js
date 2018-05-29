@@ -96,3 +96,4 @@ export default connect(state => ({
   year: state.episodes.getIn(['currentYear']),
   isLoaded: state.episodes.getIn(['loaded'])
 }))(Podcast)
+
