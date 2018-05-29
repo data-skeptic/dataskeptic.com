@@ -22,7 +22,7 @@ const Inner = styled.div`
   height: 100%;
 `
 
-const Button = styled.button`
+export const Button = styled.button`
   position: absolute;
   border: none;
   overflow: hidden;
