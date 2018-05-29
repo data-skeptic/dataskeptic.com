@@ -1,5 +1,5 @@
-import {fromJS, Set} from 'immutable' 
-import initPopup, {INIT, OPEN, CLOSE, ACCEPT} from "../helpers/popup";
+import { fromJS, Set } from 'immutable'
+import initPopup, { INIT, OPEN, CLOSE, ACCEPT } from '../helpers/popup'
 
 const defaultState = {
   registeredKeys: Set([])
@@ -27,11 +27,11 @@ export default (state = initialState, action) => {
       // TODO: unsafe close case
       // if (!action.payload.safe) {
       return state
-    
+
     case ACCEPT:
       state = state.setIn([action.payload.key, 'accepted'], true)
       return state
-    
+
     default:
       return state
   }

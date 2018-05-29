@@ -40,10 +40,10 @@ export default class Popup extends Component {
   render() {
     const { children, isOpen, onClose, isMobile } = this.props
     const customStyles = isMobile ? MOBILE_DEFAULT_STYLES : DEFAULT_STYLES
-    
+
     const width = isMobile ? `auto` : this.props.width
     const height = isMobile ? `auto` : this.props.height
-    
+
     const styles = {
       ...customStyles,
       content: {
@@ -62,8 +62,8 @@ export default class Popup extends Component {
         overlayClassName="datas-overlay"
       >
         <In>
-        <CloseButton onClick={onClose} />
-        <Container>{children}</Container>
+          <CloseButton onClick={onClose} />
+          <Container>{children}</Container>
         </In>
       </Modal>
     )
