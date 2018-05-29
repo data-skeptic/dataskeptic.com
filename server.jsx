@@ -217,6 +217,16 @@ setInterval(doRefresh, 60 * 60 * 1000)
  * ENVIRONMENT SPECIFIC CONFIGURATION
  */
 if (env == 'prod') {
+  // https redirect
+  app.use((req, res, next) => {
+    if (!req.secure && req.headers['x-forwarded-proto'] !== 'https') {
+      const redirect = 'https://' + req.headers['host'] + req.url
+      return res.redirect(redirect)
+    }
+
+    next()
+  })
+
   function shouldCompress(req, res) {
     if (req.headers['x-no-compression']) {
       // don't compress responses with this request header
