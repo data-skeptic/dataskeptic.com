@@ -8,7 +8,7 @@ const init = {
   playback_loaded: false,
   position: 0,
   position_updated: false,
-  volume: 0,
+  volume: 0.8,
   muted: false,
   episode: {}
 }
@@ -101,31 +101,35 @@ const removePlaying = () => {
   localStorage.removeItem(PLAYER_META_KEY)
 }
 
-const getCachePlaying = (nstate) => {
+const getCachePlaying = nstate => {
   const episodeData = getKey(PLAYER_PLAYING_KEY)
   const episodeMeta = getPlayingMeta(episodeData)
-  
+
   if (isEmpty(episodeMeta)) {
     return nstate
-  } 
-  
-  if (!episodeMeta.has_shown) {
-    return nstate
   }
-  
+
+  const volume = episodeMeta.volume || 0.8
+
+  if (!episodeMeta.has_shown) {
+    return {
+      ...nstate,
+      volume
+    }
+  }
+
   delete episodeMeta.has_shown
   delete episodeMeta.is_playing
   delete episodeMeta.blog_id
 
   nstate = playEpisode(nstate, episodeData)
-  const volume = (episodeMeta.volume || 0.8)
-  
+
   nstate = {
     ...nstate,
     ...episodeMeta,
     volume
   }
-  
+
   return nstate
 }
 
