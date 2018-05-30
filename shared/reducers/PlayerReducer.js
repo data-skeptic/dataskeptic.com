@@ -32,13 +32,15 @@ const normalizeState = ({
   position = 0,
   episode = null,
   volume = 0.8,
-  muted = false
+  muted = false,
+  has_shown = false
 }) => ({
   is_playing,
   position,
   episode,
   volume,
-  muted
+  muted,
+  has_shown
 })
 
 const getKey = key => {
@@ -119,7 +121,6 @@ const getCachePlaying = nstate => {
   }
 
   delete episodeMeta.has_shown
-  delete episodeMeta.is_playing
   delete episodeMeta.blog_id
 
   nstate = playEpisode(nstate, episodeData)
@@ -127,7 +128,8 @@ const getCachePlaying = nstate => {
   nstate = {
     ...nstate,
     ...episodeMeta,
-    volume
+    volume,
+    is_playing: episodeMeta.is_playing || false
   }
 
   return nstate
