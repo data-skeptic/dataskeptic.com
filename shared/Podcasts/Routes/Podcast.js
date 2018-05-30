@@ -14,29 +14,13 @@ import { changePageTitle } from '../../Layout/Actions/LayoutActions'
 import { load as loadEpisodes, setYear } from '../../reducers/EpisodesReducer'
 import infiniteList from '../../Data/hoc/infiniteList'
 import formatRequest from '../../utils/formatRequest'
+import page from '../../Layout/hoc/page'
 
 const EpisodesList = infiniteList({
   dataSource: state => state.episodes.toJS()
 })
 
 class Podcast extends Component {
-  constructor(props) {
-    super(props)
-  }
-
-  static getPageMeta() {
-    return {
-      title: 'Podcasts | Data Skeptic'
-    }
-  }
-
-  componentDidMount() {
-    const dispatch = this.props.dispatch
-
-    const { title } = Podcast.getPageMeta()
-    //dispatch(changePageTitle(title))
-  }
-
   initFromParams = params => {
     if (params.year) {
       this.props.dispatch(setYear(+params.year))
@@ -46,10 +30,7 @@ class Podcast extends Component {
   updateLocation = params => {
     delete params.firstLoad
     const query = formatRequest(params)
-    var history = this.props.history
-    if (history) {
-      history.replace(`/podcasts?${query}`)
-    }
+    this.props.router.replace(`/podcast?${query}`)
   }
 
   loadMore = (attributes, reset) => {
@@ -92,10 +73,15 @@ class Podcast extends Component {
   }
 }
 
-export default connect(state => ({
-  eps: state.episodes.toJS(),
-  list: state.episodes.getIn(['episodes']).toJS(),
-  years: state.episodes.getIn(['years']).toJS(),
-  year: state.episodes.getIn(['currentYear']),
-  isLoaded: state.episodes.getIn(['loaded'])
-}))(Podcast)
+export default page(
+  connect((state, ownProps) => ({
+    eps: state.episodes.toJS(),
+    list: state.episodes.getIn(['episodes']).toJS(),
+    years: state.episodes.getIn(['years']).toJS(),
+    year: state.episodes.getIn(['currentYear']),
+    isLoaded: state.episodes.getIn(['loaded'])
+  }))(Podcast),
+  {
+    title: 'Data Skeptic Episodes'
+  }
+)
