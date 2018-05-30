@@ -53,24 +53,24 @@ const getKey = key => {
 const PLAYER_PLAYING_KEY = 'player_playing'
 const PLAYER_META_KEY = 'player_meta'
 
-const savePlaying = meta => {
+const computeKey = episode => `${PLAYER_META_KEY}_${episode.blog_id}`
+
+const savePlaying = ({ episode }) => {
   if (!IS_CLIENT) return
 
   const data = {
-    ...meta.episode
+    ...episode
   }
 
   localStorage.setItem(PLAYER_PLAYING_KEY, JSON.stringify(data))
 }
 
-const savePlayingMeta = ({
-  position,
-  has_shown,
-  is_playing,
-  volume,
-  muted
-}) => {
+const savePlayingMeta = meta => {
   if (!IS_CLIENT) return null
+
+  const blog_id = isEmpty(meta.episode) ? null : meta.episode.blog_id
+
+  const { position, has_shown, is_playing, volume, muted } = meta
 
   const data = {
     position,
@@ -78,10 +78,22 @@ const savePlayingMeta = ({
     has_shown,
     is_playing,
     volume,
-    muted
+    muted,
+    blog_id
   }
 
-  localStorage.setItem(PLAYER_META_KEY, JSON.stringify(data))
+  if (!isEmpty(meta.episode)) {
+    const key = computeKey(meta.episode)
+    localStorage.setItem(key, JSON.stringify(data))
+  }
+}
+
+const getPlayingMeta = episode => {
+  if (!IS_CLIENT) return null
+  if (isEmpty(episode)) return null
+
+  const key = computeKey(episode)
+  return getKey(key)
 }
 
 const removePlaying = () => {
@@ -89,10 +101,16 @@ const removePlaying = () => {
   localStorage.removeItem(PLAYER_META_KEY)
 }
 
-const getCachePlaying = () => {
+const getCachePlaying = e => {
   const playing = getKey(PLAYER_META_KEY)
-  const episode = getKey(PLAYER_PLAYING_KEY)
+  const episode = getPlayingMeta(playing)
 
+  if (!episode) {
+    return {
+      
+    }
+  }
+  
   let has_shown = false
   if (!isEmpty(episode)) {
     has_shown = true
@@ -105,17 +123,41 @@ const getCachePlaying = () => {
   }
 }
 
+const playEpisode = (nstate, episode) => {
+  nstate.episode = clone(episode)
+  nstate.position = init.position
+
+  const cachedMeta = getPlayingMeta(episode)
+
+  if (!isEmpty(cachedMeta)) {
+    delete cachedMeta.muted
+    delete cachedMeta.volume
+
+    nstate = {
+      ...nstate,
+      ...cachedMeta,
+      episode: clone(episode)
+    }
+  }
+
+  nstate.playback_loaded = false
+  nstate.is_playing = true
+  nstate.has_shown = true
+
+  return nstate
+}
+
 const defaultState = Immutable.fromJS(init)
 
 export default function PlayerReducer(state = defaultState, action) {
   var nstate = state.toJS()
   switch (action.type) {
     case INITIALIZE_PLAYER:
-      const cache = getCachePlaying()
-      nstate = {
-        ...nstate,
-        ...cache
-      }
+      // const cache = getCachePlaying()
+      // nstate = {
+      //   ...nstate,
+      //   ...cache
+      // }
       break
     case 'PLAY_EPISODE_FROM_GUID':
       // This is used by the bot
@@ -169,31 +211,11 @@ export default function PlayerReducer(state = defaultState, action) {
             if (episode.guid === nstate.episode.guid) {
               nstate.is_playing = false
             } else {
-              nstate.episode = clone(episode)
-              nstate.playback_loaded = false
-              nstate.position = init.position
-              nstate.is_playing = true
+              nstate = playEpisode(nstate, episode)
             }
           }
         } else {
-          const cache = getCachePlaying()
-          const theSameCacheEpisode =
-            cache && cache.episode && cache.episode.blog_id === episode.blog_id
-
-          if (theSameCacheEpisode) {
-            nstate = {
-              ...nstate,
-              ...cache,
-              is_playing: true,
-              playback_loaded: nstate.playback_loaded,
-              has_shown: true
-            }
-          } else {
-            nstate.episode = clone(episode)
-            nstate.is_playing = true
-            nstate.playback_loaded = false
-            nstate.position = init.position
-          }
+          nstate = playEpisode(nstate, episode)
         }
       }
       savePlaying(nstate)
