@@ -8,7 +8,7 @@ const init = {
   playback_loaded: false,
   position: 0,
   position_updated: false,
-  volume: 0.8,
+  volume: 0,
   muted: false,
   episode: {}
 }
@@ -101,26 +101,32 @@ const removePlaying = () => {
   localStorage.removeItem(PLAYER_META_KEY)
 }
 
-const getCachePlaying = e => {
-  const playing = getKey(PLAYER_META_KEY)
-  const episode = getPlayingMeta(playing)
-
-  if (!episode) {
-    return {
-      
-    }
+const getCachePlaying = (nstate) => {
+  const episodeData = getKey(PLAYER_PLAYING_KEY)
+  const episodeMeta = getPlayingMeta(episodeData)
+  
+  if (isEmpty(episodeMeta)) {
+    return nstate
+  } 
+  
+  if (!episodeMeta.has_shown) {
+    return nstate
   }
   
-  let has_shown = false
-  if (!isEmpty(episode)) {
-    has_shown = true
-  }
+  delete episodeMeta.has_shown
+  delete episodeMeta.is_playing
+  delete episodeMeta.blog_id
 
-  return {
-    ...playing,
-    episode,
-    has_shown
+  nstate = playEpisode(nstate, episodeData)
+  const volume = (episodeMeta.volume || 0.8)
+  
+  nstate = {
+    ...nstate,
+    ...episodeMeta,
+    volume
   }
+  
+  return nstate
 }
 
 const playEpisode = (nstate, episode) => {
@@ -153,11 +159,7 @@ export default function PlayerReducer(state = defaultState, action) {
   var nstate = state.toJS()
   switch (action.type) {
     case INITIALIZE_PLAYER:
-      // const cache = getCachePlaying()
-      // nstate = {
-      //   ...nstate,
-      //   ...cache
-      // }
+      nstate = getCachePlaying(nstate)
       break
     case 'PLAY_EPISODE_FROM_GUID':
       // This is used by the bot
