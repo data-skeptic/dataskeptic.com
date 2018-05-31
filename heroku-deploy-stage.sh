@@ -52,7 +52,7 @@ docker build --build-arg NODE_ENV=$NODE_ENV \
 
 
 echo "push image to heroku"
-docker tag $(cat latest.txt) registry.heroku.com/dataskeptic-com/web
-docker push registry.heroku.com/dataskeptic-com/web
+docker tag $(cat latest.txt) registry.heroku.com/dataskeptic-dev/web
+docker push registry.heroku.com/dataskeptic-dev/web
 echo "finishing push, open page now"
-heroku open --app dataskeptic-com
+heroku open --app dataskeptic-dev
