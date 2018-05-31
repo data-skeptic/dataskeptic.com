@@ -156,7 +156,7 @@ const playEpisode = (nstate, episode) => {
   nstate.is_playing = true
   nstate.has_shown = true
   
-  if (nstate.volume) {
+  if (!nstate.volume || nstate.volume === -1) {
     nstate.volume = 0.8
   }
 

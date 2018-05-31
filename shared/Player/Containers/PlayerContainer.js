@@ -63,7 +63,7 @@ class PlayerContainer extends Component {
     this.updater = setInterval(this.update, 1000)
     setTimeout(() => {
       this.props.dispatch(initializePlayer())
-    }, 300)
+    }, 1300)
   }
 
   componentWillUnmount() {

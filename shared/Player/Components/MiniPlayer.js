@@ -90,7 +90,7 @@ const Preview = styled.div`
   flex-basis: 250px;
 
   img {
-    height: 64px;
+    height: 63px;
   }
   
   @media (max-width: 900px) {
