@@ -8,7 +8,7 @@ const init = {
   playback_loaded: false,
   position: 0,
   position_updated: false,
-  volume: 0.8,
+  volume: -1,
   muted: false,
   episode: {}
 }
@@ -155,6 +155,10 @@ const playEpisode = (nstate, episode) => {
   nstate.playback_loaded = false
   nstate.is_playing = true
   nstate.has_shown = true
+  
+  if (nstate.volume) {
+    nstate.volume = 0.8
+  }
 
   return nstate
 }
@@ -247,6 +251,7 @@ export default function PlayerReducer(state = defaultState, action) {
 
     case SET_MUTED:
       nstate.muted = action.payload.muted
+      savePlayingMeta(nstate)
       break
 
     case 'PLAYBACK_LOADED':
@@ -276,6 +281,7 @@ export default function PlayerReducer(state = defaultState, action) {
 
     case SET_VOLUME:
       nstate.volume = action.payload.volume
+      savePlayingMeta(nstate)
       break
 
     case RESET:

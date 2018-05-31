@@ -90,7 +90,6 @@ const Preview = styled.div`
   flex-basis: 250px;
 
   img {
-    width: 64px;
     height: 64px;
   }
   
@@ -123,7 +122,7 @@ const Date = styled.div`
 const Title = styled.div`
   color: #575959;
   overflow-x: hidden;
-  height: 1em;
+  height: 1.2em;
   margin: 0px;
 
   max-width: 250px;
