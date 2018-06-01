@@ -23,6 +23,8 @@ const CAPTURE_TYPES = {
   POS: 'POS'
 }
 
+const normalizeSource = mp3 => mp3.replace('http://', 'https://')
+
 class PlayerContainer extends Component {
   /**
    * Record player action
@@ -59,7 +61,9 @@ class PlayerContainer extends Component {
     this.setState({ ready: true })
     // start update timer
     this.updater = setInterval(this.update, 1000)
-    this.props.dispatch(initializePlayer())
+    setTimeout(() => {
+      this.props.dispatch(initializePlayer())
+    }, 1300)
   }
 
   componentWillUnmount() {
@@ -399,6 +403,8 @@ class PlayerContainer extends Component {
     if (mp3s.length > 0) {
       mp3 = mp3s[0]['dest']
       duration = mp3s[0]['duration']
+
+      mp3 = normalizeSource(mp3)
     }
     var img =
       'https://s3.amazonaws.com/dataskeptic.com/img/2017/primary-logo-400.jpg'
