@@ -29,6 +29,12 @@ docker run -t -i -p 3000:3000 -p 4430:4430 -p 9001:9001 --env-file .env IMcAGE_I
 docker run -t -i -p 80:3000 -p 443:4430 -p 9001:9001 --env-file .env IMAGE_ID
 ```
 
+## Release Image
+
+```
+heroku container:release web -a dataskeptic
+```
+
 ## Configure bucket
 Create buckets:
  1. `proposals-recordings`.
