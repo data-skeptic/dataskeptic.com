@@ -873,7 +873,7 @@ const renderPage = async (req, res) => {
 }
 
 doRefresh().then(() => {
-  console.log('CACHE IS READY')
+  console.log('CACHE IS now READY')
   app.use(renderPage)
 })
 
