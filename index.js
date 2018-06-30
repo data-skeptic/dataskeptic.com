@@ -7,8 +7,7 @@ const aws = require('aws-sdk')
 const checkEnv = require('./shared/utils/checkEnv').default
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const isHeroku = JSON.parse(process.env.IS_HEROKU)
-const isSSL = JSON.parse(process.env.FORCE_SSL)
+const isSSL = process.env.FORCE_SSL === 1 ? true : false
 console.log('NODE_ENV', '=', env)
 console.log('FORCE_SSL', '=', isSSL)
 
@@ -17,7 +16,6 @@ try {
   checkEnv()
 } catch (e) {
   throw e
-
   process.exit(1)
 }
 
