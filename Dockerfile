@@ -54,6 +54,8 @@ WORKDIR /usr/src/app
 COPY package.json /usr/src/app/
 COPY package-lock.json /usr/src/app/
 
+RUN npm install --save-dev -g babel-cli 
+
 ## Copy app sources
 COPY . /usr/src/app
 

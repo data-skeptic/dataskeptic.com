@@ -119,7 +119,7 @@ class ContactUs extends React.Component {
       <Container>
         <Title>Contact Us</Title>
         <Text>
-          We try to respond to all inquiries, but sometimes the volume of
+          We try to respond to every inquiry, but sometimes the volume of
           incoming questions can cause our queue to explode. We prioritize
           responses to Data Skeptic members first, and to those who ask
           questions in a public forum like Twitter, our Facebook wall (not
@@ -211,8 +211,6 @@ class ContactUs extends React.Component {
             </SocialForm>
           </SocialBlock>
         </Socials>
-
-        
 
         <hr />
 

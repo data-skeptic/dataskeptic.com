@@ -54,7 +54,7 @@ export default function(options) {
         })
       }
     }
-    
+
     componentWillMount() {
       const params = decodePath(this.props.location.search)
       this.props.initFromParams(params)
@@ -84,7 +84,7 @@ export default function(options) {
         ...this.props.params,
         ...params
       }
-      
+
       if (this.props.hasMore) {
         if (reset) {
           params.limit = this.state.initialLimit

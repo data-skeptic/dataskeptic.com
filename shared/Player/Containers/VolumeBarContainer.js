@@ -30,8 +30,9 @@ class VolumeBarContainer extends Component {
     const value = volume * 100
     return (
       <div className="volume-bar-container">
-        <VolumeButton silent={muted} onClick={e => this.toggleMute()} />
-        <VolumeBar onChange={this.onVolumeBarChange} value={value} />
+        {volume !== -1 && (
+          <VolumeBar onChange={this.onVolumeBarChange} value={value} />
+        )}
       </div>
     )
   }

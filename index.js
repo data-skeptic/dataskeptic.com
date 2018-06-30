@@ -7,15 +7,15 @@ const aws = require('aws-sdk')
 const checkEnv = require('./shared/utils/checkEnv').default
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const isHeroku = JSON.parse(process.env.IS_HEROKU)
+const isSSL = process.env.FORCE_SSL === 1 ? true : false
 console.log('NODE_ENV', '=', env)
+console.log('FORCE_SSL', '=', isSSL)
 
 // validate env config
 try {
   checkEnv()
 } catch (e) {
   throw e
-
   process.exit(1)
 }
 
@@ -90,11 +90,51 @@ var launch_with_ssl = function() {
   console.log('Attempt to load SSL 3')
 }
 
+function forceSSL(req, res, next) {
+  let redirect
+
+  if (req.headers['host'].match(/^www/) !== null) {
+    redirect = 'https://' + req.headers['host'].replace(/^www\./, '') + req.url
+  } else if (req.headers['x-forwarded-proto'] !== 'https') {
+    const host = req.headers['host'].replace(/^www\./, '')
+    redirect = 'https://' + host + req.url
+  }
+
+  if (redirect) {
+    res.writeHead(302, { Location: redirect })
+    return res.end()
+  }
+
+  return next()
+}
+
 var launch_without_ssl = function() {
   console.log('Launch without SSL')
   app.listen(process.env.PORT, function() {
     console.log(`Server listening on ${process.env.PORT}`)
   })
+}
+
+const launh_on_heroku = function() {
+  const server = http
+    .createServer(
+      (req, res, next) =>
+        isSSL
+          ? forceSSL(req, res, () => {
+              app(req, res, next)
+            })
+          : app(req, res, next)
+    )
+    .listen(process.env.PORT, function() {
+      console.log('Starting on HEROKU')
+    })
+
+  server.on('error', err => {
+    onError(err)
+    console.log(err)
+  })
+
+  recordingServer(server)
 }
 
 function config_load_promise() {
@@ -165,9 +205,9 @@ function config_load_promise() {
 
 if (env === 'prod') {
   console.log('Loading as prod')
-  console.log('Heroku mode?', isHeroku)
+  console.log('Heroku mode', isHeroku)
   if (isHeroku) {
-    launch_without_ssl()
+    launh_on_heroku()
   } else {
     config_load_promise()
   }

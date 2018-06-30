@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
 
-import {reset, setYear} from '../reducers/EpisodesReducer'
+import { reset, setYear } from '../reducers/EpisodesReducer'
 
 class YearNav extends React.Component {
   onClick(e) {
