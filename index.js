@@ -7,7 +7,7 @@ const aws = require('aws-sdk')
 const checkEnv = require('./shared/utils/checkEnv').default
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const isSSL = process.env.FORCE_SSL === 1 ? true : false
+const isSSL = process.env.FORCE_SSL === 1 ? true : process.env.NODE_ENV == 'prod'
 console.log('NODE_ENV', '=', env)
 console.log('FORCE_SSL', '=', isSSL)
 
