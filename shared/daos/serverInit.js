@@ -9,7 +9,7 @@ const proposalsDocs = new aws.DynamoDB.DocumentClient()
 
 require('dotenv').load();
 
-console.log("process.env.BASE_API")
+console.log("process.env.BASE_API...")
 console.log(process.env.BASE_API)
 
 const baseapi = process.env.BASE_API
