@@ -38,17 +38,6 @@ class BlogTopNav extends React.Component {
     if (cats.length > 1) {
       return (
         <div className="blog-top-nav">
-          <div>
-            Subcategories:
-            {cats.map(cat => {
-              var url = '/blog/' + cat
-              return (
-                <span className="category" key={url}>
-                  &nbsp;<Link to={url}>{cat}</Link>&nbsp;|
-                </span>
-              )
-            })}
-          </div>
         </div>
       )
     } else {
