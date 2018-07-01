@@ -12,6 +12,7 @@ import { join_slack } from 'backend/join_slack'
 import { send_email } from 'backend/send_email'
 import { search_site } from 'backend/search_site'
 import { get_blogs_rss } from 'backend/get_blogs_rss'
+import { get_blogs } from 'backend/get_blogs'
 import { order_create } from 'backend/order_create'
 import { add_order } from 'backend/add_order'
 import { order_fulfill } from 'backend/order_fulfill'
@@ -388,6 +389,9 @@ function api_router(req, res) {
     return res.status(200).end(JSON.stringify(resp))
   } else if (req.url.indexOf('/api/Related') == 0) {
     related_content(req, res)
+    return true
+  } else if (req.url == '/api/blog/list') {
+    blog_list(req, res)
     return true
   } else if (req.url == '/api/blog/categories') {
     var folders = Cache.folders
