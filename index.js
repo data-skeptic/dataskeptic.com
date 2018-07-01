@@ -10,7 +10,7 @@ const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 const isSSL = process.env.FORCE_SSL === 1 ? true : env === 'prod'
 console.log('NODE_ENV', '=', env)
 console.log('FORCE_SSL', '=', isSSL)
-
+console.log(process.env.BASE_API)
 // validate env config
 try {
   checkEnv()

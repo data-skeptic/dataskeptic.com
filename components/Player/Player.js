@@ -32,10 +32,14 @@ export default class Player extends Component {
     this.props.resetPlayer()
   }
   play = () => {
+    console.log("p0")
     this.props.play()
+    console.log("p1")
   }
   pause = () => {
+    console.log("p2")
     this.props.pause()
+    console.log("p3")
   }
 
   constructor() {
