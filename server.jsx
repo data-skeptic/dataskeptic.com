@@ -748,6 +748,7 @@ app.use('/api/v1', async (req, res, next) => {
 app.use('/api/v1/', api(() => Cache))
 
 if (env === 'prod') {
+/*
   const rollbar = Rollbar.init({
     accessToken: '4555957947d347a69caf6e017ea72f51',
     handleUncaughtExceptions: true,
@@ -756,8 +757,9 @@ if (env === 'prod') {
       environment: env
     }
   })
+  */
 
-  app.use(rollbar.errorHandler())
+  //app.use(rollbar.errorHandler())
   app.use(
     minifyHTML({
       override: true,
