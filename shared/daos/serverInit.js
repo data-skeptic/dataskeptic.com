@@ -10,11 +10,14 @@ const proposalsDocs = new aws.DynamoDB.DocumentClient()
 console.log("process.env.BASE_API")
 console.log(process.env.BASE_API)
 
+const baseapi = process.env.BASE_API
+
 import { convert_items_to_json } from 'daos/episodes'
 
 export function get_contributors() {
   console.log('-[Refreshing Contributors]-')
-  const uri = process.env.BASE_API + '/blog/contributors/list'
+  console.log(baseapi)
+  const uri = baseapi + '/blog/contributors/list'
   console.log(uri)
   return axios
     .get(uri)
@@ -81,10 +84,10 @@ export function get_podcasts_by_guid(dispatch, guid) {
   }
 }
 export function load_blogs(prefix, limit, offset, dispatch) {
-  console.log("process.env.BASE_API")
-  console.log(process.env.BASE_API)
+  console.log("baseapi")
+  console.log(baseapi)
   var url =
-    process.env.BASE_API +
+    baseapi +
     '/blog/list?limit=' +
     limit +
     '&offset=' +
@@ -127,7 +130,7 @@ export function load_blogs(prefix, limit, offset, dispatch) {
 }
 
 function get_member_feed_replacements() {
-  var url = process.env.BASE_API + '/members/feedreplacements/list'
+  var url = baseapi + '/members/feedreplacements/list'
   return axios
     .get(url)
     .then(function(result) {
@@ -201,7 +204,7 @@ function xml_to_list(xml) {
 }
 
 const getEpisodesData = guids => {
-  const uri = process.env.BASE_API + '/podcast/episodes/get_by_guids'
+  const uri = baseapi + '/podcast/episodes/get_by_guids'
   console.log(uri)
   return axios.post(uri, { guids }).then(res => res.data)
 }
@@ -239,7 +242,7 @@ function get_and_process_feed(replacements, feed_uri) {
       if (data.episodes_list.length > 0) {
         var latest = data.episodes_list[0]
         console.log('Going to inform server of latest guid:' + latest)
-        var url = process.env.BASE_API + '/episodes?latest=' + latest
+        var url = baseapi + '/episodes?latest=' + latest
         axios
           .post(url)
           .then(function(result) {
@@ -313,7 +316,7 @@ export function loadCurrentRFC() {
 
 export function loadProducts() {
   console.log('-[Refreshing products]-')
-  var url = process.env.BASE_API + '/store/products/list'
+  var url = baseapi + '/store/products/list'
 
   return axios
     .get(url)
