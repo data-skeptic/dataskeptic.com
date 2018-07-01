@@ -22,6 +22,7 @@ module.exports = cache => {
       })
   })
   router.post('/', function(req, res) {
+    /*
     MetaDataService.insertMeta(req.body)
       .then(id => {
         MetaDataService.getMetaById(id).then(data => {
@@ -31,6 +32,8 @@ module.exports = cache => {
       .catch(err => {
         res.send(err)
       })
+    */
+    res.send({})
   })
   router.put('/:id', function(req, res) {
     MetaDataService.updateMeta(req.params.id, req.body)
@@ -42,6 +45,7 @@ module.exports = cache => {
       })
   })
   router.delete('/:id', function(req, res) {
+    /*
     MetaDataService.deleteMeta(req.params.id)
       .then(data => {
         res.send(data)
@@ -49,6 +53,8 @@ module.exports = cache => {
       .catch(err => {
         res.send(err)
       })
+    */
+    res.send({})
   })
 
   return router

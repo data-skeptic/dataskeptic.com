@@ -70,6 +70,8 @@ export const insertMeta = data => {
     }
   }
   return new Promise((resolve, reject) => {
+    return resolve(-1)
+  /*
     docClient.put(params, function(err, data) {
       if (err) {
         console.log(tablename)
@@ -82,6 +84,7 @@ export const insertMeta = data => {
         return resolve(idOfNewElement)
       }
     })
+  */
   })
 }
 
@@ -108,6 +111,7 @@ export const deleteMeta = id => {
 }
 
 export const updateMeta = (id, data) => {
+  /*
   const params = {
     TableName: tablename,
     Key: {
@@ -126,7 +130,10 @@ export const updateMeta = (id, data) => {
     },
     ReturnValues: 'UPDATED_NEW'
   }
+  */
   return new Promise((resolve, reject) => {
+    return resolve(data)
+    /*
     docClient.update(params, function(err, data) {
       if (err) {
         console.error(
@@ -138,5 +145,6 @@ export const updateMeta = (id, data) => {
         return resolve(data)
       }
     })
+    */
   })
 }
