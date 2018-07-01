@@ -394,7 +394,7 @@ function api_router(req, res) {
   } else if (req.url.indexOf('/api/Related') == 0) {
     related_content(req, res)
     return true
-  } else if (req.url == '/api/blog/list') {
+  } else if (req.url.indexOf('/api/blog/list') == 0) {
     blog_list(req, res)
     return true
   } else if (req.url == '/api/blog/categories') {
