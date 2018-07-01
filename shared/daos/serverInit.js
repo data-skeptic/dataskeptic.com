@@ -7,8 +7,6 @@ const s3 = new aws.S3()
 
 const proposalsDocs = new aws.DynamoDB.DocumentClient()
 
-require('dotenv').load();
-
 console.log("process.env.BASE_API...")
 console.log(process.env.BASE_API)
 
