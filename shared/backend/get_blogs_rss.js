@@ -3,7 +3,7 @@ const axios = require('axios')
 const each = require('lodash/each')
 
 const BASE_URL = 'https://dataskeptic.com/'
-var api_url = process.env.BASE_API
+var api_url = process.env.BASE_API || 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/prod'
 
 const BlogItemModel = ({
   title,

@@ -7,11 +7,9 @@ const s3 = new aws.S3()
 
 const proposalsDocs = new aws.DynamoDB.DocumentClient()
 
-console.log("process.env.BASE_API...")
+const baseapi = process.env.BASE_API || 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/prod'
 
-const baseapi = process.env.BASE_API || '/api'
-
-console.log(baseapi)
+console.log("baseapi=" + baseapi)
 
 import { convert_items_to_json } from 'daos/episodes'
 
@@ -87,7 +85,7 @@ export function load_blogs(prefix, limit, offset, dispatch) {
   console.log("baseapi")
   console.log(baseapi)
   var url =
-    'https://4sevcujref.execute-api.us-east-1.amazonaws.com/prod' +
+    baseapi +
     '/blog/list?limit=' +
     limit +
     '&offset=' +

@@ -2,7 +2,7 @@ import axios from 'axios'
 const express = require('express')
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const base_url = process.env.BASE_API
+const base_url = process.env.BASE_API || 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/prod'
 
 module.exports = cache => {
   const router = express.Router()

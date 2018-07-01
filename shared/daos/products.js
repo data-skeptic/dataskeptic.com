@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-var base_url = process.env.BASE_API
+var base_url = process.env.BASE_API || 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/prod'
 
 export function getProducts(store, env) {
   console.log('Network: retrieving all products')
