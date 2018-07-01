@@ -7,8 +7,6 @@ const s3 = new aws.S3()
 
 const proposalsDocs = new aws.DynamoDB.DocumentClient()
 
-require('dotenv').load();
-
 const baseapi = process.env.BASE_API || 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/prod'
 
 console.log("baseapi=" + baseapi)
@@ -87,8 +85,12 @@ export function load_blogs(prefix, limit, offset, dispatch) {
   console.log("baseapi")
   console.log(baseapi)
   var url =
+<<<<<<< HEAD
     baseapi +
     '/blog/list?limit=' +
+=======
+    'https://4sevcujref.execute-api.us-east-1.amazonaws.com/prod' +
+>>>>>>> 99601ccb462c6a1442c79b52af8bdc94c0d20f16
     limit +
     '&offset=' +
     offset +
@@ -204,7 +206,7 @@ function xml_to_list(xml) {
 }
 
 const getEpisodesData = guids => {
-  const uri = baseapi + '/podcast/episodes/get_by_guids'
+  const uri = '/api/episodes/get'
   console.log(uri)
   return axios.post(uri, { guids }).then(res => res.data)
 }
