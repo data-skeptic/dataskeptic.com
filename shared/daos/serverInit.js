@@ -7,11 +7,15 @@ const s3 = new aws.S3()
 
 const proposalsDocs = new aws.DynamoDB.DocumentClient()
 
+console.log("process.env.BASE_API")
+console.log(process.env.BASE_API)
+
 import { convert_items_to_json } from 'daos/episodes'
 
 export function get_contributors() {
   console.log('-[Refreshing Contributors]-')
   const uri = process.env.BASE_API + '/blog/contributors/list'
+  console.log(uri)
   return axios
     .get(uri)
     .then(function(result) {
@@ -77,6 +81,8 @@ export function get_podcasts_by_guid(dispatch, guid) {
   }
 }
 export function load_blogs(prefix, limit, offset, dispatch) {
+  console.log("process.env.BASE_API")
+  console.log(process.env.BASE_API)
   var url =
     process.env.BASE_API +
     '/blog/list?limit=' +
