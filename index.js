@@ -7,7 +7,7 @@ const aws = require('aws-sdk')
 const checkEnv = require('./shared/utils/checkEnv').default
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const isSSL = process.env.FORCE_SSL === 1 ? true : process.env.NODE_ENV == 'prod'
+const isSSL = process.env.FORCE_SSL === 1 ? true : env === 'prod'
 console.log('NODE_ENV', '=', env)
 console.log('FORCE_SSL', '=', isSSL)
 
@@ -79,6 +79,8 @@ var launch_with_ssl = function() {
       res.end()
     })
     .listen(80, process.env.HOST, err => {
+      console.log("Failed to listen on 80")
+      console.log(err)
       if (err) throw err
       console.dir()
     })
