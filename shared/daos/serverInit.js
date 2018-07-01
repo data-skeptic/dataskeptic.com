@@ -8,16 +8,16 @@ const s3 = new aws.S3()
 const proposalsDocs = new aws.DynamoDB.DocumentClient()
 
 console.log("process.env.BASE_API...")
-console.log(process.env.BASE_API)
 
-const baseapi = process.env.BASE_API
+const baseapi = process.env.BASE_API || '/api'
+
+console.log(baseapi)
 
 import { convert_items_to_json } from 'daos/episodes'
 
 export function get_contributors() {
   console.log('-[Refreshing Contributors]-')
-  console.log(baseapi)
-  const uri = '/api/contributors/list'
+  const uri = baseapi + '/blog/contributors/list'
   console.log(uri)
   return axios
     .get(uri)
