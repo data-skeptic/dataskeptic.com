@@ -7,7 +7,7 @@ var chatter = require('./chatter')
 var e164 = require('e164')
 var assert = require('assert')
 
-var base_url = process.env.BASE_API
+var base_url = process.env.BASE_API || 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/prod'
 
 function get_opening_remark(dispatch, reply, cstate) {
   return 'Ok, reminders.  When would you like to get the reminder?'

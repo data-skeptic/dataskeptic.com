@@ -8,9 +8,7 @@ const checkEnv = require('./shared/utils/checkEnv').default
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 const isSSL = process.env.FORCE_SSL === 1 ? true : env === 'prod'
-console.log('NODE_ENV', '=', env)
-console.log('FORCE_SSL', '=', isSSL)
-console.log(process.env.BASE_API)
+console.log('NODE_ENV', '=', env, 'FORCE_SSL', '=', isSSL)
 // validate env config
 try {
   checkEnv()
@@ -29,7 +27,6 @@ if (process.env.NODE_ENV === 'dev') {
 const snsalert = require('./shared/SnsUtil').snsalert
 const recordingServer = require('./recordingServer').default
 
-console.log('index.js : env = ' + env)
 const aws_accessKeyId = process.env.AWS_ACCESS_KEY_ID
 const aws_secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
 const aws_region = process.env.AWS_REGION
@@ -127,14 +124,12 @@ function config_load_promise() {
     for (var file of files) {
       var s3Key = file
       var p = new Promise((resolve, reject) => {
-        console.log("Gettin': " + bucket + ' ' + s3Key)
         const params = { Bucket: bucket, Key: s3Key }
         s3
           .getObject(params)
           .createReadStream()
           .pipe(fs.createWriteStream(cert_path + s3Key))
           .on('close', () => {
-            console.log('Resolving: ' + s3Key)
             resolve(true)
           })
           .on('error', (er) => {
@@ -146,16 +141,13 @@ function config_load_promise() {
     }
     return Promise.all(promises)
       .then(function() {
-        console.log('All promises complete')
         var c = 0
         for (file of files) {
-          console.log('Checking for ' + file)
           if (fs.existsSync(cert_path + file)) {
             c += 1
           }
         }
         if (c == files.length) {
-          console.log('Found all expected files')
           resolve(true)
         } else {
           console.log(
