@@ -387,6 +387,10 @@ function api_router(req, res) {
     var req = req.body
     var resp = Cache.contributors
     return res.status(200).end(JSON.stringify(resp))
+  } else if (req.url.indexOf('/api/blog/contributors/list') == 0) {
+    var req = req.body
+    var resp = Cache.contributors
+    return res.status(200).end(JSON.stringify(resp))
   } else if (req.url.indexOf('/api/Related') == 0) {
     related_content(req, res)
     return true
