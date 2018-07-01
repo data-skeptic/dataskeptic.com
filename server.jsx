@@ -395,7 +395,7 @@ function api_router(req, res) {
     related_content(req, res)
     return true
   } else if (req.url.indexOf('/api/blog/list') == 0) {
-    blog_list(req, res)
+    get_blogs(req, res)
     return true
   } else if (req.url == '/api/blog/categories') {
     var folders = Cache.folders

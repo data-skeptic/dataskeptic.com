@@ -89,7 +89,7 @@ export function load_blogs(prefix, limit, offset, dispatch) {
   console.log("baseapi")
   console.log(baseapi)
   var url =
-    baseapi +
+    'https://4sevcujref.execute-api.us-east-1.amazonaws.com/prod' +
     '/blog/list?limit=' +
     limit +
     '&offset=' +
