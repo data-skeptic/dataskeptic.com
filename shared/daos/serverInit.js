@@ -9,7 +9,7 @@ const proposalsDocs = new aws.DynamoDB.DocumentClient()
 
 require('dotenv').load();
 
-console.log("process.env.BASE_API")
+console.log("process.env.BASE_API...")
 console.log(process.env.BASE_API)
 
 const baseapi = process.env.BASE_API
@@ -19,7 +19,7 @@ import { convert_items_to_json } from 'daos/episodes'
 export function get_contributors() {
   console.log('-[Refreshing Contributors]-')
   console.log(baseapi)
-  const uri = baseapi + '/blog/contributors/list'
+  const uri = '/api/contributors/list'
   console.log(uri)
   return axios
     .get(uri)
@@ -89,8 +89,7 @@ export function load_blogs(prefix, limit, offset, dispatch) {
   console.log("baseapi")
   console.log(baseapi)
   var url =
-    baseapi +
-    '/blog/list?limit=' +
+    '/api/blog/list?limit=' +
     limit +
     '&offset=' +
     offset +
@@ -206,7 +205,7 @@ function xml_to_list(xml) {
 }
 
 const getEpisodesData = guids => {
-  const uri = baseapi + '/podcast/episodes/get_by_guids'
+  const uri = '/api/episodes/get'
   console.log(uri)
   return axios.post(uri, { guids }).then(res => res.data)
 }
