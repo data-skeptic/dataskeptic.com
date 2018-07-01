@@ -33,7 +33,7 @@ console.log('index.js : env = ' + env)
 const aws_accessKeyId = process.env.AWS_ACCESS_KEY_ID
 const aws_secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
 const aws_region = process.env.AWS_REGION
-
+console.log(aws_accessKeyId)
 aws.config.update({
   accessKeyId: aws_accessKeyId,
   secretAccessKey: aws_secretAccessKey,
@@ -41,10 +41,6 @@ aws.config.update({
 })
 
 const s3 = new aws.S3()
-
-if (env == 'prod') {
-  snsalert(new Date().toString(), 'rebooting production')
-}
 
 const onError = err => {
   fs.writeFile('./error.err', err, function(e) {
@@ -57,7 +53,7 @@ const onError = err => {
 const cert_path = './cert/'
 
 var launch_with_ssl = function() {
-  console.log('Attempt to load SSL')
+  console.log('launch_with_ssl')
   const httpsOptions = {
     cert: fs.readFileSync(cert_path + 'cert.pem'),
     ca: [fs.readFileSync(cert_path + 'fullchain.pem')],
@@ -67,9 +63,10 @@ var launch_with_ssl = function() {
   var server = https
     .createServer(httpsOptions, app)
     .listen(process.env.HTTPS_PORT, '0.0.0.0', function() {
-      console.log('Serving in https')
+      console.log(`Serving in https on port ${process.env.HTTPS_PORT}`)
     })
   server.on('error', err => {
+    console.log(`Failed to listen on port ${process.env.HTTPS_PORT}`)
     onError(err)
     console.log(err)
   })
@@ -81,7 +78,7 @@ var launch_with_ssl = function() {
       res.writeHead(301, { Location: 'https://' + host + req.url })
       res.end()
     })
-    .listen(process.env.PORT, process.env.HOST, err => {
+    .listen(80, process.env.HOST, err => {
       if (err) throw err
       console.dir()
     })
@@ -115,29 +112,8 @@ var launch_without_ssl = function() {
   })
 }
 
-const launh_on_heroku = function() {
-  const server = http
-    .createServer(
-      (req, res, next) =>
-        isSSL
-          ? forceSSL(req, res, () => {
-              app(req, res, next)
-            })
-          : app(req, res, next)
-    )
-    .listen(process.env.PORT, function() {
-      console.log('Starting on HEROKU')
-    })
-
-  server.on('error', err => {
-    onError(err)
-    console.log(err)
-  })
-
-  recordingServer(server)
-}
-
 function config_load_promise() {
+  console.log("config_load_promise")
   var clp = new Promise(function(resolve, reject) {
     var files = ['cert.pem', 'fullchain.pem', 'privkey.pem', 'config.jsn']
     var bucket = 'config-dataskeptic.com'
@@ -158,6 +134,10 @@ function config_load_promise() {
           .on('close', () => {
             console.log('Resolving: ' + s3Key)
             resolve(true)
+          })
+          .on('error', (er) => {
+            console.log('ERROR!')
+            console.log(er)
           })
       })
       promises.push(p)
@@ -204,16 +184,11 @@ function config_load_promise() {
 }
 
 if (env === 'prod') {
-  console.log('Loading as prod')
-  console.log('Heroku mode', isHeroku)
-  if (isHeroku) {
-    launh_on_heroku()
-  } else {
+    console.log('Loading as prod.')
     config_load_promise()
-  }
 } else {
-  console.log('Loading as dev')
-  launch_without_ssl()
+    console.log('Loading as dev.')
+    launch_without_ssl()
 }
 
 // safe debug information
