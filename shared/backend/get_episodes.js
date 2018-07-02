@@ -6,6 +6,7 @@ module.exports = {
     episodes_list,
     exclude = ['/episodes', '/transcripts']
   ) {
+    console.log('get_episodes')
     var episodes = []
     var query = req.query
     var url = req.url

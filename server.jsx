@@ -66,7 +66,7 @@ import axios from 'axios'
 
 import minifyHTML from 'express-minify-html'
 
-import Rollbar from 'rollbar'
+//import Rollbar from 'rollbar'
 import http from 'http'
 var Influx = require('influx')
 
@@ -511,6 +511,11 @@ function getContributorPosts(contributor) {
     .then(res => res.data)
 }
 
+function getEpisode(guid) {
+  var uri = `/api/episodes/get/${guid}`
+  return axios.get(uri)
+}
+
 async function inject_homepage(store, my_cache, location) {
   const res = await getFeaturesAPI('homepage')
   store.dispatch({
@@ -520,7 +525,27 @@ async function inject_homepage(store, my_cache, location) {
 
   const guid = res.data.latest_episode.guid
   const episode = my_cache.episodes_map[guid]
-  store.dispatch({ type: 'ADD_EPISODES', payload: [episode] })
+  if (episode == undefined) {
+    console.log("episode undefined")
+    console.log(guid)
+    var promise = getEpisode(guid)
+    promise.then(function(res) {
+        console.log('EEEEEFFFFF')
+        console.log(res)
+        var episode = res.data
+        dispatch({
+          type: 'ADD_EPISODES',
+          payload: [episode]
+        })
+      })
+      .catch(err => {
+        console.log('Caught in server.jsx :(')
+        console.log(err)
+      })  
+  } else {
+    store.dispatch({ type: 'ADD_EPISODES', payload: [episode] })
+  }
+
 
   const q = 'data'
   const jobs = await getJobs(q, location)
@@ -532,7 +557,6 @@ async function inject_homepage(store, my_cache, location) {
 
 function inject_products(store, my_cache, pathname) {
   var products = my_cache.products['items']
-  console.log('inject_products ' + products.length)
   store.dispatch({ type: 'ADD_PRODUCTS', payload: products })
 }
 

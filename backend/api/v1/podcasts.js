@@ -29,7 +29,9 @@ module.exports = cache => {
     }
 
     getEpisodes(realLimit, realOffset, year)
-      .then(({ total, episodes }) => {
+      .then(function (result) {
+        var total = result['total']
+        var episodes = result['episodes']
         const hasMore = limit + offset <= total
 
         res.send({

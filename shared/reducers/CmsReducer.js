@@ -256,6 +256,7 @@ export default function cmsReducer(state = defaultState, action) {
           var le = data['latest_episode']
           getEpisode(le.guid)
             .then(episode => {
+              console.log('EEEEE', episode)
               dispatch({
                 type: 'ADD_EPISODES',
                 payload: [episode]

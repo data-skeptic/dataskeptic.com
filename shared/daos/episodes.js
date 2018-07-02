@@ -26,30 +26,3 @@ export function convert_items_to_json(items) {
   })
   return episodes
 }
-/*
-export default function getEpisodes(store) {
-	console.log("Network: retrieving episodes")
-	axios
-	  .get(feed_uri)
-	  .then(function(result) {
-	  	var xml = result["data"]
-		var parser = new xml2js.Parser()
-		var year = (new Date()).getYear()+1900
-
-		parser.parseString(xml, function(err,rss) {
-			var items = rss["rss"]["channel"][0]["item"]
-			var episodes = convert_items_to_json(items)
-			if (episodes.length > 0) {
-				var pubDate = episodes[0].pubDate
-				year = pubDate.getYear() + 1900				
-			}
-			store.dispatch({type: "ADD_EPISODES", payload: episodes })
-			store.dispatch({type: "SET_YEAR", payload: year })
-			store.dispatch({type: "SET_EPISODES_LOADED", payload: 1 })
-		})
-	})
-	.catch((err) => {
-		store.dispatch({type: "FETCH_EPISODES_ERROR", playload: err})
-	})			
-}
-*/

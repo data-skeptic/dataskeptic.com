@@ -65,24 +65,18 @@ export function get_podcasts(dispatch, pathname) {
   if (year == -1) {
     year = new Date().getYear() + 1900
   }
-  var my_cache = global.my_cache
-  if (my_cache != undefined) {
-    console.log('get_podcasts with no cache')
-    var episodes = get_podcasts_from_cache(my_cache, pathname)
-  } else {
-    console.log(['Getting :: episodes', year])
-    dispatch({ type: 'LOADING_EPISODES' })
-    axios
-      .get('/api/episodes/list?year=' + year)
-      .then(result => result.data)
-      .then(episodes => {
-        console.log('got episodes')
-        dispatch({ type: 'ADD_EPISODES', payload: episodes })
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  }
+  console.log(['Getting :: episodes', year])
+  dispatch({ type: 'LOADING_EPISODES' })
+  axios
+    .get('/api/episodes/list?year=' + year)
+    .then(result => result.data)
+    .then(episodes => {
+      console.log('got episodes')
+      dispatch({ type: 'ADD_EPISODES', payload: episodes })
+    })
+    .catch(err => {
+      console.log(err)
+    })
 }
 
 export function get_podcasts_from_cache(my_cache, pathname) {
