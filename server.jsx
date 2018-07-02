@@ -531,8 +531,8 @@ async function inject_homepage(store, my_cache, location) {
     var promise = getEpisode(guid)
     promise.then(function(res) {
         console.log('EEEEEFFFFF')
-        console.log(res)
         var episode = res.data
+        console.log(episode)
         store.dispatch({
           type: 'ADD_EPISODES',
           payload: [episode]

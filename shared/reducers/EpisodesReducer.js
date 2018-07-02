@@ -46,6 +46,7 @@ export default function EpisodesReducer(state = defaultState, action) {
           console.log('ERROR: got undefined episode')
         }
       }
+      console.log(nstate.ep_map)
       nstate.loaded = true
       break
 

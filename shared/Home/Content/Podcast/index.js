@@ -10,6 +10,8 @@ class Podcast extends Component {
     var guid = latest_episode_blog['guid']
     var oepisodes = this.props.episodes.toJS()
     var ep_map = oepisodes.ep_map
+    console.log('guid')
+    console.log(guid)
     var old_latest_episode = ep_map[guid]
     const { latest_episode } = this.props
     return (
