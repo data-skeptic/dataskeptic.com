@@ -533,7 +533,7 @@ async function inject_homepage(store, my_cache, location) {
         console.log('EEEEEFFFFF')
         console.log(res)
         var episode = res.data
-        dispatch({
+        store.dispatch({
           type: 'ADD_EPISODES',
           payload: [episode]
         })
