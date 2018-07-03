@@ -36,7 +36,8 @@ class UserPlaylist extends Component {
     })
   }
   startPlay = episode => {
-    this.props.dispatch({ type: 'PLAY_EPISODE', payload: episode })
+    var dispatch = this.props.dispatch
+    this.props.dispatch({ type: 'PLAY_EPISODE', payload: episode, dispatch })
   }
   remove = ({ blog_id, guid }) => {
     const playlisted = false

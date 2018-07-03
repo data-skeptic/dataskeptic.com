@@ -184,7 +184,7 @@ export default function PlayerReducer(state = defaultState, action) {
         var allepisodes = get_podcasts_from_cache(my_cache, pathname)
         for (var episode of allepisodes) {
           if (episode.guid == guid) {
-            dispatch({ type: 'PLAY_EPISODE', payload: episode })
+            dispatch({ type: 'PLAY_EPISODE', payload: episode, dispatch })
           }
         }
       } else {
@@ -194,14 +194,14 @@ export default function PlayerReducer(state = defaultState, action) {
           .then(function(result) {
             console.log('Return of ' + guid)
             var episode = result['data']
-            dispatch({ type: 'PLAY_EPISODE', payload: episode })
+            dispatch({ type: 'PLAY_EPISODE2', payload: episode, dispatch })
           })
           .catch(err => {
             console.log(err)
           })
       }
       break
-    case 'PLAY_EPISODE':
+    case 'PLAY_EPISODE2':
       var episode = action.payload
       nstate.seekPosition = null
       if (isEmpty(episode)) {
@@ -212,9 +212,7 @@ export default function PlayerReducer(state = defaultState, action) {
         nstate.has_shown = true
         if (nstate.is_playing) {
           if (episode === undefined) {
-            console.log(
-              'Unusual situation for player to be in, but I can fix it'
-            )
+            console.log('Unusual situation for player to be in, but I can fix it')
             nstate.episode = clone(episode)
             nstate.is_playing = true
             nstate.playback_loaded = false
@@ -232,6 +230,24 @@ export default function PlayerReducer(state = defaultState, action) {
       }
       savePlaying(nstate)
       savePlayingMeta(nstate)
+      break
+    case 'PLAY_EPISODE':
+      console.log('PLAY_EPISODE')
+      var episode = action.payload
+      var dispatch = action.dispatch
+      var guid = episode.guid
+      console.log('Getting episodes ' + guid)
+      axios
+          .get('/api/episodes/get/' + guid)
+          .then(function(result) {
+            console.log('Return of ' + guid)
+            var episode = result['data']
+            console.log([episode, dispatch])
+            dispatch({ type: 'PLAY_EPISODE2', payload: episode, dispatch })
+          })
+          .catch(err => {
+            console.log(err)
+          })
       break
 
     case 'STOP_PLAYBACK':

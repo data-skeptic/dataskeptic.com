@@ -60,8 +60,8 @@ class EpisodePlayer extends Component {
   }
 
   onClick(episode) {
-    var episode = this.props.episode
-    this.props.dispatch({ type: 'PLAY_EPISODE', payload: episode })
+    var dispatch = this.props.dispatch
+    dispatch({ type: 'PLAY_EPISODE', payload: episode, dispatch })
   }
 
   render() {
