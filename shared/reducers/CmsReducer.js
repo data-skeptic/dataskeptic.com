@@ -40,6 +40,12 @@ const getEpisode = async guid => {
   return await axios.get(uri).then(res => res.data)
 }
 
+const get_blog = async src_file => {
+    var base = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/prod"
+    var uri = base + `/blog/get?key=${src_file}`
+    return await axios.get(uri).then(res => res.data)
+}
+
 export default function cmsReducer(state = defaultState, action) {
   var nstate = state.toJS()
   switch (action.type) {
@@ -50,22 +56,9 @@ export default function cmsReducer(state = defaultState, action) {
       if (check == undefined) {
         console.log('Not in memory, going to get from s3')
         nstate.blog_state = 'loading'
-        var envp = ''
-        if (env != 'prod') {
-          envp = env + '.'
-        }
-        var bucket = envp + 'dataskeptic.com'
-        var s3key = src_file
-        var params = { Bucket: bucket, Key: s3key }
-        s3.getObject(params, function(err, d) {
-          if (err) {
-            console.log("Can't retrieve blog")
-            console.log(err)
-          } else {
-            var content = d.Body.toString('utf-8')
-            var payload = { src_file, content }
+        get_blog(src_file).then(function(content) {
+            var payload = {src_file, content}
             dispatch({ type: 'CMS_ADD_BLOG_CONTENT', payload })
-          }
         })
       } else {
         console.log('Blog already in cache')
