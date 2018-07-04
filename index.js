@@ -7,10 +7,8 @@ const aws = require('aws-sdk')
 const checkEnv = require('./shared/utils/checkEnv').default
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const isSSL = process.env.FORCE_SSL === 1 ? true : false
-console.log('NODE_ENV', '=', env)
-console.log('FORCE_SSL', '=', isSSL)
-
+const isSSL = process.env.FORCE_SSL === 1 ? true : env === 'prod'
+console.log('NODE_ENV', '=', env, 'FORCE_SSL', '=', isSSL)
 // validate env config
 try {
   checkEnv()
@@ -29,11 +27,10 @@ if (process.env.NODE_ENV === 'dev') {
 const snsalert = require('./shared/SnsUtil').snsalert
 const recordingServer = require('./recordingServer').default
 
-console.log('index.js : env = ' + env)
 const aws_accessKeyId = process.env.AWS_ACCESS_KEY_ID
 const aws_secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
 const aws_region = process.env.AWS_REGION
-
+console.log(aws_accessKeyId)
 aws.config.update({
   accessKeyId: aws_accessKeyId,
   secretAccessKey: aws_secretAccessKey,
@@ -41,10 +38,6 @@ aws.config.update({
 })
 
 const s3 = new aws.S3()
-
-if (env == 'prod') {
-  snsalert(new Date().toString(), 'rebooting production')
-}
 
 const onError = err => {
   fs.writeFile('./error.err', err, function(e) {
@@ -57,7 +50,7 @@ const onError = err => {
 const cert_path = './cert/'
 
 var launch_with_ssl = function() {
-  console.log('Attempt to load SSL')
+  console.log('launch_with_ssl')
   const httpsOptions = {
     cert: fs.readFileSync(cert_path + 'cert.pem'),
     ca: [fs.readFileSync(cert_path + 'fullchain.pem')],
@@ -67,9 +60,10 @@ var launch_with_ssl = function() {
   var server = https
     .createServer(httpsOptions, app)
     .listen(process.env.HTTPS_PORT, '0.0.0.0', function() {
-      console.log('Serving in https')
+      console.log(`Serving in https on port ${process.env.HTTPS_PORT}`)
     })
   server.on('error', err => {
+    console.log(`Failed to listen on port ${process.env.HTTPS_PORT}`)
     onError(err)
     console.log(err)
   })
@@ -81,7 +75,9 @@ var launch_with_ssl = function() {
       res.writeHead(301, { Location: 'https://' + host + req.url })
       res.end()
     })
-    .listen(process.env.PORT, process.env.HOST, err => {
+    .listen(80, process.env.HOST, err => {
+      console.log("Failed to listen on 80")
+      console.log(err)
       if (err) throw err
       console.dir()
     })
@@ -115,29 +111,8 @@ var launch_without_ssl = function() {
   })
 }
 
-const launh_on_heroku = function() {
-  const server = http
-    .createServer(
-      (req, res, next) =>
-        isSSL
-          ? forceSSL(req, res, () => {
-              app(req, res, next)
-            })
-          : app(req, res, next)
-    )
-    .listen(process.env.PORT, function() {
-      console.log('Starting on HEROKU')
-    })
-
-  server.on('error', err => {
-    onError(err)
-    console.log(err)
-  })
-
-  recordingServer(server)
-}
-
 function config_load_promise() {
+  console.log("config_load_promise")
   var clp = new Promise(function(resolve, reject) {
     var files = ['cert.pem', 'fullchain.pem', 'privkey.pem', 'config.jsn']
     var bucket = 'config-dataskeptic.com'
@@ -149,31 +124,30 @@ function config_load_promise() {
     for (var file of files) {
       var s3Key = file
       var p = new Promise((resolve, reject) => {
-        console.log("Gettin': " + bucket + ' ' + s3Key)
         const params = { Bucket: bucket, Key: s3Key }
         s3
           .getObject(params)
           .createReadStream()
           .pipe(fs.createWriteStream(cert_path + s3Key))
           .on('close', () => {
-            console.log('Resolving: ' + s3Key)
             resolve(true)
+          })
+          .on('error', (er) => {
+            console.log('ERROR!')
+            console.log(er)
           })
       })
       promises.push(p)
     }
     return Promise.all(promises)
       .then(function() {
-        console.log('All promises complete')
         var c = 0
         for (file of files) {
-          console.log('Checking for ' + file)
           if (fs.existsSync(cert_path + file)) {
             c += 1
           }
         }
         if (c == files.length) {
-          console.log('Found all expected files')
           resolve(true)
         } else {
           console.log(
@@ -204,16 +178,11 @@ function config_load_promise() {
 }
 
 if (env === 'prod') {
-  console.log('Loading as prod')
-  console.log('Heroku mode', isHeroku)
-  if (isHeroku) {
-    launh_on_heroku()
-  } else {
+    console.log('Loading as prod.')
     config_load_promise()
-  }
 } else {
-  console.log('Loading as dev')
-  launch_without_ssl()
+    console.log('Loading as dev.')
+    launch_without_ssl()
 }
 
 // safe debug information

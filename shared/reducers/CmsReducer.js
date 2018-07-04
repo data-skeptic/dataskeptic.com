@@ -8,7 +8,7 @@ const aws = require('aws-sdk')
 
 var env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
-var base_url = process.env.BASE_API
+var base_url = process.env.BASE_API || 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/prod'
 
 const init = {
   home_loaded: false,
@@ -256,6 +256,7 @@ export default function cmsReducer(state = defaultState, action) {
           var le = data['latest_episode']
           getEpisode(le.guid)
             .then(episode => {
+              console.log('EEEEE', episode)
               dispatch({
                 type: 'ADD_EPISODES',
                 payload: [episode]

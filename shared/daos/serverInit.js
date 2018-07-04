@@ -7,13 +7,16 @@ const s3 = new aws.S3()
 
 const proposalsDocs = new aws.DynamoDB.DocumentClient()
 
-import { convert_items_to_json } from 'daos/episodes'
+const baseapi = process.env.BASE_API || 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/prod'
 
-var base_api = process.env.BASE_API
+console.log("baseapi=" + baseapi)
+
+import { convert_items_to_json } from 'daos/episodes'
 
 export function get_contributors() {
   console.log('-[Refreshing Contributors]-')
-  const uri = base_api + '/blog/contributors/list'
+  const uri = baseapi + '/blog/contributors/list'
+  console.log(uri)
   return axios
     .get(uri)
     .then(function(result) {
@@ -56,8 +59,10 @@ export function populate_content_map(blogs, data) {
 export function get_podcasts_by_guid(dispatch, guid) {
   var my_cache = global.my_cache
   if (my_cache != undefined) {
+    console.log('my_cache')
     var episodes = []
     var allepisodes = get_podcasts_from_cache(my_cache, pathname)
+    console.log(typeof(allepisodes))
     for (var episode of allepisodes) {
       if (episode.guid == guid) {
         episodes.push(episode)
@@ -79,19 +84,19 @@ export function get_podcasts_by_guid(dispatch, guid) {
   }
 }
 export function load_blogs(prefix, limit, offset, dispatch) {
+  console.log("baseapi")
+  console.log(baseapi)
   var url =
-    base_api +
+    baseapi +
     '/blog/list?limit=' +
     limit +
     '&offset=' +
     offset +
     '&prefix=' +
     prefix
-  console.log('Load blogs: ' + url)
   axios
     .get(url)
     .then(function(result) {
-      console.log('blog api success')
       var blogs = result['data']
       var guids = []
       for (var blog of blogs) {
@@ -123,7 +128,7 @@ export function load_blogs(prefix, limit, offset, dispatch) {
 }
 
 function get_member_feed_replacements() {
-  var url = base_api + '/members/feedreplacements/list'
+  var url = baseapi + '/members/feedreplacements/list'
   return axios
     .get(url)
     .then(function(result) {
@@ -149,7 +154,6 @@ export async function loadEpisodes() {
 }
 
 function xml_to_list(xml) {
-  console.log('xml_to_list')
   var parser = new xml2js.Parser()
   var domain = 'dataskeptic.com'
 
@@ -197,22 +201,20 @@ function xml_to_list(xml) {
 }
 
 const getEpisodesData = guids => {
-  const uri = base_api + '/podcast/episodes/get_by_guids'
+  console.log('getEpisodesData')
+  const uri = '/api/episodes/get'
   console.log(uri)
   return axios.post(uri, { guids }).then(res => res.data)
 }
 
 function get_and_process_feed(replacements, feed_uri) {
-  console.log('Getting ' + feed_uri)
+  console.log('Getting feed ' + feed_uri)
   return axios
     .get(feed_uri)
     .then(function(result) {
-      console.log('request done')
-
       var xml = result['data']
       var data = xml_to_list(xml)
       var mxml = xml
-      console.log('do not apply replacements')
       for (var replacement of replacements) {
         var guid = replacement['guid']
         var member_link = replacement['member_link']
@@ -223,7 +225,6 @@ function get_and_process_feed(replacements, feed_uri) {
           console.log('Error: unlinkable GUID: ' + guid)
         }
       }
-      console.log('replacements made')
       data.member_feed = mxml
       /*
              *  We need to tell the server what the latest GUID (Libsyn's unique)
@@ -235,7 +236,7 @@ function get_and_process_feed(replacements, feed_uri) {
       if (data.episodes_list.length > 0) {
         var latest = data.episodes_list[0]
         console.log('Going to inform server of latest guid:' + latest)
-        var url = base_api + '/episodes?latest=' + latest
+        var url = baseapi + '/episodes?latest=' + latest
         axios
           .post(url)
           .then(function(result) {
@@ -309,7 +310,7 @@ export function loadCurrentRFC() {
 
 export function loadProducts() {
   console.log('-[Refreshing products]-')
-  var url = base_api + '/store/products/list'
+  var url = baseapi + '/store/products/list'
 
   return axios
     .get(url)

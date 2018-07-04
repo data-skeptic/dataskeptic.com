@@ -25,7 +25,6 @@ export function loadEpisode(guid, dispatch) {
     .get('/api/episodes/get/' + guid)
     .then(function(result) {
       var episode = result['data']
-      console.log('Got episode for no reason in redux_loader')
     })
     .catch(err => {
       console.log(err)
@@ -38,8 +37,7 @@ export function get_folders(dispatch) {
     var folders = my_cache.folders
     dispatch({ type: 'ADD_FOLDERS', payload: folders })
   } else {
-    console.log('Getting blog categories')
-    axios
+   axios
       .get('/api/blog/categories')
       .then(function(result) {
         var folders = result['data']
@@ -65,28 +63,19 @@ export function get_podcasts(dispatch, pathname) {
   if (year == -1) {
     year = new Date().getYear() + 1900
   }
-  var my_cache = global.my_cache
-  if (my_cache != undefined) {
-    console.log('get_podcasts with no cache')
-    var episodes = get_podcasts_from_cache(my_cache, pathname)
-  } else {
-    console.log(['Getting :: episodes', year])
-    dispatch({ type: 'LOADING_EPISODES' })
-    axios
-      .get('/api/episodes/list?year=' + year)
-      .then(result => result.data)
-      .then(episodes => {
-        console.log('got episodes')
-        dispatch({ type: 'ADD_EPISODES', payload: episodes })
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  }
+  dispatch({ type: 'LOADING_EPISODES' })
+  axios
+    .get('/api/episodes/list?year=' + year)
+    .then(result => result.data)
+    .then(episodes => {
+      dispatch({ type: 'ADD_EPISODES', payload: episodes })
+    })
+    .catch(err => {
+      console.log(err)
+    })
 }
 
 export function get_podcasts_from_cache(my_cache, pathname) {
-  console.log('get_podcasts_from_cache')
   var year = year_from_path(pathname)
   var episodes_list = my_cache.episodes_list
   var episodes_map = my_cache.episodes_map
@@ -112,7 +101,6 @@ export function get_products(dispatch) {
     var products = my_cache.products
     dispatch({ type: 'ADD_PRODUCTS', payload: products })
   } else {
-    console.log('Getting products')
     axios
       .get('/api/store/list')
       .then(function(result) {

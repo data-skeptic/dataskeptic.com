@@ -173,35 +173,31 @@ export default function PlayerReducer(state = defaultState, action) {
       break
     case 'PLAY_EPISODE_FROM_GUID':
       // This is used by the bot
-      console.log('PLAY_EPISODE_FROM_GUID')
-      console.log(action)
       var dispatch = action.dispatch
       var guid = action.guid
       var my_cache = global.my_cache
-      if (my_cache != undefined) {
+      if (false) {//my_cache != undefined) {
         var my_episode = undefined
         var episodes = []
         var allepisodes = get_podcasts_from_cache(my_cache, pathname)
         for (var episode of allepisodes) {
           if (episode.guid == guid) {
-            dispatch({ type: 'PLAY_EPISODE', payload: episode })
+            dispatch({ type: 'PLAY_EPISODE', payload: episode, dispatch })
           }
         }
       } else {
-        console.log('Getting episodes ' + guid)
         axios
           .get('/api/episodes/get/' + guid)
           .then(function(result) {
-            console.log('Return of ' + guid)
             var episode = result['data']
-            dispatch({ type: 'PLAY_EPISODE', payload: episode })
+            dispatch({ type: 'PLAY_EPISODE2', payload: episode, dispatch })
           })
           .catch(err => {
             console.log(err)
           })
       }
       break
-    case 'PLAY_EPISODE':
+    case 'PLAY_EPISODE2':
       var episode = action.payload
       nstate.seekPosition = null
       if (isEmpty(episode)) {
@@ -212,9 +208,7 @@ export default function PlayerReducer(state = defaultState, action) {
         nstate.has_shown = true
         if (nstate.is_playing) {
           if (episode === undefined) {
-            console.log(
-              'Unusual situation for player to be in, but I can fix it'
-            )
+            console.log('Unusual situation for player to be in, but I can fix it')
             nstate.episode = clone(episode)
             nstate.is_playing = true
             nstate.playback_loaded = false
@@ -232,6 +226,20 @@ export default function PlayerReducer(state = defaultState, action) {
       }
       savePlaying(nstate)
       savePlayingMeta(nstate)
+      break
+    case 'PLAY_EPISODE':
+      var episode = action.payload
+      var dispatch = action.dispatch
+      var guid = episode.guid
+      axios
+          .get('/api/episodes/get/' + guid)
+          .then(function(result) {
+            var episode = result['data']
+            dispatch({ type: 'PLAY_EPISODE2', payload: episode, dispatch })
+          })
+          .catch(err => {
+            console.log(err)
+          })
       break
 
     case 'STOP_PLAYBACK':

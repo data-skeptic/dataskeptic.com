@@ -398,21 +398,24 @@ class PlayerContainer extends Component {
     let { title, pubDate, publish_date } = episode
     const mp3s =
       episode.related && episode.related.filter(r => r.type === 'mp3')
-    var mp3 = ''
+    var mp3 = undefined
     var duration = 1
-    if (mp3s.length > 0) {
-      mp3 = mp3s[0]['dest']
-      duration = mp3s[0]['duration']
-
-      mp3 = normalizeSource(mp3)
+    if (mp3s != undefined) {
+      if (mp3s.length > 0) {
+        mp3 = mp3s[0]['dest']
+        duration = mp3s[0]['duration']
+        mp3 = normalizeSource(mp3)
+      }      
     }
     var img =
       'https://s3.amazonaws.com/dataskeptic.com/img/2017/primary-logo-400.jpg'
     const imgs =
       episode.related &&
       episode.related.filter(r => r.type === 'homepage-image')
-    if (imgs.length > 0) {
-      img = imgs[0]['dest']
+    if (imgs != undefined) {
+      if (imgs.length > 0) {
+        img = imgs[0]['dest']
+      }
     }
     if (pubDate) {
       pubDate = moment(pubDate).format('MMMM D, YYYY')

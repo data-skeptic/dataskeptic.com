@@ -25,7 +25,7 @@ const init = {
 
 const defaultState = Immutable.fromJS(init)
 
-var base_url = process.env.BASE_API
+var base_url = process.env.BASE_API || 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/prod'
 
 let start_survey = function() {
   return new Promise(function(resolve, reject) {

@@ -12,6 +12,7 @@ import { join_slack } from 'backend/join_slack'
 import { send_email } from 'backend/send_email'
 import { search_site } from 'backend/search_site'
 import { get_blogs_rss } from 'backend/get_blogs_rss'
+import { get_blogs } from 'backend/get_blogs'
 import { order_create } from 'backend/order_create'
 import { add_order } from 'backend/add_order'
 import { order_fulfill } from 'backend/order_fulfill'
@@ -65,7 +66,7 @@ import axios from 'axios'
 
 import minifyHTML from 'express-minify-html'
 
-import Rollbar from 'rollbar'
+//import Rollbar from 'rollbar'
 import http from 'http'
 var Influx = require('influx')
 
@@ -386,8 +387,15 @@ function api_router(req, res) {
     var req = req.body
     var resp = Cache.contributors
     return res.status(200).end(JSON.stringify(resp))
+  } else if (req.url.indexOf('/api/blog/contributors/list') == 0) {
+    var req = req.body
+    var resp = Cache.contributors
+    return res.status(200).end(JSON.stringify(resp))
   } else if (req.url.indexOf('/api/Related') == 0) {
     related_content(req, res)
+    return true
+  } else if (req.url.indexOf('/api/blog/list') == 0) {
+    get_blogs(req, res)
     return true
   } else if (req.url == '/api/blog/categories') {
     var folders = Cache.folders
@@ -503,6 +511,11 @@ function getContributorPosts(contributor) {
     .then(res => res.data)
 }
 
+function getEpisode(guid) {
+  var uri = `/api/episodes/get/${guid}`
+  return axios.get(uri)
+}
+
 async function inject_homepage(store, my_cache, location) {
   const res = await getFeaturesAPI('homepage')
   store.dispatch({
@@ -512,7 +525,27 @@ async function inject_homepage(store, my_cache, location) {
 
   const guid = res.data.latest_episode.guid
   const episode = my_cache.episodes_map[guid]
-  store.dispatch({ type: 'ADD_EPISODES', payload: [episode] })
+  if (episode == undefined) {
+    console.log("episode undefined")
+    console.log(guid)
+    var promise = getEpisode(guid)
+    promise.then(function(res) {
+        console.log('EEEEEFFFFF')
+        var episode = res.data
+        console.log(episode)
+        store.dispatch({
+          type: 'ADD_EPISODES',
+          payload: [episode]
+        })
+      })
+      .catch(err => {
+        console.log('Caught in server.jsx :(')
+        console.log(err)
+      })  
+  } else {
+    store.dispatch({ type: 'ADD_EPISODES', payload: [episode] })
+  }
+
 
   const q = 'data'
   const jobs = await getJobs(q, location)
@@ -524,7 +557,6 @@ async function inject_homepage(store, my_cache, location) {
 
 function inject_products(store, my_cache, pathname) {
   var products = my_cache.products['items']
-  console.log('inject_products ' + products.length)
   store.dispatch({ type: 'ADD_PRODUCTS', payload: products })
 }
 
@@ -748,6 +780,7 @@ app.use('/api/v1', async (req, res, next) => {
 app.use('/api/v1/', api(() => Cache))
 
 if (env === 'prod') {
+/*
   const rollbar = Rollbar.init({
     accessToken: '4555957947d347a69caf6e017ea72f51',
     handleUncaughtExceptions: true,
@@ -756,8 +789,9 @@ if (env === 'prod') {
       environment: env
     }
   })
+  */
 
-  app.use(rollbar.errorHandler())
+  //app.use(rollbar.errorHandler())
   app.use(
     minifyHTML({
       override: true,

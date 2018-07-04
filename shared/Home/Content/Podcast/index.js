@@ -11,12 +11,12 @@ class Podcast extends Component {
     var oepisodes = this.props.episodes.toJS()
     var ep_map = oepisodes.ep_map
     var old_latest_episode = ep_map[guid]
-    const { latest_episode } = this.props
+    var { latest_episode } = this.props
     return (
       <Container>
         <PostTitle>LATEST PODCAST</PostTitle>
         <EpisodePlayer
-          episode={old_latest_episode}
+          episode={latest_episode}
           desc={latest_episode.abstract}
         />
       </Container>

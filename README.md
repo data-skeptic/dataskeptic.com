@@ -1,6 +1,6 @@
 # dataskeptic.com
 
-Source for the web app powering dataskeptic.com
+This repository is being deprecated due to major issues with the codebase.  The new repository is here: https://github.com/data-skeptic/dataskeptic.com_v3
 
 ## Simulate environment configuration locally
 

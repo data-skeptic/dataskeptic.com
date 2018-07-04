@@ -2,7 +2,7 @@ import axios from 'axios'
 
 var chatter = require('./chatter')
 
-var base_url = process.env.BASE_API
+var base_url = process.env.BASE_API || 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/prod'
 
 function get_opening_remark(dispatch, reply, cstate) {
   var msg = chatter.get_message('SURVEY>WELCOME')

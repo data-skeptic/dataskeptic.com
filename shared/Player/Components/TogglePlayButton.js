@@ -19,7 +19,9 @@ export const TogglePlayButton = ({
   if (proposalsDisabled) {
     return <ProposalLoading />
   }
-
+  if (playing) {
+    disabled = false
+  }
   return (
     <button
       className={classNames('player-btn', { disabled: disabled })}
