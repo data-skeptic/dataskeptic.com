@@ -395,7 +395,6 @@ class PlayerContainer extends Component {
     }
 
     const episode = oepisode.toJS()
-    console.log(["episode", episode])
     let { title, pubDate, publish_date } = episode
     const mp3s =
       episode.related && episode.related.filter(r => r.type === 'mp3')
@@ -427,7 +426,6 @@ class PlayerContainer extends Component {
       return <div />
     }
 
-    console.log(["howler", mp3, is_playing, volume, muted])
     const howler = (
       <ReactHowler
         src={mp3}

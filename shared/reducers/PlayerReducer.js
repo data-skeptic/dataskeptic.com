@@ -173,8 +173,6 @@ export default function PlayerReducer(state = defaultState, action) {
       break
     case 'PLAY_EPISODE_FROM_GUID':
       // This is used by the bot
-      console.log('PLAY_EPISODE_FROM_GUID')
-      console.log(action)
       var dispatch = action.dispatch
       var guid = action.guid
       var my_cache = global.my_cache
@@ -188,11 +186,9 @@ export default function PlayerReducer(state = defaultState, action) {
           }
         }
       } else {
-        console.log('Getting episodes ' + guid)
         axios
           .get('/api/episodes/get/' + guid)
           .then(function(result) {
-            console.log('Return of ' + guid)
             var episode = result['data']
             dispatch({ type: 'PLAY_EPISODE2', payload: episode, dispatch })
           })
@@ -232,17 +228,13 @@ export default function PlayerReducer(state = defaultState, action) {
       savePlayingMeta(nstate)
       break
     case 'PLAY_EPISODE':
-      console.log('PLAY_EPISODE')
       var episode = action.payload
       var dispatch = action.dispatch
       var guid = episode.guid
-      console.log('Getting episodes ' + guid)
       axios
           .get('/api/episodes/get/' + guid)
           .then(function(result) {
-            console.log('Return of ' + guid)
             var episode = result['data']
-            console.log([episode, dispatch])
             dispatch({ type: 'PLAY_EPISODE2', payload: episode, dispatch })
           })
           .catch(err => {
