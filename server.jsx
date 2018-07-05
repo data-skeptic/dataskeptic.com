@@ -169,16 +169,16 @@ const doRefresh = () => {
 
   // Let node make requests asynchronous
   return Promise.all([
-    loadEpisodes(),
+    //loadEpisodes(),
     loadProducts(),
     get_contributors(),
     loadCurrentRFC()
   ])
     .then(results => {
       // but wait until all of them will be done
-
-      const [episodes, products, contributors, rfc] = results
       console.log('-[All cache data fetched]-')
+      const [episodes, products, contributors, rfc] = results
+      
 
       // episodes
       const {

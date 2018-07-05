@@ -212,6 +212,7 @@ function get_and_process_feed(replacements, feed_uri) {
   return axios
     .get(feed_uri)
     .then(function(result) {
+      console.log("rrrrrrrrrrrrrrrrr")
       var xml = result['data']
       var data = xml_to_list(xml)
       var mxml = xml
@@ -251,6 +252,8 @@ function get_and_process_feed(replacements, feed_uri) {
       return data
     })
     .then(data => {
+      console.log("[(data)]")
+      console.log(Object.keys(data))
       return getEpisodesData(data.episodes_list)
         .then(episodesData => {
           episodesData.forEach(episodeData => {

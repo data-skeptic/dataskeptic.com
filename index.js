@@ -24,7 +24,6 @@ if (process.env.NODE_ENV === 'dev') {
   require('./webpack.dev').default(app)
 }
 
-const snsalert = require('./shared/SnsUtil').snsalert
 const recordingServer = require('./recordingServer').default
 
 const aws_accessKeyId = process.env.AWS_ACCESS_KEY_ID
@@ -150,12 +149,7 @@ function config_load_promise() {
         if (c == files.length) {
           resolve(true)
         } else {
-          console.log(
-            'Found less files than expected: ' +
-              c +
-              ' instead of ' +
-              files.length
-          )
+          console.log('Found less files than expected: ' + c + ' instead of ' + files.length)
           resolve(false)
         }
       })
@@ -178,14 +172,14 @@ function config_load_promise() {
 }
 
 if (env === 'prod') {
-    console.log('Loading as prod.')
+    console.log('===[Loading as prod]=============================')
+    console.log('===[Loaded as prod]==============================')
     config_load_promise()
 } else {
     console.log('Loading as dev.')
     launch_without_ssl()
 }
 
-// safe debug information
 console.log('RUNNING CONFIG ===>')
 console.log(`Starting on ${process.env.PORT}`)
 console.log(`Host is ${process.env.HOST}`)

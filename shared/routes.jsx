@@ -102,6 +102,7 @@ export default (
 
       <Route path="/checkout" component={Checkout} />
 
+      <Route path="/checkout/thank-you" component={CheckoutThankYouPage} />
       <Route path="/thank-you" component={CheckoutThankYouPage} />
 
       <Route path="/contact-us" component={ContactUs} />
