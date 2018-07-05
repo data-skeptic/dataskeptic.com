@@ -1,4 +1,4 @@
-echo "Starting!"
+echo "running startup.sh"
 cd /usr/src/app/
 if [ -n $NODE_ENV ]
 then
