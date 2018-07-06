@@ -16,11 +16,23 @@ import infiniteList from '../../Data/hoc/infiniteList'
 import formatRequest from '../../utils/formatRequest'
 import page from '../../Layout/hoc/page'
 
+import { get_podcasts } from '../../utils/redux_loader'
+
 const EpisodesList = infiniteList({
   dataSource: state => state.episodes.toJS()
 })
 
 class Podcast extends Component {
+
+  constructor(props) {
+    super(props)
+    console.log("props!")
+    console.log(props)
+    var dispatch = props.dispatch
+    var pathname = "/"
+    get_podcasts(dispatch, pathname)
+  }
+
   initFromParams = params => {
     if (params.year) {
       this.props.dispatch(setYear(+params.year))
@@ -28,6 +40,7 @@ class Podcast extends Component {
   }
 
   updateLocation = params => {
+    console.log("!!!!!!!!!!!!!!!!!")
     delete params.firstLoad
     const query = formatRequest(params)
     this.props.router.replace(`/podcast?${query}`)
@@ -41,6 +54,8 @@ class Podcast extends Component {
 
   render() {
     const { list = [], years = [], isLoaded = false, year } = this.props
+    console.log("PODCAST!")
+    console.log(this.props)
 
     return (
       <div className="podcasts-page">
