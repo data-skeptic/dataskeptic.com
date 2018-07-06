@@ -26,8 +26,6 @@ class Podcast extends Component {
 
   constructor(props) {
     super(props)
-    console.log("props!")
-    console.log(props)
     var dispatch = props.dispatch
     var pathname = "/"
     get_podcasts(dispatch, pathname)
@@ -40,7 +38,6 @@ class Podcast extends Component {
   }
 
   updateLocation = params => {
-    console.log("!!!!!!!!!!!!!!!!!")
     delete params.firstLoad
     const query = formatRequest(params)
     this.props.router.replace(`/podcast?${query}`)
@@ -54,9 +51,6 @@ class Podcast extends Component {
 
   render() {
     const { list = [], years = [], isLoaded = false, year } = this.props
-    console.log("PODCAST!")
-    console.log(this.props)
-
     return (
       <div className="podcasts-page">
         <Container>
