@@ -50,7 +50,8 @@ class Episode extends React.Component {
   }
 
   onPlayToggle(episode) {
-    this.props.dispatch({ type: 'PLAY_EPISODE', payload: episode })
+    var dispatch = this.props.dispatch
+    dispatch({ type: 'PLAY_EPISODE', payload: episode, dispatch })
   }
 
   formatLink(link) {
