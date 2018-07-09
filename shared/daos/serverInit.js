@@ -9,8 +9,6 @@ const proposalsDocs = new aws.DynamoDB.DocumentClient()
 
 const baseapi = process.env.BASE_API || 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/prod'
 
-console.log("baseapi=" + baseapi)
-
 import { convert_items_to_json } from 'daos/episodes'
 
 export function get_contributors() {
@@ -44,16 +42,6 @@ function populate_one(cm, blog) {
     cm[prettyname] = content
   })
   cm[prettyname] = ''
-}
-
-export function populate_content_map(blogs, data) {
-  var cm = data['content_map']
-  var n = blogs.length
-  n = 4
-  for (var i = 0; i < n; i++) {
-    var blog = blogs[i]
-    populate_one(cm, blog)
-  }
 }
 
 export function get_podcasts_by_guid(dispatch, guid) {
@@ -212,7 +200,6 @@ function get_and_process_feed(replacements, feed_uri) {
   return axios
     .get(feed_uri)
     .then(function(result) {
-      console.log("rrrrrrrrrrrrrrrrr")
       var xml = result['data']
       var data = xml_to_list(xml)
       var mxml = xml
