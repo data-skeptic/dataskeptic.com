@@ -73,6 +73,9 @@ class Podcast extends Component {
               />
             )}
           </Content>
+          <SideBar title="Year">
+            <YearSelector years={years} year={year} />
+          </SideBar>
         </Container>
       </div>
     )
@@ -80,9 +83,6 @@ class Podcast extends Component {
 }
 /*
   // TODO: add this code back in above once the underlying bugs in year selector are fixed
-          <SideBar title="Year">
-            <YearSelector years={years} year={year} />
-          </SideBar>
 */
 
 export default page(
