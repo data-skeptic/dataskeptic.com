@@ -314,36 +314,6 @@ function api_router(req, res) {
     var req = req.body
     join_slack(req, res, slack_key)
     return true
-  } else if (req.url.indexOf('/api/messages') == 0) {
-    console.log(Object.keys(req))
-    var p = req.url
-    var post_data = req.body
-    var pd = JSON.stringify(post_data)
-    var options = {
-      hostname: 'bot.dataskeptic.com',
-      port: 3978,
-      path: req.url,
-      method: 'POST',
-      headers: req.headers
-    }
-    console.log(
-      '=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-='
-    )
-    var proxy = http.request(options, function(presponse) {
-      presponse.pipe(res, { end: true })
-    })
-    proxy.write(pd)
-    proxy.on('error', function(err) {
-      console.log(err)
-    })
-    console.log(
-      '=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-='
-    )
-    req.pipe(proxy, { end: true })
-    console.log(
-      '=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-='
-    )
-    return true
   } else if (req.url.indexOf('/api/members/feed') == 0) {
     apiMemberFeed(req, res, Cache.member_feed)
     return true
@@ -528,13 +498,9 @@ async function inject_homepage(store, my_cache, location) {
   const guid = res.data.latest_episode.guid
   const episode = my_cache.episodes_map[guid]
   if (episode == undefined) {
-    console.log("episode undefined")
-    console.log(guid)
     var promise = getEpisode(guid)
     promise.then(function(res) {
-        console.log('EEEEEFFFFF')
         var episode = res.data
-        console.log(episode)
         store.dispatch({
           type: 'ADD_EPISODES',
           payload: [episode]
@@ -578,17 +544,11 @@ async function inject_contributor(store, cache, pathanme) {
 }
 
 async function updateState(store, pathname, req) {
-  // TODO: find a way to better sync this section with each page's componentWillMount
-  console.log('server.jsx : updateState for ' + pathname)
-  //inject_folders(store, Cache)
-  //inject_years(store, Cache)
-
   store.dispatch({
     type: 'PROPOSAL_SET_BUCKET',
     payload: { aws_proposals_bucket }
   })
   if (!isEmpty(Cache.contributors)) {
-    console.log('using cache for contributors')
     store.dispatch({
       type: 'SET_CONTRIBUTORS',
       payload: Cache.contributors
@@ -782,7 +742,6 @@ app.use('/api/v1', async (req, res, next) => {
 app.use('/api/v1/', api(() => Cache))
 
 if (env === 'prod') {
-/*
   const rollbar = Rollbar.init({
     accessToken: '4555957947d347a69caf6e017ea72f51',
     handleUncaughtExceptions: true,
@@ -791,9 +750,8 @@ if (env === 'prod') {
       environment: env
     }
   })
-  */
 
-  //app.use(rollbar.errorHandler())
+  app.use(rollbar.errorHandler())
   app.use(
     minifyHTML({
       override: true,
