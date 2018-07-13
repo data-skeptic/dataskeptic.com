@@ -9,8 +9,6 @@ const proposalsDocs = new aws.DynamoDB.DocumentClient()
 
 const baseapi = process.env.BASE_API || 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/prod'
 
-console.log("baseapi=" + baseapi)
-
 import { convert_items_to_json } from 'daos/episodes'
 
 export function get_contributors() {
@@ -45,7 +43,6 @@ function populate_one(cm, blog) {
   })
   cm[prettyname] = ''
 }
-
 export function populate_content_map(blogs, data) {
   var cm = data['content_map']
   var n = blogs.length
@@ -55,6 +52,7 @@ export function populate_content_map(blogs, data) {
     populate_one(cm, blog)
   }
 }
+
 
 export function get_podcasts_by_guid(dispatch, guid) {
   var my_cache = global.my_cache
@@ -72,7 +70,7 @@ export function get_podcasts_by_guid(dispatch, guid) {
   } else {
     console.log('Getting episodes ' + guid)
     axios
-      .get('/api/episodes/get/' + guid)
+      .get(baseapi + '/api/episodes/get/' + guid)
       .then(function(result) {
         console.log('Return of ' + guid)
         var episode = result['data']
@@ -202,7 +200,7 @@ function xml_to_list(xml) {
 
 const getEpisodesData = guids => {
   console.log('getEpisodesData')
-  const uri = '/api/episodes/get'
+  const uri = baseapi + '/api/episodes/get'
   console.log(uri)
   return axios.post(uri, { guids }).then(res => res.data)
 }
@@ -212,7 +210,6 @@ function get_and_process_feed(replacements, feed_uri) {
   return axios
     .get(feed_uri)
     .then(function(result) {
-      console.log("rrrrrrrrrrrrrrrrr")
       var xml = result['data']
       var data = xml_to_list(xml)
       var mxml = xml
@@ -252,8 +249,7 @@ function get_and_process_feed(replacements, feed_uri) {
       return data
     })
     .then(data => {
-      console.log("[(data)]")
-      console.log(Object.keys(data))
+      console.log("data.episodes_list" + data.episodes_list)
       return getEpisodesData(data.episodes_list)
         .then(episodesData => {
           episodesData.forEach(episodeData => {

@@ -451,7 +451,7 @@ function api_router(req, res) {
  * INITIALIZE STORE
  */
 
-/*
+
 function inject_folders(store, my_cache) {
   var folders = my_cache.folders
   store.dispatch({ type: 'ADD_FOLDERS', payload: folders })
@@ -472,7 +472,7 @@ function inject_years(store, my_cache) {
   years = years.sort().reverse()
   store.dispatch({ type: 'SET_YEARS', payload: years })
 }
-*/
+
 
 const getFeaturesAPI = pageType =>
   axios.get(`${base_url}/cms${pageType ? '/' + pageType : ''}`)

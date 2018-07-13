@@ -204,6 +204,8 @@ const doRefresh = () => {
 
       // RFC
       Cache.rfc = rfc
+      console.log('cacheee' + JSON.stringify(Cache))
+
     })
     .then(() => console.log('-[Refreshing Complete]-'))
     .catch(err => {
@@ -481,7 +483,7 @@ function api_router(req, res) {
  * INITIALIZE STORE
  */
 
-/*
+
 function inject_folders(store, my_cache) {
   var folders = my_cache.folders
   store.dispatch({ type: 'ADD_FOLDERS', payload: folders })
@@ -490,19 +492,25 @@ function inject_folders(store, my_cache) {
 function inject_years(store, my_cache) {
   var episodes_list = my_cache.episodes_list
   var episodes_map = my_cache.episodes_map
+  console.log('episodes_list' + JSON.stringify(episodes_list))
+  console.log('episodes_map' + JSON.stringify(episodes_map))
+  
   var ymap = {}
   for (var i = 0; i < episodes_list.length; i++) {
     var guid = episodes_list[i]
     var episode = episodes_map[guid]
     var pd = new Date(episode.pubDate)
     var year = pd.getYear() + 1900
+    console.log('year - ' + year)
     ymap[year] = 1
   }
   var years = Object.keys(ymap)
+
+  
   years = years.sort().reverse()
   store.dispatch({ type: 'SET_YEARS', payload: years })
 }
-*/
+
 
 const getFeaturesAPI = pageType =>
   axios.get(`${base_url}/cms${pageType ? '/' + pageType : ''}`)
@@ -579,9 +587,9 @@ async function inject_contributor(store, cache, pathanme) {
 
 async function updateState(store, pathname, req) {
   // TODO: find a way to better sync this section with each page's componentWillMount
-  console.log('server.jsx : updateState for ' + pathname)
-  //inject_folders(store, Cache)
-  //inject_years(store, Cache)
+  console.log('server.js : updateState for ' + pathname)
+  inject_folders(store, Cache)
+  inject_years(store, Cache)
 
   store.dispatch({
     type: 'PROPOSAL_SET_BUCKET',
