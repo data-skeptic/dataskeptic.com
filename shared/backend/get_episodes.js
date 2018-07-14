@@ -2,8 +2,6 @@ module.exports = {
   get_episodes: function(
     req,
     res,
-    episodes_map,
-    episodes_list,
     exclude = ['/episodes', '/transcripts']
   ) {
     console.log('get_episodes')
@@ -11,7 +9,7 @@ module.exports = {
     var query = req.query
     var url = req.url
     var offset = parseInt(query['offset']) || 0
-    var limit = parseInt(query['limit']) || 52 + 5 // We sometimes release more than once a week :)
+    var limit = parseInt(query['limit']) || 52 + 20 // We sometimes release more than once a week :)
     var year = query['year'] || -2
     var s = limit
     console.log(['eps', episodes_list.length])
