@@ -178,9 +178,7 @@ const doRefresh = () => {
       // but wait until all of them will be done
       console.log('-[All cache data fetched]-')
       const [products, contributors, rfc] = results
-      console.log(contributors)
       
-
       // episodes
       /*
       const {
@@ -194,8 +192,8 @@ const doRefresh = () => {
       Cache.episodes_map = {}
       Cache.episodes_list = []
       Cache.episodes_content = {}
-      Cache.episodes_blog_map = episodes_blog_map
-      Cache.member_feed = member_feed
+      Cache.episodes_blog_map = {}
+      Cache.member_feed = {}
 
       // products
       Cache.products = null
@@ -359,7 +357,6 @@ function api_router(req, res) {
   } else if (req.url.indexOf('/api/contributors/list') == 0) {
     var url = `${base_url}/blog/contributors/list`
     return axios.get(url).then(function(contributors) {
-      console.log(contributors)
       return res.status(200).end(JSON.stringify(contributors))    
     }).catch(function(err) {
       console.log(err)
@@ -368,7 +365,6 @@ function api_router(req, res) {
   } else if (req.url.indexOf('/api/blog/contributors/list') == 0) {
     var url = `${base_url}/blog/contributors/list`
     return axios.get(url).then(function(contributors) {
-      console.log(contributors)
       return res.status(200).end(JSON.stringify(contributors))    
     }).catch(function(err) {
       console.log(err)
@@ -513,10 +509,8 @@ async function inject_homepage(store, my_cache, location) {
   const guid = res.data.latest_episode.guid
   const episode = undefined
   if (episode == undefined) {
-    console.log("***** get ep " + guid)
     var promise = getEpisode(guid)
     promise.then(function(res) {
-        console.log("&&&&&")
         var episode = res.data
         store.dispatch({
           type: 'ADD_EPISODES',

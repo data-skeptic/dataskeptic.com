@@ -56,9 +56,7 @@ export default function siteReducer(state = defaultState, action) {
       nstate.contact_form.send = 'no'
       break
     case 'SET_CONTRIBUTORS':
-      console.log('SET_CONTRIBUTORS')
       var contributors = action.payload
-      console.log(contributors)
       nstate.contributors = clone(contributors)
       break
     case 'SET_CONTRIBUTOR_BLOGS':
@@ -80,13 +78,10 @@ export default function siteReducer(state = defaultState, action) {
       nstate.slackstatus = msg
       break
     case 'LOAD_CONTRIBUTORS':
-      console.log('LOAD_CONTRIBUTORS')
       var dispatch = action.payload.dispatch
       var n = Object.keys(nstate.contributors).length
-      console.log(["n", n])
       if (n == 0) {
         get_contributors().then(function(contributors) {
-            console.log(contributors)
             dispatch({ type: 'SET_CONTRIBUTORS', payload: contributors })
         }). catch(function(err) {
             console.log("Could not load contributors")

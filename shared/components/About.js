@@ -144,7 +144,7 @@ const Avatar = styled.img`
 
 export default page(
   connect(state => ({
-    contributors: state.site.get('contributors').toJS()
+    site: state.site
   }))(About),
   {
     title: 'About Data Skeptic'
