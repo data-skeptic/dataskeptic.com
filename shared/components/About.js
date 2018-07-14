@@ -15,6 +15,22 @@ const markdown = text => {
 }
 
 class About extends Component {
+
+  componentWillMount() {
+    const dispatch = this.props.dispatch
+    dispatch({type: 'LOAD_CONTRIBUTORS', payload: {dispatch}})
+  }
+
+  componentWillReceiveProps(nextProps) {
+      const dispatch = this.props.dispatch
+      var opathname = this.props.location.pathname
+      var npathname = nextProps.location.pathname
+      var request_reload = npathname != opathname
+      if (request_reload) {
+          dispatch({type: 'LOAD_CONTRIBUTORS', payload: {dispatch}})
+      }
+  }
+
   renderContributor = contributor => (
     <div className="media" key={contributor.contributor_id}>
       <div className="media-left">
@@ -46,13 +62,8 @@ class About extends Component {
   sortContributors = contributors => orderBy(contributors, 'sort_rank')
 
   render() {
-    console.log("=====[ABOUT US RENDER]=====")
-    console.log(this.props)
-    console.log("----------------------------")
-    const { contributors } = this.props
-    console.log(contributors)
-    console.log("=====[ABOUT US RENDER2]=====")
-
+    var osite = this.props.site.toJS()
+    var contributors = osite['contributors']
     return (
       <div className="center-about">
         <div className="row">

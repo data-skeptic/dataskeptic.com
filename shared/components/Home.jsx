@@ -11,6 +11,7 @@ class Home extends Component {
   componentWillMount() {
     const dispatch = this.props.dispatch
 
+    dispatch({type: 'LOAD_CONTRIBUTORS', payload: {dispatch}})
     if (!this.props.cms.get('home_loaded')) {
       dispatch({
         type: 'CMS_GET_HOMEPAGE_CONTENT',
@@ -27,6 +28,8 @@ class Home extends Component {
   }
 
   render() {
+    var osite = this.props.site.toJS()
+    var contributors = osite['contributors']
     return (
       <div>
         <EmailPopupContainer />
@@ -45,6 +48,6 @@ class Home extends Component {
   }
 }
 
-export default page(connect(state => ({ cms: state.cms }))(Home), {
+export default page(connect(state => ({ cms: state.cms, site: state.site }))(Home), {
   title: 'Data Skeptic'
 })
