@@ -32,7 +32,7 @@ import {
   apiMemberFeed,
   loadEpisodes,
   loadProducts,
-  load,
+  loadYearRange,
   get_contributors,
   loadCurrentRFC
 } from 'daos/serverInit'
@@ -170,6 +170,7 @@ const doRefresh = () => {
   // Let node make requests asynchronous
   return Promise.all([
     loadEpisodes(),
+    loadYearRange(),
     loadProducts(),
     get_contributors(),
     loadCurrentRFC()
@@ -177,7 +178,7 @@ const doRefresh = () => {
     .then(results => {
       // but wait until all of them will be done
 
-      const [episodes, products, contributors, rfc] = results
+      const [episodes, yearRanges, products, contributors, rfc] = results
       console.log('-[All cache data fetched]-')
 
       // episodes
@@ -193,6 +194,7 @@ const doRefresh = () => {
       Cache.episodes_content = episodes_content
       Cache.episodes_blog_map = episodes_blog_map
       Cache.member_feed = member_feed
+      Cache.yearRanges = clone(yearRanges)
 
       // products
       Cache.products = null
@@ -204,7 +206,6 @@ const doRefresh = () => {
 
       // RFC
       Cache.rfc = rfc
-      console.log('cacheee' + JSON.stringify(Cache))
 
     })
     .then(() => console.log('-[Refreshing Complete]-'))
@@ -490,25 +491,22 @@ function inject_folders(store, my_cache) {
 }
 
 function inject_years(store, my_cache) {
-  var episodes_list = my_cache.episodes_list
-  var episodes_map = my_cache.episodes_map
-  console.log('episodes_list' + JSON.stringify(episodes_list))
-  console.log('episodes_map' + JSON.stringify(episodes_map))
-  
+    
+  var yearsData = my_cache.yearRanges
+
   var ymap = {}
-  for (var i = 0; i < episodes_list.length; i++) {
-    var guid = episodes_list[i]
-    var episode = episodes_map[guid]
-    var pd = new Date(episode.pubDate)
-    var year = pd.getYear() + 1900
-    console.log('year - ' + year)
+  for (var i = 0; i < yearsData.length; i++) {
+    var rangeData = yearsData[i]
+    var pd = new Date(rangeData.min_date)
+    var year = pd.getFullYear()
     ymap[year] = 1
   }
+
   var years = Object.keys(ymap)
 
-  
   years = years.sort().reverse()
   store.dispatch({ type: 'SET_YEARS', payload: years })
+
 }
 
 

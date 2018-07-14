@@ -127,6 +127,21 @@ function get_member_feed_replacements() {
     })
 }
 
+export function loadYearRange() {
+
+  var url = baseapi + '/podcast/episodes/range'
+  return axios
+    .get(url)
+    .then(function(result) {
+      var yearRanges = result['data']
+      return yearRanges
+    })
+    .catch(err => {
+      console.log(`loadYearRange ERROR:`)
+      console.error(err)
+    })
+  
+}
 export async function loadEpisodes() {
   console.log('-[Refreshing episodes]-')
   var feed_uri = 'http://dataskeptic.libsyn.com/rss'
@@ -189,7 +204,6 @@ function xml_to_list(xml) {
 const getEpisodesData = guids => {
   console.log('getEpisodesData')
   const uri = baseapi + '/api/episodes/get'
-  console.log(uri)
   return axios.post(uri, { guids }).then(res => res.data)
 }
 
@@ -226,7 +240,6 @@ function get_and_process_feed(replacements, feed_uri) {
         axios
           .post(url)
           .then(function(result) {
-            console.log(result.data)
             // TODO: should we dispatch some action?
           })
           .catch(err => {
@@ -237,7 +250,6 @@ function get_and_process_feed(replacements, feed_uri) {
       return data
     })
     .then(data => {
-      console.log("data.episodes_list" + data.episodes_list)
       return getEpisodesData(data.episodes_list)
         .then(episodesData => {
           episodesData.forEach(episodeData => {
