@@ -407,7 +407,7 @@ function api_router(req, res) {
     var products = Cache.products
     return res.status(200).end(JSON.stringify(products))
   } else if (req.url.indexOf('/api/episodes/list') == 0) {
-    get_episodes(req, res)
+    get_episodes(req, res, Cache.episodes_map, Cache.episodes_list)
     return true
   } else if (req.url.indexOf('/api/v1/store/order/add') == 0) {
     add_order(req)
