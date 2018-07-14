@@ -44,10 +44,20 @@ function populate_one(cm, blog) {
   cm[prettyname] = ''
 }
 
+export function populate_content_map(blogs, data) {
+  var cm = data['content_map']
+  var n = blogs.length
+  n = 4
+  for (var i = 0; i < n; i++) {
+    var blog = blogs[i]
+    populate_one(cm, blog)
+  }
+}
+
 export function get_podcasts_by_guid(dispatch, guid) {
     console.log('Getting episodes ' + guid)
     axios
-      .get('/api/episodes/get/' + guid)
+      .get(baseapi + '/api/episodes/get/' + guid)
       .then(function(result) {
         console.log('Return of ' + guid)
         var episode = result['data']
@@ -178,7 +188,7 @@ function xml_to_list(xml) {
 
 const getEpisodesData = guids => {
   console.log('getEpisodesData')
-  const uri = '/api/episodes/get'
+  const uri = baseapi + '/api/episodes/get'
   console.log(uri)
   return axios.post(uri, { guids }).then(res => res.data)
 }
@@ -227,8 +237,7 @@ function get_and_process_feed(replacements, feed_uri) {
       return data
     })
     .then(data => {
-      console.log("[(data)]")
-      console.log(Object.keys(data))
+      console.log("data.episodes_list" + data.episodes_list)
       return getEpisodesData(data.episodes_list)
         .then(episodesData => {
           episodesData.forEach(episodeData => {
