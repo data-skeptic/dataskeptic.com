@@ -83,7 +83,6 @@ class Blog extends Component {
     const { blogList, getContributor } = this.props
     return (
       <Container>
-        <Title>From the Blog</Title>
         <BlogBox blogList={blogList} getContributor={getContributor} />
       </Container>
     )

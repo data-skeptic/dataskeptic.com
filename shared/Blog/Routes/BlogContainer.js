@@ -6,7 +6,6 @@ import { connect } from 'react-redux'
 import NotFound from '../../NotFound/Components/NotFound'
 import BlogList from '../Components/BlogList'
 import BlogNav from '../Components/BlogNav'
-import BlogItem from '../Components/BlogItem'
 
 import PaginationContainer from '../../Pagination/Containers/PaginationContainer'
 

@@ -56,7 +56,6 @@ class BlogRouter extends Component {
         const blogs = [exact]
         const prefix = pname
         const payload = { blogs, prefix }
-        console.log(['CMS_SET_RECENT_BLOGS', blogs])
         dispatch({ type: 'CMS_SET_RECENT_BLOGS', payload: payload })
       } else if (blogs[0]['blog_id'] !== exact['blog_id']) {
         request_reload = true

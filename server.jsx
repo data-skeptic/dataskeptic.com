@@ -66,7 +66,7 @@ import axios from 'axios'
 
 import minifyHTML from 'express-minify-html'
 
-//import Rollbar from 'rollbar'
+import Rollbar from 'rollbar'
 import http from 'http'
 var Influx = require('influx')
 
