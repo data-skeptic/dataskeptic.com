@@ -55,7 +55,6 @@ export function populate_content_map(blogs, data) {
 }
 
 export function get_podcasts_by_guid(dispatch, guid) {
-    console.log('Getting episodes ' + guid)
     axios
       .get(baseapi + '/api/episodes/get/' + guid)
       .then(function(result) {
@@ -76,7 +75,6 @@ export function load_blogs(prefix, limit, offset, dispatch) {
     offset +
     '&prefix=' +
     prefix
-  console.log(url)
   axios
     .get(url)
     .then(function(result) {
@@ -87,8 +85,6 @@ export function load_blogs(prefix, limit, offset, dispatch) {
           guids.push(blog.guid)
         }
       }
-      console.log("blogs")
-      console.log(blogs)
       if (blogs.length == 1) {
         var src_file = blogs[0]['src_file']
         var payload = { src_file, dispatch }
@@ -96,7 +92,6 @@ export function load_blogs(prefix, limit, offset, dispatch) {
       }
       if (guids.length == 1) {
         var guid = guids[0]
-        console.log(["get_podcasts_by_guid", guid])
         get_podcasts_by_guid(dispatch, guid)
       } else if (guids.length > 1) {
         // TODO: grab them all and do something nice on the blog list page
@@ -202,13 +197,11 @@ function xml_to_list(xml) {
 }
 
 const getEpisodesData = guids => {
-  console.log('getEpisodesData')
   const uri = baseapi + '/api/episodes/get'
   return axios.post(uri, { guids }).then(res => res.data)
 }
 
 function get_and_process_feed(replacements, feed_uri) {
-  console.log('Getting feed ' + feed_uri)
   return axios
     .get(feed_uri)
     .then(function(result) {
