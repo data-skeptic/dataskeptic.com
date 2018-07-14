@@ -177,10 +177,12 @@ const doRefresh = () => {
     .then(results => {
       // but wait until all of them will be done
       console.log('-[All cache data fetched]-')
-      const [episodes, products, contributors, rfc] = results
+      const [products, contributors, rfc] = results
+      console.log(contributors)
       
 
       // episodes
+      /*
       const {
         episodes_map,
         episodes_blog_map,
@@ -188,9 +190,10 @@ const doRefresh = () => {
         episodes_content,
         member_feed
       } = episodes
-      Cache.episodes_map = episodes_map
-      Cache.episodes_list = episodes_list
-      Cache.episodes_content = episodes_content
+      */
+      Cache.episodes_map = {}
+      Cache.episodes_list = []
+      Cache.episodes_content = {}
       Cache.episodes_blog_map = episodes_blog_map
       Cache.member_feed = member_feed
 
@@ -354,13 +357,23 @@ function api_router(req, res) {
     order_list(req, res, stripe_key)
     return true
   } else if (req.url.indexOf('/api/contributors/list') == 0) {
-    var req = req.body
-    var resp = Cache.contributors
-    return res.status(200).end(JSON.stringify(resp))
+    var url = `${base_url}/blog/contributors/list`
+    return axios.get(url).then(function(contributors) {
+      console.log(contributors)
+      return res.status(200).end(JSON.stringify(contributors))    
+    }).catch(function(err) {
+      console.log(err)
+      return res.status(500).end("{}")    
+    })
   } else if (req.url.indexOf('/api/blog/contributors/list') == 0) {
-    var req = req.body
-    var resp = Cache.contributors
-    return res.status(200).end(JSON.stringify(resp))
+    var url = `${base_url}/blog/contributors/list`
+    return axios.get(url).then(function(contributors) {
+      console.log(contributors)
+      return res.status(200).end(JSON.stringify(contributors))    
+    }).catch(function(err) {
+      console.log(err)
+      return res.status(500).end("{}")    
+    })
   } else if (req.url.indexOf('/api/Related') == 0) {
     related_content(req, res)
     return true
@@ -478,13 +491,15 @@ const getFeaturesAPI = pageType =>
   axios.get(`${base_url}/cms${pageType ? '/' + pageType : ''}`)
 
 function getContributorPosts(contributor) {
+  console.log("Server getting contributors!")
   return axios
     .get(`${base_url}/blog/list?contributor=${contributor}&limit=21`)
     .then(res => res.data)
+    .catch(err => console.log)
 }
 
 function getEpisode(guid) {
-  var uri = `/api/episodes/get/${guid}`
+  var uri = `${base_url}/podcast/episodes/get?guid=${guid}`
   return axios.get(uri)
 }
 
@@ -496,10 +511,12 @@ async function inject_homepage(store, my_cache, location) {
   })
 
   const guid = res.data.latest_episode.guid
-  const episode = my_cache.episodes_map[guid]
+  const episode = undefined
   if (episode == undefined) {
+    console.log("***** get ep " + guid)
     var promise = getEpisode(guid)
     promise.then(function(res) {
+        console.log("&&&&&")
         var episode = res.data
         store.dispatch({
           type: 'ADD_EPISODES',
@@ -770,16 +787,10 @@ if (env === 'prod') {
 
 const renderPage = async (req, res) => {
   if (req.url == '/favicon.ico') {
-    return res.redirect(
-      301,
-      'https://s3.amazonaws.com/dataskeptic.com/favicon.ico'
-    )
+    return res.redirect(301, 'https://s3.amazonaws.com/dataskeptic.com/favicon.ico')
   }
   if (req.url == '/data-skeptic-bonus.xml') {
-    return res.redirect(
-      307,
-      'https://s3.amazonaws.com/data-skeptic-bonus-feed/data-skeptic-bonus.xml'
-    )
+    return res.redirect(307, 'https://s3.amazonaws.com/data-skeptic-bonus-feed/data-skeptic-bonus.xml')
   }
   if (req.url.indexOf('/src-') > 0) {
     var u = req.url
@@ -869,6 +880,7 @@ const renderPage = async (req, res) => {
 doRefresh().then(() => {
   console.log('CACHE IS now READY')
   app.use(renderPage)
+  console.log('yay!')
 })
 
 export default app

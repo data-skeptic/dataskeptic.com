@@ -3,6 +3,8 @@ import { fromJS } from 'immutable'
 import { v4 } from 'uuid'
 import { clone } from 'lodash'
 
+import { get_contributors } from '../daos/serverInit'
+
 /**
  * Whenever some reducer initial state have been changed update current schema version
  * Unique version number is total count of commits in `master`
@@ -73,6 +75,20 @@ export default function siteReducer(state = defaultState, action) {
     case 'SLACK_UPDATE':
       var msg = action.payload.msg
       nstate.slackstatus = msg
+      break
+    case 'LOAD_CONTRIBUTORS':
+      var dispatch = action.payload.dispatch
+      var n = Object.keys(nstate.contributors).length
+      console.log(["n", n])
+      if (n == 0) {
+        get_contributors().then(function(contributors) {
+            console.log(contributors)
+            dispatch({ type: 'SET_CONTRIBUTORS', payload: contributors })
+        }). catch(function(err) {
+            console.log("Could not load contributors")
+            console.log(err)
+        })        
+      }
       break
     case 'UPDATE_CONTACT_FORM':
       if (action.payload.name != undefined) {

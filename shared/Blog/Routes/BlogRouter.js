@@ -65,6 +65,7 @@ class BlogRouter extends Component {
       console.log('Asking blogs to reload')
       var payload = { limit: 10, offset: 0, prefix: pname, dispatch }
       dispatch({ type: 'CMS_LOAD_RECENT_BLOGS', payload })
+      dispatch({type: 'LOAD_CONTRIBUTORS', payload: {dispatch}})
     }
   }
 

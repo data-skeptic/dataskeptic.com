@@ -14,7 +14,6 @@ import { convert_items_to_json } from 'daos/episodes'
 export function get_contributors() {
   console.log('-[Refreshing Contributors]-')
   const uri = baseapi + '/blog/contributors/list'
-  console.log(uri)
   return axios
     .get(uri)
     .then(function(result) {

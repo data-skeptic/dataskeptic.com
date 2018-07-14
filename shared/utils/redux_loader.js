@@ -75,25 +75,27 @@ export function get_podcasts(dispatch, pathname) {
     })
 }
 
-export function get_podcasts_from_cache(my_cache, pathname) {
-  var year = year_from_path(pathname)
-  var episodes_list = my_cache.episodes_list
-  var episodes_map = my_cache.episodes_map
-  var episodes = []
-  for (var i = 0; i < episodes_list.length; i++) {
-    var guid = episodes_list[i]
-    var episode = episodes_map[guid]
-    var pd = new Date(episode.pubDate)
-    var eyear = pd.getYear() + 1900
-    if (year == -1) {
-      year = eyear
+    export function get_podcasts_from_cache(my_cache, pathname) {
+        var year = year_from_path(pathname)
+        var episodes_list = my_cache.episodes_list
+        var episodes_map = my_cache.episodes_map
+        var episodes = []
+        if (episodes_list != undefined) {
+            for (var i = 0; i < episodes_list.length; i++) {
+                var guid = episodes_list[i]
+                var episode = episodes_map[guid]
+                var pd = new Date(episode.pubDate)
+                var eyear = pd.getYear() + 1900
+                if (year == -1) {
+                    year = eyear
+                }
+                if (year == eyear) {
+                    episodes.push(episode)
+                }
+            }
+        }
+        return episodes
     }
-    if (year == eyear) {
-      episodes.push(episode)
-    }
-  }
-  return episodes
-}
 
 export function get_products(dispatch) {
   var my_cache = global.my_cache

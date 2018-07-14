@@ -46,7 +46,12 @@ class About extends Component {
   sortContributors = contributors => orderBy(contributors, 'sort_rank')
 
   render() {
+    console.log("=====[ABOUT US RENDER]=====")
+    console.log(this.props)
+    console.log("----------------------------")
     const { contributors } = this.props
+    console.log(contributors)
+    console.log("=====[ABOUT US RENDER2]=====")
 
     return (
       <div className="center-about">

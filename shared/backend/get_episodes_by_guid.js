@@ -15,7 +15,7 @@ module.exports = {
       return res.status(400).end('bad url')
     }
     url = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/prod/podcast/episodes/get_by_guids"
-    if (episodes_list.length == 0) {
+    if (episodes_list == undefined || episodes_list.length == 0) {
       var request_body = {"guids": [guid]}
       axios.post(url, request_body).then(function(data) {
         var blogs = data.data
