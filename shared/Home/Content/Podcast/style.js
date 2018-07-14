@@ -7,8 +7,7 @@ export const PostTitle = Title.extend`
   }
 `
 export const Container = styled.div`
-  border-top: 1px solid #979797;
-  padding: 48px 0 0px 0px;
+  padding: 2px 0 0px 0px;
 
   @media (max-width: 768px) {
     border: 0;
@@ -17,7 +16,7 @@ export const Container = styled.div`
 `
 
 export const PodcastBox = styled.div`
-  background-color: #f4f4f4;
+  background-color: #e4dcc6;
   padding: 32px;
   margin-top: 24px;
   @media (max-width: 414px) {

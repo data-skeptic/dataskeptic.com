@@ -2,8 +2,7 @@ import styled from 'styled-components'
 import { Link } from 'react-router'
 
 export const Container = styled.div`
-  border-top: 1px solid #979797;
-  padding: 48px 0;
+  padding: 2px 0;
   @media (max-width: 768px) {
     border: 0;
     padding: 0;
@@ -21,7 +20,7 @@ export const BlogItem = styled.div`
 export const Title = styled.div`
   color: #2d1454;
   font-size: 24px;
-  line-height: 31px;
+  line-height: 0px;
   font-weight: bold;
   text-transform: uppercase;
 `
