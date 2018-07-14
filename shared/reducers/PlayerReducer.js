@@ -197,6 +197,26 @@ export default function PlayerReducer(state = defaultState, action) {
           })
       }
       break
+    case 'PLAY_EPISODE':
+      var episode = action.payload
+      var dispatch = action.dispatch
+      var guid = episode.guid
+      var mp3 = episode.mp3
+      if (mp3 == undefined) {
+        console.log("get guid " + guid)
+        axios
+            .get('/api/episodes/get/' + guid)
+            .then(function(result) {
+              var episode = result['data']
+              dispatch({ type: 'PLAY_EPISODE2', payload: episode, dispatch })
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        break
+      } else {
+          // continue on to next function
+      }
     case 'PLAY_EPISODE2':
       var episode = action.payload
       nstate.seekPosition = null
@@ -226,20 +246,6 @@ export default function PlayerReducer(state = defaultState, action) {
       }
       savePlaying(nstate)
       savePlayingMeta(nstate)
-      break
-    case 'PLAY_EPISODE':
-      var episode = action.payload
-      var dispatch = action.dispatch
-      var guid = episode.guid
-      axios
-          .get('/api/episodes/get/' + guid)
-          .then(function(result) {
-            var episode = result['data']
-            dispatch({ type: 'PLAY_EPISODE2', payload: episode, dispatch })
-          })
-          .catch(err => {
-            console.log(err)
-          })
       break
 
     case 'STOP_PLAYBACK':

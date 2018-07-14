@@ -52,18 +52,11 @@ export default function cmsReducer(state = defaultState, action) {
     case 'CMS_LOAD_BLOG_CONTENT':
       var dispatch = action.payload.dispatch
       var src_file = action.payload.src_file
-      var check = nstate.blog_content[src_file]
-      if (check == undefined) {
-        console.log('Not in memory, going to get from s3')
-        nstate.blog_state = 'loading'
-        get_blog(src_file).then(function(content) {
-            var payload = {src_file, content}
-            dispatch({ type: 'CMS_ADD_BLOG_CONTENT', payload })
-        })
-      } else {
-        console.log('Blog already in cache')
-        nstate.blog_state = 'loaded'
-      }
+      nstate.blog_state = 'loading'
+      get_blog(src_file).then(function(content) {
+          var payload = {src_file, content}
+          dispatch({ type: 'CMS_ADD_BLOG_CONTENT', payload })
+      })
       break
     case 'CMS_EXPIRE_ALL_CONTENT':
       nstate.blog_content = {}
@@ -71,7 +64,6 @@ export default function cmsReducer(state = defaultState, action) {
     case 'CMS_ADD_BLOG_CONTENT':
       var src_file = action.payload.src_file
       var content = action.payload.content
-      console.log(['adding to blog_content', src_file, content == undefined])
       nstate.blog_content[src_file] = content
       nstate.blog_state = 'loaded'
       break
@@ -112,7 +104,6 @@ export default function cmsReducer(state = defaultState, action) {
     case 'CMS_SET_RECENT_BLOGS':
       var blogs = action.payload.blogs
       var prefix = action.payload.prefix
-      console.log(['CMS_SET_RECENT_BLOGS', prefix])
       nstate.blog_state = 'loaded'
       nstate.recent_blogs = blogs
       nstate.recent_blogs_loaded = true

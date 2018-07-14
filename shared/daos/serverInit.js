@@ -43,6 +43,7 @@ function populate_one(cm, blog) {
   })
   cm[prettyname] = ''
 }
+
 export function populate_content_map(blogs, data) {
   var cm = data['content_map']
   var n = blogs.length
@@ -53,21 +54,7 @@ export function populate_content_map(blogs, data) {
   }
 }
 
-
 export function get_podcasts_by_guid(dispatch, guid) {
-  var my_cache = global.my_cache
-  if (my_cache != undefined) {
-    console.log('my_cache')
-    var episodes = []
-    var allepisodes = get_podcasts_from_cache(my_cache, pathname)
-    console.log(typeof(allepisodes))
-    for (var episode of allepisodes) {
-      if (episode.guid == guid) {
-        episodes.push(episode)
-      }
-    }
-    dispatch({ type: 'ADD_EPISODES', payload: episodes })
-  } else {
     console.log('Getting episodes ' + guid)
     axios
       .get(baseapi + '/api/episodes/get/' + guid)
@@ -79,11 +66,8 @@ export function get_podcasts_by_guid(dispatch, guid) {
       .catch(err => {
         console.log(err)
       })
-  }
 }
 export function load_blogs(prefix, limit, offset, dispatch) {
-  console.log("baseapi")
-  console.log(baseapi)
   var url =
     baseapi +
     '/blog/list?limit=' +
@@ -92,6 +76,7 @@ export function load_blogs(prefix, limit, offset, dispatch) {
     offset +
     '&prefix=' +
     prefix
+  console.log(url)
   axios
     .get(url)
     .then(function(result) {
@@ -102,6 +87,8 @@ export function load_blogs(prefix, limit, offset, dispatch) {
           guids.push(blog.guid)
         }
       }
+      console.log("blogs")
+      console.log(blogs)
       if (blogs.length == 1) {
         var src_file = blogs[0]['src_file']
         var payload = { src_file, dispatch }
@@ -109,6 +96,7 @@ export function load_blogs(prefix, limit, offset, dispatch) {
       }
       if (guids.length == 1) {
         var guid = guids[0]
+        console.log(["get_podcasts_by_guid", guid])
         get_podcasts_by_guid(dispatch, guid)
       } else if (guids.length > 1) {
         // TODO: grab them all and do something nice on the blog list page

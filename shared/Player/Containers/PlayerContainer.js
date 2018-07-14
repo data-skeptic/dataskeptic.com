@@ -107,7 +107,8 @@ class PlayerContainer extends Component {
   }
 
   getGuid() {
-    const { guid = '' } = this.props.oepisode.toJS()
+    var episode = this.props.oepisode.toJS()
+    var guid = episode['guid'] || episode['dest']
     return guid
   }
 
@@ -402,10 +403,12 @@ class PlayerContainer extends Component {
     var duration = 1
     if (mp3s != undefined) {
       if (mp3s.length > 0) {
-        mp3 = mp3s[0]['dest']
+        mp3 = mp3s[0]['dest'] || mp3s['mp3']
         duration = mp3s[0]['duration']
         mp3 = normalizeSource(mp3)
-      }      
+      }
+    } else {
+      mp3 = normalizeSource(episode.mp3)
     }
     var img =
       'https://s3.amazonaws.com/dataskeptic.com/img/2017/primary-logo-400.jpg'

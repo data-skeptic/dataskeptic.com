@@ -28,21 +28,8 @@ class Home extends Component {
 
   render() {
     return (
-      // <div className="center">
-      //   <div className="row">
-      //     <div className="col-xs-12 col-sm-8">
-      //       <HomepageFeature />
-      //     </div>
-      //     <div className="col-xs-12 col-sm-4">
-      //        <EpisodePlayer episode={latest_episode} />
-      //        <MailingList />
-      //     </div>
-      //   </div>
-      //   <div className="clear"></div>
-      // </div>
       <div>
         <EmailPopupContainer />
-
         <HomeContainer />
         <div className="clear" />
         <div className="home-mailing-list-outer">

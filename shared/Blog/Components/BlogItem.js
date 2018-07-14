@@ -119,9 +119,7 @@ class BlogItem extends Component {
     var prettyname = blog.prettyname
     var src_file = blog.src_file
     var content = ocms.blog_content[src_file]
-    console.log(loading, src_file, content === undefined)
     if (content === undefined || loading) {
-      console.log('Waiting for content to load')
       return <Loading />
     }
     var related_items = blog.related
@@ -148,10 +146,9 @@ class BlogItem extends Component {
       if (related_mp3_items.length > 0) {
         const item_data = related_mp3_items[0] // hope it only one
         let mp3_item = {
-          img:
-            'https://s3.amazonaws.com/dataskeptic.com/img/primary-logo-400.jpg',
+          img: 'https://s3.amazonaws.com/dataskeptic.com/img/primary-logo-400.jpg',
           num: item_data['blog_id'],
-          guid: item_data['content_id'],
+          guid: item_data['guid'],
           pubDate: blog['publish_date'],
           mp3: item_data['dest'],
           desc: item_data['body'],
@@ -159,7 +156,6 @@ class BlogItem extends Component {
           title: item_data['title'],
           link: 'https://dataskeptic.com/blog/' + prettyname
         }
-
         top = (
           <div>
             <EpisodePlayer episode={mp3_item} />
