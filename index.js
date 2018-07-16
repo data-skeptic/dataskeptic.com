@@ -33,7 +33,9 @@ console.log(aws_accessKeyId)
 aws.config.update({
   accessKeyId: aws_accessKeyId,
   secretAccessKey: aws_secretAccessKey,
-  region: aws_region
+  region: aws_region,
+  s3BucketEndpoint: true,
+  endpoint: "https://4sevcujref.execute-api.us-east-1.amazonaws.com"
 })
 
 const s3 = new aws.S3()

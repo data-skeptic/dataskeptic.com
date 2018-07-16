@@ -6,7 +6,9 @@ import {
   generateChunkPath,
   startRecording,
   completeRecording,
-  convertFileToMp3
+  convertFileToMp3,
+  uploadToS3,
+  clearRecordingPath
 } from './recordingUtils'
 
 const run = server => {
@@ -54,18 +56,18 @@ const run = server => {
       console.log('stopped recording')
 
       convertFileToMp3(id).then(filePath => {
-        // uploadToS3(filePath, id, (err, data) => {
-        //     if (err) {
-        //         console.log('error')
-        //         console.error(err);
-        //     } else {
-        //         console.log('success')
-        //         console.dir(data);
-        //
-        //         console.log('Success upload to S3', id);
-        //         clearRecordingPath(id);
-        //     }
-        // });
+        uploadToS3(filePath, id, (err, data) => {
+            if (err) {
+                console.log('error')
+                console.error(err);
+            } else {
+                console.log('success')
+                console.dir(data);
+        
+                console.log('Success upload to S3', id);
+                clearRecordingPath(id);
+            }
+        });
       })
 
       if (fileWriter !== null) {

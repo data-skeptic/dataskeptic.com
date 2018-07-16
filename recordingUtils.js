@@ -7,20 +7,22 @@ const exec = require('child_process').exec
 const AWS = require('aws-sdk')
 
 //=========== CONFIG
-var aws_accessKeyId = process.env.AWS_ACCESS_KEY_ID
-var aws_secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
-var aws_region = process.env.AWS_REGION
+var aws_accessKeyId = process.env.AWS_ACCESS_KEY_ID        
+var aws_secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY 
+var aws_region = process.env.AWS_REGION                    
 
 AWS.config.update({
   accessKeyId: aws_accessKeyId,
   secretAccessKey: aws_secretAccessKey,
-  region: aws_region
+  region: aws_region,
+  s3BucketEndpoint: true,
+  endpoint: "https://4sevcujref.execute-api.us-east-1.amazonaws.com/"
 })
 //=========== CONFIG
 
-const LOCKED_FILE_NAME = process.env.RECORDING_LOCKED_FILE_NAME
-const AWS_RECORDS_BUCKET = process.env.RECORDING_AWS_PROPOSALS_BUCKET
-const BASE_RECORDS_PATH = '' //path.join(__dirname, process.env.RECORDING_SOURCE)
+const LOCKED_FILE_NAME = process.env.RECORDING_LOCKED_FILE_NAME       
+const AWS_RECORDS_BUCKET = process.env.RECORDING_AWS_PROPOSALS_BUCKET 
+const BASE_RECORDS_PATH = path.join(__dirname, process.env.RECORDING_SOURCE) 
 
 export const generateRecordPath = recordId =>
   path.join(BASE_RECORDS_PATH, recordId)
@@ -97,9 +99,10 @@ export const mergeFiles = (files, output) => {}
 export const uploadToS3 = (filePath, id, clb) => {
   console.log('Uploading to s3', filePath)
   console.dir(AWS_RECORDS_BUCKET)
-
+  
   fs.readFile(filePath, (err, data) => {
     if (err) throw err // Something went wrong!
+
     const s3bucket = new AWS.S3({ params: { Bucket: AWS_RECORDS_BUCKET } })
     s3bucket.createBucket(() => {
       const params = {

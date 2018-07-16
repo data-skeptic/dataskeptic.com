@@ -111,7 +111,9 @@ aws_proposals_bucket = process.env.RECORDING_AWS_PROPOSALS_BUCKET
 aws.config.update({
   accessKeyId: aws_accessKeyId,
   secretAccessKey: aws_secretAccessKey,
-  region: aws_region
+  region: aws_region,
+  s3BucketEndpoint: true,
+  endpoint: "https://4sevcujref.execute-api.us-east-1.amazonaws.com"
 })
 
 var influxdb = undefined
@@ -178,7 +180,7 @@ const doRefresh = () => {
       // but wait until all of them will be done
       console.log('-[All cache data fetched]-')
       const [episodes, products, contributors, rfc] = results
-      
+
 
       // episodes
       const {
@@ -543,7 +545,7 @@ async function inject_homepage(store, my_cache, location) {
       .catch(err => {
         console.log('Caught in server.jsx :(')
         console.log(err)
-      })  
+      })
   } else {
     store.dispatch({ type: 'ADD_EPISODES', payload: [episode] })
   }
