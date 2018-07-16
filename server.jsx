@@ -34,6 +34,7 @@ import {
   loadProducts,
   load,
   get_contributors,
+  loadYearRange,
   loadCurrentRFC
 } from 'daos/serverInit'
 import place_order from 'printful/wrapper'
@@ -172,12 +173,13 @@ const doRefresh = () => {
     //loadEpisodes(),
     loadProducts(),
     get_contributors(),
-    loadCurrentRFC()
+    loadCurrentRFC(),
+    loadYearRange()
   ])
     .then(results => {
       // but wait until all of them will be done
       console.log('-[All cache data fetched]-')
-      const [products, contributors, rfc] = results
+      const [products, contributors, rfc, yearRanges] = results
       
       // episodes
       /*
@@ -205,6 +207,9 @@ const doRefresh = () => {
 
       // RFC
       Cache.rfc = rfc
+
+      // Years
+      Cache.yearRanges = clone(yearRanges)
     })
     .then(() => console.log('-[Refreshing Complete]-'))
     .catch(err => {
@@ -467,16 +472,16 @@ function inject_folders(store, my_cache) {
 }
 
 function inject_years(store, my_cache) {
-  var episodes_list = my_cache.episodes_list
-  var episodes_map = my_cache.episodes_map
+  
+  var yearsData = my_cache.yearRanges
   var ymap = {}
-  for (var i = 0; i < episodes_list.length; i++) {
-    var guid = episodes_list[i]
-    var episode = episodes_map[guid]
-    var pd = new Date(episode.pubDate)
-    var year = pd.getYear() + 1900
+  for (var i = 0; i < yearsData.length; i++) {
+    var rangeData = yearsData[i]
+    var pd = new Date(rangeData.min_date)
+    var year = pd.getFullYear()
     ymap[year] = 1
   }
+
   var years = Object.keys(ymap)
   years = years.sort().reverse()
   store.dispatch({ type: 'SET_YEARS', payload: years })
@@ -555,6 +560,9 @@ async function inject_contributor(store, cache, pathanme) {
 }
 
 async function updateState(store, pathname, req) {
+
+  inject_years(store, Cache)
+  
   store.dispatch({
     type: 'PROPOSAL_SET_BUCKET',
     payload: { aws_proposals_bucket }
