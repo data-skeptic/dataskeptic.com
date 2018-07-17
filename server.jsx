@@ -477,9 +477,7 @@ function inject_years(store, my_cache) {
   var ymap = {}
   for (var i = 0; i < yearsData.length; i++) {
     var rangeData = yearsData[i]
-    var pd = new Date(rangeData.min_date)
-    var year = pd.getFullYear()
-    ymap[year] = 1
+    ymap[rangeData.year] = 1
   }
 
   var years = Object.keys(ymap)
