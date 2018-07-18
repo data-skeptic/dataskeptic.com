@@ -165,6 +165,6 @@
     "webpack-dev-middleware": "^1.12.2",
     "webpack-dev-server": "^3.1.4",
     "webpack-dotenv-plugin": "^2.0.2",
-    "webpack-hot-middleware": "^2.22.2"
+    "webpack-hot-middleware": "^2.22.3"
   }
 }
