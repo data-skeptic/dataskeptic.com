@@ -9,14 +9,11 @@ const proposalsDocs = new aws.DynamoDB.DocumentClient()
 
 const baseapi = process.env.BASE_API || 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/prod'
 
-console.log("baseapi=" + baseapi)
-
 import { convert_items_to_json } from 'daos/episodes'
 
 export function get_contributors() {
   console.log('-[Refreshing Contributors]-')
   const uri = baseapi + '/blog/contributors/list'
-  console.log(uri)
   return axios
     .get(uri)
     .then(function(result) {
@@ -57,22 +54,8 @@ export function populate_content_map(blogs, data) {
 }
 
 export function get_podcasts_by_guid(dispatch, guid) {
-  var my_cache = global.my_cache
-  if (my_cache != undefined) {
-    console.log('my_cache')
-    var episodes = []
-    var allepisodes = get_podcasts_from_cache(my_cache, pathname)
-    console.log(typeof(allepisodes))
-    for (var episode of allepisodes) {
-      if (episode.guid == guid) {
-        episodes.push(episode)
-      }
-    }
-    dispatch({ type: 'ADD_EPISODES', payload: episodes })
-  } else {
-    console.log('Getting episodes ' + guid)
     axios
-      .get('/api/episodes/get/' + guid)
+      .get(baseapi + '/api/episodes/get/' + guid)
       .then(function(result) {
         console.log('Return of ' + guid)
         var episode = result['data']
@@ -81,11 +64,8 @@ export function get_podcasts_by_guid(dispatch, guid) {
       .catch(err => {
         console.log(err)
       })
-  }
 }
 export function load_blogs(prefix, limit, offset, dispatch) {
-  console.log("baseapi")
-  console.log(baseapi)
   var url =
     baseapi +
     '/blog/list?limit=' +
@@ -141,6 +121,21 @@ function get_member_feed_replacements() {
     })
 }
 
+export function loadYearRange() {
+
+  var url = baseapi + '/podcast/episodes/range'
+  return axios
+    .get(url)
+    .then(function(result) {
+      var yearRanges = result['data']
+      return yearRanges
+    })
+    .catch(err => {
+      console.log(`loadYearRange ERROR:`)
+      console.error(err)
+    })
+  
+}
 export async function loadEpisodes() {
   console.log('-[Refreshing episodes]-')
   var feed_uri = 'http://dataskeptic.libsyn.com/rss'
@@ -201,18 +196,14 @@ function xml_to_list(xml) {
 }
 
 const getEpisodesData = guids => {
-  console.log('getEpisodesData')
-  const uri = '/api/episodes/get'
-  console.log(uri)
+  const uri = baseapi + '/api/episodes/get'
   return axios.post(uri, { guids }).then(res => res.data)
 }
 
 function get_and_process_feed(replacements, feed_uri) {
-  console.log('Getting feed ' + feed_uri)
   return axios
     .get(feed_uri)
     .then(function(result) {
-      console.log("rrrrrrrrrrrrrrrrr")
       var xml = result['data']
       var data = xml_to_list(xml)
       var mxml = xml
@@ -241,7 +232,6 @@ function get_and_process_feed(replacements, feed_uri) {
         axios
           .post(url)
           .then(function(result) {
-            console.log(result.data)
             // TODO: should we dispatch some action?
           })
           .catch(err => {
@@ -252,8 +242,6 @@ function get_and_process_feed(replacements, feed_uri) {
       return data
     })
     .then(data => {
-      console.log("[(data)]")
-      console.log(Object.keys(data))
       return getEpisodesData(data.episodes_list)
         .then(episodesData => {
           episodesData.forEach(episodeData => {

@@ -27,7 +27,12 @@ export default class Howler extends Component {
   getCurrentTime = () => formatSeconds(this.getSeek())
   updatePlayer = () => {
     const currentPosition = this.getCurrentTime() || '00:00'
-    const progress = this.getSeek() * 100 / this.getDuration() || 0
+    const seek = this.getSeek() || 0
+    const dur = this.getDuration() || 1
+    const progress = seek * 100 / dur
+    if (progress == undefined) {
+      progress = 0
+    }
 
     this.setState({
       currentPosition: currentPosition,

@@ -34,6 +34,7 @@ import {
   loadProducts,
   load,
   get_contributors,
+  loadYearRange,
   loadCurrentRFC
 } from 'daos/serverInit'
 import place_order from 'printful/wrapper'
@@ -66,7 +67,7 @@ import axios from 'axios'
 
 import minifyHTML from 'express-minify-html'
 
-//import Rollbar from 'rollbar'
+import Rollbar from 'rollbar'
 import http from 'http'
 var Influx = require('influx')
 
@@ -174,15 +175,15 @@ const doRefresh = () => {
     //loadEpisodes(),
     loadProducts(),
     get_contributors(),
-    loadCurrentRFC()
+    loadCurrentRFC(),
+    loadYearRange()
   ])
     .then(results => {
       // but wait until all of them will be done
       console.log('-[All cache data fetched]-')
-      const [episodes, products, contributors, rfc] = results
-
-
+      const [products, contributors, rfc, yearRanges] = results
       // episodes
+      /*
       const {
         episodes_map,
         episodes_blog_map,
@@ -190,11 +191,12 @@ const doRefresh = () => {
         episodes_content,
         member_feed
       } = episodes
-      Cache.episodes_map = episodes_map
-      Cache.episodes_list = episodes_list
-      Cache.episodes_content = episodes_content
-      Cache.episodes_blog_map = episodes_blog_map
-      Cache.member_feed = member_feed
+      */
+      Cache.episodes_map = {}
+      Cache.episodes_list = []
+      Cache.episodes_content = {}
+      Cache.episodes_blog_map = {}
+      Cache.member_feed = {}
 
       // products
       Cache.products = null
@@ -206,6 +208,9 @@ const doRefresh = () => {
 
       // RFC
       Cache.rfc = rfc
+
+      // Years
+      Cache.yearRanges = clone(yearRanges)
     })
     .then(() => console.log('-[Refreshing Complete]-'))
     .catch(err => {
@@ -316,36 +321,6 @@ function api_router(req, res) {
     var req = req.body
     join_slack(req, res, slack_key)
     return true
-  } else if (req.url.indexOf('/api/messages') == 0) {
-    console.log(Object.keys(req))
-    var p = req.url
-    var post_data = req.body
-    var pd = JSON.stringify(post_data)
-    var options = {
-      hostname: 'bot.dataskeptic.com',
-      port: 3978,
-      path: req.url,
-      method: 'POST',
-      headers: req.headers
-    }
-    console.log(
-      '=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-='
-    )
-    var proxy = http.request(options, function(presponse) {
-      presponse.pipe(res, { end: true })
-    })
-    proxy.write(pd)
-    proxy.on('error', function(err) {
-      console.log(err)
-    })
-    console.log(
-      '=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-='
-    )
-    req.pipe(proxy, { end: true })
-    console.log(
-      '=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-='
-    )
-    return true
   } else if (req.url.indexOf('/api/members/feed') == 0) {
     apiMemberFeed(req, res, Cache.member_feed)
     return true
@@ -386,13 +361,21 @@ function api_router(req, res) {
     order_list(req, res, stripe_key)
     return true
   } else if (req.url.indexOf('/api/contributors/list') == 0) {
-    var req = req.body
-    var resp = Cache.contributors
-    return res.status(200).end(JSON.stringify(resp))
+    var url = `${base_url}/blog/contributors/list`
+    return axios.get(url).then(function(contributors) {
+      return res.status(200).end(JSON.stringify(contributors))    
+    }).catch(function(err) {
+      console.log(err)
+      return res.status(500).end("{}")    
+    })
   } else if (req.url.indexOf('/api/blog/contributors/list') == 0) {
-    var req = req.body
-    var resp = Cache.contributors
-    return res.status(200).end(JSON.stringify(resp))
+    var url = `${base_url}/blog/contributors/list`
+    return axios.get(url).then(function(contributors) {
+      return res.status(200).end(JSON.stringify(contributors))    
+    }).catch(function(err) {
+      console.log(err)
+      return res.status(500).end("{}")    
+    })
   } else if (req.url.indexOf('/api/Related') == 0) {
     related_content(req, res)
     return true
@@ -483,40 +466,40 @@ function api_router(req, res) {
  * INITIALIZE STORE
  */
 
-/*
+
 function inject_folders(store, my_cache) {
   var folders = my_cache.folders
   store.dispatch({ type: 'ADD_FOLDERS', payload: folders })
 }
 
 function inject_years(store, my_cache) {
-  var episodes_list = my_cache.episodes_list
-  var episodes_map = my_cache.episodes_map
+  
+  var yearsData = my_cache.yearRanges
   var ymap = {}
-  for (var i = 0; i < episodes_list.length; i++) {
-    var guid = episodes_list[i]
-    var episode = episodes_map[guid]
-    var pd = new Date(episode.pubDate)
-    var year = pd.getYear() + 1900
-    ymap[year] = 1
+  for (var i = 0; i < yearsData.length; i++) {
+    var rangeData = yearsData[i]
+    ymap[rangeData.year] = 1
   }
+
   var years = Object.keys(ymap)
   years = years.sort().reverse()
   store.dispatch({ type: 'SET_YEARS', payload: years })
 }
-*/
+
 
 const getFeaturesAPI = pageType =>
   axios.get(`${base_url}/cms${pageType ? '/' + pageType : ''}`)
 
 function getContributorPosts(contributor) {
+  console.log("Server getting contributors!")
   return axios
     .get(`${base_url}/blog/list?contributor=${contributor}&limit=21`)
     .then(res => res.data)
+    .catch(err => console.log)
 }
 
 function getEpisode(guid) {
-  var uri = `/api/episodes/get/${guid}`
+  var uri = `${base_url}/podcast/episodes/get?guid=${guid}`
   return axios.get(uri)
 }
 
@@ -528,15 +511,11 @@ async function inject_homepage(store, my_cache, location) {
   })
 
   const guid = res.data.latest_episode.guid
-  const episode = my_cache.episodes_map[guid]
+  const episode = undefined
   if (episode == undefined) {
-    console.log("episode undefined")
-    console.log(guid)
     var promise = getEpisode(guid)
     promise.then(function(res) {
-        console.log('EEEEEFFFFF')
         var episode = res.data
-        console.log(episode)
         store.dispatch({
           type: 'ADD_EPISODES',
           payload: [episode]
@@ -580,17 +559,14 @@ async function inject_contributor(store, cache, pathanme) {
 }
 
 async function updateState(store, pathname, req) {
-  // TODO: find a way to better sync this section with each page's componentWillMount
-  console.log('server.jsx : updateState for ' + pathname)
-  //inject_folders(store, Cache)
-  //inject_years(store, Cache)
 
+  inject_years(store, Cache)
+  
   store.dispatch({
     type: 'PROPOSAL_SET_BUCKET',
     payload: { aws_proposals_bucket }
   })
   if (!isEmpty(Cache.contributors)) {
-    console.log('using cache for contributors')
     store.dispatch({
       type: 'SET_CONTRIBUTORS',
       payload: Cache.contributors
@@ -784,7 +760,6 @@ app.use('/api/v1', async (req, res, next) => {
 app.use('/api/v1/', api(() => Cache))
 
 if (env === 'prod') {
-/*
   const rollbar = Rollbar.init({
     accessToken: '4555957947d347a69caf6e017ea72f51',
     handleUncaughtExceptions: true,
@@ -793,9 +768,8 @@ if (env === 'prod') {
       environment: env
     }
   })
-  */
 
-  //app.use(rollbar.errorHandler())
+  app.use(rollbar.errorHandler())
   app.use(
     minifyHTML({
       override: true,
@@ -814,16 +788,10 @@ if (env === 'prod') {
 
 const renderPage = async (req, res) => {
   if (req.url == '/favicon.ico') {
-    return res.redirect(
-      301,
-      'https://s3.amazonaws.com/dataskeptic.com/favicon.ico'
-    )
+    return res.redirect(301, 'https://s3.amazonaws.com/dataskeptic.com/favicon.ico')
   }
   if (req.url == '/data-skeptic-bonus.xml') {
-    return res.redirect(
-      307,
-      'https://s3.amazonaws.com/data-skeptic-bonus-feed/data-skeptic-bonus.xml'
-    )
+    return res.redirect(307, 'https://s3.amazonaws.com/data-skeptic-bonus-feed/data-skeptic-bonus.xml')
   }
   if (req.url.indexOf('/src-') > 0) {
     var u = req.url
@@ -913,6 +881,7 @@ const renderPage = async (req, res) => {
 doRefresh().then(() => {
   console.log('CACHE IS now READY')
   app.use(renderPage)
+  console.log('yay!')
 })
 
 export default app

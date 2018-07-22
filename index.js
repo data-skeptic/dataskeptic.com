@@ -175,7 +175,6 @@ function config_load_promise() {
 
 if (env === 'prod') {
     console.log('===[Loading as prod]=============================')
-    console.log('===[Loaded as prod]==============================')
     config_load_promise()
 } else {
     console.log('Loading as dev.')

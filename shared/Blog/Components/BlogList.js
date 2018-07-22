@@ -24,6 +24,8 @@ class BlogList extends Component {
     var blogs = this.props.blogs
     var osite = this.props.site.toJS()
     var contributors = osite.contributors
+    console.log("contributors")
+    console.log(contributors)
     var me = this
     return (
       <div className="blog-list-container">

@@ -39,7 +39,6 @@ class BlogRouter extends Component {
   // }
 
   handle_reload(pathname, oldpathname) {
-    console.log('handle_reload of ' + pathname + ' over ' + oldpathname)
     const dispatch = this.props.dispatch
     var pname = pathname.substring(5, pathname.length)
     var ocms = this.props.cms.toJS()
@@ -57,7 +56,6 @@ class BlogRouter extends Component {
         const blogs = [exact]
         const prefix = pname
         const payload = { blogs, prefix }
-        console.log(['CMS_SET_RECENT_BLOGS', blogs])
         dispatch({ type: 'CMS_SET_RECENT_BLOGS', payload: payload })
       } else if (blogs[0]['blog_id'] !== exact['blog_id']) {
         request_reload = true
@@ -67,6 +65,7 @@ class BlogRouter extends Component {
       console.log('Asking blogs to reload')
       var payload = { limit: 10, offset: 0, prefix: pname, dispatch }
       dispatch({ type: 'CMS_LOAD_RECENT_BLOGS', payload })
+      dispatch({type: 'LOAD_CONTRIBUTORS', payload: {dispatch}})
     }
   }
 
@@ -88,19 +87,12 @@ class BlogRouter extends Component {
   }
 
   filter_blogs(allblogs, pathname) {
-    // ????
-    //var redirect = redirects_map[pathname]
-    //if (redirect) {
-    //  pathname = redirect
-    //}
     var k = '/blog'
     var path = pathname.substring(k.length, pathname.length)
-    console.log('inject_blog router path=' + path)
     var limit = 100
     var count = 0
     var i = 0
     var l = allblogs.length
-    console.log('l=' + l)
     var blogs = []
     while (i < l && count < limit) {
       var blog = allblogs[i]
@@ -124,7 +116,6 @@ class BlogRouter extends Component {
 
   render() {
     var pathname = this.props.location.pathname
-    console.log('BlogRouter render ' + pathname)
     var pname = pathname.substring(5, pathname.length)
     var osite = this.props.site.toJS()
     var contributors = osite.contributors
@@ -138,21 +129,17 @@ class BlogRouter extends Component {
       }
     }
     if (exact != undefined) {
-      console.log('exact match')
       blogs = [exact]
     }
     var blog_state = ocms.blog_state
     if (blog_state == '' || (blog_state == 'loading' && blogs.length == 0)) {
-      console.log('blog_state', blog_state)
       return <Loading />
     }
     if (blogs.length == 0) {
-      console.log('NO BLOGS IN MEMORY!')
       this.missing()
       return <NoBlogs />
     }
     if (blogs.length === 1) {
-      console.log('One to show')
       return (
         <BlogItem
           blog={blogs[0]}
@@ -161,7 +148,6 @@ class BlogRouter extends Component {
         />
       )
     } else {
-      console.log('BlogList')
       return (
         <Wrapper>
           <BlogTopNav pathname={pathname} blogs={blogs} />

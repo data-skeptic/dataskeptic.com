@@ -29,13 +29,17 @@ class BlogListItem extends Component {
     const { onClick, blog, contributor, isLatest = false } = this.props
     var img = ''
     var prettyname = ''
+    var author = ""
     if (contributor) {
+      author = contributor.author
       if (contributor.img) {
         img = contributor.img
       }
       if (contributor.prettyname) {
         prettyname = contributor.prettyname
       }
+    } else {
+      author = blog['author'].toLowerCase()
     }
 
     const link = this.formatLink(blog.prettyname)
@@ -75,7 +79,7 @@ class BlogListItem extends Component {
               <p className="by">
                 by{' '}
                 <b>
-                  <AuthorLink author={contributor.author} className="no-line">
+                  <AuthorLink author={author} className="no-line">
                     {prettyname}
                   </AuthorLink>
                 </b>
