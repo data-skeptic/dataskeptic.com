@@ -173,7 +173,7 @@ class Episode extends React.Component {
           </Guests>
         </div>
         <div className="col-xs-12 col-sm-8 episode-middle">
-          <div className="blog-date">{date} | {this.props.episode.blog_id}</div>
+          <div className="blog-date">{date}</div>
           <Title>
             <Link
               className="blog-title no-line"

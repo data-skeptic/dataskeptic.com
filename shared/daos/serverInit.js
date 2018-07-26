@@ -55,7 +55,7 @@ export function populate_content_map(blogs, data) {
 
 export function get_podcasts_by_guid(dispatch, guid) {
     axios
-      .get(baseapi + '/api/episodes/get/' + guid)
+      .get('/api/episodes/get/' + guid)
       .then(function(result) {
         console.log('Return of ' + guid)
         var episode = result['data']

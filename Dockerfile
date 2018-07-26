@@ -11,7 +11,8 @@ WORKDIR /usr/src/app
 COPY package.json /usr/src/app/
 COPY package-lock.json /usr/src/app/
 
-RUN npm install --save-dev -g babel-cli 
+RUN npm install --save-dev -g babel-cli
+RUN npm install webpack-dev-middleware --save-dev
 
 ## Copy app sources
 COPY . /usr/src/app
