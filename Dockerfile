@@ -4,15 +4,16 @@ LABEL maintainer="Kyle Polich"
 
 RUN apk add --no-cache nodejs-current tini
 
+RUN apk update && apk upgrade && \
+    apk add --no-cache bash git openssh
+
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 ## Copy dependencies file
 COPY package.json /usr/src/app/
 COPY package-lock.json /usr/src/app/
-
 RUN npm install --save-dev -g babel-cli
-RUN npm install webpack-dev-middleware --save-dev
 
 ## Copy app sources
 COPY . /usr/src/app
@@ -23,7 +24,7 @@ RUN rm -rf /usr/src/app/node_modules
 RUN npm i -g npm@5.6.0
 
 ## Install app dependencies
-RUN npm install --production --loglevel=verbose
+RUN npm install --loglevel=verbose
 
 COPY startup.sh /
 RUN ./bin/info.sh
