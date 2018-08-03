@@ -121,7 +121,7 @@ class SERP extends Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.query !== nextProps.query) {
       const title = `Search - ${nextProps.query} | Data Skeptic`
-      this.props.dispatch(changePageTitle(title))
+      // this.props.dispatch(changePageTitle(title))
       this.updateLocation(nextProps.query)
     }
   }
