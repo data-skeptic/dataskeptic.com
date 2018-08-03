@@ -280,22 +280,8 @@ const LATEST_RFC_ID = 'test-request'
 
 export function loadCurrentRFC() {
   console.log('-[Refreshing RFC]-')
-  const params = {
-    TableName: RFC_TABLE_NAME,
-    Key: {
-      id: LATEST_RFC_ID
-    }
-  }
-
   return new Promise((res, rej) => {
-    proposalsDocs.get(params, function(err, data) {
-      if (err) {
-        console.error(err)
-        res({})
-      } else {
-        res(data['Item'])
-      }
-    })
+      res({})
   })
 }
 
