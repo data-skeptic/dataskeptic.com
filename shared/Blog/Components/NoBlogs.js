@@ -14,9 +14,9 @@ class NoBlogs extends React.Component {
     return (
       <Container>
         <h2>Request not found</h2>
+        <img src="https://s3.amazonaws.com/dataskeptic.com/img/bot/star-animation_250x250.gif" />
         <p>
-          I'm sorry Dave, I'm not going to be able to retrieve that blog post
-          for you.
+          I'm sorry Dave, I'm not going to be able to retrieve that blog post for you.
         </p>
         <p>
           How about you just forget about it and solve the puzzle below by

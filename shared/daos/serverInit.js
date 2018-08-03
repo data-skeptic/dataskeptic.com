@@ -55,7 +55,7 @@ export function populate_content_map(blogs, data) {
 
 export function get_podcasts_by_guid(dispatch, guid) {
     axios
-      .get('/api/episodes/get/' + guid)
+      .get(baseapi + '/podcast/episodes/get?guid=' + guid)
       .then(function(result) {
         console.log('Return of ' + guid)
         var episode = result['data']
@@ -280,22 +280,8 @@ const LATEST_RFC_ID = 'test-request'
 
 export function loadCurrentRFC() {
   console.log('-[Refreshing RFC]-')
-  const params = {
-    TableName: RFC_TABLE_NAME,
-    Key: {
-      id: LATEST_RFC_ID
-    }
-  }
-
   return new Promise((res, rej) => {
-    proposalsDocs.get(params, function(err, data) {
-      if (err) {
-        console.error(err)
-        res({})
-      } else {
-        res(data['Item'])
-      }
-    })
+      res({})
   })
 }
 

@@ -19,7 +19,12 @@ class OpenOrders extends React.Component {
     axios
       .get(uri)
       .then(function(result) {
-        var orders = result['data']['data']
+        var orders = []
+        if (result['data'] == null) {
+          console.log(result)
+        } else {
+          orders = result['data']['data']
+        }
         self.setState({ orders })
       })
       .catch(err => {
