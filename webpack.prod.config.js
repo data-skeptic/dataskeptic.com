@@ -17,6 +17,8 @@ const env = {
   )
 }
 
+process.traceDeprecation = true
+
 console.dir('CLIENT ENV!!')
 console.dir(env)
 
@@ -68,11 +70,11 @@ module.exports = {
   plugins: [
     new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.HashedModuleIdsPlugin(),
-
     new webpack.DefinePlugin(env),
-
+/*
     new webpack.optimize.UglifyJsPlugin({
       test: /\.js($|\?)/i,
+      exclude: /node_modules/,
       parallel: true,
       compress: {
         warnings: false,
@@ -90,7 +92,7 @@ module.exports = {
         comments: false
       }
     }),
-
+*/
     new ExtractTextPlugin({
       filename: 'main.css',
       disable: false,

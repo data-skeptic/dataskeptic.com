@@ -16,6 +16,6 @@ GIT_BRANCH=$(parse_git_branch)_$(parse_git_hash)
 
 VERSION=$(date +"%Y%m%d").git.$GIT_BRANCH
 IMAGE=dataskeptic_dataskeptic.com
-docker build -t $IMAGE:$VERSION .
+docker build -m 4g -t $IMAGE:$VERSION .
 echo $IMAGE:$VERSION > latest.txt
 echo $IMAGE:$VERSION
