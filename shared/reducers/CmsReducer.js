@@ -8,7 +8,7 @@ const aws = require('aws-sdk')
 
 var env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
-var base_url = process.env.BASE_API || 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/prod'
+var base_url = process.env.BASE_API
 
 const init = {
   home_loaded: false,
@@ -41,8 +41,7 @@ const getEpisode = async guid => {
 }
 
 const get_blog = async src_file => {
-    var base = "https://4sevcujref.execute-api.us-east-1.amazonaws.com/prod"
-    var uri = base + `/blog/get?key=${src_file}`
+    var uri = base_url + `/blog/get?key=${src_file}`
     return await axios.get(uri).then(res => res.data)
 }
 

@@ -14,14 +14,13 @@ var aws_region = process.env.AWS_REGION
 AWS.config.update({
   accessKeyId: aws_accessKeyId,
   secretAccessKey: aws_secretAccessKey,
-  region: aws_region,
-  s3BucketEndpoint: true,
-  endpoint: "https://4sevcujref.execute-api.us-east-1.amazonaws.com/"
+  region: aws_region
 })
 //=========== CONFIG
 
 const LOCKED_FILE_NAME = process.env.RECORDING_LOCKED_FILE_NAME       
 const AWS_RECORDS_BUCKET = process.env.RECORDING_AWS_PROPOSALS_BUCKET 
+console.log([__dirname, process.env.RECORDING_SOURCE])
 const BASE_RECORDS_PATH = path.join(__dirname, process.env.RECORDING_SOURCE) 
 
 export const generateRecordPath = recordId =>

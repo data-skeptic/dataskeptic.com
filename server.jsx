@@ -112,9 +112,7 @@ aws_proposals_bucket = process.env.RECORDING_AWS_PROPOSALS_BUCKET
 aws.config.update({
   accessKeyId: aws_accessKeyId,
   secretAccessKey: aws_secretAccessKey,
-  region: aws_region,
-  s3BucketEndpoint: true,
-  endpoint: "https://4sevcujref.execute-api.us-east-1.amazonaws.com"
+  region: aws_region
 })
 
 var influxdb = undefined

@@ -1,3 +1,5 @@
+rm ./cert/*.*
+
 function parse_git_dirty() {
   git diff --quiet --ignore-submodules HEAD 2>/dev/null; [ $? -eq 1 ]
 }
