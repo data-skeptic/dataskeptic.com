@@ -31,7 +31,7 @@ export const CreditCard = ({ title = 'Billing Details' }) => (
         name="card_name"
         type="text"
         className="month"
-        placeholder="Jonh Smith"
+        placeholder="Ada Lovelace"
         component={renderField}
         required
       />
@@ -57,7 +57,7 @@ export const CreditCard = ({ title = 'Billing Details' }) => (
         name="card_year"
         type="text"
         className="year"
-        placeholder="2020"
+        placeholder="2030"
         component={renderField}
         normalize={cardYear}
       />
