@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { changePageTitle } from '../../Layout/Actions/LayoutActions'
 import MobileSearchArea from './MobileSearchArea'
 import SearchField from '../Components/SearchField'
 import Loading from '../../Common/Components/Loading'
@@ -43,6 +42,10 @@ class SERP extends Component {
     if (query.length > 0) {
       this.loadResults(query)
     }
+
+    const title = `Search - ${query}`
+    this.props.updateMeta({ title })
+    
   }
   loadResults = query => {
     const { dispatch } = this.props
@@ -121,9 +124,9 @@ class SERP extends Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.query !== nextProps.query) {
       const title = `Search - ${nextProps.query} | Data Skeptic`
-      this.props.dispatch(changePageTitle(title))
+      // this.props.dispatch(changePageTitle(title))
       this.updateLocation(nextProps.query)
-    }
+    }           
   }
 
   render() {

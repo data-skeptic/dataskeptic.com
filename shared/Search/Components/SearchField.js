@@ -17,6 +17,9 @@ class SearchField extends Component {
       onChange(this.state.value)
     }
   }
+  handleClearSearchKey = e => {
+    this.setState({ value: '' })
+  }
   renderLoader = () => (
     <div className="search-field-container__input-loader">
       <img
@@ -68,6 +71,12 @@ class SearchField extends Component {
           onChange={this.handleChange}
           onKeyDown={this.handleKeyDown}
         />
+        <span 
+          className="search-field-container_input-clear"
+          onClick={this.handleClearSearchKey}
+        >
+          &#x2716;
+        </span>
         {loading && this.renderLoader()}
       </div>
     )
