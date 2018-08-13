@@ -3,11 +3,37 @@ import { connect } from 'react-redux'
 import { toggleSearchArea } from '../../Layout/Actions/LayoutActions'
 import SearchField from '../Components/SearchField'
 import redirectToSearch from '../Helpers/redirectToSearch'
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { routerMiddleware, push } from 'react-router-redux'
+import { browserHistory } from 'react-router'
+import searchReducers from '../../reducers/SearchReducer'
+
+// Apply the middleware to the store
+const middleware = routerMiddleware(browserHistory)
+const store = createStore(
+  searchReducers,
+  applyMiddleware(middleware)
+)
 
 class SearchArea extends Component {
   toggleArea = () => this.props.dispatch(toggleSearchArea())
 
-  handleSearchChange = query => redirectToSearch(query)
+  handleSearchChange = query => {
+    // redirectToSearch(query)
+    const { dispatch } = this.props
+
+    dispatch({
+      type: 'SEARCH',
+      payload: {
+        query,
+        dispatch
+      }
+    })
+    store.dispatch(push(`/search?q=${query}`))
+    const title = `Search - ${query}`
+    document.title = title;
+    this.toggleArea()
+  }
 
   render() {
     const { searchAreaVisible, isLoading, query } = this.props
