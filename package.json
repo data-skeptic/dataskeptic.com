@@ -117,6 +117,7 @@
     "react-redux": "^4.4.9",
     "react-responsive-carousel": "^3.1.35",
     "react-router": "^3.0.2",
+    "react-router-redux": "^4.0.8",
     "react-select": "^1.2.1",
     "react-share": "^1.19.0",
     "react-slick": "^0.14.11",
