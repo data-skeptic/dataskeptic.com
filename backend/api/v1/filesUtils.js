@@ -86,4 +86,8 @@ export const move = (Bucket, CopySource, OldKey, NextKey) => {
         .promise()
         .then(() => `${Bucket}/${NextKey}`)
     )
+    .catch(err => {
+      console.dir(err)
+      return `${Bucket}/${NextKey}`
+    })
 }
