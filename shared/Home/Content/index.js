@@ -4,6 +4,8 @@ import Feature from './Feature'
 import Blog from './Blog'
 import Podcast from './Podcast'
 import JobListing from './JobListing'
+import PollQuestion from './Poll/PollQuestion'
+import PollResult from './Poll/PollResult'
 import { connect } from 'react-redux'
 
 class Content extends Component {
@@ -27,6 +29,8 @@ class Content extends Component {
             latest_episode={latest_episode}
             getContributor={this.getContributor}
           />
+          <PollQuestion/>
+          <PollResult/>
           <JobListing />
         </PodContainer>
       </ContentContainer>
