@@ -61,6 +61,14 @@ class PollQuestion extends Component {
     })
   }
   
+  onViewResult = () => {
+    const { dispatch } = this.props
+    
+    dispatch({
+      type: 'VIEW_POLL_RESULT',
+    })
+  }
+  
   componentWillMount() {
     const poll_id = -1
     const user_id = -1
@@ -107,7 +115,11 @@ class PollQuestion extends Component {
           </ChoiceList>
           <ViewVoteContainer>
             <div>
-              <ViewResultLink>View result</ViewResultLink>
+              <ViewResultLink
+                onClick={this.onViewResult}
+              >
+                View result
+              </ViewResultLink>
             </div>
             <VoteContainer>
               <span>Vote</span>

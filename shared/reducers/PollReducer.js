@@ -7,7 +7,9 @@ const init = {
   poll_id: null,
   question: '',
   results: [],
-  total_votes: null
+  total_votes: null,
+  post_results: [],
+  isViewResult: false
 }
 
 const defaultState = Immutable.fromJS(init)
@@ -38,7 +40,10 @@ export const votePoll = async (dispatch, data) => {
   try {
     const pollInfo = await axios.post('/api/v1/poll/vote', data)
     dispatch({
-      type: 'POST_POLL_SUCCESS'
+      type: 'POST_POLL_SUCCESS',
+      payload: {
+        post_results: pollInfo.data
+      }
     })
   } catch (err) {
     dispatch({
@@ -82,19 +87,24 @@ export default function pollReducer(state = defaultState, action) {
       nstate.loaded = false
       nstate.loading = true
       nstate.error = null
-      nstate.results = []
+      nstate.post_results = []
       votePoll(action.payload.dispatch, action.payload.data)
       break
     
     case 'POST_POLL_SUCCESS':
       nstate.loaded = true
       nstate.loading = false
+      nstate.post_results = action.payload.post_results
       break
     
     case 'POST_POLL_FAIL':
       nstate.loaded = false
       nstate.loading = false
       nstate.error = action.payload.data
+      break
+    
+    case 'VIEW_POLL_RESULT':
+      nstate.isViewResult = true
       break
   }
   return Immutable.fromJS(nstate)

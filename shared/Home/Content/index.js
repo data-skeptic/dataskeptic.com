@@ -13,7 +13,7 @@ class Content extends Component {
     this.props.contributors && this.props.contributors[author.toLowerCase()]
 
   render() {
-    const { featured_2, featured_3, featured_blog, latest_episode } = this.props
+    const { featured_2, featured_3, featured_blog, latest_episode, isViewResult } = this.props
     const blogList = [featured_2, featured_3]
     return (
       <ContentContainer>
@@ -30,7 +30,9 @@ class Content extends Component {
             getContributor={this.getContributor}
           />
           <PollQuestion/>
+          {isViewResult &&
           <PollResult/>
+          }
           <JobListing />
         </PodContainer>
       </ContentContainer>
@@ -44,5 +46,6 @@ export default connect(state => ({
   featured_2: state.cms.get('featured_blog2').toJS(),
   featured_3: state.cms.get('featured_blog3').toJS(),
   latest_episode: state.cms.get('latest_episode').toJS(),
-  contributors: state.site.get('contributors').toJS()
+  contributors: state.site.get('contributors').toJS(),
+  isViewResult: state.poll.get('isViewResult')
 }))(Content)
