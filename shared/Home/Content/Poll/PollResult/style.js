@@ -37,7 +37,7 @@ export const VotePercentContainer = styled.div`
 export const VotePercent = styled(Line)`
   box-sizing: border-box;
   border: solid 3px white;
-  border-radius: 10px;
+  border-radius: 20px;
   box-shadow: 0px 0px 1px 0px #CFC8B5;
 `
 
