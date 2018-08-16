@@ -29,9 +29,11 @@ class Content extends Component {
             latest_episode={latest_episode}
             getContributor={this.getContributor}
           />
-          <PollQuestion/>
-          {isViewResult &&
+          {isViewResult ? (
           <PollResult/>
+          ) : (
+            <PollQuestion/>
+          )
           }
           <JobListing />
         </PodContainer>

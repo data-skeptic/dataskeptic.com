@@ -59,6 +59,8 @@ class PollQuestion extends Component {
         dispatch
       }
     })
+    
+    this.onViewResult()
   }
   
   onViewResult = () => {

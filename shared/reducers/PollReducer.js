@@ -5,6 +5,7 @@ const init = {
   loading: false,
   loaded: false,
   poll_id: null,
+  user_id: null,
   question: '',
   results: [],
   total_votes: null,
@@ -42,7 +43,9 @@ export const votePoll = async (dispatch, data) => {
     dispatch({
       type: 'POST_POLL_SUCCESS',
       payload: {
-        post_results: pollInfo.data
+        dispatch,
+        post_results: pollInfo.data,
+        poll_id: pollInfo.data[0].poll_id
       }
     })
   } catch (err) {
@@ -95,6 +98,9 @@ export default function pollReducer(state = defaultState, action) {
       nstate.loaded = true
       nstate.loading = false
       nstate.post_results = action.payload.post_results
+      nstate.poll_id = action.payload.poll_id
+      if (nstate.user_id === null) nstate.user_id = -1
+      getPoll(action.payload.dispatch, nstate.poll_id, nstate.user_id)
       break
     
     case 'POST_POLL_FAIL':
