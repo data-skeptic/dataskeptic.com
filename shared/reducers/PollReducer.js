@@ -95,8 +95,6 @@ export default function pollReducer(state = defaultState, action) {
       break
     
     case 'POST_POLL_SUCCESS':
-      nstate.loaded = true
-      nstate.loading = false
       nstate.post_results = action.payload.post_results
       nstate.poll_id = action.payload.poll_id
       if (nstate.user_id === null) nstate.user_id = -1

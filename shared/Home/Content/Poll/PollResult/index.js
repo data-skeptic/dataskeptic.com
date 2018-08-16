@@ -20,7 +20,36 @@ import Loading from '../../../../Common/Components/Loading'
 class PollResult extends Component {
   renderVoteResult = (results, total_votes) => {
     return results.map((vote, i) => {
-      const vote_percent = total_votes === 0 ? 0 : +vote.votes / total_votes * 100
+      const vote_percent = total_votes === 0 ? 0 : 
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        +vote.votes / total_votes * 100
       
       return (
         <VoteResult key={i}>
