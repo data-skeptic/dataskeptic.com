@@ -11,13 +11,6 @@ var isSSL = process.env.FORCE_SSL === 1 ? true : env === 'prod'
 console.log('NODE_ENV', '=', env, 'FORCE_SSL', '=', isSSL)
 // validate env config
 
-try {
-  checkEnv()
-} catch (e) {
-  throw e
-  process.exit(1)
-}
-
 var app = require('./server').default
 
 if (process.env.NODE_ENV === 'dev') {
