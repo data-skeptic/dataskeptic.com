@@ -387,7 +387,7 @@ function api_router(req, res) {
     get_blogs_rss(req, res)
     return true
   } else if (req.url.indexOf('/api/store/order/add') === 0) {
-    var printful_key = c[env]['printful']['api']
+    var printful_key = process.env.PRINTFUL_API
     var payload = req.body
     var customer = payload['customer']
     var designId = payload['designId']
