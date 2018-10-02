@@ -198,7 +198,7 @@ function config_load_promise() {
   }).then(
     function(result) {
       console.log('Done, now launch with SSL')
-      launch_with_ssl()
+      launch_without_ssl()
     },
     function(err) {
       console.log('Error loading config, assuming development run')
@@ -211,6 +211,7 @@ function config_load_promise() {
 if (env === 'prod') {
     console.log('===[Loading as prod]=============================')
     //config_load_promise()
+    launch_without_ssl()
 } else {
     console.log('Loading as dev.')
     launch_without_ssl()
