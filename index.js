@@ -115,9 +115,9 @@ var launch_without_ssl = function() {
 }
 
 function get_file(resolve, reject, bucket, s3Key) {
+        /*
     console.log("Going to load " + bucket + " " + s3Key)
     var params = { Bucket: bucket, Key: s3Key }
-        /*
         s3
           .getObject(params)
           .createReadStream()
@@ -131,7 +131,6 @@ function get_file(resolve, reject, bucket, s3Key) {
             console.log(er)
             reject(er)
           })
-          */
 console.log('aws.config')
 console.log(aws.config)
     var r = new aws.S3().getObject(params, function(err, data) {
@@ -158,6 +157,7 @@ console.log(aws.config)
         }
     });
     return r
+          */
 }
 
 function config_load_promise() {
@@ -217,7 +217,7 @@ function config_load_promise() {
 
 if (env === 'prod') {
     console.log('===[Loading as prod]=============================')
-    config_load_promise()
+    //config_load_promise()
 } else {
     console.log('Loading as dev.')
     launch_without_ssl()

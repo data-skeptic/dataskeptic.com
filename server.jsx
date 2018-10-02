@@ -75,7 +75,7 @@ console.log('server.jsx : starting')
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
-const base_url = 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/' + env
+const base_url = 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/' + "prod"
 
 const app = express()
 
@@ -159,7 +159,7 @@ const reducer = combineReducers({
 })
 
 global.my_cache = Cache = resetCache()
-global.env = env
+global.env = 'prod'
 
 /*
  * REFRESH
@@ -245,6 +245,7 @@ if (env == 'prod') {
 } else {
   require('./webpack.dev').default(app)
   const proxy = require('http-proxy-middleware')
+  /*
   const wsProxy = proxy('/recording', {
     target: 'ws://127.0.0.1:9001',
     // pathRewrite: {
@@ -256,6 +257,7 @@ if (env == 'prod') {
     logLevel: 'debug'
   })
   app.use(wsProxy)
+  */
 }
 
 /*
