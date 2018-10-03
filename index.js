@@ -9,13 +9,6 @@ const checkEnv = require('./shared/utils/checkEnv').default
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 const isSSL = process.env.FORCE_SSL === 1 ? true : env === 'prod'
 console.log('NODE_ENV', '=', env, 'FORCE_SSL', '=', isSSL)
-// validate env config
-try {
-  checkEnv()
-} catch (e) {
-  throw e
-  process.exit(1)
-}
 
 const app = require('./server').default
 
