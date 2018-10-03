@@ -1,6 +1,6 @@
 {
   "name": "dataskeptic.com",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "repository": "https://github.com/data-skeptic/dataskeptic.com",
   "description": "",
   "main": "index.js",
