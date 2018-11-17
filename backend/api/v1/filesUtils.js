@@ -4,7 +4,7 @@ import aws from 'aws-sdk'
 const s3 = new aws.S3()
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
-const temp_files = process.env.TEMP_FILES
+const temp_files = process.env.TEMP_FILES || ""
 const dest = path.resolve(__dirname, '../../../', temp_files)
 
 export const getExtension = file =>

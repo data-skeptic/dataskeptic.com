@@ -20,8 +20,8 @@ AWS.config.update({
 
 const LOCKED_FILE_NAME = process.env.RECORDING_LOCKED_FILE_NAME       
 const AWS_RECORDS_BUCKET = process.env.RECORDING_AWS_PROPOSALS_BUCKET 
-console.log([__dirname, process.env.RECORDING_SOURCE])
-const BASE_RECORDS_PATH = path.join(__dirname, process.env.RECORDING_SOURCE) 
+
+const BASE_RECORDS_PATH = path.join(__dirname, process.env.RECORDING_SOURCE || "")
 
 export const generateRecordPath = recordId =>
   path.join(BASE_RECORDS_PATH, recordId)

@@ -1,6 +1,6 @@
 const winston = require('winston')
 const S3StreamLogger = require('s3-streamlogger').S3StreamLogger
-
+/*
 const bucket_name = process.env.CHAT_LOGS
 
 const ops = {
@@ -16,7 +16,7 @@ const transport = new winston.transports.File({
 
 // see error handling section below
 transport.on('error', function(err) {
-  /* ... */
+
 })
 
 const logger = new winston.Logger({
@@ -27,3 +27,4 @@ export const logMessage = message => {
   const s = JSON.stringify(message)
   logger.info(s)
 }
+*/
