@@ -799,7 +799,7 @@ const renderPage = async (req, res) => {
     if (i > 0) {
       var hostname = 's3.amazonaws.com/dataskeptic.com'
       if (env != 'prod') {
-        hostname = 's3.amazonaws.com/' + env + '.dataskeptic.com'
+        hostname = 's3.amazonaws.com/prod.dataskeptic.com'
       }
       var redir = u.substring(i, u.length)
       return res.redirect(301, 'https://' + hostname + redir)
