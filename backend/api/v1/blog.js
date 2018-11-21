@@ -44,7 +44,7 @@ module.exports = cache => {
       req.params.year,
       req.params.name
     )
-
+      console.log({prettyName});
     BlogServices.getPost(
       cache().blogmetadata_map,
       cache().episodes_content,
