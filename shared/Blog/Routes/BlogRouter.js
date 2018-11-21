@@ -116,6 +116,8 @@ class BlogRouter extends Component {
 
   render() {
     var pathname = this.props.location.pathname
+    console.log({pathname})
+    pathname = pathname.replace("undefined", "prod")
     var pname = pathname.substring(5, pathname.length)
     var osite = this.props.site.toJS()
     var contributors = osite.contributors

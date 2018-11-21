@@ -117,7 +117,7 @@ aws.config.update({
 
 var influxdb = undefined
 const influx_config = process.env.INFLUXDB_ON === 'true'
-if (influx_config) {
+if (false) {
   console.log('initializing influxdb')
   influxdb = new Influx.InfluxDB({
     protocol: 'https',
