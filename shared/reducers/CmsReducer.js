@@ -52,6 +52,7 @@ export default function cmsReducer(state = defaultState, action) {
       var dispatch = action.payload.dispatch
       var src_file = action.payload.src_file
       nstate.blog_state = 'loading'
+      debugger;
       get_blog(src_file).then(function(content) {
           var payload = {src_file, content}
           dispatch({ type: 'CMS_ADD_BLOG_CONTENT', payload })
@@ -63,6 +64,8 @@ export default function cmsReducer(state = defaultState, action) {
     case 'CMS_ADD_BLOG_CONTENT':
       var src_file = action.payload.src_file
       var content = action.payload.content
+      debugger;
+      console.log({src_file})
       nstate.blog_content[src_file] = content
       nstate.blog_state = 'loaded'
       break
