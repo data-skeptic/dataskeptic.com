@@ -78,6 +78,7 @@ class BlogItem extends Component {
     var dispatch = this.props.dispatch
     var blog = this.props.blog
     var src_file = blog.src_file
+    console.log('BlogItem Will Mount', {src_file})
     dispatch({
       type: 'CMS_LOAD_BLOG_CONTENT',
       payload: { src_file, dispatch }
