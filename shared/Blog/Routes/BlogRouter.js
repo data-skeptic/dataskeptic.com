@@ -15,7 +15,7 @@ const normalizePathname = path => path.replace(/\/\//g, '/')
 class BlogRouter extends Component {
   constructor(props) {
     super(props);
-    console.log('Creating BlogRouter', {props});
+    console.log('Creating BlogRouter');
   }
   // static getPageMeta(state) {
   //   const isExists = state.blogs.getIn(['blog_focus', 'blog'])
