@@ -795,6 +795,7 @@ const renderPage = async (req, res) => {
   }
   if (req.url.indexOf('/src-') > 0) {
     var u = req.url
+    console.log({u})
     var i = u.indexOf('/blog/') + '/blog'.length
     if (i > 0) {
       var hostname = 's3.amazonaws.com/dataskeptic.com'
