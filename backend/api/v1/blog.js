@@ -28,7 +28,7 @@ module.exports = cache => {
       cache().blogmetadata_map,
       offset,
       limit,
-      global.env
+      "prod"
     )
       .then(data => {
         res.send(data)
