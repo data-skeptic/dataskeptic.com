@@ -363,23 +363,24 @@ function api_router(req, res) {
   } else if (req.url.indexOf('/api/contributors/list') == 0) {
     var url = `${base_url}/blog/contributors/list`
     return axios.get(url).then(function(contributors) {
-      return res.status(200).end(JSON.stringify(contributors))    
+      return res.status(200).end(JSON.stringify(contributors))
     }).catch(function(err) {
       console.log(err)
-      return res.status(500).end("{}")    
+      return res.status(500).end("{}")
     })
   } else if (req.url.indexOf('/api/blog/contributors/list') == 0) {
     var url = `${base_url}/blog/contributors/list`
     return axios.get(url).then(function(contributors) {
-      return res.status(200).end(JSON.stringify(contributors))    
+      return res.status(200).end(JSON.stringify(contributors))
     }).catch(function(err) {
       console.log(err)
-      return res.status(500).end("{}")    
+      return res.status(500).end("{}")
     })
   } else if (req.url.indexOf('/api/Related') == 0) {
     related_content(req, res)
     return true
   } else if (req.url.indexOf('/api/blog/list') == 0) {
+    console.log(req);
     get_blogs(req, res)
     return true
   } else if (req.url == '/api/blog/categories') {
@@ -473,7 +474,7 @@ function inject_folders(store, my_cache) {
 }
 
 function inject_years(store, my_cache) {
-  
+
   var yearsData = my_cache.yearRanges
   var ymap = {}
   for (var i = 0; i < yearsData.length; i++) {
@@ -561,7 +562,7 @@ async function inject_contributor(store, cache, pathanme) {
 async function updateState(store, pathname, req) {
 
   inject_years(store, Cache)
-  
+
   store.dispatch({
     type: 'PROPOSAL_SET_BUCKET',
     payload: { aws_proposals_bucket }
