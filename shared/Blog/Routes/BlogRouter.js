@@ -13,6 +13,10 @@ import page from '../../Layout/hoc/page'
 const normalizePathname = path => path.replace(/\/\//g, '/')
 
 class BlogRouter extends Component {
+  constructor(props) {
+    super(props);
+    console.log('Creating BlogRouter', {props});
+  }
   // static getPageMeta(state) {
   //   const isExists = state.blogs.getIn(['blog_focus', 'blog'])
   //   if (!isExists) {

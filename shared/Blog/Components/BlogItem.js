@@ -70,15 +70,18 @@ const renderBottomContributors = (contributors = []) => (
 )
 
 class BlogItem extends Component {
+  constructor(props) {
+    super(props);
+    console.log('Creating BlogItem', {props});
+  }
   static defaultProps = {
     updateMeta: () => {}
   }
 
-  componentDidMount() {
+  componentWillMount() {
     var dispatch = this.props.dispatch
     var blog = this.props.blog
     var src_file = blog.src_file
-    console.log('BlogItem Did Mount', {src_file})
     dispatch({
       type: 'CMS_LOAD_BLOG_CONTENT',
       payload: { src_file, dispatch }
