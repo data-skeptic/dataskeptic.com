@@ -112,6 +112,7 @@ class BlogItem extends Component {
     var osite = this.props.site.toJS()
     var ocms = this.props.cms.toJS()
     var oepisodes = this.props.episodes.toJS()
+    console.log({osite, ocms})
     var disqus_username = osite.disqus_username
     var blog = this.props.blog
     var loading = this.props.loading
