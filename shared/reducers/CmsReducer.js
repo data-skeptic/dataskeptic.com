@@ -5,10 +5,12 @@ import axios from 'axios'
 import snserror from '../SnsUtil'
 import { load_blogs } from '../daos/serverInit'
 const aws = require('aws-sdk')
+const logger = require('heroku-logger')
 
 var env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
-var base_url = process.env.BASE_API
+const base_url = 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/prod'
+
 
 const init = {
   home_loaded: false,
@@ -41,8 +43,8 @@ const getEpisode = async guid => {
 }
 
 const get_blog = async src_file => {
-    var uri = base_url + `/blog/get?key=${src_file}`
-    console.log({base_url, src_file, uri})
+    var uri = `${base_url}/blog/get?key=${src_file}`
+    logger.info({uri})
     return await axios.get(uri).then(res => res.data)
 }
 
@@ -50,11 +52,16 @@ export default function cmsReducer(state = defaultState, action) {
   var nstate = state.toJS()
   switch (action.type) {
     case 'CMS_LOAD_BLOG_CONTENT':
+      logger.info("CMS_LOAD_BLOG_CONTENT")
       var dispatch = action.payload.dispatch
       var src_file = action.payload.src_file
       nstate.blog_state = 'loading'
+      logger.info(JSON.stringify(src_file))
+      logger.info(base_url)
       get_blog(src_file).then(function(content) {
+          console.log({content})
           var payload = {src_file, content}
+          logger.info({q: payload})
           dispatch({ type: 'CMS_ADD_BLOG_CONTENT', payload })
       })
       break
@@ -64,7 +71,7 @@ export default function cmsReducer(state = defaultState, action) {
     case 'CMS_ADD_BLOG_CONTENT':
       var src_file = action.payload.src_file
       var content = action.payload.content
-      console.log({src_file})
+      logger.info({src_file})
       nstate.blog_content[src_file] = content
       nstate.blog_state = 'loaded'
       break
@@ -88,11 +95,13 @@ export default function cmsReducer(state = defaultState, action) {
         })
       break
     case 'CMS_SET_PENDING_BLOGS':
+    logger.info("CMS_SET_PENDING_BLOGS")
       var blogs = action.payload
       nstate.pending_blogs = blogs
       nstate.pending_blogs_loaded = true
       break
     case 'CMS_LOAD_RECENT_BLOGS':
+      logger.info("CMS_LOAD_RECENT_BLOGS")
       var payload = action.payload
       var limit = payload['limit']
       var offset = payload['offset']
@@ -100,9 +109,11 @@ export default function cmsReducer(state = defaultState, action) {
       var dispatch = payload['dispatch']
       nstate.blog_state = 'loading'
       nstate.recent_blogs_loaded = false
+      console.log({prefix, limit, offset})
       load_blogs(prefix, limit, offset, dispatch)
       break
     case 'CMS_SET_RECENT_BLOGS':
+      logger.info({blogs})
       var blogs = action.payload.blogs
       var prefix = action.payload.prefix
       nstate.blog_state = 'loaded'
