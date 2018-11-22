@@ -9,8 +9,7 @@ const logger = require('heroku-logger')
 
 var env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
-const base_url = 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/prod'
-
+var base_url = process.env.BASE_API || 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/prod'
 
 const init = {
   home_loaded: false,

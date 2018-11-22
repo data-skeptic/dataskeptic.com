@@ -70,6 +70,10 @@ const renderBottomContributors = (contributors = []) => (
 )
 
 class BlogItem extends Component {
+  constructor(props) {
+    super(props);
+    console.log('Creating BlogItem');
+  }
   static defaultProps = {
     updateMeta: () => {}
   }
