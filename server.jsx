@@ -597,7 +597,7 @@ async function updateState(store, pathname, req) {
   })
 
   const isAuthenticated = req.isAuthenticated()
-  logger.info(`isAuthenticated = ${isAuthenticated}`)
+  logger.info(`isAuthenticated = ${isAuthenticated}, req.user = ${JSON.stringify(req.user)}`)
   if (isAuthenticated) {
     store.dispatch({
       type: 'AUTH_USER_SUCCESS',
