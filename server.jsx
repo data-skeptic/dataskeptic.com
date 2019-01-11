@@ -61,6 +61,7 @@ import { createStore, combineReducers, applyMiddleware } from 'redux'
 import Helmet from 'react-helmet'
 import { get_podcasts_from_cache } from 'utils/redux_loader'
 import redirects_map from './redirects'
+import { logger } from './logger.js'
 
 import { reducer as formReducer } from 'redux-form'
 import axios from 'axios'
@@ -829,8 +830,10 @@ const renderPage = async (req, res) => {
   }
 
   const location = createLocation(req.url)
+  logger.info(`routes = ${JSON.stringify(routes)}, location = ${JSON.stringify(location)}`)
 
   match({ routes, location }, async (err, redirectLocation, renderProps) => {
+    logger.info(`MATCH function`)
     if (err) {
       console.error(err)
       return res.status(500).end('Internal server error')

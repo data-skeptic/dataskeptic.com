@@ -21,9 +21,12 @@ export default WrappedComponent => {
     }
   }
 
-  return connect(state => ({
-    isAuthorized: state.site.getIn(['sessionId']),
-    loggedIn: state.auth.get('loggedIn'),
-    user: state.auth.getIn(['user']).toJS()
-  }))(withUser)
+  return connect(state => {
+    console.log({loggedIn: state.auth.get('loggedIn'), user: state.auth.getIn(['user']).toJS()})
+    return {
+      isAuthorized: state.site.getIn(['sessionId']),
+      loggedIn: state.auth.get('loggedIn'),
+      user: state.auth.getIn(['user']).toJS()
+    }
+  })(withUser)
 }
