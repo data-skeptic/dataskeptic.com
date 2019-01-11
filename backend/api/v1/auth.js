@@ -7,6 +7,7 @@ let googleStrategy = require('passport-google-oauth').OAuth2Strategy
 import { Strategy as linkedinStrategy } from 'passport-linkedin-oauth2'
 const UserServices = require('../../modules/Users/Services/UserServices')
 const MailServices = require('../../modules/mail/services/MailServices')
+import { logger } from '../../../logger'
 
 let redirectURL
 
@@ -155,7 +156,7 @@ module.exports = () => {
 
   var gp = process.env.AUTH_GOOGLE_ON
   if (gp) {
-    console.log('AUTH: allowing Google Login')
+    logger.info('AUTH: allowing Google Login')
     passport.use(
       new googleStrategy(
         {
@@ -165,6 +166,7 @@ module.exports = () => {
           passReqToCallback: true
         },
         function(req, accessToken, refreshToken, profile, done) {
+          logger.info('googleStrategy function')
           let user = {}
           user.id = profile.id
           user.displayName = profile.displayName
@@ -264,6 +266,7 @@ module.exports = () => {
   // GOOGLE
   router.all('/login/google', (req, res, next) => {
     redirectURL = req.headers.referer
+    logger.info(`/login/google ... redirectURL = ${redirectURL}`)
     passport.authenticate('google', {
       scope: [
         'https://www.googleapis.com/auth/userinfo.profile',
@@ -287,10 +290,12 @@ module.exports = () => {
   })
 
   router.get('/google/callback', (req, res, next) => {
+    logger.info(`/google/callback ...`)
     passport.authenticate(
       'google',
       { failWithError: true },
       async (err, user, info) => {
+        logger.info(`google callback authenticate`)
         if (err) {
           return res.status(403).send({ message: err.message })
         }
