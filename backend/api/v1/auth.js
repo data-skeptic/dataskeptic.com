@@ -320,6 +320,8 @@ module.exports = () => {
                 redirectURL = redirectURL.replace('/login', '')
               }
             }
+            req.user.updated_at = (new Date()).getTime()
+            logger.info(`after-login: SESSION req.user = ${JSON.stringify(req.user)}`)
             return res.redirect(redirectURL)
           }
         })
