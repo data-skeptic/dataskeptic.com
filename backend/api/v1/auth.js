@@ -293,7 +293,7 @@ module.exports = () => {
       'google',
       { failWithError: true },
       async (err, user, info) => {
-        logger.info(`google-callback authenticate ... user=`, user)
+        logger.info(`google-callback authenticate ... user=${JSON.stringify(user)}`)
         if (err) {
           return res.status(403).send({ message: err.message })
         }
@@ -301,9 +301,9 @@ module.exports = () => {
           return res.status(403).send({ message: 'System Error' })
         }
 
-        logger.info(`google-callback getUserAccount... user.email=${user.email}`)
+        logger.info(`google-callback getUserAccount...`)
         const userAccount = await getUserAccount(user.email)
-        logger.info(`google-callback userAccount=`, userAccount)
+        logger.info(`google-callback userAccount=${JSON.stringify(userAccount)}`)
         if (!userAccount) {
           const userData = {
             email: user.email
@@ -316,20 +316,19 @@ module.exports = () => {
         logger.info(`google-callback logIn...`)
         req.logIn(user, err => {
           if (err) {
-            logger.info(`google-callback logIn error=`, err)
             return res.send({
               success: false,
               message: err
             })
           } else {
-            logger.info(`google-callback logIn checkRoute redirectURL=`, redirectURL)
+            logger.info(`google-callback logIn checkRoute redirectURL=${redirectURL}`)
             if (checkRoute(redirectURL)) {
               if (checkIfAdmin(user.email)) {
                 redirectURL = redirectURL.replace('/login', '')
                 logger.info(`google-callback logIn checkIfAdmin redirectURL=`, redirectURL)
               }
             }
-            logger.info(`google-callback logIn redirect...`)
+            logger.info(`google-callback logIn redirect... redirectURL=${redirectURL}`)
             return res.redirect(redirectURL)
           }
         })
