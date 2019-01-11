@@ -596,7 +596,9 @@ async function updateState(store, pathname, req) {
     }
   })
 
-  if (req.isAuthenticated()) {
+  const isAuthenticated = req.isAuthenticated()
+  logger.info(`isAuthenticated = ${isAuthenticated}`)
+  if (isAuthenticated) {
     store.dispatch({
       type: 'AUTH_USER_SUCCESS',
       payload: {
@@ -830,7 +832,7 @@ const renderPage = async (req, res) => {
   }
 
   const location = createLocation(req.url)
-  logger.info(`routes = ${JSON.stringify(routes)}, location = ${JSON.stringify(location)}`)
+  logger.info(`URL req.url = ${req.url}`)
 
   match({ routes, location }, async (err, redirectLocation, renderProps) => {
     logger.info(`MATCH function`)
@@ -844,6 +846,7 @@ const renderPage = async (req, res) => {
     }
 
     let store = applyMiddleware(thunk, promiseMiddleware)(createStore)(reducer)
+    logger.info(`updateState location.pathname = ${location.pathname}`)
     await updateState(store, location.pathname, req)
 
     await tracking(req, res)
