@@ -266,7 +266,6 @@ module.exports = () => {
   // GOOGLE
   router.all('/login/google', (req, res, next) => {
     redirectURL = req.headers.referer
-    logger.info(`/login/google ... redirectURL = ${redirectURL}`)
     passport.authenticate('google', {
       scope: [
         'https://www.googleapis.com/auth/userinfo.profile',
@@ -290,12 +289,11 @@ module.exports = () => {
   })
 
   router.get('/google/callback', (req, res, next) => {
-    logger.info(`/google/callback ...`)
     passport.authenticate(
       'google',
       { failWithError: true },
       async (err, user, info) => {
-        logger.info(`google callback authenticate`)
+        logger.info(`google-callback authenticate ... user=`, user)
         if (err) {
           return res.status(403).send({ message: err.message })
         }
@@ -303,28 +301,35 @@ module.exports = () => {
           return res.status(403).send({ message: 'System Error' })
         }
 
+        logger.info(`google-callback getUserAccount... user.email=${user.email}`)
         const userAccount = await getUserAccount(user.email)
+        logger.info(`google-callback userAccount=`, userAccount)
         if (!userAccount) {
           const userData = {
             email: user.email
           }
-
+          logger.info(`google-callback createUserAccount...`)
           await createUserAccount(userData)
           notifyOnJoin(user)
         }
 
+        logger.info(`google-callback logIn...`)
         req.logIn(user, err => {
           if (err) {
+            logger.info(`google-callback logIn error=`, err)
             return res.send({
               success: false,
               message: err
             })
           } else {
+            logger.info(`google-callback logIn checkRoute redirectURL=`, redirectURL)
             if (checkRoute(redirectURL)) {
               if (checkIfAdmin(user.email)) {
                 redirectURL = redirectURL.replace('/login', '')
+                logger.info(`google-callback logIn checkIfAdmin redirectURL=`, redirectURL)
               }
             }
+            logger.info(`google-callback logIn redirect...`)
             return res.redirect(redirectURL)
           }
         })
