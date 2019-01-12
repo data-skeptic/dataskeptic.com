@@ -8,6 +8,7 @@ const isAdmin = user => user && user.type === 'admin'
 export default WrappedComponent => {
   const withUser = class WithUser extends Component {
     componentDidMount() {
+      console.log('WithUser:componentDidMount')
       if (!this.props.loggedIn) {
         axios.get('/api/v1/auth/usertest').then(res => {
           console.log('withUser:AUTH_USER_SUCCESS res.data = ', res.data)
