@@ -8,6 +8,7 @@ import requests
 
 def get_blogs_to_update_from_api(api) :
     url = api + "/blog/index/update_to_do"
+    print(url)
     r = requests.get(url)
     s = r.content.decode('utf-8')
     o = json.loads(s)
@@ -30,12 +31,9 @@ def get_html_from_s3(blogs_df, s3, bucketname):
     for row_num in range(blogs_df.shape[0]):
         row = blogs_df.iloc[row_num,:]
         src_file = row['src_file']
-        try:
-            obj = s3.Object(bucketname, src_file)
-            html = obj.get()['Body'].read().decode('utf-8')
-        except:
-            print("ERROR downloading src_file=" + src_file)
-            html = "missing!"
+        obj = s3.Object(bucketname, src_file)
+        print(bucketname, src_file)
+        html = obj.get()['Body'].read().decode('utf-8')
         html_dict[src_file] = html
     return html_dict
 
@@ -54,15 +52,17 @@ def update_one_blog_in_elastic_search(row, html, elastic_search_conn, index_name
         'content'      : html
     }
     print("Going to update " + row['title'])
-    result2 = elastic_search_conn.index(index_name,'blog', doc, id=blog_id)  
+    result2 = elastic_search_conn.index(index_name,'blog', doc, id=blog_id)
+    print(result2)
     if result2['_shards']['successful']==1:
         return True
     else:
         return False
     
 
-def update_elastic_search(api, elastic_search_conn, s3, index_name):
+def update_elastic_search(api, elastic_search_conn, s3, index_name, bucketname):
     blogs_df = get_blogs_to_update_from_api(api)
+    print('blogs:', blogs_df.shape)
     html_dict = get_html_from_s3(blogs_df, s3, bucketname)
     return_value = {"errors": 0, "successes": 0}
     for row_num in range(blogs_df.shape[0]):
@@ -79,7 +79,7 @@ def update_elastic_search(api, elastic_search_conn, s3, index_name):
                 fields = {"blog_id": blog_id}
                 observation = {"measurement": label, "tags": [], "fields": fields}
                 data = json.dumps(observation)
-                response = requests.post(base_url + '/tse/insert', data=data)
+                #response = requests.post(base_url + '/tse/insert', data=data)
                 return_value['successes'] += 1
             else:
                 print("api ERROR")             
@@ -91,7 +91,7 @@ def update_elastic_search(api, elastic_search_conn, s3, index_name):
         label = 'search_index_summary'
         observation = {"measurement": label, "tags": [], "fields": return_value}
         data = json.dumps(observation)
-        response = requests.post(base_url + '/tse/insert', data=data)
+        #response = requests.post(base_url + '/tse/insert', data=data)
     return return_value
 
 
@@ -104,7 +104,7 @@ if __name__ == '__main__':
     bucketname=config['dev']['bucketname']['bucketname']
     endpoint = config['dev']['endpoint']
     api = config['dev']['api']
-    base_url = config['dev']['base_url']
+    #base_url = config['dev']['base_url']
     elastic_search_conn = Elasticsearch(endpoint, port=443)
     s3 = boto3.resource('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
     return_value = update_elastic_search(api, elastic_search_conn, s3, index_name)
