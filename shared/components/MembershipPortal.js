@@ -91,19 +91,28 @@ class MembershipPortal extends Component {
               Portal:
             </p>
             <p>
-              <b>Change membership</b> - Change membership level or cancel
-              (gasp!)
+              <b>What you can do now</b>
+              <ul>
+                <li>Change membership level or cancel (gasp!)</li>
+                <li>A few details about which blog posts have been popular recently.</li>
+              </ul>
             </p>
             <p>
-              <b>Podcast Analytics</b> - A few details about which blog posts
-              have been popular recently.
+              <b>Coming soon</b>
+              <ul>
+                <li>Ad-free member's feed</li>
+              </ul>
             </p>
-            <p>Upcoming features planned for 2018:</p>
-            <ul>
-              <li>Review dataskeptic.com search logs</li>
-              <li>Ad-free members only feed</li>
-              <li>Early access to some extra AI related content</li>
-            </ul>
+            <p>
+              Hey, do you read the fine print?  I'm going to give a free t-shirt to the 
+              first member that emails me about this note.  I'll take this down once the
+              t-shirt is awarded, so if you're reading this, act now!
+            </p>
+            <p>
+              <b>Want a shout out?</b> - We're considering doing shout outs to members who
+              want to hear their name on the podcast and a thank you for the support.  If
+              you'd like your name, read, DM me on Slack!
+            </p>
           </div>
         </div>
       </div>
