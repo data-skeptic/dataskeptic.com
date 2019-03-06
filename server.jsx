@@ -476,7 +476,7 @@ function inject_folders(store, my_cache) {
 
 function inject_years(store, my_cache) {
 
-  var yearsData = my_cache.yearRanges
+  var yearsData = [2019, 2018, 2017, 2016, 2015, 2014]
   var ymap = {}
   for (var i = 0; i < yearsData.length; i++) {
     var rangeData = yearsData[i]
@@ -485,7 +485,7 @@ function inject_years(store, my_cache) {
 
   var years = Object.keys(ymap)
   years = years.sort().reverse()
-  store.dispatch({ type: 'SET_YEARS', payload: years })
+  store.dispatch({ type: 'SET_YEARS', payload: [2019, 2018, 2017, 2016, 2015, 2014] })
 }
 
 
