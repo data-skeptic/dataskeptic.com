@@ -51,15 +51,22 @@ const notifyOnJoin = ({ email }) => {
   return MailServices.sendMail(message)
 }
 
-const joinList = (list, key) =>
-  list.reduce(function(a, curr) {
-    return [...a, curr[key]]
-  }, [])
+const joinList = function(list, key) {
+  console.log({list, key, t: typeof(list)})
+  if (Objects.keys(list).length > 0) {
+    list.reduce(function(a, curr) {
+      return [...a, curr[key]]
+    }, [])    
+  }
+}
 
-const getUserList = (email, list, props = '') =>
+
+const getUserList = function(email, list, props = '') {
+  console.log(`${base_url}/user/${list}/list?email=${email}${props}`)
   axios
     .get(`${base_url}/user/${list}/list?email=${email}${props}`)
     .then(res => joinList(res.data, 'blog_id'))
+}
 
 const getPlayedList = email =>
   getUserList(email, 'played', '&limit=1000&offset=0')
