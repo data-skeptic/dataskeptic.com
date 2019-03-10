@@ -53,7 +53,7 @@ const notifyOnJoin = ({ email }) => {
 
 const joinList = function(list, key) {
   console.log({list, key, t: typeof(list)})
-  if (Objects.keys(list).length > 0) {
+  if (Object.keys(list).length > 0) {
     list.reduce(function(a, curr) {
       return [...a, curr[key]]
     }, [])    
