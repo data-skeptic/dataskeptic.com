@@ -138,13 +138,17 @@ class BlogItem extends Component {
     var top = <div />
     var bot = <div />
     var guid = blog.guid
+    console.log({zzz: guid, qqq: oepisodes.episodes, r: oepisodes.episodes.length})
     if (guid) {
       var episode = undefined
+      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!")
       for (var ep of oepisodes.episodes) {
-        if (ep.guid == guid) {
-          episode = ep
+        console.log({ep, g: ep.guid})
+        if (ep[0].guid == guid) {
+          episode = ep[0]
         }
       }
+      console.log({www: episode})
       top = <EpisodePlayer episode={episode} />
     } else {
       let related_mp3_items = related_items.filter(item => item.type === 'mp3')

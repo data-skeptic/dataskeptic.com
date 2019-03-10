@@ -68,6 +68,7 @@ const savePlaying = ({ episode }) => {
 }
 
 const savePlayingMeta = meta => {
+  /*
   if (!IS_CLIENT) return null
 
   const blog_id = isEmpty(meta.episode) ? null : meta.episode.blog_id
@@ -88,6 +89,7 @@ const savePlayingMeta = meta => {
     const key = computeKey(meta.episode)
     localStorage.setItem(key, JSON.stringify(data))
   }
+  */
 }
 
 const getPlayingMeta = episode => {
