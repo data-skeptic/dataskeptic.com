@@ -1,6 +1,5 @@
 import xml2js from 'xml2js'
 import axios from 'axios'
-import snserror from '../SnsUtil'
 
 const aws = require('aws-sdk')
 const s3 = new aws.S3()
@@ -101,7 +100,6 @@ export function load_blogs(prefix, limit, offset, dispatch) {
     .catch(err => {
       console.log(err)
       var errorMsg = JSON.stringify(err)
-      snserror('load_blogs ' + prefix, errorMsg)
       var payload = { blogs: [], prefix: prefix }
       dispatch({ type: 'CMS_SET_RECENT_BLOGS', payload: payload })
     })

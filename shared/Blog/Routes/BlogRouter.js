@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import { snserror } from '../../SnsUtil'
 
 import BlogTopNav from '../Components/BlogTopNav'
 import BlogItem from '../Components/BlogItem'
@@ -115,7 +114,6 @@ class BlogRouter extends Component {
   missing() {
     var location = this.props.location.pathname
     console.log(location)
-    snserror(location, '404!', 'ds-blog404')
   }
 
   render() {

@@ -2,7 +2,6 @@ import Immutable from 'immutable'
 import { fromJS } from 'immutable'
 import querystring from 'querystring'
 import axios from 'axios'
-import snserror from '../SnsUtil'
 import { load_blogs } from '../daos/serverInit'
 const aws = require('aws-sdk')
 const logger = require('heroku-logger')
@@ -89,7 +88,6 @@ export default function cmsReducer(state = defaultState, action) {
         .catch(err => {
           console.log(err)
           var errorMsg = JSON.stringify(err)
-          snserror('CMS_LOAD_PENDING_BLOGS', errorMsg)
           dispatch({ type: 'CMS_SET_PENDING_BLOGS', payload: [] })
         })
       break
@@ -138,7 +136,6 @@ export default function cmsReducer(state = defaultState, action) {
         .catch(err => {
           console.log(err)
           var errorMsg = JSON.stringify(err)
-          snserror('CMS_DELETE_BLOG', errorMsg)
         })
       break
     case 'CMS_UPDATE_BLOG':
@@ -161,7 +158,6 @@ export default function cmsReducer(state = defaultState, action) {
         .catch(err => {
           console.log(err)
           var errorMsg = JSON.stringify(err)
-          snserror('CMS_UPDATE_BLOG', errorMsg)
         })
       break
     case 'CMS_SET_HOMEPAGE_FEATURE':
@@ -193,7 +189,6 @@ export default function cmsReducer(state = defaultState, action) {
           })
           console.log(err)
           var errorMsg = JSON.stringify(err)
-          snserror('CMS_SET_HOMEPAGE_FEATURE', errorMsg)
         })
       break
     case 'CMS_SET_HOMEPAGE_FEATURE_SUCCESS':
@@ -227,7 +222,6 @@ export default function cmsReducer(state = defaultState, action) {
         .catch(err => {
           console.log(err)
           var errorMsg = JSON.stringify(err)
-          snserror('CMS_GET_HOMEPAGE_CONTENT', errorMsg)
         })
       break
     case 'CMS_SET_LIVE':
@@ -264,7 +258,6 @@ export default function cmsReducer(state = defaultState, action) {
         .catch(err => {
           console.log(err)
           var errorMsg = JSON.stringify(err)
-          snserror('CMS_GET_HOMEPAGE_CONTENT', errorMsg)
         })
       break
     case 'CMS_INJECT_HOMEPAGE_CONTENT':
@@ -303,7 +296,6 @@ export default function cmsReducer(state = defaultState, action) {
         .catch(err => {
           console.log(err)
           var errorMsg = JSON.stringify(err)
-          snserror('CMS_GET_HOMEPAGE_JOB_LISTING', errorMsg)
         })
       break
 

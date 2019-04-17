@@ -2,7 +2,6 @@ import Immutable from 'immutable'
 import { fromJS } from 'immutable'
 import querystring from 'querystring'
 import axios from 'axios'
-import snserror from '../SnsUtil'
 import PrintfulClient from '../printful/printfulclient'
 import Request from '../Request'
 
@@ -269,9 +268,11 @@ export default function adminReducer(state = defaultState, action) {
       var dispatch = payload['dispatch']
       var url = base_url + '/blog/relatedcontent/add'
       nstate.add_related_msg = 'Saving...'
+      console.log({url, dd: payload['data']})
       axios
         .post(url, payload['data'])
         .then(function(result) {
+          console.log({result})
           if (result.data.error) {
             dispatch({
               type: 'RELATED_CONTENT_LIST',
@@ -287,7 +288,6 @@ export default function adminReducer(state = defaultState, action) {
         .catch(err => {
           console.log(err)
           var errorMsg = JSON.stringify(err)
-          snserror('ADD_RELATED_CONTENT', errorMsg)
         })
       break
     case 'RELATED_CONTENT_LIST':
@@ -308,7 +308,6 @@ export default function adminReducer(state = defaultState, action) {
         .catch(err => {
           console.log(err)
           var errorMsg = JSON.stringify(err)
-          snserror('RELATED_CONTENT_LIST', errorMsg)
         })
       break
     case 'RELATED_CONTENT_LIST_SET':
@@ -335,7 +334,6 @@ export default function adminReducer(state = defaultState, action) {
         .catch(err => {
           console.log(err)
           var errorMsg = JSON.stringify(err)
-          snserror('RELATED_CONTENT_DELETE', errorMsg)
         })
       break
 

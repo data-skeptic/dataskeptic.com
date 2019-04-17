@@ -2,7 +2,6 @@ import Immutable from 'immutable'
 import { fromJS } from 'immutable'
 import querystring from 'querystring'
 import axios from 'axios'
-import snserror from '../SnsUtil'
 
 var env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 
@@ -48,7 +47,6 @@ export default function memberPortalReducer(state = defaultState, action) {
         .catch(err => {
           var errorMsg = JSON.stringify(err)
           console.log(errorMsg)
-          snserror('LOAD_MEMBER', errorMsg)
         })
       break
     case 'SET_MEMBER':
@@ -85,7 +83,6 @@ export default function memberPortalReducer(state = defaultState, action) {
         .catch(err => {
           var errorMsg = JSON.stringify(err)
           console.log(errorMsg)
-          snserror('CHECK_MEMBERSHIP', errorMsg)
           var mode = 'not-found'
           dispatch({
             type: 'UPDATE_MEMBERSHIP_MODE',
@@ -143,7 +140,6 @@ export default function memberPortalReducer(state = defaultState, action) {
         .catch(err => {
           console.log(err)
           var errorMsg = JSON.stringify(err)
-          snserror('SET_MEMBER_ANALYTICS', errorMsg)
         })
       break
     case 'SET_MEMBER_ANALYTICS':
@@ -166,10 +162,6 @@ export default function memberPortalReducer(state = defaultState, action) {
         })
         .catch(err => {
           console.log(err)
-          snserror(
-            'SET_ADDRESS_MSG',
-            'Failed!  Please email kyle@dataskeptic.com to get assistance.'
-          )
         })
       break
     case 'SET_ADDRESS_MSG':
@@ -203,10 +195,6 @@ export default function memberPortalReducer(state = defaultState, action) {
             type: 'LOAD_MEMBER_DOWNLOADS_SUCCESS',
             payload: { data: [] }
           })
-          snserror(
-            'LOAD_MEMBER_DOWNLOADS',
-            'Failed!  Please email kyle@dataskeptic.com to get assistance.'
-          )
         })
       break
     case 'LOAD_MEMBER_DOWNLOADS_SUCCESS':

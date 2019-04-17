@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import ReactDisqusComments from 'react-disqus-comments'
-import snserror from '../../SnsUtil'
 import EpisodePlayer from '../../components/EpisodePlayer'
 import MailingListBlogFooter from './MailingListBlogFooter'
 import RelatedContent from './RelatedContent'
@@ -90,7 +89,6 @@ class BlogItem extends Component {
 
   handleNewComment(comment) {
     console.log(comment.text)
-    snserror('Blog comment', comment.text, 'ds-newblog')
   }
 
   componentWillReceiveProps(nextProps) {

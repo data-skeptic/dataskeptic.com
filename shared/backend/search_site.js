@@ -2,11 +2,17 @@ var elasticsearch = require('elasticsearch')
 
 module.exports = {
   search_site: function(req, res, elastic_search_endpoint) {
+    console.log(process.env.ES_USERNAME)
     const query = req.query
     var q = query['q']
     console.log('SEARCH: ' + q)
+    const es_u = process.env.ES_USERNAME
+    const es_p = process.env.ES_PASSWORD
+    const a = `${es_u}:${es_p}`
+    console.log(a)
     var client = new elasticsearch.Client({
       host: elastic_search_endpoint,
+      auth: a,
       log: 'trace'
     })
     var es_query = {
@@ -57,6 +63,7 @@ module.exports = {
         return res.status(200).end(JSON.stringify(results))
       },
       function(err) {
+        console.log(err)
         return res.status(500).end(JSON.stringify(err.message))
       }
     )
