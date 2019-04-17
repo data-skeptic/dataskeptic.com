@@ -322,5 +322,5 @@ export default connect(state => ({
   isMobile: state.layout.get('isMobile'),
   showAds: state.layout.getIn(['showAds']),
   chatbot: state.chatbot,
-  contributors: state.site.get('contributors').toJS()
+  contributors: (state.site.get('contributors') || {}).toJS()
 }))(MainView)
