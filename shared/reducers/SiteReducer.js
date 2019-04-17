@@ -82,6 +82,8 @@ export default function siteReducer(state = defaultState, action) {
       var n = Object.keys(nstate.contributors).length
       if (n == 0) {
         get_contributors().then(function(contributors) {
+          console.log({contributors})
+            console.log(contributors.toJS())
             dispatch({ type: 'SET_CONTRIBUTORS', payload: contributors })
         }). catch(function(err) {
             console.log("Could not load contributors")

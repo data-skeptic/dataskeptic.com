@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { changePageTitle } from '../../Layout/Actions/LayoutActions'
-import { snserror } from '../../SnsUtil'
 import NotFound from '../../NotFound/Components/NotFound'
 import { Link } from 'react-router'
 import marked from 'marked'
@@ -62,7 +61,6 @@ class ContributorPage extends Component {
   missing() {
     const location = this.props.location.pathname
     console.log(location)
-    snserror(location, '404!', 'ds-blog404')
   }
 
   renderPosts(posts) {
