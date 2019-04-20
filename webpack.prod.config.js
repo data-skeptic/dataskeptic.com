@@ -1,6 +1,8 @@
 const path = require('path')
 const webpack = require('webpack')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+
 
 const env = {
   'process.env.NODE_ENV': JSON.stringify(process.env['NODE_ENV']),
@@ -71,7 +73,7 @@ module.exports = {
     new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.HashedModuleIdsPlugin(),
     new webpack.DefinePlugin(env),
-/*
+
     new webpack.optimize.UglifyJsPlugin({
       test: /\.js($|\?)/i,
       exclude: /node_modules/,
@@ -92,7 +94,7 @@ module.exports = {
         comments: false
       }
     }),
-*/
+
     new ExtractTextPlugin({
       filename: 'main.css',
       disable: false,
