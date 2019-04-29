@@ -397,8 +397,10 @@ class PlayerContainer extends Component {
 
     const episode = oepisode.toJS()
     let { title, pubDate, publish_date } = episode
-    const mp3s =
-      episode.related && episode.related.filter(r => r.type === 'mp3')
+    console.log("-------")
+    console.log({episode})
+    const mp3s = episode.related && episode.related.filter(r => r.type === 'mp3')
+    console.log({mp3s})
     var mp3 = undefined
     var duration = 1
     if (mp3s != undefined) {
