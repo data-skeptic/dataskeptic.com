@@ -1,8 +1,8 @@
 # dataskeptic.com
 
-! Be sure that you have own `.env` file
+## Migrate production configs to dev configs
 
-`build.sh` - creates image
+heroku config -s -a dataskeptic-com > config.txt
+cat config.txt | tr '\n' ' ' | xargs heroku config:set -a dataskeptic-com-dev
 
-`deploy.sh` - puts image on S3
 
