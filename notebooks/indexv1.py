@@ -53,10 +53,11 @@ def update_one_blog_in_elastic_search(row, html, elastic_search_conn, index_name
     }
     print("Going to update " + row['title'])
     result2 = elastic_search_conn.index(index_name,'blog', doc, id=blog_id)
-    print(result2)
-    if result2['_shards']['successful']==1:
+    if result2['_shards']['failed']==0:
         return True
     else:
+        print(len(html))
+        print(result2)
         return False
     
 
