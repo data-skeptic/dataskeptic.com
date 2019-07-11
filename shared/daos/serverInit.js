@@ -8,7 +8,7 @@ const proposalsDocs = new aws.DynamoDB.DocumentClient()
 
 const baseapi = process.env.BASE_API || 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/prod'
 
-import { convert_items_to_json } from 'daos/episodes'
+import { convert_items_to_json } from './episodes'
 
 export function get_contributors() {
   console.log('-[Refreshing Contributors]-')
