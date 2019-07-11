@@ -44,6 +44,7 @@ class BlogRouter extends Component {
   handle_reload(pathname, oldpathname) {
     const dispatch = this.props.dispatch
     var pname = pathname.substring(5, pathname.length)
+    
     var ocms = this.props.cms.toJS()
     var blogs = ocms['recent_blogs'] || []
     var exact = undefined
