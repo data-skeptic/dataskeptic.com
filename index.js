@@ -4,7 +4,7 @@ const fs = require('fs')
 const http = require('http')
 const https = require('https')
 const aws = require('aws-sdk')
-const checkEnv = require('./shared/utils/checkEnv').default
+const checkEnv = require('./shared/utils/checkEnv').default()
 
 const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
 const isSSL = process.env.FORCE_SSL === 1 ? true : env === 'prod'
