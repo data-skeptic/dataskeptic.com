@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import axios from 'axios'
 
 export default class MailingList extends React.Component {
   static defaultProps = {
@@ -17,17 +18,31 @@ export default class MailingList extends React.Component {
     this.setState({ email })
   }
 
+  handleSubmit = e => {
+    e.preventDefault();
+    axios.post('/api/v1/auth/signup', { ...this.state, password: '', src: 'email_signup' })
+      .then(({ data }) => {
+        const message = data.success ? 'Thank you for signing up for our mailing list!' : 'It looks like that email address is already signed up.';
+        const color = data.success ? '#3d963d' : '#f00';
+        this.setState({ message, color });
+        let toast;
+        toast = setTimeout(() => {
+          this.setState({ message: undefined, color: undefined });
+          clearTimeout(toast);
+        }, 5000);
+        console.log({onSubmit});
+        onSubmit(e);
+      })
+      .catch(err => console.error);
+  }
+
   render() {
     const { heading, id, onSubmit } = this.props
     return (
       <Wrapper>
         <Form
-          action="//dataskeptic.us9.list-manage.com/subscribe/post?u=65e63d6f84f1d87759105d133&amp;id=dc60d554db"
           method="post"
-          id="mc-embedded-subscribe-form"
-          name="mc-embedded-subscribe-form"
           className="validate"
-          target="_blank"
           onSubmit={onSubmit}
         >
           <Heading htmlFor={`mce-EMAIL${id}`}>{heading}</Heading>
@@ -36,21 +51,45 @@ export default class MailingList extends React.Component {
               type="input"
               value={this.state.email}
               onChange={this.onChange}
-              name="EMAIL"
+              name="email"
               id={`mce-EMAIL${id}`}
               placeholder="Email address"
               required
             />
-            <Submit type="submit" name="subscribe" id="mc-embedded-subscribe">
+            <input name="password" type="hidden" value="" />
+            <Submit name="subscribe" onClick={this.handleSubmit}>
               Subscribe
             </Submit>
           </Inner>
+          <Inner>
+            <label style={{ display: 'block', color: this.state.color, minHeight: '1.5em' }}>{this.state.message && this.state.message}</label>
+          </Inner>
         </Form>
+        {/* {this.state.message && <Toast message={this.state.message} />} */}
       </Wrapper>
     )
   }
 }
 
+const Toast = ({
+  message = ''
+}) => <ToastMessage>{message}</ToastMessage>;
+
+const ToastMessage = styled.div`
+  position: fixed;
+  top:95px;
+  right:15px;
+  width:200px;
+  height:auto;
+  background-color:#948c76;
+  color:#fff;
+  border-radius:4px;
+  padding:15px 30px;
+  animation-duration:0.5s;
+  animation-name:slidein;
+
+  @keyframes slidein { from { right: -215px; } to { right: 15px; } }
+`
 const Wrapper = styled.div`
   @media (max-width: 768px) {
     margin-top: 30px;
