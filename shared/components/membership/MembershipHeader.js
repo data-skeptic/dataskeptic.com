@@ -21,11 +21,13 @@ class MembershipHeader extends Component {
         </div>
         <br />
         <div className="membership-menu">
-          <Link to="/membership">Members home</Link>
+          <Link to="/membership">Members Home</Link>
           &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
           <Link to="/membership/change">Change Membership</Link>
           &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
           <Link to="/membership/analytics">Analytics</Link>
+          &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+          <Link to="/membership/orders">My Orders</Link>
         </div>
         <br />
         <br />

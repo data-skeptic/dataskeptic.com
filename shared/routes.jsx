@@ -28,6 +28,7 @@ import ChangeMembership from './components/membership/ChangeMembership'
 import MembershipInbox from './components/membership/MembershipInbox'
 import MembershipAnalytics from './components/membership/MembershipAnalytics'
 import MembershipDownloads from './components/membership/MembershipDownloads'
+import MembershipOrders from './components/membership/MembershipOrders'
 import Analytics from './components/Analytics'
 import NotFound from './NotFound/Components/NotFound'
 import Podcast from './Podcasts/Routes/Podcast'
@@ -152,6 +153,8 @@ export default (
         <Route path="analytics" component={MembershipAnalytics} />
 
         <Route path="downloads" component={MembershipDownloads} />
+
+        <Route path="orders" component={MembershipOrders} />
       </Route>
 
       <Route path="/profile/playlist" component={UserPlaylist} />
