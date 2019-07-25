@@ -18,32 +18,36 @@ export default class MailingList extends React.Component {
     this.setState({ email })
   }
 
+  setMessage = (message, color, time) => {
+    this.setState({ message, color });
+    let timer;
+    timer = setTimeout(() => {
+      this.setState({ message: undefined, color: undefined });
+      clearTimeout(timer);
+    }, time || 5000);
+  }
   handleSubmit = e => {
     e.preventDefault();
     axios.post('/api/v1/auth/signup', { ...this.state, password: '', src: 'email_signup' })
       .then(({ data }) => {
         const message = data.success ? 'Thank you for signing up for our mailing list!' : 'It looks like that email address is already signed up.';
         const color = data.success ? '#3d963d' : '#f00';
-        this.setState({ message, color });
-        let toast;
-        toast = setTimeout(() => {
-          this.setState({ message: undefined, color: undefined });
-          clearTimeout(toast);
-        }, 5000);
-        console.log({onSubmit});
-        onSubmit(e);
+        this.setMessage(message, color);
+        this.props.onSubmit(e, data);
       })
-      .catch(err => console.error);
+      .catch(err => {
+        console.error(err);
+        this.setMessage('It looks like something went wrong.', '#f00');
+      });
   }
 
   render() {
-    const { heading, id, onSubmit } = this.props
+    const { heading, id } = this.props
     return (
       <Wrapper>
         <Form
           method="post"
           className="validate"
-          onSubmit={onSubmit}
         >
           <Heading htmlFor={`mce-EMAIL${id}`}>{heading}</Heading>
           <Inner>
@@ -56,39 +60,24 @@ export default class MailingList extends React.Component {
               placeholder="Email address"
               required
             />
-            <input name="password" type="hidden" value="" />
             <Submit name="subscribe" onClick={this.handleSubmit}>
               Subscribe
             </Submit>
           </Inner>
           <Inner>
-            <label style={{ display: 'block', color: this.state.color, minHeight: '1.5em' }}>{this.state.message && this.state.message}</label>
+            <InputAlert style={{ color: this.state.color }}>{this.state.message && this.state.message}</InputAlert>
           </Inner>
         </Form>
-        {/* {this.state.message && <Toast message={this.state.message} />} */}
       </Wrapper>
     )
   }
 }
 
-const Toast = ({
-  message = ''
-}) => <ToastMessage>{message}</ToastMessage>;
-
-const ToastMessage = styled.div`
-  position: fixed;
-  top:95px;
-  right:15px;
-  width:200px;
-  height:auto;
-  background-color:#948c76;
-  color:#fff;
-  border-radius:4px;
-  padding:15px 30px;
-  animation-duration:0.5s;
-  animation-name:slidein;
-
-  @keyframes slidein { from { right: -215px; } to { right: 15px; } }
+const InputAlert = styled.label`
+  display: block;
+  minHeight: 1.5em;
+  width: 100%;
+  text-align: center;
 `
 const Wrapper = styled.div`
   @media (max-width: 768px) {

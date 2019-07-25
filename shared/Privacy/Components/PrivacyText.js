@@ -16,10 +16,9 @@ const PrivacyText = () => (
 
     <p>
       {' '}
-      Our mailing list is managed through Mailchimp. Although we may include
-      advertisements in our correspondence from time to time, nothing except
-      default Mailchimp tracking occurs and we never sell or expose email
-      addresses to anyone ever.
+      Our mailing list is managed through our personal server. Although we may
+      include advertisements in our correspondence from time to time, we never
+      sell or expose email addresses to anyone ever.
     </p>
 
     <p>

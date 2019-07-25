@@ -74,7 +74,7 @@ var Influx = require('influx')
 
 console.log('server.jsx : starting')
 
-const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const env = process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'development' ? 'dev' : 'prod'
 
 const base_url = 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/' + "prod"
 
