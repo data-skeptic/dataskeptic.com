@@ -74,7 +74,7 @@ var Influx = require('influx')
 
 console.log('server.jsx : starting')
 
-const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const env = process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'development' ? 'dev' : 'prod'
 
 const base_url = 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/' + "prod"
 
@@ -460,6 +460,17 @@ function api_router(req, res) {
     var chal = b['c']
     challenge_response = chal
     return res.status(200).end(JSON.stringify({ status: chal }))
+  } else if (req.url.indexOf('/api/s3/blogs') === 0) {
+    var AWS_S3 = new aws.S3();
+    AWS_S3.listObjects({ 
+      Bucket: 'dataskeptic.com',
+      Prefix: 'blog/'
+    }, (err, data) => {
+      console.log({err, data});
+      if (err) return res.status(500).end(JSON.stringify(err));
+      res.status(200).end(JSON.stringify(data));
+    });
+    return true;
   }
   return false
 }

@@ -9,6 +9,9 @@ import NoBlogs from '../Components/NoBlogs'
 import Loading from '../../Common/Components/Loading'
 import page from '../../Layout/hoc/page'
 
+import BucketBlog from 'bucket-blog';
+import { Link } from 'react-router';
+
 const normalizePathname = path => path.replace(/\/\//g, '/')
 
 class BlogRouter extends Component {
@@ -154,6 +157,7 @@ class BlogRouter extends Component {
     } else {
       return (
         <Wrapper>
+          {/* <BucketBlog bucket="dialog-creation-system" path={pathname} content={content} Link={Link} /> */}
           <BlogTopNav pathname={pathname} blogs={blogs} />
           <div className="center">
             <BlogList blogs={blogs} contributors={contributors} />

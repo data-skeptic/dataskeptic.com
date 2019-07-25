@@ -22,7 +22,9 @@ class EmailPopup extends Component {
         <Container>
           <MailingList
             id={'popup'}
-            onSubmit={() => setTimeout(onClose, DELAY)}
+            onSubmit={(e, { success }) => {
+              if (success) setTimeout(onClose, DELAY)
+            }}
             heading={`Sign up for our mailing list and don't miss any updates`}
           />
         </Container>
@@ -35,7 +37,7 @@ export default connect((state, ownProps) => ({}))(
   popup(EmailPopup, {
     key: KEY,
     height: '360px',
-    width: '400px',
+    width: '430px',
     message: "Sign up for our mailing list and don't miss any updates",
     callToAction: 'Subscribe'
   })
