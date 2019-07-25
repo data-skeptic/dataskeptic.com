@@ -6,13 +6,13 @@ const https = require('https')
 const aws = require('aws-sdk')
 const checkEnv = require('./shared/utils/checkEnv').default()
 
-const env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+const env = process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'development' ? 'dev' : 'prod'
 const isSSL = process.env.FORCE_SSL === 1 ? true : env === 'prod'
 console.log('NODE_ENV', '=', env, 'FORCE_SSL', '=', isSSL)
 
 const app = require('./server').default
 
-if (process.env.NODE_ENV === 'dev') {
+if (process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'development') {
   console.log('wepback.dev')
   require('./webpack.dev').default(app)
 }
