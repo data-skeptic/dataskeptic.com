@@ -5,7 +5,7 @@ const example = path.resolve(__dirname + '../../../' + '.env.example')
 
 export default () => {
   require('dotenv-safe').config({
-    allowEmptyValues: false,
+    allowEmptyValues: true,
     example
   })
 }
