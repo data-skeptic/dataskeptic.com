@@ -23,7 +23,7 @@ class MembershipOrders extends Component {
   async getOrders() {
     const { user } = this.props;
     const { data } = await axios.get('/api/v1/orders');
-    const orders = data.orders[1] //.filter(_order => _order.email);
+    const orders = data.orders[1].filter(_order => _order.email);
     this.setState({ orders });
   }
 

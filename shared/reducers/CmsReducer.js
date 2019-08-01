@@ -143,6 +143,8 @@ export default function cmsReducer(state = defaultState, action) {
       var dispatch = payload.dispatch
       //payload['title'] = payload['title']
       //payload['abstract'] = payload['abstract']
+      console.log({payload});
+      if (payload['publish_date']) payload['publish_date'] = new Date(payload['publish_date']).toJSON().slice(0, 19).replace('T', ' ')
       var url = base_url + '/blog/update'
       axios
         .post(url, payload)

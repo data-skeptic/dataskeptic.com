@@ -5,7 +5,7 @@ import axios from 'axios'
 import PrintfulClient from '../printful/printfulclient'
 import Request from '../Request'
 
-var env = process.env.NODE_ENV === 'dev' ? 'dev' : 'prod'
+var env = process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'development' ? 'dev' : 'prod'
 
 var base_url = 'https://4sevcujref.execute-api.us-east-1.amazonaws.com/' + env
 
