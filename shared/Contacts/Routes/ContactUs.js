@@ -97,13 +97,37 @@ class ContactUs extends React.Component {
         console.log(err)
       })
   }
+  
+  onChange = key => event => this.setState({ [key]: event.target.value });
+  setMessage = (message, color, time) => {
+    this.setState({ message, color });
+    let timer;
+    timer = setTimeout(() => {
+      this.setState({ message: undefined, color: undefined });
+      clearTimeout(timer);
+    }, time || 5000);
+  }
+  handleSubmit = e => {
+    e.preventDefault();
+    axios.post('/api/v1/auth/signup', { ...this.state, password: '', src: 'email_signup' })
+      .then(({ data }) => {
+        const message = data.success ? 'Thank you for signing up for our mailing list!' : 'It looks like that email address is already signed up.';
+        const color = data.success ? '#3d963d' : '#f00';
+        this.setMessage(message, color);
+      })
+      .catch(err => {
+        console.error(err);
+        this.setMessage('It looks like something went wrong.', '#f00');
+      });
+  }
 
   constructor(props) {
     super(props)
 
     this.state = {
       submittedUrl: '',
-      openSection: ''
+      openSection: '',
+      email: ''
     }
   }
 
@@ -185,31 +209,27 @@ class ContactUs extends React.Component {
               }
             />
             <SocialForm
-              action="//dataskeptic.us9.list-manage.com/subscribe/post?u=65e63d6f84f1d87759105d133&amp;id=dc60d554db"
               method="post"
-              id="mc-embedded-subscribe-form"
-              name="mc-embedded-subscribe-form"
               className="validate"
-              target="_blank"
-              noValidate
             >
-              <div id="mc_embed_signup_scroll" />
               <input
-                name="EMAIL"
+                name="email"
                 className="email"
-                id="mce-EMAIL"
                 placeholder="Email address"
                 required
+                value={this.state.email}
+                onChange={this.onChange('email')}
               />
               <button
-                type="submit"
-                onClick={this.onClick}
+                onClick={this.handleSubmit}
                 id="mc-embedded-subscribe"
               >
                 Join Mailing List
               </button>
             </SocialForm>
           </SocialBlock>
+          <SocialBlock order={5} />
+          <SocialBlock order={6} style={{ color: this.state.color }}>{this.state.message && this.state.message}</SocialBlock>
         </Socials>
 
         <ListenerArea>
