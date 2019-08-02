@@ -24,9 +24,9 @@ export const CartMenu = ({
       </NavLink>
     )}
 
-    <NavLink active={pathname} to="/store" onClick={itemClick}>
+    {/* <NavLink active={pathname} to="/store" onClick={itemClick}>
       Store
-    </NavLink>
+    </NavLink> */}
 
     {!mobile && <SearchArea />}
 
