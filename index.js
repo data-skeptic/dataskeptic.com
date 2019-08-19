@@ -12,6 +12,10 @@ console.log('NODE_ENV', '=', env, 'FORCE_SSL', '=', isSSL)
 
 const app = require('./server').default
 
+app.get('/ads.txt', (req, res, next) => {
+  res.status(200).send('google.com, pub-4495792015968395, DIRECT, f08c47fec0942fa0');
+});
+
 if (process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'development') {
   console.log('wepback.dev')
   require('./webpack.dev').default(app)
