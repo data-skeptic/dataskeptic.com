@@ -77,6 +77,10 @@ export const ViewMore = styled(Link)`
     margin-top: -1px;
     transform: rotate(45deg);
   }
+  
+  &:hover {
+    border-bottom: none;
+  }
 `
 
 export const Authors = styled.div`
