@@ -8,18 +8,13 @@ import Link from '../Link'
 const LINKS = {
   ITUNES:
     'https://itunes.apple.com/podcast/the-data-skeptic-podcast/id890348705',
-  GOOGLE:
-    'https://play.google.com/music/m/Ibr6e2jb7ot6m6gupwdjgsfmoqa?t=Data_Skeptic',
   STITCHER: 'http://www.stitcher.com/s?fid=50561&amp;refid=stpr',
-  RSS: '/api/blog/rss',
-
   TWITTER: 'https://twitter.com/dataskeptic',
-  FACEBOOK: 'https://www.facebook.com/dataskeptic',
   YOUTUBE: 'https://youtube.com/dataskeptic'
 }
 
 export const Footer = ({
-  showAds = true,
+  showAds = false,
   foo,
   pathname,
   linkClick,
@@ -82,12 +77,6 @@ export const Footer = ({
             <NavLink active={pathname} to="/about" onClick={linkClick}>
               About
             </NavLink>
-            <NavLink active={pathname} to="/members" onClick={linkClick}>
-              Membership
-            </NavLink>
-            <NavLink active={pathname} to="/store" onClick={linkClick}>
-              Store
-            </NavLink>
             <NavLink active={pathname} to="/contact-us" onClick={linkClick}>
               Contact
             </NavLink>
@@ -98,9 +87,6 @@ export const Footer = ({
           <div className="links">
             <a className="twitter" href={LINKS.TWITTER} onClick={linkClick}>
               Twitter
-            </a>
-            <a className="facebook" href={LINKS.FACEBOOK} onClick={linkClick}>
-              Facebook
             </a>
             <a className="youtube" href={LINKS.YOUTUBE} onClick={linkClick}>
               Youtube
@@ -113,14 +99,8 @@ export const Footer = ({
             <a className="itunes" href={LINKS.ITUNES} onClick={linkClick}>
               iTunes
             </a>
-            <a className="google_play" href={LINKS.GOOGLE} onClick={linkClick}>
-              Google Play
-            </a>
             <a className="stitcher" href={LINKS.STITCHER} onClick={linkClick}>
               Stitcher
-            </a>
-            <a className="rss" href={LINKS.RSS} onClick={linkClick}>
-              RSS Feed
             </a>
           </div>
         </div>
