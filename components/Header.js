@@ -21,19 +21,9 @@ export default class Header extends Component {
         </Logo>
         <Navs>
           <ActiveLink href="/podcasts">Podcast</ActiveLink>
-          <ActiveLink href="/blog">Blogs</ActiveLink>
-          <ActiveLink href="/projects">Projects</ActiveLink>
-          <ActiveLink href="/services">Services</ActiveLink>
         </Navs>
         <Navs>
           <ActiveLink href="/members"> Members </ActiveLink>
-          <ActiveLink href="/store"> Store </ActiveLink>
-          <Cart>
-            <Icon>
-              <img src="/static/icon-cart.svg" />
-              {amount !== 0 && <Number>{amount}</Number>}
-            </Icon>
-          </Cart>
         </Navs>
       </HeaderWrapper>
     )
