@@ -4,6 +4,8 @@ import Feature from './Feature'
 import Blog from './Blog'
 import Podcast from './Podcast'
 import JobListing from './JobListing'
+import PollQuestion from './Poll/PollQuestion'
+import PollResult from './Poll/PollResult'
 import { connect } from 'react-redux'
 
 class Content extends Component {
@@ -11,7 +13,7 @@ class Content extends Component {
     this.props.contributors && this.props.contributors[author.toLowerCase()]
 
   render() {
-    const { featured_2, featured_3, featured_blog, latest_episode } = this.props
+    const { featured_2, featured_3, featured_blog, latest_episode, isViewResult } = this.props
     const blogList = [featured_2, featured_3]
     return (
       <ContentContainer>
@@ -27,6 +29,12 @@ class Content extends Component {
             latest_episode={latest_episode}
             getContributor={this.getContributor}
           />
+          {isViewResult ? (
+          <PollResult/>
+          ) : (
+            <PollQuestion/>
+          )
+          }
           <JobListing />
         </PodContainer>
       </ContentContainer>
@@ -40,5 +48,6 @@ export default connect(state => ({
   featured_2: state.cms.get('featured_blog2').toJS(),
   featured_3: state.cms.get('featured_blog3').toJS(),
   latest_episode: state.cms.get('latest_episode').toJS(),
-  contributors: state.site.get('contributors').toJS()
+  contributors: state.site.get('contributors').toJS(),
+  isViewResult: state.poll.get('isViewResult')
 }))(Content)

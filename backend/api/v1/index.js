@@ -21,6 +21,7 @@ module.exports = cache => {
   router.use('/files', require('./files')(cache))
   router.use('/chat', require('./chat')(cache))
   router.use('/podcasts', require('./podcasts')(cache))
+  router.use('/poll', require('./poll')(cache))
 
   // lets map to the start of url request
   router.use('/tse', require('./tse')(cache))

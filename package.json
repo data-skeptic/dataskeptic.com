@@ -101,6 +101,7 @@
     "prettier": "1.12.1",
     "prop-types": "^15.6.1",
     "qs": "^6.5.1",
+    "rc-progress": "^2.2.5",
     "rc-slider": "^5.3.5",
     "rc-time-picker": "^3.2.1",
     "react": "^15.6.2",
